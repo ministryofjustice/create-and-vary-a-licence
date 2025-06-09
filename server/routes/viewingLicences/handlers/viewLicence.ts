@@ -1,11 +1,11 @@
 import type { Request, Response } from 'express'
 import { format } from 'date-fns'
 import { plainToInstance } from 'class-transformer'
-import { ValidationError, validate } from 'class-validator'
+import { validate, ValidationError } from 'class-validator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
 import { groupingBy, isHdcLicence, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
-import { Licence } from '../../../@types/licenceApiClientTypes'
+import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
 import HdcService from '../../../services/hdcService'
@@ -68,7 +68,7 @@ export default class ViewAndPrintLicenceRoutes {
       const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
 
       res.render('pages/view/view', {
-        additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
+        additionalConditions: groupingBy(licence.additionalLicenceConditions as AdditionalCondition[], 'code'),
         warningMessage,
         isEditableByPrison: licence.statusCode !== LicenceStatus.ACTIVE && isInHardStopPeriod(licence),
         isPrisonUser: user.authSource === 'nomis',

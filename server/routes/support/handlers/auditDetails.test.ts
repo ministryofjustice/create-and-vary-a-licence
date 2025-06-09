@@ -25,6 +25,7 @@ describe('Route Handlers - Audit details', () => {
   describe('GET', () => {
     it('Should render audit event details', async () => {
       req.params = {
+        nomsId: 'A1234BC',
         licenceId: '1',
         auditEventId: '1',
       }
@@ -53,6 +54,7 @@ describe('Route Handlers - Audit details', () => {
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/support/auditDetails', {
+        nomsId: req.params.nomsId,
         auditEvent: expectedAuditDetail,
       })
     })

@@ -9,6 +9,7 @@ export default class PromptCasesRoutes {
 
     const header = ['ComName', 'Email', 'Casename', 'Crn', 'Release Date']
     const csv = coms
+      // @ts-expect-error: not sure how this works as I can't see an subjects field on PromptComNotification
       .flatMap(com => com.subjects.map(s => [com.comName, com.email, s.name, s.crn, s.releaseDate]))
       .map(row => row.join(','))
       .join('\n')

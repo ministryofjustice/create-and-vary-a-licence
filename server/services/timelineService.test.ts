@@ -137,6 +137,7 @@ describe('Timeline Service', () => {
 
       licenceApiClient.matchLicenceEvents.mockResolvedValue([
         {
+          id: 1,
           licenceId: 2,
           eventType: LicenceEventType.HARD_STOP_REVIEWED_WITHOUT_VARIATION,
           username: 'TEST_USER',
@@ -190,6 +191,7 @@ describe('Timeline Service', () => {
 
       licenceApiClient.matchLicenceEvents.mockResolvedValue([
         {
+          id: 1,
           licenceId: 2,
           eventType: LicenceEventType.HARD_STOP_REVIEWED_WITHOUT_VARIATION,
           username: 'TEST_USER',

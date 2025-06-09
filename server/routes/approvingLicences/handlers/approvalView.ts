@@ -6,6 +6,7 @@ import HdcService from '../../../services/hdcService'
 import { groupingBy } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import { nameToString } from '../../../data/deliusClient'
+import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 
 export default class ApprovalViewRoutes {
   constructor(
@@ -37,7 +38,7 @@ export default class ApprovalViewRoutes {
       const returnPath = encodeURIComponent(`/licence/approve/id/${licence.id}/view`)
 
       res.render('pages/approve/view', {
-        additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
+        additionalConditions: groupingBy(licence.additionalLicenceConditions as AdditionalCondition[], 'code'),
         staffDetails: {
           name: nameToString(comDetails.name),
           telephone: comDetails?.telephoneNumber,

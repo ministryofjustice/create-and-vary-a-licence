@@ -43,7 +43,7 @@ import type {
   TeamCaseloadRequest,
   HdcLicenceData,
   OverrideLicenceTypeRequest,
-  Com,
+  PromptComNotification,
   OverrideLicencePrisonerDetailsRequest,
   VaryApproverCaseloadSearchRequest,
   VaryApproverCase,
@@ -422,8 +422,8 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/refer-variation`, data: request }, { username: user?.username })
   }
 
-  async getComsToPrompt(): Promise<Com[]> {
-    return (await this.get({ path: `/coms-to-prompt` })) as Promise<Com[]>
+  async getComsToPrompt(): Promise<PromptComNotification[]> {
+    return (await this.get({ path: `/coms-to-prompt` })) as Promise<PromptComNotification[]>
   }
 
   async matchLicenceEvents(

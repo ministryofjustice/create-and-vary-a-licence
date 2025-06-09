@@ -62,7 +62,7 @@ export interface paths {
     get?: never
     /**
      * Create/updates the details of a prison user.
-     * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_CVL_ADMIN.
      */
     put: operations['updatePrisonUser']
     post?: never
@@ -82,7 +82,7 @@ export interface paths {
     get?: never
     /**
      * Create/updates the details of a prison user.
-     * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_CVL_ADMIN.
      */
     put: operations['updatePrisonUser_1']
     post?: never
@@ -101,18 +101,18 @@ export interface paths {
     }
     /**
      * Get OMU email address.
-     * @description Obtain prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Obtain prison Offender Management Unit email address. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getOmuContactByPrisonCode']
     /**
      * Updates the OMU email address.
-     * @description Updates the OMU email address used to contact members of a prison OMU. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the OMU email address used to contact members of a prison OMU. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateOmuEmail']
     post?: never
     /**
      * Delete the OMU email address.
-     * @description Delete prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Delete prison Offender Management Unit email address. Requires ROLE_CVL_ADMIN.
      */
     delete: operations['deleteOmuContactByPrisonCode']
     options?: never
@@ -130,7 +130,7 @@ export interface paths {
     get?: never
     /**
      * Updates the offender's personal information on all of their licences.
-     * @description Updates the name and date of birth stored on all licences associated with the given offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the name and date of birth stored on all licences associated with the given offender. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateOffenderDetails']
     post?: never
@@ -150,7 +150,7 @@ export interface paths {
     get?: never
     /**
      * Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender.
-     * @description Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateResponsibleCom']
     post?: never
@@ -170,7 +170,7 @@ export interface paths {
     get?: never
     /**
      * Updates in-flight licences associated with an offender with a new probation team.
-     * @description Updates in-flight licences associated with an offender with a new probation team. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates in-flight licences associated with an offender with a new probation team. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateProbationTeam']
     post?: never
@@ -190,7 +190,7 @@ export interface paths {
     get?: never
     /**
      * Sets whether the variation has been discussed with a VLO.
-     * @description Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateVloDiscussion']
     post?: never
@@ -210,7 +210,7 @@ export interface paths {
     get?: never
     /**
      * Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED.
-     * @description Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED, and record the details of the COM who submitted. Requires ROLE_CVL_ADMIN.
      */
     put: operations['submitLicence']
     post?: never
@@ -230,7 +230,7 @@ export interface paths {
     get?: never
     /**
      * Update the status of a licence.
-     * @description Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the status of a licence. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateLicenceStatus']
     post?: never
@@ -250,7 +250,7 @@ export interface paths {
     get?: never
     /**
      * Update the standard conditions for a licence.
-     * @description Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateStandardConditions']
     post?: never
@@ -270,7 +270,7 @@ export interface paths {
     get?: never
     /**
      * Sets whether the variation has been discussed with an SPO.
-     * @description Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateSpoDiscussion']
     post?: never
@@ -290,7 +290,7 @@ export interface paths {
     get?: never
     /**
      * Updates the sentence dates.
-     * @description Updates the sentence dates. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the sentence dates. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateSentenceDates']
     post?: never
@@ -310,7 +310,7 @@ export interface paths {
     get?: never
     /**
      * Updates a licence to referred and stores the reason provided.
-     * @description Updates a licence to referred and stores the reason provided by the approver. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates a licence to referred and stores the reason provided by the approver. Requires ROLE_CVL_ADMIN.
      */
     put: operations['referVariation']
     post?: never
@@ -330,7 +330,7 @@ export interface paths {
     get?: never
     /**
      * Updates the reason for the licence variation.
-     * @description Updates the reason for the licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the reason for the licence variation. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateReasonForVariation']
     post?: never
@@ -350,7 +350,7 @@ export interface paths {
     get?: never
     /**
      * Updates the prison information.
-     * @description Updates the prison information. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the prison information. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updatePrisonInformation']
     post?: never
@@ -370,7 +370,7 @@ export interface paths {
     get?: never
     /**
      * Override licence dates
-     * @description Override the dates for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Override the dates for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
      */
     put: operations['changeDates']
     post?: never
@@ -390,7 +390,7 @@ export interface paths {
     get?: never
     /**
      * Update the curfew times for a HDC licence.
-     * @description Replace the curfew times against a HDC licence if curfew times change. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Replace the curfew times against a HDC licence if curfew times change. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateCurfewTimes']
     post?: never
@@ -410,7 +410,7 @@ export interface paths {
     get?: never
     /**
      * Update the officer contact number for a licence
-     * @description Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the contact number for the officer related to this licence. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateContactNumber']
     post?: never
@@ -430,7 +430,7 @@ export interface paths {
     get?: never
     /**
      * Add or replace the bespoke conditions for a licence.
-     * @description Add or replace the bespoke conditions on a licence with the content of this request. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Add or replace the bespoke conditions on a licence with the content of this request. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateBespokeConditions']
     post?: never
@@ -450,7 +450,7 @@ export interface paths {
     get?: never
     /**
      * Approves a licence variation.
-     * @description Approves a licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Approves a licence variation. Requires ROLE_CVL_ADMIN.
      */
     put: operations['approveVariation']
     post?: never
@@ -470,7 +470,7 @@ export interface paths {
     get?: never
     /**
      * Update the appointment date and time
-     * @description Update the date and time for the initial appointment. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the date and time for the initial appointment. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAppointmentTime']
     post?: never
@@ -490,7 +490,7 @@ export interface paths {
     get?: never
     /**
      * Update the person to meet at the initial appointment
-     * @description Update the person the person on probation will meet at the initial appointment Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the person the person on probation will meet at the initial appointment Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAppointmentPerson']
     post?: never
@@ -510,7 +510,7 @@ export interface paths {
     get?: never
     /**
      * Update the address where the initial appointment will take place
-     * @description Update the address where the initial appointment will take place. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the address where the initial appointment will take place. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAppointmentAddress']
     post?: never
@@ -530,7 +530,7 @@ export interface paths {
     get?: never
     /**
      * Update the set of additional conditions on the licence.
-     * @description Update the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAdditionalConditions']
     post?: never
@@ -550,7 +550,7 @@ export interface paths {
     get?: never
     /**
      * Update the user entered data to accompany an additional condition template.
-     * @description Update the user entered data to accompany an additional condition template. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the user entered data to accompany an additional condition template. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAdditionalConditionData']
     post?: never
@@ -570,7 +570,7 @@ export interface paths {
     get?: never
     /**
      * Activates an approved variation. Inactivates previous licence.
-     * @description Activates a variation. Inactivates previous licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Activates a variation. Inactivates previous licence. Requires ROLE_CVL_ADMIN.
      */
     put: operations['activateVariation']
     post?: never
@@ -590,7 +590,7 @@ export interface paths {
     get?: never
     /**
      * Removes a previously uploaded exclusion zone file from an additional condition.
-     * @description Removes a previously uploaded exclusion zone file. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Removes a previously uploaded exclusion zone file. Requires ROLE_CVL_ADMIN.
      */
     put: operations['removeExclusionZoneFile']
     post?: never
@@ -610,7 +610,7 @@ export interface paths {
     get?: never
     /**
      * Create/updates the details of a community offender manager.
-     * @description Create/updates the details of a community offender manager (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create/updates the details of a community offender manager (e.g. email address). Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateComDetails']
     post?: never
@@ -671,7 +671,7 @@ export interface paths {
     put?: never
     /**
      * Recalculates licence start dates
-     * @description Recalculates licence start dates for the given number of licences. Licences are updated sequentially, from newest to oldest, starting with the one after the provided ID. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Recalculates licence start dates for the given number of licences. Licences are updated sequentially, from newest to oldest, starting with the one after the provided ID. Requires ROLE_CVL_ADMIN.
      */
     post: operations['recalculateLicenceStartDates']
     delete?: never
@@ -752,7 +752,7 @@ export interface paths {
     put?: never
     /**
      * Inactivate licences in bulk
-     * @description Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_CVL_ADMIN.
      */
     post: operations['inactivateLicences']
     delete?: never
@@ -772,7 +772,7 @@ export interface paths {
     put?: never
     /**
      * Marks the HardStop / Time served licence as having been reviewed with no variation required.
-     * @description Marks the HardStop / Time served licence as having been reviewed with no variation required. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Marks the HardStop / Time served licence as having been reviewed with no variation required. Requires ROLE_CVL_ADMIN.
      */
     post: operations['reviewWithNoVariationRequired']
     delete?: never
@@ -792,7 +792,7 @@ export interface paths {
     put?: never
     /**
      * Override a licence type
-     * @description Override the type for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Override the type for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
      */
     post: operations['changeType']
     delete?: never
@@ -812,9 +812,49 @@ export interface paths {
     put?: never
     /**
      * Override a licence status
-     * @description Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
      */
     post: operations['changeStatus']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/licence/id/{licenceId}/override/prisoner-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Override prisoner details on a licence
+     * @description Override the prisoner details for an existing licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['changePrisonerDetails']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/licence/id/{licenceId}/electronic-monitoring-programmes': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Updates the electronic monitoring programme details.
+     * @description Updates the electronic monitoring programme details. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['updateElectronicMonitoringProgramme']
     delete?: never
     options?: never
     head?: never
@@ -832,7 +872,7 @@ export interface paths {
     put?: never
     /**
      * Create a new version of an approved licence
-     * @description Create a new version of an  approved licence. The new licence will have a new id and have status IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create a new version of an  approved licence. The new licence will have a new id and have status IN_PROGRESS. Requires ROLE_CVL_ADMIN.
      */
     post: operations['editLicence']
     delete?: never
@@ -852,7 +892,7 @@ export interface paths {
     put?: never
     /**
      * Remove additional conditions from the licence.
-     * @description Remove any instances of the additional conditions with the supplied condition codes from the licence. This includes any existing accompanying data per condition. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Remove any instances of the additional conditions with the supplied condition codes from the licence. This includes any existing accompanying data per condition. Requires ROLE_CVL_ADMIN.
      */
     post: operations['deleteAdditionalConditionsByCode']
     delete?: never
@@ -872,7 +912,7 @@ export interface paths {
     put?: never
     /**
      * Deactivate an active licence and any associated variations
-     * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_CVL_ADMIN.
      */
     post: operations['deactivateLicenceAndVariations']
     delete?: never
@@ -892,7 +932,7 @@ export interface paths {
     put?: never
     /**
      * Create a variation of this licence
-     * @description Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_CVL_ADMIN.
      */
     post: operations['createVariation']
     delete?: never
@@ -912,7 +952,7 @@ export interface paths {
     put?: never
     /**
      * Add additional condition to the licence.
-     * @description Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_CVL_ADMIN.
      */
     post: operations['addAdditionalCondition']
     delete?: never
@@ -932,7 +972,7 @@ export interface paths {
     put?: never
     /**
      * Create a licence
-     * @description Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_CVL_ADMIN.
      */
     post: operations['createLicence']
     delete?: never
@@ -1140,7 +1180,7 @@ export interface paths {
     put?: never
     /**
      * Upload a multipart/form-data request containing a PDF exclusion zone file.
-     * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_CVL_ADMIN.
      */
     post: operations['uploadExclusionZoneFile']
     delete?: never
@@ -1160,9 +1200,29 @@ export interface paths {
     put?: never
     /**
      * Search for offenders on a given staff member's caseload.
-     * @description Search for offenders on a given staff member's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Search for offenders on a given staff member's caseload. Requires ROLE_CVL_ADMIN.
      */
     post: operations['searchForOffenderOnStaffCaseload']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/caseload/vary-approver': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Returns the variation approver caseload for a probation region
+     * @description Returns an enriched list of cases for people that have a variation to be approved
+     */
+    post: operations['getVaryApproverCaseload']
     delete?: never
     options?: never
     head?: never
@@ -1283,6 +1343,26 @@ export interface paths {
      * @description Returns an enriched list of cases for people on prison
      */
     post: operations['getPrisonView']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/caseload/case-admin/case-search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Search for offenders on a given case admin's caseload.
+     * @description Search for offenders on a given case admin's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    post: operations['searchForOffenderOnPrisonCaseAdminCaseload']
     delete?: never
     options?: never
     head?: never
@@ -1545,7 +1625,7 @@ export interface paths {
     }
     /**
      * Retrieve IS-91 status for offender
-     * @description Returns IS-91 status for creating a licence for a specific prisoner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns IS-91 status for creating a licence for a specific prisoner. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getIS91Status']
     put?: never
@@ -1565,7 +1645,7 @@ export interface paths {
     }
     /**
      * Retrieve ineligibility reasons for offender
-     * @description Returns ineligibility reasons for creating a licence for a specific prisoner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns ineligibility reasons for creating a licence for a specific prisoner. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getIneligibilityReasons']
     put?: never
@@ -1605,7 +1685,7 @@ export interface paths {
     }
     /**
      * Get a licence by its licence id
-     * @description Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns a single licence detail by its unique identifier. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getLicenceById_1']
     put?: never
@@ -1625,7 +1705,7 @@ export interface paths {
     }
     /**
      * Get licence policy be version number
-     * @description Returns a single policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns a single policy using its unique identifier. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getPolicyByVersion']
     put?: never
@@ -1645,7 +1725,7 @@ export interface paths {
     }
     /**
      * Get differences between saved licences conditions and new policy
-     * @description Returns condition data saved against a licence no longer present within the new licence policyRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns condition data saved against a licence no longer present within the new licence policyRequires ROLE_CVL_ADMIN.
      */
     get: operations['compareLicence']
     put?: never
@@ -1665,7 +1745,7 @@ export interface paths {
     }
     /**
      * Get the active licence policy
-     * @description Returns the active policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns the active policy using its unique identifier. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getCurrentPolicy']
     put?: never
@@ -1685,7 +1765,7 @@ export interface paths {
     }
     /**
      * Get all licence policy versions
-     * @description Returns a list of policies, active and presentRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns a list of policies, active and presentRequires ROLE_CVL_ADMIN.
      */
     get: operations['getPolicies']
     put?: never
@@ -1725,7 +1805,7 @@ export interface paths {
     }
     /**
      * Get the exclusion zone map image for a specified licence and condition
-     * @description Get the exclusion zone map image. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Get the exclusion zone map image. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getExclusionZoneImage']
     put?: never
@@ -1836,7 +1916,7 @@ export interface paths {
     }
     /**
      * Retrieve the individual and team count of cases that the probation practitioner needs to review
-     * @description Retrieve the individual and team count of cases that the probation practitioner needs to review. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Retrieve the individual and team count of cases that the probation practitioner needs to review. Requires ROLE_CVL_ADMIN.
      */
     get: operations['retrieveReviewCounts']
     put?: never
@@ -1896,7 +1976,7 @@ export interface paths {
     }
     /**
      * Get the bank holiday dates for England and Wales
-     * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getBankHolidaysForEnglandAndWales']
     put?: never
@@ -1979,7 +2059,7 @@ export interface paths {
     post?: never
     /**
      * Discards a licence record.
-     * @description Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Discards a licence record. Requires ROLE_CVL_ADMIN.
      */
     delete: operations['discard']
     options?: never
@@ -2225,23 +2305,23 @@ export interface components {
        * @description The internal ID for this standard condition on this licence
        * @example 98987
        */
-      id?: number
+      id: number
       /**
        * @description The unique code for this standard condition
        * @example 9ce9d594-e346-4785-9642-c87e764bee37
        */
-      code?: string
+      code: string
       /**
        * Format: int32
        * @description The sequence of this standard condition
        * @example 1
        */
-      sequence?: number
+      sequence: number
       /**
        * @description The text of this standard condition
        * @example Be of generally good behaviour
        */
-      text?: string
+      text: string
     }
     UpdateStandardConditionDataRequest: {
       /** @description The list of standard licence conditions from service configuration */
@@ -2256,75 +2336,6 @@ export interface components {
        * @example Yes
        */
       spoDiscussion: string
-    }
-    /** @description Request object for updating sentence dates */
-    UpdateSentenceDatesRequest: {
-      /**
-       * Format: date
-       * @description The conditional release date, from prison services
-       * @example 18/06/2022
-       */
-      conditionalReleaseDate?: string
-      /**
-       * Format: date
-       * @description The actual release date, from prison services
-       * @example 18/07/2022
-       */
-      actualReleaseDate?: string
-      /**
-       * Format: date
-       * @description The sentence start date, from prison services
-       * @example 06/05/2019
-       */
-      sentenceStartDate?: string
-      /**
-       * Format: date
-       * @description The sentence end date, from prison services
-       * @example 06/05/2023
-       */
-      sentenceEndDate?: string
-      /**
-       * Format: date
-       * @description The licence start date, from prison services
-       * @example 06/05/2021
-       */
-      licenceStartDate?: string
-      /**
-       * Format: date
-       * @description The licence end date, from prison services
-       * @example 06/05/2023
-       */
-      licenceExpiryDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
-       */
-      topupSupervisionStartDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       * @example 06/06/2023
-       */
-      topupSupervisionExpiryDate?: string
-      /**
-       * Format: date
-       * @description The date when a person is recalled to prison, after being released on a license
-       * @example 06/06/2023
-       */
-      postRecallReleaseDate?: string
-      /**
-       * Format: date
-       * @description The person's actual home detention curfew date
-       * @example 06/06/2023
-       */
-      homeDetentionCurfewActualDate?: string
-      /**
-       * Format: date
-       * @description The person's home detention curfew end date
-       * @example 06/06/2023
-       */
-      homeDetentionCurfewEndDate?: string
     }
     /** @description Request object for referring a licence variation */
     ReferVariationRequest: {
@@ -2425,13 +2436,56 @@ export interface components {
       /** @description Reason for overriding the licence dates */
       reason: string
     }
+    /** @description Describes the curfew times on this hdc licence */
+    HdcCurfewTimes: {
+      /**
+       * Format: int64
+       * @description The internal ID for these curfew times on this hdc licence
+       * @example 98987
+       */
+      id?: number
+      /**
+       * Format: int32
+       * @description Sequence of this curfew time within the curfew times
+       * @example 1
+       */
+      curfewTimesSequence?: number
+      /**
+       * @description The day on which this curfew starts for this curfew time
+       * @example MONDAY
+       * @enum {string}
+       */
+      fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      /**
+       * Format: HH:mm
+       * @description The time at which this curfew starts on the fromDay
+       * @example 01:00:00
+       */
+      fromTime?: string
+      /**
+       * @description The day on which this curfew ends for this curfew time
+       * @example MONDAY
+       * @enum {string}
+       */
+      untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      /**
+       * Format: HH:mm
+       * @description The time at which this curfew ends on the untilDay
+       * @example 01:00:00
+       */
+      untilTime?: string
+    }
+    UpdateCurfewTimesRequest: {
+      /** @description The list of hdc licence curfew times from service configuration */
+      curfewTimes: components['schemas']['HdcCurfewTimes'][]
+    }
     /** @description Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
        */
-      telephone?: string
+      telephone: string
     }
     /** @description A list of bespoke conditions to add to a licence */
     BespokeConditionRequest: {
@@ -2476,7 +2530,7 @@ export interface components {
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
-      appointmentAddress?: string
+      appointmentAddress: string
     }
     /** @description Describes an additional condition to create/update */
     AdditionalConditionRequest: {
@@ -2484,12 +2538,12 @@ export interface components {
        * @description Coded value for the additional condition
        * @example meetingAddress
        */
-      code?: string
+      code: string
       /**
        * @description The category of the additional condition
        * @example Freedom of movement
        */
-      category?: string
+      category: string
       /**
        * Format: int32
        * @description Sequence of this additional condition within the additional conditions
@@ -2500,7 +2554,7 @@ export interface components {
        * @description The textual value for this additional condition
        * @example You must not enter the location [DESCRIPTION]
        */
-      text?: string
+      text: string
     }
     /** @description Request object for updating the list of additional conditions on a licence */
     AdditionalConditionsRequest: {
@@ -2571,7 +2625,7 @@ export interface components {
       username?: string
       /**
        * @description The full name of the person who performed this auditable event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
+       * @example Joe Bloggs
        */
       fullName?: string
       /**
@@ -2584,17 +2638,15 @@ export interface components {
        * @description A summary of the action taken
        * @example Updated a bespoke condition
        */
-      summary?: string
+      summary: string
       /**
        * @description A detailed description of the action taken
        * @example Updated a bespoke condition
        */
       detail?: string
-      /**
-       * @description The changes that were made based on the action taken
-       */
+      /** @description The changes that were made based on the action taken */
       changes?: {
-        [key: string]: Record<string, never>
+        [key: string]: unknown
       }
     }
     /** @description Search Criteria for Release Date Search */
@@ -2699,7 +2751,7 @@ export interface components {
       bookNumber?: string
       /**
        * @description First Name
-       * @example Robert
+       * @example Joe
        */
       firstName: string
       /**
@@ -2709,7 +2761,7 @@ export interface components {
       middleNames?: string
       /**
        * @description Last name
-       * @example Larsen
+       * @example Bloggs
        */
       lastName: string
       /**
@@ -3216,7 +3268,7 @@ export interface components {
       /** Format: uri */
       instance?: string
       properties?: {
-        [key: string]: Record<string, never>
+        [key: string]: unknown
       }
     }
     /** @description Request object for overriding a licence status */
@@ -3262,11 +3314,21 @@ export interface components {
       /**
        * Format: date
        * @description The prisoner's date of birth
-       * @example 15/04/1985
+       * @example 21/01/1995
        */
       dateOfBirth: string
       /** @description Reason for overriding the prisoner details */
       reason: string
+    }
+    /** @description Request for providing details about any electronic monitoring programme */
+    UpdateElectronicMonitoringProgrammeRequest: {
+      /** @description Is the licence to be tagged for electronic monitoring programme */
+      isToBeTaggedForProgramme?: boolean
+      /**
+       * @description Programme Name of the licence
+       * @example Off Some Road
+       */
+      programmeName?: string
     }
     /** @description A list of licence condition codes to be removed from a licence */
     DeleteAdditionalConditionsByCodeRequest: {
@@ -3301,7 +3363,7 @@ export interface components {
        * @description The category of the additional condition
        * @example Freedom of movement
        */
-      conditionCategory?: string
+      conditionCategory: string
       /**
        * Format: int32
        * @description Sequence of this additional condition within the additional conditions
@@ -3495,7 +3557,7 @@ export interface components {
       /**
        * Format: int64
        * @description The delius staff identifier of the probation staff member
-       * @example 014829475
+       * @example 14829475
        */
       staffIdentifier: number
       /** @description A list of fields to sort by along with the sort direction for each */
@@ -3750,7 +3812,7 @@ export interface components {
        * @description The full name of the probation practitioner
        * @example Joe Bloggs
        */
-      name?: string
+      name: string
       /**
        * Format: int64
        * @description Probation staffIdentifier in nDelius
@@ -3990,6 +4052,19 @@ export interface components {
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
       isInHardStopPeriod: boolean
     }
+    /** @description Request object for searching for offenders within a set of teams attached to a staff member */
+    PrisonUserSearchRequest: {
+      /**
+       * @description The query the user wishes to search for (e.g. CRN, name, NOMIS ID)
+       * @example Joe Bloggs
+       */
+      query: string
+      /**
+       * @description The prison caseloads of the prison staff member
+       * @example BAI
+       */
+      prisonCaseload: string
+    }
     /** @description Describes an audit event request */
     AuditRequest: {
       /**
@@ -4099,7 +4174,7 @@ export interface components {
       username?: string
       /**
        * @description The full name of the person who performed this auditable event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
+       * @example Joe Bloggs
        */
       fullName?: string
       /**
@@ -4112,7 +4187,7 @@ export interface components {
        * @description A summary of the action taken
        * @example Updated a bespoke condition
        */
-      summary?: string
+      summary: string
       /**
        * @description A detailed description of the action taken
        * @example Updated a bespoke condition
@@ -4294,7 +4369,7 @@ export interface components {
     }
     DlqMessage: {
       body: {
-        [key: string]: Record<string, never>
+        [key: string]: unknown
       }
       messageId: string
     }
@@ -4351,15 +4426,42 @@ export interface components {
        */
       version?: string
       /**
-       * @description A flag to denote whether the licence is a variation or not
-       * @example true
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
        */
-      isVariation: boolean
+      pnc?: string
       /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
        */
-      bookingNo?: string
+      cro?: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn?: string
+      kind: string
+      /**
+       * @description The current status code for this licence
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      statusCode?:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
+      /** @deprecated */
+      isVariation: boolean
       /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
@@ -4367,26 +4469,15 @@ export interface components {
        */
       comStaffId?: number
       /**
+       * @description The prison booking number for the person on this licence
+       * @example F12333
+       */
+      bookingNo?: string
+      /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
       nomsId?: string
-      /**
-       * @description The first name of the person on licence
-       * @example Michael
-       */
-      forename?: string
-      /**
-       * @description The family name of the person on licence
-       * @example Smith
-       */
-      surname?: string
-      /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number
       /**
        * @description The agency code of the detaining prison
        * @example LEI
@@ -4427,69 +4518,21 @@ export interface components {
        */
       isReviewNeeded: boolean
       /**
-       * @description The current status code for this licence
-       * @example IN_PROGRESS
-       * @enum {string}
+       * @description The first name of the person on licence
+       * @example Michael
        */
-      statusCode?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-      kind: string
+      forename?: string
       /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
+       * @description The family name of the person on licence
+       * @example Smith
        */
-      pnc?: string
+      surname?: string
       /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
        */
-      cro?: string
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Gordon Sumner
-       */
-      createdByFullName?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       * @example 24/08/2022 11:30:33
-       */
-      supersededDate?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       * @example 24/08/2022 09:30:33
-       */
-      dateLastUpdated?: string
-      /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
-       */
-      updatedByUsername?: string
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean
+      bookingId?: number
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
@@ -4525,6 +4568,26 @@ export interface components {
       /** @description The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
+       * @description The team code that is supervising this licence
+       * @example Cardiff-A
+       */
+      probationTeamCode?: string
+      /**
+       * @description The probation area code where this licence is supervised from
+       * @example N01
+       */
+      probationAreaCode?: string
+      /**
+       * @description The Probation Delivery Unit (PDU or borough) supervising this licence
+       * @example PDU01
+       */
+      probationPduCode?: string
+      /**
+       * @description The Local Administrative Unit (LAU or district) supervising this licence
+       * @example LAU01
+       */
+      probationLauCode?: string
+      /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
@@ -4549,45 +4612,31 @@ export interface components {
        */
       licenceExpiryDate?: string
       /**
-       * @description The team code that is supervising this licence
-       * @example Cardiff-A
-       */
-      probationTeamCode?: string
-      /**
-       * @description The probation area code where this licence is supervised from
-       * @example N01
-       */
-      probationAreaCode?: string
-      /**
-       * @description The Probation Delivery Unit (PDU or borough) supervising this licence
-       * @example PDU01
-       */
-      probationPduCode?: string
-      /**
-       * @description The Local Administrative Unit (LAU or district) supervising this licence
-       * @example LAU01
-       */
-      probationLauCode?: string
-      /**
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
        */
       submittedByFullName?: string
       /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
+       * Format: date
+       * @description The date that the licence will start
+       * @example 13/09/2022
        */
-      updatedByFullName?: string
+      licenceStartDate?: string
+      /**
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       */
+      earliestReleaseDate?: string
       /**
        * @description The version number of this licence
        * @example 1.3
        */
       licenceVersion?: string
       /**
-       * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
        */
-      earliestReleaseDate?: string
+      updatedByFullName?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
@@ -4616,23 +4665,38 @@ export interface components {
        */
       appointmentAddress?: string
       /**
-       * Format: date
-       * @description The date that the licence will start
-       * @example 13/09/2022
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
        */
-      licenceStartDate?: string
+      supersededDate?: string
       /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
        */
-      topupSupervisionStartDate?: string
+      dateLastUpdated?: string
       /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       * @example 06/06/2023
+       * @description The username of the person who last updated this licence
+       * @example X34433
        */
-      topupSupervisionExpiryDate?: string
+      updatedByUsername?: string
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Gordon Sumner
+       */
+      createdByFullName?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
        * @description The probation area description
        * @example Wales
@@ -4653,10 +4717,18 @@ export interface components {
        * @example Cardiff South
        */
       probationTeamDescription?: string
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][]
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
+       */
+      topupSupervisionExpiryDate?: string
       /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
@@ -4686,7 +4758,13 @@ export interface components {
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /** @description The list of additional post sentence supervision conditions on this licence */
       additionalPssConditions: components['schemas']['AdditionalCondition'][]
-    }
+    } & (
+      | components['schemas']['CrdLicence']
+      | components['schemas']['VariationLicence']
+      | components['schemas']['HardStopLicence']
+      | components['schemas']['HdcLicence']
+      | components['schemas']['HdcVariationLicence']
+    )
     /** @description Describes a CRD licence within this service */
     CrdLicence: Omit<
       WithRequired<
@@ -4820,49 +4898,6 @@ export interface components {
        * @example SO30 2UH
        */
       postcode?: string
-    }
-    /** @description Describes the curfew times on this hdc licence */
-    HdcCurfewTimes: {
-      /**
-       * Format: int64
-       * @description The internal ID for these curfew times on this hdc licence
-       * @example 98987
-       */
-      id?: number
-      /**
-       * Format: int32
-       * @description Sequence of this curfew time within the curfew times
-       * @example 1
-       */
-      curfewTimesSequence?: number
-      /**
-       * @description The day on which this curfew starts for this curfew time
-       * @example MONDAY
-       * @enum {string}
-       */
-      fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      /**
-       * Format: HH:mm
-       * @description The time at which this curfew starts on the fromDay
-       * @example 01:00:00
-       */
-      fromTime?: string
-      /**
-       * @description The day on which this curfew ends for this curfew time
-       * @example MONDAY
-       * @enum {string}
-       */
-      untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      /**
-       * Format: HH:mm
-       * @description The time at which this curfew ends on the untilDay
-       * @example 01:00:00
-       */
-      untilTime?: string
-    }
-    UpdateCurfewTimesRequest: {
-      /** @description The list of hdc licence curfew times from service configuration */
-      curfewTimes: components['schemas']['HdcCurfewTimes'][]
     }
     /** @description Describes a HDC licence within this service */
     HdcLicence: Omit<
@@ -5142,18 +5177,6 @@ export interface components {
       code: string
       currentText: string
     }
-    Com: {
-      email: string
-      comName: string
-      subjects: components['schemas']['Subject'][]
-    }
-    CurfewAddress: {
-      addressLine1: string
-      addressLine2?: string
-      townOrCity: string
-      county?: string
-      postcode: string
-    }
     FirstNight: {
       /**
        * Format: HH:mm
@@ -5180,19 +5203,19 @@ export interface components {
        * @description The internal ID of the licence event
        * @example 1234
        */
-      id?: number
+      id: number
       /**
        * Format: int64
        * @description The internal ID of the licence that this event relates to
        * @example 1234
        */
-      licenceId?: number
+      licenceId: number
       /**
        * @description The licence event type
        * @example LicenceEventType.VARIATION_SUBMITTED
        * @enum {string}
        */
-      eventType?:
+      eventType:
         | 'CREATED'
         | 'SUBMITTED'
         | 'BACK_IN_PROGRESS'
@@ -5221,12 +5244,12 @@ export interface components {
       username?: string
       /**
        * @description The forename of the person related to this event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
+       * @example Joe
        */
       forenames?: string
       /**
        * @description The surname of the person related to this event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
+       * @example Bloggs
        */
       surname?: string
       /**
@@ -5239,7 +5262,7 @@ export interface components {
        * @description The date and time of the event
        * @example 12/01/2022 23:14:23
        */
-      eventTime?: string
+      eventTime: string
     }
     DashboardDefinitionSummary: {
       id: string
@@ -6625,11 +6648,7 @@ export interface operations {
       }
       cookie?: never
     }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateSentenceDatesRequest']
-      }
-    }
+    requestBody?: never
     responses: {
       /** @description Sentence dates updated */
       200: {
@@ -8643,6 +8662,162 @@ export interface operations {
       }
     }
   }
+  changePrisonerDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OverrideLicencePrisonerDetailsRequest']
+      }
+    }
+    responses: {
+      /** @description Prisoner details updated */
+      202: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateElectronicMonitoringProgramme: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateElectronicMonitoringProgrammeRequest']
+      }
+    }
+    responses: {
+      /** @description Electronic monitoring programme details updated */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   editLicence: {
     parameters: {
       query?: never
@@ -9823,6 +9998,75 @@ export interface operations {
       }
     }
   }
+  getVaryApproverCaseload: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['VaryApproverCaseloadSearchRequest']
+      }
+    }
+    responses: {
+      /** @description Returns a list of cases with variations awaiting approval */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VaryApproverCase'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getRecentlyApproved: {
     parameters: {
       query?: never
@@ -10237,6 +10481,75 @@ export interface operations {
       }
     }
   }
+  searchForOffenderOnPrisonCaseAdminCaseload: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PrisonUserSearchRequest']
+      }
+    }
+    responses: {
+      /** @description The query retrieved a set of enriched results */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CaCase'][]
+        }
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   requestAuditEvents: {
     parameters: {
       query?: never
@@ -10475,7 +10788,7 @@ export interface operations {
         }
         content: {
           '*/*': {
-            [key: string]: Record<string, never>
+            [key: string]: unknown
           }[]
         }
       }
@@ -12610,7 +12923,18 @@ export interface operations {
   }
   searchForAddresses: {
     parameters: {
-      query?: never
+      query?: {
+        /**
+         * @description Pagination page number, starting at zero
+         * @example 0
+         */
+        page?: number
+        /**
+         * @description Pagination size per page, min/max = 2/200
+         * @example 50
+         */
+        pageSize?: number
+      }
       header?: never
       path: {
         searchQuery: string
@@ -12744,7 +13068,18 @@ export interface operations {
   }
   searchForAddressesByPostcode: {
     parameters: {
-      query?: never
+      query?: {
+        /**
+         * @description Pagination page number, starting at zero
+         * @example 0
+         */
+        page?: number
+        /**
+         * @description Pagination size per page, min/max = 2/200
+         * @example 50
+         */
+        pageSize?: number
+      }
       header?: never
       path: {
         postcode: string

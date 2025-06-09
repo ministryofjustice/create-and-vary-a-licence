@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
-import { AddAdditionalConditionRequest } from '../../../../@types/licenceApiClientTypes'
+import { AddAdditionalConditionRequest, AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import ConditionService from '../../../../services/conditionService'
 
@@ -14,7 +14,7 @@ export default class FileUploadListRoutes {
     const { licenceId, conditionCode } = req.params
     const { licence } = res.locals
 
-    const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)
+    const conditions = licence.additionalLicenceConditions.filter((c: AdditionalCondition) => c.code === conditionCode)
 
     if (conditions.length === 0) {
       if (req.query?.fromPolicyReview) {
@@ -46,7 +46,9 @@ export default class FileUploadListRoutes {
 
     if (!uploadFile) {
       const displayMessage = { text: 'Select yes or no' }
-      const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)
+      const conditions = licence.additionalLicenceConditions.filter(
+        (c: AdditionalCondition) => c.code === conditionCode,
+      )
       return res.render('pages/manageConditions/fileUploads/list', {
         conditions,
         licenceId,
