@@ -117,6 +117,7 @@
             <div class="moj-search govuk-!-margin-bottom-8">
                 {% if caNewSearchEnabled %}
                     <form method="GET", action="/search/ca-search">
+                        <input type="hidden" id="activeTab" value="{{ activeTab }}">
                         <div class="govuk-form-group">
                             <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
                             Find a case

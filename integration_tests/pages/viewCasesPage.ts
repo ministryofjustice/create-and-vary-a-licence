@@ -1,5 +1,6 @@
 import Page from './page'
 import ViewALicencePage from './viewALicence'
+import CaSearchPage from './caSearch'
 import ComDetailsPage from './comDetails'
 import ChangeLocationPage from './changeLocationPage'
 
@@ -8,8 +9,18 @@ export default class ViewCasesPage extends Page {
 
   private changeLocationsLink = '[data-qa=change-location-link]'
 
+  private searchTextInput = '#search'
+
+  private searchButtonId = '[data-qa=search-button]'
+
   constructor() {
     super('view-cases-page')
+  }
+
+  clickSearch = (text: string): CaSearchPage => {
+    cy.get(this.searchTextInput).type(text)
+    cy.get(this.searchButtonId).click()
+    return Page.verifyOnPage(CaSearchPage)
   }
 
   clickFutureReleasesTab = (): ViewCasesPage => {
