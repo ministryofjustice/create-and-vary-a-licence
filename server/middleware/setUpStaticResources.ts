@@ -73,7 +73,10 @@ export default function setUpStaticResources(): Router {
   )
   router.use(
     '/assets/govuk/all.js',
-    express.static(path.join(process.cwd(), '/node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js'), cacheControl),
+    express.static(
+      path.join(process.cwd(), '/node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js'),
+      cacheControl,
+    ),
   )
   router.use('/favicon.ico', express.static(path.join(process.cwd(), '/assets/images/favicon.ico'), cacheControl))
 
