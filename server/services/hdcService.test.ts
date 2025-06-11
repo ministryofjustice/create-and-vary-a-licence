@@ -96,8 +96,7 @@ describe('HDC Service', () => {
     })
 
     it('Should set allCurfewTimesEqual to false when curfew times are different', async () => {
-      const differentCurfewTimes = exampleHdcLicenceData
-      differentCurfewTimes.curfewTimes[0].fromTime = '18:00:00'
+      exampleHdcLicenceData.curfewTimes[0].fromTime = '18:00:00'
       licenceApiClient.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       const result = await hdcService.getHdcLicenceData(1)
