@@ -21,8 +21,8 @@ describe('Route Handlers - Confirmation', () => {
       render: jest.fn(),
       locals: {
         licence: {
-          forename: 'Bobby',
-          surname: 'Zamora',
+          forename: 'Test',
+          surname: 'Person',
           prisonDescription: `Leeds (HMP)`,
         },
       },
@@ -38,7 +38,7 @@ describe('Route Handlers - Confirmation', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
           confirmationMessage:
             'We have sent the licence and post sentence supervision order to Leeds (HMP) for approval.',
-          titleText: 'Licence and post sentence supervision order for Bobby Zamora sent',
+          titleText: 'Licence and post sentence supervision order for Test Person sent',
           backLink: req.session.returnToCase,
         })
       })
@@ -58,7 +58,7 @@ describe('Route Handlers - Confirmation', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
           confirmationMessage:
             'We have sent the licence and post sentence supervision order to Leeds (HMP) for approval.',
-          titleText: 'Licence and post sentence supervision order for Bobby Zamora sent',
+          titleText: 'Licence and post sentence supervision order for Test Person sent',
           backLink: '/licence/create/caseload',
         })
       })
@@ -69,7 +69,7 @@ describe('Route Handlers - Confirmation', () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
           confirmationMessage: 'We have sent the licence to Leeds (HMP) for approval.',
-          titleText: 'Licence conditions for Bobby Zamora sent',
+          titleText: 'Licence conditions for Test Person sent',
           backLink: req.session.returnToCase,
         })
       })
@@ -80,7 +80,7 @@ describe('Route Handlers - Confirmation', () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
           confirmationMessage: 'We have sent the post sentence supervision order to Leeds (HMP) for approval.',
-          titleText: 'Post sentence supervision order for Bobby Zamora sent',
+          titleText: 'Post sentence supervision order for Test Person sent',
           backLink: req.session.returnToCase,
         })
       })

@@ -1,14 +1,13 @@
 import { defineConfig } from 'cypress'
 import 'reflect-metadata'
 import moment, { Moment } from 'moment/moment'
-import { resetStubs, verifyEndpointCalled } from './integration_tests/wiremock'
+import { resetStubs, verifyEndpointCalled, verifyEndpointCalledWith } from './integration_tests/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import licence from './integration_tests/mockApis/licence'
 import delius from './integration_tests/mockApis/delius'
 import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import prison from './integration_tests/mockApis/prison'
-import probationSearch from './integration_tests/mockApis/probationSearch'
 import events from './integration_tests/support/events'
 import feComponent from './integration_tests/mockApis/feComponent'
 import manageUsersApi from './integration_tests/mockApis/manageUsers'
@@ -34,6 +33,7 @@ export default defineConfig({
         ...tokenVerification,
         reset: resetStubs,
         verifyEndpointCalled,
+        verifyEndpointCalledWith,
 
         getSignInUrl: auth.getSignInUrl,
         stubPrisonSignIn: auth.stubPrisonSignIn,
@@ -54,6 +54,8 @@ export default defineConfig({
         stubUpdateProbationTeam: licence.stubUpdateProbationTeam,
         stubUpdatePrisonUserDetails: licence.stubUpdatePrisonUserDetails,
         stubGetLicence: licence.stubGetLicence,
+        stubGetHdcLicence: licence.stubGetHdcLicence,
+        stubGetHdcLicenceData: licence.stubGetHdcLicenceData,
         stubGetEmptyLicence: licence.stubGetEmptyLicence,
         stubGetPssLicence: licence.stubGetPssLicence,
         stubPostLicence: licence.stubPostLicence,
@@ -90,8 +92,7 @@ export default defineConfig({
         stubApproveVariation: licence.stubApproveVariation,
         stubReferVariation: licence.stubReferVariation,
         stubUpdateStandardConditions: licence.stubUpdateStandardConditions,
-        stubGetHdcLicencesForOffender: licence.stubGetHdcLicencesForOffender,
-        stubGetVariationsSubmittedByRegionForOffender: licence.stubGetVariationsSubmittedByRegionForOffender,
+        stubGetVaryApproverCaseload: licence.stubGetVaryApproverCaseload,
         stubGetLicencePolicyConditions: licence.stubGetLicencePolicyConditions,
         stubGetActivePolicyConditions: licence.stubGetActivePolicyConditions,
         stubGetPolicyChanges: licence.stubGetPolicyChanges,
@@ -110,6 +111,7 @@ export default defineConfig({
         stubGetComReviewCount: licence.stubGetComReviewCount,
         stubGetCaseloadItem: licence.stubGetCaseloadItem,
         stubGetCaseloadItemInHardStop: licence.stubGetCaseloadItemInHardStop,
+        stubGetHdcCaseloadItem: licence.stubGetHdcCaseloadItem,
         stubGetPreviouslyApprovedAndTimedOutLicencesCaseload:
           licence.stubGetPreviouslyApprovedAndTimedOutLicencesCaseload,
         stubGetHardStopAndTimedOutLicencesCaseload: licence.stubGetHardStopAndTimedOutLicencesCaseload,
@@ -129,13 +131,15 @@ export default defineConfig({
         stubDeleteAdditionalConditionsByCode: licence.stubDeleteAdditionalConditionsByCode,
         stubPostExclusionZone: licence.stubPostExclusionZone,
 
+        stubGetProbationer: delius.stubGetProbationer,
+        stubGetProbationers: delius.stubGetProbationers,
         stubGetStaffDetails: delius.stubGetStaffDetails,
         stubGetStaffDetailsByStaffCode: delius.stubGetStaffDetailsByStaffCode,
         stubGetStaffDetailsByList: delius.stubGetStaffDetailsByList,
         stubAssignRole: delius.stubAssignRole,
         stubGetPduHeads: delius.stubGetPduHeads,
         stubGetResponsibleCommunityManager: delius.stubGetResponsibleCommunityManager,
-        stubGetManagerEmailAddresses: delius.stubGetManagerEmailAddresses,
+        stubGetResponsibleCommunityManagers: delius.stubGetResponsibleCommunityManagers,
         stubDeliusPing: delius.stubPing,
 
         searchPrisonersByNomisIds: licence.searchPrisonersByNomisIds,
@@ -155,13 +159,9 @@ export default defineConfig({
         stubGetHdcStatus: prison.stubGetHdcStatus,
         stubGetPrisons: prison.stubGetPrisons,
         stubPrisonApiPing: prison.stubPing,
+        stubGetHdcLicencesForOffender: prison.stubGetHdcLicencesForOffender,
 
         stubPrisonRegisterApiPing: prisonRegister.stubPing,
-
-        stubGetProbationer: probationSearch.stubGetProbationer,
-        stubGetOffendersByCrn: probationSearch.stubGetOffendersByCrn,
-        stubGetOffendersByNomsNumber: probationSearch.stubGetOffendersByNomsNumber,
-        stubProbationSearchPing: probationSearch.stubPing,
 
         stubGotenbergApiPing: gotenbergApi.stubPing,
 

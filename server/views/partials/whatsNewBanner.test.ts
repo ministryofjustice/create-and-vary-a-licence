@@ -12,7 +12,7 @@ describe('Whats new banner', () => {
     expect($('body').text()).toContain('Updates to additional licence conditions')
   })
 
-  it('Hide whats new banner if showCommsBanner is true', () => {
+  it('Hide whats new banner if showCommsBanner is false', () => {
     const $ = render({
       showCommsBanner: false,
     })

@@ -5,7 +5,15 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
-import type { CvlFields, CvlPrisoner, Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
+import type {
+  CvlFields,
+  CvlPrisoner,
+  HdcLicence,
+  HdcVariationLicence,
+  Licence,
+  LicenceSummary,
+  VariationLicence,
+} from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import LicenceStatus from '../enumeration/licenceStatus'
 
@@ -191,7 +199,7 @@ const formatAddress = (address?: string) => {
 }
 
 const licenceIsTwoDaysToRelease = (licence: Licence) =>
-  moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
+  moment(licence.licenceStartDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
 
 const selectReleaseDate = (nomisRecord: CvlPrisoner) => {
   const dateString = nomisRecord.confirmedReleaseDate || nomisRecord.conditionalReleaseDate
@@ -221,8 +229,7 @@ const determineCaViewCasesTab = (
   cvlFields: CvlFields,
   licence?: LicenceSummary,
 ): CaViewCasesTab => {
-  const releaseDate =
-    parseCvlDate(licence?.actualReleaseDate || licence?.conditionalReleaseDate) || selectReleaseDate(nomisRecord)
+  const releaseDate = parseCvlDate(licence?.licenceStartDate) || selectReleaseDate(nomisRecord)
 
   if (
     licence &&
@@ -251,7 +258,17 @@ const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], k
 }
 
 const isInHardStopPeriod = (licence: Licence): boolean => {
-  return licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod
+  return (
+    licence.kind !== LicenceKind.VARIATION && licence.kind !== LicenceKind.HDC_VARIATION && licence.isInHardStopPeriod
+  )
+}
+
+function isVariation(licence: Licence): licence is VariationLicence | HdcVariationLicence {
+  return licence.isVariation
+}
+
+function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLicence {
+  return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
 }
 
 export {
@@ -284,4 +301,6 @@ export {
   isAttentionNeeded,
   determineCaViewCasesTab,
   toIsoDate,
+  isVariation,
+  isHdcLicence,
 }

@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -34,9 +33,9 @@ export default function Index({ licenceService, conditionService }: Services): R
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      licenceKindCheckMiddleware(LicenceKind.VARIATION),
+      licenceKindCheckMiddleware([LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
       hardStopCheckMiddleware(userType),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -44,9 +43,9 @@ export default function Index({ licenceService, conditionService }: Services): R
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      licenceKindCheckMiddleware(LicenceKind.VARIATION),
+      licenceKindCheckMiddleware([LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
 
   {

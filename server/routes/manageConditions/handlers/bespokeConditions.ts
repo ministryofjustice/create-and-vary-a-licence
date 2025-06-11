@@ -8,7 +8,7 @@ export default class BespokeConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const conditionsList = res.locals?.licence?.bespokeConditions || ([] as BespokeCondition[])
+    const conditionsList: BespokeCondition[] = res.locals?.licence?.bespokeConditions || ([] as BespokeCondition[])
     const conditions: string[] = conditionsList?.length > 0 ? conditionsList.map(c => c.text) : []
     res.render('pages/manageConditions/bespokeConditions', { conditions })
   }

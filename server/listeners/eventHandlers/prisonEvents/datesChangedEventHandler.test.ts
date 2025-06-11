@@ -22,6 +22,7 @@ const prisoner = {
     topupSupervisionStartDate: '2023-09-09',
     topupSupervisionExpiryDate: '2024-09-09',
     homeDetentionCurfewActualDate: '2023-09-09',
+    homeDetentionCurfewEndDate: '2023-09-10',
   },
 } as PrisonApiPrisoner
 
@@ -105,24 +106,11 @@ describe('Sentence dates changed event handler', () => {
 
     await handler.handle(event)
 
-    const newDates = {
-      conditionalReleaseDate: '09/09/2022',
-      actualReleaseDate: undefined,
-      sentenceStartDate: '09/09/2021',
-      sentenceEndDate: '09/09/2023',
-      licenceStartDate: '09/09/2022',
-      licenceExpiryDate: '09/09/2023',
-      topupSupervisionStartDate: '09/09/2023',
-      topupSupervisionExpiryDate: '09/09/2024',
-      postRecallReleaseDate: undefined,
-      homeDetentionCurfewActualDate: '09/09/2023',
-    } as Record<string, string>
-
-    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1', newDates)
-    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('2', newDates)
-    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('3', newDates)
-    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('4', newDates)
-    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('5', newDates)
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1')
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('2')
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('3')
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('4')
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('5')
   })
 
   it('should use conditional release override date, sentence expiry override date, licence expiry override date, topup supervision expiry override date, post recall release override date', async () => {
@@ -152,18 +140,7 @@ describe('Sentence dates changed event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1', {
-      conditionalReleaseDate: '10/09/2022',
-      actualReleaseDate: undefined,
-      sentenceStartDate: '09/09/2021',
-      sentenceEndDate: '11/09/2022',
-      licenceStartDate: '10/09/2022',
-      licenceExpiryDate: '12/09/2022',
-      topupSupervisionStartDate: '09/09/2023',
-      topupSupervisionExpiryDate: '13/09/2022',
-      postRecallReleaseDate: '02/05/2024',
-      homeDetentionCurfewActualDate: '09/09/2023',
-    })
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1')
   })
 
   it('should not use override dates, if they are null', async () => {
@@ -193,18 +170,7 @@ describe('Sentence dates changed event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1', {
-      conditionalReleaseDate: '09/09/2022',
-      actualReleaseDate: undefined,
-      sentenceStartDate: '09/09/2021',
-      sentenceEndDate: '09/09/2023',
-      licenceStartDate: '09/09/2022',
-      licenceExpiryDate: '09/09/2023',
-      topupSupervisionStartDate: '09/09/2023',
-      topupSupervisionExpiryDate: '09/09/2024',
-      postRecallReleaseDate: undefined,
-      homeDetentionCurfewActualDate: '09/09/2023',
-    })
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1')
   })
 
   it('should use confirmed release date', async () => {
@@ -230,20 +196,10 @@ describe('Sentence dates changed event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1', {
-      conditionalReleaseDate: '09/09/2022',
-      actualReleaseDate: '10/09/2022',
-      sentenceStartDate: '09/09/2021',
-      sentenceEndDate: '09/09/2023',
-      licenceStartDate: '10/09/2022',
-      licenceExpiryDate: '09/09/2023',
-      topupSupervisionStartDate: '09/09/2023',
-      topupSupervisionExpiryDate: '09/09/2024',
-      homeDetentionCurfewActualDate: '09/09/2023',
-    })
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1')
   })
 
-  it('should not deactivate an active licence if the sentence start date is before the licence CRD', async () => {
+  it('should not deactivate an active licence if the sentence start date is before the licence LSD', async () => {
     const event = {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
@@ -251,7 +207,7 @@ describe('Sentence dates changed event handler', () => {
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
       licenceStatus: 'ACTIVE',
-      conditionalReleaseDate: '20/02/2022',
+      licenceStartDate: '20/02/2022',
     } as LicenceSummary)
 
     await handler.handle(event)
@@ -259,7 +215,7 @@ describe('Sentence dates changed event handler', () => {
     expect(licenceService.deactivateActiveAndVariationLicences).not.toHaveBeenCalled()
   })
 
-  it('should deactivate an active licence if the sentence start date is after the licence CRD', async () => {
+  it('should deactivate an active licence if the sentence start date is after the licence LSD', async () => {
     const event = {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
@@ -267,7 +223,7 @@ describe('Sentence dates changed event handler', () => {
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
       licenceStatus: 'ACTIVE',
-      conditionalReleaseDate: '08/09/2021',
+      licenceStartDate: '08/09/2021',
     } as LicenceSummary)
 
     await handler.handle(event)

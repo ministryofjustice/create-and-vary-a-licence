@@ -1,0 +1,65 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro hdcCurfewTimes(hdcLicenceData) %}
+    {% set addressLine2Html = hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if hdcLicenceData.curfewAddress.addressLine2 | length%}
+    {% set countyHtml = hdcLicenceData.curfewAddress.county | escape + ", " if hdcLicenceData.curfewAddress.county | length%}
+
+
+    {{ govukSummaryList({
+        attributes: {'data-qa': 'hdc-curfew-details'},
+        rows: [
+            {
+                key: {text: 'Address'}, 
+                value: {
+                    html: "<p>" + hdcLicenceData.curfewAddress.addressLine1 | escape + ", " + 
+                          addressLine2Html + 
+                          hdcLicenceData.curfewAddress.townOrCity | escape + ", " +
+                          countyHtml + 
+                          hdcLicenceData.curfewAddress.postcode | escape + "</p>",
+                    classes: "curfew-address"
+                }
+            },
+            {
+                key: { text: 'First night curfew hours' }, 
+                value: {
+                    text: hdcLicenceData.firstNightCurfewHours.firstNightFrom | localTimeTo12h + " to " + hdcLicenceData.firstNightCurfewHours.firstNightUntil | localTimeTo12h,
+                    classes: "first-night-curfew-hours"
+                }
+            },
+            {
+                classes: 'all-curfew-times-equal',
+                key: {
+                    text: 'Curfew hours'
+                },
+                value: {
+                    html: hdcLicenceData.curfewTimes[0].fromDay | titlecase | escape + " to " + hdcLicenceData.curfewTimes[6].fromDay | titlecase | escape + "<br>" + 
+                          hdcLicenceData.curfewTimes[0].fromTime  | localTimeTo12h + " to " + hdcLicenceData.curfewTimes[0].untilTime | localTimeTo12h,
+                    classes: "curfew-hours"
+                }
+            } if hdcLicenceData.allCurfewTimesEqual
+        ]
+    }) }}
+
+    {% if not hdcLicenceData.allCurfewTimesEqual %}
+        {% set curfewRows = []%}
+        {% for curfewTime in hdcLicenceData.curfewTimes %} 
+            {% set curfewRows = (curfewRows.push(
+                {
+                    key: {
+                        text: curfewTime.fromDay | titlecase
+                    }, 
+                    value: {
+                        text: curfewTime.fromTime | localTimeTo12h + " to " + curfewTime.untilTime | localTimeTo12h
+                    }
+                }
+            ), curfewRows) %}
+        {% endfor %}
+
+        <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-7 govuk-heading-m">Curfew hours</h3>
+
+        {{ govukSummaryList({
+            attributes: {'data-qa': 'curfew-times-not-equal'},
+            rows: curfewRows
+        }) }}
+    {% endif %}
+{% endmacro %}

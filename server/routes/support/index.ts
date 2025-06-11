@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import SupportHomeRoutes from './handlers/supportHome'
 import { Services } from '../../services'
@@ -16,10 +15,15 @@ import LicenceDatesAndReason from './types/licenceDatesAndReason'
 import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
 import OffenderLicenceStatusRoutes from './handlers/offenderLicenceStatus'
 import OffenderLicenceDatesRoutes from './handlers/offenderLicenceDates'
+import OffenderLicenceTypeRoutes from './handlers/offenderLicenceType'
 import ProbationTeamRoutes from './handlers/probationTeam'
 import ProbationUserRoutes from './handlers/probationStaff'
 import ComDetailsRoutes from './handlers/comDetails'
 import PromptCasesRoutes from './handlers/promptCases'
+import LicenceTypeChange from './types/licenceTypeChange'
+import LicencePrisonerDetails from './types/licencePrisonerDetails'
+import LicencePrisonerDetailsRoutes from './handlers/licencePrisonerDetails'
+import AuditDetailsRoutes from './handlers/auditDetails'
 
 export default function Index({
   probationService,
@@ -29,20 +33,20 @@ export default function Index({
   conditionService,
   licenceOverrideService,
   comCaseloadService,
-  promptLicenceCreationService,
+  licenceApiClient,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']), asyncMiddleware(handler))
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
   const supportHomeHandler = new SupportHomeRoutes()
   const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, probationService)
@@ -52,10 +56,13 @@ export default function Index({
   const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
+  const offenderLicenceTypeHandler = new OffenderLicenceTypeRoutes(licenceService, licenceOverrideService)
   const probationTeamHandler = new ProbationTeamRoutes(comCaseloadService)
   const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, probationService)
   const comDetailsHandler = new ComDetailsRoutes(probationService)
-  const promptCasesHandler = new PromptCasesRoutes(promptLicenceCreationService)
+  const promptCasesHandler = new PromptCasesRoutes(licenceApiClient)
+  const licencePrisonerDetailsHandler = new LicencePrisonerDetailsRoutes(licenceService, licenceOverrideService)
+  const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
 
   get('/', supportHomeHandler.GET)
   get('/prompt-cases', promptCasesHandler.GET)
@@ -68,10 +75,19 @@ export default function Index({
   get('/offender/:nomsId/detail', offenderDetailHandler.GET)
   get('/offender/:nomsId/licences', offenderLicenceHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/audit', offenderAuditHandler.GET)
+  get('/offender/:nomsId/licence/:licenceId/audit/:auditEventId', auditDetailsHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
   get('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.POST, LicenceDatesAndReason)
+  get('/offender/:nomsId/licence/:licenceId/type', offenderLicenceTypeHandler.GET)
+  post('/offender/:nomsId/licence/:licenceId/type', offenderLicenceTypeHandler.POST, LicenceTypeChange)
+  get('/offender/:nomsId/licence/:licenceId/prisoner-details', licencePrisonerDetailsHandler.GET)
+  post(
+    '/offender/:nomsId/licence/:licenceId/prisoner-details',
+    licencePrisonerDetailsHandler.POST,
+    LicencePrisonerDetails,
+  )
   get('/probation-teams/:teamCode/caseload', probationTeamHandler.GET)
   get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
   get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)

@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -24,12 +23,14 @@ import LicenceCreatedByPrisonRoutes from './handlers/licenceCreatedByPrison'
 import LicenceChangesNotApprovedInTimeRoutes from './handlers/licenceChangesNotApprovedInTime'
 import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import UserType from '../../enumeration/userType'
+import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMiddleware'
 
 export default function Index({
   licenceService,
   comCaseloadService,
   probationService,
   conditionService,
+  hdcService,
 }: Services): Router {
   const router = Router()
 
@@ -42,12 +43,7 @@ export default function Index({
    * to explicitly inject the licence data into their individual view contexts.
    */
   const get = (path: string, handler: RequestHandler) =>
-    router.get(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      fetchLicence(licenceService),
-      asyncMiddleware(handler),
-    )
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), fetchLicence(licenceService), handler)
 
   const getWithHardStopCheck = (path: string, handler: RequestHandler) =>
     router.get(
@@ -55,16 +51,16 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       hardStopCheckMiddleware(UserType.PROBATION),
-      asyncMiddleware(handler),
+      handler,
     )
 
-  const post = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(
+  const getWithPreLicenceCreationCheck = (path: string, handler: RequestHandler) =>
+    router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      preLicenceCreationMiddleware(probationService),
+      handler,
     )
 
   const postWithHardStopCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -74,7 +70,17 @@ export default function Index({
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(UserType.PROBATION),
-      asyncMiddleware(handler),
+      handler,
+    )
+
+  const postWithPreLicenceCreationCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
+    router.post(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      fetchLicence(licenceService),
+      preLicenceCreationMiddleware(probationService),
+      validationMiddleware(conditionService, type),
+      handler,
     )
 
   {
@@ -89,8 +95,8 @@ export default function Index({
 
   {
     const controller = new ConfirmCreateRoutes(probationService, licenceService)
-    get('/nomisId/:nomisId/confirm', controller.GET)
-    post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
+    getWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.GET)
+    postWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
   }
 
   {
@@ -116,7 +122,7 @@ export default function Index({
   }
 
   {
-    const controller = new CheckAnswersRoutes(licenceService, conditionService)
+    const controller = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
     get('/id/:licenceId/check-your-answers', controller.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }

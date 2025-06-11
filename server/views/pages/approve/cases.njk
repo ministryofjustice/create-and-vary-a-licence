@@ -14,6 +14,9 @@
     {% if case.urgentApproval and approvalNeededView %}
         {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">Urgent approval required for<br>upcoming release</span>' %}
+    {% elseif case.kind == 'HDC' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
+            + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif case.isDueForEarlyRelease and approvalNeededView %}
         {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}

@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import { Services } from '../../services'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -25,11 +24,11 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
       fetchLicence(licenceService),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const viewCasesHandler = new ViewAndPrintCaseRoutes(caCaseloadService, prisonerService)
-  const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService)
+  const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService, hdcService)
   const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService, hdcService)
   const comDetailsHandler = new ComDetailsRoutes(probationService)
 

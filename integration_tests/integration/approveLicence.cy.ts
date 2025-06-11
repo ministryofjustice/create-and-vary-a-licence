@@ -91,7 +91,7 @@ context('Approve a licence', () => {
     cy.url().should('eq', 'http://localhost:3007/licence/approve/id/1/view')
   })
 
-  it('should check if review details accordian is open', () => {
+  it('should check if review details accordion is open', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -122,6 +122,34 @@ context('Approve a licence', () => {
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
     approvalViewPage.getValue(approvalViewPage.approveLicenceId).should('have.text', 'Approve licence')
     approvalViewPage.getValue(approvalViewPage.accordionSectionHeading).should('contain.text', 'Licence conditions')
+  })
+
+  it('should display HDC content if licence kind is HDC', () => {
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'SUBMITTED',
+      typeCode: 'AP',
+      kind: 'HDC',
+      homeDetentionCurfewActualDate: '09/09/2023',
+      homeDetentionCurfewEndDate: '12/03/2021',
+    })
+    cy.task('stubGetHdcLicenceData')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage.getValue(approvalViewPage.approveLicenceId).should('have.text', 'Approve licence')
+    approvalViewPage.getValue(approvalViewPage.accordionSectionHeading).should('contain.text', 'HDC and licence dates')
+    approvalViewPage.getValue(approvalViewPage.releaseDateHeading).should('contain.text', 'Release date/HDC start date')
+    approvalViewPage.getValue(approvalViewPage.hdcEndDate).should('contain.text', '12 Mar 2021')
+    approvalViewPage.getValue(approvalViewPage.conditionalReleaseDate).should('contain.text', '13 Mar 2021')
+    approvalViewPage.getValue(approvalViewPage.accordionSectionHeading).should('contain.text', 'HDC curfew details')
+    approvalViewPage
+      .getValue(approvalViewPage.curfewAddress)
+      .should('contain.text', '1 The Street, Avenue, Some Town, Some County, A1 2BC')
+    approvalViewPage.getValue(approvalViewPage.firstNightCurfewHours).should('contain.text', '5pm to 7am')
+    approvalViewPage.getValue(approvalViewPage.curfewHours).should('contain.text', 'Monday to Sunday')
+    approvalViewPage.getValue(approvalViewPage.curfewHours).should('contain.text', '5pm to 7am')
   })
 
   it('should display Approve licence and post sentence supervision order heading if licence is of type AP_PSS', () => {

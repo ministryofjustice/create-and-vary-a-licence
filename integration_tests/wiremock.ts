@@ -25,4 +25,35 @@ const verifyEndpointCalled = async (options: { verb: string; path: string; times
     })
 }
 
-export { stubFor, getRequests, resetStubs, verifyEndpointCalled }
+const verifyEndpointCalledWith = async (options: {
+  verb: string
+  path: string
+  times: number
+  param: string
+  value: string
+}): Promise<boolean> => {
+  return superagent
+    .post('http://localhost:9091/__admin/requests/find')
+    .send({
+      method: options.verb,
+      urlPath: options.path,
+    })
+    .then(response => response.body.requests)
+    .then((requests: Response[]) => {
+      if (requests.length < 1) throw new Error(`No ${options.verb} requests made to ${options.path}`)
+      return requests.filter(request => {
+        const json = JSON.parse(request.body)
+        return json[options.param] === options.value
+      })
+    })
+    .then(requests => requests.length === options.times)
+    .then(success => {
+      if (!success)
+        throw new Error(
+          `${options.verb} request to ${options.path} with ${options.param} of ${options.value} was not called ${options.times} time(s)`,
+        )
+      return success
+    })
+}
+
+export { stubFor, getRequests, resetStubs, verifyEndpointCalled, verifyEndpointCalledWith }

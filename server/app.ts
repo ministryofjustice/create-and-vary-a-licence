@@ -2,7 +2,6 @@ import 'reflect-metadata'
 import express from 'express'
 
 import createError from 'http-errors'
-import csurf from 'csurf'
 import setupRoutes from './routes'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
@@ -15,6 +14,7 @@ import setUpWebSession from './middleware/setUpWebSession'
 import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpAuthentication from './middleware/setUpAuthentication'
+import setUpCsrf from './middleware/setUpCsrf'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
@@ -22,8 +22,6 @@ import trimRequestBody from './middleware/trimBodyMiddleware'
 import phaseNameSetup from './middleware/phaseNameSetup'
 import getFrontendComponents from './middleware/getFeComponents'
 import { ApplicationInfo } from './applicationInfo'
-
-const testMode = process.env.NODE_ENV === 'test'
 
 export default function createApp(services: Services, applicationInfo: ApplicationInfo): express.Application {
   const app = express()
@@ -42,14 +40,9 @@ export default function createApp(services: Services, applicationInfo: Applicati
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.url)))
   app.use(trimRequestBody())
-
-  // CSRF protection
-  if (!testMode) {
-    app.use(csurf())
-  }
-
   app.use(authorisationMiddleware)
-  app.get('*', getFrontendComponents(services))
+  app.use(setUpCsrf())
+  app.get(/(.*)/, getFrontendComponents(services))
   app.use(setupRoutes(services))
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler())

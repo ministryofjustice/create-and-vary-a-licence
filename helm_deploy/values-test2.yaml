@@ -1,13 +1,4 @@
 ---
-cronjobs:
-  activate_licences: "0 9,12,15,18 * * 1-5" # 9am, 12pm, 3pm, and 6pm UTC, Monday - Friday
-  email_probation_practioner: "0 11 * * 1-5" # 11am UTC, Monday - Friday
-  prompt_licence_creation: "0 8 * * 1" # 8am UTC, every monday
-  remove_expired_conditions: "0 7 * * 1-5" # 7am UTC, Monday - Friday
-  expire_licences:
-    enabled: false
-    schedule: "0 10 * * 1-5" # 10am UTC, Monday - Friday
-
 generic-service:
   replicaCount: 2
 
@@ -25,17 +16,13 @@ generic-service:
     PRISON_API_URL: 'https://prison-api-dev.prison.service.justice.gov.uk'
     LICENCE_API_URL: 'https://create-and-vary-a-licence-api-test2.hmpps.service.justice.gov.uk'
     PRISONER_SEARCH_API_URL: 'https://prisoner-search-dev.prison.service.justice.gov.uk'
-    # PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: 'https://prison-register-dev.hmpps.service.justice.gov.uk'
-    EXIT_SURVEY_LINK: 'https://eu.surveymonkey.com/r/V9JSHL3'
-    PHASE_BANNER_LINK: 'https://eu.surveymonkey.com/r/V9JSHL3'
 
     # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
     GOTENBERG_API_URL: 'http://create-and-vary-a-licence-gotenberg'
 
     # A temporary reference to a local container which provides a stubbed Delius caseload
     DELIUS_API_URL: 'https://create-and-vary-a-licence-and-delius-dev.hmpps.service.justice.gov.uk'
-    PROBATION_SEARCH_API_URL: 'https://probation-offender-search-dev.hmpps.service.justice.gov.uk'
 
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: 'http://create-and-vary-a-licence'
@@ -43,9 +30,17 @@ generic-service:
     LICENCE_WATERMARK: 'true'
     DPS_URL: 'https://digital-dev.prison.service.justice.gov.uk'
 
+    ACO_CASELOAD_BACKEND_ENABLED: "false"
+
     # To enable common front-end components
     COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
     MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
+    HDC_INTEGRATION_MVP2_ENABLED: 'false'
+    HDC_LICENCE_CREATION_BLOCK: 'true'
+    CA_NEW_SEARCH_ENABLED: 'false'
+
+  scheduledDowntime:
+    enabled: true
 
 gotenberg:
   replicaCount: 1
@@ -55,5 +50,9 @@ gotenberg:
     DISABLE_UNOCONV: 1
     DEFAULT_WAIT_TIMEOUT: 30
 
+  scheduledDowntime:
+    enabled: true
+
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts-non-prod
+  businessHoursOnly: true

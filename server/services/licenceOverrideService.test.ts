@@ -2,6 +2,7 @@ import LicenceApiClient from '../data/licenceApiClient'
 import LicenceOverrideService from './licenceOverrideService'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { User } from '../@types/CvlUserDetails'
+import { OverrideLicencePrisonerDetailsRequest } from '../@types/licenceApiClientTypes'
 
 jest.mock('../data/licenceApiClient')
 
@@ -37,5 +38,26 @@ describe('Licence Override Service', () => {
 
     overrideStatus.overrideDates(1, { ...dates, reason }, user)
     expect(licenceApiClient.overrideLicenceDates).toHaveBeenCalledWith(1, { ...dates, reason }, user)
+  })
+
+  it('Updates licence type', () => {
+    const licenceType = 'AP'
+    const reason = 'reason to update dates'
+
+    overrideStatus.overrideType(1, { licenceType, reason }, user)
+    expect(licenceApiClient.overrideLicenceType).toHaveBeenCalledWith(1, { licenceType, reason }, user)
+  })
+
+  it('Updates prisoner details', () => {
+    const details: OverrideLicencePrisonerDetailsRequest = {
+      forename: 'foo',
+      middleNames: 'fizz',
+      surname: 'bar',
+      dateOfBirth: '01/01/1995',
+      reason: 'test',
+    }
+
+    overrideStatus.overrideLicencePrisonerDetails(1, details, user)
+    expect(licenceApiClient.overrideLicencePrisonerDetails).toHaveBeenCalledWith(1, details, user)
   })
 })

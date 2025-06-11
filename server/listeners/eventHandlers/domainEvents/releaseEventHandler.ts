@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import { DomainEventMessage } from '../../../@types/events'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ReleaseEventHandler {
   constructor(
@@ -44,9 +45,11 @@ export default class ReleaseEventHandler {
      */
     if (approvedLicences.length) {
       const licenceToActivate = _.head(approvedLicences)
-      const newStatus = (await this.prisonerService.isHdcApproved(licenceToActivate.bookingId))
-        ? LicenceStatus.INACTIVE
-        : LicenceStatus.ACTIVE
+      const newStatus =
+        licenceToActivate.kind !== LicenceKind.HDC &&
+        (await this.prisonerService.isHdcApproved(licenceToActivate.bookingId))
+          ? LicenceStatus.INACTIVE
+          : LicenceStatus.ACTIVE
 
       await this.licenceService.updateStatus(licenceToActivate.licenceId, newStatus)
     }

@@ -15,7 +15,7 @@ context('View and print licence', () => {
     cy.task('stubGetPrisonOmuCaseload')
     cy.task('stubGetProbationOmuCaseload')
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
-    cy.task('stubGetOffendersByNomsNumber')
+    cy.task('stubGetProbationers')
     cy.task('searchPrisonersByNomisIds')
     cy.task('searchPrisonersByReleaseDate')
     cy.task('stubGetStaffDetailsByList')
@@ -184,7 +184,7 @@ context('View and print licence', () => {
     let viewLicencePage: ViewALicencePage = viewCasesList.clickALicence()
     viewLicencePage = viewLicencePage.clickChangePersonLink().enterPerson('Joe Bloggs').clickContinueToReturn()
     viewLicencePage = viewLicencePage.clickChangeAddressLink().enterDefaultAddress().clickContinueToReturn()
-    viewLicencePage = viewLicencePage.clickChangeTelephoneLink().enterTelephone('01234567890').clickContinueToReturn()
+    viewLicencePage = viewLicencePage.clickChangeTelephoneLink().enterTelephone('00000000000').clickContinueToReturn()
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       viewLicencePage = viewLicencePage
         .clickChangeDateLink()

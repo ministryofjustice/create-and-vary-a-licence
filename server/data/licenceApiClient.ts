@@ -20,9 +20,7 @@ import type {
   UpdateVloDiscussionRequest,
   UpdateReasonForVariationRequest,
   UpdatePrisonInformationRequest,
-  UpdateSentenceDatesRequest,
   ReferVariationRequest,
-  EmailContact,
   UpdateProbationTeamRequest,
   NotifyRequest,
   UpdateStandardConditionDataRequest,
@@ -44,6 +42,11 @@ import type {
   ComCase,
   TeamCaseloadRequest,
   HdcLicenceData,
+  OverrideLicenceTypeRequest,
+  PromptComNotification,
+  OverrideLicencePrisonerDetailsRequest,
+  VaryApproverCaseloadSearchRequest,
+  VaryApproverCase,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -52,6 +55,7 @@ import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
 import logger from '../../logger'
+import { isVariation } from '../utils/utils'
 
 export default class LicenceApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -402,8 +406,8 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/prison-information`, data: request }, { username: user?.username })
   }
 
-  async updateSentenceDates(licenceId: string, request: UpdateSentenceDatesRequest, user?: User): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/sentence-dates`, data: request }, { username: user?.username })
+  async updateSentenceDates(licenceId: string, user?: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/sentence-dates` }, { username: user?.username })
   }
 
   async approveVariation(licenceId: string, user: User): Promise<void> {
@@ -418,13 +422,12 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/refer-variation`, data: request }, { username: user?.username })
   }
 
-  async notifyComsToPromptEmailCreation(request: EmailContact[]): Promise<void> {
-    await this.post({ path: `/com/prompt-licence-creation`, data: request })
+  async getComsToPrompt(): Promise<PromptComNotification[]> {
+    return (await this.get({ path: `/coms-to-prompt` })) as Promise<PromptComNotification[]>
   }
 
   async matchLicenceEvents(
     licenceId: string,
-    // eslint-disable-next-line default-param-last
     eventTypes: string[] = [],
     sortBy?: string,
     sortOrder?: string,
@@ -466,48 +469,35 @@ export default class LicenceApiClient extends RestClient {
     >
   }
 
-  async notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd(): Promise<void> {
-    await this.post({
-      path: '/notify-probation-of-unapproved-licences',
-    })
-  }
-
   async overrideStatusCode(licenceId: number, request: { reason: string; statusCode: LicenceStatus }, user: User) {
     await this.post({ path: `/licence/id/${licenceId}/override/status`, data: request }, { username: user?.username })
   }
 
-  async runLicenceActivationJob() {
-    await this.post({
-      path: '/run-activation-job',
-    })
-  }
-
-  async runRemoveExpiredConditionsJob() {
-    await this.post({
-      path: '/run-remove-expired-conditions-job',
-    })
-  }
-
-  async runLicenceTimeOutJob() {
-    await this.post({
-      path: '/run-time-out-job',
-    })
-  }
-
-  async runHardStopLicencesReviewOverdueJob() {
-    await this.post({
-      path: '/run-hard-stop-licence-review-overdue-job',
-    })
-  }
-
-  async runNotifyAttentionNeededLicencesJob() {
-    await this.post({
-      path: '/run-notify-attention-needed-licences-job',
-    })
-  }
-
   async overrideLicenceDates(licenceId: number, request: OverrideLicenceDatesRequest, user: User) {
     await this.put({ path: `/licence/id/${licenceId}/override/dates`, data: request }, { username: user?.username })
+  }
+
+  async overrideLicenceType(
+    licenceId: number,
+    request: OverrideLicenceTypeRequest,
+    user: User,
+  ): Promise<Record<string, string>> {
+    const response = (await this.post(
+      {
+        path: `/licence/id/${licenceId}/override/type`,
+        data: request,
+        returnBodyOnErrorIfPredicate: e => e.response.status === 400,
+      },
+      { username: user?.username },
+    )) as Record<string, unknown>
+    return response.status === 400 ? (response.fieldErrors as Record<string, string>) : null
+  }
+
+  async overrideLicencePrisonerDetails(licenceId: number, request: OverrideLicencePrisonerDetailsRequest, user: User) {
+    await this.post(
+      { path: `/licence/id/${licenceId}/override/prisoner-details`, data: request },
+      { username: user?.username },
+    )
   }
 
   async updateOffenderDetails(nomisId: string, offenderDetails: UpdateOffenderDetailsRequest) {
@@ -526,7 +516,7 @@ export default class LicenceApiClient extends RestClient {
 
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     const licence = await this.getLicenceById(licenceId, user)
-    if (licence.kind !== 'VARIATION') {
+    if (!isVariation(licence)) {
       return licence
     }
 
@@ -537,18 +527,6 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({
       path: '/bank-holidays',
     })) as Promise<string[]>
-  }
-
-  async runLicenceExpiryJob(): Promise<void> {
-    await this.post({
-      path: '/run-expire-licences-job',
-    })
-  }
-
-  async runDeactivateReleaseDatePassedLicencesJob(): Promise<void> {
-    await this.post({
-      path: '/run-deactivate-licences-past-release-date',
-    })
   }
 
   async reviewWithoutVariation(licenceId: number, user: User): Promise<void> {
@@ -685,9 +663,30 @@ export default class LicenceApiClient extends RestClient {
     })) as Promise<ComCase[]>
   }
 
+  async getVaryApproverCaseload(
+    varyApproverCaseloadRequest: VaryApproverCaseloadSearchRequest,
+  ): Promise<VaryApproverCase[]> {
+    return (await this.post({
+      path: `/caseload/vary-approver`,
+      data: varyApproverCaseloadRequest,
+    })) as Promise<VaryApproverCase[]>
+  }
+
   async getHdcLicenceData(licenceId: number): Promise<HdcLicenceData> {
     return (await this.get({
       path: `/hdc/curfew/licenceId/${licenceId}`,
     })) as Promise<HdcLicenceData>
+  }
+
+  async getIneligibilityReasons(nomisId: string): Promise<string[]> {
+    return (await this.get({
+      path: `/offender/nomisid/${nomisId}/ineligibility-reasons`,
+    })) as Promise<string[]>
+  }
+
+  async getIS91Status(nomisId: string): Promise<boolean> {
+    return (await this.get({
+      path: `/offender/nomisid/${nomisId}/is-91-status`,
+    })) as Promise<boolean>
   }
 }

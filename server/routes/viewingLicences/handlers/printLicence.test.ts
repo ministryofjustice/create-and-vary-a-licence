@@ -5,8 +5,8 @@ import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import config from '../../../config'
-import HdcService from '../../../services/hdcService'
-import { HdcLicenceData } from '../../../@types/licenceApiClientTypes'
+import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const qrCodeService = new QrCodeService() as jest.Mocked<QrCodeService>
@@ -24,8 +24,9 @@ describe('Route - print a licence', () => {
     curfewAddress: {
       addressLine1: 'addressLineOne',
       addressLine2: 'addressLineTwo',
-      addressTown: 'addressTownOrCity',
-      postCode: 'addressPostcode',
+      townOrCity: 'addressTownOrCity',
+      county: 'county',
+      postcode: 'addressPostcode',
     },
     firstNightCurfewHours: {
       firstNightFrom: '09:00',
@@ -82,7 +83,8 @@ describe('Route - print a licence', () => {
         untilTime: '09:00:00',
       },
     ],
-  } as HdcLicenceData
+    allCurfewTimesEqual: true,
+  } as CvlHdcLicenceData
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -92,24 +94,37 @@ describe('Route - print a licence', () => {
     licenceService.getExclusionZoneImageData = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
     hdcService.getHdcLicenceData = jest.fn()
+
+    res = {
+      render: jest.fn(),
+      redirect: jest.fn(),
+      renderPDF: jest.fn(),
+      locals: {
+        user: { username },
+        licence: {
+          id: '1',
+          kind: 'CRD',
+          typeCode: 'AP',
+          nomsId: 'A1234AA',
+          lastName: 'Bloggs',
+          cro: 'CRO',
+          bookingNo: 'BOOKING',
+          pnc: 'PNC',
+          version: '1.0',
+          prisonCode: 'MDI',
+          prisonTelephone: '0114 2345232334',
+          additionalLicenceConditions: [],
+          additionalPssConditions: [],
+          licenceVersion: '1.4',
+        },
+        qrCodesEnabled: false,
+      },
+    } as unknown as Response
   })
 
   describe('GET', () => {
     it('should render a HTML view of an AP licence', async () => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username },
-          licence: {
-            id: 1,
-            typeCode: 'AP',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-          },
-          qrCodesEnabled: false,
-        },
-      } as unknown as Response
+      res.locals.licence.typeCode = 'AP'
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
 
@@ -128,20 +143,7 @@ describe('Route - print a licence', () => {
     })
 
     it('should render a HTML view of a PSS licence', async () => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username },
-          licence: {
-            id: 1,
-            typeCode: 'PSS',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-          },
-          qrCodesEnabled: false,
-        },
-      } as unknown as Response
+      res.locals.licence.typeCode = 'PSS'
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
 
@@ -160,30 +162,7 @@ describe('Route - print a licence', () => {
     })
 
     it('should render a PDF view of an AP licence', async () => {
-      res = {
-        render: jest.fn(),
-        renderPDF: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username },
-          licence: {
-            id: '1',
-            typeCode: 'AP',
-            nomsId: 'A1234AA',
-            lastName: 'Bloggs',
-            cro: 'CRO',
-            bookingNo: 'BOOKING',
-            pnc: 'PNC',
-            version: '1.0',
-            prisonCode: 'MDI',
-            prisonTelephone: '0114 2345232334',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-            licenceVersion: '1.4',
-          },
-          qrCodesEnabled: false,
-        },
-      } as unknown as Response
+      res.locals.licence.typeCode = 'AP'
 
       const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
       const { monitoringSupplierTelephone } = config
@@ -220,55 +199,21 @@ describe('Route - print a licence', () => {
     })
 
     it('should strip the minor version number off a varied licence', async () => {
-      res = {
-        locals: {
-          licence: {
-            id: 1,
-            typeCode: 'AP',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-            licenceVersion: '3.0',
-          },
-        },
-      } as unknown as Response
+      res.locals.licence.version = '3.0'
 
       const footerHtml = handler.getPdfFooter(res.locals.licence)
       expect(footerHtml).toMatch(/Version No:.+<\/span>/)
     })
 
     it('should render a PDF view of an AP licence with exclusion zone data', async () => {
-      const additionalLicenceConditions = [
+      res.locals.licence.additionalLicenceConditions = [
         {
           id: 1,
           code: 'code',
-          uploadSummary: [{ id: 1, description: 'Some words' }],
-          data: [{ field: 'outOfBoundArea' }, { value: 'London' }],
+          uploadSummary: [{ id: 1, description: 'Some words', fileSize: 0, uploadedTime: '', uploadDetailId: 0 }],
+          data: [{ field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true }],
         },
       ]
-
-      res = {
-        render: jest.fn(),
-        renderPDF: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username },
-          licence: {
-            id: '1',
-            typeCode: 'AP',
-            nomsId: 'A1234AA',
-            lastName: 'Bloggs',
-            cro: 'CRO',
-            bookingNo: 'BOOKING',
-            pnc: 'PNC',
-            version: '1.0',
-            prisonCode: 'MDI',
-            prisonTelephone: '0114 2345232334',
-            licenceVersion: '1.0',
-            additionalLicenceConditions,
-          },
-          qrCodesEnabled: false,
-        },
-      } as unknown as Response
 
       const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
       const { monitoringSupplierTelephone } = config
@@ -296,9 +241,9 @@ describe('Route - print a licence', () => {
               data: [
                 {
                   field: 'outOfBoundArea',
-                },
-                {
-                  value: 'London',
+                  id: 0,
+                  sequence: 0,
+                  contributesToLicence: true,
                 },
               ],
               id: 1,
@@ -306,6 +251,9 @@ describe('Route - print a licence', () => {
                 {
                   description: 'Some words',
                   id: 1,
+                  fileSize: 0,
+                  uploadedTime: '',
+                  uploadDetailId: 0,
                 },
               ],
             },
@@ -315,6 +263,9 @@ describe('Route - print a licence', () => {
             {
               dataValue: {
                 field: 'outOfBoundArea',
+                contributesToLicence: true,
+                id: 0,
+                sequence: 0,
               },
               description: 'Some words',
               mapData: 'base64 data',
@@ -332,30 +283,8 @@ describe('Route - print a licence', () => {
     })
 
     it('should render a PDF view of an AP licence with a QR code', async () => {
-      res = {
-        render: jest.fn(),
-        renderPDF: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username },
-          licence: {
-            id: '1',
-            typeCode: 'AP',
-            nomsId: 'A1234AA',
-            lastName: 'Bloggs',
-            cro: 'CRO',
-            bookingNo: 'BOOKING',
-            pnc: 'PNC',
-            version: '1.0',
-            prisonCode: 'MDI',
-            prisonTelephone: '0114 2345232334',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-            licenceVersion: '1.0',
-          },
-          qrCodesEnabled: true,
-        },
-      } as unknown as Response
+      res.locals.licence.typeCode = 'AP'
+      res.locals.qrCodesEnabled = true
 
       const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
       const { monitoringSupplierTelephone } = config
@@ -391,21 +320,8 @@ describe('Route - print a licence', () => {
     })
 
     it('should render a HTML view of a HDC AP licence', async () => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username },
-          licence: {
-            id: 1,
-            kind: 'HDC',
-            typeCode: 'AP',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-          },
-          qrCodesEnabled: false,
-        },
-      } as unknown as Response
+      res.locals.licence.kind = 'HDC'
+      res.locals.licence.typeCode = 'AP'
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
@@ -426,31 +342,8 @@ describe('Route - print a licence', () => {
     })
 
     it('should render a PDF view of a HDC AP licence', async () => {
-      res = {
-        render: jest.fn(),
-        renderPDF: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username },
-          licence: {
-            id: '1',
-            kind: 'HDC',
-            typeCode: 'AP',
-            nomsId: 'A1234AA',
-            lastName: 'Bloggs',
-            cro: 'CRO',
-            bookingNo: 'BOOKING',
-            pnc: 'PNC',
-            version: '1.0',
-            prisonCode: 'MDI',
-            prisonTelephone: '0114 2345232334',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-            licenceVersion: '1.4',
-          },
-          qrCodesEnabled: false,
-        },
-      } as unknown as Response
+      res.locals.licence.kind = 'HDC'
+      res.locals.licence.typeCode = 'AP'
 
       const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
       const { monitoringSupplierTelephone } = config
@@ -489,21 +382,8 @@ describe('Route - print a licence', () => {
     })
 
     it('should render a HTML view of a HDC AP_PSS licence', async () => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username },
-          licence: {
-            id: 1,
-            kind: 'HDC',
-            typeCode: 'AP_PSS',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-          },
-          qrCodesEnabled: false,
-        },
-      } as unknown as Response
+      res.locals.licence.kind = 'HDC'
+      res.locals.licence.typeCode = 'AP_PSS'
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
@@ -524,31 +404,8 @@ describe('Route - print a licence', () => {
     })
 
     it('should render a PDF view of a HDC AP_PSS licence', async () => {
-      res = {
-        render: jest.fn(),
-        renderPDF: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username },
-          licence: {
-            id: '1',
-            kind: 'HDC',
-            typeCode: 'AP_PSS',
-            nomsId: 'A1234AA',
-            lastName: 'Bloggs',
-            cro: 'CRO',
-            bookingNo: 'BOOKING',
-            pnc: 'PNC',
-            version: '1.0',
-            prisonCode: 'MDI',
-            prisonTelephone: '0114 2345232334',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-            licenceVersion: '1.4',
-          },
-          qrCodesEnabled: false,
-        },
-      } as unknown as Response
+      res.locals.licence.kind = 'HDC'
+      res.locals.licence.typeCode = 'AP_PSS'
 
       const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
       const { monitoringSupplierTelephone } = config
@@ -584,6 +441,95 @@ describe('Route - print a licence', () => {
       expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
       expect(footerHtml).toMatch(/Version No:.+1.4/)
+    })
+
+    it('should render a HTML view of a HDC AP_PSS Variation licence', async () => {
+      res.locals.licence.kind = 'HDC_VARIATION'
+      res.locals.licence.typeCode = 'AP_PSS'
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
+      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
+
+      await handler.preview(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/licence/HDC_AP_PSS', {
+        qrCode: null,
+        htmlPrint: true,
+        exclusionZoneMapData: [],
+        singleItemConditions: [],
+        multipleItemConditions: [],
+        hdcLicenceData: exampleHdcLicenceData,
+      })
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
+      expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
+    })
+
+    it('should render a PDF view of a HDC AP_PSS variation licence', async () => {
+      res.locals.licence.kind = 'HDC_VARIATION'
+      res.locals.licence.typeCode = 'AP_PSS'
+
+      const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+      const { monitoringSupplierTelephone } = config
+
+      const filename = `${res.locals.licence.nomsId}.pdf`
+      const footerHtml = handler.getPdfFooter(res.locals.licence)
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
+      prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
+      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
+
+      await handler.renderPdf(req, res)
+
+      expect(res.renderPDF).toHaveBeenCalledWith(
+        'pages/licence/HDC_AP_PSS',
+        {
+          licencesUrl,
+          imageData: '-- base64 image data --',
+          qrCode: null,
+          htmlPrint: false,
+          watermark,
+          singleItemConditions: [],
+          multipleItemConditions: [],
+          exclusionZoneMapData: [],
+          hdcLicenceData: exampleHdcLicenceData,
+          prisonTelephone: '0114 2345232334',
+          monitoringSupplierTelephone,
+        },
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
+      )
+
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
+      expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
+      expect(footerHtml).toMatch(/Version No:.+1.4/)
+    })
+  })
+
+  describe('getTemplateForLicenceType', () => {
+    it('returns typeCode for CRD licences', () => {
+      const licence = { kind: 'CRD', typeCode: 'AP' } as Licence
+      expect(handler.getTemplateForLicence(licence)).toBe('AP')
+    })
+
+    it('returns typeCode for HARD_STOP licences', () => {
+      const licence = { kind: 'HARD_STOP', typeCode: 'PSS' } as Licence
+      expect(handler.getTemplateForLicence(licence)).toBe('PSS')
+    })
+
+    it('returns typeCode for VARIATION licences', () => {
+      const licence = { kind: 'VARIATION', typeCode: 'AP_PSS' } as Licence
+      expect(handler.getTemplateForLicence(licence)).toBe('AP_PSS')
+    })
+
+    it('adds an HDC prefix to typeCode for HDC licences', () => {
+      const licence = { kind: 'HDC', typeCode: 'AP' } as Licence
+      expect(handler.getTemplateForLicence(licence)).toBe('HDC_AP')
+    })
+
+    it('adds an HDC prefix to typeCode for HDC variation licences', () => {
+      const licence = { kind: 'HDC_VARIATION', typeCode: 'AP_PSS' } as Licence
+      expect(handler.getTemplateForLicence(licence)).toBe('HDC_AP_PSS')
     })
   })
 })

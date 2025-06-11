@@ -1,0 +1,56 @@
+{% from "partials/timePicker.njk" import timePicker %}
+{% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+
+{% macro initialMeetingTimeInputs(formResponses, formDate, licence, appointmentTimeType, validationErrors) %}
+    {% set SPECIFIC_DATE_TIME = "SPECIFIC_DATE_TIME" %}
+
+    {% set dateTimeHtml %}
+        {{ hmppsDatePicker({
+            id: "date-calendarDate",
+            name: "date[calendarDate]",
+            label: {
+                text: "Date"
+            },
+            hint: {
+                id: "date-hint",
+                text: "For example, 12/11/2024"
+            },
+            errorMessage: validationErrors | findError('date'),
+            classes: 'hmpps-datepicker--fixed-width',
+            value: formResponses.date.calendarDate or formDate.date.calendarDate
+        }) }}
+        
+        {{ timePicker({
+            id: "time",
+            label: {
+                text: "Time"
+            },
+            hint: {
+                id: "time-hint",
+                text: "For example, 9:30am or 2:55pm"
+            },
+            errorMessage: validationErrors | findError('time'),
+            formResponses: formResponses.time or formDate.time
+        }) }}
+    {% endset %}
+
+    {% set appointmentTimeTypeOptions = [] %}
+    {% for value, text in appointmentTimeType %}
+        {% set appointmentTimeTypeOptions = (appointmentTimeTypeOptions.push(
+            {   value: value, 
+                text: text,
+                conditional: {
+                html: dateTimeHtml
+                } if value === SPECIFIC_DATE_TIME
+            }), appointmentTimeTypeOptions) %}
+    {% endfor %}
+
+    {{ govukRadios({
+        id: "appointment-time-type",
+        name: "appointmentTimeType",
+        value: (formResponses.appointmentTimeType or licence.appointmentTimeType) or SPECIFIC_DATE_TIME,
+        items: appointmentTimeTypeOptions
+    }) }}
+{% endmacro %}

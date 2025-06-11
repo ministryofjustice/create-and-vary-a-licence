@@ -17,10 +17,7 @@ generic-service:
     PRISON_API_URL: "https://prison-api.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api.hmpps.service.justice.gov.uk"
     PRISONER_SEARCH_API_URL: "https://prisoner-search.prison.service.justice.gov.uk"
-    PROBATION_SEARCH_API_URL: "https://probation-offender-search.hmpps.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: "https://prison-register.hmpps.service.justice.gov.uk"
-    EXIT_SURVEY_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
-    PHASE_BANNER_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
     LICENCE_WATERMARK: "false"
     # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
     GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
@@ -28,9 +25,14 @@ generic-service:
     LICENCES_URL: "http://create-and-vary-a-licence"
     DPS_URL: "https://digital.prison.service.justice.gov.uk"
 
+    ACO_CASELOAD_BACKEND_ENABLED: "false"
+
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components.hmpps.service.justice.gov.uk"
     MANAGE_USERS_API_URL: "https://manage-users-api.hmpps.service.justice.gov.uk"
+    HDC_INTEGRATION_MVP2_ENABLED: "false"
+    HDC_LICENCE_CREATION_BLOCK: "true"
+    CA_NEW_SEARCH_ENABLED: "false"
 
 gotenberg:
   replicaCount: 2
@@ -41,3 +43,6 @@ gotenberg:
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts
+  sqsAlertsQueueNames:
+    - "Digital-Prison-Services-prod-cvl_domain_events_queue"
+    - "Digital-Prison-Services-prod-cvl_domain_events_dl"

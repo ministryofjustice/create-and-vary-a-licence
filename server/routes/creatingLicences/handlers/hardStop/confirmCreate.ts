@@ -13,15 +13,14 @@ export default class ConfirmCreateRoutes {
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/view/cases'
     const {
-      cvl: { licenceType, isEligibleForEarlyRelease },
-      prisoner: { confirmedReleaseDate, conditionalReleaseDate, dateOfBirth, firstName, lastName },
+      cvl: { licenceType, isEligibleForEarlyRelease, licenceStartDate },
+      prisoner: { dateOfBirth, firstName, lastName },
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
     return res.render('pages/create/hardStop/confirmCreate', {
       licence: {
         nomsId: nomisId,
-        actualReleaseDate: confirmedReleaseDate ? moment(confirmedReleaseDate).format('DD/MM/YYYY') : undefined,
-        conditionalReleaseDate: moment(conditionalReleaseDate).format('DD/MM/YYYY'),
+        licenceStartDate,
         dateOfBirth: moment(dateOfBirth).format('DD/MM/YYYY'),
         forename: convertToTitleCase(firstName),
         surname: convertToTitleCase(lastName),

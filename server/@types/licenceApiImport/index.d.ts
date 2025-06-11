@@ -4,6 +4,54 @@
  */
 
 export interface paths {
+  '/queue-admin/retry-dlq/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['retryDlq']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/retry-all-dlqs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['retryAllDlqs']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/purge-queue/{queueName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['purgeQueue']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/prison-case-administrator/update': {
     parameters: {
       query?: never
@@ -14,7 +62,7 @@ export interface paths {
     get?: never
     /**
      * Create/updates the details of a prison user.
-     * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_CVL_ADMIN.
      */
     put: operations['updatePrisonUser']
     post?: never
@@ -34,7 +82,7 @@ export interface paths {
     get?: never
     /**
      * Create/updates the details of a prison user.
-     * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_CVL_ADMIN.
      */
     put: operations['updatePrisonUser_1']
     post?: never
@@ -53,18 +101,18 @@ export interface paths {
     }
     /**
      * Get OMU email address.
-     * @description Obtain prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Obtain prison Offender Management Unit email address. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getOmuContactByPrisonCode']
     /**
      * Updates the OMU email address.
-     * @description Updates the OMU email address used to contact members of a prison OMU. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the OMU email address used to contact members of a prison OMU. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateOmuEmail']
     post?: never
     /**
      * Delete the OMU email address.
-     * @description Delete prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Delete prison Offender Management Unit email address. Requires ROLE_CVL_ADMIN.
      */
     delete: operations['deleteOmuContactByPrisonCode']
     options?: never
@@ -82,7 +130,7 @@ export interface paths {
     get?: never
     /**
      * Updates the offender's personal information on all of their licences.
-     * @description Updates the name and date of birth stored on all licences associated with the given offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the name and date of birth stored on all licences associated with the given offender. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateOffenderDetails']
     post?: never
@@ -102,7 +150,7 @@ export interface paths {
     get?: never
     /**
      * Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender.
-     * @description Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateResponsibleCom']
     post?: never
@@ -122,7 +170,7 @@ export interface paths {
     get?: never
     /**
      * Updates in-flight licences associated with an offender with a new probation team.
-     * @description Updates in-flight licences associated with an offender with a new probation team. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates in-flight licences associated with an offender with a new probation team. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateProbationTeam']
     post?: never
@@ -142,7 +190,7 @@ export interface paths {
     get?: never
     /**
      * Sets whether the variation has been discussed with a VLO.
-     * @description Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateVloDiscussion']
     post?: never
@@ -162,7 +210,7 @@ export interface paths {
     get?: never
     /**
      * Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED.
-     * @description Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED, and record the details of the COM who submitted. Requires ROLE_CVL_ADMIN.
      */
     put: operations['submitLicence']
     post?: never
@@ -182,7 +230,7 @@ export interface paths {
     get?: never
     /**
      * Update the status of a licence.
-     * @description Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the status of a licence. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateLicenceStatus']
     post?: never
@@ -202,7 +250,7 @@ export interface paths {
     get?: never
     /**
      * Update the standard conditions for a licence.
-     * @description Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateStandardConditions']
     post?: never
@@ -222,7 +270,7 @@ export interface paths {
     get?: never
     /**
      * Sets whether the variation has been discussed with an SPO.
-     * @description Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateSpoDiscussion']
     post?: never
@@ -242,7 +290,7 @@ export interface paths {
     get?: never
     /**
      * Updates the sentence dates.
-     * @description Updates the sentence dates. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the sentence dates. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateSentenceDates']
     post?: never
@@ -262,7 +310,7 @@ export interface paths {
     get?: never
     /**
      * Updates a licence to referred and stores the reason provided.
-     * @description Updates a licence to referred and stores the reason provided by the approver. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates a licence to referred and stores the reason provided by the approver. Requires ROLE_CVL_ADMIN.
      */
     put: operations['referVariation']
     post?: never
@@ -282,7 +330,7 @@ export interface paths {
     get?: never
     /**
      * Updates the reason for the licence variation.
-     * @description Updates the reason for the licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the reason for the licence variation. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateReasonForVariation']
     post?: never
@@ -302,7 +350,7 @@ export interface paths {
     get?: never
     /**
      * Updates the prison information.
-     * @description Updates the prison information. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Updates the prison information. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updatePrisonInformation']
     post?: never
@@ -322,9 +370,29 @@ export interface paths {
     get?: never
     /**
      * Override licence dates
-     * @description Override the dates for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Override the dates for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
      */
     put: operations['changeDates']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/licence/id/{licenceId}/curfew-times': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Update the curfew times for a HDC licence.
+     * @description Replace the curfew times against a HDC licence if curfew times change. Requires ROLE_CVL_ADMIN.
+     */
+    put: operations['updateCurfewTimes']
     post?: never
     delete?: never
     options?: never
@@ -342,7 +410,7 @@ export interface paths {
     get?: never
     /**
      * Update the officer contact number for a licence
-     * @description Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the contact number for the officer related to this licence. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateContactNumber']
     post?: never
@@ -362,7 +430,7 @@ export interface paths {
     get?: never
     /**
      * Add or replace the bespoke conditions for a licence.
-     * @description Add or replace the bespoke conditions on a licence with the content of this request. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Add or replace the bespoke conditions on a licence with the content of this request. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateBespokeConditions']
     post?: never
@@ -382,7 +450,7 @@ export interface paths {
     get?: never
     /**
      * Approves a licence variation.
-     * @description Approves a licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Approves a licence variation. Requires ROLE_CVL_ADMIN.
      */
     put: operations['approveVariation']
     post?: never
@@ -402,7 +470,7 @@ export interface paths {
     get?: never
     /**
      * Update the appointment date and time
-     * @description Update the date and time for the initial appointment. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the date and time for the initial appointment. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAppointmentTime']
     post?: never
@@ -422,7 +490,7 @@ export interface paths {
     get?: never
     /**
      * Update the person to meet at the initial appointment
-     * @description Update the person the person on probation will meet at the initial appointment Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the person the person on probation will meet at the initial appointment Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAppointmentPerson']
     post?: never
@@ -442,7 +510,7 @@ export interface paths {
     get?: never
     /**
      * Update the address where the initial appointment will take place
-     * @description Update the address where the initial appointment will take place. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the address where the initial appointment will take place. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAppointmentAddress']
     post?: never
@@ -462,7 +530,7 @@ export interface paths {
     get?: never
     /**
      * Update the set of additional conditions on the licence.
-     * @description Update the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAdditionalConditions']
     post?: never
@@ -482,7 +550,7 @@ export interface paths {
     get?: never
     /**
      * Update the user entered data to accompany an additional condition template.
-     * @description Update the user entered data to accompany an additional condition template. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Update the user entered data to accompany an additional condition template. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateAdditionalConditionData']
     post?: never
@@ -502,7 +570,7 @@ export interface paths {
     get?: never
     /**
      * Activates an approved variation. Inactivates previous licence.
-     * @description Activates a variation. Inactivates previous licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Activates a variation. Inactivates previous licence. Requires ROLE_CVL_ADMIN.
      */
     put: operations['activateVariation']
     post?: never
@@ -522,7 +590,7 @@ export interface paths {
     get?: never
     /**
      * Removes a previously uploaded exclusion zone file from an additional condition.
-     * @description Removes a previously uploaded exclusion zone file. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Removes a previously uploaded exclusion zone file. Requires ROLE_CVL_ADMIN.
      */
     put: operations['removeExclusionZoneFile']
     post?: never
@@ -542,7 +610,7 @@ export interface paths {
     get?: never
     /**
      * Create/updates the details of a community offender manager.
-     * @description Create/updates the details of a community offender manager (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create/updates the details of a community offender manager (e.g. email address). Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateComDetails']
     post?: never
@@ -572,146 +640,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/run-time-out-job': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Triggers the time out licence job.
-     * @description Triggers a job that causes licences with a status of IN_PROGRESS and a CRD or ARD less than two working days to be updated to TIMED_OUT. Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['runTimeOutLicencesServiceJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/run-remove-expired-conditions-job': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Job to remove AP conditions.
-     * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['runRemoveExpiredConditionsJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/run-notify-attention-needed-licences-job': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Triggers the notify attention needed licences job.
-     * @description Triggers a job that notifies licences with a status of APPROVED and a CRD or ARD in past or licences with a status of APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED with no release date. Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['runNotifyAttentionNeededLicencesJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/run-hard-stop-licence-review-overdue-job': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Triggers the hard stop licence review overdue job.
-     * @description Triggers a job that sends a notification when the COM has not reviewed a hard stop licence 5 days after activation. Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['runHardStopLicenceReviewOverdueJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/run-expire-licences-job': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Triggers the licence expiry job.
-     * @description Triggers a job that causes licences with an ACTIVE status to be deactivated if they are passed their TUSED (if present) or LED (if TUSED is null). Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['runLicenceExpiryJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/run-deactivate-licences-past-release-date': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Deactivate licences which are past release date.
-     * @description Deactivate licences from IN_PROGRESS and SUBMITTED status to INACTIVE where these are past release date already. Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['runDeactivateLicencesJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/run-activation-job': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Triggers the licence activation job.
-     * @description Triggers a job that causes licences with a status of APPROVED, a CRD or ARD of today, and that are either IS91 cases or have an NOMIS status beginning with 'INACTIVE' to be activated. Deactivates offenders with approved HDC licences. Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['runLicenceActivationJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/release-date-by-prison': {
     parameters: {
       query?: never
@@ -726,6 +654,26 @@ export interface paths {
      * @description Match prisoners in a subset of prisons with a release date within a given range
      */
     post: operations['findByReleaseDatePaginated']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/recalculate-licence-start-dates': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Recalculates licence start dates
+     * @description Recalculates licence start dates for the given number of licences. Licences are updated sequentially, from newest to oldest, starting with the one after the provided ID. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['recalculateLicenceStartDates']
     delete?: never
     options?: never
     head?: never
@@ -773,26 +721,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/notify-probation-of-unapproved-licences': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Send an email to probation practitioner of any previously approved licences that have been edited but not re-approved by prisoners release date
-     * @description Send email to probation practioner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-     */
-    post: operations['notifyProbationOfUnapprovedLicences']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/licence/match': {
     parameters: {
       query?: never
@@ -824,7 +752,7 @@ export interface paths {
     put?: never
     /**
      * Inactivate licences in bulk
-     * @description Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_CVL_ADMIN.
      */
     post: operations['inactivateLicences']
     delete?: never
@@ -844,9 +772,29 @@ export interface paths {
     put?: never
     /**
      * Marks the HardStop / Time served licence as having been reviewed with no variation required.
-     * @description Marks the HardStop / Time served licence as having been reviewed with no variation required. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Marks the HardStop / Time served licence as having been reviewed with no variation required. Requires ROLE_CVL_ADMIN.
      */
     post: operations['reviewWithNoVariationRequired']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/licence/id/{licenceId}/override/type': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Override a licence type
+     * @description Override the type for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['changeType']
     delete?: never
     options?: never
     head?: never
@@ -864,9 +812,49 @@ export interface paths {
     put?: never
     /**
      * Override a licence status
-     * @description Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
      */
     post: operations['changeStatus']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/licence/id/{licenceId}/override/prisoner-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Override prisoner details on a licence
+     * @description Override the prisoner details for an existing licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['changePrisonerDetails']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/licence/id/{licenceId}/electronic-monitoring-programmes': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Updates the electronic monitoring programme details.
+     * @description Updates the electronic monitoring programme details. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['updateElectronicMonitoringProgramme']
     delete?: never
     options?: never
     head?: never
@@ -884,7 +872,7 @@ export interface paths {
     put?: never
     /**
      * Create a new version of an approved licence
-     * @description Create a new version of an  approved licence. The new licence will have a new id and have status IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create a new version of an  approved licence. The new licence will have a new id and have status IN_PROGRESS. Requires ROLE_CVL_ADMIN.
      */
     post: operations['editLicence']
     delete?: never
@@ -904,7 +892,7 @@ export interface paths {
     put?: never
     /**
      * Remove additional conditions from the licence.
-     * @description Remove any instances of the additional conditions with the supplied condition codes from the licence. This includes any existing accompanying data per condition. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Remove any instances of the additional conditions with the supplied condition codes from the licence. This includes any existing accompanying data per condition. Requires ROLE_CVL_ADMIN.
      */
     post: operations['deleteAdditionalConditionsByCode']
     delete?: never
@@ -924,7 +912,7 @@ export interface paths {
     put?: never
     /**
      * Deactivate an active licence and any associated variations
-     * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_CVL_ADMIN.
      */
     post: operations['deactivateLicenceAndVariations']
     delete?: never
@@ -944,7 +932,7 @@ export interface paths {
     put?: never
     /**
      * Create a variation of this licence
-     * @description Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_CVL_ADMIN.
      */
     post: operations['createVariation']
     delete?: never
@@ -964,7 +952,7 @@ export interface paths {
     put?: never
     /**
      * Add additional condition to the licence.
-     * @description Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_CVL_ADMIN.
      */
     post: operations['addAdditionalCondition']
     delete?: never
@@ -984,9 +972,197 @@ export interface paths {
     put?: never
     /**
      * Create a licence
-     * @description Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_CVL_ADMIN.
      */
     post: operations['createLicence']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/warn-hard-stop-review-overdue': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Reminds COMs to review hard stop licences after release.
+     * @description Triggers a job that sends a notification when the COM has not reviewed a hard stop licence 5 days after activation.
+     */
+    post: operations['runHardStopLicenceReviewOverdueJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/time-out-licences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Times out licences that have hit hard stop.
+     * @description Triggers a job that causes licences with a status of IN_PROGRESS and a CRD or ARD less than two working days to be updated to TIMED_OUT.
+     */
+    post: operations['runTimeOutLicencesServiceJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/remove-expired-conditions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Remove AP conditions from in-progress variations after PSS starts.
+     * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'.
+     */
+    post: operations['runRemoveExpiredConditionsJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/prompt-licence-creation': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Notifies the COM of upcoming releases which they need to create a licence for.
+     * @description Notifies the COM of upcoming releases which they need to create a licence for.
+     */
+    post: operations['runJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/notify-probation-of-unapproved-licences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Warn of unapproved licences after release
+     * @description Send an email to probation practitioner of any previously approved licences that have been edited but not re-approved by prisoners release date
+     */
+    post: operations['notifyProbationOfUnapprovedLicences']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/expire-licences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Expires licences that have ended.
+     * @description Triggers a job that causes licences with an ACTIVE status to be deactivated if they are passed their TUSED (if present) or LED (if TUSED is null).
+     */
+    post: operations['runLicenceExpiryJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/deactivate-licences-past-release-date': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Deactivate licences which are past release date.
+     * @description Deactivate licences from IN_PROGRESS and SUBMITTED status to INACTIVE where these are past release date already.
+     */
+    post: operations['runDeactivateLicencesJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/deactivate-hdc-licences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Deactivates HDC licences past their release date
+     * @description Deactivates HDC licences past their release date
+     */
+    post: operations['runJob_1']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/activate-licences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Activates and inactivates licences on release day.
+     * @description Triggers a job that activates licences with:
+     *           <ul>
+     *            <li>a status of APPROVED</li>
+     *            <li>an appropriate HDC approval state based on type</li>
+     *            <li>an LSD of today</li>
+     *            <li>are either IS91 cases or have an NOMIS status beginning with 'INACTIVE'</li>
+     *           </ul>
+     *            It also inactivates CRD licences that have been approved for HDC.
+     *            This only fires for licences we haven't processed a release event for.
+     */
+    post: operations['runLicenceActivationJob']
     delete?: never
     options?: never
     head?: never
@@ -1004,29 +1180,9 @@ export interface paths {
     put?: never
     /**
      * Upload a multipart/form-data request containing a PDF exclusion zone file.
-     * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_CVL_ADMIN.
      */
     post: operations['uploadExclusionZoneFile']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/com/prompt-licence-creation': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Notifies the COM of upcoming releases which they need to create a licence for.
-     * @description Notifies the COM of upcoming releases which they need to create a licence for. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-     */
-    post: operations['notifyOfUpcomingReleasesRequiringLicence']
     delete?: never
     options?: never
     head?: never
@@ -1044,9 +1200,29 @@ export interface paths {
     put?: never
     /**
      * Search for offenders on a given staff member's caseload.
-     * @description Search for offenders on a given staff member's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Search for offenders on a given staff member's caseload. Requires ROLE_CVL_ADMIN.
      */
     post: operations['searchForOffenderOnStaffCaseload']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/caseload/vary-approver': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Returns the variation approver caseload for a probation region
+     * @description Returns an enriched list of cases for people that have a variation to be approved
+     */
+    post: operations['getVaryApproverCaseload']
     delete?: never
     options?: never
     head?: never
@@ -1173,6 +1349,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/caseload/case-admin/case-search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Search for offenders on a given case admin's caseload.
+     * @description Search for offenders on a given case admin's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    post: operations['searchForOffenderOnPrisonCaseAdminCaseload']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/audit/retrieve': {
     parameters: {
       query?: never
@@ -1205,6 +1401,73 @@ export interface paths {
      * @description Returns a list of licences and audit details for the Prison Reference Number(prn). Requires ROLE_SAR_DATA_ACCESS or ROLE_CVL_ADMIN.
      */
     get: operations['getSarRecordsById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/reports/{reportId}/{reportVariantId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Returns the dataset for the given report ID and report variant ID filtered by the filters provided in the query. */
+    get: operations['configuredApiDataset']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/reports/{reportId}/{reportVariantId}/{fieldId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Returns the dataset for the given report ID and report variant ID filtered by the filters provided in the query. */
+    get: operations['configuredApiDynamicFilter']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/reports/{reportId}/{reportVariantId}/count': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Returns the number of records for the given report ID and report variant ID filtered by the filters provided in the query. */
+    get: operations['configuredApiCount']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/get-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getDlqMessages']
     put?: never
     post?: never
     delete?: never
@@ -1353,6 +1616,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/offender/nomisid/{nomsId}/is-91-status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve IS-91 status for offender
+     * @description Returns IS-91 status for creating a licence for a specific prisoner. Requires ROLE_CVL_ADMIN.
+     */
+    get: operations['getIS91Status']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/offender/nomisid/{nomsId}/ineligibility-reasons': {
     parameters: {
       query?: never
@@ -1362,7 +1645,7 @@ export interface paths {
     }
     /**
      * Retrieve ineligibility reasons for offender
-     * @description Returns ineligibility reasons for creating a licence for a specific prisoner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns ineligibility reasons for creating a licence for a specific prisoner. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getIneligibilityReasons']
     put?: never
@@ -1402,7 +1685,7 @@ export interface paths {
     }
     /**
      * Get a licence by its licence id
-     * @description Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns a single licence detail by its unique identifier. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getLicenceById_1']
     put?: never
@@ -1422,7 +1705,7 @@ export interface paths {
     }
     /**
      * Get licence policy be version number
-     * @description Returns a single policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns a single policy using its unique identifier. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getPolicyByVersion']
     put?: never
@@ -1442,7 +1725,7 @@ export interface paths {
     }
     /**
      * Get differences between saved licences conditions and new policy
-     * @description Returns condition data saved against a licence no longer present within the new licence policyRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns condition data saved against a licence no longer present within the new licence policyRequires ROLE_CVL_ADMIN.
      */
     get: operations['compareLicence']
     put?: never
@@ -1462,7 +1745,7 @@ export interface paths {
     }
     /**
      * Get the active licence policy
-     * @description Returns the active policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns the active policy using its unique identifier. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getCurrentPolicy']
     put?: never
@@ -1482,7 +1765,7 @@ export interface paths {
     }
     /**
      * Get all licence policy versions
-     * @description Returns a list of policies, active and presentRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns a list of policies, active and presentRequires ROLE_CVL_ADMIN.
      */
     get: operations['getPolicies']
     put?: never
@@ -1522,7 +1805,7 @@ export interface paths {
     }
     /**
      * Get the exclusion zone map image for a specified licence and condition
-     * @description Get the exclusion zone map image. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Get the exclusion zone map image. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getExclusionZoneImage']
     put?: never
@@ -1553,6 +1836,77 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/definitions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Gets summaries of all report definitions */
+    get: operations['definitions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/definitions/{reportId}/{variantId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Gets report definition containing a single variant. */
+    get: operations['definition']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/definitions/{dataProductDefinitionId}/dashboards/{dashboardId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Gets the metric dashboard definition. */
+    get: operations['dashboardDefinition']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/coms-to-prompt': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve a list of cases that we will send an email for.
+     * @description Retrieve a list of cases that we have identified to encourage them to progress cases. Requires ROLE_CVL_ADMIN.
+     */
+    get: operations['run']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/com/{staffIdentifier}/review-counts': {
     parameters: {
       query?: never
@@ -1562,7 +1916,7 @@ export interface paths {
     }
     /**
      * Retrieve the individual and team count of cases that the probation practitioner needs to review
-     * @description Retrieve the individual and team count of cases that the probation practitioner needs to review. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Retrieve the individual and team count of cases that the probation practitioner needs to review. Requires ROLE_CVL_ADMIN.
      */
     get: operations['retrieveReviewCounts']
     put?: never
@@ -1622,9 +1976,69 @@ export interface paths {
     }
     /**
      * Get the bank holiday dates for England and Wales
-     * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getBankHolidaysForEnglandAndWales']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/address/search/by/text/{searchQuery}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Searches for addresses that match the given search text
+     * @description Searches for addresses that match the given search text
+     */
+    get: operations['searchForAddresses']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/address/search/by/reference/{reference}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Gets an address by it's reference
+     * @description Gets an address by it's reference (Unique Property Reference Number)
+     */
+    get: operations['searchForAddressByReference']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/address/search/by/postcode/{postcode}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Searches for addresses that match the given postcode
+     * @description Searches for addresses that match the given postcode
+     */
+    get: operations['searchForAddressesByPostcode']
     put?: never
     post?: never
     delete?: never
@@ -1645,7 +2059,7 @@ export interface paths {
     post?: never
     /**
      * Discards a licence record.
-     * @description Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * @description Discards a licence record. Requires ROLE_CVL_ADMIN.
      */
     delete: operations['discard']
     options?: never
@@ -1677,6 +2091,23 @@ export interface paths {
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
+    RetryDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+    }
+    PurgeQueueResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+    }
     /** @description Request object for updating a prison case administrator */
     UpdatePrisonUserRequest: {
       /**
@@ -1699,15 +2130,6 @@ export interface components {
        * @example Bloggs
        */
       lastName?: string
-    }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** @description Request object for updating / creating OMU email contact */
     UpdateOmuEmailRequest: {
@@ -1747,6 +2169,7 @@ export interface components {
       /**
        * Format: date
        * @description The offender's date of birth, from either prison or probation services
+       * @example 12/12/2001
        */
       dateOfBirth: string
     }
@@ -1882,23 +2305,23 @@ export interface components {
        * @description The internal ID for this standard condition on this licence
        * @example 98987
        */
-      id?: number
+      id: number
       /**
        * @description The unique code for this standard condition
        * @example 9ce9d594-e346-4785-9642-c87e764bee37
        */
-      code?: string
+      code: string
       /**
        * Format: int32
        * @description The sequence of this standard condition
        * @example 1
        */
-      sequence?: number
+      sequence: number
       /**
        * @description The text of this standard condition
        * @example Be of generally good behaviour
        */
-      text?: string
+      text: string
     }
     UpdateStandardConditionDataRequest: {
       /** @description The list of standard licence conditions from service configuration */
@@ -1913,59 +2336,6 @@ export interface components {
        * @example Yes
        */
       spoDiscussion: string
-    }
-    /** @description Request object for updating sentence dates */
-    UpdateSentenceDatesRequest: {
-      /**
-       * Format: date
-       * @description The conditional release date, from prison services
-       */
-      conditionalReleaseDate?: string
-      /**
-       * Format: date
-       * @description The actual release date, from prison services
-       */
-      actualReleaseDate?: string
-      /**
-       * Format: date
-       * @description The sentence start date, from prison services
-       */
-      sentenceStartDate?: string
-      /**
-       * Format: date
-       * @description The sentence end date, from prison services
-       */
-      sentenceEndDate?: string
-      /**
-       * Format: date
-       * @description The licence start date, from prison services
-       */
-      licenceStartDate?: string
-      /**
-       * Format: date
-       * @description The licence end date, from prison services
-       */
-      licenceExpiryDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       */
-      topupSupervisionStartDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       */
-      topupSupervisionExpiryDate?: string
-      /**
-       * Format: date
-       * @description The date when a person is recalled to prison, after being released on a license
-       */
-      postRecallReleaseDate?: string
-      /**
-       * Format: date
-       * @description The person's actual home detention curfew date
-       */
-      homeDetentionCurfewActualDate?: string
     }
     /** @description Request object for referring a licence variation */
     ReferVariationRequest: {
@@ -2000,55 +2370,114 @@ export interface components {
       /**
        * Format: date
        * @description The conditional release date
+       * @example 18/06/2022
        */
       conditionalReleaseDate?: string
       /**
        * Format: date
        * @description The actual release date
+       * @example 18/07/2022
        */
       actualReleaseDate?: string
       /**
        * Format: date
        * @description The sentence start date
+       * @example 06/05/2019
        */
       sentenceStartDate?: string
       /**
        * Format: date
        * @description The sentence end date
+       * @example 06/05/2023
        */
       sentenceEndDate?: string
       /**
        * Format: date
        * @description The licence start date
+       * @example 06/05/2021
        */
       licenceStartDate?: string
       /**
        * Format: date
        * @description The licence expiry date
+       * @example 06/05/2023
        */
       licenceExpiryDate?: string
       /**
        * Format: date
        * @description The date when the post sentence supervision period starts
+       * @example 06/05/2023
        */
       topupSupervisionStartDate?: string
       /**
        * Format: date
        * @description The date when the post sentence supervision period ends
+       * @example 06/06/2023
        */
       topupSupervisionExpiryDate?: string
       /**
        * Format: date
        * @description The release date after being recalled
+       * @example 06/06/2023
        */
       postRecallReleaseDate?: string
       /**
        * Format: date
        * @description The person's actual home detention curfew date
+       * @example 06/06/2023
        */
       homeDetentionCurfewActualDate?: string
+      /**
+       * Format: date
+       * @description The person's home detention curfew end date
+       * @example 06/06/2023
+       */
+      homeDetentionCurfewEndDate?: string
       /** @description Reason for overriding the licence dates */
       reason: string
+    }
+    /** @description Describes the curfew times on this hdc licence */
+    HdcCurfewTimes: {
+      /**
+       * Format: int64
+       * @description The internal ID for these curfew times on this hdc licence
+       * @example 98987
+       */
+      id?: number
+      /**
+       * Format: int32
+       * @description Sequence of this curfew time within the curfew times
+       * @example 1
+       */
+      curfewTimesSequence?: number
+      /**
+       * @description The day on which this curfew starts for this curfew time
+       * @example MONDAY
+       * @enum {string}
+       */
+      fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      /**
+       * Format: HH:mm
+       * @description The time at which this curfew starts on the fromDay
+       * @example 01:00:00
+       */
+      fromTime?: string
+      /**
+       * @description The day on which this curfew ends for this curfew time
+       * @example MONDAY
+       * @enum {string}
+       */
+      untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      /**
+       * Format: HH:mm
+       * @description The time at which this curfew ends on the untilDay
+       * @example 01:00:00
+       */
+      untilTime?: string
+    }
+    UpdateCurfewTimesRequest: {
+      /** @description The list of hdc licence curfew times from service configuration */
+      curfewTimes: components['schemas']['HdcCurfewTimes'][]
     }
     /** @description Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
@@ -2071,6 +2500,7 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
+       * @example 12/12/2021 10:35
        */
       appointmentTime?: string
       /**
@@ -2108,12 +2538,12 @@ export interface components {
        * @description Coded value for the additional condition
        * @example meetingAddress
        */
-      code?: string
+      code: string
       /**
        * @description The category of the additional condition
        * @example Freedom of movement
        */
-      category?: string
+      category: string
       /**
        * Format: int32
        * @description Sequence of this additional condition within the additional conditions
@@ -2124,7 +2554,7 @@ export interface components {
        * @description The textual value for this additional condition
        * @example You must not enter the location [DESCRIPTION]
        */
-      text?: string
+      text: string
     }
     /** @description Request object for updating the list of additional conditions on a licence */
     AdditionalConditionsRequest: {
@@ -2185,6 +2615,7 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time of the event
+       * @example 12/01/2022 23:14:23
        */
       eventTime: string
       /**
@@ -2194,7 +2625,7 @@ export interface components {
       username?: string
       /**
        * @description The full name of the person who performed this auditable event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
+       * @example Joe Bloggs
        */
       fullName?: string
       /**
@@ -2213,6 +2644,10 @@ export interface components {
        * @example Updated a bespoke condition
        */
       detail?: string
+      /** @description The changes that were made based on the action taken */
+      changes?: {
+        [key: string]: unknown
+      }
     }
     /** @description Search Criteria for Release Date Search */
     ReleaseDateSearch: {
@@ -2231,14 +2666,16 @@ export interface components {
       /**
        * @description List of Prison Ids (can include OUT and TRN) to restrict the search by. Unrestricted if not supplied or null
        * @example [
-       *       'MDI'
+       *       "MDI"
        *     ]
        */
       prisonIds?: string[]
     }
     /** @description An item in the caseload */
     CaseloadItem: {
+      /** @description Details about a prisoner */
       prisoner: components['schemas']['Prisoner']
+      /** @description Additional CVL specific information including derived fields */
       cvl: components['schemas']['CvlFields']
     }
     /** @description Additional information pertinent to CVL */
@@ -2252,11 +2689,13 @@ export interface components {
       /**
        * Format: date
        * @description Date which the hard stop period will start
+       * @example 03/05/2023
        */
       hardStopDate?: string
       /**
        * Format: date
        * @description Date which to show the hard stop warning
+       * @example 01/05/2023
        */
       hardStopWarningDate?: string
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
@@ -2267,6 +2706,12 @@ export interface components {
       isDueForEarlyRelease: boolean
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      /**
+       * Format: date
+       * @description Date that the licence is due to activate
+       * @example 05/05/2023
+       */
+      licenceStartDate?: string
     }
     PageMetadata: {
       /** Format: int64 */
@@ -2278,7 +2723,6 @@ export interface components {
       /** Format: int64 */
       totalPages?: number
     }
-    /** @description Details about a prisoner */
     Prisoner: {
       /**
        * @description Prisoner Number
@@ -2307,7 +2751,7 @@ export interface components {
       bookNumber?: string
       /**
        * @description First Name
-       * @example Robert
+       * @example Joe
        */
       firstName: string
       /**
@@ -2317,7 +2761,7 @@ export interface components {
       middleNames?: string
       /**
        * @description Last name
-       * @example Larsen
+       * @example Bloggs
        */
       lastName: string
       /**
@@ -2488,47 +2932,27 @@ export interface components {
       content?: components['schemas']['CaseloadItem'][]
       page?: components['schemas']['PageMetadata']
     }
+    /** @description Request object for updating licence start dates for a batch of licences. */
+    RecalculateLicenceStartDatesRequest: {
+      /**
+       * Format: int64
+       * @description The update batch size.
+       */
+      batchSize: number
+      /**
+       * Format: int64
+       * @description The ID of the last updated licence.
+       */
+      id: number
+    }
     PrisonerNumbers: {
       /**
        * @description List of prisoner numbers to search by
        * @example [
-       *       'A1234AA'
+       *       "A1234AA"
        *     ]
        */
       prisonerNumbers: string[]
-    }
-    /** @description Describes a prisoner's first and last name, their CRN if present and a COM's contact details for use in an email to COM */
-    UnapprovedLicence: {
-      /**
-       * @description The Crime Reference Number
-       * @example Z882661
-       */
-      crn?: string
-      /**
-       * @description The prisoner's first name
-       * @example Jim
-       */
-      forename?: string
-      /**
-       * @description The prisoner's last name
-       * @example Smith
-       */
-      surname?: string
-      /**
-       * @description The COM's first name
-       * @example Joseph
-       */
-      comFirstName?: string
-      /**
-       * @description The COM's last name
-       * @example Bloggs
-       */
-      comLastName?: string
-      /**
-       * @description The COM's email address
-       * @example jbloggs@probation.gov.uk
-       */
-      comEmail?: string
     }
     /** @description Request object for searching licences by field */
     MatchLicencesRequest: {
@@ -2582,7 +3006,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
+      kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION'
       /**
        * Format: int64
        * @description Internal identifier for this licence generated within this service
@@ -2682,56 +3106,67 @@ export interface components {
       /**
        * Format: date
        * @description The conditional release date on the licence
+       * @example 12/12/2022
        */
       conditionalReleaseDate?: string
       /**
        * Format: date
        * @description The actual release date on the licence
+       * @example 12/12/2022
        */
       actualReleaseDate?: string
       /**
        * Format: date
        * @description The sentence start date
+       * @example 13/09/2019
        */
       sentenceStartDate?: string
       /**
        * Format: date
        * @description The sentence end date
+       * @example 13/09/2022
        */
       sentenceEndDate?: string
       /**
        * Format: date
        * @description The date that the licence will start
+       * @example 13/09/2022
        */
       licenceStartDate?: string
       /**
        * Format: date
        * @description The date that the licence will expire
+       * @example 13/09/2024
        */
       licenceExpiryDate?: string
       /**
        * Format: date
        * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
        */
       topupSupervisionStartDate?: string
       /**
        * Format: date
        * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
        */
       topupSupervisionExpiryDate?: string
       /**
        * Format: date
        * @description The release date after being recalled
+       * @example 06/06/2023
        */
       postRecallReleaseDate?: string
       /**
        * Format: date
        * @description The date when the hard stop period starts
+       * @example 11/09/2022
        */
       hardStopDate?: string
       /**
        * Format: date
        * @description The date when warning about the hard stop period begins
+       * @example 11/09/2022
        */
       hardStopWarningDate?: string
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
@@ -2748,6 +3183,7 @@ export interface components {
       /**
        * Format: date
        * @description The offender's date of birth, from either prison or probation services
+       * @example 12/12/2001
        */
       dateOfBirth?: string
       /**
@@ -2764,6 +3200,7 @@ export interface components {
       /**
        * Format: date-time
        * @description The date the licence was created
+       * @example 02/12/2001 10:15
        */
       dateCreated?: string
       /**
@@ -2774,11 +3211,13 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time that this licence was approved
+       * @example 24/08/2022 11:30:33
        */
       approvedDate?: string
       /**
        * Format: date-time
        * @description The date and time that this licence was submitted for approval
+       * @example 24/08/2022 11:30:33
        */
       submittedDate?: string
       /**
@@ -2802,6 +3241,35 @@ export interface components {
        * @example Jane Jones
        */
       updatedByFullName?: string
+      /**
+       * Format: date
+       * @description The person’s actual home detention curfew date
+       * @example 30/01/2025
+       */
+      homeDetentionCurfewActualDate?: string
+    }
+    /** @description Request object for overriding a licence type */
+    OverrideLicenceTypeRequest: {
+      /**
+       * @description The new licence Type to assign to the licence
+       * @enum {string}
+       */
+      licenceType: 'AP' | 'AP_PSS' | 'PSS'
+      /** @description Reason for overriding the licence status */
+      reason: string
+    }
+    ProblemDetail: {
+      /** Format: uri */
+      type?: string
+      title?: string
+      /** Format: int32 */
+      status?: number
+      detail?: string
+      /** Format: uri */
+      instance?: string
+      properties?: {
+        [key: string]: unknown
+      }
     }
     /** @description Request object for overriding a licence status */
     OverrideLicenceStatusRequest: {
@@ -2825,6 +3293,42 @@ export interface components {
         | 'TIMED_OUT'
       /** @description Reason for overriding the licence status */
       reason: string
+    }
+    /** @description Request object for overriding prisoner details */
+    OverrideLicencePrisonerDetailsRequest: {
+      /**
+       * @description The prisoner's forename
+       * @example John
+       */
+      forename: string
+      /**
+       * @description The prisoner's middle names
+       * @example James Micheal
+       */
+      middleNames?: string
+      /**
+       * @description The prisoner's surname
+       * @example Smith
+       */
+      surname: string
+      /**
+       * Format: date
+       * @description The prisoner's date of birth
+       * @example 21/01/1995
+       */
+      dateOfBirth: string
+      /** @description Reason for overriding the prisoner details */
+      reason: string
+    }
+    /** @description Request for providing details about any electronic monitoring programme */
+    UpdateElectronicMonitoringProgrammeRequest: {
+      /** @description Is the licence to be tagged for electronic monitoring programme */
+      isToBeTaggedForProgramme?: boolean
+      /**
+       * @description Programme Name of the licence
+       * @example Off Some Road
+       */
+      programmeName?: string
     }
     /** @description A list of licence condition codes to be removed from a licence */
     DeleteAdditionalConditionsByCodeRequest: {
@@ -2859,7 +3363,7 @@ export interface components {
        * @description The category of the additional condition
        * @example Freedom of movement
        */
-      conditionCategory?: string
+      conditionCategory: string
       /**
        * Format: int32
        * @description Sequence of this additional condition within the additional conditions
@@ -2950,6 +3454,7 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time this file was uploaded
+       * @example 12/12/2021 10:35
        */
       uploadedTime: string
       /**
@@ -3003,42 +3508,39 @@ export interface components {
       /** Format: int64 */
       existingResourceId: number
     }
-    /** @description Describes a prisoner due for release */
-    PrisonerForRelease: {
+    /** @description Describes a prisoner's first and last name, their CRN if present and a COM's contact details for use in an email to COM */
+    UnapprovedLicence: {
       /**
-       * @description The full name of the prisoner
-       * @example John Smith
+       * @description The Crime Reference Number
+       * @example Z882661
        */
-      name: string
+      crn?: string
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * @description The prisoner's first name
+       * @example Jim
        */
-      crn: string
+      forename?: string
       /**
-       * Format: date
-       * @description The date on which the prisoner leaves custody
+       * @description The prisoner's last name
+       * @example Smith
        */
-      releaseDate: string
-    }
-    /** @description Describes a COM's contact details and the upcoming releases that they must consider for licence creation */
-    PromptLicenceCreationRequest: {
+      surname?: string
       /**
-       * @description The email address of the COM
+       * @description The COM's first name
+       * @example Joseph
+       */
+      comFirstName?: string
+      /**
+       * @description The COM's last name
+       * @example Bloggs
+       */
+      comLastName?: string
+      /**
+       * @description The COM's email address
        * @example jbloggs@probation.gov.uk
        */
-      email: string
-      /**
-       * @description The full name of the COM
-       * @example Joseph Bloggs
-       */
-      comName: string
-      /** @description The list of prisoners for whom the COM should be notified of needing a licence */
-      initialPromptCases: components['schemas']['PrisonerForRelease'][]
-      /** @description The list of prisoners for whom the COM should be notified of needing a licence urgently */
-      urgentPromptCases: components['schemas']['PrisonerForRelease'][]
+      comEmail?: string
     }
-    /** @description A list of fields to sort by along with the sort direction for each */
     ProbationSearchSortBy: {
       /** @enum {string} */
       field: 'FORENAME' | 'SURNAME' | 'CRN' | 'COM_FORENAME' | 'COM_SURNAME'
@@ -3068,7 +3570,13 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION'
+      /**
+       * Format: int64
+       * @description the prison booking id
+       * @example 123
+       */
+      bookingId?: number
       /** @description The forename and surname of the offender */
       name: string
       /**
@@ -3090,16 +3598,19 @@ export interface components {
       /**
        * Format: date
        * @description The release date of the offender
+       * @example 27/07/2023
        */
       releaseDate?: string
       /**
        * Format: date
        * @description The date when the hard stop period starts
+       * @example 11/09/2022
        */
       hardStopDate?: string
       /**
        * Format: date
        * @description The date when warning about the hard stop period begins
+       * @example 11/09/2022
        */
       hardStopWarningDate?: string
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
@@ -3173,6 +3684,65 @@ export interface components {
        */
       onProbationCount: number
     }
+    /** @description Search criteria for vary approver caseload search */
+    VaryApproverCaseloadSearchRequest: {
+      /**
+       * @description The probation delivery units where the the licence is supervised
+       * @example [
+       *       "N55PDV"
+       *     ]
+       */
+      probationPduCodes?: string[]
+      /**
+       * @description The probation region where the licence is supervised
+       * @example N01
+       */
+      probationAreaCode?: string
+      /**
+       * @description Search text to filter caseload
+       * @example 2022-04-20
+       */
+      searchTerm?: string
+    }
+    /** @description Describes a vary approver case */
+    VaryApproverCase: {
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      licenceId?: number
+      /**
+       * @description The full name of the person on licence
+       * @example An offender
+       */
+      name?: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crnNumber: string
+      /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      licenceType?: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * Format: date
+       * @description The date on which the licence variation was created
+       * @example 30/11/2022
+       */
+      variationRequestDate?: string
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       * @example 30/11/2022
+       */
+      releaseDate?: string
+      /** @description The details for the active supervising probation officer */
+      probationPractitioner?: string
+    }
     /** @description Describes an approval case */
     ApprovalCase: {
       /**
@@ -3199,6 +3769,7 @@ export interface components {
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
+       * @example 30/11/2022
        */
       releaseDate?: string
       /**
@@ -3214,6 +3785,7 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time that this prison approved this licence
+       * @example 19/06/2024 09:00:00
        */
       approvedOn?: string
       /**
@@ -3221,7 +3793,13 @@ export interface components {
        * @example false
        */
       isDueForEarlyRelease?: boolean
+      /** @description The details for the active supervising probation officer */
       probationPractitioner?: components['schemas']['ProbationPractitioner']
+      /**
+       * @description Type of this licence
+       * @enum {string}
+       */
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION'
     }
     /** @description Describes a probation practitioner on an approval case */
     ProbationPractitioner: {
@@ -3252,16 +3830,16 @@ export interface components {
       /**
        * @description The probation team codes to get the case loads for
        * @example [
-       *       'teamA',
-       *       'teamC'
+       *       "teamA",
+       *       "teamC"
        *     ]
        */
       probationTeamCodes: string[]
       /**
        * @description The teams linked to the user to get the case loads for
        * @example [
-       *       'teamA',
-       *       'teamC'
+       *       "teamA",
+       *       "teamC"
        *     ]
        */
       teamSelected: string[]
@@ -3286,6 +3864,7 @@ export interface components {
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
+       * @example 30/11/2022
        */
       releaseDate?: string
       /**
@@ -3324,15 +3903,18 @@ export interface components {
        * @example true
        */
       isReviewNeeded: boolean
+      /** @description The details for the active supervising probation officer */
       probationPractitioner?: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description Date which the hard stop period will start
+       * @example 03/05/2023
        */
       hardStopDate?: string
       /**
        * Format: date
        * @description Date which to show the hard stop warning
+       * @example 01/05/2023
        */
       hardStopWarningDate?: string
       /**
@@ -3340,7 +3922,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION'
       /**
        * @description Is the prisoner due for early release
        * @example false
@@ -3368,7 +3950,7 @@ export interface components {
       /**
        * @description List of Prison Ids (can include OUT and TRN) to restrict the search by. Unrestricted if not supplied or null
        * @example [
-       *       'MDI'
+       *       "MDI"
        *     ]
        */
       prisonCodes: string[]
@@ -3380,7 +3962,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION'
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
@@ -3390,6 +3972,7 @@ export interface components {
       /**
        * Format: int64
        * @description The version number of this licence
+       * @example 1.3
        */
       licenceVersionOf?: number
       /**
@@ -3402,10 +3985,12 @@ export interface components {
        * @example A9999AA
        */
       prisonerNumber: string
+      /** @description The details for the active supervising probation officer */
       probationPractitioner?: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
+       * @example 30/11/2022
        */
       releaseDate?: string
       /**
@@ -3467,6 +4052,19 @@ export interface components {
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
       isInHardStopPeriod: boolean
     }
+    /** @description Request object for searching for offenders within a set of teams attached to a staff member */
+    PrisonUserSearchRequest: {
+      /**
+       * @description The query the user wishes to search for (e.g. CRN, name, NOMIS ID)
+       * @example Joe Bloggs
+       */
+      query: string
+      /**
+       * @description The prison caseloads of the prison staff member
+       * @example BAI
+       */
+      prisonCaseload: string
+    }
     /** @description Describes an audit event request */
     AuditRequest: {
       /**
@@ -3483,58 +4081,50 @@ export interface components {
       /**
        * Format: date-time
        * @description The start date and time to query for events (default is 1 month ago)
+       * @example 13/11/2021 23:14:13
        */
       startTime: string
       /**
        * Format: date-time
        * @description The end time to query for events (default is now)
+       * @example 12/01/2022 23:14:13
        */
       endTime: string
     }
-    ErrorResponse_SubjectAccessRequest: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
+    /** @description The list of licences, audit events and licence events */
+    Content: {
+      /** @description The list of licence events */
+      licences: components['schemas']['SarLicence'][]
+      /** @description The list of audit events */
+      auditEvents: components['schemas']['SarAuditEvent'][]
     }
-    /** @description Describes the data entered for an additional condition */
-    AdditionalConditionData_SubjectAccessRequest: {
+    /** @description Describes an additional condition */
+    SarAdditionalCondition: {
       /**
-       * Format: int64
-       * @description The internal ID of this data item, for this condition on this licence
-       * @example 98989
+       * @description Coded value for the additional condition
+       * @example meetingAddress
        */
-      id: number
+      code: string
       /**
-       * @description The field name of this data item for this condition on this licence
-       * @example location
+       * @description Version number for condition
+       * @example 2.1
        */
-      field?: string
+      version?: string
       /**
-       * @description The value of this data item
-       * @example Norfolk
+       * @description The category of the additional condition
+       * @example Freedom of movement
        */
-      value?: string
+      category?: string
       /**
-       * Format: int32
-       * @description The sequence of this data item, for this condition on this licence
-       * @example 1
+       * @description The condition text with the users data inserted into the template
+       * @example You must not enter the location Tesco Superstore
        */
-      sequence: number
-      /** @description Whether this data item contributes to the licence or whether it is just used for rendering purposes */
-      contributesToLicence: boolean
+      text?: string
+      /** @description The list of file upload summary for this additional condition */
+      uploadSummary: components['schemas']['SarAdditionalConditionUploadSummary'][]
     }
     /** @description Describes the files uploaded for an additional condition */
-    AdditionalConditionUploadSummary_SubjectAccessRequest: {
-      /**
-       * Format: int64
-       * @description The internal ID of this upload for this condition on this licence
-       * @example 98989
-       */
-      id: number
+    SarAdditionalConditionUploadSummary: {
       /**
        * @description The original file name uploaded for this condition on this licence
        * @example exclusion-zone.pdf
@@ -3554,6 +4144,7 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time this file was uploaded
+       * @example 12/12/2021 10:35
        */
       uploadedTime: string
       /**
@@ -3561,72 +4152,9 @@ export interface components {
        * @example A description of the exclusion zone boundaries
        */
       description?: string
-      /**
-       * @description The thumbnail for the  exclusion zone map as a base64-encoded JPEG image
-       * @example Base64 string
-       */
-      thumbnailImage?: string
-      /**
-       * Format: int64
-       * @description The id which references the original file data and full size image
-       * @example 9999
-       */
-      uploadDetailId: number
-    }
-    /** @description Describes an additional condition */
-    AdditionalCondition_SubjectAccessRequest: {
-      /**
-       * Format: int64
-       * @description The internal ID for this additional condition for this licence
-       * @example 98989
-       */
-      id?: number
-      /**
-       * @description Coded value for the additional condition
-       * @example meetingAddress
-       */
-      code: string
-      /**
-       * @description Version number for condition
-       * @example 2.1
-       */
-      version?: string
-      /**
-       * @description The category of the additional condition
-       * @example Freedom of movement
-       */
-      category?: string
-      /**
-       * Format: int32
-       * @description Sequence of this additional condition within the additional conditions
-       * @example 1
-       */
-      sequence?: number
-      /**
-       * @description The textual value for this additional condition
-       * @example You must not enter the location [DESCRIPTION]
-       */
-      text?: string
-      /**
-       * @description The condition text with the users data inserted into the template
-       * @example You must not enter the location Tesco Superstore
-       */
-      expandedText?: string
-      /** @description The list of data items entered for this additional condition */
-      data: components['schemas']['AdditionalConditionData_SubjectAccessRequest'][]
-      /** @description The list of file upload summary for this additional condition */
-      uploadSummary: components['schemas']['AdditionalConditionUploadSummary_SubjectAccessRequest'][]
-      /** @description Whether the condition is ready to submit for approval */
-      readyToSubmit?: boolean
     }
     /** @description Describes an audit event request */
-    AuditEvent_SubjectAccessRequest: {
-      /**
-       * Format: int64
-       * @description The internal ID of the audit event
-       * @example 1234
-       */
-      id?: number
+    SarAuditEvent: {
       /**
        * Format: int64
        * @description The internal ID of the licence that this event related to, or null if unrelated to a licence
@@ -3636,6 +4164,7 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time of the event
+       * @example 12/01/2022 23:14:23
        */
       eventTime: string
       /**
@@ -3645,15 +4174,15 @@ export interface components {
       username?: string
       /**
        * @description The full name of the person who performed this auditable event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
+       * @example Joe Bloggs
        */
       fullName?: string
       /**
        * @description The event type. One of SYSTEM_EVENT or USER_EVENT
-       * @example USER_EVENT
+       * @example User event
        * @enum {string}
        */
-      eventType: 'USER_EVENT' | 'SYSTEM_EVENT'
+      eventType: 'User event' | 'System event'
       /**
        * @description A summary of the action taken
        * @example Updated a bespoke condition
@@ -3665,300 +4194,13 @@ export interface components {
        */
       detail?: string
     }
-    /** @description Describes a bespoke condition on a licence */
-    BespokeCondition_SubjectAccessRequest: {
-      /**
-       * Format: int64
-       * @description The internal ID for this condition on this licence
-       * @example 98989
-       */
-      id: number
-      /**
-       * Format: int32
-       * @description The sequence of this bespoke condition on this licence
-       * @example 1
-       */
-      sequence?: number
-      /**
-       * @description The text of this bespoke condition
-       * @example You should not visit any music venues
-       */
-      text?: string
+    /** @description The Sar Content holds the prisoner details */
+    SarContent: {
+      /** @description SAR content */
+      content: components['schemas']['Content']
     }
-    /** @description The list of licences, audit events and licence events */
-    Content_SubjectAccessRequest: {
-      /** @description The list of licence events */
-      licences: components['schemas']['Licence_SubjectAccessRequest'][]
-      /** @description The list of audit events */
-      auditEvents: components['schemas']['AuditEvent_SubjectAccessRequest'][]
-      /** @description The list of licence events */
-      licencesEvents: components['schemas']['LicenceEvent_SubjectAccessRequest'][]
-    }
-    /** @description Describes a CRD licence within this service */
-    CrdLicence_SubjectAccessRequest: Omit<
-      WithRequired<
-        components['schemas']['Licence_SubjectAccessRequest'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
-      /**
-       * @description Type of this licence
-       * @example CRD
-       * @enum {string}
-       */
-      kind: 'CRD'
-      /**
-       * Format: date
-       * @description Date which the hard stop period will start
-       */
-      hardStopDate?: string
-      /**
-       * Format: date
-       * @description Date which to show the hard stop warning
-       */
-      hardStopWarningDate?: string
-      /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
-      /** @description Is the prisoner due for early release */
-      isDueForEarlyRelease: boolean
-      /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'CRD'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'CRD'
-    }
-    /** @description Describes a licence that was created by a prison */
-    HardStopLicence_SubjectAccessRequest: Omit<
-      WithRequired<
-        components['schemas']['Licence_SubjectAccessRequest'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
-      /**
-       * @description Type of this licence
-       * @example HARD_STOP
-       * @enum {string}
-       */
-      kind: 'HARD_STOP'
-      /**
-       * Format: date-time
-       * @description The date time when the hardstop licence was reviewed by a probation practitioner
-       */
-      reviewDate?: string
-      /**
-       * Format: date
-       * @description Date which the hard stop period will start
-       */
-      hardStopDate?: string
-      /**
-       * Format: date
-       * @description Date which to show the hard stop warning
-       */
-      hardStopWarningDate?: string
-      /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
-      /** @description Is the prisoner due for early release */
-      isDueForEarlyRelease: boolean
-      /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HARD_STOP'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HARD_STOP'
-    }
-    /** @description Describes the curfew times on this hdc licence */
-    HdcCurfewTimes_SubjectAccessRequest: {
-      /**
-       * Format: int64
-       * @description The internal ID for these curfew times on this hdc licence
-       * @example 98987
-       */
-      id?: number
-      /**
-       * Format: int32
-       * @description Sequence of this curfew time within the curfew times
-       * @example 1
-       */
-      curfewTimesSequence?: number
-      /**
-       * @description The day on which this curfew starts for this curfew time
-       * @example MONDAY
-       * @enum {string}
-       */
-      fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      fromTime?: components['schemas']['LocalTime_SubjectAccessRequest']
-      /**
-       * @description The day on which this curfew ends for this curfew time
-       * @example MONDAY
-       * @enum {string}
-       */
-      untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      untilTime?: components['schemas']['LocalTime_SubjectAccessRequest']
-    }
-    /** @description Describes a HDC licence within this service */
-    HdcLicence_SubjectAccessRequest: Omit<
-      WithRequired<
-        components['schemas']['Licence_SubjectAccessRequest'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
-      /**
-       * @description Type of this licence
-       * @example HDC
-       * @enum {string}
-       */
-      kind: 'HDC'
-      /**
-       * Format: date
-       * @description The offender’s actual home detention curfew date
-       */
-      homeDetentionCurfewActualDate?: string
-      curfewTimes?: components['schemas']['HdcCurfewTimes_SubjectAccessRequest']
-      /**
-       * Format: date
-       * @description Date which the hard stop period will start
-       */
-      hardStopDate?: string
-      /**
-       * Format: date
-       * @description Date which to show the hard stop warning
-       */
-      hardStopWarningDate?: string
-      /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
-      /** @description Is the prisoner due for early release */
-      isDueForEarlyRelease: boolean
-      /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HDC'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HDC'
-    }
-    /** @description Describes an event that was related to a licence */
-    LicenceEvent_SubjectAccessRequest: {
-      /**
-       * Format: int64
-       * @description The internal ID of the licence event
-       * @example 1234
-       */
-      id?: number
-      /**
-       * Format: int64
-       * @description The internal ID of the licence that this event relates to
-       * @example 1234
-       */
-      licenceId?: number
-      /**
-       * @description The licence event type
-       * @example LicenceEventType.VARIATION_SUBMITTED
-       * @enum {string}
-       */
-      eventType?:
-        | 'CREATED'
-        | 'SUBMITTED'
-        | 'BACK_IN_PROGRESS'
-        | 'APPROVED'
-        | 'ACTIVATED'
-        | 'SUPERSEDED'
-        | 'HARD_STOP_CREATED'
-        | 'HARD_STOP_SUBMITTED'
-        | 'HARD_STOP_REVIEWED_WITHOUT_VARIATION'
-        | 'HARD_STOP_REVIEWED_WITH_VARIATION'
-        | 'VARIATION_CREATED'
-        | 'VARIATION_SUBMITTED_REASON'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REFERRED'
-        | 'VARIATION_APPROVED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VERSION_CREATED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-        | 'HDC_CREATED'
-        | 'HDC_VERSION_CREATED'
-        | 'HDC_SUBMITTED'
-      /**
-       * @description The username related to this event or SYSTEM if an automated event
-       * @example X63533
-       */
-      username?: string
-      /**
-       * @description The forename of the person related to this event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
-       */
-      forenames?: string
-      /**
-       * @description The surname of the person related to this event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
-       */
-      surname?: string
-      /**
-       * @description A reason or description related to the event
-       * @example Reason for variation
-       */
-      eventDescription?: string
-      /**
-       * Format: date-time
-       * @description The date and time of the event
-       */
-      eventTime?: string
-    }
-    /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
-    Licence_SubjectAccessRequest: {
+    /** @description Describes a licence within this service1 */
+    SarLicence: {
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
@@ -3966,242 +4208,79 @@ export interface components {
        */
       id: number
       /**
+       * @description Kind of licence
+       * @example CRD
+       */
+      kind: string
+      /**
        * @description The licence type code
-       * @example AP
+       * @example All purpose
        * @enum {string}
        */
-      typeCode: 'AP' | 'AP_PSS' | 'PSS'
-      /**
-       * @description The version number used for standard and additional conditions
-       * @example 1.4
-       */
-      version?: string
+      typeCode: 'All purpose' | 'All purpose & post sentence supervision' | 'Post sentence supervision'
       /**
        * @description The current status code for this licence
-       * @example IN_PROGRESS
+       * @example In progress
        * @enum {string}
        */
       statusCode?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-      /**
-       * @description The family name of the person on licence
-       * @example Smith
-       */
-      surname?: string
-      kind: string
-      /**
-       * Format: date
-       * @description The earliest conditional release date of the person on licence
-       */
-      conditionalReleaseDate?: string
-      /**
-       * Format: date
-       * @description The date that the licence will start
-       */
-      licenceStartDate?: string
-      /**
-       * Format: date
-       * @description The release date after being recalled
-       */
-      postRecallReleaseDate?: string
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string
-      /**
-       * @description The first name of the person on licence
-       * @example Michael
-       */
-      forename?: string
+        | 'In progress'
+        | 'Submitted'
+        | 'Approved'
+        | 'Active'
+        | 'Rejected'
+        | 'Inactive'
+        | 'Recalled'
+        | 'Variation in progress'
+        | 'Variation submitted'
+        | 'Variation rejected'
+        | 'Variation approved'
+        | 'Not started'
+        | 'Timed out'
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
       nomsId?: string
       /**
-       * Format: date
-       * @description The actual release date (if set)
-       */
-      actualReleaseDate?: string
-      /**
-       * Format: date
-       * @description The sentence start date
-       */
-      sentenceStartDate?: string
-      /**
-       * Format: date
-       * @description The sentence end date
-       */
-      sentenceEndDate?: string
-      /**
-       * Format: date
-       * @description The date that the licence will expire
-       */
-      licenceExpiryDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       */
-      topupSupervisionStartDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       */
-      topupSupervisionExpiryDate?: string
-      /**
-       * @description The middle names of the person on licence
-       * @example John Peter
-       */
-      middleNames?: string
-      /**
-       * @description The team code that is supervising this licence
-       * @example Cardiff-A
-       */
-      probationTeamCode?: string
-      /**
-       * @description The probation area code where this licence is supervised from
-       * @example N01
-       */
-      probationAreaCode?: string
-      /**
-       * @description The probation area description
-       * @example Wales
-       */
-      probationAreaDescription?: string
-      /**
-       * @description The Probation Delivery Unit (PDU or borough) supervising this licence
-       * @example PDU01
-       */
-      probationPduCode?: string
-      /**
-       * @description The description for the PDU
-       * @example North Wales
-       */
-      probationPduDescription?: string
-      /**
-       * @description The Local Administrative Unit (LAU or district) supervising this licence
-       * @example LAU01
-       */
-      probationLauCode?: string
-      /**
-       * @description The LAU description
-       * @example North Wales
-       */
-      probationLauDescription?: string
-      /**
-       * @description The team description
-       * @example Cardiff South
-       */
-      probationTeamDescription?: string
-      /**
-       * Format: date
-       * @description The date of birth of the person on licence
-       */
-      dateOfBirth?: string
-      /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
        * @example 989898
        */
       bookingId?: number
-      /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition_SubjectAccessRequest'][]
-      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
-      isEligibleForEarlyRelease: boolean
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       */
-      dateCreated?: string
-      /**
-       * @description The full name of the person who approved the licence on behalf of the prison governor
-       * @example John Smith
-       */
-      approvedByName?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this prison approved this licence
-       */
-      approvedDate?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string
-      /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string
-      /**
-       * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
-       */
-      earliestReleaseDate?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
       appointmentPerson?: string
       /**
-       * @description The type of appointment time of the initial appointment
-       * @example SPECIFIC_DATE_TIME
-       * @enum {string}
-       */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
-      /**
        * Format: date-time
        * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
        */
       appointmentTime?: string
       /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
+       * @description The type of appointment time of the initial appointment
+       * @example Specific date time
+       * @enum {string}
        */
-      appointmentContact?: string
+      appointmentTimeType?: 'Immediate upon release' | 'Next working day before 2pm' | 'Specific date time'
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
       appointmentAddress?: string
       /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
+      appointmentContact?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this prison approved this licence
+       * @example 24/08/2022 11:30:33
+       */
+      approvedDate?: string
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
@@ -4210,187 +4289,96 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time that this licence was submitted for approval
+       * @example 24/08/2022 11:30:33
        */
       submittedDate?: string
       /**
-       * @description The agency code of the detaining prison
-       * @example LEI
+       * @description The full name of the person who approved the licence on behalf of the prison governor
+       * @example John Smith
        */
-      prisonCode?: string
-      /**
-       * @description The agency description of the detaining prison
-       * @example Leeds (HMP)
-       */
-      prisonDescription?: string
-      /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
-       */
-      prisonTelephone?: string
-      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
-      isInPssPeriod?: boolean
-      /** @deprecated */
-      isVariation: boolean
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       */
-      dateLastUpdated?: string
-      /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
-       */
-      bookingNo?: string
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string
+      approvedByName?: string
       /**
        * Format: date-time
        * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
        */
       supersededDate?: string
       /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       * @example 24/08/2022 09:30:33
        */
-      updatedByUsername?: string
-      /**
-       * @description The version number of this licence
-       * @example 1.3
-       */
-      licenceVersion?: string
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean
+      dateCreated?: string
       /**
        * @description The username which created this licence
        * @example X12333
        */
       createdByUsername?: string
       /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
        */
-      comStaffId?: number
+      dateLastUpdated?: string
       /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
+       * @description The username of the person who last updated this licence
+       * @example X34433
        */
-      responsibleComFullName?: string
+      updatedByUsername?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['SarStandardCondition'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['SarStandardCondition'][]
       /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      additionalLicenceConditions: components['schemas']['SarAdditionalCondition'][]
       /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      additionalPssConditions: components['schemas']['SarAdditionalCondition'][]
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: string[]
       /**
        * @description The full name of the person who created licence or variation
        * @example Gordon Sumner
        */
       createdByFullName?: string
-    } & (
-      | components['schemas']['CrdLicence_SubjectAccessRequest']
-      | components['schemas']['VariationLicence_SubjectAccessRequest']
-      | components['schemas']['HardStopLicence_SubjectAccessRequest']
-      | components['schemas']['HdcLicence_SubjectAccessRequest']
-    )
-    /**
-     * @description The time at which this curfew ends on the untilDay
-     * @example 01:00:00
-     */
-    LocalTime_SubjectAccessRequest: {
-      /** Format: int32 */
-      hour?: number
-      /** Format: int32 */
-      minute?: number
-      /** Format: int32 */
-      second?: number
-      /** Format: int32 */
-      nano?: number
-    }
-    /** @description The Sar Content holds the prisoner details */
-    SarContent_SubjectAccessRequest: {
-      content: components['schemas']['Content_SubjectAccessRequest']
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
     }
     /** @description Describes a standard condition on this licence */
-    StandardCondition_SubjectAccessRequest: {
-      /**
-       * Format: int64
-       * @description The internal ID for this standard condition on this licence
-       * @example 98987
-       */
-      id?: number
+    SarStandardCondition: {
       /**
        * @description The unique code for this standard condition
        * @example 9ce9d594-e346-4785-9642-c87e764bee37
        */
       code?: string
       /**
-       * Format: int32
-       * @description The sequence of this standard condition
-       * @example 1
-       */
-      sequence?: number
-      /**
        * @description The text of this standard condition
        * @example Be of generally good behaviour
        */
       text?: string
     }
-    /** @description Describes a licence within this service */
-    VariationLicence_SubjectAccessRequest: Omit<
-      WithRequired<
-        components['schemas']['Licence_SubjectAccessRequest'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
-      /**
-       * @description Type of this licence
-       * @example VARIATION
-       * @enum {string}
-       */
-      kind: 'VARIATION'
-      /**
-       * @description Have you have discussed this variation request with your SPO?
-       * @example Yes
-       */
-      spoDiscussion?: string
-      /**
-       * @description Have you consulted with the victim liaison officer (VLO) for this case?
-       * @example Yes
-       */
-      vloDiscussion?: string
+    Count: {
       /**
        * Format: int64
-       * @description The licence Id which this licence is a variation of
+       * @description The total number of records
+       * @example 501
        */
-      variationOf?: number
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'VARIATION'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'VARIATION'
+      count: number
+    }
+    DlqMessage: {
+      body: {
+        [key: string]: unknown
+      }
+      messageId: string
+    }
+    GetDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesReturnedCount: number
+      messages: components['schemas']['DlqMessage'][]
     }
     LicencePolicy: {
       version: string
@@ -4438,6 +4426,22 @@ export interface components {
        */
       version?: string
       /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string
+      /**
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
+       */
+      cro?: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn?: string
+      kind: string
+      /**
        * @description The current status code for this licence
        * @example IN_PROGRESS
        * @enum {string}
@@ -4456,77 +4460,113 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+      /** @deprecated */
+      isVariation: boolean
       /**
-       * @description The family name of the person on licence
-       * @example Smith
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
        */
-      surname?: string
-      kind: string
+      comStaffId?: number
       /**
-       * Format: date
-       * @description The earliest conditional release date of the person on licence
+       * @description The prison booking number for the person on this licence
+       * @example F12333
        */
-      conditionalReleaseDate?: string
-      /**
-       * Format: date
-       * @description The date that the licence will start
-       */
-      licenceStartDate?: string
-      /**
-       * Format: date
-       * @description The release date after being recalled
-       */
-      postRecallReleaseDate?: string
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string
-      /**
-       * @description The first name of the person on licence
-       * @example Michael
-       */
-      forename?: string
+      bookingNo?: string
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
       nomsId?: string
       /**
-       * Format: date
-       * @description The actual release date (if set)
+       * @description The agency code of the detaining prison
+       * @example LEI
        */
-      actualReleaseDate?: string
+      prisonCode?: string
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
+      isInPssPeriod?: boolean
       /**
-       * Format: date
-       * @description The sentence start date
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
        */
-      sentenceStartDate?: string
-      /**
-       * Format: date
-       * @description The sentence end date
-       */
-      sentenceEndDate?: string
-      /**
-       * Format: date
-       * @description The date that the licence will expire
-       */
-      licenceExpiryDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       */
-      topupSupervisionStartDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       */
-      topupSupervisionExpiryDate?: string
+      comEmail?: string
       /**
        * @description The middle names of the person on licence
        * @example John Peter
        */
       middleNames?: string
+      /**
+       * Format: date
+       * @description The date of birth of the person on licence
+       * @example 12/05/1987
+       */
+      dateOfBirth?: string
+      /**
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
+       */
+      comUsername?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       * @example 24/08/2022 09:30:33
+       */
+      dateCreated?: string
+      /**
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string
+      /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
+      bookingId?: number
+      /**
+       * @description The username who approved the licence on behalf of the prison governor
+       * @example X33221
+       */
+      approvedByUsername?: string
+      /**
+       * @description The full name of the person who approved the licence on behalf of the prison governor
+       * @example John Smith
+       */
+      approvedByName?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this prison approved this licence
+       * @example 24/08/2022 11:30:33
+       */
+      approvedDate?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was submitted for approval
+       * @example 24/08/2022 11:30:33
+       */
+      submittedDate?: string
+      /**
+       * @description The agency description of the detaining prison
+       * @example Leeds (HMP)
+       */
+      prisonDescription?: string
+      /**
+       * @description The telephone number to contact the prison
+       * @example 0161 234 4747
+       */
+      prisonTelephone?: string
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * @description The team code that is supervising this licence
        * @example Cardiff-A
@@ -4538,85 +4578,39 @@ export interface components {
        */
       probationAreaCode?: string
       /**
-       * @description The probation area description
-       * @example Wales
-       */
-      probationAreaDescription?: string
-      /**
        * @description The Probation Delivery Unit (PDU or borough) supervising this licence
        * @example PDU01
        */
       probationPduCode?: string
-      /**
-       * @description The description for the PDU
-       * @example North Wales
-       */
-      probationPduDescription?: string
       /**
        * @description The Local Administrative Unit (LAU or district) supervising this licence
        * @example LAU01
        */
       probationLauCode?: string
       /**
-       * @description The LAU description
-       * @example North Wales
+       * Format: date
+       * @description The actual release date (if set)
+       * @example 13/09/2022
        */
-      probationLauDescription?: string
-      /**
-       * @description The team description
-       * @example Cardiff South
-       */
-      probationTeamDescription?: string
+      actualReleaseDate?: string
       /**
        * Format: date
-       * @description The date of birth of the person on licence
+       * @description The sentence start date
+       * @example 13/09/2019
        */
-      dateOfBirth?: string
+      sentenceStartDate?: string
       /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
+       * Format: date
+       * @description The sentence end date
+       * @example 13/09/2022
        */
-      bookingId?: number
-      /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition'][]
-      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
-      isEligibleForEarlyRelease: boolean
+      sentenceEndDate?: string
       /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
+       * Format: date
+       * @description The date that the licence will expire
+       * @example 13/09/2024
        */
-      comUsername?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       */
-      dateCreated?: string
-      /**
-       * @description The full name of the person who approved the licence on behalf of the prison governor
-       * @example John Smith
-       */
-      approvedByName?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this prison approved this licence
-       */
-      approvedDate?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string
+      licenceExpiryDate?: string
       /**
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
@@ -4624,9 +4618,25 @@ export interface components {
       submittedByFullName?: string
       /**
        * Format: date
+       * @description The date that the licence will start
+       * @example 13/09/2022
+       */
+      licenceStartDate?: string
+      /**
+       * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
       earliestReleaseDate?: string
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
@@ -4641,6 +4651,7 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
        */
       appointmentTime?: string
       /**
@@ -4654,79 +4665,22 @@ export interface components {
        */
       appointmentAddress?: string
       /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][]
-      /**
-       * @description The username who approved the licence on behalf of the prison governor
-       * @example X33221
-       */
-      approvedByUsername?: string
-      /**
        * Format: date-time
-       * @description The date and time that this licence was submitted for approval
+       * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
        */
-      submittedDate?: string
-      /**
-       * @description The agency code of the detaining prison
-       * @example LEI
-       */
-      prisonCode?: string
-      /**
-       * @description The agency description of the detaining prison
-       * @example Leeds (HMP)
-       */
-      prisonDescription?: string
-      /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
-       */
-      prisonTelephone?: string
-      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
-      isInPssPeriod?: boolean
-      /** @deprecated */
-      isVariation: boolean
+      supersededDate?: string
       /**
        * Format: date-time
        * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
        */
       dateLastUpdated?: string
-      /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
-       */
-      bookingNo?: string
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       */
-      supersededDate?: string
       /**
        * @description The username of the person who last updated this licence
        * @example X34433
        */
       updatedByUsername?: string
-      /**
-       * @description The version number of this licence
-       * @example 1.3
-       */
-      licenceVersion?: string
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
       /**
@@ -4735,11 +4689,66 @@ export interface components {
        */
       createdByUsername?: string
       /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
+       * @description The full name of the person who created licence or variation
+       * @example Gordon Sumner
        */
-      comStaffId?: number
+      createdByFullName?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
+      /**
+       * @description The probation area description
+       * @example Wales
+       */
+      probationAreaDescription?: string
+      /**
+       * @description The description for the PDU
+       * @example North Wales
+       */
+      probationPduDescription?: string
+      /**
+       * @description The LAU description
+       * @example North Wales
+       */
+      probationLauDescription?: string
+      /**
+       * @description The team description
+       * @example Cardiff South
+       */
+      probationTeamDescription?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
+       */
+      topupSupervisionExpiryDate?: string
+      /**
+       * @description The type of appointment with for the initial appointment
+       * @example SPECIFIC_PERSON
+       * @enum {string}
+       */
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
+      /**
+       * Format: date
+       * @description The earliest conditional release date of the person on licence
+       * @example 13/08/2022
+       */
+      conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       * @example 06/06/2023
+       */
+      postRecallReleaseDate?: string
       /**
        * @description The full name of the supervising probation officer
        * @example Jane Jones
@@ -4749,12 +4758,13 @@ export interface components {
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /** @description The list of additional post sentence supervision conditions on this licence */
       additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Gordon Sumner
-       */
-      createdByFullName?: string
-    }
+    } & (
+      | components['schemas']['CrdLicence']
+      | components['schemas']['VariationLicence']
+      | components['schemas']['HardStopLicence']
+      | components['schemas']['HdcLicence']
+      | components['schemas']['HdcVariationLicence']
+    )
     /** @description Describes a CRD licence within this service */
     CrdLicence: Omit<
       WithRequired<
@@ -4780,11 +4790,13 @@ export interface components {
       /**
        * Format: date
        * @description Date which the hard stop period will start
+       * @example 03/05/2023
        */
       hardStopDate?: string
       /**
        * Format: date
        * @description Date which to show the hard stop warning
+       * @example 01/05/2023
        */
       hardStopWarningDate?: string
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
@@ -4793,12 +4805,6 @@ export interface components {
       isDueForEarlyRelease: boolean
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'CRD'
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -4831,16 +4837,19 @@ export interface components {
       /**
        * Format: date-time
        * @description The date time when the hardstop licence was reviewed by a probation practitioner
+       * @example 06/06/2023 09:32
        */
       reviewDate?: string
       /**
        * Format: date
        * @description Date which the hard stop period will start
+       * @example 03/05/2023
        */
       hardStopDate?: string
       /**
        * Format: date
        * @description Date which to show the hard stop warning
+       * @example 01/05/2023
        */
       hardStopWarningDate?: string
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
@@ -4855,41 +4864,40 @@ export interface components {
        * @enum {string}
        */
       kind: 'HARD_STOP'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HARD_STOP'
     }
-    /** @description Describes the curfew times on this hdc licence */
-    HdcCurfewTimes: {
+    /** @description Describes a curfew address on a HDC licence */
+    HdcCurfewAddress: {
       /**
        * Format: int64
-       * @description The internal ID for these curfew times on this hdc licence
+       * @description The internal ID for this curfew address on this HDC licence
        * @example 98987
        */
       id?: number
       /**
-       * Format: int32
-       * @description Sequence of this curfew time within the curfew times
+       * @description The first line of the curfew address
        * @example 1
        */
-      curfewTimesSequence?: number
+      addressLine1?: string
       /**
-       * @description The day on which this curfew starts for this curfew time
-       * @example MONDAY
-       * @enum {string}
+       * @description The second line of the curfew address
+       * @example Off Some Road
        */
-      fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      fromTime?: components['schemas']['LocalTime']
+      addressLine2?: string
       /**
-       * @description The day on which this curfew ends for this curfew time
-       * @example MONDAY
-       * @enum {string}
+       * @description The town or city associated with the curfew address
+       * @example Some Town or City
        */
-      untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      untilTime?: components['schemas']['LocalTime']
+      townOrCity?: string
+      /**
+       * @description The county for the curfew address
+       * @example SomeCounty
+       */
+      county?: string
+      /**
+       * @description The postcode for the curfew address
+       * @example SO30 2UH
+       */
+      postcode?: string
     }
     /** @description Describes a HDC licence within this service */
     HdcLicence: Omit<
@@ -4916,17 +4924,27 @@ export interface components {
       /**
        * Format: date
        * @description The offender’s actual home detention curfew date
+       * @example 06/05/2023
        */
       homeDetentionCurfewActualDate?: string
-      curfewTimes?: components['schemas']['HdcCurfewTimes']
+      /**
+       * Format: date
+       * @description The offender’s home detention curfew end date
+       * @example 06/05/2023
+       */
+      homeDetentionCurfewEndDate?: string
+      /** @description The curfew times for this licence */
+      curfewTimes?: components['schemas']['HdcCurfewTimes'][]
       /**
        * Format: date
        * @description Date which the hard stop period will start
+       * @example 03/05/2023
        */
       hardStopDate?: string
       /**
        * Format: date
        * @description Date which to show the hard stop warning
+       * @example 01/05/2023
        */
       hardStopWarningDate?: string
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
@@ -4935,12 +4953,8 @@ export interface components {
       isDueForEarlyRelease: boolean
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HDC'
+      /** @description The curfew address for this licence */
+      curfewAddress?: components['schemas']['HdcCurfewAddress']
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -4948,21 +4962,67 @@ export interface components {
        */
       kind: 'HDC'
     }
-    /**
-     * @description The time at which this curfew ends on the untilDay
-     * @example 01:00:00
-     */
-    LocalTime: {
-      /** Format: int32 */
-      hour?: number
-      /** Format: int32 */
-      minute?: number
-      /** Format: int32 */
-      second?: number
-      /** Format: int32 */
-      nano?: number
+    /** @description Describes a HDC licence variation within this service */
+    HdcVariationLicence: Omit<
+      WithRequired<
+        components['schemas']['Licence'],
+        | 'additionalLicenceConditions'
+        | 'additionalPssConditions'
+        | 'bespokeConditions'
+        | 'id'
+        | 'isEligibleForEarlyRelease'
+        | 'isReviewNeeded'
+        | 'isVariation'
+        | 'kind'
+        | 'typeCode'
+      >,
+      'kind'
+    > & {
+      /**
+       * @description Type of this licence
+       * @example HDC_VARIATION
+       * @enum {string}
+       */
+      kind: 'HDC_VARIATION'
+      /**
+       * Format: date
+       * @description The offender’s actual home detention curfew date
+       * @example 06/05/2023
+       */
+      homeDetentionCurfewActualDate?: string
+      /**
+       * Format: date
+       * @description The offender’s home detention curfew end date
+       * @example 06/05/2023
+       */
+      homeDetentionCurfewEndDate?: string
+      /**
+       * @description Have you have discussed this variation request with your SPO?
+       * @example Yes
+       */
+      spoDiscussion?: string
+      /**
+       * @description Have you consulted with the victim liaison officer (VLO) for this case?
+       * @example Yes
+       */
+      vloDiscussion?: string
+      /** @description The curfew times for this licence */
+      curfewTimes?: components['schemas']['HdcCurfewTimes'][]
+      /**
+       * Format: int64
+       * @description The licence Id which this licence is a variation of
+       */
+      variationOf?: number
+      /** @description The curfew address for this licence */
+      curfewAddress?: components['schemas']['HdcCurfewAddress']
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'HDC_VARIATION'
     }
-    /** @description Describes a licence within this service */
+    /** @description Describes a licence variation within this service */
     VariationLicence: Omit<
       WithRequired<
         components['schemas']['Licence'],
@@ -4999,12 +5059,6 @@ export interface components {
        * @description The licence Id which this licence is a variation of
        */
       variationOf?: number
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'VARIATION'
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -5123,22 +5177,24 @@ export interface components {
       code: string
       currentText: string
     }
-    CurfewAddress: {
-      addressLine1: string
-      addressLine2?: string
-      addressTown: string
-      postCode: string
-    }
     FirstNight: {
+      /**
+       * Format: HH:mm
+       * @example 00:00
+       */
       firstNightFrom: string
+      /**
+       * Format: HH:mm
+       * @example 00:00
+       */
       firstNightUntil: string
     }
     HdcLicenceData: {
       /** Format: int64 */
       licenceId?: number
-      curfewAddress?: components['schemas']['CurfewAddress']
+      curfewAddress?: components['schemas']['HdcCurfewAddress']
       firstNightCurfewHours?: components['schemas']['FirstNight']
-      curfewTimes: components['schemas']['HdcCurfewTimes'][]
+      curfewTimes?: components['schemas']['HdcCurfewTimes'][]
     }
     /** @description Describes an event that was related to a licence */
     LicenceEvent: {
@@ -5147,19 +5203,19 @@ export interface components {
        * @description The internal ID of the licence event
        * @example 1234
        */
-      id?: number
+      id: number
       /**
        * Format: int64
        * @description The internal ID of the licence that this event relates to
        * @example 1234
        */
-      licenceId?: number
+      licenceId: number
       /**
        * @description The licence event type
        * @example LicenceEventType.VARIATION_SUBMITTED
        * @enum {string}
        */
-      eventType?:
+      eventType:
         | 'CREATED'
         | 'SUBMITTED'
         | 'BACK_IN_PROGRESS'
@@ -5181,9 +5237,6 @@ export interface components {
         | 'VERSION_CREATED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
-        | 'HDC_CREATED'
-        | 'HDC_VERSION_CREATED'
-        | 'HDC_SUBMITTED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -5191,12 +5244,12 @@ export interface components {
       username?: string
       /**
        * @description The forename of the person related to this event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
+       * @example Joe
        */
       forenames?: string
       /**
        * @description The surname of the person related to this event, or SYSTEM if an automated event.
-       * @example Robert Mortimer
+       * @example Bloggs
        */
       surname?: string
       /**
@@ -5207,8 +5260,198 @@ export interface components {
       /**
        * Format: date-time
        * @description The date and time of the event
+       * @example 12/01/2022 23:14:23
        */
-      eventTime?: string
+      eventTime: string
+    }
+    DashboardDefinitionSummary: {
+      id: string
+      name: string
+      description: string
+    }
+    ReportDefinitionSummary: {
+      id: string
+      name: string
+      description?: string
+      variants: components['schemas']['VariantDefinitionSummary'][]
+      dashboards?: components['schemas']['DashboardDefinitionSummary'][]
+      authorised: boolean
+    }
+    VariantDefinitionSummary: {
+      id: string
+      name: string
+      description?: string
+    }
+    ChildVariantDefinition: {
+      id: string
+      name: string
+      resourceName: string
+      specification?: components['schemas']['Specification']
+      joinFields: string[]
+    }
+    DynamicFilterOption: {
+      /** Format: int32 */
+      minimumLength?: number
+    }
+    FieldDefinition: {
+      name: string
+      display: string
+      /** @enum {string} */
+      wordWrap?: 'none' | 'normal' | 'break-words'
+      filter?: components['schemas']['FilterDefinition']
+      sortable: boolean
+      defaultsort: boolean
+      /** @enum {string} */
+      type: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time'
+      mandatory: boolean
+      visible: boolean
+      calculated: boolean
+      header: boolean
+    }
+    FilterDefinition: {
+      /** @enum {string} */
+      type: 'Radio' | 'Select' | 'multiselect' | 'daterange' | 'autocomplete' | 'text' | 'date' | 'granulardaterange'
+      mandatory: boolean
+      pattern?: string
+      staticOptions?: components['schemas']['FilterOption'][]
+      dynamicOptions?: components['schemas']['DynamicFilterOption']
+      defaultValue?: string
+      min?: string
+      max?: string
+      interactive?: boolean
+      /** @enum {string} */
+      defaultGranularity?: 'hourly' | 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually'
+      /** @enum {string} */
+      defaultQuickFilterValue?:
+        | 'today'
+        | 'yesterday'
+        | 'last-seven-days'
+        | 'last-thirty-days'
+        | 'last-month'
+        | 'last-full-month'
+        | 'last-ninety-days'
+        | 'last-three-months'
+        | 'last-full-three-months'
+        | 'last-year'
+        | 'last-full-year'
+        | 'tomorrow'
+        | 'next-seven-days'
+        | 'next-thirty-days'
+        | 'next-month'
+        | 'next-full-month'
+        | 'next-ninety-days'
+        | 'next-three-months'
+        | 'next-full-three-months'
+        | 'next-year'
+        | 'next-full-year'
+    }
+    FilterOption: {
+      name: string
+      display: string
+    }
+    ReportSummary: {
+      id: string
+      /** @enum {string} */
+      template: 'table-header' | 'table-footer' | 'section-header' | 'section-footer' | 'page-header' | 'page-footer'
+      fields: components['schemas']['SummaryField'][]
+    }
+    SingleVariantReportDefinition: {
+      id: string
+      name: string
+      description?: string
+      variant: components['schemas']['VariantDefinition']
+    }
+    Specification: {
+      /** @enum {string} */
+      template: 'list' | 'list-section' | 'list-tab' | 'summary' | 'summary-section' | 'parent-child'
+      fields: components['schemas']['FieldDefinition'][]
+      sections: string[]
+    }
+    SummaryField: {
+      name: string
+      display?: string
+      /** @enum {string} */
+      type?: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time'
+      header?: boolean
+      mergeRows?: boolean
+    }
+    VariantDefinition: {
+      id: string
+      name: string
+      resourceName: string
+      description?: string
+      specification?: components['schemas']['Specification']
+      classification?: string
+      printable?: boolean
+      summaries?: components['schemas']['ReportSummary'][]
+      interactive?: boolean
+      childVariants?: components['schemas']['ChildVariantDefinition'][]
+    }
+    DashboardDefinition: {
+      id: string
+      name: string
+      description: string
+      sections: components['schemas']['DashboardSectionDefinition'][]
+      filterFields?: components['schemas']['FieldDefinition'][]
+    }
+    DashboardSectionDefinition: {
+      id: string
+      display?: string
+      description?: string
+      visualisations: components['schemas']['DashboardVisualisationDefinition'][]
+    }
+    DashboardVisualisationColumnDefinition: {
+      id: string
+      display: string
+      /** @enum {string} */
+      aggregate?: 'sum' | 'average'
+      /** @enum {string} */
+      unit?: 'NUMBER' | 'PERCENTAGE'
+      displayValue?: boolean
+      axis?: string
+    }
+    DashboardVisualisationColumnsDefinition: {
+      keys?: components['schemas']['DashboardVisualisationColumnDefinition'][]
+      measures: components['schemas']['DashboardVisualisationColumnDefinition'][]
+      filters?: components['schemas']['ValueVisualisationColumnDefinition'][]
+      expectNulls: boolean
+    }
+    DashboardVisualisationDefinition: {
+      id: string
+      /** @enum {string} */
+      type: 'list' | 'doughnut' | 'bar' | 'bar-timeseries' | 'line' | 'scorecard' | 'scorecard-group'
+      display?: string
+      description?: string
+      columns: components['schemas']['DashboardVisualisationColumnsDefinition']
+    }
+    ValueVisualisationColumnDefinition: {
+      id: string
+      equals: string
+    }
+    /** @description Describes a prisoner due for release */
+    Case: {
+      /**
+       * @description The full name of the prisoner
+       * @example John Smith
+       */
+      name: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn: string
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       * @example 30/11/2022
+       */
+      releaseDate: string
+    }
+    PromptComNotification: {
+      email: string
+      comName: string
+      initialPromptCases: components['schemas']['Case'][]
+      urgentPromptCases: components['schemas']['Case'][]
     }
     /** @description Describes the counts of cases needed for review by a Probation Practitioner */
     ComReviewCount: {
@@ -5235,6 +5478,44 @@ export interface components {
        */
       count: number
     }
+    /** @description Response object which describes an result from a address search */
+    AddressSearchResponse: {
+      /**
+       * @description The address's Unique Property Reference Number
+       * @example 200010019924
+       */
+      reference: string
+      /**
+       * @description The address's first line
+       * @example 34
+       */
+      firstLine: string
+      /**
+       * @description The address's second line
+       * @example Urchfont
+       */
+      secondLine?: string
+      /**
+       * @description The address's Town or City
+       * @example Chippenham
+       */
+      townOrCity: string
+      /**
+       * @description The address's county
+       * @example Shropshire
+       */
+      county: string
+      /**
+       * @description The address's postcode
+       * @example RG13HS
+       */
+      postcode: string
+      /**
+       * @description The address's country
+       * @example Wales
+       */
+      country: string
+    }
   }
   responses: never
   parameters: never
@@ -5242,8 +5523,179 @@ export interface components {
   headers: never
   pathItems: never
 }
-export type $defs = Record<string, never>
 export interface operations {
+  retryDlq: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RetryDlqResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  retryAllDlqs: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RetryDlqResult'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  purgeQueue: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        queueName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PurgeQueueResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   updatePrisonUser: {
     parameters: {
       query?: never
@@ -5289,6 +5741,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -5340,6 +5810,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getOmuContactByPrisonCode: {
@@ -5360,6 +5848,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['OmuContact']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5387,6 +5884,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -5442,6 +5957,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   deleteOmuContactByPrisonCode: {
@@ -5462,6 +5995,15 @@ export interface operations {
         }
         content?: never
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -5478,6 +6020,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -5531,6 +6091,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateResponsibleCom: {
@@ -5582,6 +6160,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateProbationTeam: {
@@ -5631,6 +6227,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -5693,6 +6307,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   submitLicence: {
@@ -5751,6 +6383,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -5813,6 +6463,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateStandardConditions: {
@@ -5871,6 +6539,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -5933,6 +6619,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateSentenceDates: {
@@ -5944,11 +6648,7 @@ export interface operations {
       }
       cookie?: never
     }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateSentenceDatesRequest']
-      }
-    }
+    requestBody?: never
     responses: {
       /** @description Sentence dates updated */
       200: {
@@ -5991,6 +6691,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -6053,6 +6771,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateReasonForVariation: {
@@ -6113,6 +6849,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updatePrisonInformation: {
@@ -6171,6 +6925,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -6240,6 +7012,102 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateCurfewTimes: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateCurfewTimesRequest']
+      }
+    }
+    responses: {
+      /** @description Curfew times updated */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateContactNumber: {
@@ -6298,6 +7166,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -6360,6 +7246,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   approveVariation: {
@@ -6414,6 +7318,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -6476,6 +7398,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateAppointmentPerson: {
@@ -6534,6 +7474,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -6596,6 +7554,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateAdditionalConditions: {
@@ -6654,6 +7630,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -6717,6 +7711,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   activateVariation: {
@@ -6773,6 +7785,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   removeExclusionZoneFile: {
@@ -6819,6 +7849,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -6870,6 +7918,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   recordAuditEvent: {
@@ -6919,256 +7985,22 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-    }
-  }
-  runTimeOutLicencesServiceJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Time out job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
+      /** @description Too Many Requests */
+      429: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse']
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runRemoveExpiredConditionsJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description run-remove-ap-conditions-job */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runNotifyAttentionNeededLicencesJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Activation job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runHardStopLicenceReviewOverdueJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Hard stop licence review overdue job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runLicenceExpiryJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Expiry job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runDeactivateLicencesJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Deactivation request for licences past release date is processed successfully. */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runLicenceActivationJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Activation job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7198,6 +8030,15 @@ export interface operations {
           'application/json': components['schemas']['SearchResultsPage']
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -7214,6 +8055,102 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  recalculateLicenceStartDates: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RecalculateLicenceStartDatesRequest']
+      }
+    }
+    responses: {
+      /** @description Licences updated */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': unknown
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7240,6 +8177,15 @@ export interface operations {
           'application/json': components['schemas']['CaseloadItem'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -7256,6 +8202,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7282,42 +8246,13 @@ export interface operations {
           'application/json': components['schemas']['CaseloadItem'][]
         }
       }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
+      /** @description Bad Request */
+      400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  notifyProbationOfUnapprovedLicences: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Emails sent */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UnapprovedLicence']
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7336,6 +8271,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7365,6 +8318,15 @@ export interface operations {
           'application/json': components['schemas']['LicenceSummary'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -7381,6 +8343,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7430,6 +8410,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7486,6 +8484,102 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  changeType: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OverrideLicenceTypeRequest']
+      }
+    }
+    responses: {
+      /** @description Status has been updated */
+      202: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProblemDetail']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7548,9 +8642,27 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
-  editLicence: {
+  changePrisonerDetails: {
     parameters: {
       query?: never
       header?: never
@@ -7559,15 +8671,26 @@ export interface operations {
       }
       cookie?: never
     }
-    requestBody?: never
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OverrideLicencePrisonerDetailsRequest']
+      }
+    }
     responses: {
-      /** @description Licence version created */
-      200: {
+      /** @description Prisoner details updated */
+      202: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['LicenceSummary']
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7595,6 +8718,178 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateElectronicMonitoringProgramme: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateElectronicMonitoringProgrammeRequest']
+      }
+    }
+    responses: {
+      /** @description Electronic monitoring programme details updated */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  editLicence: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Licence version created */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['LicenceSummary']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7657,6 +8952,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   deactivateLicenceAndVariations: {
@@ -7681,6 +8994,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['LicenceSummary']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7708,6 +9030,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7766,6 +9106,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7831,6 +9189,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   createLicence: {
@@ -7853,6 +9229,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['LicenceCreationResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7880,6 +9265,593 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['EntityAlreadyExistsResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  runHardStopLicenceReviewOverdueJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Hard stop licence review overdue job executed. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  runTimeOutLicencesServiceJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Time out job executed. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  runRemoveExpiredConditionsJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description run-remove-ap-conditions-job */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  runJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The job ran successfully */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  notifyProbationOfUnapprovedLicences: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Emails sent */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UnapprovedLicence']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  runLicenceExpiryJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Expiry job executed. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  runDeactivateLicencesJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Deactivation request for licences past release date is processed successfully. */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  runJob_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The job ran successfully */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  runLicenceActivationJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Activation job executed. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7937,53 +9909,22 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-    }
-  }
-  notifyOfUpcomingReleasesRequiringLicence: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['PromptLicenceCreationRequest'][]
-      }
-    }
-    responses: {
-      /** @description The COM was notified */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
+      /** @description Too Many Requests */
+      429: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse']
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8037,6 +9978,93 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getVaryApproverCaseload: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['VaryApproverCaseloadSearchRequest']
+      }
+    }
+    responses: {
+      /** @description Returns a list of cases with variations awaiting approval */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VaryApproverCase'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getRecentlyApproved: {
@@ -8061,6 +10089,15 @@ export interface operations {
           'application/json': components['schemas']['ApprovalCase'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8077,6 +10114,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8103,6 +10158,15 @@ export interface operations {
           'application/json': components['schemas']['ApprovalCase'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8119,6 +10183,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8145,6 +10227,15 @@ export interface operations {
           'application/json': components['schemas']['ComCase'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8161,6 +10252,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8187,6 +10296,15 @@ export interface operations {
           'application/json': components['schemas']['ComCase'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8203,6 +10321,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8229,6 +10365,15 @@ export interface operations {
           'application/json': components['schemas']['CaCase'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8245,6 +10390,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8271,6 +10434,15 @@ export interface operations {
           'application/json': components['schemas']['CaCase'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8287,6 +10459,93 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForOffenderOnPrisonCaseAdminCaseload: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PrisonUserSearchRequest']
+      }
+    }
+    responses: {
+      /** @description The query retrieved a set of enriched results */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CaCase'][]
+        }
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8340,6 +10599,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getSarRecordsById: {
@@ -8360,7 +10637,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['SarContent_SubjectAccessRequest']
+          'application/json': components['schemas']['SarContent']
         }
       }
       /** @description Records for this prn was not found. */
@@ -8378,7 +10655,16 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8387,7 +10673,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
@@ -8396,7 +10682,16 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unexpected error occurred */
@@ -8405,7 +10700,334 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  configuredApiDataset: {
+    parameters: {
+      query: {
+        selectedPage?: number
+        pageSize?: number
+        sortColumn?: string
+        sortedAsc?: boolean
+        /**
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
+         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
+         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
+         *           filters.someMultiselectFilter=a,b,c
+         *
+         * @example {
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
+         *     }
+         */
+        filters: {
+          [key: string]: string
+        }
+        /**
+         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         * @example definitions/prisons/orphanage
+         */
+        dataProductDefinitionsPath?: string
+      }
+      header?: never
+      path: {
+        reportId: string
+        reportVariantId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description default response */
+      default: {
+        headers: {
+          /** @description Provides additional information about why no data has been returned. */
+          'x-no-data-warning'?: string
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': {
+            [key: string]: unknown
+          }[]
+        }
+      }
+    }
+  }
+  configuredApiDynamicFilter: {
+    parameters: {
+      query: {
+        pageSize?: number
+        sortedAsc?: boolean
+        /**
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
+         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
+         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
+         *           filters.someMultiselectFilter=a,b,c
+         *
+         * @example {
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
+         *     }
+         */
+        filters: {
+          [key: string]: string
+        }
+        /**
+         * @description The value to match the start of the fieldId
+         * @example Lond
+         */
+        prefix: string
+        /**
+         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         * @example definitions/prisons/orphanage
+         */
+        dataProductDefinitionsPath?: string
+      }
+      header?: never
+      path: {
+        reportId: string
+        reportVariantId: string
+        /**
+         * @description The name of the schema field which will be used as a dynamic filter.
+         * @example name
+         */
+        fieldId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description default response */
+      default: {
+        headers: {
+          /** @description Provides additional information about why no data has been returned. */
+          'x-no-data-warning'?: string
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': string[]
+        }
+      }
+    }
+  }
+  configuredApiCount: {
+    parameters: {
+      query: {
+        /**
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
+         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
+         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
+         *           filters.someMultiselectFilter=a,b,c
+         *
+         * @example {
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
+         *     }
+         */
+        filters: {
+          [key: string]: string
+        }
+        /**
+         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         * @example definitions/prisons/orphanage
+         */
+        dataProductDefinitionsPath?: string
+      }
+      header?: never
+      path: {
+        reportId: string
+        reportVariantId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description default response */
+      default: {
+        headers: {
+          /** @description Provides additional information about why no data has been returned. */
+          'x-no-data-warning'?: string
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['Count']
+        }
+      }
+    }
+  }
+  getDlqMessages: {
+    parameters: {
+      query?: {
+        maxMessages?: number
+      }
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['GetDlqResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8432,6 +11054,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['LicencePolicy']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8461,6 +11092,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getLatestPolicy: {
@@ -8481,6 +11130,15 @@ export interface operations {
           'application/json': components['schemas']['LicencePolicy']
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token. */
       401: {
         headers: {
@@ -8497,6 +11155,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8522,6 +11198,15 @@ export interface operations {
         }
         content: {
           'image/jpeg': unknown
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8551,6 +11236,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getLicenceById: {
@@ -8572,6 +11275,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['Licence']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8601,6 +11313,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getLicencesByPrisonNumber: {
@@ -8627,6 +11357,15 @@ export interface operations {
           'application/json': components['schemas']['LicenceSummary'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8643,6 +11382,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8671,6 +11428,15 @@ export interface operations {
           'application/json': components['schemas']['LicenceSummary'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8687,6 +11453,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8709,6 +11493,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['CaseloadItem'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8736,6 +11529,100 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getIS91Status: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        nomsId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description a boolean for IS-91 status */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': boolean
+        }
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Could not find prisoner */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8796,6 +11683,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   submittedVariations: {
@@ -8818,6 +11723,15 @@ export interface operations {
           'application/json': components['schemas']['LicenceSummary'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8834,6 +11748,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8858,6 +11790,15 @@ export interface operations {
           'application/json': components['schemas']['Licence']
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8883,6 +11824,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8907,6 +11866,15 @@ export interface operations {
           'application/json': components['schemas']['LicencePolicy']
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8932,6 +11900,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -8957,6 +11943,42 @@ export interface operations {
           'application/json': components['schemas']['LicenceConditionChanges'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getCurrentPolicy: {
@@ -8977,6 +11999,15 @@ export interface operations {
           'application/json': components['schemas']['LicencePolicy']
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -8993,6 +12024,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -9013,6 +12062,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['LicencePolicy']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9042,6 +12100,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getHdcLicenceData: {
@@ -9062,6 +12138,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['HdcLicenceData']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9091,6 +12176,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getExclusionZoneImage: {
@@ -9112,6 +12215,15 @@ export interface operations {
         }
         content: {
           'image/jpeg': unknown
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9139,6 +12251,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -9169,9 +12299,6 @@ export interface operations {
           | 'VERSION_CREATED'
           | 'NOT_STARTED'
           | 'TIMED_OUT'
-          | 'HDC_CREATED'
-          | 'HDC_VERSION_CREATED'
-          | 'HDC_SUBMITTED'
         )[]
         sortBy?: string
         sortOrder?: string
@@ -9191,6 +12318,15 @@ export interface operations {
           'application/json': components['schemas']['LicenceEvent'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -9207,6 +12343,305 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  definitions: {
+    parameters: {
+      query?: {
+        /**
+         * @description Set this parameter to filter the list to only include reports for the given rendering method.
+         * @example HTML
+         */
+        renderMethod?: 'HTML' | 'PDF' | 'SVG'
+        /**
+         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         * @example definitions/prisons/orphanage
+         */
+        dataProductDefinitionsPath?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ReportDefinitionSummary'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  definition: {
+    parameters: {
+      query?: {
+        /**
+         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         * @example definitions/prisons/orphanage
+         */
+        dataProductDefinitionsPath?: string
+      }
+      header?: never
+      path: {
+        /**
+         * @description The ID of the report definition.
+         * @example external-movements
+         */
+        reportId: string
+        /**
+         * @description The ID of the variant definition.
+         * @example list
+         */
+        variantId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SingleVariantReportDefinition']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dashboardDefinition: {
+    parameters: {
+      query?: {
+        /**
+         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         * @example definitions/prisons/orphanage
+         */
+        dataProductDefinitionsPath?: string
+      }
+      header?: never
+      path: {
+        /**
+         * @description The ID of the Data Product Definition.
+         * @example external-movements
+         */
+        dataProductDefinitionId: string
+        /**
+         * @description The ID of the dashboard.
+         * @example dashboardId
+         */
+        dashboardId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['DashboardDefinition']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  run: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description list of COMs we'll send email to */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PromptComNotification'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -9258,6 +12693,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getStaffVaryCaseload: {
@@ -9280,6 +12733,15 @@ export interface operations {
           'application/json': components['schemas']['ComCase'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -9296,6 +12758,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -9320,6 +12800,15 @@ export interface operations {
           'application/json': components['schemas']['ComCase'][]
         }
       }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
@@ -9336,6 +12825,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -9356,6 +12863,15 @@ export interface operations {
         }
         content: {
           'application/json': string[]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised */
@@ -9383,6 +12899,247 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForAddresses: {
+    parameters: {
+      query?: {
+        /**
+         * @description Pagination page number, starting at zero
+         * @example 0
+         */
+        page?: number
+        /**
+         * @description Pagination size per page, min/max = 2/200
+         * @example 50
+         */
+        pageSize?: number
+      }
+      header?: never
+      path: {
+        searchQuery: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns addresses matching the given search text */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressSearchResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForAddressByReference: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        reference: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns the address with the provided reference */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressSearchResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForAddressesByPostcode: {
+    parameters: {
+      query?: {
+        /**
+         * @description Pagination page number, starting at zero
+         * @example 0
+         */
+        page?: number
+        /**
+         * @description Pagination size per page, min/max = 2/200
+         * @example 50
+         */
+        pageSize?: number
+      }
+      header?: never
+      path: {
+        postcode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns addresses matching the given search text */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressSearchResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -9441,6 +13198,24 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   deleteAdditionalCondition: {
@@ -9461,6 +13236,15 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
@@ -9487,6 +13271,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }

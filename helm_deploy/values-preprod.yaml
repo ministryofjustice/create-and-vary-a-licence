@@ -1,11 +1,5 @@
 ---
 # Per environment values which override defaults in create-and-vary-a-licence/values.yaml
-
-cronjobs:
-  time_out_licences:
-    enabled: true
-    schedule: "30 1 * * 1-5" # 1:30am UTC Monday - Friday
-
 generic-service:
   replicaCount: 2
   
@@ -23,10 +17,7 @@ generic-service:
     PRISON_API_URL: "https://prison-api-preprod.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-preprod.hmpps.service.justice.gov.uk"
     PRISONER_SEARCH_API_URL: "https://prisoner-search-preprod.prison.service.justice.gov.uk"
-    PROBATION_SEARCH_API_URL: "https://probation-offender-search-preprod.hmpps.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: "https://prison-register-preprod.hmpps.service.justice.gov.uk"
-    EXIT_SURVEY_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
-    PHASE_BANNER_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
     LICENCE_WATERMARK: "true"
     # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
     GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
@@ -34,9 +25,14 @@ generic-service:
     LICENCES_URL: "http://create-and-vary-a-licence"
     DPS_URL: "https://digital-preprod.prison.service.justice.gov.uk"
 
+    ACO_CASELOAD_BACKEND_ENABLED: "false"
+
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
     MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"
+    HDC_INTEGRATION_MVP2_ENABLED: "false"
+    HDC_LICENCE_CREATION_BLOCK: "true"
+    CA_NEW_SEARCH_ENABLED: "false"
 
 
 

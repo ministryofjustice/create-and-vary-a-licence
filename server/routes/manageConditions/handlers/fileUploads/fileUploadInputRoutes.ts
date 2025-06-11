@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import FileUploadType from '../../../../enumeration/fileUploadType'
+import { AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 
 export default class FileUploadInputRoutes {
   constructor(
@@ -13,7 +14,9 @@ export default class FileUploadInputRoutes {
     const { conditionId } = req.params
     const { user, licence } = res.locals
 
-    const { code } = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
+    const { code } = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),
+    )
 
     let redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/callback`
 
@@ -24,7 +27,7 @@ export default class FileUploadInputRoutes {
     if (req.query?.fromPolicyReview) {
       // This hijacks the policy review loop to allow users to review each instance of a changed multi-instance upload condition.
       if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
-        const instanceToReview = licence.additionalLicenceConditions.find(c => {
+        const instanceToReview = licence.additionalLicenceConditions.find((c: AdditionalCondition) => {
           return c.code === code && c.version !== licence.version && c.id.toString() !== conditionId
         })
         if (instanceToReview) {
@@ -39,7 +42,9 @@ export default class FileUploadInputRoutes {
     if (req.file) {
       await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
     }
-    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
+    const condition = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),
+    )
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
     return res.redirect(redirect)
@@ -50,7 +55,9 @@ export default class FileUploadInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
-    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
+    const condition = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),
+    )
 
     await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)
 

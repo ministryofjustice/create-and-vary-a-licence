@@ -1,20 +1,9 @@
 import _ from 'lodash'
 import DeliusClient from '../data/deliusClient'
-import ProbationSearchApiClient from '../data/probationSearchApiClient'
-import { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
-import {
-  DeliusManager,
-  DeliusPDUHead,
-  DeliusStaff,
-  DeliusStaffEmail,
-  DeliusStaffName,
-} from '../@types/deliusClientTypes'
+import { DeliusManager, DeliusPDUHead, DeliusRecord, DeliusStaff, DeliusStaffName } from '../@types/deliusClientTypes'
 
 export default class ProbationService {
-  constructor(
-    private readonly deliusClient: DeliusClient,
-    private readonly probationSearchApiClient: ProbationSearchApiClient,
-  ) {}
+  constructor(private readonly deliusClient: DeliusClient) {}
 
   async getStaffDetailByUsername(username: string): Promise<DeliusStaff> {
     return this.deliusClient.getStaffDetailByUsername(username)
@@ -39,52 +28,21 @@ export default class ProbationService {
     return this.deliusClient.getPduHeads(pduCode)
   }
 
-  async searchProbationers(searchCriteria: SearchDto): Promise<OffenderDetail[]> {
-    return this.probationSearchApiClient.searchProbationer(searchCriteria)
+  async getProbationer(crnOrNomisId: string): Promise<DeliusRecord> {
+    const probationer = await this.deliusClient.getCase(crnOrNomisId)
+    if (!probationer) throw new Error(`No delius record found`)
+    return probationer
   }
 
-  async getProbationer(searchDto: SearchDto): Promise<OffenderDetail> {
-    const deliusRecords = await this.probationSearchApiClient.searchProbationer(searchDto)
-    if (deliusRecords.length < 1) {
-      throw new Error(`No delius record found`)
-    }
-    return deliusRecords[0]
+  async getProbationers(crnsOrNomisIds: string[]): Promise<DeliusRecord[]> {
+    return (await Promise.all(_.chunk(crnsOrNomisIds, 500).map(chunk => this.deliusClient.getCases(chunk)))).flat()
   }
 
-  async getOffendersByCrn(crns: string[]): Promise<OffenderDetail[]> {
-    return this.probationSearchApiClient.getOffendersByCrn(crns)
+  async getResponsibleCommunityManager(crnOrNomisId: string): Promise<DeliusManager> {
+    return this.deliusClient.getResponsibleCommunityManager(crnOrNomisId)
   }
 
-  async getOffendersByNomsNumbers(nomsNumbers: string[]): Promise<OffenderDetail[]> {
-    const offenderDetails = []
-    if (nomsNumbers.length > 0) {
-      /* eslint-disable */
-      for (const nomsNums of _.chunk(nomsNumbers, 500)) {
-        const partResult = await this.probationSearchApiClient.getOffendersByNomsNumbers(nomsNums)
-        offenderDetails.push(partResult)
-      }
-      /* eslint-enable */
-      return offenderDetails.flat()
-    }
-    return []
-  }
-
-  async getManagerEmailAddresses(crns: string[]): Promise<DeliusStaffEmail[]> {
-    const managerEmailAddresses = []
-    if (crns.length > 0) {
-      /* eslint-disable */
-      for (const nomsNums of _.chunk(crns, 500)) {
-        const partResult = await this.deliusClient.getManagerEmailAddresses(nomsNums)
-        managerEmailAddresses.push(partResult)
-      }
-      /* eslint-enable */
-    }
-    return managerEmailAddresses.flat()
-  }
-
-  // Has slower lookup than probation offender search /crns, but also has no lag-time after Community API event raised
-  // Only to be used when probation offender search api is return outdated information.
-  async getResponsibleCommunityManager(crn: string): Promise<DeliusManager> {
-    return this.deliusClient.getResponsibleCommunityManager(crn)
+  async getResponsibleCommunityManagers(crnsOrNomisIds: string[]): Promise<DeliusManager[]> {
+    return this.deliusClient.getResponsibleCommunityManagers(crnsOrNomisIds)
   }
 }

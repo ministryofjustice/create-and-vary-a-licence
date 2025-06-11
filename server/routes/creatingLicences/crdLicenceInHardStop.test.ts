@@ -1,5 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { Expose } from 'class-transformer'
+import { IsString } from 'class-validator'
 import LicenceService from '../../services/licenceService'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { CaseloadItem, CvlPrisoner, Licence, OmuContact } from '../../@types/licenceApiClientTypes'
@@ -7,6 +9,9 @@ import ProbationService from '../../services/probationService'
 import ConditionService from '../../services/conditionService'
 import { AdditionalConditionAp } from '../../@types/LicencePolicy'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
+import { DeliusManager } from '../../@types/deliusClientTypes'
+import { User } from '../../@types/CvlUserDetails'
+import AppointmentTimeAndPlace from '../manageConditions/types/additionalConditionInputs/appointmentTimeAndPlace'
 
 let app: Express
 
@@ -14,7 +19,7 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const bankHolidayRetriever: BankHolidayRetriever = async () => []
 const ukBankHolidayFeedService = new UkBankHolidayFeedService(bankHolidayRetriever)
-const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 
 jest.mock('../../services/licenceService')
 jest.mock('../../services/conditionService')
@@ -29,9 +34,23 @@ const licence = {
   version: '3.0',
 } as Licence
 
+const user = {
+  username: 'joebloggs',
+  deliusStaffIdentifier: 2000,
+  probationTeamCodes: ['ABC123'],
+  userRoles: ['ROLE_LICENCE_RO'],
+} as User
+
+class DummyAddress {
+  @Expose()
+  @IsString()
+  addressLine: string
+}
+
 beforeEach(() => {
   app = appWithAllRoutes({
     services: { licenceService, conditionService, ukBankHolidayFeedService, probationService },
+    userSupplier: () => user,
   })
   licenceService.getOmuEmail.mockResolvedValue({ email: 'test@test.test' } as OmuContact)
   licenceService.getParentLicenceOrSelf.mockResolvedValue(licence)
@@ -39,6 +58,36 @@ beforeEach(() => {
 
   conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([])
   conditionService.getAdditionalConditionByCode.mockResolvedValue({ validatorType: null } as AdditionalConditionAp)
+
+  probationService.getProbationer.mockResolvedValue({
+    crn: 'X12345',
+  })
+  probationService.getResponsibleCommunityManager.mockResolvedValue({
+    code: 'X12345',
+    id: 2000,
+    username: 'joebloggs',
+    email: 'joebloggs@probation.gov.uk',
+    name: {
+      forename: 'Joe',
+      surname: 'Bloggs',
+    },
+    provider: {
+      code: 'N01',
+      description: 'N01 Region',
+    },
+    team: {
+      code: 'ABC123',
+      description: 'ABC123 Description',
+      borough: {
+        code: 'PDU1',
+        description: 'PDU1 Description',
+      },
+      district: {
+        code: 'LAU1',
+        description: 'LAU1 Description',
+      },
+    },
+  } as DeliusManager)
 })
 
 afterEach(() => {
@@ -131,6 +180,9 @@ describe('createLicenceRoutes', () => {
       })
 
       it('should redirect to access-denied when trying to submit a licence via CYA page', () => {
+        conditionService.getAdditionalConditionByCode.mockResolvedValue({
+          validatorType: AppointmentTimeAndPlace,
+        } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
           .expect(302)
@@ -149,7 +201,7 @@ describe('createLicenceRoutes', () => {
         appointmentPersonType: 'SPECIFIC_PERSON',
         appointmentPerson: 'Bob Smith',
         appointmentAddress: '123 Fake St',
-        appointmentContact: '01234567890',
+        appointmentContact: '00000000000',
         appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
       } as Licence)
       licenceService.getPrisonerDetail.mockResolvedValue({
@@ -249,10 +301,24 @@ describe('createLicenceRoutes', () => {
       })
 
       it('should redirect to confirmation page when submitting a licence via CYA page', () => {
+        conditionService.getAdditionalConditionByCode.mockResolvedValue({
+          validatorType: AppointmentTimeAndPlace,
+        } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
           .expect(302)
           .expect('Location', '/licence/create/id/1/confirmation')
+      })
+
+      it('should redirect back on validation failure', () => {
+        conditionService.getAdditionalConditionByCode.mockResolvedValue({
+          validatorType: DummyAddress,
+        } as AdditionalConditionAp)
+        return request(app)
+          .post('/licence/create/id/1/check-your-answers')
+          .set('Referer', '/validation-error-page')
+          .expect(302)
+          .expect('Location', '/validation-error-page')
       })
     })
   })

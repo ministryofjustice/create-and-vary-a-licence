@@ -3,11 +3,10 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import ProbationService from '../../../services/probationService'
-import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { CaseloadItem, CvlPrisoner, LicenceSummary } from '../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/probationService')
@@ -49,12 +48,13 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         confirmedReleaseDate: '2022-11-20',
         conditionalReleaseDate: '2022-11-21',
         dateOfBirth: '1960-11-10',
-        firstName: 'Patrick',
-        lastName: 'Holmes',
+        firstName: 'Test',
+        lastName: 'Person',
       } as CvlPrisoner,
       cvl: {
         isInHardStopPeriod: false,
         isEligibleForEarlyRelease: true,
+        licenceStartDate: '19/11/2022',
       },
     } as CaseloadItem)
   })
@@ -66,22 +66,19 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   describe('GET', () => {
     beforeEach(() => {
       probationService.getProbationer.mockResolvedValue({
-        otherIds: {
-          crn: 'X1234',
-        },
-      } as OffenderDetail)
+        crn: 'X1234',
+      })
     })
 
     it('should render view', async () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
         licence: {
-          conditionalReleaseDate: '21/11/2022',
-          actualReleaseDate: '20/11/2022',
+          licenceStartDate: '19/11/2022',
           crn: 'X1234',
           dateOfBirth: '10/11/1960',
-          forename: 'Patrick',
-          surname: 'Holmes',
+          forename: 'Test',
+          surname: 'Person',
           isEligibleForEarlyRelease: true,
         },
         backLink: req.session.returnToCase,
@@ -100,44 +97,14 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       await handler.GET(reqWithEmptySession, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
         licence: {
-          conditionalReleaseDate: '21/11/2022',
-          actualReleaseDate: '20/11/2022',
+          licenceStartDate: '19/11/2022',
           crn: 'X1234',
           dateOfBirth: '10/11/1960',
-          forename: 'Patrick',
-          surname: 'Holmes',
+          forename: 'Test',
+          surname: 'Person',
           isEligibleForEarlyRelease: true,
         },
         backLink: '/licence/create/caseload',
-      })
-    })
-
-    it('actualReleaseDate should be undefined if confirmedReleaseDate does not exist', async () => {
-      licenceService.getPrisonerDetail.mockResolvedValue({
-        prisoner: {
-          conditionalReleaseDate: '2022-11-20',
-          dateOfBirth: '1960-11-10',
-          firstName: 'Patrick',
-          lastName: 'Holmes',
-        } as CvlPrisoner,
-        cvl: {
-          isInHardStopPeriod: false,
-          isEligibleForEarlyRelease: false,
-        },
-      } as CaseloadItem)
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
-        licence: {
-          conditionalReleaseDate: '20/11/2022',
-          actualReleaseDate: undefined,
-          crn: 'X1234',
-          dateOfBirth: '10/11/1960',
-          forename: 'Patrick',
-          surname: 'Holmes',
-          isEligibleForEarlyRelease: false,
-        },
-        backLink: req.session.returnToCase,
       })
     })
   })

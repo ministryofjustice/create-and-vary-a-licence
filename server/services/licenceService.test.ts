@@ -21,7 +21,6 @@ import {
   UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
-  UpdateSentenceDatesRequest,
   CaseloadItem,
 } from '../@types/licenceApiClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
@@ -41,7 +40,9 @@ describe('Licence Service', () => {
   conditionService.getStandardConditions.mockResolvedValue({} as StandardCondition[])
   conditionService.getAdditionalConditions.mockResolvedValue({} as AdditionalConditionsConfig)
 
-  conditionService.getStandardConditions.mockResolvedValue([{ text: 'fake standard condition', code: 'fake1' }])
+  conditionService.getStandardConditions.mockResolvedValue([
+    { id: 1, text: 'fake standard condition', code: 'fake1', sequence: 1 },
+  ])
 
   const user = {
     username: 'joebloggs',
@@ -406,6 +407,16 @@ describe('Licence Service', () => {
     )
   })
 
+  it('Get latest licence by nomis ids and statuses', async () => {
+    licenceApiClient.matchLicences.mockResolvedValue([
+      { licenceId: 1 } as LicenceSummary,
+      { licenceId: 2 } as LicenceSummary,
+    ])
+    const result = await licenceService.getLatestLicenceByNomisIdsAndStatus(['ABC1234'], [], user)
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith([], null, null, ['ABC1234'], null, null, null, user)
+    expect(result).toEqual({ licenceId: 2 })
+  })
+
   it('Get licences for variation approval', async () => {
     const approver = { ...user, probationPduCodes: ['A'] }
     await licenceService.getLicencesForVariationApproval(approver)
@@ -570,34 +581,8 @@ describe('Licence Service', () => {
   })
 
   it('should update sentence dates', async () => {
-    await licenceService.updateSentenceDates(
-      '1',
-      {
-        conditionalReleaseDate: '09/09/2022',
-        actualReleaseDate: '09/09/2022',
-        sentenceStartDate: '09/09/2021',
-        sentenceEndDate: '09/09/2023',
-        licenceStartDate: '09/09/2022',
-        licenceExpiryDate: '09/09/2023',
-        topupSupervisionStartDate: '09/09/2023',
-        topupSupervisionExpiryDate: '09/09/2024',
-      },
-      user,
-    )
-    expect(licenceApiClient.updateSentenceDates).toHaveBeenCalledWith(
-      '1',
-      {
-        conditionalReleaseDate: '09/09/2022',
-        actualReleaseDate: '09/09/2022',
-        sentenceStartDate: '09/09/2021',
-        sentenceEndDate: '09/09/2023',
-        licenceStartDate: '09/09/2022',
-        licenceExpiryDate: '09/09/2023',
-        topupSupervisionStartDate: '09/09/2023',
-        topupSupervisionExpiryDate: '09/09/2024',
-      } as UpdateSentenceDatesRequest,
-      user,
-    )
+    await licenceService.updateSentenceDates('1', user)
+    expect(licenceApiClient.updateSentenceDates).toHaveBeenCalledWith('1', user)
   })
 
   it('should approve a licence variation', async () => {
@@ -616,13 +601,16 @@ describe('Licence Service', () => {
       id: 1,
     } as Licence)
 
-    await licenceService.compareVariationToOriginal({ id: 2, kind: 'VARIATION', variationOf: 1 } as Licence, user)
+    await licenceService.compareVariationToOriginal(
+      { id: 2, kind: 'VARIATION', variationOf: 1, isVariation: true } as Licence,
+      user,
+    )
 
     expect(licenceCompatatorSpy).toHaveBeenCalledWith(
       {
         id: 1,
       },
-      { id: 2, kind: 'VARIATION', variationOf: 1 },
+      { id: 2, kind: 'VARIATION', variationOf: 1, isVariation: true },
     )
   })
 
@@ -861,5 +849,10 @@ describe('Licence Service', () => {
     expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenCalledTimes(3)
 
     expect(result).toEqual([prisonerDetails, prisonerDetails, prisonerDetails])
+  })
+
+  it('Get IS-91 status', async () => {
+    await licenceService.getIS91Status('ABC123')
+    expect(licenceApiClient.getIS91Status).toHaveBeenCalledWith('ABC123')
   })
 })

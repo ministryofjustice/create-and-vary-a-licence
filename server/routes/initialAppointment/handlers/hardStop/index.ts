@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 import fetchLicence from '../../../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
@@ -17,7 +16,7 @@ import ViewAndPrintLicenceRoutes from '../../../viewingLicences/handlers/viewLic
 import ConfirmationRoutes from '../../../creatingLicences/handlers/hardStop/confirmation'
 import PathType from '../../../../enumeration/pathType'
 
-export default function Index({ licenceService, conditionService }: Services): Router {
+export default function Index({ licenceService, conditionService, hdcService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hard-stop${path}`
@@ -29,12 +28,7 @@ export default function Index({ licenceService, conditionService }: Services): R
    * to explicitly inject the licence data into their individual view contexts.
    */
   const get = (path: string, handler: RequestHandler) =>
-    router.get(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA']),
-      fetchLicence(licenceService),
-      asyncMiddleware(handler),
-    )
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_CA']), fetchLicence(licenceService), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
@@ -42,7 +36,7 @@ export default function Index({ licenceService, conditionService }: Services): R
       roleCheckMiddleware(['ROLE_LICENCE_CA']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
   {
     const controller = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
@@ -85,7 +79,7 @@ export default function Index({ licenceService, conditionService }: Services): R
     post('/edit/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }
   {
-    const controller = new ViewAndPrintLicenceRoutes(licenceService)
+    const controller = new ViewAndPrintLicenceRoutes(licenceService, hdcService)
     get('/id/:licenceId/check-your-answers', controller.GET)
     post('/id/:licenceId/check-your-answers', controller.POST)
   }

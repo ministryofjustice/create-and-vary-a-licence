@@ -21,7 +21,7 @@ describe('User service', () => {
   beforeEach(() => {
     manageUsersApiClient = new ManageUsersApiClient(null) as jest.Mocked<ManageUsersApiClient>
     prisonApiClient = new PrisonApiClient(null) as jest.Mocked<PrisonApiClient>
-    probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+    probationService = new ProbationService(null) as jest.Mocked<ProbationService>
     userService = new UserService(manageUsersApiClient, prisonApiClient, probationService)
   })
 
@@ -70,15 +70,15 @@ describe('User service', () => {
         active: true,
         activeCaseLoadId: 'MDI',
         expiredFlag: false,
-        firstName: 'Robert',
-        lastName: 'Charles',
+        firstName: 'Joe',
+        lastName: 'Bloggs',
         lockedFlag: false,
         staffId: 123,
-        username: 'RCHARLES',
+        username: 'JBLOGGS',
       } as PrisonApiUserDetail)
       const result = await userService.getPrisonUser(user)
-      expect(result.firstName).toEqual('Robert')
-      expect(result.lastName).toEqual('Charles')
+      expect(result.firstName).toEqual('Joe')
+      expect(result.lastName).toEqual('Bloggs')
       expect(result.staffId).toEqual(123)
       expect(result.activeCaseLoadId).toEqual('MDI')
       expect(prisonApiClient.getUser).toHaveBeenCalled()

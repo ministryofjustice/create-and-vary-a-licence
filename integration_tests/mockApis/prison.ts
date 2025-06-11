@@ -15,9 +15,9 @@ export default {
           bookingNo: '1234',
           bookingId: '1234',
           agencyId: 'BMI',
-          firstName: 'DOUGAL',
-          middleName: 'JP',
-          lastName: 'MCGUIRE',
+          firstName: 'Test',
+          middleName: 'Middle Name',
+          lastName: 'Person',
           dateOfBirth: '1950-05-28',
           sentenceDetail: {
             conditionalReleaseDate: '2022-11-10',
@@ -41,9 +41,9 @@ export default {
           bookingNo: '1234',
           bookingId: '1234',
           agencyId: 'BMI',
-          firstName: 'DOUGAL',
-          middleName: 'JP',
-          lastName: 'MCGUIRE',
+          firstName: 'Test',
+          middleName: 'Middle Name',
+          lastName: 'Person',
           dateOfBirth: '1950-05-28',
           sentenceDetail: {
             conditionalReleaseDate: '2022-11-10',
@@ -356,6 +356,27 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'image/jpeg' },
         jsonBody: {},
+      },
+    })
+  },
+
+  stubGetHdcLicencesForOffender: (options: { bookingId: number; status: string }): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/prison-api/api/offender-sentences/booking/(\\d)*/home-detention-curfews/latest',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          approvalStatus: options.status,
+          approvalStatusDate: null,
+          bookingId: options.bookingId,
+          checksPassedDate: null,
+          passed: true,
+          refusedReason: '',
+        },
       },
     })
   },

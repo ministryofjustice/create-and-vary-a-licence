@@ -213,20 +213,6 @@ describe('Prisoner Service', () => {
       expect(prisonApiClient.getLatestHdcStatus).toHaveBeenCalledWith('123')
     })
 
-    it('Should return NULL if no bookingId is found', async () => {
-      prisonApiClient.getLatestHdcStatus.mockResolvedValue({
-        bookingId: null,
-        approvalStatus: 'PASSED',
-        passed: true,
-      } as HomeDetentionCurfew)
-
-      const actualResult = await prisonerService.getActiveHdcStatus('123')
-
-      expect(actualResult).toBeNull()
-
-      expect(prisonApiClient.getLatestHdcStatus).toHaveBeenCalledWith('123')
-    })
-
     it('Should return PASSED approval status', async () => {
       prisonApiClient.getLatestHdcStatus.mockResolvedValue({
         bookingId: 123,

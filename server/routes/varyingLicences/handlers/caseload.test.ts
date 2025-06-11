@@ -28,7 +28,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         crnNumber: 'X12345',
         name: 'Bob Smith',
         probationPractitioner: {
-          name: 'Walter White',
+          name: 'Test Com',
         },
         isDueForEarlyRelease: false,
         isReviewNeeded: false,
@@ -37,12 +37,12 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         licenceId: 2,
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.ACTIVE,
-        name: 'John Deer',
+        name: 'Joe Bloggs',
         prisonerNumber: 'A1234AR',
         releaseDate: '02/05/2022',
         crnNumber: 'X12346',
         probationPractitioner: {
-          name: 'Walter White',
+          name: 'Test Com',
         },
         kind: LicenceKind.CRD,
         isDueForEarlyRelease: false,
@@ -61,7 +61,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         releaseDate: '01/05/2022',
         crnNumber: 'X12345',
         probationPractitioner: {
-          name: 'Walter White',
+          name: 'Test Com',
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: false,
@@ -71,12 +71,12 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.ACTIVE,
         isDueForEarlyRelease: false,
-        name: 'Dr Who',
+        name: 'Person Seven',
         prisonerNumber: 'A1234AB',
         releaseDate: '01/05/2022',
         crnNumber: 'X12346',
         probationPractitioner: {
-          name: 'Sherlock Holmes',
+          name: 'Another Com',
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: false,
@@ -86,12 +86,12 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.ACTIVE,
         isDueForEarlyRelease: false,
-        name: 'John Deer',
+        name: 'Joe Bloggs',
         prisonerNumber: 'A1234AR',
         releaseDate: '02/05/2022',
         crnNumber: 'X12346',
         probationPractitioner: {
-          name: 'Walter White',
+          name: 'Test Com',
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: true,
@@ -144,17 +144,17 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         caseload: [
           {
             licenceId: 2,
-            name: 'John Deer',
+            name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
-            kind: 'CRD',
+            kind: LicenceKind.CRD,
             isReviewNeeded: true,
           },
           {
@@ -166,10 +166,10 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
-            kind: 'CRD',
+            kind: LicenceKind.CRD,
             isReviewNeeded: false,
           },
         ],
@@ -191,14 +191,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         caseload: [
           {
             licenceId: 3,
-            name: 'John Deer',
+            name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -213,7 +213,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -221,14 +221,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           {
             licenceId: 2,
-            name: 'Dr Who',
+            name: 'Person Seven',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AB',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Another Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -258,7 +258,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           releaseDate: null,
           crnNumber: 'X12345',
           probationPractitioner: {
-            name: 'Walter White',
+            name: 'Test Com',
           },
           isReviewNeeded: false,
           kind: LicenceKind.CRD,
@@ -282,7 +282,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             isReviewNeeded: false,
@@ -316,7 +316,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -336,21 +336,21 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
 
     it('should successfully search by probation practitioner', async () => {
       req.query.view = 'team'
-      req.query.search = 'white'
+      req.query.search = 'test'
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
           {
             licenceId: 3,
-            name: 'John Deer',
+            name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -365,7 +365,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -376,7 +376,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         statusConfig,
         teamName: 'teamA',
         teamView: true,
-        search: 'white',
+        search: 'test',
         myCount: 1,
         teamCount: 1,
       })
@@ -399,7 +399,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -421,7 +421,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       const caseload = [
         {
           licenceId: 1,
-          name: 'Dat Kia',
+          name: 'Test Person',
           crnNumber: 'L258123',
           licenceType: 'AP',
           releaseDate: '21 Oct 2024',
@@ -436,7 +436,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 2,
-          name: 'Ema Ely',
+          name: 'Another Person',
           crnNumber: 'Z265291',
           licenceType: 'AP',
           releaseDate: '17 Jul 2024',
@@ -451,7 +451,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 3,
-          name: 'Emaj Elys',
+          name: 'Person Three',
           crnNumber: 'Z265292',
           licenceType: 'AP',
           releaseDate: '23 Jul 2024',
@@ -466,7 +466,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 4,
-          name: 'Emajinhany Elysasha',
+          name: 'Person Four',
           crnNumber: 'Z265290',
           licenceType: 'AP',
           releaseDate: '16 Jul 2024',
@@ -481,7 +481,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 5,
-          name: 'Datessdu Kiarerick',
+          name: 'Person Six',
           crnNumber: 'L258122',
           licenceType: 'AP',
           releaseDate: '20 Oct 2024',
@@ -496,7 +496,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 6,
-          name: 'Emajin Elysa',
+          name: 'Person Five',
           crnNumber: 'Z265294',
           licenceType: 'AP',
           releaseDate: '30 Nov 2024',
@@ -511,7 +511,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 7,
-          name: 'Datessdu Kiarerick',
+          name: 'Person Six',
           crnNumber: 'L258122',
           licenceType: 'AP',
           releaseDate: '05 Dec 2023',
@@ -526,7 +526,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 8,
-          name: 'Datessdu Kiarerick',
+          name: 'Person Six',
           crnNumber: 'L258122',
           licenceType: 'AP',
           releaseDate: '05 Dec 2024',
@@ -543,7 +543,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       const sortedCaseload = [
         {
           licenceId: 7,
-          name: 'Datessdu Kiarerick',
+          name: 'Person Six',
           crnNumber: 'L258122',
           licenceType: 'AP',
           releaseDate: '05 Dec 2023',
@@ -555,7 +555,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 5,
-          name: 'Datessdu Kiarerick',
+          name: 'Person Six',
           crnNumber: 'L258122',
           licenceType: 'AP',
           releaseDate: '20 Oct 2024',
@@ -567,7 +567,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 1,
-          name: 'Dat Kia',
+          name: 'Test Person',
           crnNumber: 'L258123',
           licenceType: 'AP',
           releaseDate: '21 Oct 2024',
@@ -579,7 +579,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 4,
-          name: 'Emajinhany Elysasha',
+          name: 'Person Four',
           crnNumber: 'Z265290',
           licenceType: 'AP',
           releaseDate: '16 Jul 2024',
@@ -591,7 +591,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 2,
-          name: 'Ema Ely',
+          name: 'Another Person',
           crnNumber: 'Z265291',
           licenceType: 'AP',
           releaseDate: '17 Jul 2024',
@@ -603,7 +603,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 3,
-          name: 'Emaj Elys',
+          name: 'Person Three',
           crnNumber: 'Z265292',
           licenceType: 'AP',
           releaseDate: '23 Jul 2024',
@@ -615,7 +615,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 6,
-          name: 'Emajin Elysa',
+          name: 'Person Five',
           crnNumber: 'Z265294',
           licenceType: 'AP',
           releaseDate: '30 Nov 2024',
@@ -627,7 +627,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         {
           licenceId: 8,
-          name: 'Datessdu Kiarerick',
+          name: 'Person Six',
           crnNumber: 'L258122',
           licenceType: 'AP',
           releaseDate: '05 Dec 2024',
@@ -654,14 +654,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         caseload: [
           {
             licenceId: 2,
-            name: 'John Deer',
+            name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -676,7 +676,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -713,14 +713,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         caseload: [
           {
             licenceId: 3,
-            name: 'John Deer',
+            name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -735,7 +735,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Test Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
@@ -743,14 +743,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           {
             licenceId: 2,
-            name: 'Dr Who',
+            name: 'Person Seven',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AB',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Another Com',
             },
             isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,

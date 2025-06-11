@@ -1,25 +1,4 @@
 ---
-cronjobs:
-  activate_licences: "0 3,9,12,15,18 * * *" # 3am, 9am, 12pm, 3pm, and 6pm every day
-  email_probation_practioner: "0 2 * * *" # 2am every day
-  prompt_licence_creation: "0 7 * * 1" # 7am UTC every monday
-  remove_expired_conditions: "0 3 * * *" # 3am every day
-  time_out_licences:
-    enabled: true
-    schedule: "30 1 * * 1-5" # 1:30am UTC Monday - Friday
-  expire_licences:
-    enabled: true
-    schedule: "0 4 * * *" # 4am every day
-  deactivate_release_date_passed_licences:
-    enabled: true
-    schedule: "0 2 * * 1-5" # 2am UTC Monday - Friday
-  hard_stop_licences_review_overdue:
-    enabled: true
-    schedule: "0 8 * * *" # 8:00am UTC every day
-  notify_attention_needed_licences:
-    enabled: true
-    schedule: "0 9 * * 1" # 9am UTC, every monday
-
 generic-service:
   nameOverride: create-and-vary-a-licence
   replicaCount: 4
@@ -59,7 +38,7 @@ generic-service:
     LICENCE_WATERMARK: "false"
     TOKEN_VERIFICATION_ENABLED: "true"
     COMMON_COMPONENTS_ENABLED: "true"
-    SHOW_WHATS_NEW_BANNER: "true"
+    SHOW_WHATS_NEW_BANNER: "false"
     SERVICE_NOW_URL: "https://mojprod.service-now.com/moj_sp?id=sc_cat_item&table=sc_cat_item&sys_id=e389e8931b8bc65025dc6351f54bcb82&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=e389e8931b8bc65025dc6351f54bcb82"
 
     # HDC

@@ -16,13 +16,13 @@ export default class PrisonWillCreateThisLicenceRoutes {
 
     const [
       {
-        cvl: { licenceType },
-        prisoner: { prisonId, confirmedReleaseDate, conditionalReleaseDate, dateOfBirth, firstName, lastName },
+        cvl: { licenceType, licenceStartDate },
+        prisoner: { prisonId, dateOfBirth, firstName, lastName },
       },
       deliusRecord,
     ] = await Promise.all([
       this.licenceService.getPrisonerDetail(nomisId, user),
-      this.probationService.getProbationer({ nomsNumber: nomisId }),
+      this.probationService.getProbationer(nomisId),
     ])
 
     const backLink = req.session.returnToCase || '/licence/create/caseload'
@@ -30,9 +30,8 @@ export default class PrisonWillCreateThisLicenceRoutes {
 
     return res.render('pages/create/prisonWillCreateThisLicence', {
       licence: {
-        crn: deliusRecord?.otherIds?.crn,
-        actualReleaseDate: confirmedReleaseDate ? moment(confirmedReleaseDate).format('DD/MM/YYYY') : undefined,
-        conditionalReleaseDate: moment(conditionalReleaseDate).format('DD/MM/YYYY'),
+        crn: deliusRecord?.crn,
+        licenceStartDate,
         dateOfBirth: moment(dateOfBirth).format('DD/MM/YYYY'),
         forename: convertToTitleCase(firstName),
         surname: convertToTitleCase(lastName),

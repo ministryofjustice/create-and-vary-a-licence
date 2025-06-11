@@ -20,7 +20,10 @@
 {% set licences = [] %}
 
 {% for offender in caseload %}
-    {% if offender.licenceStatus === "REVIEW_NEEDED" %}
+    {% if offender.kind === 'HDC' or offender.kind === 'HDC_VARIATION' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate
+            + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+    {% elseif offender.licenceStatus === "REVIEW_NEEDED" %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Timed out</span>' %}
     {% else %}
         {% set releaseDate = offender.releaseDate %}

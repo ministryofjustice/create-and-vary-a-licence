@@ -137,15 +137,6 @@ export default {
       },
       agent: new AgentConfig(Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000))),
     },
-    probationSearchApi: {
-      url: get('PROBATION_SEARCH_API_URL', 'http://localhost:8091', requiredInProduction),
-      healthPath: '/health/ping',
-      timeout: {
-        response: Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000)),
-        deadline: Number(get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 30000)),
-      },
-      agent: new AgentConfig(Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000))),
-    },
     delius: {
       url: get('DELIUS_API_URL', 'http://localhost:8088', requiredInProduction),
       healthPath: '/health/ping',
@@ -200,8 +191,6 @@ export default {
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
-  exitSurveyLink: get('EXIT_SURVEY_LINK', 'https://exit-survey-placeholder-link', requiredInProduction),
-  phaseBannerLink: get('PHASE_BANNER_LINK', 'https://phase-banner-placeholder-link', requiredInProduction),
   qrCodesEnabled: get('QR_CODES_ENABLED', 'false') === 'true',
   analytics: {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
@@ -337,4 +326,8 @@ export default {
     requiredInProduction,
   ),
   monitoringSupplierTelephone: get('MONITORING_SUPPLIER_TELEPHONE', '0800 137 291', requiredInProduction),
+  hdcIntegrationMvp2Enabled: get('HDC_INTEGRATION_MVP2_ENABLED', 'false', requiredInProduction) === 'true',
+  hdcLicenceCreationBlockEnabled: get('HDC_LICENCE_CREATION_BLOCK', 'false', requiredInProduction) === 'true',
+  getAcoCaseloadFromBackEnd: get('ACO_CASELOAD_BACKEND_ENABLED', 'false', requiredInProduction) === 'true',
+  caNewSearchEnabled: get('CA_NEW_SEARCH_ENABLED', 'false', requiredInProduction) === 'true',
 }

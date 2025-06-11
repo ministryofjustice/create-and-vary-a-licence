@@ -27,6 +27,8 @@ import {
   parseCvlDateTime,
   CaViewCasesTab,
   toIsoDate,
+  isVariation,
+  isHdcLicence,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -448,17 +450,17 @@ describe('Check licence is close to release', () => {
     })
   })
 
-  it('should return false if CRD is greater than 2 days from now', () => {
+  it('should return false if LSD is greater than 2 days from now', () => {
     const licence = {
-      conditionalReleaseDate: '04/05/2021',
+      licenceStartDate: '04/05/2021',
       statusCode: LicenceStatus.APPROVED,
     } as Licence
     expect(licenceIsTwoDaysToRelease(licence)).toBeFalsy()
   })
 
-  it('should return true if CRD is 2 days or less from now', () => {
+  it('should return true if LSD is 2 days or less from now', () => {
     const licence = {
-      conditionalReleaseDate: '03/05/2021',
+      licenceStartDate: '03/05/2021',
       statusCode: LicenceStatus.APPROVED,
     } as Licence
     expect(licenceIsTwoDaysToRelease(licence)).toBeTruthy()
@@ -629,7 +631,7 @@ describe('Get Case Tab Type', () => {
       determineCaViewCasesTab(
         { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null },
         {} as CvlFields,
-        licence,
+        { ...licence, licenceStartDate: null },
       ),
     ).toEqual(CaViewCasesTab.ATTENTION_NEEDED)
   })
@@ -685,6 +687,11 @@ describe('isInHardStopPeriod', () => {
     expect(isInHardStopPeriod(licence)).toBe(false)
   })
 
+  it('returns false if the licence is an HDC variation', () => {
+    licence.kind = LicenceKind.HDC_VARIATION
+    expect(isInHardStopPeriod(licence)).toBe(false)
+  })
+
   it('returns false if the licence is not in the hard stop period', () => {
     licence = { kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
     expect(isInHardStopPeriod(licence)).toBe(false)
@@ -692,5 +699,39 @@ describe('isInHardStopPeriod', () => {
 
   it('returns true for non-variations in the hard stop period when the feature is enabled', () => {
     expect(isInHardStopPeriod(licence)).toBe(true)
+  })
+})
+
+describe('isVariation', () => {
+  it('returns true if isVariation is set to true', () => {
+    const licence = { isVariation: true } as Licence
+    expect(isVariation(licence)).toBe(true)
+  })
+
+  it('returns false if isVariation is set to false', () => {
+    const licence = { isVariation: false } as Licence
+    expect(isVariation(licence)).toBe(false)
+  })
+})
+
+describe('isHdcLicence', () => {
+  it('returns true if the licence kind is HDC', () => {
+    const licence = { kind: LicenceKind.HDC } as Licence
+    expect(isHdcLicence(licence)).toBe(true)
+  })
+
+  it('returns true if the licence kind is HDC_VARIATION', () => {
+    const licence = { kind: LicenceKind.HDC_VARIATION } as Licence
+    expect(isHdcLicence(licence)).toBe(true)
+  })
+
+  it('returns true if the licence kind is anything else', () => {
+    const crdLicence = { kind: LicenceKind.CRD } as Licence
+    const variationLicence = { kind: LicenceKind.VARIATION } as Licence
+    const hardStopLicence = { kind: LicenceKind.HARD_STOP } as Licence
+
+    expect(isHdcLicence(crdLicence)).toBe(false)
+    expect(isHdcLicence(variationLicence)).toBe(false)
+    expect(isHdcLicence(hardStopLicence)).toBe(false)
   })
 })

@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import moment from 'moment/moment'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
 import LicenceService from '../../../services/licenceService'
-import { dateStringToSimpleDate } from '../../../utils/utils'
+import { dateStringToSimpleDate, isHdcLicence } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import SimpleDate from '../../creatingLicences/types/date'
 import LicenceDatesAndReason from '../types/licenceDatesAndReason'
@@ -61,6 +61,8 @@ export default class OffenderLicenceDatesRoutes {
       led: dateStringToSimpleDate(licence.licenceExpiryDate),
       tussd: dateStringToSimpleDate(licence.topupSupervisionStartDate),
       tused: dateStringToSimpleDate(licence.topupSupervisionExpiryDate),
+      hdcad: isHdcLicence(licence) ? dateStringToSimpleDate(licence.homeDetentionCurfewActualDate) : undefined,
+      hdcEndDate: isHdcLicence(licence) ? dateStringToSimpleDate(licence.homeDetentionCurfewEndDate) : undefined,
     }
   }
 
@@ -74,6 +76,8 @@ export default class OffenderLicenceDatesRoutes {
       licenceExpiryDate: this.simpleDateToLicenceDate(formData.led),
       topupSupervisionStartDate: this.simpleDateToLicenceDate(formData.tussd),
       topupSupervisionExpiryDate: this.simpleDateToLicenceDate(formData.tused),
+      homeDetentionCurfewActualDate: this.simpleDateToLicenceDate(formData.hdcad),
+      homeDetentionCurfewEndDate: this.simpleDateToLicenceDate(formData.hdcEndDate),
     }
   }
 

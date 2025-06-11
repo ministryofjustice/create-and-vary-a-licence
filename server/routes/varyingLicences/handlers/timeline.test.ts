@@ -5,6 +5,8 @@ import TimelineRoutes from './timeline'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import TimelineEvent from '../../../@types/TimelineEvent'
 import TimelineService from '../../../services/timelineService'
+import LicenceKind from '../../../enumeration/LicenceKind'
+import config from '../../../config'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/timelineService')
@@ -25,7 +27,10 @@ describe('Route Handlers - Timeline', () => {
 
   const commonUser = { username: 'joebloggs' }
 
+  const existingConfig = config
+
   beforeEach(() => {
+    config.hdcIntegrationMvp2Enabled = true
     req = {
       params: {
         licenceId: 1,
@@ -33,6 +38,10 @@ describe('Route Handlers - Timeline', () => {
       query: {},
     } as unknown as Request
     jest.resetAllMocks()
+  })
+
+  afterEach(() => {
+    config.hdcIntegrationMvp2Enabled = existingConfig.hdcIntegrationMvp2Enabled
   })
 
   describe('GET', () => {
@@ -224,6 +233,7 @@ describe('Route Handlers - Timeline', () => {
             id: 1,
             statusCode: LicenceStatus.ACTIVE,
             isReviewNeeded: false,
+            kind: LicenceKind.CRD,
           },
           user: commonUser,
         },
@@ -245,13 +255,94 @@ describe('Route Handlers - Timeline', () => {
       await handler.GET(req, res)
 
       expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
-        { id: 1, statusCode: LicenceStatus.ACTIVE, isReviewNeeded: false },
+        { id: 1, statusCode: LicenceStatus.ACTIVE, isReviewNeeded: false, kind: LicenceKind.CRD },
         { username: 'joebloggs' },
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToAction: 'VIEW_OR_VARY',
+      })
+    })
+
+    it('should render view or vary call to action for HDC licences when hdcIntegrationMvp2Enabled is true', async () => {
+      res = {
+        ...commonRes,
+        locals: {
+          licence: {
+            id: 1,
+            kind: LicenceKind.HDC,
+            statusCode: LicenceStatus.ACTIVE,
+            isReviewNeeded: false,
+          },
+          user: commonUser,
+        },
+      } as unknown as Response
+
+      const timelineEvents = [
+        {
+          eventType: 'CREATION',
+          title: 'Licence created',
+          statusCode: 'ACTIVE',
+          createdBy: 'X Y',
+          licenceId: 1,
+          lastUpdate: '12/11/2022 10:04:00',
+        },
+      ] as unknown as TimelineEvent[]
+
+      timelineService.getTimelineEvents.mockResolvedValue(timelineEvents)
+
+      await handler.GET(req, res)
+
+      expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
+        { id: 1, statusCode: LicenceStatus.ACTIVE, isReviewNeeded: false, kind: LicenceKind.HDC },
+        { username: 'joebloggs' },
+      )
+
+      expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
+        timelineEvents,
+        callToAction: 'VIEW_OR_VARY',
+      })
+    })
+
+    it('should render view call to action for HDC licences when hdcIntegrationMvp2Enabled is false', async () => {
+      config.hdcIntegrationMvp2Enabled = false
+      res = {
+        ...commonRes,
+        locals: {
+          licence: {
+            id: 1,
+            kind: LicenceKind.HDC,
+            statusCode: LicenceStatus.ACTIVE,
+            isReviewNeeded: false,
+          },
+          user: commonUser,
+        },
+      } as unknown as Response
+
+      const timelineEvents = [
+        {
+          eventType: 'CREATION',
+          title: 'Licence created',
+          statusCode: 'ACTIVE',
+          createdBy: 'X Y',
+          licenceId: 1,
+          lastUpdate: '12/11/2022 10:04:00',
+        },
+      ] as unknown as TimelineEvent[]
+
+      timelineService.getTimelineEvents.mockResolvedValue(timelineEvents)
+
+      await handler.GET(req, res)
+
+      expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
+        { id: 1, statusCode: LicenceStatus.ACTIVE, isReviewNeeded: false, kind: LicenceKind.HDC },
+        { username: 'joebloggs' },
+      )
+
+      expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
+        timelineEvents,
+        callToAction: 'VIEW',
       })
     })
   })
@@ -266,6 +357,7 @@ describe('Route Handlers - Timeline', () => {
             kind: 'VARIATION',
             statusCode: LicenceStatus.VARIATION_APPROVED,
             variationOf: 1,
+            isVariation: true,
           },
           user: commonUser,
         },

@@ -9,7 +9,6 @@ context('Healthcheck', () => {
       cy.task('stubPrisonerSearchApiPing')
       cy.task('stubDeliusPing')
       cy.task('stubPrisonApiPing')
-      cy.task('stubProbationSearchPing')
       cy.task('stubLicencesPing')
       cy.task('stubPrisonRegisterApiPing')
       cy.task('stubGotenbergApiPing')
@@ -41,7 +40,7 @@ context('Healthcheck', () => {
         expect(response.body.components.hmppsAuth.status).to.equal('UP')
         expect(response.body.components.manageUsersApi.status).to.equal('UP')
         expect(response.body.components.tokenVerification.status).to.equal('DOWN')
-        expect(response.body.components.tokenVerification.details).to.contain({ status: 500, retries: 2 })
+        expect(response.body.components.tokenVerification.details).to.contain({ status: 500, attempts: 3 })
       })
     })
 

@@ -5,6 +5,7 @@
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/varyCallToActions.njk" import activeCta %}
+{% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
 
 {% set pageTitle = applicationName + " - Vary a licence - Active licence" %}
 {% set isInVariation = licence.statusCode == 'VARIATION_IN_PROGRESS' or licence.statusCode == 'VARIATION_SUBMITTED' 
@@ -25,9 +26,20 @@
         </div>
     </div>
 
-    {{ activeCta(callToActions, licence) }}
+    {% if hdcIntegrationMvp2Enabled %}
+        {{ activeCta(callToActions, licence) }}
+    {% else %}
+        {% if licence.kind !== 'HDC' %} 
+            {{ activeCta(callToActions, licence) }}
+        {% endif %}
+    {% endif %}
 
-    <div class="govuk-grid-row">
+    {% if licence.kind === 'HDC' or licence.kind === 'HDC_VARIATION' %}
+        <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
+        {{ hdcCurfewTimes(hdcLicenceData) }}
+    {% endif %}
+
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
         <div class="govuk-grid-column-full">
             {% if ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') 
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
@@ -60,6 +72,12 @@
         </div>
     </div>
 
-    {{ activeCta(callToActions, licence) }}
+    {% if hdcIntegrationMvp2Enabled %}
+        {{ activeCta(callToActions, licence) }}
+    {% else %}
+        {% if licence.kind !== 'HDC' %} 
+            {{ activeCta(callToActions, licence) }}
+        {% endif %}
+    {% endif %}
 
 {% endblock %}

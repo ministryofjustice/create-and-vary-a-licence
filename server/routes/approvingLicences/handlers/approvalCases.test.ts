@@ -20,7 +20,7 @@ const caseload: ApprovalCase[] = [
     prisonerNumber: 'A1234AA',
     releaseDate: '01/05/2022',
     probationPractitioner: {
-      name: 'Walter White',
+      name: 'Com Four',
     },
     submittedByFullName: 'John Smith',
     urgentApproval: false,
@@ -33,7 +33,7 @@ const caseload: ApprovalCase[] = [
     name: 'Joe Bloggs',
     prisonerNumber: 'A1234AB',
     probationPractitioner: {
-      name: 'Thor',
+      name: 'Com Three',
     },
     submittedByFullName: 'John Smith',
     releaseDate: '01/05/2022',
@@ -103,7 +103,7 @@ describe('Route Handlers - Approval - case list', () => {
               prisonerNumber: 'A1234AA',
               releaseDate: '01 May 2022',
               probationPractitioner: {
-                name: 'Walter White',
+                name: 'Com Four',
               },
               submittedByFullName: 'John Smith',
               urgentApproval: false,
@@ -116,7 +116,7 @@ describe('Route Handlers - Approval - case list', () => {
               name: 'Joe Bloggs',
               prisonerNumber: 'A1234AB',
               probationPractitioner: {
-                name: 'Thor',
+                name: 'Com Three',
               },
               submittedByFullName: 'John Smith',
               releaseDate: '01 May 2022',
@@ -153,7 +153,7 @@ describe('Route Handlers - Approval - case list', () => {
             prisonerNumber: 'A1234AA',
             releaseDate: null,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Com Four',
             },
             submittedByFullName: 'John Smith',
             urgentApproval: false,
@@ -175,7 +175,7 @@ describe('Route Handlers - Approval - case list', () => {
               name: 'Bob Smith',
               prisonerNumber: 'A1234AA',
               probationPractitioner: {
-                name: 'Walter White',
+                name: 'Com Four',
               },
               releaseDate: 'not found',
               submittedByFullName: 'John Smith',
@@ -208,7 +208,7 @@ describe('Route Handlers - Approval - case list', () => {
               prisonerNumber: 'A1234AA',
               releaseDate: '01 May 2022',
               probationPractitioner: {
-                name: 'Walter White',
+                name: 'Com Four',
               },
               submittedByFullName: 'John Smith',
               urgentApproval: false,
@@ -221,7 +221,7 @@ describe('Route Handlers - Approval - case list', () => {
               name: 'Joe Bloggs',
               prisonerNumber: 'A1234AB',
               probationPractitioner: {
-                name: 'Thor',
+                name: 'Com Three',
               },
               submittedByFullName: 'John Smith',
               releaseDate: '01 May 2022',
@@ -265,7 +265,7 @@ describe('Route Handlers - Approval - case list', () => {
             prisonerNumber: 'A1234AA',
             releaseDate: null,
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Com Four',
             },
             submittedByFullName: 'John Smith',
             urgentApproval: false,
@@ -287,7 +287,7 @@ describe('Route Handlers - Approval - case list', () => {
               name: 'Bob Smith',
               prisonerNumber: 'A1234AA',
               probationPractitioner: {
-                name: 'Walter White',
+                name: 'Com Four',
               },
               releaseDate: 'not found',
               submittedByFullName: 'John Smith',

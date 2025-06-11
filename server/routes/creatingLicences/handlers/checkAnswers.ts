@@ -7,13 +7,14 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
-import { groupingBy, isInHardStopPeriod } from '../../../utils/utils'
-import LicenceKind from '../../../enumeration/LicenceKind'
+import { groupingBy, isHdcLicence, isInHardStopPeriod, isVariation } from '../../../utils/utils'
+import HdcService from '../../../services/hdcService'
 
 export default class CheckAnswersRoutes {
   constructor(
     private readonly licenceService: LicenceService,
     private readonly conditionService: ConditionService,
+    private readonly hdcService: HdcService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -36,15 +37,18 @@ export default class CheckAnswersRoutes {
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
+    const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
+
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
       backLink,
       initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
-      canEditInitialAppt: licence.kind !== LicenceKind.VARIATION && !isInHardStopPeriod(licence),
+      canEditInitialAppt: !isVariation(licence) && !isInHardStopPeriod(licence),
       statusCode: licence.statusCode,
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
+      hdcLicenceData,
     })
   }
 
@@ -55,7 +59,8 @@ export default class CheckAnswersRoutes {
     const errors = await this.validateLicence(licence)
     if (errors.length > 0) {
       req.flash('validationErrors', JSON.stringify(errors))
-      return res.redirect('back')
+      const referer = req.get('Referer') || `/licence/create/id/${licenceId}/check-your-answers`
+      return res.redirect(referer)
     }
 
     /**
@@ -79,7 +84,7 @@ export default class CheckAnswersRoutes {
       await this.licenceService.updateStandardConditions(licenceId, newStdConditions, user)
     }
 
-    if (licence.kind === 'VARIATION') {
+    if (licence.kind === 'VARIATION' || licence.kind === 'HDC_VARIATION') {
       return res.redirect(`/licence/vary/id/${licence.id}/reason-for-variation`)
     }
 

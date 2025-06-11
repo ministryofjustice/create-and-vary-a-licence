@@ -48,7 +48,6 @@ export default class AdditionalConditionsInputPage extends Page {
     return this
   }
 
-  // eslint-disable-next-line default-param-last
   enterTime = (hour = '11', minute = '30', fieldId?: string): AdditionalConditionsInputPage => {
     if (fieldId) {
       cy.get(`#${fieldId}-hour`).type(hour)
@@ -72,8 +71,8 @@ export default class AdditionalConditionsInputPage extends Page {
   enterAddress = (): AdditionalConditionsInputPage => {
     cy.get("input[name*='addressLine1']").type('123 Fake Street')
     cy.get("input[name*='addressTown']").type('Fakestown')
-    cy.get("input[name*='addressCounty']").type('London')
-    cy.get("input[name*='addressPostcode']").type('SW2 5XF')
+    cy.get("input[name*='addressCounty']").type('Fakeshire')
+    cy.get("input[name*='addressPostcode']").type('FA1 1KE')
     return this
   }
 

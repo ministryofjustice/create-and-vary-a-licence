@@ -47,7 +47,7 @@ Then:
 There is a single integration test to verify that the Gotenberg container can support the
 conversion of HTML to PDF documents. To run this, follow these instructions:
 
-`$ docker-compose up -d`
+`$ docker compose up -d`
 
 This runs local redis and gotenberg containers.
 
@@ -63,9 +63,9 @@ NOTE: This test is not currently run in CI.
 
 Pull images and start dependent services:
 
-`$ docker-compose -f docker-compose-test.yml pull`
+`$ docker compose -f docker-compose-test.yml pull`
 
-`$ docker-compose -f docker-compose-test.yml up -d`
+`$ docker compose -f docker-compose-test.yml up -d`
 
 In a different terminal:
 
@@ -96,9 +96,9 @@ These are:
 2. Copy `.env.example` to `.env` in the root of the project and customise.
    For the client ID and secrets present in the file, you will need to retrieve these values from the kubernetes dev environment.
 
-3. Run the script to start the required containers and start the local service, which will use the `.env` file to set up its environment to reference the DEV APIs.
+3. Run the following to start the required containers and start the local service, which will use the `.env` file to set up its environment to reference the DEV APIs.
 
-`$ ./run-local.sh`
+`docker compose up -d && npm run start:dev`
 
 4. Bear in mind that the login details, and all data you will see, will be from the `licence-db` and APIs in the DEV environment. Only the redis functions and any use of the gotenberg container will be local operations.
 

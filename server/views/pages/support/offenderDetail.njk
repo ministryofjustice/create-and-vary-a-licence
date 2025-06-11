@@ -170,6 +170,14 @@
                         <td class="govuk-table__cell">{{ prisonerDetail.hdced }}</td>
                     </tr>
                     <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDCAD</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.hdcad }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDC end date</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.hdcEndDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">HDC status</th>
                         <td class="govuk-table__cell">{{ prisonerDetail.hdcStatus }}</td>
                     </tr>
@@ -192,6 +200,10 @@
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">Recall</th>
                         <td class="govuk-table__cell">{{ prisonerDetail.recall }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">IS-91</th>
+                        <td class="govuk-table__cell">{{ is91Status }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -224,6 +236,10 @@
                         <td class="govuk-table__cell">{{ licence.sed }}</td>
                     </tr>
                     <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">LSD</th>
+                        <td class="govuk-table__cell">{{ licence.lsd }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">LED</th>
                         <td class="govuk-table__cell">{{ licence.led }}</td>
                     </tr>
@@ -234,6 +250,14 @@
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">TUSED</th>
                         <td class="govuk-table__cell">{{ licence.tused }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDCAD</th>
+                        <td class="govuk-table__cell">{{ licence.hdcad }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDC end date</th>
+                        <td class="govuk-table__cell">{{ licence.hdcEndDate }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -261,6 +285,29 @@
             </table>
         </div>
     </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">Ineligibility Reasons</caption>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Reason</th>
+                    <td class="govuk-table__cell">
+                        {% if ineligibilityReasons | length %}
+                            {% for reason in ineligibilityReasons %}
+                                <li>{{reason}}</li>
+                            {% endfor %}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     
     <div class="govuk-button-group">
         {{ govukButton({

@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -18,17 +17,13 @@ export default function Index({
   probationService,
   prisonerService,
   conditionService,
+  hdcService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/approve${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_DM']),
-      fetchLicence(licenceService),
-      asyncMiddleware(handler),
-    )
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_DM']), fetchLicence(licenceService), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
@@ -36,12 +31,12 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_DM']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const comDetailsHandler = new ComDetailsRoutes(probationService)
   const approvalCasesHandler = new ApprovalCaseRoutes(approvedCaseloadService, prisonerService)
-  const approvalViewHandler = new ApprovalViewRoutes(licenceService, probationService)
+  const approvalViewHandler = new ApprovalViewRoutes(licenceService, probationService, hdcService)
   const approvalConfirmedHandler = new ConfirmApprovedRoutes(probationService)
   const approvalRejectedHandler = new ConfirmRejectedRoutes()
 

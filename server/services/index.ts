@@ -3,7 +3,7 @@ import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
 import ProbationService from './probationService'
 import QrCodeService from './qrCodeService'
-import CaseloadService from './lists/caseloadService'
+import AcoCaseloadService from './lists/acoCaseloadService'
 import UkBankHolidayFeedService from './ukBankHolidayFeedService'
 import PrisonRegisterService from './prisonRegisterService'
 import ConditionService from './conditionService'
@@ -13,9 +13,7 @@ import SearchService from './searchService'
 import FeComponentsService from './feComponentsService'
 import ApproverCaseloadService from './lists/approverCaseloadService'
 import TimelineService from './timelineService'
-import PromptLicenceCreationService from '../../jobs/promptLicenceCreationService'
 import CaCaseloadService from './lists/caCaseloadService'
-import PromptListService from './lists/promptListService'
 import ComCaseloadService from './lists/comCaseloadService'
 import HdcService from './hdcService'
 
@@ -24,7 +22,6 @@ const {
   prisonApiClient,
   prisonerSearchApiClient,
   deliusClient,
-  probationSearchApiClient,
   licenceApiClient,
   prisonRegisterApiClient,
   feComponentsClient,
@@ -32,22 +29,20 @@ const {
 
 const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
-const probationService = new ProbationService(deliusClient, probationSearchApiClient)
+const probationService = new ProbationService(deliusClient)
 const userService = new UserService(manageUsersApiClient, prisonApiClient, probationService)
 const conditionService = new ConditionService(licenceApiClient)
 const licenceService = new LicenceService(licenceApiClient, conditionService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
-const caseloadService = new CaseloadService(probationService, licenceService)
+const caseloadService = new AcoCaseloadService(probationService, licenceApiClient, licenceService)
 const caCaseloadService = new CaCaseloadService(licenceApiClient)
 const comCaseloadService = new ComCaseloadService(licenceService, licenceApiClient)
-const promptListService = new PromptListService(prisonerService, probationService, licenceService)
 const approvedCaseloadService = new ApproverCaseloadService(licenceApiClient)
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
 const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
 const searchService = new SearchService(licenceApiClient)
 const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
-const promptLicenceCreationService = new PromptLicenceCreationService(promptListService, licenceApiClient)
 const hdcService = new HdcService(licenceApiClient)
 
 export const services = {
@@ -68,7 +63,6 @@ export const services = {
   licenceApiClient,
   feComponentsService,
   timelineService,
-  promptLicenceCreationService,
   hdcService,
 }
 

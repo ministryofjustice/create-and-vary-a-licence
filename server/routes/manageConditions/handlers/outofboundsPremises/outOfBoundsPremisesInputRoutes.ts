@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
+import { AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 
 export default class OutOfBoundsPremisesInputRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -9,7 +10,9 @@ export default class OutOfBoundsPremisesInputRoutes {
     const { conditionId } = req.params
     const { user, licence } = res.locals
 
-    const { code } = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
+    const { code } = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),
+    )
 
     let redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/outofbounds-premises`
     if (req.query?.fromPolicyReview) {
@@ -18,7 +21,9 @@ export default class OutOfBoundsPremisesInputRoutes {
       redirect += '?fromReview=true'
     }
 
-    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
+    const condition = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),
+    )
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
     return res.redirect(redirect)
@@ -29,7 +34,9 @@ export default class OutOfBoundsPremisesInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
-    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
+    const condition = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),
+    )
 
     await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)
 

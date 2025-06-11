@@ -23,16 +23,26 @@
             </p>
 
             <h2 class="govuk-heading-m">If you need to make any changes</h2>
-            <p class="govuk-body">
-                You can do so up to 2 days before a standard release. From this point, you can only ask the prison to change the initial appointment details. Other changes must be made after release.
-                <br>
-                You can continue to work on licences for people being released early after the 2-day point. 
-            </p>
-
-            <h2 class="govuk-heading-m">Give us your feedback</h2>
-            <p class="govuk-body">
-                <a href="{{ exitSurveyLink }}" rel="noreferrer noopener" target="_blank" id="exit-survey" class="govuk-link">What did you think of this service?</a> (takes 30 seconds)
-            </p>
+            {% if kind == "HDC" %}
+                <p class="govuk-body" id="message">
+                    You can make changes to reporting instructions through the Create and vary a licence service. These changes do not need to be reapproved by the prison, but a case administrator may need to reprint the licence.
+                <p>
+                {% if hdcIntegrationMvp2Enabled %}
+                    <p class="govuk-body" id="change-message">
+                        To request a change to the curfew address or first night curfew hours, email createandvaryalicence@digital.justice.gov.uk.
+                    </p>
+                {% else %}
+                    <p class="govuk-body" id="change-message">
+                        To change the curfew address, curfew hours or first night curfew hours email createandvaryalicence@digital.justice.gov.uk.
+                    </p>
+                {% endif %}
+            {% else %}    
+                <p class="govuk-body" id="message">
+                    You can do so up to 2 days before a standard release. From this point, you can only ask the prison to change the initial appointment details. Other changes must be made after release.
+                    <br>
+                    You can continue to work on licences for people being released early after the 2-day point. 
+                </p>
+            {% endif %}
 
             <p class="govuk-body">
             {{ govukButton({

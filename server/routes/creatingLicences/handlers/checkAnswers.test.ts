@@ -5,17 +5,51 @@ import { Licence, OmuContact } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
+jest.mock('../../../services/hdcService')
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
+const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 describe('Route Handlers - Create Licence - Check Answers', () => {
-  const handler = new CheckAnswersRoutes(licenceService, conditionService)
+  const handler = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
   let req: Request
   let res: Response
+
+  const exampleHdcLicenceData = {
+    curfewAddress: {
+      addressLine1: 'addressLineOne',
+      addressLine2: 'addressLineTwo',
+      townOrCity: 'addressTownOrCity',
+      county: 'county',
+      postcode: 'addressPostcode',
+    },
+    firstNightCurfewHours: {
+      firstNightFrom: '09:00',
+      firstNightUntil: '17:00',
+    },
+    curfewTimes: [
+      {
+        curfewTimesSequence: 1,
+        fromDay: 'MONDAY',
+        fromTime: '17:00:00',
+        untilDay: 'TUESDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 2,
+        fromDay: 'TUESDAY',
+        fromTime: '17:00:00',
+        untilDay: 'WEDNESDAY',
+        untilTime: '09:00:00',
+      },
+    ],
+    allCurfewTimesEqual: true,
+  } as CvlHdcLicenceData
 
   afterEach(() => {
     jest.resetAllMocks()
@@ -30,6 +64,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         returnToCase: 'some-back-link',
       },
       flash: jest.fn(),
+      get: jest.fn().mockReturnValue('/previous-page'),
     } as unknown as Request
 
     res = {
@@ -52,16 +87,19 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           additionalPssConditions: [],
           bespokeConditions: [],
           comStaffId: 123,
-          forename: 'Jim',
-          surname: 'Jones',
+          forename: 'Test',
+          surname: 'Person',
           statusCode: LicenceStatus.IN_PROGRESS,
           isDueForEarlyRelease: true,
           isInHardStopPeriod: false,
+          kind: LicenceKind.CRD,
         } as Licence,
       },
     } as unknown as Response
+
     conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([])
     conditionService.getbespokeConditionsForSummaryAndPdf.mockResolvedValue(res.locals.licence.bespokeConditions)
+    hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
   })
 
   describe('GET', () => {
@@ -75,6 +113,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -96,6 +135,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        hdcLicenceData: null,
       })
     })
 
@@ -121,6 +161,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -138,11 +179,12 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        hdcLicenceData: null,
       })
     })
 
     it('should not allow PPs to edit initial appointment details for variations', async () => {
-      res.locals.licence.kind = LicenceKind.VARIATION
+      res.locals.licence = { ...res.locals.licence, kind: LicenceKind.VARIATION, isVariation: true }
 
       await handler.GET(req, res)
 
@@ -154,6 +196,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: false,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        hdcLicenceData: null,
       })
     })
 
@@ -161,6 +204,40 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       await handler.GET(req, res)
 
       expect(req.flash).toHaveBeenCalledWith('initialApptUpdated')
+    })
+
+    it('should pass through HDC licence data for HDC licences', async () => {
+      res.locals.licence.kind = LicenceKind.HDC
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        hdcLicenceData: exampleHdcLicenceData,
+      })
+    })
+
+    it('should pass through HDC licence data for HDC variations', async () => {
+      res.locals.licence.kind = LicenceKind.HDC_VARIATION
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        hdcLicenceData: exampleHdcLicenceData,
+      })
     })
 
     describe('when hard stop is enabled', () => {
@@ -177,6 +254,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           canEditInitialAppt: true,
           isInHardStopPeriod: false,
           statusCode: 'IN_PROGRESS',
+          hdcLicenceData: null,
         })
       })
 
@@ -193,6 +271,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           canEditInitialAppt: false,
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
+          hdcLicenceData: null,
         })
       })
 
@@ -211,6 +290,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
           omuEmail: 'test@test.test',
+          hdcLicenceData: null,
         })
       })
     })
@@ -238,7 +318,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           { field: 'appointmentTimeType', message: "Select 'Change' to go back and add appointment date and time" },
         ]),
       )
-      expect(res.redirect).toHaveBeenCalledWith('back')
+      expect(res.redirect).toHaveBeenCalledWith('/previous-page')
     })
 
     it('should call the licence API to submit the licence for approval', async () => {
@@ -259,6 +339,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should redirect back with error messages in flash if appointment person field is empty', async () => {
+      req.get = jest.fn().mockReturnValue(undefined) // Simulate no referer
       res.locals.licence = {
         ...res.locals.licence,
         appointmentPersonType: 'SPECIFIC_PERSON',
@@ -271,7 +352,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         'validationErrors',
         JSON.stringify([{ field: 'appointmentPerson', message: "Select 'Change' to go back and add who to meet" }]),
       )
-      expect(res.redirect).toHaveBeenCalledWith('back')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
 
     it('should not redirect back with error messages in flash if appointment person field is empty', async () => {
@@ -289,6 +370,22 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         username: 'joebloggs',
         deliusStaffIdentifier: 123,
       })
+    })
+
+    it('should redirect to the reason-for-variation page if the licence is a variation', async () => {
+      res.locals.licence.kind = LicenceKind.VARIATION
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/reason-for-variation')
+    })
+
+    it('should redirect to the reason-for-variation page if the licence is an HDC variation', async () => {
+      res.locals.licence.kind = LicenceKind.HDC_VARIATION
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/reason-for-variation')
     })
   })
 })

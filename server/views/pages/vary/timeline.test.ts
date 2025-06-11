@@ -1,10 +1,22 @@
 import fs from 'fs'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import LicenceKind from '../../../enumeration/LicenceKind'
+import config from '../../../config'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/vary/timeline.njk').toString())
 
 describe('Timeline', () => {
+  const existingConfig = config
+
+  beforeEach(() => {
+    config.hdcIntegrationMvp2Enabled = true
+  })
+
+  afterEach(() => {
+    config.hdcIntegrationMvp2Enabled = existingConfig.hdcIntegrationMvp2Enabled
+  })
+
   it('should display the text Last update with the date', () => {
     const $ = render({
       timelineEvents: [
@@ -43,5 +55,59 @@ describe('Timeline', () => {
     })
     expect($('[data-qa=date]').text()).not.toContain('Release date: ')
     expect($('[data-qa=date]').text()).toContain('Licence end date:')
+  })
+
+  it('should display the View licence button for HDC licences when hdcIntegrationMvp2Enabled is false', () => {
+    config.hdcIntegrationMvp2Enabled = false
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { kind: LicenceKind.HDC },
+      timelineEvents: [],
+      callToAction: 'VIEW',
+      hdcIntegrationMvp2Enabled,
+    })
+    expect($('[data-qa=view-licence]').length).toBe(1)
+    expect($('[data-qa=view-licence]').text().trim()).toContain('View licence')
+  })
+
+  it('should display the How do I vary the licence component for HDC licences when hdcIntegrationMvp2Enabled is false', () => {
+    config.hdcIntegrationMvp2Enabled = false
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { kind: LicenceKind.HDC },
+      timelineEvents: [],
+      callToAction: 'VIEW',
+      hdcIntegrationMvp2Enabled,
+    })
+    expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain('How do I vary this licence?')
+    expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain(
+      'Email createandvaryalicence@digital.justice.gov.uk to vary this licence.',
+    )
+  })
+
+  it('should display the View or vary licence button for HDC licences when hdcIntegrationMvp2Enabled is true', () => {
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { kind: LicenceKind.HDC },
+      timelineEvents: [],
+      callToAction: 'VIEW_OR_VARY',
+      hdcIntegrationMvp2Enabled,
+    })
+    expect($('[data-qa=view-or-vary-licence]').length).toBe(1)
+    expect($('[data-qa=view-or-vary-licence]').text().trim()).toContain('View or vary licence')
+  })
+
+  it('should not display the How do I vary the licence component for HDC licences when hdcIntegrationMvp2Enabled is true', () => {
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { kind: LicenceKind.HDC },
+      timelineEvents: [],
+      callToAction: 'VIEW_OR_VARY',
+      hdcIntegrationMvp2Enabled,
+    })
+    expect($('body').text().trim()).not.toContain('How do I vary this licence?')
+    expect($('[data-qa=hdc-vary-licence]').text().trim()).not.toContain(
+      'Email createandvaryalicence@digital.justice.gov.uk to vary this licence.',
+    )
   })
 })

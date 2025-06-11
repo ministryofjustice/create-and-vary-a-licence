@@ -3,6 +3,7 @@ import fs from 'fs'
 import _ from 'lodash'
 import { format } from 'date-fns'
 import type {
+  AddAdditionalConditionRequest,
   AdditionalCondition,
   AdditionalConditionsRequest,
   AppointmentAddressRequest,
@@ -11,37 +12,33 @@ import type {
   AuditEvent,
   AuditRequest,
   BespokeConditionsRequest,
+  ComReviewCount,
   ContactNumberRequest,
   CreateLicenceRequest,
   Licence,
+  LicenceConditionChange,
+  LicenceCreationResponse,
   LicenceSummary,
   NotifyRequest,
   ReferVariationRequest,
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
-  UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
+  UpdatePrisonUserRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
-  UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
   UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
-  OmuContact,
-  AddAdditionalConditionRequest,
-  LicenceConditionChange,
-  UpdateOffenderDetailsRequest,
-  ComReviewCount,
-  CaseloadItem,
-  LicenceCreationResponse,
 } from '../@types/licenceApiClientTypes'
+import { CaseloadItem, OmuContact, UpdateOffenderDetailsRequest } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
 import Telephone from '../routes/initialAppointment/types/telephone'
 import Address from '../routes/initialAppointment/types/address'
-import { addressObjectToString, filterCentralCaseload, objectIsEmpty } from '../utils/utils'
+import { addressObjectToString, filterCentralCaseload, isVariation, objectIsEmpty } from '../utils/utils'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
@@ -263,7 +260,8 @@ export default class LicenceService {
     user?: User,
   ): Promise<LicenceSummary | null | undefined> {
     const licences = await this.licenceApiClient.matchLicences(statuses, null, null, nomisIds, null, null, null, user)
-    return _.head(licences)
+    const licencesSortedDesc = licences.sort((a, b) => a.licenceId - b.licenceId)
+    return _.last(licencesSortedDesc)
   }
 
   async getPreReleaseAndActiveLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
@@ -422,8 +420,8 @@ export default class LicenceService {
     return this.licenceApiClient.updatePrisonInformation(licenceId, prisonInformation, user)
   }
 
-  async updateSentenceDates(licenceId: string, sentenceDates: UpdateSentenceDatesRequest, user?: User): Promise<void> {
-    return this.licenceApiClient.updateSentenceDates(licenceId, sentenceDates, user)
+  async updateSentenceDates(licenceId: string, user?: User): Promise<void> {
+    return this.licenceApiClient.updateSentenceDates(licenceId, user)
   }
 
   async approveVariation(licenceId: string, user: User): Promise<void> {
@@ -435,7 +433,7 @@ export default class LicenceService {
   }
 
   async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
-    if (variation.kind === 'VARIATION') {
+    if (isVariation(variation)) {
       const originalLicence = await this.getLicence(variation.variationOf, user)
       return compareLicenceConditions(originalLicence, variation)
     }
@@ -544,5 +542,13 @@ export default class LicenceService {
 
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
     return this.licenceApiClient.deactivateActiveAndVariationLicences(licenceId, reason)
+  }
+
+  async getIneligibilityReasons(nomsId: string): Promise<string[]> {
+    return this.licenceApiClient.getIneligibilityReasons(nomsId)
+  }
+
+  async getIS91Status(nomsId: string): Promise<boolean> {
+    return this.licenceApiClient.getIS91Status(nomsId)
   }
 }

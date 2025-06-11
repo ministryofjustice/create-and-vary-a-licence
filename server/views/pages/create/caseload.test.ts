@@ -4,6 +4,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/create/caseload.njk').toString())
 
@@ -12,7 +13,7 @@ describe('Create a Licence Views - Caseload', () => {
     const $ = render({
       caseload: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           crnNumber: 'X381306',
           releaseDate: '03 August 2022',
           isClickable: true,
@@ -29,7 +30,7 @@ describe('Create a Licence Views - Caseload', () => {
     })
 
     expect($('tbody .govuk-table__row').length).toBe(2)
-    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
     expect($('#release-date-1').text()).toBe('03 August 2022')
     expect($('#name-2 > .caseload-offender-name > a').text()).toBe('John Smith')
@@ -41,7 +42,7 @@ describe('Create a Licence Views - Caseload', () => {
     const $ = render({
       caseload: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           crnNumber: 'X381306',
           releaseDate: '03 August 2022',
           probationPractitioner: {
@@ -62,7 +63,7 @@ describe('Create a Licence Views - Caseload', () => {
     })
 
     expect($('tbody .govuk-table__row').length).toBe(2)
-    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
     expect($('#probation-practitioner-1').text()).toBe('Joe Bloggs')
     expect($('#probation-practitioner-1 > a').attr('href')).toBe(
       '/licence/create/probation-practitioner/staffCode/X12345',
@@ -78,7 +79,7 @@ describe('Create a Licence Views - Caseload', () => {
       statusConfig,
       caseload: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           crnNumber: 'X381306',
           releaseDate: '03 August 2022',
           probationPractitioner: {
@@ -104,7 +105,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
-    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
     expect($('#release-date-1').text()).toBe('03 August 2022')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Not started')
@@ -120,7 +121,7 @@ describe('Create a Licence Views - Caseload', () => {
       statusConfig,
       caseload: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           crnNumber: 'X381306',
           releaseDate: '03 August 2022',
           probationPractitioner: {
@@ -146,7 +147,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
-    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
     expect($('#release-date-1').text()).toBe('03 August 2022')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Not started')
@@ -162,7 +163,7 @@ describe('Create a Licence Views - Caseload', () => {
       statusConfig,
       caseload: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           crnNumber: 'X381306',
           releaseDate: '03 August 2022',
           probationPractitioner: {
@@ -188,7 +189,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
-    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
     expect($('#release-date-1').text()).toBe('03 August 2022')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Not started')
@@ -204,7 +205,7 @@ describe('Create a Licence Views - Caseload', () => {
       statusConfig,
       caseload: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           crnNumber: 'X381306',
           prisonerNumber: 'ABC123',
           releaseDate: '03 August 2022',
@@ -235,7 +236,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
-    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
     expect($('#release-date-1').text()).toBe('03 August 2022')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Not started')
@@ -250,5 +251,59 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#name-2 > .caseload-offender-name > a').attr('href').trim()).toBe(
       '/licence/create/id/1/check-your-answers',
     )
+  })
+
+  it('should highlight a HDC licence with a HDC release warning label', () => {
+    const $ = render({
+      statusConfig,
+      caseload: [
+        {
+          name: 'Test Person',
+          crnNumber: 'A123456',
+          prisonerNumber: 'ABC123',
+          releaseDate: '20 December 2025',
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffId: 2000,
+          },
+          isClickable: true,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          createLink: '/licence/create/nomisId/ABC123/confirm',
+          kind: LicenceKind.HDC,
+        },
+      ],
+    })
+
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
+    expect($('#release-date-1').text()).toBe('20 December 2025HDC release')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+  })
+
+  it('should highlight a HDC variation with a HDC release warning label', () => {
+    const $ = render({
+      statusConfig,
+      caseload: [
+        {
+          name: 'Test Person',
+          crnNumber: 'A123456',
+          prisonerNumber: 'ABC123',
+          releaseDate: '20 December 2025',
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffId: 2000,
+          },
+          isClickable: true,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          createLink: '/licence/create/nomisId/ABC123/confirm',
+          kind: LicenceKind.HDC_VARIATION,
+        },
+      ],
+    })
+
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
+    expect($('#release-date-1').text()).toBe('20 December 2025HDC release')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
 })

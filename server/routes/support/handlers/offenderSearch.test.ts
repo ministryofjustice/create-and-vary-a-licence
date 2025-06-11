@@ -2,11 +2,10 @@ import { Request, Response } from 'express'
 import OffenderSearchRoutes from './offenderSearch'
 import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
-import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/probationService')
 
@@ -38,34 +37,30 @@ describe('Route Handlers - Offender search', () => {
         crn: 'X1234',
       }
 
-      probationService.getOffendersByCrn.mockResolvedValue([
-        {
-          otherIds: {
-            crn: 'X1234',
-            nomsNumber: 'ABC123',
-          },
-        } as unknown as OffenderDetail,
-      ])
+      probationService.getProbationer.mockResolvedValue({
+        crn: 'X1234',
+        nomisId: 'ABC123',
+      })
       prisonerService.searchPrisoners.mockResolvedValue([
         {
           prisonerNumber: 'ABC123',
           prisonName: 'Pentonville',
-          firstName: 'Peter',
-          lastName: 'Pepper',
+          firstName: 'Test',
+          lastName: 'Person',
         } as unknown as Prisoner,
       ])
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderSearch', {
-        searchResults: [{ crn: 'X1234', name: 'Peter Pepper', nomisId: 'ABC123', prison: 'Pentonville' }],
+        searchResults: [{ crn: 'X1234', name: 'Test Person', nomisId: 'ABC123', prison: 'Pentonville' }],
         searchValues: { crn: 'X1234' },
       })
     })
 
     it('Should search by name and nomisId', async () => {
       req.query = {
-        firstName: 'Peter',
-        lastName: 'Pepper',
+        firstName: 'Test',
+        lastName: 'Person',
         nomisId: 'ABC123',
       }
 
@@ -73,25 +68,23 @@ describe('Route Handlers - Offender search', () => {
         {
           prisonerNumber: 'ABC123',
           prisonName: 'Pentonville',
-          firstName: 'Peter',
-          lastName: 'Pepper',
+          firstName: 'Test',
+          lastName: 'Person',
         } as unknown as Prisoner,
       ])
-      probationService.getOffendersByNomsNumbers.mockResolvedValue([
+      probationService.getProbationers.mockResolvedValue([
         {
-          otherIds: {
-            crn: 'X1234',
-            nomsNumber: 'ABC123',
-          },
-        } as unknown as OffenderDetail,
+          crn: 'X1234',
+          nomisId: 'ABC123',
+        },
       ])
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderSearch', {
-        searchResults: [{ crn: 'X1234', name: 'Peter Pepper', nomisId: 'ABC123', prison: 'Pentonville' }],
+        searchResults: [{ crn: 'X1234', name: 'Test Person', nomisId: 'ABC123', prison: 'Pentonville' }],
         searchValues: {
-          firstName: 'Peter',
-          lastName: 'Pepper',
+          firstName: 'Test',
+          lastName: 'Person',
           nomisId: 'ABC123',
         },
       })

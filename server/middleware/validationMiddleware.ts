@@ -16,9 +16,9 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       let classType
       if (licence) {
         classType =
-          (await conditionService.getAdditionalConditionByCode(req.body.code, licence.version))?.validatorType || type
+          (await conditionService.getAdditionalConditionByCode(req.body?.code, licence.version))?.validatorType || type
       } else {
-        classType = (await conditionService.getAdditionalConditionByCode(req.body.code))?.validatorType || type
+        classType = (await conditionService.getAdditionalConditionByCode(req.body?.code))?.validatorType || type
       }
       // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
       if (req.file && req.file.fieldname === 'outOfBoundFilename') {
@@ -32,8 +32,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         { excludeExtraneousValues: false },
       )
 
-      const errors: ValidationError[] = await validate(validationScope)
-
+      const errors: ValidationError[] = await validate(validationScope, { forbidUnknownValues: false })
       if (errors.length === 0) {
         req.body = plainToInstance(classType, req.body, { excludeExtraneousValues: true })
         return next()
@@ -60,7 +59,9 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       req.flash('validationErrors', JSON.stringify(flattenErrors(errors)))
       req.flash('formResponses', JSON.stringify(req.body))
 
-      return res.redirect('back')
+      const referer = req.get('Referer')
+      if (!referer) return next(new Error('Missing Referer header'))
+      return res.redirect(referer)
     } catch (error) {
       return next(
         new Error(`Failed to validate licence details for: ${req.params.nomisId}`, {

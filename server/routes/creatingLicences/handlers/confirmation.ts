@@ -8,6 +8,7 @@ export default class ConfirmationRoutes {
     let titleText
     let confirmationMessage
     const backLink = req.session.returnToCase || '/licence/create/caseload'
+    const { kind } = licence
 
     switch (licence.typeCode) {
       case LicenceType.AP_PSS:
@@ -27,6 +28,6 @@ export default class ConfirmationRoutes {
       }
     }
 
-    res.render('pages/create/confirmation', { titleText, confirmationMessage, backLink })
+    res.render('pages/create/confirmation', { titleText, confirmationMessage, backLink, kind })
   }
 }

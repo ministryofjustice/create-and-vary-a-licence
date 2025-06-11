@@ -10,7 +10,6 @@ import {
   AuditRequest,
   BespokeConditionsRequest,
   ContactNumberRequest,
-  EmailContact,
   Licence,
   LicenceSummary,
   ReferVariationRequest,
@@ -21,11 +20,11 @@ import {
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
-  UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
   CaCaseloadSearch,
   LicenceCreationResponse,
+  OverrideLicencePrisonerDetailsRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -498,34 +497,11 @@ describe('Licence API client tests', () => {
   })
 
   it('Update sentence dates', async () => {
-    await licenceApiClient.updateSentenceDates(
-      '1',
-      {
-        conditionalReleaseDate: '09/09/2022',
-        actualReleaseDate: '09/09/2022',
-        sentenceStartDate: '09/09/2021',
-        sentenceEndDate: '09/09/2023',
-        licenceStartDate: '09/09/2022',
-        licenceExpiryDate: '09/09/2023',
-        topupSupervisionStartDate: '09/09/2023',
-        topupSupervisionExpiryDate: '09/09/2024',
-      } as UpdateSentenceDatesRequest,
-      { username: 'joebloggs' } as User,
-    )
+    await licenceApiClient.updateSentenceDates('1', { username: 'joebloggs' } as User)
 
     expect(put).toHaveBeenCalledWith(
       {
         path: '/licence/id/1/sentence-dates',
-        data: {
-          conditionalReleaseDate: '09/09/2022',
-          actualReleaseDate: '09/09/2022',
-          sentenceStartDate: '09/09/2021',
-          sentenceEndDate: '09/09/2023',
-          licenceStartDate: '09/09/2022',
-          licenceExpiryDate: '09/09/2023',
-          topupSupervisionStartDate: '09/09/2023',
-          topupSupervisionExpiryDate: '09/09/2024',
-        },
       },
       { username: 'joebloggs' },
     )
@@ -551,28 +527,22 @@ describe('Licence API client tests', () => {
     )
   })
 
-  it('Notify com with create licence prompt', async () => {
-    await licenceApiClient.notifyComsToPromptEmailCreation([{ email: 'exampleEmail' }] as EmailContact[])
-    expect(post).toHaveBeenCalledWith({
-      path: '/com/prompt-licence-creation',
-      data: [{ email: 'exampleEmail' }],
-    })
-  })
-
   it('Override licence status code', async () => {
+    const username = 'admin-user'
     await licenceApiClient.overrideStatusCode(1, { reason: 'Test Reason', statusCode: LicenceStatus.APPROVED }, {
-      username: 'bob',
+      username,
     } as User)
     expect(post).toHaveBeenCalledWith(
       {
         path: `/licence/id/1/override/status`,
         data: { reason: 'Test Reason', statusCode: LicenceStatus.APPROVED },
       },
-      { username: 'bob' },
+      { username },
     )
   })
 
   it('Override licence dates', async () => {
+    const username = 'admin-user'
     const dates = {
       conditionalReleaseDate: '01/01/2022',
       actualReleaseDate: '02/01/2022',
@@ -585,32 +555,70 @@ describe('Licence API client tests', () => {
     }
 
     await licenceApiClient.overrideLicenceDates(1, { ...dates, reason: 'Test Reason' }, {
-      username: 'bob',
+      username,
     } as User)
     expect(put).toHaveBeenCalledWith(
       {
         path: `/licence/id/1/override/dates`,
         data: { ...dates, reason: 'Test Reason' },
       },
-      { username: 'bob' },
+      { username },
+    )
+  })
+
+  it('Override licence prisoner details', async () => {
+    const username = 'admin-user'
+    const details: OverrideLicencePrisonerDetailsRequest = {
+      forename: 'foo',
+      middleNames: 'fizz',
+      surname: 'bar',
+      dateOfBirth: '01/01/1995',
+      reason: 'test',
+    }
+
+    await licenceApiClient.overrideLicencePrisonerDetails(1, details, { username } as User)
+
+    expect(post).toHaveBeenCalledWith(
+      {
+        path: `/licence/id/1/override/prisoner-details`,
+        data: details,
+      },
+      { username },
+    )
+  })
+
+  it('Override licence type', async () => {
+    const username = 'admin-user'
+    await licenceApiClient.overrideLicenceType(1, { licenceType: 'AP', reason: 'Test Reason' }, {
+      username,
+    } as User)
+    expect(post).toHaveBeenCalledWith(
+      {
+        path: `/licence/id/1/override/type`,
+        data: { licenceType: 'AP', reason: 'Test Reason' },
+        returnBodyOnErrorIfPredicate: expect.any(Function),
+      },
+      { username },
     )
   })
 
   it('should call to set a licence as reviewed', async () => {
+    const username = 'admin-user'
     await licenceApiClient.reviewWithoutVariation(1, {
-      username: 'bob',
+      username,
     } as User)
     expect(post).toHaveBeenCalledWith(
       {
         path: `/licence/id/1/review-with-no-variation-required`,
       },
-      { username: 'bob' },
+      { username },
     )
   })
 
   it('should get prisoner details', async () => {
-    await licenceApiClient.getPrisonerDetail('G4169UO', { username: 'bob' } as User)
-    expect(get).toHaveBeenCalledWith({ path: '/prisoner-search/nomisid/G4169UO' }, { username: 'bob' })
+    const username = 'admin-user'
+    await licenceApiClient.getPrisonerDetail('G4169UO', { username } as User)
+    expect(get).toHaveBeenCalledWith({ path: '/prisoner-search/nomisid/G4169UO' }, { username })
   })
 
   describe('Exclusion zone file', () => {
@@ -718,12 +726,6 @@ describe('Licence API client tests', () => {
       )
     })
   })
-  describe('Unapproved licence: ', () => {
-    it('should call the api', async () => {
-      await licenceApiClient.notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd()
-      expect(post).toHaveBeenCalledWith({ path: '/notify-probation-of-unapproved-licences' })
-    })
-  })
 
   describe('Com review count: ', () => {
     it('Should get mycount and teams individual count for Com', async () => {
@@ -783,6 +785,20 @@ describe('Licence API client tests', () => {
         { path: '/caseload/case-admin/probation-view', data },
         { username: 'joebloggs' },
       )
+    })
+  })
+
+  describe('Ineligibility Reasons: ', () => {
+    it('should get ineligibility reasons', async () => {
+      await licenceApiClient.getIneligibilityReasons('A1234AA')
+      expect(get).toHaveBeenCalledWith({ path: '/offender/nomisid/A1234AA/ineligibility-reasons' })
+    })
+  })
+
+  describe('IS-91 status: ', () => {
+    it('should get IS-91 status', async () => {
+      await licenceApiClient.getIS91Status('A1234AA')
+      expect(get).toHaveBeenCalledWith({ path: '/offender/nomisid/A1234AA/is-91-status' })
     })
   })
 })

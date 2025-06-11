@@ -1,23 +1,27 @@
 import type { Request, Response } from 'express'
 import { format } from 'date-fns'
 import { plainToInstance } from 'class-transformer'
-import { ValidationError, validate } from 'class-validator'
+import { validate, ValidationError } from 'class-validator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
-import { groupingBy, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
-import { Licence } from '../../../@types/licenceApiClientTypes'
+import { groupingBy, isHdcLicence, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
+import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
+import HdcService from '../../../services/hdcService'
 
 export default class ViewAndPrintLicenceRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly hdcService: HdcService,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     let warningMessage
 
     if (req.query?.latestVersion) {
-      const latestLicenceVersion = req.query.latestVersion as string
+      const latestLicenceVersion = req.query?.latestVersion as string
       const latestLicence = await this.licenceService.getLicence(parseInt(latestLicenceVersion, 10), user)
       const statusMessage = latestLicence.statusCode === LicenceStatus.IN_PROGRESS ? 'started' : 'submitted'
       const date = this.getFormattedLicenceDate(latestLicence)
@@ -29,7 +33,7 @@ export default class ViewAndPrintLicenceRoutes {
     }
 
     if (req.query?.lastApprovedVersion) {
-      const lastApprovedLicenceVersion = req.query.lastApprovedVersion as string
+      const lastApprovedLicenceVersion = req.query?.lastApprovedVersion as string
       const lastApprovedLicence = await this.licenceService.getLicence(parseInt(lastApprovedLicenceVersion, 10), user)
       const date = this.getFormattedLicenceDate(licence)
       warningMessage = 'This is the most recent version of this licence'
@@ -61,12 +65,15 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
+      const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
+
       res.render('pages/view/view', {
-        additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
+        additionalConditions: groupingBy(licence.additionalLicenceConditions as AdditionalCondition[], 'code'),
         warningMessage,
         isEditableByPrison: licence.statusCode !== LicenceStatus.ACTIVE && isInHardStopPeriod(licence),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
+        hdcLicenceData,
       })
     } else {
       res.redirect(`/licence/view/cases`)
@@ -80,7 +87,8 @@ export default class ViewAndPrintLicenceRoutes {
     const errors = await this.validateLicence(licence)
     if (errors.length > 0) {
       req.flash('validationErrors', JSON.stringify(errors))
-      return res.redirect('back')
+      const referer = req.get('Referer') || `/licence/view/id/${licenceId}/show`
+      return res.redirect(referer)
     }
 
     await this.licenceService.submitLicence(licenceId, user)

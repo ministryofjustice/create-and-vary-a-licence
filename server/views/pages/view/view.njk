@@ -9,6 +9,8 @@
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "moj/components/banner/macro.njk" import mojBanner %}
 {% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
+{% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% if licence.statusCode === "APPROVED" or licence.statusCode === "ACTIVE" %}
   {% set actionWord = "Print" %}
@@ -61,6 +63,15 @@
                     {{ hardStopInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser) }}
                 {% else %}
                     {{ inductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
+                {% endif %}
+
+                {% if licence.kind === 'HDC' or licence.kind === 'HDC_VARIATION' %}
+                    <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
+                    {{ hdcCurfewTimes(hdcLicenceData) }}
+                    {{ govukDetails({
+                        summaryText: "How do I change the HDC curfew details?",
+                        html: "Email createandvaryalicence@digital.justice.gov.uk to change the HDC curfew details."
+                    }) }}
                 {% endif %}
 
                 {% if licence.kind === 'HARD_STOP' %}

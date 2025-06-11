@@ -9,11 +9,17 @@ import policyV2_1 from './polices/v2-1'
 // eslint-disable-next-line camelcase
 import policyV3_0 from './polices/v3-0'
 import LicenceCreationType from '../../server/enumeration/licenceCreationType'
-import { AdditionalCondition } from '../../server/@types/licenceApiClientTypes'
+import { AdditionalCondition, Licence, LicencePolicyResponse } from '../../server/@types/licenceApiClientTypes'
 
 const ACTIVE_POLICY_VERSION = '3.0'
 
-const licencePlaceholder = {
+const licencePlaceholder: Licence = {
+  isDueForEarlyRelease: false,
+  isDueToBeReleasedInTheNextTwoWorkingDays: false,
+  isEligibleForEarlyRelease: false,
+  isInHardStopPeriod: false,
+  isReviewNeeded: false,
+  isVariation: false,
   id: 1,
   typeCode: 'AP_PSS',
   kind: 'CRD',
@@ -21,14 +27,14 @@ const licencePlaceholder = {
   statusCode: 'IN_PROGRESS',
   nomsId: 'G9786GC',
   bookingNo: '123456',
-  bookingId: '54321',
+  bookingId: 54321,
   crn: 'X12345',
   pnc: '2019/123445',
   cro: '12345',
   prisonCode: 'LEI',
   prisonDescription: 'Leeds (HMP)',
-  forename: 'Bob',
-  surname: 'Zimmer',
+  forename: 'Test',
+  surname: 'Person',
   dateOfBirth: '12/02/1980',
   conditionalReleaseDate: '13/03/2021',
   actualReleaseDate: '01/04/2021',
@@ -41,12 +47,9 @@ const licencePlaceholder = {
   topupSupervisionExpiryDate: '26/06/2060',
   hardStopDate: '29/04/2021',
   hardStopWarningDate: '29/04/2021',
-  comFirstName: 'John',
-  comLastName: 'Smith',
   comUsername: 'jsmith',
-  comStaffId: '12345',
+  comStaffId: 12345,
   comEmail: 'john.smith@nps.gov.uk',
-  comTelephone: '08002345557',
   probationAreaCode: 'N01',
   probationAreaDescription: 'Wales',
   probationPduCode: 'PDU1',
@@ -84,6 +87,7 @@ const licencePlaceholder = {
           sequence: 0,
           field: 'probationRegion',
           value: 'London',
+          contributesToLicence: true,
         },
       ],
       uploadSummary: [],
@@ -97,7 +101,15 @@ const licencePlaceholder = {
       text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
       expandedText:
         'Report to staff at The Approved Premises at 9:30AM Daily, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a Monthly basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-      data: [{}],
+      data: [
+        {
+          id: 1,
+          sequence: 0,
+          field: 'approvedPremises',
+          value: 'The Approved Premises',
+          contributesToLicence: true,
+        },
+      ],
       uploadSummary: [],
       readyToSubmit: true,
     },
@@ -176,6 +188,109 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: licencePlaceholder,
+      },
+    })
+  },
+
+  stubGetHdcLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/licence/id/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          kind: 'HDC',
+          homeDetentionCurfewActualDate: '01/03/2021',
+        },
+      },
+    })
+  },
+
+  stubGetHdcLicenceData: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/hdc/curfew/licenceId/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          licenceId: 1,
+          curfewAddress: {
+            addressLine1: '1 The Street',
+            addressLine2: 'Avenue',
+            townOrCity: 'Some Town',
+            county: 'Some County',
+            postcode: 'A1 2BC',
+          },
+          firstNightCurfewHours: {
+            firstNightFrom: '17:00',
+            firstNightUntil: '07:00',
+          },
+          curfewTimes: [
+            {
+              id: 1,
+              curfewTimesSequence: 1,
+              fromDay: 'MONDAY',
+              fromTime: '17:00',
+              untilDay: 'TUESDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 2,
+              fromDay: 'TUESDAY',
+              fromTime: '17:00',
+              untilDay: 'WEDNESDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 3,
+              fromDay: 'WEDNESDAY',
+              fromTime: '17:00',
+              untilDay: 'THURSDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 4,
+              fromDay: 'THURSDAY',
+              fromTime: '17:00',
+              untilDay: 'FRIDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 5,
+              fromDay: 'FRIDAY',
+              fromTime: '17:00',
+              untilDay: 'SATURDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 6,
+              fromDay: 'SATURDAY',
+              fromTime: '17:00',
+              untilDay: 'SUNDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 7,
+              fromDay: 'SUNDAY',
+              fromTime: '17:00',
+              untilDay: 'MONDAY',
+              untilTime: '07:00',
+            },
+          ],
+        },
       },
     })
   },
@@ -290,7 +405,9 @@ export default {
     typeCode: 'AP_PSS' | 'AP' | 'PSS'
     appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
     isInHardStopPeriod: boolean
-    kind: 'CRD' | 'VARIATION' | 'HARD_STOP'
+    homeDetentionCurfewActualDate: string | null
+    homeDetentionCurfewEndDate: string | null
+    kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
     conditions: AdditionalCondition[]
   }): SuperAgentRequest => {
     return stubFor({
@@ -307,15 +424,17 @@ export default {
           statusCode: options.statusCode, // Overrides licencePlaceHolder status
           typeCode: options.typeCode, // Overrides licence status code
           appointmentPersonType: 'SPECIFIC_PERSON',
-          appointmentPerson: 'Isaac Newton',
-          appointmentAddress: 'Down the road, over there',
-          appointmentContact: '07891245678',
-          appointmentTime: '01/12/2021 00:34',
+          appointmentPerson: 'Duty Officer',
+          appointmentAddress: 'Some address, Some town',
+          appointmentContact: '00000000000',
+          appointmentTime: '01/12/2021 12:34',
           appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
           isInHardStopPeriod: options.isInHardStopPeriod || false,
           hardStopDate: options.isInHardStopPeriod
             ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
             : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+          homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate,
+          homeDetentionCurfewEndDate: options.homeDetentionCurfewEndDate,
           additionalLicenceConditions: options.conditions || [
             {
               id: 1,
@@ -467,13 +586,13 @@ export default {
               sequence: 0,
               text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
               expandedText:
-                'Attend 123 Fake Street, Fakestown, London, SW2 5XF, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+                'Attend 123 Fake Street, Fakestown, Fakeshire, FA1 1KE, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
               data: [
                 {
                   id: 1,
                   sequence: 0,
                   field: 'appointmentAddress',
-                  value: '123 Fake Street, , Fakestown, London, SW2 5XF',
+                  value: '123 Fake Street, , Fakestown, Fakeshire, FA1 1KE',
                 },
               ],
               readyToSubmit: true,
@@ -489,7 +608,7 @@ export default {
                   id: 1,
                   sequence: 0,
                   field: 'address',
-                  value: '123 Fake Street, , Fakestown, London, SW2 5XF',
+                  value: '123 Fake Street, , Fakestown, Fakeshire, FA1 1KE',
                 },
               ],
               readyToSubmit: true,
@@ -600,14 +719,14 @@ export default {
                 licenceId: 1,
                 nomisId: options.nomisId,
                 licenceStatus: options.status,
-                forename: 'Bob',
-                surname: 'Zimmer',
+                forename: 'Test',
+                surname: 'Person',
                 crn: 'X12345',
                 licenceType: 'AP',
                 actualReleaseDate: '23/03/2022',
                 comUsername: 'jsmith',
                 bookingId: options.bookingId,
-                conditionalReleaseDate: '13/04/2023',
+                licenceStartDate: '13/04/2023',
                 dateCreated: '01/03/2021 10:15',
                 hardStopDate: '05/12/2023',
                 hardStopWarningDate: '03/12/2023',
@@ -619,7 +738,7 @@ export default {
   },
 
   stubGetLicencesForOffender: (options: {
-    kind: 'CRD' | 'VARIATION' | 'HARD_STOP'
+    kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
     nomisId: string
     status: string
     bookingId: number
@@ -639,8 +758,8 @@ export default {
             licenceId: 1,
             nomisId: options.nomisId,
             licenceStatus: options.status,
-            forename: 'Bob',
-            surname: 'Zimmer',
+            forename: 'Test',
+            surname: 'Person',
             crn: 'X12345',
             licenceType: 'AP',
             actualReleaseDate: '23/03/2022',
@@ -678,8 +797,8 @@ export default {
             licenceId: 1,
             nomisId: options.nomisId,
             licenceStatus: options.status,
-            forename: 'Bob',
-            surname: 'Zimmer',
+            forename: 'Test',
+            surname: 'Person',
             crn: 'X12345',
             licenceType: 'PSS',
             actualReleaseDate: '23/03/2022',
@@ -692,58 +811,6 @@ export default {
             hardStopWarningDate: '03/12/2023',
           },
         ],
-      },
-    })
-  },
-
-  stubGetVariationsSubmittedByRegionForOffender: (options: {
-    nomisId: string
-    bookingId: number
-  }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: `/licences-api/licence/variations/submitted/area/(\\w)*`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            licenceId: 1,
-            nomisId: options.nomisId,
-            licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
-            forename: 'Bob',
-            surname: 'Zimmer',
-            crn: 'X12345',
-            licenceType: 'AP',
-            actualReleaseDate: '23/03/2022',
-            comUsername: 'jsmith',
-            bookingId: options.bookingId,
-            dateCreated: '01/03/2021 10:15',
-          },
-        ],
-      },
-    })
-  },
-
-  stubGetHdcLicencesForOffender: (options: { bookingId: number; status: string }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: '/licences-api/api/offender-sentences/booking/(\\d)*/home-detention-curfews/latest',
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          approvalStatus: options.status,
-          approvalStatusDate: null,
-          bookingId: options.bookingId,
-          checksPassedDate: null,
-          passed: true,
-          refusedReason: '',
-        },
       },
     })
   },
@@ -1028,7 +1095,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Bob Zimmer',
+            name: 'Test Person',
             crnNumber: 'X12345',
             prisonerNumber: 'G9786GC',
             releaseDate: '13/03/2021',
@@ -1056,7 +1123,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Bob Zimmer',
+            name: 'Test Person',
             crnNumber: 'X12345',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/04/2021',
@@ -1084,7 +1151,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Bob Zimmer',
+            name: 'Test Person',
             crnNumber: 'X12345',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/04/2021',
@@ -1300,9 +1367,9 @@ export default {
             id: 1,
             licenceId: 2,
             eventType: 'VARIATION_SUBMITTED_REASON',
-            username: 'smills',
-            forenames: 'Stephen',
-            surname: 'Mills',
+            username: 'tcom',
+            forenames: 'Test',
+            surname: 'Com',
             eventDescription: 'Reason varied',
             eventTime: '12/06/2021 10:46:40',
           },
@@ -1310,9 +1377,9 @@ export default {
             id: 2,
             licenceId: 2,
             eventType: 'VARIATION_REJECTED',
-            username: 'smills',
-            forenames: 'Stephen',
-            surname: 'Mills',
+            username: 'tcom',
+            forenames: 'Test',
+            surname: 'Com',
             eventDescription: 'Reason rejected',
             eventTime: '12/06/2021 10:47:40',
           },
@@ -1364,7 +1431,7 @@ export default {
   },
 
   stubGetLicencePolicyConditions: (version = ACTIVE_POLICY_VERSION): SuperAgentRequest => {
-    let policy
+    let policy: LicencePolicyResponse
     switch (version) {
       case '2.0':
         // eslint-disable-next-line camelcase
@@ -1685,8 +1752,8 @@ export default {
         jsonBody: {
           prisoner: {
             prisonerNumber: 'G4169UO',
-            firstName: 'Patrick',
-            lastName: 'Holmes',
+            firstName: 'Test',
+            lastName: 'Person',
             dateOfBirth: '1960-11-10',
             status: 'ACTIVE IN',
             prisonId: 'BAI',
@@ -1714,8 +1781,8 @@ export default {
         jsonBody: {
           prisoner: {
             prisonerNumber: 'G4169UO',
-            firstName: 'Patrick',
-            lastName: 'Holmes',
+            firstName: 'Test',
+            lastName: 'Person',
             dateOfBirth: '1960-11-10',
             status: 'ACTIVE IN',
             prisonId: 'BAI',
@@ -1728,6 +1795,38 @@ export default {
             conditionalReleaseDate: '2022-11-10',
           },
           cvl: { licenceType: 'PSS', hardStopDate: null, hardStopWarningDate: null, isInhardStopPeriod: false },
+        },
+      },
+    }),
+
+  stubGetHdcCaseloadItem: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/prisoner-search/nomisid/.*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          prisoner: {
+            prisonerNumber: 'G9786GC',
+            bookingId: '1201102',
+            firstName: 'Test',
+            lastName: 'Person',
+            dateOfBirth: '1960-11-10',
+            status: 'ACTIVE IN',
+            prisonId: 'BAI',
+            sentenceStartDate: '2017-03-01',
+            releaseDate: '2024-07-19',
+            confirmedReleaseDate: '2022-11-10',
+            sentenceExpiryDate: '2028-08-31',
+            licenceExpiryDate: '2028-08-31',
+            conditionalReleaseDate: '2022-11-10',
+            homeDetentionCurfewActualDate: '2024-07-09',
+            homeDetentionCurfewEligibilityDate: '2024-07-09',
+          },
+          cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, isInhardStopPeriod: false },
         },
       },
     }),
@@ -1754,8 +1853,8 @@ export default {
               prisonerNumber: 'G9786GC',
               bookingId: '1201102',
               bookNumber: '38518A',
-              firstName: 'DOUGAL',
-              lastName: 'MCGUIRE',
+              firstName: 'TEST',
+              lastName: 'PERSON',
               dateOfBirth: '1940-12-20',
               gender: 'Male',
               youthOffender: false,
@@ -1769,11 +1868,11 @@ export default {
               dateCreated: '2022-07-05 10:30:00',
               aliases: [
                 {
-                  firstName: 'DOUGLAS',
-                  lastName: 'ADORNO',
+                  firstName: 'OTHER',
+                  lastName: 'NAME',
                   dateOfBirth: '1939-11-19',
                   gender: 'Male',
-                  ethnicity: 'Asian/Asian British: Indian',
+                  ethnicity: 'Some ethnicity',
                 },
               ],
               alerts: [
@@ -1821,8 +1920,8 @@ export default {
               prisonerNumber: 'G9786GC',
               bookingId: '1201102',
               bookNumber: '38518A',
-              firstName: 'DOUGAL',
-              lastName: 'MCGUIRE',
+              firstName: 'TEST',
+              lastName: 'PERSON',
               dateOfBirth: '1940-12-20',
               gender: 'Male',
               youthOffender: false,
@@ -1836,11 +1935,11 @@ export default {
               dateCreated: '2022-07-05 10:30:00',
               aliases: [
                 {
-                  firstName: 'DOUGLAS',
-                  lastName: 'ADORNO',
+                  firstName: 'OTHER',
+                  lastName: 'NAME',
                   dateOfBirth: '1939-11-19',
                   gender: 'Male',
-                  ethnicity: 'Asian/Asian British: Indian',
+                  ethnicity: 'Some ethnicity',
                 },
               ],
               alerts: [
@@ -1894,8 +1993,8 @@ export default {
               prisonerNumber: 'G9786GC',
               bookingId: '1',
               bookNumber: '38518A',
-              firstName: 'BOB',
-              lastName: 'ZIMMER',
+              firstName: 'TEST',
+              lastName: 'PERSON',
               dateOfBirth: '1940-12-20',
               gender: 'Male',
               youthOffender: false,
@@ -1908,11 +2007,11 @@ export default {
               cellLocation: 'RECP',
               aliases: [
                 {
-                  firstName: 'DOUGLAS',
-                  lastName: 'ADORNO',
+                  firstName: 'OTHER',
+                  lastName: 'NAME',
                   dateOfBirth: '1939-11-19',
                   gender: 'Male',
-                  ethnicity: 'Asian/Asian British: Indian',
+                  ethnicity: 'Some ethnicity',
                 },
               ],
               alerts: [
@@ -1950,8 +2049,8 @@ export default {
         jsonBody: {
           prisoner: {
             prisonerNumber: 'G9786GC',
-            firstName: 'DOUGAL',
-            lastName: 'MCGUIRE',
+            firstName: 'Test',
+            lastName: 'Person',
             dateOfBirth: '1940-12-20',
             status: 'ACTIVE IN',
             prisonId: 'MDI',
@@ -2053,7 +2152,7 @@ export default {
           {
             kind: 'CRD',
             licenceId: 1,
-            name: 'Steve Cena',
+            name: 'Another Person',
             prisonerNumber: 'AB1234E',
             probationPractitioner: {
               name: 'John Smith',
@@ -2085,7 +2184,7 @@ export default {
           {
             kind: 'CRD',
             licenceId: 2,
-            name: 'Steve Cena',
+            name: 'Another Person',
             prisonerNumber: 'AB1234E',
             probationPractitioner: {
               name: 'Joe Bloggs',
@@ -2119,7 +2218,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Dougal Mcguire',
+            name: 'Test Person',
             crnNumber: 'X344165',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/09/2024',
@@ -2151,7 +2250,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Dougal Mcguire',
+            name: 'Test Person',
             crnNumber: 'X344165',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/09/2024',
@@ -2184,7 +2283,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Dougal Mcguire',
+            name: 'Test Person',
             crnNumber: 'X344165',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/09/2024',
@@ -2240,6 +2339,31 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {},
+      },
+    })
+  },
+
+  stubGetVaryApproverCaseload: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/vary-approver`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: 1,
+            licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
+            name: 'Test Person',
+            crnNumber: 'X12345',
+            licenceType: 'AP',
+            releaseDate: '23/03/2022',
+            variationRequestedDate: '01/03/2021',
+            probationPractitioner: 'jsmith',
+          },
+        ],
       },
     })
   },

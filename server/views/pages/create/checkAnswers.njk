@@ -2,11 +2,13 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
+{% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/variationSummary.njk" import variationSummary %}
 {% from "moj/components/banner/macro.njk" import mojBanner %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
@@ -16,7 +18,7 @@
     or statusCode == 'VARIATION_REJECTED' or statusCode == 'VARIATION_APPROVED' %}
 {% set canChooseToEdit = (statusCode == 'APPROVED' or statusCode == 'SUBMITTED') and (not isInHardStopPeriod) %}
 {% set canChooseToPrint = statusCode == 'APPROVED' %}
-{% if licence.kind === 'VARIATION' %} 
+{% if licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION' %} 
   {% set submitButtonText = 'View summary and add notes' %}
   {% set submitButtonAttrs = { 'data-qa': 'add-notes' } %}
 {% else %} 
@@ -38,7 +40,7 @@
     {% endif %}  
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if licence.kind === 'VARIATION' %}
+            {% if licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION' %}
                 {% if licence.typeCode === 'AP' %}
                     <h1 class="govuk-heading-l">Vary licence details</h1>
                 {% elseif licence.typeCode === 'AP_PSS' %}
@@ -91,12 +93,20 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if licence.kind === 'VARIATION' %}
+            {% if licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION' %}
                 {{ variationSummary(licence, isInProgress) }}
             {% else %}
                 {{ inductionMeetingDetails(licence, canEditInitialAppt, validationErrors, contactForChangeText) }}
             {% endif %}
 
+            {% if licence.kind === 'HDC' or licence.kind === 'HDC_VARIATION' %}
+                <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
+                {{ hdcCurfewTimes(hdcLicenceData) }}
+                {{ govukDetails({
+                    summaryText: "How do I change the HDC curfew details?",
+                    html: "Email createandvaryalicence@digital.justice.gov.uk to change the HDC curfew details."
+                }) }}
+            {% endif %}
 
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
@@ -163,7 +173,7 @@
                     {% endif %}
                
 
-                    {% if isInProgress and licence.kind === 'VARIATION' %}
+                    {% if isInProgress and (licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION') %}
                             {{ govukButton({
                                 text: "Discard changes",
                                 classes: "govuk-button--secondary",

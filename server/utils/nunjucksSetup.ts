@@ -42,10 +42,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.locals.asset_path = '/assets/'
   app.locals.applicationName = 'Create and vary a licence'
 
-  // Set the values for the phase banner and exit survey links from config
-  app.locals.phaseBannerLink = config.phaseBannerLink
-  app.locals.exitSurveyLink = config.exitSurveyLink
-
   // Set the value of the auth home link from config
   app.locals.authHome = config.apis.hmppsAuth.url
 
@@ -89,6 +85,12 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   // Needs to trim - in case of newline in value
   njkEnv.addGlobal('tagManagerContainerId', tagManagerContainerId?.trim())
+
+  // To aid development, this can be used to inspect the structure of an object in a template
+  njkEnv.addFilter(
+    'dumpJson',
+    (val: string) => new nunjucks.runtime.SafeString(`<pre>${JSON.stringify(val, null, 2)}</pre>`),
+  )
 
   njkEnv.addFilter('initialiseName', (fullName: string) => {
     // this check is for the authError page
@@ -407,10 +409,28 @@ export function registerNunjucks(app?: express.Express): Environment {
       const now = startOfDay(new Date())
       return (
         licence.kind !== LicenceKind.VARIATION &&
+        licence.kind !== LicenceKind.HDC_VARIATION &&
         parseCvlDate(licence.hardStopWarningDate) <= now &&
         now < parseCvlDate(licence.hardStopDate)
       )
     },
+  )
+
+  njkEnv.addFilter('localTimeTo12h', (time: string): string => {
+    if (!time) {
+      return undefined
+    }
+    const [hour, minute] = time.split(':')
+    const hourInt = parseInt(hour, 10)
+    if (hourInt > 12) {
+      return `${hourInt - 12}${minute === '00' ? '' : `:${minute}`}pm`
+    }
+    return `${hourInt}${minute === '00' ? '' : `:${minute}`}am`
+  })
+
+  njkEnv.addFilter(
+    'dumpJson',
+    (val: string) => new nunjucks.runtime.SafeString(`<pre>${JSON.stringify(val, null, 2)}</pre>`),
   )
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
@@ -418,6 +438,9 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('serviceName', config.serviceName)
   njkEnv.addGlobal('showWhatsNewBanner', config.showWhatsNewBanner)
   njkEnv.addGlobal('fridayReleasePolicy', config.fridayReleasePolicy)
+  njkEnv.addGlobal('hdcIntegrationMvp2Enabled', config.hdcIntegrationMvp2Enabled)
+  njkEnv.addGlobal('hdcLicenceCreationBlockEnabled', config.hdcLicenceCreationBlockEnabled)
+  njkEnv.addGlobal('caNewSearchEnabled', config.caNewSearchEnabled)
 
   return njkEnv
 }
