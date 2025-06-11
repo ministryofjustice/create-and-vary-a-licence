@@ -358,7 +358,7 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('titlecase', (word: string) => {
     if (!word) return word
-    return word[0].toUpperCase() + word.substr(1).toLowerCase()
+    return word[0].toUpperCase() + word.substring(1).toLowerCase()
   })
 
   njkEnv.addFilter('createOffenderLink', (licence: FoundProbationRecord): string => {

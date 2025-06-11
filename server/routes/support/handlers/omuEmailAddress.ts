@@ -110,7 +110,6 @@ export default class OmuEmailAddressRoutes {
   }
 
   checkPrisonExists = async (prisonId: string, user: User) => {
-    const prison = await this.prisonRegisterService.getPrisonDescription(prisonId, user)
-    return prison
+    return this.prisonRegisterService.getPrisonDescription(prisonId, user)
   }
 }

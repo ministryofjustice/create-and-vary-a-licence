@@ -16,12 +16,6 @@ export default class ConfirmCreatePage extends Page {
     return this
   }
 
-  selectYesPss = (): ConfirmCreatePage => {
-    cy.task('stubPostPssLicence')
-    cy.get(this.yesRadioButtonId).click()
-    return this
-  }
-
   clickContinue = (): AppointmentPersonPage => {
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AppointmentPersonPage)

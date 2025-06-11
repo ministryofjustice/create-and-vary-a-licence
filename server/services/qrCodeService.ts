@@ -12,7 +12,6 @@ export default class QrCodeService {
       start: `${licence.licenceStartDate}`,
       end: `${licence.licenceExpiryDate}`,
     }
-    const qrCode = await toDataURL(JSON.stringify(qrCodeData))
-    return qrCode
+    return toDataURL(JSON.stringify(qrCodeData))
   }
 }
