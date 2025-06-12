@@ -8,9 +8,19 @@ export default class CaSearch {
     const queryTerm = req.query?.queryTerm as string
     const backLink = '/licence/view/cases'
 
+    const tabParameters = {
+      prison: {
+        tabId: 'tab-heading-prison',
+      },
+      probation: {
+        tabId: 'tab-heading-probation',
+      },
+    }
+
     return res.render('pages/search/caSearch/caSearch', {
       queryTerm,
       backLink,
+      tabParameters,
     })
   }
 }
