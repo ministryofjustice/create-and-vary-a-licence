@@ -131,6 +131,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'RegionOfResidence',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
@@ -171,6 +172,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'RestrictionOfResidency',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'b72fdbf2-0dc9-4e7f-81e4-c2ccb5d1bc90',
@@ -200,6 +202,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'MedicalAppointmentType',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '9ae2a336-3491-4667-aaed-dd852b09b4b9',
@@ -207,6 +210,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Contact with a person',
         text: 'Receive home visits from a Mental Health Worker.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
@@ -235,6 +239,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'AppointmentTimeAndPlace',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '75a6aac6-02a7-4414-af14-942be6736892',
@@ -242,6 +247,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Contact with a person',
         text: 'Should you return to the UK and Islands before the expiry date of your licence then your licence conditions will be in force and you must report within two working days to your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
@@ -270,6 +276,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'NoContactWithVictim',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '4a5fed48-0fb9-4711-8ddf-b46ddfd90246',
@@ -318,6 +325,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'UnsupervisedContact',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '355700a9-6184-40c0-9759-0dfed1994e1e',
@@ -339,6 +347,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'NamedIndividuals',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '0aa669bf-db8a-4b8e-b8ba-ca82fc245b94',
@@ -346,6 +355,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Contact with a person',
         text: 'Not to contact or associate with a known sex offender other than when compelled by attendance at a Treatment Programme or when residing at Approved Premises without the prior approval of your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'cc80d02b-0b62-4940-bac6-0bcd374c725e',
@@ -353,6 +363,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Contact with a person',
         text: 'Not to contact directly or indirectly any person who is a serving or remand prisoner or detained in State custody, without the prior approval of your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '18b69f61-800f-46b2-95c4-2019d33e34d6',
@@ -373,6 +384,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'NamedOrganisation',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
@@ -428,6 +440,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'BehaviourProblems',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '9da214a3-c6ae-45e1-a465-12e22adf7c87',
@@ -452,6 +465,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'WorkingWithChildren',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '8e52e16e-1abf-4251-baca-2fabfcb243d0',
@@ -459,6 +473,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Items and documents',
         text: 'Not to own or possess more than one mobile phone or SIM card without the prior approval of your supervising officer and to provide your supervising officer with details of that mobile telephone or one you have regular use of, including the IMEI number and the SIM card that you possess.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '72d281c3-b194-43ab-812d-fea0683ada65',
@@ -466,6 +481,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Items and documents',
         text: 'Not to own or possess a mobile phone with a photographic function without the prior approval of your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'ed607a91-fe3a-4816-8eb9-b447c945935c',
@@ -473,6 +489,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Items and documents',
         text: 'Not to own or use a camera without the prior approval of your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '680b3b27-43cc-46c6-9ba6-b10d4aba6531',
@@ -480,6 +497,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Items and documents',
         text: 'To make any device capable of making or storing digital images (including a camera and a mobile phone with a camera function) available for inspection on request by your supervising officer and/or a police officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '5fa04bbf-6b7c-4b65-9388-a0115cd365a6',
@@ -487,6 +505,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Items and documents',
         text: 'To surrender your passport(s) to your supervising officer and to notify your supervising officer of any intention to apply for a new passport.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'bfbc693c-ab65-4042-920e-ddb085bc7aba',
@@ -494,6 +513,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Items and documents',
         text: 'Not to use or access any computer or device which is internet enabled without the prior approval of your supervising officer; and only for the purpose, and only at a specific location, as specified by that officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '2d67f68a-8adf-47a9-a68d-a6fc9f2c4556',
@@ -501,6 +521,7 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Items and documents',
         text: 'Not to delete the usage history on any internet enabled device or computer used and to allow such items to be inspected as required by the police or your supervising officer. Such inspection may include removal of the device for inspection and the installation of monitoring software.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
@@ -522,12 +543,14 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'SpecifiedItem',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '2a93b784-b8cb-49ed-95e2-a0df60723cda',
         category: 'Disclosure of information',
         text: 'Provide your supervising officer with details (such as make, model, colour, registration) of any vehicle you own, hire for more than a short journey or have regular use of, prior to any journey taking place.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'db2d7e24-b130-4c7e-a1bf-6bb5f3036c02',
@@ -555,24 +578,28 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'IntimateRelationshipWithGender',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'c5e91330-748d-46f3-93f6-bbe5ea8324ce',
         category: 'Disclosure of information',
         text: 'Notify your supervising officer of any developing personal relationships, whether intimate or not, with any person you know or believe to be resident in a household containing children under the age of 18. This includes persons known to you prior to your time in custody with whom you are renewing or developing a personal relationship with.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '79ac033f-9d7a-4dab-8344-475106e58b71',
         category: 'Disclosure of information',
         text: 'To notify your supervising officer of the details of any passport that you possess (including passport number), and of any intention to apply for a new passport.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '8686a815-b7f0-43b6-9886-f01df6a48773',
         category: 'Disclosure of information',
         text: 'Provide your supervising officer with the details of any bank accounts to which you are a signatory and of any credit cards you possess. You must also notify your supervising officer when becoming a signatory to any new bank account or credit card, and provide the account/card details. This condition will be reviewed on a monthly basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
@@ -700,6 +727,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'CurfewTerms',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
@@ -726,6 +754,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'CurfewAddress',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
@@ -748,6 +777,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'OutOfBoundsRegion',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '42f71b40-84cd-446d-8647-f00bbb6c079c',
@@ -768,6 +798,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'OutOfBoundsPremises',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'c4a17002-88a3-43b4-b3f7-82ff476cb217',
@@ -784,18 +815,21 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'OutOfBoundsPremisesType',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'bb401b88-2137-4154-be4a-5e05c168638a',
         category: 'Freedom of movement',
         text: 'On release to be escorted by police to Approved Premises.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '5d0416a9-a4ce-4b2c-8636-0b7abaa3680a',
         category: 'Freedom of movement',
         text: 'To only attend places of worship which have been previously agreed with your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
@@ -848,6 +882,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'ReportToApprovedPremisesPolicyV2_0',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
@@ -900,6 +935,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'ReportToPoliceStationPolicyV2_0',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '7a9ca3bb-922a-433a-9601-1e475c6c0095',
@@ -907,42 +943,49 @@ const policy: LicencePolicyResponse = {
         categoryShort: 'Restriction of conduct or acts',
         text: 'Not to participate directly or indirectly in organising and/or contributing to any demonstration, meeting, gathering or website without the prior approval of your supervising officer. This condition will be reviewed on a monthly basis and may be amended or removed if your risk is assessed as having changed.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '86f8b3d6-be31-48b2-a29e-5cf662c95ad1',
         category: 'Extremism',
         text: 'Not to contact directly or indirectly any person whom you know or believe to have been charged or convicted of any extremist related offence, without the prior approval of your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '9785d8f8-31a9-4c32-a06d-eff049ecebcd',
         category: 'Extremism',
         text: 'Not to attend or organise any meetings or gatherings other than those convened solely for the purposes of worship without the prior approval of your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '9efba199-87d4-468e-a5a1-1c0945571afa',
         category: 'Extremism',
         text: 'Not to give or engage in the delivery of any lecture, talk, or sermon whether part of an act of worship or not, without the prior approval of your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '3d771cc6-b85f-47e4-9e13-75bfb80706f4',
         category: 'Extremism',
         text: 'Not to engage in any discussion or act to promote grooming or influencing of an individual or a group for the purpose of extremism or radicalisation.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'e0421c22-1be7-4d06-aba7-3c17822b0c1c',
         category: 'Extremism',
         text: 'Not to have in your possession any printed or electronically recorded material or handwritten notes which contain encoded information or that promote the destruction of or hatred for any religious or ethnic group or that celebrates, justifies or promotes acts of violence, or that contain information about military or paramilitary technology, weapons, techniques or tactics without the prior approval of your supervising officer.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '1dc7ee29-df47-48a8-90b6-69e286692d8a',
         category: 'Polygraph',
         text: 'To comply with any instruction given by your supervising officer requiring you to attend polygraph testing. To participate in polygraph sessions and examinations as instructed by or under the authority of your supervising officer and to comply with any instruction given to you during a polygraph session by the person conducting the polygraph.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
@@ -963,6 +1006,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'DrugTestLocation',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
@@ -999,6 +1043,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'ElectronicMonitoringTypes',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '524f2fd6-ad53-47dd-8edc-2161d3dd2ed4',
@@ -1014,6 +1059,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'ElectronicMonitoringPeriod',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '86e6f2a9-bb60-40f8-9ac4-310ebc72ac2f',
@@ -1029,6 +1075,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'ApprovedAddress',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '599bdcae-d545-461c-b1a9-02cb3d4ba268',
@@ -1049,12 +1096,14 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'AlcoholMonitoringPeriod',
+        requiresElectronicMonitoringResponse: false,
       },
       {
         code: '9678FD9E-F80D-423A-A6FB-B79909094887',
         category: 'Terrorist personal search',
         text: 'You must let the police search you if they ask. You must also let them search a vehicle you are with, like a car or a motorbike.',
         requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
       },
     ],
     PSS: [
