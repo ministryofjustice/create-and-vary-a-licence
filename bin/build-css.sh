@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Script to compile the SASS modules and output the stylesheets
 #
