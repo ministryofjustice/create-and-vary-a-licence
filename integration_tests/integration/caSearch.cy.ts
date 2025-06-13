@@ -25,11 +25,12 @@ context('Search for a person', () => {
     cy.signIn()
   })
 
-  it('should click through search journey', () => {
+  it('should click through search journey and show empty states where no results are present', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickViewAndPrintALicence()
     const searchPage = caseloadPage.clickSearch('test')
     searchPage.getSearchHeading().contains('Search results for test')
+    searchPage.getPrisonTabTitle().contains('People in prison (0 results)')
     Page.verifyOnPage(CaSearchPage)
   })
 })
