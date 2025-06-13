@@ -11,6 +11,15 @@ describe('Route Handlers - Search - Ca Search', () => {
   let req: Request
   let res: Response
 
+  const tabParameters = {
+    prison: {
+      tabId: 'tab-heading-prison',
+    },
+    probation: {
+      tabId: 'tab-heading-probation',
+    },
+  }
+
   beforeEach(() => {
     req = {} as Request
 
@@ -39,6 +48,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
         queryTerm: '',
         backLink: '/licence/view/cases',
+        tabParameters,
       })
     }))
 })
