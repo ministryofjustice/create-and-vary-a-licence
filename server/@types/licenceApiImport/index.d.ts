@@ -4344,7 +4344,7 @@ export interface components {
       bespokeConditions: string[]
       /**
        * @description The full name of the person who created licence or variation
-       * @example Gordon Sumner
+       * @example Test Person
        */
       createdByFullName?: string
       /**
@@ -4439,7 +4439,7 @@ export interface components {
       additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /**
        * @description The full name of the person who created licence or variation
-       * @example Gordon Sumner
+       * @example Test Person
        */
       createdByFullName?: string
       /**
@@ -4484,71 +4484,72 @@ export interface components {
        */
       surname?: string
       /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string
-      /**
-       * @description The first name of the person on licence
-       * @example Michael
-       */
-      forename?: string
-      /**
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
        */
       comUsername?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
        */
-      nomsId?: string
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string
-      /**
-       * @description The team code that is supervising this licence
-       * @example Cardiff-A
-       */
-      probationTeamCode?: string
-      /**
-       * @description The probation area description
-       * @example Wales
-       */
-      probationAreaDescription?: string
+      submittedByFullName?: string
       /**
        * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
-       */
-      earliestReleaseDate?: string
-      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
-      isEligibleForEarlyRelease: boolean
-      /**
-       * Format: date
-       * @description The date that the licence will start
+       * @description The actual release date (if set)
        * @example 13/09/2022
        */
-      licenceStartDate?: string
+      actualReleaseDate?: string
       /**
        * Format: date
-       * @description The earliest conditional release date of the person on licence
-       * @example 13/08/2022
+       * @description The sentence start date
+       * @example 13/09/2019
        */
-      conditionalReleaseDate?: string
+      sentenceStartDate?: string
       /**
        * Format: date
-       * @description The release date after being recalled
+       * @description The sentence end date
+       * @example 13/09/2022
+       */
+      sentenceEndDate?: string
+      /**
+       * Format: date
+       * @description The date that the licence will expire
+       * @example 13/09/2024
+       */
+      licenceExpiryDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
        * @example 06/06/2023
        */
-      postRecallReleaseDate?: string
+      topupSupervisionExpiryDate?: string
       /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
+       * @description The version number of this licence
+       * @example 1.3
        */
-      bookingId?: number
+      licenceVersion?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       * @example 24/08/2022 09:30:33
+       */
+      dateCreated?: string
+      /**
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
@@ -4572,79 +4573,52 @@ export interface components {
        */
       submittedDate?: string
       /**
-       * @description The agency code of the detaining prison
-       * @example LEI
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
        */
-      prisonCode?: string
+      comEmail?: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
       standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
+       * Format: date
+       * @description The earliest conditional release date of the person on licence
+       * @example 13/08/2022
        */
-      updatedByFullName?: string
+      conditionalReleaseDate?: string
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * Format: date
+       * @description The release date after being recalled
+       * @example 06/06/2023
        */
-      crn?: string
+      postRecallReleaseDate?: string
       /**
-       * Format: date-time
-       * @description The date and time of the initial appointment
-       * @example 23/08/2022 12:12
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
        */
-      appointmentTime?: string
+      bookingId?: number
       /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
+       * @description The team code that is supervising this licence
+       * @example Cardiff-A
        */
-      appointmentContact?: string
-      /**
-       * @description The address of initial appointment
-       * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
-       */
-      appointmentAddress?: string
-      /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /**
-       * @description Who the person will meet at their initial appointment
-       * @example Duty officer
-       */
-      appointmentPerson?: string
-      /**
-       * @description The type of appointment time of the initial appointment
-       * @example SPECIFIC_DATE_TIME
-       * @enum {string}
-       */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
-      /**
-       * @description The version number of this licence
-       * @example 1.3
-       */
-      licenceVersion?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       * @example 24/08/2022 09:30:33
-       */
-      dateCreated?: string
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      kind: string
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      probationTeamCode?: string
       /**
        * @description The probation area code where this licence is supervised from
        * @example N01
        */
       probationAreaCode?: string
+      /**
+       * @description The probation area description
+       * @example Wales
+       */
+      probationAreaDescription?: string
       /**
        * @description The Probation Delivery Unit (PDU or borough) supervising this licence
        * @example PDU01
@@ -4683,40 +4657,47 @@ export interface components {
       dateOfBirth?: string
       /**
        * Format: date
-       * @description The actual release date (if set)
-       * @example 13/09/2022
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
-      actualReleaseDate?: string
+      earliestReleaseDate?: string
       /**
-       * Format: date
-       * @description The sentence start date
-       * @example 13/09/2019
+       * @description The type of appointment with for the initial appointment
+       * @example SPECIFIC_PERSON
+       * @enum {string}
        */
-      sentenceStartDate?: string
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
       /**
-       * Format: date
-       * @description The sentence end date
-       * @example 13/09/2022
+       * @description Who the person will meet at their initial appointment
+       * @example Duty officer
        */
-      sentenceEndDate?: string
+      appointmentPerson?: string
       /**
-       * Format: date
-       * @description The date that the licence will expire
-       * @example 13/09/2024
+       * @description The type of appointment time of the initial appointment
+       * @example SPECIFIC_DATE_TIME
+       * @enum {string}
        */
-      licenceExpiryDate?: string
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
       /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
+       * @description The first name of the person on licence
+       * @example Michael
        */
-      topupSupervisionStartDate?: string
+      forename?: string
       /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       * @example 06/06/2023
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
        */
-      topupSupervisionExpiryDate?: string
+      appointmentTime?: string
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string
+      /**
+       * @description The address of initial appointment
+       * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
+       */
+      appointmentAddress?: string
       /**
        * @description The agency description of the detaining prison
        * @example Leeds (HMP)
@@ -4731,6 +4712,25 @@ export interface components {
       bespokeConditions: components['schemas']['BespokeCondition'][]
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn?: string
+      /**
+       * @description The agency code of the detaining prison
+       * @example LEI
+       */
+      prisonCode?: string
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
+      /**
+       * Format: date
+       * @description The date that the licence will start
+       * @example 13/09/2022
+       */
+      licenceStartDate?: string
+      kind: string
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
@@ -4812,12 +4812,30 @@ export interface components {
       isDueForEarlyRelease: boolean
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      /** @description Describes a electronic monitoring provider on a licence */
+      electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider']
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
       kind: 'CRD'
+    }
+    /** @description Describes a electronic monitoring provider on a licence */
+    ElectronicMonitoringProvider: {
+      /** @description Is the licence to be tagged for electronic monitoring programme */
+      isToBeTaggedForProgramme?: boolean
+      /**
+       * @description Programme Name of the licence
+       * @example Off Some Road
+       */
+      programmeName?: string
+      /**
+       * @description Electronic monitoring provider status
+       * @example NOT_STARTED
+       * @enum {string}
+       */
+      status?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
     }
     /** @description Describes a licence that was created by a prison */
     HardStopLicence: Omit<
@@ -4962,6 +4980,8 @@ export interface components {
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
       /** @description The curfew address for this licence */
       curfewAddress?: components['schemas']['HdcCurfewAddress']
+      /** @description Describes a electronic monitoring provider on a licence */
+      electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider']
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -10809,15 +10829,15 @@ export interface operations {
         pageSize?: number
         sortedAsc?: boolean
         /**
-         * @description The filter query parameters have to start with the prefix 'filters.' followed by the name of the filter.
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
          *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
          *           filters.someMultiselectFilter=a,b,c
          *
          * @example {
-         *       'filters.date.start': '2023-04-25',
-         *       'filters.date.end': '2023-05-30',
-         *       'filters.someMultiselectFilter': 'a,b,c'
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
          *     }
          */
         filters: {
@@ -10830,7 +10850,7 @@ export interface operations {
         prefix: string
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
@@ -10902,15 +10922,15 @@ export interface operations {
     parameters: {
       query: {
         /**
-         * @description The filter query parameters have to start with the prefix 'filters.' followed by the name of the filter.
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
          *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
          *           filters.someMultiselectFilter=a,b,c
          *
          * @example {
-         *       'filters.date.start': '2023-04-25',
-         *       'filters.date.end': '2023-05-30',
-         *       'filters.someMultiselectFilter': 'a,b,c'
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
          *     }
          */
         filters: {
@@ -10918,7 +10938,7 @@ export interface operations {
         }
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
@@ -12384,7 +12404,7 @@ export interface operations {
         renderMethod?: 'HTML' | 'PDF' | 'SVG'
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
@@ -12447,7 +12467,7 @@ export interface operations {
       query?: {
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
@@ -12521,7 +12541,7 @@ export interface operations {
       query?: {
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
