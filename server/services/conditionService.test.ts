@@ -50,6 +50,7 @@ describe('ConditionService', () => {
           },
         ],
         type: 'NamedIndividuals',
+        requiresElectronicMonitoringResponse: false,
         validatorType: NamedIndividuals,
       }
 

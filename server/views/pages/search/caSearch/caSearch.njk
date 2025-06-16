@@ -1,8 +1,44 @@
 {% extends "layout.njk" %}
 
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+
 {% set pageTitle = applicationName + " - Case Admin - Search" %}
 {% set pageId = "ca-search-page" %}
 {% set backLinkHref = backLink %}
+{% set noJsBackLink = true %}
+
+{% macro displayResults(tabId, countText, setPeopleInPrisonTab) %}
+    <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {% if setPeopleInPrisonTab %}
+                <p id="people-in-prison-empty-state-content">You can see licences for people in prison in this service if they:</p>
+                <ul class = "govuk-list govuk-list--bullet">
+                    <li>are within 4 weeks of release or if a probation practitioner has started work on their licence before then</li>
+                    <li>are serving a determinate sentence in a prison you work in</li>
+                    <li>have a release date</li>
+                    <li>have not been approved for Home Detention Curfew</li>
+            {% else %}
+                <p id="people-on-probation-empty-state-content">You can see licences for people on probation in this service if they:</p>
+                <ul class = "govuk-list govuk-list--bullet">
+                    <li>served a determinate sentence in a prison you work in</li>
+                    <li>were not released on Home Detention Curfew</li>
+                    <li>were not released from prison with a licence created using NOMIS</li>
+            {% endif %}
+                    <li>have not been recalled or breached a top up supervision order</li>
+                </ul>
+            <p>If you think someone’s licence is missing, tell us by <a id="serviceNowUrl" class="govuk-link" href="{{serviceNowUrl}}">filling in a support request form.</a></p>
+            <p class="govuk-body">
+                {{ govukButton({
+                    text: "Return to caselist",
+                    classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                    href: backLink,
+                    attributes: { 'data-qa': 'return-to-caselist' }
+                }) }}
+            </p>
+        </div>
+    </div>
+{% endmacro %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -30,6 +66,32 @@
             </form>
         </div>
     </div>
+
+    {% set inPrisonCountText = "People in prison (0 results)" %}
+    {% set onProbationCountText = "People on probation (0 results)" %}
+
+    {% set peopleInPrison = displayResults(tabParameters.prison.tabId, inPrisonCountText, true) %}
+    {% set peopleOnProbation = displayResults(tabParameters.probation.tabId, onProbationCountText, false) %}
+
+
+    {{ govukTabs({
+        items: [
+            {
+                label: "People in prison",
+                id: "people-in-prison",
+                panel: {
+                    html: peopleInPrison
+                }
+            },
+            {
+                label: "People on probation",
+                id: "people-on-probation",
+                panel: {
+                    html: peopleOnProbation
+                }
+            }
+        ]
+    }) }}
 
 {% endblock %}
 
