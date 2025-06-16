@@ -125,7 +125,7 @@ export default class PolicyChangeRoutes {
         .filter(code => code === condition.code || replacedByCodes.includes(code))
         .filter(code => !req.body?.additionalConditions?.includes(code))
 
-      this.licenceService.deleteAdditionalConditionsByCode(conditionsToDelete, licence.id, user)
+      await this.licenceService.deleteAdditionalConditionsByCode(conditionsToDelete, licence.id, user)
 
       // Add replacement conditions
       if (req.body?.additionalConditions?.length > 0) {
