@@ -1,8 +1,9 @@
-import { Expose } from 'class-transformer'
-import { IsNotEmpty, ValidateIf } from 'class-validator'
+import { Expose, Type } from 'class-transformer'
+import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator'
 import AdditionalConditions from '../../manageConditions/types/additionalConditions'
 import ConditionsHaveBeenExpanded from '../../../validators/conditionsHaveBeenExpanded'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
+import ElectronicMonitoringProvider from '../../manageConditions/types/electronicMonitoringProvider'
 
 class LicenceToSubmit {
   @Expose()
@@ -39,6 +40,12 @@ class LicenceToSubmit {
       'At least one of the additional PSS requirements you have chosen is incomplete. Check the requirements and add the missing information or remove any requirements you do not need',
   })
   additionalPssConditions: AdditionalConditions[]
+
+  @Expose()
+  @ValidateIf(o => o.electronicMonitoringProvider != null)
+  @ValidateNested()
+  @Type(() => ElectronicMonitoringProvider)
+  electronicMonitoringProvider: ElectronicMonitoringProvider
 }
 
 export default LicenceToSubmit

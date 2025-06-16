@@ -1,19 +1,37 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalInformationSummary(licence, isEditable) %}
+{% macro additionalInformationSummary(licence, isEditable, validationErrors) %}
     {% if not licence.isVariation %}
         {% set additionalInformationRows = []%}
+        {% set error = validationErrors | findError('electronicMonitoringProvider-isToBeTaggedForProgramme') %}
+        {% set electronicMonitoringProvider = licence.electronicMonitoringProvider %}
 
-        {# Placeholder #}
-        {% set yesNo = "Yes" | escape %}
-        {% set pathfinderName = "Example name" | escape%}
+        {% if electronicMonitoringProvider.isToBeTaggedForProgramme == null %}
+            {% set yesNo = 'Not yet entered' %}
+        {% elseif electronicMonitoringProvider.isToBeTaggedForProgramme %}
+            {% set yesNo = 'Yes' %}
+        {% else %}
+            {% set yesNo = 'No' %}
+        {% endif %}
+ 
+        {% if electronicMonitoringProvider.programmeName and electronicMonitoringProvider.isToBeTaggedForProgramme %}
+            {% set pathfinderName = electronicMonitoringProvider.programmeName | escape %}
+        {% else %}
+            {% set pathfinderName = '' %}
+        {% endif %}
 
         {% set pathfinderResponses = yesNo + "<br><br>" + pathfinderName %}
 
-        <div id="additional-information" class="govuk-!-padding-top-9">
+        {% set fieldId = 'electronicMonitoringProvider-isToBeTaggedForProgramme' | replace('.', '-') %}
+        <div id="{{ fieldId }}" class="{% if error %} urgent-highlight {% endif %}">
             <h2 class="govuk-heading-m">Additional information</h2>
             <p>This information will not appear on the licence.</p>
-            {{ 
+            {% if error %}
+                <p class="govuk-error-message">
+                    <span>{{ error.text }}</span>
+                </p>
+            {% endif %}
+            {{
                 govukSummaryList({
                     attributes: { id: "additionalInformationSummaryList" },
                     rows: [{

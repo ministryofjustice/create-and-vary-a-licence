@@ -139,7 +139,9 @@
                 </div>
             {% endif %}
 
-            {{ additionalInformationSummary(licence, isInProgress) }}
+            {% if licence.electronicMonitoringProvider %}
+                {{ additionalInformationSummary(licence, isInProgress, validationErrors) }}
+            {% endif %}
 
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
