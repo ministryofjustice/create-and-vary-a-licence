@@ -1,4 +1,7 @@
 import { RequestHandler, Router } from 'express'
+import defaultTokenProvider from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/defaultTokenProvider'
+import ReportListUtils from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils'
+import config from '../../config'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import SupportHomeRoutes from './handlers/supportHome'
 import { Services } from '../../services'
@@ -91,6 +94,18 @@ export default function Index({
   get('/probation-teams/:teamCode/caseload', probationTeamHandler.GET)
   get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
   get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
+  get(
+    '/reports/active-licences',
+    ReportListUtils.createReportListRequestHandler({
+      title: 'CVL Reports',
+      definitionName: 'dpd001-active-licences',
+      variantName: 'all',
+      apiUrl: config.apis.licenceApi.url,
+      apiTimeout: config.apis.licenceApi.timeout.deadline,
+      layoutTemplate: 'partials/dprReport.njk',
+      tokenProvider: defaultTokenProvider,
+    }),
+  )
 
   return router
 }

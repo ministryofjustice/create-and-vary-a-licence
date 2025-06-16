@@ -1,0 +1,12 @@
+{% extends "./layout.njk" %}Add commentMore actions
+
+{% block bodyEnd %}
+  {{ super() }}
+
+  <script type="module" src="/assets/dpr/js/all.mjs"></script>
+  <script type="module" nonce="{{ cspNonce }}">
+    import initAll from "/assets/dpr/js/all.mjs";
+    initAll();
+  </script>
+{% endblock %}
+
