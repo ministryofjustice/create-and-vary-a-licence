@@ -4,19 +4,13 @@
         {% set additionalInformationRows = []%}
         {% set error = validationErrors | findError('electronicMonitoringProvider-isToBeTaggedForProgramme') %}
         {% set electronicMonitoringProvider = licence.electronicMonitoringProvider %}
+        {% set electronicMonitoringProviderStatus = licence.electronicMonitoringProviderStatus %}
 
-        {% if electronicMonitoringProvider.isToBeTaggedForProgramme == null %}
-            {% set yesNo = 'Not yet entered' %}
-        {% elseif electronicMonitoringProvider.isToBeTaggedForProgramme %}
-            {% set yesNo = 'Yes' %}
-        {% else %}
-            {% set yesNo = 'No' %}
-        {% endif %}
- 
-        {% if electronicMonitoringProvider.programmeName and electronicMonitoringProvider.isToBeTaggedForProgramme %}
+        {% if(electronicMonitoringProviderStatus === 'COMPLETE') %}
+            {% set yesNo = 'Yes' if electronicMonitoringProvider.isToBeTaggedForProgramme else 'No' %}
             {% set pathfinderName = electronicMonitoringProvider.programmeName | escape %}
         {% else %}
-            {% set pathfinderName = '' %}
+            {% set yesNo = 'Not yet entered' %}
         {% endif %}
 
         {% set pathfinderResponses = yesNo + "<br><br>" + pathfinderName %}

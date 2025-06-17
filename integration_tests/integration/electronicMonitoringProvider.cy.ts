@@ -102,10 +102,13 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .enterAddress()
         .nextInput()
         .enterAddress()
-        .clickContinue({
-          isToBeTaggedForProgramme: null,
-          programmeName: '',
-        })
+        .clickContinue(
+          {
+            isToBeTaggedForProgramme: null,
+            programmeName: '',
+          },
+          'NOT_STARTED',
+        )
       checkAnswersPage.checkIfElectronicMonitoringProviderExists()
       checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
     })
@@ -192,10 +195,13 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .enterAddress()
         .nextInput()
         .enterAddress()
-        .clickContinue({
-          isToBeTaggedForProgramme: true,
-          programmeName: 'Test Programme',
-        })
+        .clickContinue(
+          {
+            isToBeTaggedForProgramme: true,
+            programmeName: 'Test Programme',
+          },
+          'COMPLETE',
+        )
       checkAnswersPage.checkIfElectronicMonitoringProviderExists()
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
@@ -204,7 +210,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     })
   })
 
-  it('should not load electronic monitoring provider section when electronicMonitoringProvider is null', () => {
+  it('should not load electronic monitoring provider section when electronicMonitoringProviderStatus is NOT_NEEDED', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     let caseloadPage = indexPage.clickCreateALicence()
     const comDetailsPage = caseloadPage.clickComName()
@@ -290,7 +296,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     })
   })
 
-  it('should load electronic monitoring provider section even if electronicMonitoringProvider is initialised with null data', () => {
+  it('should load electronic monitoring provider section if electronicMonitoringProviderStaus is NOT_STARTED', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     let caseloadPage = indexPage.clickCreateALicence()
     const comDetailsPage = caseloadPage.clickComName()
@@ -371,10 +377,13 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .enterAddress()
         .nextInput()
         .enterAddress()
-        .clickContinue({
-          isToBeTaggedForProgramme: null,
-          programmeName: '',
-        })
+        .clickContinue(
+          {
+            isToBeTaggedForProgramme: null,
+            programmeName: '',
+          },
+          'NOT_STARTED',
+        )
       checkAnswersPage.checkIfElectronicMonitoringProviderExists()
     })
   })

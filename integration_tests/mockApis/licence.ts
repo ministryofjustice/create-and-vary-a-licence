@@ -415,6 +415,7 @@ export default {
     kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
     conditions: AdditionalCondition[]
     electronicMonitoringProvider?: ElectronicMonitoringProvider
+    electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -621,7 +622,7 @@ export default {
             },
           ],
           electronicMonitoringProvider: options.electronicMonitoringProvider,
-          electronicMonitoringProviderStatus: 'COMPLETE',
+          electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
         },
       },
     })

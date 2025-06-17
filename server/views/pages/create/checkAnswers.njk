@@ -139,7 +139,7 @@
                 </div>
             {% endif %}
 
-            {% if licence.electronicMonitoringProvider %}
+            {% if licence.electronicMonitoringProviderStatus !== 'NOT_NEEDED' %}
                 {{ additionalInformationSummary(licence, isInProgress, validationErrors) }}
             {% endif %}
 
