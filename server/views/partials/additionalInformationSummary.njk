@@ -1,7 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% macro additionalInformationSummary(licence, isEditable, validationErrors) %}
-    {% if not licence.isVariation %}
         {% set additionalInformationRows = []%}
         {% set error = validationErrors | findError('electronicMonitoringProvider-isToBeTaggedForProgramme') %}
         {% set electronicMonitoringProvider = licence.electronicMonitoringProvider %}
@@ -22,8 +21,7 @@
 
         {% set pathfinderResponses = yesNo + "<br><br>" + pathfinderName %}
 
-        {% set fieldId = 'electronicMonitoringProvider-isToBeTaggedForProgramme' | replace('.', '-') %}
-        <div id="{{ fieldId }}" class="{% if error %} urgent-highlight {% endif %}">
+        <div id="electronicMonitoringProvider-isToBeTaggedForProgramme" class="{% if error %} urgent-highlight {% endif %}">
             <h2 class="govuk-heading-m">Additional information</h2>
             <p>This information will not appear on the licence.</p>
             {% if error %}
@@ -50,5 +48,4 @@
                 })
             }}
         </div>
-    {% endif %}
 {% endmacro %}

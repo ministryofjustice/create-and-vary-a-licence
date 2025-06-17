@@ -2,6 +2,7 @@ import moment from 'moment'
 import Page from './page'
 import { Context } from '../support/context'
 import CheckAnswersPage from './checkAnswers'
+import { ElectronicMonitoringProvider } from '../../server/@types/licenceApiClientTypes'
 
 export default class PssConditionsInputPage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -56,9 +57,13 @@ export default class PssConditionsInputPage extends Page {
     return this
   }
 
-  clickContinue = (): CheckAnswersPage => {
+  clickContinue = (electronicMonitoringProvider?: ElectronicMonitoringProvider): CheckAnswersPage => {
     cy.task('stubPutAdditionalConditionData')
-    cy.task('stubGetCompletedLicence', { statusCode: 'IN_PROGRESS', typeCode: 'AP_PSS' })
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'IN_PROGRESS',
+      typeCode: 'AP_PSS',
+      electronicMonitoringProvider,
+    })
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
   }

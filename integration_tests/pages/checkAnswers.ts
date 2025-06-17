@@ -59,4 +59,14 @@ export default class CheckAnswersPage extends Page {
   dateTimeField = () => {
     return cy.get('.govuk-summary-list__key')
   }
+
+  checkIfElectronicMonitoringProviderExists = () => {
+    cy.get('#electronicMonitoringProvider-isToBeTaggedForProgramme').should('exist')
+    return this
+  }
+
+  checkIfElectronicMonitoringProviderDoesNotExist = () => {
+    cy.get('#electronicMonitoringProvider-isToBeTaggedForProgramme').should('not.exist')
+    return this
+  }
 }
