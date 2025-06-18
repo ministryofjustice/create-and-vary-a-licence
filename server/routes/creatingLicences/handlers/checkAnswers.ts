@@ -96,9 +96,6 @@ export default class CheckAnswersRoutes {
   private validateLicence = async (licence: Licence): Promise<FieldValidationError[]> => {
     const licenceToSubmit = plainToInstance(LicenceToSubmit, licence, { excludeExtraneousValues: true })
     const errors: ValidationError[] = await validate(licenceToSubmit)
-    if (errors.length === 0) {
-      return []
-    }
     return this.flattenValidationErrors(errors)
   }
 
