@@ -26,6 +26,7 @@ export declare global {
       token: string
       authSource: string
       userRoles: string[]
+      uuid: string
     }
 
     type LocalsUser = User & CvlUserDetails

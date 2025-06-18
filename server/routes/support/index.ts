@@ -99,7 +99,7 @@ export default function Index({
     ReportListUtils.createReportListRequestHandler({
       title: 'CVL Reports',
       definitionName: 'dpd001-active-licences',
-      variantName: 'all',
+      variantName: 'active_licences',
       apiUrl: config.apis.licenceApi.url,
       apiTimeout: config.apis.licenceApi.timeout.deadline,
       layoutTemplate: 'partials/dprReport.njk',
