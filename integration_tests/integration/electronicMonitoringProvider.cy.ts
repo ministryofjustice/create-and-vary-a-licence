@@ -387,4 +387,16 @@ context('Create a licence that needs pathfinder or programme question', () => {
       checkAnswersPage.checkIfElectronicMonitoringProviderExists()
     })
   })
+
+  it('should load electronic monitoring provider section if electronicMonitoringProviderStaus is COMPLETE and licence not approved in time', () => {
+    cy.task('stubGetCaseloadItemInHardStop')
+    cy.task('stubGetStaffDetailsByList')
+    cy.task('stubGetOmuEmail')
+    cy.task('stubGetPreviouslyApprovedAndTimedOutLicencesCaseload')
+    cy.task('stubGetApprovedLicenceInHardStop')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicenceInHardStop()
+    const checkAnswersPage = caseloadPage.clickNameOfTimedOutEdit()
+    checkAnswersPage.checkIfElectronicMonitoringProviderExists()
+  })
 })

@@ -1698,6 +1698,11 @@ export default {
           ...licencePlaceholder,
           statusCode: 'APPROVED',
           isInHardStopPeriod: true,
+          electronicMonitoringProvider: {
+            isToBeTaggedForProgramme: true,
+            programmeName: 'Programme Name',
+          },
+          electronicMonitoringProviderStatus: 'COMPLETE',
         },
       },
     })

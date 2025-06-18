@@ -1,14 +1,14 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% macro additionalInformationSummary(licence, isEditable, validationErrors) %}
-        {% set additionalInformationRows = []%}
+        {% set pathfinderName = '' %}
         {% set error = validationErrors | findError('electronicMonitoringProvider-isToBeTaggedForProgramme') %}
         {% set electronicMonitoringProvider = licence.electronicMonitoringProvider %}
         {% set electronicMonitoringProviderStatus = licence.electronicMonitoringProviderStatus %}
 
         {% if(electronicMonitoringProviderStatus === 'COMPLETE') %}
             {% set yesNo = 'Yes' if electronicMonitoringProvider.isToBeTaggedForProgramme else 'No' %}
-            {% set pathfinderName = electronicMonitoringProvider.programmeName | escape %}
+            {% set pathfinderName = (electronicMonitoringProvider.programmeName | default('')) | escape %}
         {% else %}
             {% set yesNo = 'Not yet entered' %}
         {% endif %}
