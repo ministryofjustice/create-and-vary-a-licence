@@ -9,7 +9,12 @@ import policyV2_1 from './polices/v2-1'
 // eslint-disable-next-line camelcase
 import policyV3_0 from './polices/v3-0'
 import LicenceCreationType from '../../server/enumeration/licenceCreationType'
-import { AdditionalCondition, Licence, LicencePolicyResponse } from '../../server/@types/licenceApiClientTypes'
+import {
+  AdditionalCondition,
+  ElectronicMonitoringProvider,
+  Licence,
+  LicencePolicyResponse,
+} from '../../server/@types/licenceApiClientTypes'
 
 const ACTIVE_POLICY_VERSION = '3.0'
 
@@ -409,6 +414,8 @@ export default {
     homeDetentionCurfewEndDate: string | null
     kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
     conditions: AdditionalCondition[]
+    electronicMonitoringProvider?: ElectronicMonitoringProvider
+    electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -614,6 +621,8 @@ export default {
               readyToSubmit: true,
             },
           ],
+          electronicMonitoringProvider: options.electronicMonitoringProvider,
+          electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
         },
       },
     })
@@ -1689,6 +1698,11 @@ export default {
           ...licencePlaceholder,
           statusCode: 'APPROVED',
           isInHardStopPeriod: true,
+          electronicMonitoringProvider: {
+            isToBeTaggedForProgramme: true,
+            programmeName: 'Programme Name',
+          },
+          electronicMonitoringProviderStatus: 'COMPLETE',
         },
       },
     })

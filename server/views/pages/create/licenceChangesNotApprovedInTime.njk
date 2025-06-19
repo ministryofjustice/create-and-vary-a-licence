@@ -4,6 +4,7 @@
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
+{% from "partials/additionalInformationSummary.njk" import additionalInformationSummary %}
 
 {% set pageTitle = applicationName + " - Create licence - Licence changes not approved in time for release checks" %}
 {% set backLinkHref = backLink %}
@@ -35,6 +36,10 @@
 
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
+            {% endif %}
+
+            {% if licence.electronicMonitoringProviderStatus !== 'NOT_NEEDED' %}
+                {{ additionalInformationSummary(licence, isInProgress, validationErrors) }}
             {% endif %}
 
             <p class="govuk-body">

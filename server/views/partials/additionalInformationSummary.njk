@@ -1,0 +1,45 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro additionalInformationSummary(licence, isEditable, validationErrors) %}
+        {% set pathfinderName = '' %}
+        {% set error = validationErrors | findError('electronicMonitoringProvider-isToBeTaggedForProgramme') %}
+        {% set electronicMonitoringProvider = licence.electronicMonitoringProvider %}
+        {% set electronicMonitoringProviderStatus = licence.electronicMonitoringProviderStatus %}
+
+        {% if(electronicMonitoringProviderStatus === 'COMPLETE') %}
+            {% set yesNo = 'Yes' if electronicMonitoringProvider.isToBeTaggedForProgramme else 'No' %}
+            {% set pathfinderName = (electronicMonitoringProvider.programmeName | default('')) | escape %}
+        {% else %}
+            {% set yesNo = 'Not yet entered' %}
+        {% endif %}
+
+        {% set pathfinderResponses = yesNo + "<br><br>" + pathfinderName %}
+
+        <div id="electronicMonitoringProvider-isToBeTaggedForProgramme" class="{% if error %} urgent-highlight {% endif %}">
+            <h2 class="govuk-heading-m">Additional information</h2>
+            <p>This information will not appear on the licence.</p>
+            {% if error %}
+                <p class="govuk-error-message">
+                    <span>{{ error.text }}</span>
+                </p>
+            {% endif %}
+            {{
+                govukSummaryList({
+                    attributes: { id: "additionalInformationSummaryList" },
+                    rows: [{
+                        key: { text: "Are they being tagged as a part of a pathfinder or programme?" },
+                        value: { html: pathfinderResponses },
+                        actions: {
+                            items: [
+                                {
+                                    href: "#",
+                                    text: 'Change',
+                                    visuallyHiddenText: 'if they are being tagged as part of a pathfinder or programme.'
+                                }
+                            ] if isEditable else []
+                        }
+                    }]
+                })
+            }}
+        </div>
+{% endmacro %}
