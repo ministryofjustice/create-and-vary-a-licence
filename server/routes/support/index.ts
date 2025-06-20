@@ -23,6 +23,8 @@ import LicenceTypeChange from './types/licenceTypeChange'
 import LicencePrisonerDetails from './types/licencePrisonerDetails'
 import LicencePrisonerDetailsRoutes from './handlers/licencePrisonerDetails'
 import AuditDetailsRoutes from './handlers/auditDetails'
+import VaryApproverPduCaseloadHandler from './handlers/VaryApproverPduCaseloadHandler'
+import VaryApproverRegionCaseloadHandler from './handlers/VaryApproverRegionCaseloadHandler'
 
 export default function Index({
   probationService,
@@ -32,6 +34,7 @@ export default function Index({
   conditionService,
   licenceOverrideService,
   comCaseloadService,
+  varyApproverCaseloadService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -60,6 +63,8 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(probationService)
   const licencePrisonerDetailsHandler = new LicencePrisonerDetailsRoutes(licenceService, licenceOverrideService)
   const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
+  const varyApproverPduCaseloadHandler = new VaryApproverPduCaseloadHandler(varyApproverCaseloadService)
+  const varyApproverRegionCaseloadHandler = new VaryApproverRegionCaseloadHandler(varyApproverCaseloadService)
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
@@ -88,5 +93,8 @@ export default function Index({
   get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
   get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
 
+  // get vary approver case load by pdu and region
+  get('/variation-approver/cases/by-pdu', varyApproverPduCaseloadHandler.GET)
+  get('/variation-approver/cases/by-region', varyApproverRegionCaseloadHandler.GET)
   return router
 }
