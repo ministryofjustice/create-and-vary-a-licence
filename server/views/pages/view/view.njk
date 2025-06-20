@@ -7,6 +7,7 @@
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
+{% from "partials/additionalInformationSummary.njk" import additionalInformationSummary %}
 {% from "moj/components/banner/macro.njk" import mojBanner %}
 {% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
 {% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
@@ -85,34 +86,38 @@
                     {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                         {{ additionalPssConditions(licence) }}
                     {% endif %}
-                {% endif %}    
+                {% endif %}
 
-                    <div class="govuk-button-group govuk-!-margin-top-8">
-                        {% if licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP' %}
-                            {{ govukButton({
-                                text: "Send for approval",
-                                classes: "govuk-button--primary govuk-!-margin-right-1",
-                                preventDoubleClick: true,
-                                attributes: { 'data-qa': 'approve-standard-licence'}
-                            }) }}
-                        {% endif %}
+                {% if licence.electronicMonitoringProviderStatus !== 'NOT_NEEDED' %}
+                    {{ additionalInformationSummary(licence, isEditableByPrison, validationErrors) }}
+                {% endif %}
 
-                        {% if isPrintable %}
-                            {{ govukButton({
-                                text: "View and print licence PDF",
-                                classes: "govuk-button--primary govuk-!-margin-right-1",
-                                href: '/licence/view/id/' + licence.id + '/pdf-print',
-                                attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
-                            }) }}
-                        {% endif %}
-
+                <div class="govuk-button-group govuk-!-margin-top-8">
+                    {% if licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP' %}
                         {{ govukButton({
-                            text: "Return to case list",
-                            classes: "govuk-button--secondary" if isPrintable or (licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP'),
-                            href: '/licence/view/cases',
-                            attributes: { 'data-qa': 'return-to-view-list' }
+                            text: "Send for approval",
+                            classes: "govuk-button--primary govuk-!-margin-right-1",
+                            preventDoubleClick: true,
+                            attributes: { 'data-qa': 'approve-standard-licence'}
                         }) }}
-                    </div>
+                    {% endif %}
+
+                    {% if isPrintable %}
+                        {{ govukButton({
+                            text: "View and print licence PDF",
+                            classes: "govuk-button--primary govuk-!-margin-right-1",
+                            href: '/licence/view/id/' + licence.id + '/pdf-print',
+                            attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+                        }) }}
+                    {% endif %}
+
+                    {{ govukButton({
+                        text: "Return to case list",
+                        classes: "govuk-button--secondary" if isPrintable or (licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP'),
+                        href: '/licence/view/cases',
+                        attributes: { 'data-qa': 'return-to-view-list' }
+                    }) }}
+                </div>
             </div>
         </div>
     </form>

@@ -47,4 +47,14 @@ export default class ViewALicencePage extends Page {
       .click()
     return Page.verifyOnPage(PrintLicenceHtmlPage)
   }
+
+  checkElectronicMonitoringAdditionalInformationExists = () => {
+    cy.get('#electronicMonitoringProvider-isToBeTaggedForProgramme').should('exist')
+    return this
+  }
+
+  checkIfElectronicMonitoringAdditionalInformationDoesNotExist = () => {
+    cy.get('#electronicMonitoringProvider-isToBeTaggedForProgramme').should('not.exist')
+    return this
+  }
 }
