@@ -4051,6 +4051,16 @@ export interface components {
       isDueForEarlyRelease?: boolean
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
       isInHardStopPeriod: boolean
+      /**
+       * @description The agency code where this offender resides or was released from
+       * @example MDI
+       */
+      prisonCode?: string
+      /**
+       * @description The agency description of the detaining prison
+       * @example Leeds (HMP)
+       */
+      prisonDescription?: string
     }
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
     PrisonUserSearchRequest: {
@@ -4491,11 +4501,6 @@ export interface components {
       surname?: string
       kind: string
       /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
@@ -4743,15 +4748,20 @@ export interface components {
       /** @description The list of standard post sentence supervision conditions on this licence */
       standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string
-      /**
        * @description The prison booking number for the person on this licence
        * @example F12333
        */
       bookingNo?: string
+      /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string
+      /**
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
+       */
+      cro?: string
       /**
        * Format: date-time
        * @description The date and time that this licence was superseded by a new variant
