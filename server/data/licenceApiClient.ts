@@ -46,6 +46,8 @@ import type {
   OverrideLicencePrisonerDetailsRequest,
   VaryApproverCaseloadSearchRequest,
   VaryApproverCase,
+  PrisonCaseAdminSearchResult,
+  PrisonUserSearchRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -683,5 +685,14 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({
       path: `/offender/nomisid/${nomisId}/is-91-status`,
     })) as Promise<boolean>
+  }
+
+  async searchForOffenderOnPrisonCaseAdminCaseload(
+    searchRequest: PrisonUserSearchRequest,
+  ): Promise<PrisonCaseAdminSearchResult> {
+    return (await this.post({
+      path: `/caseload/case-admin/case-search`,
+      data: searchRequest,
+    })) as Promise<PrisonCaseAdminSearchResult>
   }
 }

@@ -4051,6 +4051,16 @@ export interface components {
       isDueForEarlyRelease?: boolean
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
       isInHardStopPeriod: boolean
+      /**
+       * @description The agency code where this offender resides or was released from
+       * @example MDI
+       */
+      prisonCode?: string
+      /**
+       * @description The agency description of the detaining prison
+       * @example Leeds (HMP)
+       */
+      prisonDescription?: string
     }
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
     PrisonUserSearchRequest: {
@@ -4061,9 +4071,9 @@ export interface components {
       query: string
       /**
        * @description The prison caseloads of the prison staff member
-       * @example BAI
+       * @example ['BAI','ABC']
        */
-      prisonCaseload: string
+      prisonCaseload: string[]
     }
     /** @description Describes an enriched prison case admin search result */
     PrisonCaseAdminSearchResult: {
@@ -4490,10 +4500,6 @@ export interface components {
        */
       surname?: string
       kind: string
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][]
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
@@ -4737,6 +4743,10 @@ export interface components {
        * @example Jane Jones
        */
       updatedByFullName?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
