@@ -42,7 +42,10 @@ class LicenceToSubmit {
   additionalPssConditions: AdditionalConditions[]
 
   @Expose()
-  @ValidateIf(o => o.electronicMonitoringProviderStatus !== 'NOT_NEEDED' && o.electronicMonitoringProvider != null)
+  electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+
+  @Expose()
+  @ValidateIf(o => o.electronicMonitoringProviderStatus !== 'NOT_NEEDED')
   @ValidateNested()
   @Type(() => ElectronicMonitoringProvider)
   electronicMonitoringProvider: ElectronicMonitoringProvider
