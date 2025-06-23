@@ -26,6 +26,21 @@
                         value: licence.electronicMonitoringProvider.programmeName | fillFormResponse(formResponses.programmeName)
                     }) }}
                 {% endset %}
+                {% set radioValue = formResponses.isToBeTaggedForProgramme
+                    or (licence.electronicMonitoringProvider.isToBeTaggedForProgramme == true and 'Yes')
+                    or (licence.electronicMonitoringProvider.isToBeTaggedForProgramme == false and 'No')
+                    or '' %}
+                {% set radioItems = [
+                    {
+                        value: "Yes",
+                        text: "Yes",
+                        conditional: { html: programmeNameHtml }
+                    },
+                    {
+                        value: "No",
+                        text: "No"
+                    }
+                ] %}
                 {{ govukRadios({
                     idPrefix: "radio-option",
                     name: "isToBeTaggedForProgramme",
@@ -43,21 +58,8 @@
                         text: "For example, DAPOL(domestic abuse perpetrator on licence) or EMAC(EM acquisitive crime)."
                     },
                     errorMessage: validationErrors | findError('isToBeTaggedForProgramme'),
-                    items: [
-                        {
-                            value: "Yes",
-                            checked: (formResponses.isToBeTaggedForProgramme == "Yes") | (licence.electronicMonitoringProvider.isToBeTaggedForProgramme),
-                            text: "Yes",
-                            conditional: {
-                                html: programmeNameHtml
-                            }
-                        },
-                        {
-                            value: "No",
-                            checked: (formResponses.isToBeTaggedForProgramme == "No") | (licence.electronicMonitoringProvider.isToBeTaggedForProgramme),
-                            text: "No"
-                        }
-                    ]
+                    value: radioValue,
+                    items: radioItems
                 }) }}
 
                 {{ govukButton({

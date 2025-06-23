@@ -11,9 +11,11 @@ export default class PathfinderRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
-    await this.licenceService.updateElectronicMonitoringProgramme(licence.licenceId, {
-      isToBeTaggedForProgramme: req.body.isToBeTaggedForProgramme,
-      programmeName: req.body.programmeName,
+    const { isToBeTaggedForProgramme, programmeName } = req.body
+
+    await this.licenceService.updateElectronicMonitoringProgramme(licence.id, {
+      isToBeTaggedForProgramme: isToBeTaggedForProgramme === 'Yes',
+      programmeName: isToBeTaggedForProgramme === 'Yes' ? programmeName : null,
     } as UpdateElectronicMonitoringProgrammeRequest)
 
     if (req.query?.fromReview) {

@@ -503,10 +503,6 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async updateElectronicMonitoringProgramme(licenceId: number, request: UpdateElectronicMonitoringProgrammeRequest) {
-    await this.post({ path: `/licence/id/${licenceId}/electronic-monitoring-programmes`, data: request })
-  }
-
   async searchForOffenderOnStaffCaseload(searchRequest: ProbationSearchRequest): Promise<ProbationSearchResult> {
     return (await this.post({
       path: `/com/case-search`,
@@ -688,5 +684,9 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({
       path: `/offender/nomisid/${nomisId}/is-91-status`,
     })) as Promise<boolean>
+  }
+
+  async updateElectronicMonitoringProgramme(licenceId: number, request: UpdateElectronicMonitoringProgrammeRequest) {
+    await this.post({ path: `/licence/id/${licenceId}/electronic-monitoring-programmes`, data: request })
   }
 }
