@@ -67,3 +67,5 @@ export type HdcLicenceData = components['schemas']['HdcLicenceData']
 export type VaryApproverCaseloadSearchRequest = components['schemas']['VaryApproverCaseloadSearchRequest']
 export type VaryApproverCase = components['schemas']['VaryApproverCase']
 export type ElectronicMonitoringProvider = components['schemas']['ElectronicMonitoringProvider']
+export type UpdateElectronicMonitoringProgrammeRequest =
+  components['schemas']['UpdateElectronicMonitoringProgrammeRequest']

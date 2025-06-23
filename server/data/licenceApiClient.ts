@@ -46,6 +46,7 @@ import type {
   OverrideLicencePrisonerDetailsRequest,
   VaryApproverCaseloadSearchRequest,
   VaryApproverCase,
+  UpdateElectronicMonitoringProgrammeRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -500,6 +501,10 @@ export default class LicenceApiClient extends RestClient {
       path: `/offender/nomisid/${nomisId}/update-offender-details`,
       data: offenderDetails,
     })
+  }
+
+  async updateElectronicMonitoringProgramme(licenceId: number, request: UpdateElectronicMonitoringProgrammeRequest) {
+    await this.post({ path: `/licence/id/${licenceId}/electronic-monitoring-programmes`, data: request })
   }
 
   async searchForOffenderOnStaffCaseload(searchRequest: ProbationSearchRequest): Promise<ProbationSearchResult> {

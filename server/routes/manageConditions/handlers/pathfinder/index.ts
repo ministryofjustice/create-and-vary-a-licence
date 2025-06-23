@@ -5,6 +5,7 @@ import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 
 import type { Services } from '../../../../services'
 import PathfinderRoutes from './pathfinderRoutes'
+import TaggedForProgramme from '../../../creatingLicences/types/taggedForProgramme'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
@@ -24,9 +25,9 @@ export default function Index({ licenceService, conditionService }: Services): R
     )
 
   {
-    const controller = new PathfinderRoutes()
+    const controller = new PathfinderRoutes(licenceService)
     get('/add-pathfinder', controller.GET)
-    post('/add-pathfinder', controller.POST)
+    post('/add-pathfinder', controller.POST, TaggedForProgramme)
   }
 
   return router
