@@ -63,8 +63,14 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(probationService)
   const licencePrisonerDetailsHandler = new LicencePrisonerDetailsRoutes(licenceService, licenceOverrideService)
   const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
-  const varyApproverPduCaseloadHandler = new VaryApproverPduCaseloadHandler(varyApproverCaseloadService)
-  const varyApproverRegionCaseloadHandler = new VaryApproverRegionCaseloadHandler(varyApproverCaseloadService)
+  const varyApproverPduCaseloadHandler = new VaryApproverPduCaseloadHandler(
+    probationService,
+    varyApproverCaseloadService,
+  )
+  const varyApproverRegionCaseloadHandler = new VaryApproverRegionCaseloadHandler(
+    probationService,
+    varyApproverCaseloadService,
+  )
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
