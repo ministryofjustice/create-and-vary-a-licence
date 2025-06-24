@@ -3,7 +3,7 @@ import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
 import ProbationService from './probationService'
 import QrCodeService from './qrCodeService'
-import AcoCaseloadService from './lists/acoCaseloadService'
+import VaryApproverCaseloadService from './lists/varyApproverCaseloadService'
 import UkBankHolidayFeedService from './ukBankHolidayFeedService'
 import PrisonRegisterService from './prisonRegisterService'
 import ConditionService from './conditionService'
@@ -34,7 +34,7 @@ const userService = new UserService(manageUsersApiClient, prisonApiClient, proba
 const conditionService = new ConditionService(licenceApiClient)
 const licenceService = new LicenceService(licenceApiClient, conditionService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
-const caseloadService = new AcoCaseloadService(probationService, licenceApiClient, licenceService)
+const varyApproverCaseloadService = new VaryApproverCaseloadService(probationService, licenceApiClient, licenceService)
 const caCaseloadService = new CaCaseloadService(licenceApiClient)
 const comCaseloadService = new ComCaseloadService(licenceService, licenceApiClient)
 const approvedCaseloadService = new ApproverCaseloadService(licenceApiClient)
@@ -51,7 +51,7 @@ export const services = {
   approvedCaseloadService,
   caCaseloadService,
   comCaseloadService,
-  caseloadService,
+  varyApproverCaseloadService,
   prisonerService,
   probationService,
   qrCodeService,

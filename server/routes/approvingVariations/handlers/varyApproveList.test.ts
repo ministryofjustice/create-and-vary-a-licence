@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 
 import VaryApproveListRoutes from './varyApproveList'
-import AcoCaseloadService from '../../../services/lists/acoCaseloadService'
+import VaryApproverCaseloadService from '../../../services/lists/varyApproverCaseloadService'
 import LicenceType from '../../../enumeration/licenceType'
 
-const caseloadService = new AcoCaseloadService(null, null, null) as jest.Mocked<AcoCaseloadService>
-jest.mock('../../../services/lists/acoCaseloadService')
+const caseloadService = new VaryApproverCaseloadService(null, null, null) as jest.Mocked<VaryApproverCaseloadService>
+jest.mock('../../../services/lists/varyApproverCaseloadService')
 
 describe('Route Handlers - Variation approval list', () => {
   const handler = new VaryApproveListRoutes(caseloadService)
@@ -46,7 +46,7 @@ describe('Route Handlers - Variation approval list', () => {
   describe('GET', () => {
     it('should render list of variations for approval', async () => {
       await handler.GET(req, res)
-      expect(caseloadService.getVaryApproverCaseload).toHaveBeenCalledWith(res.locals.user, undefined)
+      expect(caseloadService.getVaryApproverCaseload).toHaveBeenCalledWith(res.locals.user, undefined, false)
       expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
         caseload: [
           {
