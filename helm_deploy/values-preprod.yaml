@@ -34,7 +34,8 @@ generic-service:
     HDC_LICENCE_CREATION_BLOCK: "true"
     CA_NEW_SEARCH_ENABLED: "false"
 
-
+  scheduledDowntime:
+    enabled: true
 
 gotenberg:
   replicaCount: 1
@@ -45,3 +46,4 @@ gotenberg:
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts-non-prod
+  businessHoursOnly: true
