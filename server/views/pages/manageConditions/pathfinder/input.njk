@@ -7,8 +7,7 @@
 
 {% set pageTitle = applicationName + " - Create a licence - Pathfinder Details" %}
 {% set pageId = "pathfinder-details-question-page" %}
-{% set backLinkHref = "/" %}
-{% set noJsBackLink = true %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/add-pathfinder" %}
 
 {% block content %}
     <form method="POST">
@@ -20,7 +19,7 @@
                         id: 'programmeName',
                         name: 'programmeName',
                         label: {
-                            html: 'What is the name of the pathfinder or programme(the information will not appear on the licence)?'
+                            html: 'What is the name of the pathfinder or programme (this information will not appear on the licence)?'
                         },
                         errorMessage: validationErrors | findError('programmeName'),
                         value: licence.electronicMonitoringProvider.programmeName | fillFormResponse(formResponses.programmeName)
@@ -55,7 +54,7 @@
                         }
                     },
                     hint: {
-                        text: "For example, DAPOL(domestic abuse perpetrator on licence) or EMAC(EM acquisitive crime)."
+                        text: "For example, DAPOL (domestic abuse perpetrator on licence) or EMAC (EM acquisitive crime)."
                     },
                     errorMessage: validationErrors | findError('isToBeTaggedForProgramme'),
                     value: radioValue,
