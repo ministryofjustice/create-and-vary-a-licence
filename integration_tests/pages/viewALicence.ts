@@ -4,6 +4,7 @@ import AppointmentPlacePage from './appointmentPlace'
 import AppointmentTimePage from './appointmentTime'
 import Page from './page'
 import PrintLicenceHtmlPage from './printLicenceHtmlPage'
+import CaSearchPage from './caSearch'
 
 export default class ViewALicencePage extends Page {
   constructor() {
@@ -46,5 +47,10 @@ export default class ViewALicencePage extends Page {
       })
       .click()
     return Page.verifyOnPage(PrintLicenceHtmlPage)
+  }
+
+  clickBackToCaSearch = (): CaSearchPage => {
+    cy.get('.govuk-back-link').click()
+    return Page.verifyOnPage(CaSearchPage)
   }
 }

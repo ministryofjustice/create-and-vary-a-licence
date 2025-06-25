@@ -17,7 +17,7 @@
 {% macro offenderName(offenderName, link, index) %}
     <div class="search-offender-name">
         {% if link %}
-            <a id="name-button-{{ index }}" href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
+            <a id="name-button-{{ index }}"  href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
         {% else %}
             <span id="name-button-{{ index }}" class="govuk-heading-s">{{ offenderName }}</span>
         {% endif %}
@@ -123,7 +123,7 @@
 
 {% for offender in inPrisonResults %}
     {% if offender.probationPractitioner.staffCode and offender.probationPractitioner.name%}
-        {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
+        {% set comDetailsHtml = '<a class="govuk-link" data-qa="comLink" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
     {% else %}
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}

@@ -130,6 +130,7 @@ export default defineConfig({
         stubDeleteAdditionalConditionById: licence.stubDeleteAdditionalConditionById,
         stubDeleteAdditionalConditionsByCode: licence.stubDeleteAdditionalConditionsByCode,
         stubPostExclusionZone: licence.stubPostExclusionZone,
+        stubGetCaSearchResults: licence.stubGetCaSearchResults,
 
         stubGetProbationer: delius.stubGetProbationer,
         stubGetProbationers: delius.stubGetProbationers,

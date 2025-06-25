@@ -12,10 +12,10 @@ export default class SearchService {
     })
   }
 
-  async getCaSearchResults(queryTerm: string, prisonCaseload: string[]): Promise<PrisonCaseAdminSearchResult> {
+  async getCaSearchResults(queryTerm: string, prisonCaseloads: string[]): Promise<PrisonCaseAdminSearchResult> {
     return this.licenceApiClient.searchForOffenderOnPrisonCaseAdminCaseload({
       query: queryTerm,
-      prisonCaseload,
+      prisonCaseloads,
     })
   }
 }
