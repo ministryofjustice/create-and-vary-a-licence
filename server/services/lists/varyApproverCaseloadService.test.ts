@@ -1,5 +1,5 @@
 import { addDays, format } from 'date-fns'
-import AcoCaseloadService from './acoCaseloadService'
+import VaryApproverCaseloadService from './varyApproverCaseloadService'
 import ProbationService from '../probationService'
 import LicenceService from '../licenceService'
 import { User } from '../../@types/CvlUserDetails'
@@ -17,7 +17,7 @@ describe('Caseload Service', () => {
   const deliusService = new ProbationService(null) as jest.Mocked<ProbationService>
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-  const serviceUnderTest = new AcoCaseloadService(deliusService, licenceApiClient, licenceService)
+  const serviceUnderTest = new VaryApproverCaseloadService(deliusService, licenceApiClient, licenceService)
   const user = {
     deliusStaffIdentifier: 2000,
     probationTeamCodes: ['teamA', 'teamB'],
@@ -74,7 +74,7 @@ describe('Caseload Service', () => {
       },
     ])
 
-    const result = await serviceUnderTest.getVaryApproverCaseload(user, undefined)
+    const result = await serviceUnderTest.getVaryApproverCaseload(user, undefined, false)
 
     expect(result).toMatchObject([
       {
@@ -129,7 +129,7 @@ describe('Caseload Service', () => {
       },
     ])
 
-    const result = await serviceUnderTest.getVaryApproverCaseload(user, 'XXX')
+    const result = await serviceUnderTest.getVaryApproverCaseload(user, 'XXX', false)
 
     expect(result).toEqual([])
   })

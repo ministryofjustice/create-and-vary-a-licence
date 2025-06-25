@@ -25,10 +25,6 @@ export default class DeliusClient extends RestClient {
     await this.put({ path: `/users/${deliusUsername}/roles` })
   }
 
-  async removeDeliusRole(deliusUsername: string): Promise<void> {
-    await this.delete({ path: `/users/${deliusUsername}/roles` })
-  }
-
   async getPduHeads(pduCode: string): Promise<DeliusPDUHead[]> {
     return (await this.get({ path: `/staff/${pduCode}/pdu-head` })) as Promise<DeliusPDUHead[]>
   }
