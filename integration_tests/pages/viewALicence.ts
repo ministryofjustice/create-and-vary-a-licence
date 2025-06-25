@@ -53,7 +53,7 @@ export default class ViewALicencePage extends Page {
     cy.get('.govuk-back-link').click()
     return Page.verifyOnPage(CaSearchPage)
   }
-  
+
   checkElectronicMonitoringAdditionalInformationExists = () => {
     cy.get('#electronicMonitoringProvider-isToBeTaggedForProgramme').should('exist')
     return this
