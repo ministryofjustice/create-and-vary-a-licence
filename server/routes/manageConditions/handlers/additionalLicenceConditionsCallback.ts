@@ -43,7 +43,6 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
     if (req.query?.fromReview) {
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     }
-
     return res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)
   }
 }
