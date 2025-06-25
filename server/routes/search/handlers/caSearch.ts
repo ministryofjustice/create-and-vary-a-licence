@@ -12,7 +12,6 @@ export default class CaSearch {
     private readonly prisonerService: PrisonerService,
   ) {}
 
-  // check if these are needed when it comes to CA or there are other ones that should not be clickable
   nonViewableStatuses = [
     LicenceStatus.NOT_IN_PILOT,
     LicenceStatus.OOS_RECALL,
@@ -120,7 +119,6 @@ export default class CaSearch {
     return !this.nonViewableStatuses.includes(licenceStatus)
   }
 
-  // again check this if needed in CA jounrey for search
   private isEditableInHardStop = (kind: LicenceKind, licenceStatus: LicenceStatus) => {
     const inProgressHardStop = kind === LicenceKind.HARD_STOP && licenceStatus === LicenceStatus.IN_PROGRESS
     const notStarted = licenceStatus === LicenceStatus.TIMED_OUT
