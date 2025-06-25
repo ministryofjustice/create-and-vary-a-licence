@@ -98,14 +98,24 @@ describe('View CA Search Results', () => {
   it('should display empty states correctly when no search results are found', () => {
     const $ = render({
       queryTerm: 'Test',
+      backLink: '/licence/view/cases',
+      statusConfig,
       tabParameters: {
+        activeTab: '#people-in-prison',
         prison: {
+          resultsCount: 0,
+          tabHeading: 'People in prison',
           tabId: 'tab-heading-prison',
         },
         probation: {
+          resultsCount: 0,
+          tabHeading: 'People on probation',
           tabId: 'tab-heading-probation',
         },
       },
+      inPrisonResults: [],
+      onProbationResults: [],
+      worksAtMoreThanOnePrison: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People in prison')
