@@ -104,12 +104,12 @@ describe('View CA Search Results', () => {
         activeTab: '#people-in-prison',
         prison: {
           resultsCount: 0,
-          tabHeading: 'People in prison',
+          tabHeading: 'People in prison (0 results)',
           tabId: 'tab-heading-prison',
         },
         probation: {
           resultsCount: 0,
-          tabHeading: 'People on probation',
+          tabHeading: 'People on probation (0 results)',
           tabId: 'tab-heading-probation',
         },
       },
@@ -118,8 +118,8 @@ describe('View CA Search Results', () => {
       worksAtMoreThanOnePrison: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
-    expect($('.govuk-tabs__list a').text()).toContain('People in prison')
-    expect($('.govuk-tabs__list a').text()).toContain('People on probation')
+    expect($('.govuk-tabs__list a').text()).toContain('People in prison (0 results)')
+    expect($('.govuk-tabs__list a').text()).toContain('People on probation (0 results)')
     expect($('#tab-heading-prison').text()).toContain('People in prison (0 results)')
     expect($('#tab-heading-probation').text()).toContain('People on probation (0 results)')
     expect($('#people-in-prison-empty-state-content').text()).toContain(
@@ -139,12 +139,12 @@ describe('View CA Search Results', () => {
         activeTab: '#people-in-prison',
         prison: {
           resultsCount: 2,
-          tabHeading: 'People in prison',
+          tabHeading: 'People in prison (2 results)',
           tabId: 'tab-heading-prison',
         },
         probation: {
           resultsCount: 0,
-          tabHeading: 'People on probation',
+          tabHeading: 'People on probation (0 results)',
           tabId: 'tab-heading-probation',
         },
       },
@@ -153,7 +153,7 @@ describe('View CA Search Results', () => {
       worksAtMoreThanOnePrison: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
-    expect($('.govuk-tabs__list a').text()).toContain('People in prison')
+    expect($('.govuk-tabs__list a').text()).toContain('People in prison (2 results)')
     expect($('#tab-heading-prison').text()).toContain('People in prison (2 results)')
     expect($('tbody .govuk-table__row').length).toBe(2)
 
@@ -188,12 +188,12 @@ describe('View CA Search Results', () => {
         activeTab: '#people-on-probation',
         prison: {
           resultsCount: 0,
-          tabHeading: 'People in prison',
+          tabHeading: 'People in prison (0 results)',
           tabId: 'tab-heading-prison',
         },
         probation: {
           resultsCount: 2,
-          tabHeading: 'People on probation',
+          tabHeading: 'People on probation (2 results)',
           tabId: 'tab-heading-probation',
         },
       },
@@ -202,8 +202,8 @@ describe('View CA Search Results', () => {
       worksAtMoreThanOnePrison: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
-    expect($('.govuk-tabs__list a').text()).toContain('People on probation')
-    expect($('#tab-heading-probation').text()).toContain('People on probation')
+    expect($('.govuk-tabs__list a').text()).toContain('People on probation (2 results)')
+    expect($('#tab-heading-probation').text()).toContain('People on probation (2 results)')
     expect($('tbody .govuk-table__row').length).toBe(2)
 
     expect($('#name-1 > .search-offender-name > a').text()).toBe('Test Person 1')
@@ -235,12 +235,12 @@ describe('View CA Search Results', () => {
         activeTab: '#people-in-prison',
         prison: {
           resultsCount: 2,
-          tabHeading: 'People in prison',
+          tabHeading: 'People on prison (2 results)',
           tabId: 'tab-heading-prison',
         },
         probation: {
           resultsCount: 0,
-          tabHeading: 'People on probation',
+          tabHeading: 'People on probation (0 results)',
           tabId: 'tab-heading-probation',
         },
       },
