@@ -696,7 +696,7 @@ export default class LicenceApiClient extends RestClient {
       data: searchRequest,
     })) as Promise<PrisonCaseAdminSearchResult>
   }
-    
+
   async updateElectronicMonitoringProgramme(licenceId: number, request: UpdateElectronicMonitoringProgrammeRequest) {
     await this.post({ path: `/licence/id/${licenceId}/electronic-monitoring-programmes`, data: request })
   }
