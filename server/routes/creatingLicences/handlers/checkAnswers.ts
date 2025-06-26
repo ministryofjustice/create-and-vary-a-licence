@@ -96,10 +96,14 @@ export default class CheckAnswersRoutes {
   private validateLicence = async (licence: Licence): Promise<FieldValidationError[]> => {
     const licenceToSubmit = plainToInstance(LicenceToSubmit, licence, { excludeExtraneousValues: true })
     const errors: ValidationError[] = await validate(licenceToSubmit)
-
-    return errors.flatMap(error => ({
-      field: error.property,
-      message: Object.values(error.constraints)[Object.values(error.constraints).length - 1],
-    }))
+    return this.flattenValidationErrors(errors)
   }
+
+  flattenValidationErrors = (errors: ValidationError[], parentProperty = ''): FieldValidationError[] =>
+    errors.flatMap(error => {
+      const propertyPath = parentProperty ? `${parentProperty}-${error.property}` : error.property
+      const current = error.constraints ? [{ field: propertyPath, message: Object.values(error.constraints)[0] }] : []
+      const children = error.children ? this.flattenValidationErrors(error.children, propertyPath) : []
+      return [...current, ...children]
+    })
 }

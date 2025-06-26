@@ -24,6 +24,7 @@ import type {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
+  UpdateElectronicMonitoringProgrammeRequest,
   UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
   UpdateProbationTeamRequest,
@@ -66,8 +67,7 @@ export default class LicenceService {
 
   async getPolicyChanges(id: string): Promise<LicenceConditionChange[]> {
     const activePolicyVersion = await this.conditionService.getPolicyVersion()
-
-    return this.licenceApiClient.getPolicyChanges(id, activePolicyVersion) as Promise<LicenceConditionChange[]>
+    return this.licenceApiClient.getPolicyChanges(id, activePolicyVersion)
   }
 
   async updateAppointmentPerson(id: string, formData: PersonName, user: User): Promise<void> {
@@ -550,5 +550,15 @@ export default class LicenceService {
 
   async getIS91Status(nomsId: string): Promise<boolean> {
     return this.licenceApiClient.getIS91Status(nomsId)
+  }
+
+  async updateElectronicMonitoringProgramme(
+    licenceId: number,
+    updateElectronicMonitoringProgrammeRequest: UpdateElectronicMonitoringProgrammeRequest,
+  ): Promise<void> {
+    return this.licenceApiClient.updateElectronicMonitoringProgramme(
+      licenceId,
+      updateElectronicMonitoringProgrammeRequest,
+    )
   }
 }

@@ -9,8 +9,6 @@ export default class ApprovalCasesPage extends Page {
 
   private recentlyApprovedTab = '[data-qa=recently-approved-link]'
 
-  private approvalNeededTab = '[data-qa=approval-needed-link]'
-
   constructor() {
     super('approval-cases-page')
   }
