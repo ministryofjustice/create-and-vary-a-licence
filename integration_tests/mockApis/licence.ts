@@ -183,7 +183,9 @@ export default {
     })
   },
 
-  stubGetLicence: (): SuperAgentRequest => {
+  stubGetLicence: (options: {
+    electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -192,7 +194,10 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: licencePlaceholder,
+        jsonBody: {
+          ...licencePlaceholder,
+          electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
+        },
       },
     })
   },

@@ -1,0 +1,72 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% set pageTitle = applicationName + " - Create a licence - Pathfinder Details" %}
+{% set pageId = "pathfinder-details-question-page" %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/add-pathfinder" %}
+
+{% block content %}
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                {% set programmeNameHtml %}
+                    {{ govukTextarea({
+                        id: 'programmeName',
+                        name: 'programmeName',
+                        label: {
+                            html: 'What is the name of the pathfinder or programme (this information will not appear on the licence)?'
+                        },
+                        errorMessage: validationErrors | findError('programmeName'),
+                        value: licence.electronicMonitoringProvider.programmeName | fillFormResponse(formResponses.programmeName)
+                    }) }}
+                {% endset %}
+                {% set radioValue = formResponses.isToBeTaggedForProgramme
+                    or (licence.electronicMonitoringProvider.isToBeTaggedForProgramme == true and 'Yes')
+                    or (licence.electronicMonitoringProvider.isToBeTaggedForProgramme == false and 'No')
+                    or '' %}
+                {% set radioItems = [
+                    {
+                        value: "Yes",
+                        text: "Yes",
+                        conditional: { html: programmeNameHtml }
+                    },
+                    {
+                        value: "No",
+                        text: "No"
+                    }
+                ] %}
+                {{ govukRadios({
+                    idPrefix: "radio-option",
+                    name: "isToBeTaggedForProgramme",
+                    fieldset: {
+                        attributes: {
+                            id: 'isToBeTaggedForProgramme'
+                        },
+                        legend: {
+                            text: 'Are they being tagged as part of a pathfinder or programme?',
+                            isPageHeading: true,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    hint: {
+                        text: "For example, DAPOL (domestic abuse perpetrator on licence) or EMAC (EM acquisitive crime)"
+                    },
+                    errorMessage: validationErrors | findError('isToBeTaggedForProgramme'),
+                    value: radioValue,
+                    items: radioItems
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}
