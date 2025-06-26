@@ -2386,4 +2386,41 @@ export default {
       },
     })
   },
+  stubGetCaSearchResults: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          inPrisonResults: [
+            {
+              kind: 'CRD',
+              licenceId: 1,
+              name: 'Test Person 1',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: '01/07/2025',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'APPROVED',
+              tabType: 'FUTURE_RELEASES',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'BAI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+          ],
+          onProbationResults: [],
+        },
+      },
+    })
+  },
 }
