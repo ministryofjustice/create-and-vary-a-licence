@@ -21,6 +21,7 @@ export default function setUpStaticResources(): Router {
     '/node_modules/govuk-frontend/dist',
     '/node_modules/@ministryofjustice/frontend/moj/assets',
     '/node_modules/@ministryofjustice/frontend',
+    '/node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/assets',
     '/node_modules/jquery/dist',
   ].forEach(dir => {
     router.use('/assets', express.static(path.join(process.cwd(), dir), cacheControl))
@@ -40,13 +41,6 @@ export default function setUpStaticResources(): Router {
   router.use(
     '/assets/stylesheets/jquery-ui.min.css',
     express.static(path.join(process.cwd(), '/node_modules/jquery-ui-dist/jquery-ui.min.css'), cacheControl),
-  )
-  router.use(
-    '/assets/dpr',
-    express.static(
-      path.join(process.cwd(), '/node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/assets'),
-      cacheControl,
-    ),
   )
   router.use('/favicon.ico', express.static(path.join(process.cwd(), '/assets/images/favicon.ico'), cacheControl))
 

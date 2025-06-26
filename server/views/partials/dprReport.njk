@@ -1,12 +1,17 @@
-{% extends "./layout.njk" %}Add commentMore actions
+{% extends "../layout.njk" %}
 
-{% block bodyEnd %}
-  {{ super() }}
+{% set pageTitle = applicationName + " - DPR Reports" %}
+{% set pageId = "dpr-reporting" %}
 
-  <script type="module" src="/assets/dpr/js/all.mjs"></script>
-  <script type="module" nonce="{{ cspNonce }}">
-    import initAll from "/assets/dpr/js/all.mjs";
-    initAll();
+{% block content %}
+      <h2 class="govuk-heading-l">Test</h2>
+{% endblock %}
+
+{% block pageScripts %}
+  <script type="module" src="/assets/dpr/all.mjs"></script>
+  <script type="module">
+    import { initAll } from '/assets/dpr/all.mjs'
+    initAll()
   </script>
 {% endblock %}
 
