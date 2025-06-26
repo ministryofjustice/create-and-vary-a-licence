@@ -4466,6 +4466,7 @@ export interface components {
        * @example Smith
        */
       surname?: string
+      kind: string
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
@@ -4747,6 +4748,11 @@ export interface components {
        * @enum {string}
        */
       electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      updatedByFullName?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333

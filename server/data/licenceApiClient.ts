@@ -48,6 +48,7 @@ import type {
   VaryApproverCase,
   PrisonCaseAdminSearchResult,
   PrisonUserSearchRequest,
+  UpdateElectronicMonitoringProgrammeRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -694,5 +695,9 @@ export default class LicenceApiClient extends RestClient {
       path: `/caseload/case-admin/case-search`,
       data: searchRequest,
     })) as Promise<PrisonCaseAdminSearchResult>
+  }
+    
+  async updateElectronicMonitoringProgramme(licenceId: number, request: UpdateElectronicMonitoringProgrammeRequest) {
+    await this.post({ path: `/licence/id/${licenceId}/electronic-monitoring-programmes`, data: request })
   }
 }

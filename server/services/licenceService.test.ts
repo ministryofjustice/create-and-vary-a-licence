@@ -22,6 +22,7 @@ import {
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   CaseloadItem,
+  UpdateElectronicMonitoringProgrammeRequest,
 } from '../@types/licenceApiClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
@@ -854,5 +855,16 @@ describe('Licence Service', () => {
   it('Get IS-91 status', async () => {
     await licenceService.getIS91Status('ABC123')
     expect(licenceApiClient.getIS91Status).toHaveBeenCalledWith('ABC123')
+  })
+
+  describe('Update Electronic Monitoring Programme', () => {
+    it('should update the electronic monitoring programme', async () => {
+      const request: UpdateElectronicMonitoringProgrammeRequest = {
+        isToBeTaggedForProgramme: true,
+        programmeName: 'GPS',
+      }
+      await licenceService.updateElectronicMonitoringProgramme(1, request)
+      expect(licenceApiClient.updateElectronicMonitoringProgramme).toHaveBeenCalledWith(1, request)
+    })
   })
 })

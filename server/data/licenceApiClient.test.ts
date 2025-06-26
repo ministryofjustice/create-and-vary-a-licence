@@ -25,6 +25,7 @@ import {
   CaCaseloadSearch,
   LicenceCreationResponse,
   OverrideLicencePrisonerDetailsRequest,
+  UpdateElectronicMonitoringProgrammeRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -799,6 +800,17 @@ describe('Licence API client tests', () => {
     it('should get IS-91 status', async () => {
       await licenceApiClient.getIS91Status('A1234AA')
       expect(get).toHaveBeenCalledWith({ path: '/offender/nomisid/A1234AA/is-91-status' })
+    })
+  })
+
+  describe('Electronic Monitoring Programme: ', () => {
+    it('should update Electronic Monitoring Programme', async () => {
+      const request: UpdateElectronicMonitoringProgrammeRequest = {
+        isToBeTaggedForProgramme: true,
+        programmeName: 'EM Programme',
+      }
+      await licenceApiClient.updateElectronicMonitoringProgramme(1, request)
+      expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/electronic-monitoring-programmes', data: request })
     })
   })
 })
