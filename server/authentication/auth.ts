@@ -36,6 +36,7 @@ function init(): void {
         username: params.user_name,
         authSource: params.auth_source,
         userRoles: params.authorities,
+        uuid: params.uuid,
       })
     },
   )
