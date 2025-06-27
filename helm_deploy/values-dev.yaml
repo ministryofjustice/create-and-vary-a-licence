@@ -37,6 +37,8 @@ generic-service:
     HDC_INTEGRATION_MVP2_ENABLED: "true"
     HDC_LICENCE_CREATION_BLOCK: "false"
     CA_NEW_SEARCH_ENABLED: "true"
+    SHOW_DPR_REPORTING: "true"
+
   
   scheduledDowntime:
     enabled: true

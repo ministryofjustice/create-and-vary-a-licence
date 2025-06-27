@@ -94,18 +94,21 @@ export default function Index({
   get('/probation-teams/:teamCode/caseload', probationTeamHandler.GET)
   get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
   get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
-  get(
-    '/reports/active-licences',
-    ReportListUtils.createReportListRequestHandler({
-      title: 'CVL Reports',
-      definitionName: 'dpd001-active-licences',
-      variantName: 'active_licences',
-      apiUrl: config.apis.licenceApi.url,
-      apiTimeout: config.apis.licenceApi.timeout.deadline,
-      layoutTemplate: 'partials/dprReport.njk',
-      tokenProvider: defaultTokenProvider,
-    }),
-  )
+
+  if (config.dprReportingEnabled) {
+    get(
+      '/reports/active-licences',
+      ReportListUtils.createReportListRequestHandler({
+        title: 'CVL Reports',
+        definitionName: 'dpd001-active-licences',
+        variantName: 'active_licences',
+        apiUrl: config.apis.licenceApi.url,
+        apiTimeout: config.apis.licenceApi.timeout.deadline,
+        layoutTemplate: 'partials/dprReport.njk',
+        tokenProvider: defaultTokenProvider,
+      }),
+    )
+  }
 
   return router
 }
