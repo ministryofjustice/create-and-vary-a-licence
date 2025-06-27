@@ -245,7 +245,7 @@ describe('Release event handler', () => {
     ])
     prisonerService.getActiveHdcStatus.mockResolvedValue(null)
 
-    expect(async () => {
+    await expect(async () => {
       await handler.handle(event)
     }).rejects.toThrowError('Multiple approved licences found, unable to automatically activate')
   })

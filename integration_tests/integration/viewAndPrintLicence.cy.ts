@@ -20,7 +20,12 @@ context('View and print licence', () => {
     cy.task('searchPrisonersByReleaseDate')
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubGetStaffDetailsByStaffCode')
-    cy.task('stubGetCompletedLicence', { statusCode: 'APPROVED', typeCode: 'AP_PSS' })
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'APPROVED',
+      typeCode: 'AP_PSS',
+      electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
+      electronicMonitoringProviderStatus: 'COMPLETE',
+    })
     cy.task('stubGetHdcStatus')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetPrisons')
@@ -198,5 +203,37 @@ context('View and print licence', () => {
         .enterTime(moment())
         .clickContinueToReturn()
     })
+  })
+
+  it('should populate electronic monitoring additional information', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
+    const comDetails = viewCasesList.clickComDetails()
+    viewCasesList = comDetails.clickReturn()
+    viewCasesList.clickFutureReleasesTab()
+    const viewLicencePage = viewCasesList.clickALicence()
+    viewLicencePage.checkElectronicMonitoringAdditionalInformationExists()
+  })
+
+  it('should not populate electronic monitoring additional information', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'APPROVED',
+      typeCode: 'AP_PSS',
+    })
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
+    const comDetails = viewCasesList.clickComDetails()
+    viewCasesList = comDetails.clickReturn()
+    viewCasesList.clickFutureReleasesTab()
+    const viewLicencePage = viewCasesList.clickALicence()
+    viewLicencePage.checkIfElectronicMonitoringAdditionalInformationDoesNotExist()
   })
 })

@@ -43,10 +43,12 @@ import type {
   TeamCaseloadRequest,
   HdcLicenceData,
   OverrideLicenceTypeRequest,
-  PromptComNotification,
   OverrideLicencePrisonerDetailsRequest,
   VaryApproverCaseloadSearchRequest,
   VaryApproverCase,
+  PrisonCaseAdminSearchResult,
+  PrisonUserSearchRequest,
+  UpdateElectronicMonitoringProgrammeRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -422,10 +424,6 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/refer-variation`, data: request }, { username: user?.username })
   }
 
-  async getComsToPrompt(): Promise<PromptComNotification[]> {
-    return (await this.get({ path: `/coms-to-prompt` })) as Promise<PromptComNotification[]>
-  }
-
   async matchLicenceEvents(
     licenceId: string,
     eventTypes: string[] = [],
@@ -449,7 +447,7 @@ export default class LicenceApiClient extends RestClient {
 
   async getLicencePolicyForVersion(version: string): Promise<LicencePolicyResponse> {
     try {
-      return this.get({ path: `/licence-policy/version/${version}` }) as Promise<LicencePolicyResponse>
+      return (await this.get({ path: `/licence-policy/version/${version}` })) as Promise<LicencePolicyResponse>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
     }
@@ -457,14 +455,14 @@ export default class LicenceApiClient extends RestClient {
 
   async getActiveLicencePolicy(): Promise<LicencePolicyResponse> {
     try {
-      return this.get({ path: `/licence-policy/active` }) as Promise<LicencePolicyResponse>
+      return (await this.get({ path: `/licence-policy/active` })) as Promise<LicencePolicyResponse>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
     }
   }
 
   async getPolicyChanges(licenceId: string, activePolicyVersion: string): Promise<LicenceConditionChange[]> {
-    return this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` }) as Promise<
+    return (await this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` })) as Promise<
       LicenceConditionChange[]
     >
   }
@@ -688,5 +686,18 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({
       path: `/offender/nomisid/${nomisId}/is-91-status`,
     })) as Promise<boolean>
+  }
+
+  async searchForOffenderOnPrisonCaseAdminCaseload(
+    searchRequest: PrisonUserSearchRequest,
+  ): Promise<PrisonCaseAdminSearchResult> {
+    return (await this.post({
+      path: `/caseload/case-admin/case-search`,
+      data: searchRequest,
+    })) as Promise<PrisonCaseAdminSearchResult>
+  }
+
+  async updateElectronicMonitoringProgramme(licenceId: number, request: UpdateElectronicMonitoringProgrammeRequest) {
+    await this.post({ path: `/licence/id/${licenceId}/electronic-monitoring-programmes`, data: request })
   }
 }

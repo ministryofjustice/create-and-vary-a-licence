@@ -9,7 +9,12 @@ import policyV2_1 from './polices/v2-1'
 // eslint-disable-next-line camelcase
 import policyV3_0 from './polices/v3-0'
 import LicenceCreationType from '../../server/enumeration/licenceCreationType'
-import { AdditionalCondition, Licence, LicencePolicyResponse } from '../../server/@types/licenceApiClientTypes'
+import {
+  AdditionalCondition,
+  ElectronicMonitoringProvider,
+  Licence,
+  LicencePolicyResponse,
+} from '../../server/@types/licenceApiClientTypes'
 
 const ACTIVE_POLICY_VERSION = '3.0'
 
@@ -178,7 +183,9 @@ export default {
     })
   },
 
-  stubGetLicence: (): SuperAgentRequest => {
+  stubGetLicence: (options: {
+    electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -187,7 +194,10 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: licencePlaceholder,
+        jsonBody: {
+          ...licencePlaceholder,
+          electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
+        },
       },
     })
   },
@@ -409,6 +419,8 @@ export default {
     homeDetentionCurfewEndDate: string | null
     kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
     conditions: AdditionalCondition[]
+    electronicMonitoringProvider?: ElectronicMonitoringProvider
+    electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -614,6 +626,8 @@ export default {
               readyToSubmit: true,
             },
           ],
+          electronicMonitoringProvider: options.electronicMonitoringProvider,
+          electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
         },
       },
     })
@@ -1689,6 +1703,11 @@ export default {
           ...licencePlaceholder,
           statusCode: 'APPROVED',
           isInHardStopPeriod: true,
+          electronicMonitoringProvider: {
+            isToBeTaggedForProgramme: true,
+            programmeName: 'Programme Name',
+          },
+          electronicMonitoringProviderStatus: 'COMPLETE',
         },
       },
     })
@@ -2364,6 +2383,43 @@ export default {
             probationPractitioner: 'jsmith',
           },
         ],
+      },
+    })
+  },
+  stubGetCaSearchResults: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          inPrisonResults: [
+            {
+              kind: 'CRD',
+              licenceId: 1,
+              name: 'Test Person 1',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: '01/07/2025',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'APPROVED',
+              tabType: 'FUTURE_RELEASES',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'BAI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+          ],
+          onProbationResults: [],
+        },
       },
     })
   },

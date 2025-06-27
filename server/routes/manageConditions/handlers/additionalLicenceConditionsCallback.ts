@@ -34,6 +34,11 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
         }),
       )
     }
+    if (licence.electronicMonitoringProviderStatus === 'NOT_STARTED') {
+      return res.redirect(
+        `/licence/create/id/${licenceId}/add-pathfinder${req.query?.fromReview ? '?fromReview=true' : ''}`,
+      )
+    }
 
     if (req.query?.fromReview) {
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)

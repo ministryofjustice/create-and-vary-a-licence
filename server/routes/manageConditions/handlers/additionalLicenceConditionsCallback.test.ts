@@ -160,10 +160,101 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/bespoke-conditions-question`)
     })
 
-    it('should redirect to the check answers page fromReview flag is true', async () => {
+    it('should redirect to the check answers page', async () => {
       req.query.fromReview = 'true'
+      res.locals.licence = {
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: 'code1',
+            data: [],
+            sequence: 1,
+          },
+        ],
+        electronicMonitoringProviderStatus: 'NOT_NEEDED',
+      } as Licence
+      conditionsProviderSpy.mockResolvedValueOnce({
+        text: 'Condition 1',
+        requiresInput: false,
+        code: 'CON1',
+        category: 'group1',
+      })
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/check-your-answers`)
+    })
+
+    it('should redirect to the bespoke conditions questions page', async () => {
+      req.query.fromReview = 'false'
+      res.locals.licence = {
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: 'code1',
+            data: [],
+            sequence: 1,
+          },
+        ],
+        electronicMonitoringProviderStatus: 'COMPLETE',
+      } as Licence
+      conditionsProviderSpy.mockResolvedValueOnce({
+        text: 'Condition 1',
+        requiresInput: false,
+        code: 'CON1',
+        category: 'group1',
+      })
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/check-your-answers`)
+    })
+
+    it('should redirect to the add path finder page with fromReview flag set', async () => {
+      req.query.fromReview = 'true'
+      res.locals.licence = {
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: 'code1',
+            data: [],
+            sequence: 1,
+          },
+        ],
+        electronicMonitoringProviderStatus: 'NOT_STARTED',
+      } as Licence
+
+      conditionsProviderSpy.mockResolvedValueOnce({
+        text: 'Condition 1',
+        requiresInput: false,
+        code: 'CON1',
+        category: 'group1',
+      })
+
+      await handler.GET(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/add-pathfinder?fromReview=true`)
+    })
+
+    it('should redirect to the add path finder page with out fromReview flag set', async () => {
+      res.locals.licence = {
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: 'code1',
+            data: [],
+            sequence: 1,
+          },
+        ],
+        electronicMonitoringProviderStatus: 'NOT_STARTED',
+      } as Licence
+
+      conditionsProviderSpy.mockResolvedValueOnce({
+        text: 'Condition 1',
+        requiresInput: false,
+        code: 'CON1',
+        category: 'group1',
+      })
+
+      await handler.GET(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/add-pathfinder`)
     })
   })
 })

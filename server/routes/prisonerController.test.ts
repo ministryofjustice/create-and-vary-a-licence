@@ -28,7 +28,7 @@ describe('GET /prisoners/prisonNumber/image', () => {
     return request(app)
       .get('/prisoner/A12345/image')
       .expect('Content-Type', 'image/jpeg')
-      .expect(res => {
+      .expect(_res => {
         expect(prisonerService.getPrisonerImage).toHaveBeenCalledWith('A12345', user)
       })
   })

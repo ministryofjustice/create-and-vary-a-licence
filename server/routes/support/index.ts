@@ -22,11 +22,12 @@ import OffenderLicenceTypeRoutes from './handlers/offenderLicenceType'
 import ProbationTeamRoutes from './handlers/probationTeam'
 import ProbationUserRoutes from './handlers/probationStaff'
 import ComDetailsRoutes from './handlers/comDetails'
-import PromptCasesRoutes from './handlers/promptCases'
 import LicenceTypeChange from './types/licenceTypeChange'
 import LicencePrisonerDetails from './types/licencePrisonerDetails'
 import LicencePrisonerDetailsRoutes from './handlers/licencePrisonerDetails'
 import AuditDetailsRoutes from './handlers/auditDetails'
+import VaryApproverPduCaseloadHandler from './handlers/VaryApproverPduCaseloadHandler'
+import VaryApproverRegionCaseloadHandler from './handlers/VaryApproverRegionCaseloadHandler'
 
 export default function Index({
   probationService,
@@ -36,7 +37,7 @@ export default function Index({
   conditionService,
   licenceOverrideService,
   comCaseloadService,
-  licenceApiClient,
+  varyApproverCaseloadService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -63,12 +64,18 @@ export default function Index({
   const probationTeamHandler = new ProbationTeamRoutes(comCaseloadService)
   const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, probationService)
   const comDetailsHandler = new ComDetailsRoutes(probationService)
-  const promptCasesHandler = new PromptCasesRoutes(licenceApiClient)
   const licencePrisonerDetailsHandler = new LicencePrisonerDetailsRoutes(licenceService, licenceOverrideService)
   const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
+  const varyApproverPduCaseloadHandler = new VaryApproverPduCaseloadHandler(
+    probationService,
+    varyApproverCaseloadService,
+  )
+  const varyApproverRegionCaseloadHandler = new VaryApproverRegionCaseloadHandler(
+    probationService,
+    varyApproverCaseloadService,
+  )
 
   get('/', supportHomeHandler.GET)
-  get('/prompt-cases', promptCasesHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
   get('/manage-omu-email-address/:prisonId', manageOmuEmailAddressHandler.GET_IN_CONTEXT)
   post('/manage-omu-email-address/add-or-edit', manageOmuEmailAddressHandler.ADD_OR_EDIT, prisonIdAndEmail)
@@ -110,5 +117,8 @@ export default function Index({
     )
   }
 
+  // get vary approver case load by pdu and region
+  get('/variation-approver/cases/by-pdu', varyApproverPduCaseloadHandler.GET)
+  get('/variation-approver/cases/by-region', varyApproverRegionCaseloadHandler.GET)
   return router
 }

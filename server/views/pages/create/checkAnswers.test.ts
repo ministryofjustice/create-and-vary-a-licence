@@ -92,6 +92,7 @@ describe('Create a Licence Views - Check Answers', () => {
       },
     ],
     bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
+    electronicMonitoringProviderStatus: 'NOT_NEEDED',
   } as Licence
 
   it('should display additional licence conditions section if licence type is AP', () => {
