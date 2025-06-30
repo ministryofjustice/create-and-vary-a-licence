@@ -17,7 +17,13 @@ window.onload = function () {
 
 function caseInsensitiveHighlighting(html, searchTerm) {
   const reg = new RegExp(searchTerm, 'gi')
-  return html.replace(reg, function (str) {
-    return `<mark>${str}</mark>`
-  })
+  // avoid changing searchTerm within href content
+  if (
+    !html.match(`/licence/create/nomisId/${searchTerm}/confirm`) &&
+    !html.match(`/licence/create/nomisId/${searchTerm}/prison-will-create-this-licence`)
+  ) {
+    return html.replace(reg, function (str) {
+      return `<mark>${str}</mark>`
+    })
+  } else return html
 }
