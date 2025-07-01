@@ -37,7 +37,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
                 key: { text: "Address" },
-                value: { text: licence.appointmentAddress | formatAddress },
+                value: { text: licence.appointmentAddress | formatAddress if licence.appointmentAddress else "Not yet entered" },
                 actions: {
                     items: [
                         {
@@ -52,7 +52,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentContact'),
                 key: { text: "Contact phone number" },
-                value: { text: licence.appointmentContact },
+                value: { text: licence.appointmentContact if licence.appointmentContact else "Not yet entered" },
                 actions: {
                     items: [
                         {
