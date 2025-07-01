@@ -37,7 +37,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
                 key: { text: "Address" },
-                value: { text: licence.appointmentAddress | formatAddress },
+                value: { text: licence.appointmentAddress | formatAddress if licence.appointmentAddress else "Not yet entered" },
                 actions: {
                     items: [
                         {
@@ -52,7 +52,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentContact'),
                 key: { text: "Contact phone number" },
-                value: { text: licence.appointmentContact },
+                value: { text: licence.appointmentContact if licence.appointmentContact else "Not yet entered" },
                 actions: {
                     items: [
                         {
@@ -82,7 +82,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Date" },
-                value: { text: licence.appointmentTime | datetimeToDateShort if apptDateTimeEntered else "Not yet entered" },
+                value: { text: licence.appointmentTime | datetimeToDateShort if apptDateTimeEntered else "Not working time 2" },
                 actions: {
                     items: [
                         {
@@ -97,7 +97,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Time" },
-                value: { text: licence.appointmentTime | datetimeTo12HourTime if apptDateTimeEntered else "Not yet entered" },
+                value: { text: licence.appointmentTime | datetimeTo12HourTime if apptDateTimeEntered else "Not working time 3" },
                 actions: {
                     items: [
                         {

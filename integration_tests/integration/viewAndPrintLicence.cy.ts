@@ -175,7 +175,7 @@ context('View and print licence', () => {
     })
     viewCasesList.getRow(0).contains('Active')
     viewCasesList.clickLinkWithDataQa('prison-view-link')
-    cy.get('[data-qa=no-match-message]').contains('There are no licences which match the search criteria.')
+    cy.get('[data-qa=no-match-message]').contains('No licences to display')
   })
 
   it('should allow prison CAs to change initial appointment information in the hard-stop window', () => {
