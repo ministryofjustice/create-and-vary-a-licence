@@ -13,7 +13,7 @@
             {% set yesNo = 'Not yet entered' %}
         {% endif %}
 
-        {% set pathfinderResponses = yesNo + "<br><br>" + pathfinderName %}
+        {% set pathfinderResponses = "<p>" + yesNo + "</p><p>" + pathfinderName + "</p>" %}
 
         <div id="electronicMonitoringProvider-isToBeTaggedForProgramme" class="{% if error %} urgent-highlight {% endif %}">
             <h2 class="govuk-heading-m">Additional information</h2>
@@ -27,7 +27,7 @@
                 govukSummaryList({
                     attributes: { id: "additionalInformationSummaryList" },
                     rows: [{
-                        key: { text: "Are they being tagged as a part of a pathfinder or programme?" },
+                        key: { text: "Are they being tagged as part of a pathfinder or programme?" },
                         value: { html: pathfinderResponses },
                         actions: {
                             items: [
