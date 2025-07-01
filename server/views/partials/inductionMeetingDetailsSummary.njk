@@ -82,7 +82,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Date" },
-                value: { text: licence.appointmentTime | datetimeToDateShort if apptDateTimeEntered else "Not working time 2" },
+                value: { text: licence.appointmentTime | datetimeToDateShort if apptDateTimeEntered else "Not yet entered" },
                 actions: {
                     items: [
                         {
@@ -97,7 +97,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Time" },
-                value: { text: licence.appointmentTime | datetimeTo12HourTime if apptDateTimeEntered else "Not working time 3" },
+                value: { text: licence.appointmentTime | datetimeTo12HourTime if apptDateTimeEntered else "Not yet entered" },
                 actions: {
                     items: [
                         {

@@ -36,7 +36,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
                 key: { text: "Address" },
-                value: { text: licence.appointmentAddress | formatAddress if licence.appointmentAddress else "Not working time hardstop 3" },
+                value: { text: licence.appointmentAddress | formatAddress if licence.appointmentAddress else "Not yet entered" },
                 actions: {
                     items: [
                         {
@@ -66,7 +66,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTimeType'),
                 key: { text: "Date/time" },
-                value: { text: licence.appointmentTimeType | getAppointmentTimeTypeDescription if apptDateTimeEntered else "Not working time hardstop" },
+                value: { text: licence.appointmentTimeType | getAppointmentTimeTypeDescription if apptDateTimeEntered else "Not yet entered" },
                 actions: {
                     items: [
                         {
@@ -81,7 +81,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Date" },
-                value: { text: licence.appointmentTime | datetimeToDateShort if apptDateTimeEntered else "Not working time hardstop 2" },
+                value: { text: licence.appointmentTime | datetimeToDateShort if apptDateTimeEntered else "Not yet entered" },
                 actions: {
                     items: [
                         {
