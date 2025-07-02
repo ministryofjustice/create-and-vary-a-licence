@@ -49,7 +49,6 @@ export REDIS_HOST=localhost
 export AWS_ACCESS_KEY_ID=foo
 export AWS_SECRET_ACCESS_KEY=bar
 export SERVICE_NAME=create-and-vary-a-licence
-export APPLICATIONINSIGHTS_CONNECTION_STRING='InstrumentationKey=?;IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/'
 
 # Write to .env grouped by value type
 cat <<EOF > $fileToAddVars
@@ -91,7 +90,6 @@ cat <<EOF > $fileToAddVars
   AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
   AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   SERVICE_NAME=$SERVICE_NAME
-  APPLICATIONINSIGHTS_CONNECTION_STRING=$APPLICATIONINSIGHTS_CONNECTION_STRING
 EOF
 
 echo ".env file created successfully."
