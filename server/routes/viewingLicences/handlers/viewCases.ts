@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import { format } from 'date-fns/format'
 import statusConfig from '../../../licences/licenceStatus'
-import { CaViewCasesTab, parseCvlDate } from '../../../utils/utils'
+import { parseCvlDate } from '../../../utils/utils'
 import PrisonerService from '../../../services/prisonerService'
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
-import LicenceStatus from '../../../enumeration/licenceStatus'
-import LicenceKind from '../../../enumeration/LicenceKind'
+import { LicenceStatus, LicenceKind, CaViewCasesTab } from '../../../enumeration'
+
 import { CaCase } from '../../../@types/licenceApiClientTypes'
 
 export default class ViewAndPrintCaseRoutes {

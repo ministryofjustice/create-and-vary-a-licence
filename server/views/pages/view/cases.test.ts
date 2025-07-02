@@ -1,8 +1,7 @@
 import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import statusConfig from '../../../licences/licenceStatus'
-import { CaViewCasesTab } from '../../../utils/utils'
-import LicenceKind from '../../../enumeration/LicenceKind'
+import { CaViewCasesTab, LicenceKind } from '../../../enumeration'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/view/cases.njk').toString())
 
