@@ -1,27 +1,12 @@
 import moment from 'moment'
-import { isBefore, parse, isValid, startOfDay, format } from 'date-fns'
+import { parse, format } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
-import type {
-  CvlFields,
-  CvlPrisoner,
-  HdcLicence,
-  HdcVariationLicence,
-  Licence,
-  LicenceSummary,
-  VariationLicence,
-} from '../@types/licenceApiClientTypes'
+import type { HdcLicence, HdcVariationLicence, Licence, VariationLicence } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
-import LicenceStatus from '../enumeration/licenceStatus'
-
-export enum CaViewCasesTab {
-  RELEASES_IN_NEXT_TWO_WORKING_DAYS = 'releasesInNextTwoWorkingDays',
-  FUTURE_RELEASES = 'futureReleases',
-  ATTENTION_NEEDED = 'attentionNeeded',
-}
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -201,48 +186,6 @@ const formatAddress = (address?: string) => {
 const licenceIsTwoDaysToRelease = (licence: Licence) =>
   moment(licence.licenceStartDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
 
-const selectReleaseDate = (nomisRecord: CvlPrisoner) => {
-  const dateString = nomisRecord.confirmedReleaseDate || nomisRecord.conditionalReleaseDate
-
-  if (!dateString) {
-    return null
-  }
-
-  const date = parseIsoDate(dateString)
-  return isValid(date) ? date : null
-}
-
-const isAttentionNeeded = (status: LicenceStatus, licenceStartDate: Date, releaseDate: Date) => {
-  const today = startOfDay(new Date())
-
-  const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
-  const noReleaseDates = !releaseDate
-
-  const missingDates = [APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED].includes(status) && noReleaseDates
-  const startDateInPast = licenceStartDate && status === APPROVED && isBefore(licenceStartDate, today)
-
-  return missingDates || startDateInPast
-}
-
-const determineCaViewCasesTab = (
-  nomisRecord: CvlPrisoner,
-  cvlFields: CvlFields,
-  licence?: LicenceSummary,
-): CaViewCasesTab => {
-  const releaseDate = parseCvlDate(licence?.licenceStartDate) || selectReleaseDate(nomisRecord)
-
-  if (
-    licence &&
-    isAttentionNeeded(<LicenceStatus>licence.licenceStatus, parseCvlDate(licence.licenceStartDate), releaseDate)
-  ) {
-    return CaViewCasesTab.ATTENTION_NEEDED
-  }
-  const { isDueToBeReleasedInTheNextTwoWorkingDays } = licence || cvlFields
-  return isDueToBeReleasedInTheNextTwoWorkingDays
-    ? CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS
-    : CaViewCasesTab.FUTURE_RELEASES
-}
-
 const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], keyField: K): T[][] => {
   const results = arr.reduce(
     (acc, c) => {
@@ -295,11 +238,8 @@ export {
   objectIsEmpty,
   formatAddress,
   licenceIsTwoDaysToRelease,
-  selectReleaseDate,
   groupingBy,
   isInHardStopPeriod,
-  isAttentionNeeded,
-  determineCaViewCasesTab,
   toIsoDate,
   isVariation,
   isHdcLicence,
