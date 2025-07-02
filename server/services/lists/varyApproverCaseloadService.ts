@@ -11,7 +11,6 @@ import LicenceKind from '../../enumeration/LicenceKind'
 import { convertToTitleCase, parseCvlDate, parseCvlDateTime } from '../../utils/utils'
 import { nameToString } from '../../data/deliusClient'
 import { DeliusRecord } from '../../@types/deliusClientTypes'
-import config from '../../config'
 import { LicenceApiClient } from '../../data'
 
 type Licence = {
@@ -43,20 +42,25 @@ type AcoCase = {
   cvlFields: CvlFields
 }
 
-export default class AcoCaseloadService {
+export default class VaryApproverCaseloadService {
   constructor(
     private readonly probationService: ProbationService,
     private readonly licenceApiClient: LicenceApiClient,
     private readonly licenceService: LicenceService,
   ) {}
 
-  async getVaryApproverCaseload(user: User, searchTerm: string): Promise<VaryApproverCase[]> {
-    const { getAcoCaseloadFromBackEnd } = config
+  async getVaryApproverCaseload(
+    user: User,
+    searchTerm: string,
+    getAcoCaseloadFromBackEnd: boolean,
+  ): Promise<VaryApproverCase[]> {
     if (getAcoCaseloadFromBackEnd) {
-      return this.licenceApiClient.getVaryApproverCaseload({
-        probationPduCodes: user.probationPduCodes,
-        searchTerm,
-      })
+      return (
+        await this.licenceApiClient.getVaryApproverCaseload({
+          probationPduCodes: user.probationPduCodes,
+          searchTerm,
+        })
+      ).map(this.mapToCaseView)
     }
     return this.licenceService
       .getLicencesForVariationApproval(user)
@@ -67,13 +71,18 @@ export default class AcoCaseloadService {
       .then(caseload => caseload.sort((a, b) => this.sortByReleaseDate(a, b)))
   }
 
-  async getVaryApproverCaseloadByRegion(user: User, searchTerm: string): Promise<VaryApproverCase[]> {
-    const { getAcoCaseloadFromBackEnd } = config
+  async getVaryApproverCaseloadByRegion(
+    user: User,
+    searchTerm: string,
+    getAcoCaseloadFromBackEnd: boolean,
+  ): Promise<VaryApproverCase[]> {
     if (getAcoCaseloadFromBackEnd) {
-      return this.licenceApiClient.getVaryApproverCaseload({
-        probationAreaCode: user.probationAreaCode,
-        searchTerm,
-      })
+      return (
+        await this.licenceApiClient.getVaryApproverCaseload({
+          probationAreaCode: user.probationAreaCode,
+          searchTerm,
+        })
+      ).map(this.mapToCaseView)
     }
 
     return this.licenceService
@@ -212,5 +221,13 @@ export default class AcoCaseloadService {
     const releaseDate1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
     const releaseDate2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
     return releaseDate1 - releaseDate2
+  }
+
+  private mapToCaseView(aCase: VaryApproverCase) {
+    return {
+      ...aCase,
+      releaseDate: format(parseCvlDate(aCase.releaseDate), 'dd MMM yyyy'),
+      variationRequestDate: format(parseCvlDate(aCase.variationRequestDate), 'dd MMMM yyyy'),
+    }
   }
 }

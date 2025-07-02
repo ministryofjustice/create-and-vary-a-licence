@@ -66,3 +66,8 @@ export type TeamCaseloadRequest = components['schemas']['TeamCaseloadRequest']
 export type HdcLicenceData = components['schemas']['HdcLicenceData']
 export type VaryApproverCaseloadSearchRequest = components['schemas']['VaryApproverCaseloadSearchRequest']
 export type VaryApproverCase = components['schemas']['VaryApproverCase']
+export type ElectronicMonitoringProvider = components['schemas']['ElectronicMonitoringProvider']
+export type PrisonUserSearchRequest = components['schemas']['PrisonUserSearchRequest']
+export type PrisonCaseAdminSearchResult = components['schemas']['PrisonCaseAdminSearchResult']
+export type UpdateElectronicMonitoringProgrammeRequest =
+  components['schemas']['UpdateElectronicMonitoringProgrammeRequest']

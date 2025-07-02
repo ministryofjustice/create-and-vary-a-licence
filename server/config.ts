@@ -330,4 +330,5 @@ export default {
   hdcLicenceCreationBlockEnabled: get('HDC_LICENCE_CREATION_BLOCK', 'false', requiredInProduction) === 'true',
   getAcoCaseloadFromBackEnd: get('ACO_CASELOAD_BACKEND_ENABLED', 'false', requiredInProduction) === 'true',
   caNewSearchEnabled: get('CA_NEW_SEARCH_ENABLED', 'false', requiredInProduction) === 'true',
+  dprReportingEnabled: get('SHOW_DPR_REPORTING', 'false', requiredInProduction) === 'true',
 }

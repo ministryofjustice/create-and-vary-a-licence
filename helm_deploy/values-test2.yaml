@@ -38,9 +38,11 @@ generic-service:
     HDC_INTEGRATION_MVP2_ENABLED: 'false'
     HDC_LICENCE_CREATION_BLOCK: 'true'
     CA_NEW_SEARCH_ENABLED: 'false'
+    SHOW_DPR_REPORTING: "false"
 
   scheduledDowntime:
     enabled: true
+    businessHoursOnly: true
 
 gotenberg:
   replicaCount: 1
@@ -52,6 +54,7 @@ gotenberg:
 
   scheduledDowntime:
     enabled: true
+    businessHoursOnly: true
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts-non-prod

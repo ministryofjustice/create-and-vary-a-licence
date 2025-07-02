@@ -1,49 +1,295 @@
 {% extends "layout.njk" %}
 
+{% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "partials/statusBadge.njk" import statusBadge %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
 
 {% set pageTitle = applicationName + " - Case Admin - Search" %}
 {% set pageId = "ca-search-page" %}
 {% set backLinkHref = backLink %}
 {% set noJsBackLink = true %}
 
-{% macro displayResults(tabId, countText, setPeopleInPrisonTab) %}
-    <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            {% if setPeopleInPrisonTab %}
-                <p id="people-in-prison-empty-state-content">You can see licences for people in prison in this service if they:</p>
-                <ul class = "govuk-list govuk-list--bullet">
-                    <li>are within 4 weeks of release or if a probation practitioner has started work on their licence before then</li>
-                    <li>are serving a determinate sentence in a prison you work in</li>
-                    <li>have a release date</li>
-                    <li>have not been approved for Home Detention Curfew</li>
-            {% else %}
-                <p id="people-on-probation-empty-state-content">You can see licences for people on probation in this service if they:</p>
-                <ul class = "govuk-list govuk-list--bullet">
-                    <li>served a determinate sentence in a prison you work in</li>
-                    <li>were not released on Home Detention Curfew</li>
-                    <li>were not released from prison with a licence created using NOMIS</li>
-            {% endif %}
-                    <li>have not been recalled or breached a top up supervision order</li>
-                </ul>
-            <p>If you think someone’s licence is missing, tell us by <a id="serviceNowUrl" class="govuk-link" href="{{serviceNowUrl}}">filling in a support request form.</a></p>
-            <p class="govuk-body">
-                {{ govukButton({
-                    text: "Return to caselist",
-                    classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
-                    href: backLink,
-                    attributes: { 'data-qa': 'return-to-caselist' }
-                }) }}
-            </p>
-        </div>
+{% set peopleInPrisonResults = [] %}
+{% set peopleOnProbationResults = [] %}
+
+{% macro offenderName(offenderName, link, index) %}
+    <div class="search-offender-name">
+        {% if link %}
+            <a id="name-button-{{ index }}"  href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
+        {% else %}
+            <span id="name-button-{{ index }}" class="govuk-heading-s">{{ offenderName }}</span>
+        {% endif %}
     </div>
 {% endmacro %}
+
+{% macro displayResults(tableHeadings, results, tabId, countText, isOnPrisonTab) %}
+    <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
+    {% if results.length == 0 %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {% if isOnPrisonTab %}
+                    <p id="people-in-prison-empty-state-content">You can see licences for people in prison in this service if they:</p>
+                    <ul class = "govuk-list govuk-list--bullet">
+                        <li>are within 4 weeks of release or if a probation practitioner has started work on their licence before then</li>
+                        <li>are serving a determinate sentence in a prison you work in</li>
+                        <li>have a release date</li>
+                        <li>have not been approved for Home Detention Curfew</li>
+                {% else %}
+                    <p id="people-on-probation-empty-state-content">You can see licences for people on probation in this service if they:</p>
+                    <ul class = "govuk-list govuk-list--bullet">
+                        <li>served a determinate sentence in a prison you work in</li>
+                        <li>were not released on Home Detention Curfew</li>
+                        <li>were not released from prison with a licence created using NOMIS</li>
+                {% endif %}
+                        <li>have not been recalled or breached a top up supervision order</li>
+                    </ul>
+                <p>If you think someone’s licence is missing, tell us by <a id="serviceNowUrl" class="govuk-link" href="{{serviceNowUrl}}">filling in a support request form.</a></p>
+                <p class="govuk-body">
+                    {{ govukButton({
+                        text: "Return to caselist",
+                        classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                        href: backLink,
+                        attributes: { 'data-qa': 'return-to-caselist' }
+                    }) }}
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <form method="GET">
+            {{ govukTable({
+                attributes: {
+                    'data-module': 'moj-sortable-table',
+                    'id': 'searchResults'
+                },
+                caption: caption,
+                captionClasses: "govuk-visually-hidden",
+                head: tableHeadings,
+                rows: results
+            }) }}
+        </form>
+    {% endif %}
+{% endmacro %}
+
+{% set searchTableHeadings = [
+    {
+        text: "Name",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Prison number",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Probation practitioner",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Release date",
+        attributes: {
+            "aria-sort": "ascending"
+        }
+    },
+    {
+        text: "Last worked on by",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Status",
+        attributes: {
+            "aria-sort": "none"
+        }
+    }
+] %}
+
+{% if worksAtMoreThanOnePrison %}
+    {% set searchTableHeadings = (searchTableHeadings.splice(3, 0, {
+                text: "Location",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            }
+    ), searchTableHeadings) %}
+{% endif %}
+
+{% for offender in inPrisonResults %}
+    {% if offender.probationPractitioner.staffCode and offender.probationPractitioner.name%}
+        {% set comDetailsHtml = '<a class="govuk-link" data-qa="comLink" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
+    {% else %}
+        {% set comDetailsHtml = 'Unallocated' %}
+    {% endif %}
+
+    {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort
+            + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+    {% elseif offender.isDueForEarlyRelease %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
+    {% elseif offender | shouldShowHardStopWarning %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
+    {% else %}
+        {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
+    {% endif %}
+
+    {% set result = [
+    {
+        attributes: {
+            id: 'name-' + loop.index,
+            "data-sort-value": offender.name
+        },
+        html: offenderName(offender.name, offender.link, loop.index)
+    },
+    {
+        attributes: {
+            id: 'nomis-id-' + loop.index,
+            "data-sort-value": offender.prisonerNumber
+        },
+        text: offender.prisonerNumber
+    },
+    {
+        attributes: {
+            id: 'probation-practitioner-' + loop.index,
+            "data-sort-value": offender.comName
+        },
+        html: comDetailsHtml
+    },
+    {
+        attributes: {
+            id: 'release-date-' + loop.index,
+            "data-sort-value": offender.releaseDate | dateToUnix
+        },
+        html: releaseDate
+    },
+    {
+        attributes: {
+            id: 'licence-last-worked-on-by-' + loop.index,
+            "data-sort-value": case.lastWorkedOnBy
+        },
+        text: offender.lastWorkedOnBy
+    },
+    {
+        attributes: {
+            id: 'licence-status-' + loop.index,
+            "data-sort-value": offender.licenceStatus | getStatusOrder
+        },
+        html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig)
+    }
+    ] %}
+
+    {% if worksAtMoreThanOnePrison %}
+        {% set result = (result.splice(3, 0,
+            {
+                attributes: {
+                    id: 'location-' + loop.index,
+                    "data-sort-value": offender.prisonDescription
+                },
+                text: offender.prisonDescription
+            }
+        ), result) %}
+    {% endif %}
+
+    {% set peopleInPrisonResults = (peopleInPrisonResults.push(result), peopleInPrisonResults) %}
+
+{% endfor %}
+
+{% for offender in onProbationResults %}
+    {% if offender.probationPractitioner.staffCode or case.probationPractitioner.name%}
+        {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
+    {% else %}
+        {% set comDetailsHtml = 'Unallocated' %}
+    {% endif %}
+
+    {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort
+            + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+    {% elseif offender.isDueForEarlyRelease %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
+    {% elseif offender | shouldShowHardStopWarning %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
+    {% else %}
+        {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
+    {% endif %}
+
+    {% set result = [
+    {
+        attributes: {
+            id: 'name-' + loop.index,
+            "data-sort-value": offender.name
+        },
+        html: offenderName(offender.name, offender.link, loop.index)
+    },
+    {
+        attributes: {
+            id: 'nomis-id-' + loop.index,
+            "data-sort-value": offender.prisonerNumber
+        },
+        text: offender.prisonerNumber
+    },
+    {
+        attributes: {
+            id: 'probation-practitioner-' + loop.index,
+            "data-sort-value": offender.comName
+        },
+        html: comDetailsHtml
+    },
+    {
+        attributes: {
+            id: 'release-date-' + loop.index,
+            "data-sort-value": offender.releaseDate | dateToUnix
+        },
+        html: releaseDate
+    },
+    {
+        attributes: {
+            id: 'licence-last-worked-on-by-' + loop.index,
+            "data-sort-value": case.lastWorkedOnBy
+        },
+        text: offender.lastWorkedOnBy
+    },
+    {
+        attributes: {
+            id: 'licence-status-' + loop.index,
+            "data-sort-value": offender.licenceStatus | getStatusOrder
+        },
+        html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig)
+    }
+    ] %}
+
+    {% if worksAtMoreThanOnePrison %}
+        {% set result = (result.splice(3, 0,
+            {
+                attributes: {
+                    id: 'location-' + loop.index,
+                    "data-sort-value": offender.prisonDescription
+                },
+                text: offender.prisonDescription
+            }
+        ), result) %}
+    {% endif %}
+
+    {% set peopleOnProbationResults = (peopleOnProbationResults.push(result), peopleOnProbationResults) %}
+
+{% endfor %}
+
+{% set inPrisonCountText = "People in prison ("  + tabParameters.prison.resultsCount + tabParameters.prison.resultsCount | pluralise(" result") + ")" %}
+{% set onProbationCountText = "People on probation (" + tabParameters.probation.resultsCount + tabParameters.probation.resultsCount | pluralise(" result") + ")" %}
+
+{% set peopleInPrison = displayResults(searchTableHeadings, peopleInPrisonResults, tabParameters.prison.tabId, inPrisonCountText, true) %}
+{% set peopleOnProbation = displayResults(searchTableHeadings, peopleOnProbationResults, tabParameters.probation.tabId, onProbationCountText, false) %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <input type="hidden" id="searchTerm" value="{{ queryTerm }}">
+            <input type="hidden" id="activeTab" value="{{ tabParameters.activeTab }}">
             <h1 class="govuk-heading-xl" id="ca-search-heading">Search results for {{ queryTerm }}</h1>
         </div>
     </div>
@@ -67,24 +313,17 @@
         </div>
     </div>
 
-    {% set inPrisonCountText = "People in prison (0 results)" %}
-    {% set onProbationCountText = "People on probation (0 results)" %}
-
-    {% set peopleInPrison = displayResults(tabParameters.prison.tabId, inPrisonCountText, true) %}
-    {% set peopleOnProbation = displayResults(tabParameters.probation.tabId, onProbationCountText, false) %}
-
-
     {{ govukTabs({
         items: [
             {
-                label: "People in prison",
+                label: inPrisonCountText,
                 id: "people-in-prison",
                 panel: {
                     html: peopleInPrison
                 }
             },
             {
-                label: "People on probation",
+                label: onProbationCountText,
                 id: "people-on-probation",
                 panel: {
                     html: peopleOnProbation
@@ -93,5 +332,10 @@
         ]
     }) }}
 
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/assets/js/search/highlightSearchTerm.js"></script>
+    <script src="/assets/js/search/setActiveTab.js"></script>
 {% endblock %}
 

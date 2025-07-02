@@ -1,4 +1,7 @@
 import { RequestHandler, Router } from 'express'
+import defaultTokenProvider from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/defaultTokenProvider'
+import ReportListUtils from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils'
+import config from '../../config'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import SupportHomeRoutes from './handlers/supportHome'
 import { Services } from '../../services'
@@ -23,6 +26,8 @@ import LicenceTypeChange from './types/licenceTypeChange'
 import LicencePrisonerDetails from './types/licencePrisonerDetails'
 import LicencePrisonerDetailsRoutes from './handlers/licencePrisonerDetails'
 import AuditDetailsRoutes from './handlers/auditDetails'
+import VaryApproverPduCaseloadHandler from './handlers/VaryApproverPduCaseloadHandler'
+import VaryApproverRegionCaseloadHandler from './handlers/VaryApproverRegionCaseloadHandler'
 
 export default function Index({
   probationService,
@@ -32,6 +37,7 @@ export default function Index({
   conditionService,
   licenceOverrideService,
   comCaseloadService,
+  varyApproverCaseloadService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -60,6 +66,14 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(probationService)
   const licencePrisonerDetailsHandler = new LicencePrisonerDetailsRoutes(licenceService, licenceOverrideService)
   const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
+  const varyApproverPduCaseloadHandler = new VaryApproverPduCaseloadHandler(
+    probationService,
+    varyApproverCaseloadService,
+  )
+  const varyApproverRegionCaseloadHandler = new VaryApproverRegionCaseloadHandler(
+    probationService,
+    varyApproverCaseloadService,
+  )
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
@@ -88,5 +102,23 @@ export default function Index({
   get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
   get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
 
+  if (config.dprReportingEnabled) {
+    get(
+      '/reports/active-licences',
+      ReportListUtils.createReportListRequestHandler({
+        title: 'CVL Reports',
+        definitionName: 'dpd001-active-licences',
+        variantName: 'active_licences',
+        apiUrl: config.apis.licenceApi.url,
+        apiTimeout: config.apis.licenceApi.timeout.deadline,
+        layoutTemplate: 'partials/dprReport.njk',
+        tokenProvider: defaultTokenProvider,
+      }),
+    )
+  }
+
+  // get vary approver case load by pdu and region
+  get('/variation-approver/cases/by-pdu', varyApproverPduCaseloadHandler.GET)
+  get('/variation-approver/cases/by-region', varyApproverRegionCaseloadHandler.GET)
   return router
 }

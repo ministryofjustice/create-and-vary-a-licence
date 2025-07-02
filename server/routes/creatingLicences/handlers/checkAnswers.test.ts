@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { ValidationError } from 'class-validator'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import { Licence, OmuContact } from '../../../@types/licenceApiClientTypes'
@@ -386,6 +387,90 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/reason-for-variation')
+    })
+  })
+
+  describe('flattenValidationErrors', () => {
+    it('should return a flat array for single-level errors', () => {
+      const errors: ValidationError[] = [
+        {
+          property: 'field1',
+          constraints: { isDefined: 'Field1 is required' },
+          children: [],
+        } as ValidationError,
+        {
+          property: 'field2',
+          constraints: { isNotEmpty: 'Field2 must not be empty' },
+          children: [],
+        } as ValidationError,
+      ]
+
+      const result = handler.flattenValidationErrors(errors)
+      expect(result).toEqual([
+        { field: 'field1', message: 'Field1 is required' },
+        { field: 'field2', message: 'Field2 must not be empty' },
+      ])
+    })
+
+    it('should handle nested errors and build property path', () => {
+      const errors: ValidationError[] = [
+        {
+          property: 'parent',
+          constraints: undefined,
+          children: [
+            {
+              property: 'child',
+              constraints: { isDefined: 'Child is required' },
+              children: [],
+            } as ValidationError,
+          ],
+        } as ValidationError,
+      ]
+
+      const result = handler.flattenValidationErrors(errors)
+      expect(result).toEqual([{ field: 'parent-child', message: 'Child is required' }])
+    })
+
+    it('should handle deeply nested errors', () => {
+      const errors: ValidationError[] = [
+        {
+          property: 'level1',
+          constraints: undefined,
+          children: [
+            {
+              property: 'level2',
+              constraints: undefined,
+              children: [
+                {
+                  property: 'level3',
+                  constraints: { isDefined: 'Level3 is required' },
+                  children: [],
+                } as ValidationError,
+              ],
+            } as ValidationError,
+          ],
+        } as ValidationError,
+      ]
+
+      const result = handler.flattenValidationErrors(errors)
+      expect(result).toEqual([{ field: 'level1-level2-level3', message: 'Level3 is required' }])
+    })
+
+    it('should return an empty array if there are no errors', () => {
+      const result = handler.flattenValidationErrors([])
+      expect(result).toEqual([])
+    })
+
+    it('should skip errors without constraints or children', () => {
+      const errors: ValidationError[] = [
+        {
+          property: 'field',
+          constraints: undefined,
+          children: [],
+        } as ValidationError,
+      ]
+      const result = handler.flattenValidationErrors(errors)
+      expect(result).toEqual([])
     })
   })
 })

@@ -5,7 +5,6 @@ import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
-
 jest.mock('../../../services/searchService')
 
 describe('Route Handlers - Search - Probation Search', () => {

@@ -24,6 +24,7 @@ import type {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
+  UpdateElectronicMonitoringProgrammeRequest,
   UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
   UpdateProbationTeamRequest,
@@ -549,5 +550,15 @@ export default class LicenceService {
 
   async getIS91Status(nomsId: string): Promise<boolean> {
     return this.licenceApiClient.getIS91Status(nomsId)
+  }
+
+  async updateElectronicMonitoringProgramme(
+    licenceId: number,
+    updateElectronicMonitoringProgrammeRequest: UpdateElectronicMonitoringProgrammeRequest,
+  ): Promise<void> {
+    return this.licenceApiClient.updateElectronicMonitoringProgramme(
+      licenceId,
+      updateElectronicMonitoringProgrammeRequest,
+    )
   }
 }
