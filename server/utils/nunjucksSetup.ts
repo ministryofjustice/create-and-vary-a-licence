@@ -9,7 +9,6 @@ import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
 import type { ApplicationInfo } from '../applicationInfo'
 import {
-  CaViewCasesTab,
   formatAddress,
   jsonDtTo12HourTime,
   json24HourTimeTo12HourTime,
@@ -28,11 +27,8 @@ import {
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/initialAppointment/types/address'
-import LicenceStatus from '../enumeration/licenceStatus'
 import { getEditConditionHref } from './conditionRoutes'
-import AppointmentTimeType from '../enumeration/appointmentTimeType'
-import LegalStatus from '../enumeration/LegalStatus'
-import LicenceKind from '../enumeration/LicenceKind'
+import { LegalStatus, AppointmentTimeType, LicenceKind, CaViewCasesTab, LicenceStatus } from '../enumeration'
 
 const production = process.env.NODE_ENV === 'production'
 

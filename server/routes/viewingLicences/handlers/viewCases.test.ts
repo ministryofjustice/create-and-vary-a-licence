@@ -1,11 +1,10 @@
 import { Request, Response } from 'express'
 import ViewAndPrintCaseRoutes from './viewCases'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
-import { CaViewCasesTab } from '../../../utils/utils'
-import LicenceKind from '../../../enumeration/LicenceKind'
+import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../enumeration'
+
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import { CaCase } from '../../../@types/licenceApiClientTypes'
 
