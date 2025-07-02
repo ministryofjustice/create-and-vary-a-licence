@@ -5,6 +5,7 @@ import LicenceService from '../../../services/licenceService'
 import Address from '../types/address'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
+import config from '../../../config'
 
 jest.mock('./initialMeetingUpdatedFlashMessage')
 
@@ -49,6 +50,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
 
     licenceService.updateAppointmentAddress = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
+  })
+
+  afterEach(() => {
+    config.postcodeLookupEnabled = false
   })
 
   describe('Probation user journey', () => {
@@ -105,6 +110,13 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       it('should call to generate a flash message', async () => {
         await handler.POST(req, res)
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
+      })
+
+      it('should not call updateAppointmentAddress', async () => {
+        config.postcodeLookupEnabled = true // Mocking the config for postcode lookup
+        await handler.POST(req, res)
+        expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
+        expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalledWith()
       })
     })
   })

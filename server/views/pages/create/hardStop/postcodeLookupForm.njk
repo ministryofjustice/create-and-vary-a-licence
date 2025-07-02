@@ -1,0 +1,44 @@
+<form method="POST">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <div class="govuk-grid-row">
+        <div class="moj-search govuk-grid-column-full">
+            {% if licence.isEligibleForEarlyRelease and not licence.kind == "HDC" %}
+                {{ govukWarningText({
+                    html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href=" + fridayReleasePolicy + ">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
+                    iconFallbackText: "Warning"
+                }) }}
+            {% endif %}
+
+            {% call govukFieldset({
+                legend: {
+                    text: "Meeting place address",
+                    classes: "govuk-visually-hidden"
+                }
+            }) %}
+
+                <h1 class="govuk-heading-m govuk-!-margin-top-6">
+                    Find an address
+                </h1>
+                {{ govukInput({
+                    label: {
+                        text: "Type an address or postcode",
+                        classes: "moj-search__label govuk-!-font-weight-bold"
+                    },
+                    classes: "moj-search__input width-40",
+                    attributes: {
+                        "data-qa": "addressInput"
+                    },
+                    id: "searchQuery",
+                    name: "searchQuery",
+                    errorMessage: validationErrors | findError('searchQuery')
+                }) }}
+                <button class="govuk-button moj-search__button" data-module="govuk-button" data-qa="searchAddresses">
+                    Find address
+                </button>
+                <p class="govuk-!-margin-top-3">
+                    <a href="#" class="govuk-link govuk-!-font-size-16" data-qa="enterAddressManually">Enter address manually</a>
+                </p>
+            {% endcall %}
+        </div>
+    </div>
+</form>
