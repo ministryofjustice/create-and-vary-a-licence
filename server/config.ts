@@ -331,4 +331,5 @@ export default {
   getAcoCaseloadFromBackEnd: get('ACO_CASELOAD_BACKEND_ENABLED', 'false', requiredInProduction) === 'true',
   caNewSearchEnabled: get('CA_NEW_SEARCH_ENABLED', 'false', requiredInProduction) === 'true',
   dprReportingEnabled: get('SHOW_DPR_REPORTING', 'false', requiredInProduction) === 'true',
+  postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
 }
