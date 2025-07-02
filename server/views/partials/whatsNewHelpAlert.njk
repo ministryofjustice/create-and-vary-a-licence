@@ -5,12 +5,10 @@
     This allows the correct tag to be attached to a person leaving prison.
 {% endset %}
 
-<div class="govuk-grid-column-three-quarters govuk-!-margin-top-5">
-    {{ mojAlert({
-        variant: "information",
-        title: "What’s new",
-        showTitleAsHeading: true,
-        dismissible: false,
-        html: alertContent
-    }) }}
-</div>
+{{ mojAlert({
+    variant: "information",
+    title: "What’s new",
+    showTitleAsHeading: true,
+    dismissible: false,
+    html: alertContent
+}) }}
