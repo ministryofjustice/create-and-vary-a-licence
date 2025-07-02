@@ -93,7 +93,7 @@ These are:
 - localstack
 - gotenberg
 
-2. Copy `.env.example` to `.env` in the root of the project and customise.
+2. Copy `.env.example` to `.env` or run `create-env-file.sh` in the root of the project and customise.
    For the client ID and secrets present in the file, you will need to retrieve these values from the kubernetes dev environment.
 
 3. Run the following to start the required containers and start the local service, which will use the `.env` file to set up its environment to reference the DEV APIs.
@@ -126,8 +126,8 @@ Scripts are provided to generate these types from the development instances:
 
 `generate-delius-api-types.sh` - Re-run when Probation Integration API types change
 
-`generate-licence-api-types.sh` - Re-run when create and vary a licence API types change from dev
-`generate-licence-api-types.sh --local` - Re-run when create and vary a licence API types change from locally running API
+`generate-licence-api-types.sh` - Re-run when create and vary a CVL licence API types change from dev
+`generate-licence-api-types.sh --local` - Re-run when create and vary a CVL licence API types change from locally running API
 
 `generate-prison-api-types.sh` - Re-run when prisoner API types change
 
