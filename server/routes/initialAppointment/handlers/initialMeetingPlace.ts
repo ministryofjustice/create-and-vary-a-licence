@@ -3,6 +3,7 @@ import { stringToAddressObject } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
+import config from '../../../config'
 
 export default class InitialMeetingPlaceRoutes {
   constructor(
@@ -22,16 +23,18 @@ export default class InitialMeetingPlaceRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
-    await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
+    if (!config.postcodeLookupEnabled) {
+      await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
 
-    flashInitialApptUpdatedMessage(req, licence, this.userType)
+      flashInitialApptUpdatedMessage(req, licence, this.userType)
 
-    if (this.userType === UserType.PRISON) {
-      res.redirect(`/licence/view/id/${licenceId}/show`)
-    } else if (req.query?.fromReview) {
-      res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
-    } else {
-      res.redirect(`/licence/create/id/${licenceId}/initial-meeting-contact`)
+      if (this.userType === UserType.PRISON) {
+        res.redirect(`/licence/view/id/${licenceId}/show`)
+      } else if (req.query?.fromReview) {
+        res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
+      } else {
+        res.redirect(`/licence/create/id/${licenceId}/initial-meeting-contact`)
+      }
     }
   }
 }
