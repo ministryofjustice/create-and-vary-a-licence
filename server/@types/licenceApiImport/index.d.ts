@@ -2668,7 +2668,7 @@ export interface components {
       /**
        * @description List of Prison Ids (can include OUT and TRN) to restrict the search by. Unrestricted if not supplied or null
        * @example [
-       *       'MDI'
+       *       "MDI"
        *     ]
        */
       prisonIds?: string[]
@@ -2951,7 +2951,7 @@ export interface components {
       /**
        * @description List of prisoner numbers to search by
        * @example [
-       *       'A1234AA'
+       *       "A1234AA"
        *     ]
        */
       prisonerNumbers: string[]
@@ -3691,7 +3691,7 @@ export interface components {
       /**
        * @description The probation delivery units where the the licence is supervised
        * @example [
-       *       'N55PDV'
+       *       "N55PDV"
        *     ]
        */
       probationPduCodes?: string[]
@@ -3832,16 +3832,16 @@ export interface components {
       /**
        * @description The probation team codes to get the case loads for
        * @example [
-       *       'teamA',
-       *       'teamC'
+       *       "teamA",
+       *       "teamC"
        *     ]
        */
       probationTeamCodes: string[]
       /**
        * @description The teams linked to the user to get the case loads for
        * @example [
-       *       'teamA',
-       *       'teamC'
+       *       "teamA",
+       *       "teamC"
        *     ]
        */
       teamSelected: string[]
@@ -3952,7 +3952,7 @@ export interface components {
       /**
        * @description List of Prison Ids (can include OUT and TRN) to restrict the search by. Unrestricted if not supplied or null
        * @example [
-       *       'MDI'
+       *       "MDI"
        *     ]
        */
       prisonCodes: string[]
@@ -4445,28 +4445,76 @@ export interface components {
        */
       version?: string
       /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
        */
-      pnc?: string
+      responsibleComFullName?: string
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
        */
-      cro?: string
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * @description The type of appointment with for the initial appointment
+       * @example SPECIFIC_PERSON
+       * @enum {string}
        */
-      crn?: string
-      /** @deprecated */
-      isVariation: boolean
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
       /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
+       * Format: date
+       * @description The earliest conditional release date of the person on licence
+       * @example 13/08/2022
        */
-      comStaffId?: number
+      conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       * @example 06/06/2023
+       */
+      postRecallReleaseDate?: string
+      /**
+       * @description The probation area description
+       * @example Wales
+       */
+      probationAreaDescription?: string
+      /**
+       * @description The description for the PDU
+       * @example North Wales
+       */
+      probationPduDescription?: string
+      /**
+       * @description The LAU description
+       * @example North Wales
+       */
+      probationLauDescription?: string
+      /**
+       * @description The team description
+       * @example Cardiff South
+       */
+      probationTeamDescription?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
+       */
+      topupSupervisionExpiryDate?: string
       /**
        * @description The current status code for this licence
        * @example IN_PROGRESS
@@ -4487,6 +4535,11 @@ export interface components {
         | 'NOT_STARTED'
         | 'TIMED_OUT'
       kind: string
+      /**
+       * @description The prison booking number for the person on this licence
+       * @example F12333
+       */
+      bookingNo?: string
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
@@ -4547,21 +4600,34 @@ export interface components {
        * @example true
        */
       isReviewNeeded: boolean
+      /** @deprecated */
+      isVariation: boolean
       /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
        */
-      bookingNo?: string
+      comStaffId?: number
       /**
-       * @description The username which created this licence
-       * @example X12333
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
        */
-      createdByUsername?: string
+      pnc?: string
       /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
        */
-      createdByFullName?: string
+      cro?: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn?: string
+      /**
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       */
+      earliestReleaseDate?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
@@ -4589,6 +4655,11 @@ export interface components {
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
       appointmentAddress?: string
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
       /**
        * Format: date
        * @description The date that the licence will start
@@ -4684,16 +4755,6 @@ export interface components {
        */
       updatedByFullName?: string
       /**
-       * @description The version number of this licence
-       * @example 1.3
-       */
-      licenceVersion?: string
-      /**
-       * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
-       */
-      earliestReleaseDate?: string
-      /**
        * Format: date-time
        * @description The date and time that this licence was superseded by a new variant
        * @example 24/08/2022 11:30:33
@@ -4713,76 +4774,15 @@ export interface components {
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
       /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
+       * @description The username which created this licence
+       * @example X12333
        */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      createdByUsername?: string
       /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
        */
-      responsibleComFullName?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
-      isEligibleForEarlyRelease: boolean
-      /**
-       * Format: date
-       * @description The earliest conditional release date of the person on licence
-       * @example 13/08/2022
-       */
-      conditionalReleaseDate?: string
-      /**
-       * Format: date
-       * @description The release date after being recalled
-       * @example 06/06/2023
-       */
-      postRecallReleaseDate?: string
-      /**
-       * @description The probation area description
-       * @example Wales
-       */
-      probationAreaDescription?: string
-      /**
-       * @description The description for the PDU
-       * @example North Wales
-       */
-      probationPduDescription?: string
-      /**
-       * @description The LAU description
-       * @example North Wales
-       */
-      probationLauDescription?: string
-      /**
-       * @description The team description
-       * @example Cardiff South
-       */
-      probationTeamDescription?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
-       */
-      topupSupervisionStartDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       * @example 06/06/2023
-       */
-      topupSupervisionExpiryDate?: string
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][]
+      createdByFullName?: string
     } & (
       | components['schemas']['CrdLicence']
       | components['schemas']['VariationLicence']
@@ -10812,15 +10812,15 @@ export interface operations {
         sortColumn?: string
         sortedAsc?: boolean
         /**
-         * @description The filter query parameters have to start with the prefix 'filters.' followed by the name of the filter.
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
          *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
          *           filters.someMultiselectFilter=a,b,c
          *
          * @example {
-         *       'filters.date.start': '2023-04-25',
-         *       'filters.date.end': '2023-05-30',
-         *       'filters.someMultiselectFilter': 'a,b,c'
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
          *     }
          */
         filters: {
@@ -10828,7 +10828,7 @@ export interface operations {
         }
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
@@ -10899,15 +10899,15 @@ export interface operations {
         pageSize?: number
         sortedAsc?: boolean
         /**
-         * @description The filter query parameters have to start with the prefix 'filters.' followed by the name of the filter.
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
          *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
          *           filters.someMultiselectFilter=a,b,c
          *
          * @example {
-         *       'filters.date.start': '2023-04-25',
-         *       'filters.date.end': '2023-05-30',
-         *       'filters.someMultiselectFilter': 'a,b,c'
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
          *     }
          */
         filters: {
@@ -10920,7 +10920,7 @@ export interface operations {
         prefix: string
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
@@ -10992,15 +10992,15 @@ export interface operations {
     parameters: {
       query: {
         /**
-         * @description The filter query parameters have to start with the prefix 'filters.' followed by the name of the filter.
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
          *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
          *           filters.someMultiselectFilter=a,b,c
          *
          * @example {
-         *       'filters.date.start': '2023-04-25',
-         *       'filters.date.end': '2023-05-30',
-         *       'filters.someMultiselectFilter': 'a,b,c'
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
          *     }
          */
         filters: {
@@ -11008,7 +11008,7 @@ export interface operations {
         }
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
@@ -12474,7 +12474,7 @@ export interface operations {
         renderMethod?: 'HTML' | 'PDF' | 'SVG'
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
@@ -12537,7 +12537,7 @@ export interface operations {
       query?: {
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
@@ -12611,7 +12611,7 @@ export interface operations {
       query?: {
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           'This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
