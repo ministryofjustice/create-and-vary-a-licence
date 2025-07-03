@@ -39,6 +39,7 @@ generic-service:
     CA_NEW_SEARCH_ENABLED: "true"
     SHOW_DPR_REPORTING: "true"
     SHOW_WHATS_NEW_HELP_ALERT: "true"
+    POSTCODE_LOOKUP_ENABLED: "false"
 
   scheduledDowntime:
     enabled: true
