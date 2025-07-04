@@ -19,6 +19,7 @@ export default function setUpWebSecurity(): Router {
     '*.googletagmanager.com',
     'www.google-analytics.com',
     "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
+    "'sha256-dLzOBI3BXLTg64ufJN47vMrP4752xiQhkGoOLYZC4/0='",
   ]
   const styleSrc = [
     "'self'",

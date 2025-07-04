@@ -25,6 +25,17 @@
                         "description": "View, add, edit and delete OMU email addresses"
                     }) }}
                 </div>
+                {% if dprReportingEnabled %}
+                    <div class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "href": "/support/reports",
+                            "clickable": "true",
+                            "heading": "DPR Reports",
+                            "description": "View reports"
+                        }) }}
+                    </div>
+                {% endif %}
+
             </div>
         </div>
     </div>
