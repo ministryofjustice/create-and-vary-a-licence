@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import defaultTokenProvider from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/defaultTokenProvider'
 import ReportListUtils from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils'
 import config from '../../config'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -28,6 +27,7 @@ import LicencePrisonerDetailsRoutes from './handlers/licencePrisonerDetails'
 import AuditDetailsRoutes from './handlers/auditDetails'
 import VaryApproverPduCaseloadHandler from './handlers/VaryApproverPduCaseloadHandler'
 import VaryApproverRegionCaseloadHandler from './handlers/VaryApproverRegionCaseloadHandler'
+import DprReportsRoutes from './handlers/dprReports'
 
 export default function Index({
   probationService,
@@ -74,6 +74,7 @@ export default function Index({
     probationService,
     varyApproverCaseloadService,
   )
+  const dprReportsHandler = new DprReportsRoutes()
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
@@ -103,16 +104,17 @@ export default function Index({
   get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
 
   if (config.dprReportingEnabled) {
+    get('/reports', dprReportsHandler.GET)
     get(
       '/reports/active-licences',
       ReportListUtils.createReportListRequestHandler({
         title: 'CVL Reports',
         definitionName: 'dpd001-active-licences',
-        variantName: 'active_licences',
+        variantName: 'active-licences',
         apiUrl: config.apis.licenceApi.url,
         apiTimeout: config.apis.licenceApi.timeout.deadline,
         layoutTemplate: 'partials/dprReport.njk',
-        tokenProvider: defaultTokenProvider,
+        tokenProvider: (res, req) => req.locals.user?.token,
       }),
     )
   }
