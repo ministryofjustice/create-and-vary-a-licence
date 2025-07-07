@@ -191,7 +191,7 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <input type="hidden" id="searchTerm" value="{{ queryTerm | titlecase }}">
+            <input type="hidden" id="searchTerm" value="{{ queryTerm }}">
             <input type="hidden" id="activeTab" value="{{ tabParameters.activeTab }}">
             <h1 class="govuk-heading-xl" id="probation-search-heading">Search results for {{ queryTerm }}</h1>
         </div>
