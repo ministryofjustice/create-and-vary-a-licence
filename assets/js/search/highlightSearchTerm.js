@@ -13,11 +13,6 @@ window.onload = function () {
   highlightTextInDOM(searchTerm)
 }
 
-function titleCase(str) {
-  if (!str) return str
-  return str[0].toUpperCase() + str.substring(1).toLowerCase()
-}
-
 function highlightTextInDOM(targetText) {
   const walker = document.createTreeWalker(
     searchResults,
@@ -40,7 +35,7 @@ function highlightTextInDOM(targetText) {
   for (const textNode of nodesToUpdate) {
     const span = document.createElement('span')
     const regEx = new RegExp(targetText, 'ig')
-    span.innerHTML = textNode.nodeValue.replaceAll(regEx, '<mark>' + titleCase(targetText) + '</mark>')
+    span.innerHTML = textNode.nodeValue.replaceAll(regEx, '<mark>' + targetText + '</mark>')
     textNode.parentNode?.replaceChild(span, textNode)
   }
 }
