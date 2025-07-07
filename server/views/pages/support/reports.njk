@@ -1,0 +1,28 @@
+{% extends "layout.njk" %}
+{% from "partials/card.njk" import card %}
+
+{% set pageTitle = applicationName + " - DPR Reports" %}
+{% set pageId = "dpr-reports" %}
+{% set backLinkHref = "/" %}
+
+{% block content %}
+    <div class="grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">DPR Reports</h1>
+            <div class="govuk-grid-row card-group">
+                <div class="govuk-grid-column-one-third card-group__item">
+                    {{ card({
+                        "href": "/support/reports/active-licences",
+                        "clickable": "true",
+                        "heading": "Active licences in the last 3 months",
+                        "description": "Active licences with release date in the last 3 months"
+                    }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/assets/js/card.js"></script>
+{% endblock %}
