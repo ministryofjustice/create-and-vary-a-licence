@@ -10,14 +10,37 @@ window.onload = function () {
     return
   }
 
-  for (const result of searchResults) {
-    result.innerHTML = caseInsensitiveHighlighting(result.innerHTML, searchTerm)
-  }
+  highlightTextInDOM(searchTerm)
 }
 
-function caseInsensitiveHighlighting(html, searchTerm) {
-  const reg = new RegExp(searchTerm, 'gi')
-  return html.replace(reg, function (str) {
-    return `<mark>${str}</mark>`
-  })
+function titleCase(str) {
+  if (!str) return str
+  return str[0].toUpperCase() + str.substring(1).toLowerCase()
+}
+
+function highlightTextInDOM(targetText) {
+  const walker = document.createTreeWalker(
+    searchResults,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode: function (node) {
+        const formattedNodeValue = node.nodeValue?.toLocaleLowerCase()
+        const formattedTargetText = targetText.toLocaleLowerCase()
+        return formattedNodeValue.includes(formattedTargetText) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP
+      },
+    },
+    false
+  )
+  const nodesToUpdate = []
+  let node
+  while ((node = walker.nextNode())) {
+    nodesToUpdate.push(node)
+  }
+
+  for (const textNode of nodesToUpdate) {
+    const span = document.createElement('span')
+    const regEx = new RegExp(targetText, 'ig')
+    span.innerHTML = textNode.nodeValue.replaceAll(regEx, '<mark>' + titleCase(targetText) + '</mark>')
+    textNode.parentNode?.replaceChild(span, textNode)
+  }
 }
