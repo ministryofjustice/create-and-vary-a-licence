@@ -38,6 +38,7 @@ export default function Index({
   licenceOverrideService,
   comCaseloadService,
   varyApproverCaseloadService,
+  dprService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -74,7 +75,7 @@ export default function Index({
     probationService,
     varyApproverCaseloadService,
   )
-  const dprReportsHandler = new DprReportsRoutes()
+  const dprReportsHandler = new DprReportsRoutes(dprService)
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
