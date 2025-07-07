@@ -39,7 +39,6 @@ generic-service:
     CA_NEW_SEARCH_ENABLED: "true"
     SHOW_DPR_REPORTING: "true"
 
-  
   scheduledDowntime:
     enabled: true
 

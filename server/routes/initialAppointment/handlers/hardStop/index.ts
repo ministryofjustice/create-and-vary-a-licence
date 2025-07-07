@@ -15,6 +15,7 @@ import DateTime from '../../types/dateTime'
 import ViewAndPrintLicenceRoutes from '../../../viewingLicences/handlers/viewLicence'
 import ConfirmationRoutes from '../../../creatingLicences/handlers/hardStop/confirmation'
 import PathType from '../../../../enumeration/pathType'
+import config from '../../../../config'
 
 export default function Index({ licenceService, conditionService, hdcService }: Services): Router {
   const router = Router()
@@ -51,7 +52,8 @@ export default function Index({ licenceService, conditionService, hdcService }: 
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET)
-    post('/create/id/:licenceId/initial-meeting-place', controller.POST, Address)
+    const addressType = config.postcodeLookupEnabled ? undefined : Address
+    post('/create/id/:licenceId/initial-meeting-place', controller.POST, addressType)
   }
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, PathType.EDIT)

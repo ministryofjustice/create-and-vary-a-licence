@@ -4,6 +4,7 @@ import LicenceService from '../../../../services/licenceService'
 import UserType from '../../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
 import PathType from '../../../../enumeration/pathType'
+import config from '../../../../config'
 
 export default class InitialMeetingPlaceRoutes {
   constructor(
@@ -24,13 +25,15 @@ export default class InitialMeetingPlaceRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
-    await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
+    if (!config.postcodeLookupEnabled) {
+      await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
 
-    flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
-    if (this.path === PathType.EDIT) {
-      res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
-    } else {
-      res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-contact`)
+      flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
+      if (this.path === PathType.EDIT) {
+        res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
+      } else {
+        res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-contact`)
+      }
     }
   }
 }

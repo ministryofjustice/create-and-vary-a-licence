@@ -16,6 +16,7 @@ import UserType from '../../enumeration/userType'
 import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import LicenceKind from '../../enumeration/LicenceKind'
 import licenceKindCheckMiddleware from '../../middleware/licenceKindCheckMiddleware'
+import config from '../../config'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
@@ -63,7 +64,8 @@ export default function Index({ licenceService, conditionService }: Services): R
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PROBATION)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET, UserType.PROBATION)
-    post('/create/id/:licenceId/initial-meeting-place', controller.POST, Address)
+    const addressType = config.postcodeLookupEnabled ? undefined : Address
+    post('/create/id/:licenceId/initial-meeting-place', controller.POST, addressType)
   }
 
   {
