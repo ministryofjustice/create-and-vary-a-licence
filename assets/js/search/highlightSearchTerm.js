@@ -18,9 +18,9 @@ window.onload = function () {
   }
 }
 
-function highlightTextInDOM(targetText, searchResults) {
+function highlightTextInDOM(targetText, searchResult) {
   const walker = document.createTreeWalker(
-    searchResults,
+    searchResult,
     NodeFilter.SHOW_TEXT,
     {
       acceptNode: function (node) {
