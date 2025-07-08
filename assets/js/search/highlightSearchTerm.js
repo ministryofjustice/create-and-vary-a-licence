@@ -10,10 +10,15 @@ window.onload = function () {
     return
   }
 
-  highlightTextInDOM(searchTerm)
+  for (const searchResult of searchResults) {
+    if (searchResult === null) {
+      continue
+    }
+    highlightTextInDOM(searchTerm, searchResult)
+  }
 }
 
-function highlightTextInDOM(targetText) {
+function highlightTextInDOM(targetText, searchResults) {
   const walker = document.createTreeWalker(
     searchResults,
     NodeFilter.SHOW_TEXT,
