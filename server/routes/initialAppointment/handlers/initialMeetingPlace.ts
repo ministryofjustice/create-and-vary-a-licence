@@ -23,18 +23,24 @@ export default class InitialMeetingPlaceRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
-    if (!config.postcodeLookupEnabled) {
-      await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
 
-      flashInitialApptUpdatedMessage(req, licence, this.userType)
+    if (config.postcodeLookupEnabled) {
+      const { postcode } = req.body
+      res.redirect(`/licence/create/id/${licenceId}/no-address-found?postcode=${postcode}`)
+      return
+    }
 
-      if (this.userType === UserType.PRISON) {
-        res.redirect(`/licence/view/id/${licenceId}/show`)
-      } else if (req.query?.fromReview) {
-        res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
-      } else {
-        res.redirect(`/licence/create/id/${licenceId}/initial-meeting-contact`)
-      }
+    await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
+    flashInitialApptUpdatedMessage(req, licence, this.userType)
+
+    const basePath = `/licence/create/id/${licenceId}`
+
+    if (this.userType === UserType.PRISON) {
+      res.redirect(`/licence/view/id/${licenceId}/show`)
+    } else if (req.query?.fromReview) {
+      res.redirect(`${basePath}/check-your-answers`)
+    } else {
+      res.redirect(`${basePath}/initial-meeting-contact`)
     }
   }
 }
