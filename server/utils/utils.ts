@@ -195,16 +195,16 @@ const formatAddressTitleCase = (address: AddressSearchResponse): string => {
   const { firstLine, secondLine, townOrCity, postcode } = address
 
   const formattedParts = [
-    toUkAddressCase(firstLine),
-    toUkAddressCase(secondLine),
-    toUkAddressCase(townOrCity),
+    toAddressCase(firstLine),
+    toAddressCase(secondLine),
+    toAddressCase(townOrCity),
     postcode.trim(),
   ].filter(Boolean)
 
   return formattedParts.join(', ')
 }
 
-const toUkAddressCase = (str: string): string => {
+const toAddressCase = (str: string): string => {
   if (!str) return ''
 
   return str
