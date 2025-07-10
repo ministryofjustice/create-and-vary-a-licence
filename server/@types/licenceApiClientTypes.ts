@@ -71,3 +71,4 @@ export type PrisonUserSearchRequest = components['schemas']['PrisonUserSearchReq
 export type PrisonCaseAdminSearchResult = components['schemas']['PrisonCaseAdminSearchResult']
 export type UpdateElectronicMonitoringProgrammeRequest =
   components['schemas']['UpdateElectronicMonitoringProgrammeRequest']
+export type AddressSearchResponse = components['schemas']['AddressSearchResponse']

@@ -13,12 +13,12 @@
             <p class="govuk-body">
                 We could not find an address that matches <strong>{{ postcode }}</strong>.<br>You can search again or enter the address manually.
             </p>
-            <div>
-                <a data-qa="searchAgain" class="govuk-link govuk-link--no-visited-state" href="{{ postcodeLookupSearchUrl }}">Search again</a>
-            </div>
-            <div class="govuk-!-margin-top-3">
-                <a data-qa="enterAddressManually" class="govuk-link govuk-link--no-visited-state" href="#">Enter address manually</a>
-            </div>
+            <p class="govuk-body">
+                <a data-qa="searchAgain" class="govuk-link" href="{{ postcodeLookupSearchUrl }}">Search again</a>
+            </p>
+            <p class="govuk-body govuk-!-margin-top-3">
+                <a data-qa="enterAddressManually" class="govuk-link" href="#">Enter address manually</a>
+            </p>
         </div>
       </div>
     </div>

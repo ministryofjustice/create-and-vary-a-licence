@@ -1,0 +1,52 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Select an address" %}
+{% set backLinkHref = "/" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <h1 class="govuk-heading-l">
+                    Select address
+                </h1>
+                <p class="govuk-body">
+                    {{ addresses.length }} addresses found for <strong>{{ searchQuery }}</strong>. <a class="govuk-link govuk-link--no-visited-state" href="{{ postcodeLookupSearchUrl }}">Search again</a>
+                </p>
+                {% set addressesOptions = [] %}
+                {% for address in addresses %}
+                    {% set addressesOptions = (addressesOptions.push({
+                        text: address | formatAddressTitleCase,
+                        value: address.uprn,
+                        attributes: {
+                            "data-qa": "address-" + loop.index
+                        }
+                    }), addressesOptions) %}
+                {% endfor %}
+
+                {{ govukRadios({
+                    idPrefix: "radio-option",
+                    name: "selectedAddressUprn",
+                    errorMessage: validationErrors | findError('selectedAddressUprn'),
+                    items: addressesOptions
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+
+                <p class="govuk-body">
+                    <a data-qa="enterAddressManually" class="govuk-link govuk-link--no-visited-state" href="#">Enter address manually</a>
+                </p>
+            </form>
+        </div>
+      </div>
+    </div>
+{% endblock %}

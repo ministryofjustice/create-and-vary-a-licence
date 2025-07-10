@@ -49,6 +49,7 @@ import type {
   PrisonCaseAdminSearchResult,
   PrisonUserSearchRequest,
   UpdateElectronicMonitoringProgrammeRequest,
+  AddressSearchResponse,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -144,6 +145,13 @@ export default class LicenceApiClient extends RestClient {
       { path: `/licence/id/${licenceId}/appointment-address`, data: appointmentAddress },
       { username: user.username },
     )
+  }
+
+  async searchForAddresses(requestBody: { searchQuery: string }, user: User): Promise<AddressSearchResponse[]> {
+    return (await this.get(
+      { path: `/address/search/by/text/${requestBody.searchQuery}` },
+      { username: user.username },
+    )) as Promise<AddressSearchResponse[]>
   }
 
   async updateContactNumber(licenceId: string, contactNumber: ContactNumberRequest, user: User): Promise<void> {
