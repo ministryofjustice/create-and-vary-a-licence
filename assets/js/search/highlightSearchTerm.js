@@ -25,8 +25,11 @@ function highlightTextInDOM(targetText, searchResult) {
     {
       acceptNode: function (node) {
         const formattedNodeValue = node.nodeValue?.toLocaleLowerCase()
+        const searchResult = node.parentNode?.classList.contains('search-highlight')
         const formattedTargetText = targetText.toLocaleLowerCase()
-        return formattedNodeValue.includes(formattedTargetText) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP
+        return formattedNodeValue.includes(formattedTargetText) && searchResult
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_SKIP
       },
     },
     false
