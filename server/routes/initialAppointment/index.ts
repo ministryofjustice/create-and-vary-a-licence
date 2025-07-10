@@ -17,6 +17,7 @@ import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import LicenceKind from '../../enumeration/LicenceKind'
 import licenceKindCheckMiddleware from '../../middleware/licenceKindCheckMiddleware'
 import config from '../../config'
+import NoAddressFoundRoutes from './handlers/noAddressFound'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
@@ -96,6 +97,11 @@ export default function Index({ licenceService, conditionService }: Services): R
     const controller = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON)
     get('/view/id/:licenceId/initial-meeting-time', controller.GET, UserType.PRISON)
     post('/view/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
+  }
+
+  {
+    const controller = new NoAddressFoundRoutes()
+    get('/create/id/:licenceId/no-address-found', controller.GET, UserType.PROBATION)
   }
   return router
 }
