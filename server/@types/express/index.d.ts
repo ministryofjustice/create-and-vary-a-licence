@@ -35,7 +35,7 @@ export declare global {
     interface Locals {
       user?: LocalsUser
       licence: Licence
-      reportDefinitions: DprReportDefinition[]
+      reportDefinitions?: DprReportDefinition[]
     }
 
     interface Request {
