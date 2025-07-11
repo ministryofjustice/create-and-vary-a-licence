@@ -813,4 +813,12 @@ describe('Licence API client tests', () => {
       expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/electronic-monitoring-programmes', data: request })
     })
   })
+
+  describe('searchForAddresses', () => {
+    it('should search for addresses', async () => {
+      const request = { searchQuery: '123 Fake Street' }
+      await licenceApiClient.searchForAddresses(request, { username: 'joebloggs' } as User)
+      expect(get).toHaveBeenCalledWith({ path: '/address/search/by/text/123 Fake Street' }, { username: 'joebloggs' })
+    })
+  })
 })
