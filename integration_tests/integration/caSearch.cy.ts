@@ -32,9 +32,9 @@ context('Search for a person', () => {
     const caseloadPage = indexPage.clickViewAndPrintALicence()
     let searchPage = caseloadPage.clickSearch('test')
     searchPage.getSearchHeading().contains('Search results for test')
-    searchPage.getPrisonTabTitle().contains('People in prison (1 result)')
+    searchPage.getPrisonTabTitle().contains('People in prison (3 results)')
     searchPage.clickOnProbationTab()
-    searchPage.getProbationTabTitle().contains('People on probation (0 results)')
+    searchPage.getProbationTabTitle().contains('People on probation (3 results)')
     searchPage.clickOnPrisonTab()
     const comPage = searchPage.clickComName()
     searchPage = comPage.clickBackToCaSearch()
@@ -42,5 +42,28 @@ context('Search for a person', () => {
     searchPage = printALicencePage.clickBackToCaSearch()
     const viewCasesPageExit = searchPage.clickBackToCaseload()
     viewCasesPageExit.signOut().click()
+  })
+
+  it('should order by release date', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickViewAndPrintALicence()
+    const searchPage = caseloadPage.clickSearch('test')
+    searchPage.getSearchHeading().contains('Search results for test')
+    // check people in prison are ordered by ascending release date by default
+    searchPage.getRow(0).contains('01 Jul 2025')
+    searchPage.getRow(1).contains('01 Aug 2025')
+    searchPage.getRow(2).contains('02 Aug 2025')
+    // first click sorts ascending but already ascending by default
+    searchPage.clickSortByReleaseDate()
+    // second click sorts descending
+    searchPage.clickSortByReleaseDate()
+    searchPage.getRow(0).contains('02 Aug 2025')
+    searchPage.getRow(1).contains('01 Aug 2025')
+    searchPage.getRow(2).contains('01 Jul 2025')
+    searchPage.clickOnProbationTab()
+    // check people on probation are ordered by descending release date by default
+    searchPage.getRow(3).contains('01 May 2025')
+    searchPage.getRow(4).contains('30 Apr 2025')
+    searchPage.getRow(5).contains('29 Apr 2025')
   })
 })
