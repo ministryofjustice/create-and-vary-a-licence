@@ -10,18 +10,26 @@ window.onload = function () {
     return
   }
 
-  highlightTextInDOM(searchTerm)
+  for (const searchResult of searchResults) {
+    if (searchResult === null) {
+      continue
+    }
+    highlightTextInDOM(searchTerm, searchResult)
+  }
 }
 
-function highlightTextInDOM(targetText) {
+function highlightTextInDOM(targetText, searchResult) {
   const walker = document.createTreeWalker(
-    searchResults,
+    searchResult,
     NodeFilter.SHOW_TEXT,
     {
       acceptNode: function (node) {
         const formattedNodeValue = node.nodeValue?.toLocaleLowerCase()
+        const searchResult = node.parentNode?.classList.contains('search-highlight')
         const formattedTargetText = targetText.toLocaleLowerCase()
-        return formattedNodeValue.includes(formattedTargetText) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP
+        return formattedNodeValue.includes(formattedTargetText) && searchResult
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_SKIP
       },
     },
     false
