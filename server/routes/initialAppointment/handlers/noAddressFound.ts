@@ -3,9 +3,9 @@ import { Request, Response } from 'express'
 export default class NoAddressFoundRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { postcode } = req.query as { postcode?: string }
+    const { searchQuery } = req.query as { searchQuery?: string }
     return res.render('pages/create/NoAddressFound', {
-      postcode,
+      searchQuery,
       postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place`,
     })
   }
