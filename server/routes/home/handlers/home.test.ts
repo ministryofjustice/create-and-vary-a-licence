@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import config from '../../../config'
 
 import HomeRoutes from './home'
 
@@ -26,6 +27,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: true,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
+          shouldShowDprCard: false,
         })
       })
 
@@ -40,6 +42,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
+          shouldShowDprCard: false,
         })
       })
     })
@@ -56,6 +59,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
+          shouldShowDprCard: false,
         })
       })
 
@@ -70,6 +74,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
+          shouldShowDprCard: false,
         })
       })
     })
@@ -85,6 +90,7 @@ describe('Route Handlers - Home', () => {
         shouldShowViewOrPrintCard: true,
         shouldShowVaryApprovalCard: false,
         shouldShowSupportCard: false,
+        shouldShowDprCard: false,
       })
     })
 
@@ -100,6 +106,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
+          shouldShowDprCard: false,
         })
       })
 
@@ -114,6 +121,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
+          shouldShowDprCard: false,
         })
       })
     })
@@ -130,6 +138,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: true,
           shouldShowSupportCard: false,
+          shouldShowDprCard: false,
         })
       })
 
@@ -144,6 +153,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
+          shouldShowDprCard: false,
         })
       })
     })
@@ -159,6 +169,57 @@ describe('Route Handlers - Home', () => {
         shouldShowViewOrPrintCard: false,
         shouldShowVaryApprovalCard: false,
         shouldShowSupportCard: true,
+        shouldShowDprCard: false,
+      })
+    })
+
+    describe('For dpr reporting', () => {
+      it('With correct auth source', async () => {
+        req = getReqWithRolesAndSource(['ROLE_NOMIS_BATCHLOAD'], 'nomis')
+        config.dprReportingEnabled = true
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: false,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: true,
+          shouldShowDprCard: true,
+        })
+      })
+
+      it('With just support role', async () => {
+        req = getReqWithRolesAndSource(['ROLE_NOMIS_BATCHLOAD'], 'nomis')
+        config.dprReportingEnabled = false
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: false,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: true,
+          shouldShowDprCard: false,
+        })
+      })
+
+      it('With incorrect role', async () => {
+        req = getReqWithRolesAndSource(['ROLE_LICENCE_ACO'], 'nomis')
+        config.dprReportingEnabled = false
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: false,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: false,
+          shouldShowDprCard: false,
+        })
       })
     })
   })

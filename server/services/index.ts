@@ -16,6 +16,7 @@ import TimelineService from './timelineService'
 import CaCaseloadService from './lists/caCaseloadService'
 import ComCaseloadService from './lists/comCaseloadService'
 import HdcService from './hdcService'
+import DprService from './dprService'
 
 const {
   manageUsersApiClient,
@@ -44,6 +45,7 @@ const searchService = new SearchService(licenceApiClient)
 const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
 const hdcService = new HdcService(licenceApiClient)
+const dprService = new DprService(licenceApiClient)
 
 export const services = {
   userService,
@@ -64,6 +66,7 @@ export const services = {
   feComponentsService,
   timelineService,
   hdcService,
+  dprService,
 }
 
 export type Services = typeof services

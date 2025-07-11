@@ -1,4 +1,5 @@
 import CvlUserDetails from '../CvlUserDetails'
+import { DprReportDefinition } from '../dprReportingTypes'
 import { LicenceConditionChange, Licence } from '../licenceApiClientTypes'
 
 export default {}
@@ -34,6 +35,7 @@ export declare global {
     interface Locals {
       user?: LocalsUser
       licence: Licence
+      reportDefinitions?: DprReportDefinition[]
     }
 
     interface Request {

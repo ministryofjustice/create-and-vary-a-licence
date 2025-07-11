@@ -88,6 +88,17 @@
                     </div>
                 {% endif %}
 
+                {% if shouldShowDprCard %}
+                    <div class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "href": "/reports",
+                            "clickable": "true",
+                            "heading": "DPR Reports",
+                            "description": "View reports"
+                        }) }}
+                    </div>
+                {% endif %}
+
             </div>
         </div>
     </div>
