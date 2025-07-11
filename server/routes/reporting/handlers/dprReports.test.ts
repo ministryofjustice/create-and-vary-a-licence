@@ -48,7 +48,7 @@ describe('Route Handlers - DPR Reports', () => {
   })
 
   describe('GET', () => {
-    it('Should call createReportListRequestHandler and return successfully', async () => {
+    it('Should call createReportListRequestHandler and return the handler successfully', async () => {
       jest.spyOn(ReportListUtils, 'createReportListRequestHandler').mockReturnValue(dprHandler)
       await handler.GET(req, res, next)
       expect(ReportListUtils.createReportListRequestHandler).toHaveBeenCalledWith(

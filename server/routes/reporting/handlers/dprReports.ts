@@ -21,7 +21,6 @@ export default class DprReportsRoutes {
       apiTimeout: config.apis.licenceApi.timeout.deadline,
       layoutTemplate: 'partials/dprReport.njk',
       tokenProvider: (req, res) => res.locals.user?.token,
-      definitionsPath: null,
     })(req, res, next)
   }
 }
