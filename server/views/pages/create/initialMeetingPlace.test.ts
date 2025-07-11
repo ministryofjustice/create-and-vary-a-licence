@@ -12,7 +12,7 @@ describe('postcodeLookupEnabled', () => {
       postcodeLookupEnabled: true,
       licence: {},
     })
-    expect($('label[for="postcode"]').text()).toContain('Type an address or postcode')
+    expect($('label[for="searchQuery"]').text()).toContain('Type an address or postcode')
     expect($('[data-qa="searchAddresses"]').length).toBe(1)
     expect($('#addressLine1').length).toBe(0)
   })

@@ -113,6 +113,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       })
 
       it('should not call updateAppointmentAddress', async () => {
+        req.body = { searchQuery: '123 Fake Street' }
         config.postcodeLookupEnabled = true // Mocking the config for postcode lookup
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()

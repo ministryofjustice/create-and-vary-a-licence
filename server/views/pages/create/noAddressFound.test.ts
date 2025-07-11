@@ -10,22 +10,22 @@ describe('noAddressFound', () => {
 
   it('renders correct postcode', () => {
     const licenceId = '12345'
-    const postcode = 'AB12CD'
+    const searchQuery = 'AB12CD'
 
     const $ = render({
-      postcode,
+      searchQuery,
       postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place`,
     })
 
-    expect($('.govuk-body').text()).toContain(`We could not find an address that matches ${postcode}`)
+    expect($('.govuk-body').text()).toContain(`We could not find an address that matches ${searchQuery}`)
   })
 
   it('render search again link with correct URL', () => {
     const licenceId = '12345'
-    const postcode = 'AB12CD'
+    const searchQuery = 'AB12CD'
 
     const $ = render({
-      postcode,
+      searchQuery,
       postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place`,
     })
 

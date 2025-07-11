@@ -545,4 +545,66 @@ describe('Nunjucks Filters', () => {
       expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
     })
   })
+
+  describe('formatAddressTitleCase', () => {
+    it('formats a full address correctly', () => {
+      const address = {
+        firstLine: '1 PRUNUS WALK',
+        secondLine: 'FLAT 2b',
+        townOrCity: 'SWINDON',
+        postcode: 'HN5 8UH',
+      }
+      expect(registerNunjucks().getFilter('formatAddressTitleCase')(address)).toBe(
+        '1 Prunus Walk, Flat 2B, Swindon, HN5 8UH',
+      )
+    })
+
+    it('handles missing secondLine', () => {
+      const address = {
+        firstLine: '1 PRUNUS WALK',
+        secondLine: '',
+        townOrCity: 'SWINDON',
+        postcode: 'HN5 8UH',
+      }
+      expect(registerNunjucks().getFilter('formatAddressTitleCase')(address)).toBe('1 Prunus Walk, Swindon, HN5 8UH')
+    })
+
+    it('preserves postcode casing', () => {
+      const address = {
+        firstLine: 'flat 3b',
+        secondLine: '',
+        townOrCity: 'london',
+        postcode: 'e1 6an',
+      }
+      expect(registerNunjucks().getFilter('formatAddressTitleCase')(address)).toBe('Flat 3B, London, e1 6an')
+    })
+
+    it('handles apostrophes correctly', () => {
+      const address = {
+        firstLine: "emilia's house",
+        secondLine: '',
+        townOrCity: "swindon's end",
+        postcode: 'HN5 8UH',
+      }
+      expect(registerNunjucks().getFilter('formatAddressTitleCase')(address)).toBe(
+        "Emilia's House, Swindon's End, HN5 8UH",
+      )
+    })
+
+    it('returns empty string for null address', () => {
+      expect(registerNunjucks().getFilter('formatAddressTitleCase')(null)).toBe('')
+    })
+
+    it('trims whitespace from parts', () => {
+      const address = {
+        firstLine: ' 10 downing street ',
+        secondLine: ' ',
+        townOrCity: ' london ',
+        postcode: ' SW1A 2AA ',
+      }
+      expect(registerNunjucks().getFilter('formatAddressTitleCase')(address)).toBe(
+        '10 Downing Street, London, SW1A 2AA',
+      )
+    })
+  })
 })
