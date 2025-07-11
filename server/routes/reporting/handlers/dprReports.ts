@@ -10,12 +10,10 @@ export default class DprReportsRoutes {
     const { id } = req.params
     const dprReports = res.locals.reportDefinitions
 
-    // Can have multiple reports on the same dataset but currently have one rpoert per dataset
-    // if it were multiple then would need to create a report list to house some metadata to allow us to pick the right variant
     const reportDefinition = dprReports.find(report => report.id === id)
     const variant = reportDefinition.variants.find(variant => variant.id === id)
 
-    ReportListUtils.createReportListRequestHandler({
+    return ReportListUtils.createReportListRequestHandler({
       title: 'CVL Reports',
       definitionName: reportDefinition.id,
       variantName: variant.id,
@@ -23,6 +21,7 @@ export default class DprReportsRoutes {
       apiTimeout: config.apis.licenceApi.timeout.deadline,
       layoutTemplate: 'partials/dprReport.njk',
       tokenProvider: (req, res) => res.locals.user?.token,
+      definitionsPath: null,
     })(req, res, next)
   }
 }
