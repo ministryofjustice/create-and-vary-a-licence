@@ -39,7 +39,7 @@ export default class CaSearchPage extends Page {
     return Page.verifyOnPage(ViewALicencePage)
   }
 
-  clickComName = (): ComDetailsPage => {
+  clickFirstComName = (): ComDetailsPage => {
     cy.task('stubGetStaffDetailsByStaffCode')
     cy.get(this.probationPractionerLinkId).first().click()
     return Page.verifyOnPage(ComDetailsPage)

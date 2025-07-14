@@ -36,7 +36,7 @@ context('Search for a person', () => {
     searchPage.clickOnProbationTab()
     searchPage.getProbationTabTitle().contains('People on probation (3 results)')
     searchPage.clickOnPrisonTab()
-    const comPage = searchPage.clickComName()
+    const comPage = searchPage.clickFirstComName()
     searchPage = comPage.clickBackToCaSearch()
     const printALicencePage = searchPage.clickOffenderName()
     searchPage = printALicencePage.clickBackToCaSearch()
