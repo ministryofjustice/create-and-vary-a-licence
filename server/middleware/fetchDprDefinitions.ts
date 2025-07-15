@@ -9,7 +9,7 @@ export default function fetchDprDefintions(dprService: DprService): RequestHandl
       const reportDefinitions = await dprService.getDefinitions(user)
       res.locals.reportDefinitions = reportDefinitions
     } catch (error) {
-      logger.error(error, `Failed to get DPR definitons for: ${res.locals.user?.username}`)
+      logger.error(error, `Failed to get DPR definitions for: ${res.locals.user?.username}`)
       next(error)
     }
     return next()
