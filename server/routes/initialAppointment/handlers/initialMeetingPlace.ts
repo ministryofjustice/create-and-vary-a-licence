@@ -23,17 +23,18 @@ export default class InitialMeetingPlaceRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
+    const basePath = `/licence/create/id/${licenceId}`
 
     if (config.postcodeLookupEnabled) {
-      const { postcode } = req.body
-      res.redirect(`/licence/create/id/${licenceId}/no-address-found?postcode=${postcode}`)
+      const { searchQuery } = req.body
+      if (searchQuery.trim().length > 0) {
+        res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}`)
+      }
       return
     }
 
     await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
     flashInitialApptUpdatedMessage(req, licence, this.userType)
-
-    const basePath = `/licence/create/id/${licenceId}`
 
     if (this.userType === UserType.PRISON) {
       res.redirect(`/licence/view/id/${licenceId}/show`)

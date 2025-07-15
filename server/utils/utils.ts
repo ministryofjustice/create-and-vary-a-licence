@@ -5,7 +5,13 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
-import type { HdcLicence, HdcVariationLicence, Licence, VariationLicence } from '../@types/licenceApiClientTypes'
+import type {
+  AddressSearchResponse,
+  HdcLicence,
+  HdcVariationLicence,
+  Licence,
+  VariationLicence,
+} from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 
 const properCase = (word: string): string =>
@@ -183,6 +189,37 @@ const formatAddress = (address?: string) => {
     : undefined
 }
 
+const formatAddressTitleCase = (address: AddressSearchResponse): string => {
+  if (!address) return ''
+
+  const { firstLine, secondLine, townOrCity, postcode } = address
+
+  const formattedParts = [
+    toAddressCase(firstLine),
+    toAddressCase(secondLine),
+    toAddressCase(townOrCity),
+    postcode.trim(),
+  ].filter(Boolean)
+
+  return formattedParts.join(', ')
+}
+
+const toAddressCase = (str: string): string => {
+  if (!str) return ''
+
+  return str
+    .trim()
+    .split(' ')
+    .map(word => {
+      if (!word) return ''
+      // Capitalize first letter and lowercase the rest
+      const capitalized = word[0].toUpperCase() + word.slice(1).toLowerCase()
+      // Capitalize letter after digit, unless preceded by a backtick
+      return capitalized.replace(/(?<![`])(?<=\d)([a-z])/g, (_, letter) => letter.toUpperCase())
+    })
+    .join(' ')
+}
+
 const licenceIsTwoDaysToRelease = (licence: Licence) =>
   moment(licence.licenceStartDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
 
@@ -243,4 +280,5 @@ export {
   toIsoDate,
   isVariation,
   isHdcLicence,
+  formatAddressTitleCase,
 }

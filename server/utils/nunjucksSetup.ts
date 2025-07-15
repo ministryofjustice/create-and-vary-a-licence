@@ -17,6 +17,7 @@ import {
   jsonDtToDateWithDay,
   parseCvlDate,
   toIsoDate,
+  formatAddressTitleCase,
 } from './utils'
 import {
   AdditionalCondition,
@@ -213,7 +214,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('dateToUnix', (date: string) => {
-    return moment(date, 'D MMM YYYY').unix()
+    return moment(date, ['D MMM YYYY', 'YYYY-MM-DD', 'DD/MM/YYYY']).unix()
   })
 
   njkEnv.addFilter('toIsoDate', toIsoDate)
@@ -425,10 +426,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     return `${hourInt}${minute === '00' ? '' : `:${minute}`}am`
   })
 
-  njkEnv.addFilter(
-    'dumpJson',
-    (val: string) => new nunjucks.runtime.SafeString(`<pre>${JSON.stringify(val, null, 2)}</pre>`),
-  )
+  njkEnv.addFilter('formatAddressTitleCase', address => formatAddressTitleCase(address))
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('serviceNowUrl', config.serviceNowUrl)

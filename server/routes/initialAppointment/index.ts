@@ -18,8 +18,9 @@ import LicenceKind from '../../enumeration/LicenceKind'
 import licenceKindCheckMiddleware from '../../middleware/licenceKindCheckMiddleware'
 import config from '../../config'
 import NoAddressFoundRoutes from './handlers/noAddressFound'
+import SelectAddressRoutes from './handlers/selectAddress'
 
-export default function Index({ licenceService, conditionService }: Services): Router {
+export default function Index({ licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence${path}`
@@ -102,6 +103,12 @@ export default function Index({ licenceService, conditionService }: Services): R
   {
     const controller = new NoAddressFoundRoutes()
     get('/create/id/:licenceId/no-address-found', controller.GET, UserType.PROBATION)
+  }
+
+  {
+    const controller = new SelectAddressRoutes(addressService, UserType.PROBATION)
+    get('/create/id/:licenceId/select-address', controller.GET, UserType.PROBATION)
+    post('/create/id/:licenceId/select-address', controller.POST)
   }
   return router
 }

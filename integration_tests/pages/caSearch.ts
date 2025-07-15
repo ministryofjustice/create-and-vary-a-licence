@@ -30,14 +30,18 @@ export default class CaSearchPage extends Page {
     return cy.get(this.probationTabTitle)
   }
 
+  getRow = n => {
+    return cy.get('tbody  tr').eq(n)
+  }
+
   clickOffenderName = (): ViewALicencePage => {
     cy.get(this.licenceLinkId).click()
     return Page.verifyOnPage(ViewALicencePage)
   }
 
-  clickComName = (): ComDetailsPage => {
+  clickFirstComName = (): ComDetailsPage => {
     cy.task('stubGetStaffDetailsByStaffCode')
-    cy.get(this.probationPractionerLinkId).click()
+    cy.get(this.probationPractionerLinkId).first().click()
     return Page.verifyOnPage(ComDetailsPage)
   }
 
@@ -53,6 +57,11 @@ export default class CaSearchPage extends Page {
 
   clickOnProbationTab = (): CaSearchPage => {
     cy.get('#tab_people-on-probation').click()
+    return Page.verifyOnPage(CaSearchPage)
+  }
+
+  clickSortByReleaseDate = (): CaSearchPage => {
+    cy.get('#release-date-sort').click()
     return Page.verifyOnPage(CaSearchPage)
   }
 }
