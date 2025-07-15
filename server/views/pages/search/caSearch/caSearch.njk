@@ -43,7 +43,7 @@
                         <li>were not released on Home Detention Curfew</li>
                         <li>were not released from prison with a licence created using NOMIS</li>
                 {% endif %}
-                        <li>have not been recalled or breached a top up supervision order</li>
+                        <li>{{ recallsMessage }}</li>
                     </ul>
                 <p>If you think someone’s licence is missing, tell us by <a id="serviceNowUrl" class="govuk-link" href="{{serviceNowUrl}}">filling in a support request form.</a></p>
                 <p class="govuk-body">
@@ -283,8 +283,14 @@
 {% set inPrisonCountText = "People in prison ("  + tabParameters.prison.resultsCount + tabParameters.prison.resultsCount | pluralise(" result") + ")" %}
 {% set onProbationCountText = "People on probation (" + tabParameters.probation.resultsCount + tabParameters.probation.resultsCount | pluralise(" result") + ")" %}
 
-{% set peopleInPrison = displayResults(searchTableHeadings, peopleInPrisonResults, tabParameters.prison.tabId, inPrisonCountText, true) %}
-{% set peopleOnProbation = displayResults(searchTableHeadings, peopleOnProbationResults, tabParameters.probation.tabId, onProbationCountText, false) %}
+{% if recallsEnabled %}
+    {%  set recallsMessage = "have not breached a top-up supervision order" %}
+{% else %}
+    {%  set recallsMessage = "have not been recalled or breached a top up supervision order" %}
+{% endif %}
+
+{% set peopleInPrison = displayResults(searchTableHeadings, peopleInPrisonResults, tabParameters.prison.tabId, inPrisonCountText, true, recallsMesage) %}
+{% set peopleOnProbation = displayResults(searchTableHeadings, peopleOnProbationResults, tabParameters.probation.tabId, onProbationCountText, false, recallsMesage) %}
 
 {% block content %}
     <div class="govuk-grid-row">

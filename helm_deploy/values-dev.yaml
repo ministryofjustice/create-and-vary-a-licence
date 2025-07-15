@@ -38,6 +38,7 @@ generic-service:
     HDC_LICENCE_CREATION_BLOCK: "false"
     CA_NEW_SEARCH_ENABLED: "true"
     SHOW_DPR_REPORTING: "true"
+    RECALLS_ENABLED: "false"
 
   scheduledDowntime:
     enabled: true

@@ -3,6 +3,7 @@ import { ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
 import ProbationSearchRoutes from './probationSearch'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
+import config from '../../../config'
 
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
 jest.mock('../../../services/searchService')
@@ -77,6 +78,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
+        recallsEnabled: config.recallsEnabled,
       })
     })
 
@@ -95,6 +97,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
+        recallsEnabled: config.recallsEnabled,
       })
     })
 
@@ -113,6 +116,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
+        recallsEnabled: config.recallsEnabled,
       })
     })
 
@@ -137,6 +141,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
+        recallsEnabled: config.recallsEnabled,
       })
     })
 
@@ -162,6 +167,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
+        recallsEnabled: config.recallsEnabled,
       })
     })
   })
