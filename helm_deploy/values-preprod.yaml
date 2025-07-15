@@ -32,7 +32,7 @@ generic-service:
     MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"
     HDC_INTEGRATION_MVP2_ENABLED: "false"
     HDC_LICENCE_CREATION_BLOCK: "true"
-    CA_NEW_SEARCH_ENABLED: "false"
+    CA_NEW_SEARCH_ENABLED: "true"
     SHOW_DPR_REPORTING: "false"
 
   scheduledDowntime:
