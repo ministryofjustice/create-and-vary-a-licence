@@ -7,6 +7,7 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { CaCase } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
+import config from '../../../config'
 
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
 jest.mock('../../../services/searchService')
@@ -371,6 +372,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
       ],
       worksAtMoreThanOnePrison: false,
+      recallsEnabled: config.recallsEnabled,
     })
   })
 
@@ -630,6 +632,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
       ],
       worksAtMoreThanOnePrison: false,
+      recallsEnabled: config.recallsEnabled,
     })
   })
 
@@ -659,6 +662,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       inPrisonResults: [],
       onProbationResults: [],
       worksAtMoreThanOnePrison: false,
+      recallsEnabled: config.recallsEnabled,
     })
   })
 })
