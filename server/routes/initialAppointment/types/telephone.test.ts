@@ -91,6 +91,7 @@ describe('Telephone validator test', () => {
       // Then
       expect(errors.length).toBe(1)
       expect(errors[0].constraints).toHaveProperty('matches')
+      expect(errors[0].constraints.matches).toEqual('Enter a phone number in the correct format, like 01632 960901')
     })
   })
 })
