@@ -27,7 +27,7 @@ import { IsNotEmpty, Matches } from 'class-validator'
 */
 class Telephone {
   @Expose()
-  @IsNotEmpty({ message: 'Enter a telephone number' })
+  @IsNotEmpty({ message: 'Enter a phone number' })
   @Matches(/^((\+44\s?[1-9]\d{1,4}|\(0\d{2,5}\)|0\d{2,5})\s?\d{3,4}\s?\d{3,4})(\s?(?:#|ext|x)\s?\d{1,5})?$/, {
     message: 'Enter a phone number in the correct format, like 01632 960901',
   })

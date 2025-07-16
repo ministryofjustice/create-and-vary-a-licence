@@ -1,4 +1,4 @@
-import { validate } from 'class-validator'
+import { validate, ValidationError } from 'class-validator'
 import Telephone from './telephone'
 
 describe('Telephone validator test', () => {
@@ -93,5 +93,21 @@ describe('Telephone validator test', () => {
       expect(errors[0].constraints).toHaveProperty('matches')
       expect(errors[0].constraints.matches).toEqual('Enter a phone number in the correct format, like 01632 960901')
     })
+  })
+
+  it('should fail when telephone is empty', async () => {
+    const validateEmptyTelephone = async (): Promise<{ telephone: Telephone; errors: ValidationError[] }> => {
+      const telephone = new Telephone()
+      telephone.telephone = ''
+
+      const errors = await validate(telephone)
+      return { telephone, errors }
+    }
+
+    // Then
+    const { errors } = await validateEmptyTelephone()
+    expect(errors).not.toHaveLength(0)
+    expect(errors[0].property).toBe('telephone')
+    expect(errors[0].constraints?.isNotEmpty).toBe('Enter a phone number')
   })
 })
