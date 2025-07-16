@@ -5,6 +5,35 @@
 
 {% set pageTitle = applicationName + " - Select an address" %}
 {% set backLinkHref = "/" %}
+{% set addressCountLabel = "One address" if addresses.length == 1 else addresses.length + " addresses" %}
+
+{% macro renderMultipleAddresses(addresses, validationErrors) %}
+    {% set addressesOptions = [] %}
+    {% for address in addresses %}
+        {% set addressesOptions = (addressesOptions.push({
+            text: address | formatAddressTitleCase(true) | safe,
+            value: address.uprn,
+            attributes: {
+                "data-qa": "address-" + loop.index
+            }
+        }), addressesOptions) %}
+    {% endfor %}
+    {{ govukRadios({
+        idPrefix: "radio-option",
+        name: "selectedAddressUprn",
+        errorMessage: validationErrors | findError('selectedAddressUprn'),
+        attributes: {
+                "data-qa": "multiple-address"
+        },
+        items: addressesOptions
+    }) }}
+{% endmacro %}
+
+{% macro renderSingleAddress(address, validationErrors) %}
+    <div data-qa="single-address" class="govuk-body govuk-!-padding-2 govuk-!-margin-bottom-8 address-highlight">
+        {{ address | formatAddressTitleCase | safe }}
+    </div>
+{% endmacro %}
 
 {% block content %}
     <div class="govuk-width-container">
@@ -16,25 +45,14 @@
                     Select address
                 </h1>
                 <p class="govuk-body">
-                    {{ addresses.length }} addresses found for <strong>{{ searchQuery }}</strong>. <a class="govuk-link govuk-link--no-visited-state" href="{{ postcodeLookupSearchUrl }}">Search again</a>
+                    {{ addressCountLabel }} found for <strong>{{ searchQuery }}</strong>. <a class="govuk-link govuk-link--no-visited-state" href="{{ postcodeLookupSearchUrl }}">Search again</a>
                 </p>
-                {% set addressesOptions = [] %}
-                {% for address in addresses %}
-                    {% set addressesOptions = (addressesOptions.push({
-                        text: address | formatAddressTitleCase,
-                        value: address.uprn,
-                        attributes: {
-                            "data-qa": "address-" + loop.index
-                        }
-                    }), addressesOptions) %}
-                {% endfor %}
 
-                {{ govukRadios({
-                    idPrefix: "radio-option",
-                    name: "selectedAddressUprn",
-                    errorMessage: validationErrors | findError('selectedAddressUprn'),
-                    items: addressesOptions
-                }) }}
+                {% if addresses.length == 1 %}
+                    {{ renderSingleAddress(addresses[0], validationErrors) }}
+                {% else %}
+                    {{ renderMultipleAddresses(addresses, validationErrors) }}
+                {% endif %}
 
                 {{ govukButton({
                     text: "Continue",

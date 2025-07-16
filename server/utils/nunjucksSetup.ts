@@ -426,7 +426,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     return `${hourInt}${minute === '00' ? '' : `:${minute}`}am`
   })
 
-  njkEnv.addFilter('formatAddressTitleCase', address => formatAddressTitleCase(address))
+  njkEnv.addFilter('formatAddressTitleCase', (address, isMultiple) => formatAddressTitleCase(address, isMultiple))
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('serviceNowUrl', config.serviceNowUrl)
