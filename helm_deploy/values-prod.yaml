@@ -34,6 +34,7 @@ generic-service:
     HDC_LICENCE_CREATION_BLOCK: "true"
     CA_NEW_SEARCH_ENABLED: "false"
     SHOW_DPR_REPORTING: "false"
+    RECALLS_ENABLED: "false"
 
 gotenberg:
   replicaCount: 2

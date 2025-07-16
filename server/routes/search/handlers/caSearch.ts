@@ -5,6 +5,7 @@ import statusConfig from '../../../licences/licenceStatus'
 import { CaCase, PrisonCaseAdminSearchResult } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import config from '../../../config'
 
 export default class CaSearch {
   constructor(
@@ -65,6 +66,7 @@ export default class CaSearch {
       },
     }
 
+    const { recallsEnabled } = config
     return res.render('pages/search/caSearch/caSearch', {
       queryTerm,
       backLink,
@@ -85,6 +87,7 @@ export default class CaSearch {
         }
       }),
       worksAtMoreThanOnePrison,
+      recallsEnabled,
     })
   }
 

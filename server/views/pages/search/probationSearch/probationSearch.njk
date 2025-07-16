@@ -46,9 +46,9 @@
                             <li>were not released on Home Detention Curfew</li>
                             <li>were not released from prison with a licence created using a PD1 form</li>
                         {% endif %}
-                            <li>have not been recalled or breached a post sentence supervision order</li>
+                        <li>{{ recallsMessage }}</li>
                     </ul>
-                    <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
+                    <p>If you think someone’s licence is missing, tell us by <a id="serviceNowUrl" class="govuk-link" href="{{serviceNowUrl}}">filling in a support request form.</a></p>
                     <p class="govuk-body">
                         {{ govukButton({
                             text: "Return to caselist",
@@ -111,6 +111,11 @@
 
 {% set peopleInPrisonResults = [] %}
 {% set peopleOnProbationResults = [] %}
+{%  if recallsEnabled %}
+    {%  set recallsMessage = "have not breached a post-sentence supervision order" %}
+{% else %}
+    {%  set recallsMessage = "have not been recalled or breached a post sentence supervision order" %}
+{% endif %}
 
 {% for offender in searchResponse.results %}
     {% if offender.comName %}
