@@ -189,7 +189,7 @@ const formatAddress = (address?: string) => {
     : undefined
 }
 
-const formatAddressTitleCase = (address: AddressSearchResponse): string => {
+const formatAddressTitleCase = (address: AddressSearchResponse, isMultiple: boolean = false): string => {
   if (!address) return ''
 
   const { firstLine, secondLine, townOrCity, postcode } = address
@@ -201,7 +201,7 @@ const formatAddressTitleCase = (address: AddressSearchResponse): string => {
     postcode.trim(),
   ].filter(Boolean)
 
-  return formattedParts.join(', ')
+  return isMultiple ? formattedParts.join(', ') : formattedParts.join('<br>')
 }
 
 const toAddressCase = (str: string): string => {
