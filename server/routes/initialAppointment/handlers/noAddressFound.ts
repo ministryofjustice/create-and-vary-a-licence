@@ -7,6 +7,7 @@ export default class NoAddressFoundRoutes {
     return res.render('pages/create/NoAddressFound', {
       searchQuery,
       postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place`,
+      manualAddressEntryUrl: `/licence/create/id/${licenceId}/manual-address-entry`,
     })
   }
 }
