@@ -14,11 +14,13 @@ export default class InitialMeetingPlaceRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
+    const { licenceId } = req.params
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
     return res.render('pages/create/hardStop/initialMeetingPlace', {
       formAddress,
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
+      manualAddressEntryUrl: `/licence/create/id/${licenceId}/manual-address-entry`,
     })
   }
 

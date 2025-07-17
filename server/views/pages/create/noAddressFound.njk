@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 
 {% set pageTitle = applicationName + " - No address found" %}
-{% set backLinkHref = "/" %}¡
+{% set backLinkHref = "/" %}
 
 {% block content %}
     <div class="govuk-width-container">
@@ -17,7 +17,7 @@
                 <a data-qa="searchAgain" class="govuk-link" href="{{ postcodeLookupSearchUrl }}">Search again</a>
             </p>
             <p class="govuk-body govuk-!-margin-top-3">
-                <a data-qa="enterAddressManually" class="govuk-link" href="#">Enter address manually</a>
+                <a data-qa="enterAddressManually" class="govuk-link" href={{ manualAddressEntryUrl }}>Enter address manually</a>
             </p>
         </div>
       </div>

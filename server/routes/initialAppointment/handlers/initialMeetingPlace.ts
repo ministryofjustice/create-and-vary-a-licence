@@ -12,11 +12,13 @@ export default class InitialMeetingPlaceRoutes {
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
+    const { licenceId } = req.params
     const { licence } = res.locals
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
     return res.render('pages/create/initialMeetingPlace', {
       formAddress,
+      manualAddressEntryUrl: `/licence/create/id/${licenceId}/manual-address-entry`,
     })
   }
 

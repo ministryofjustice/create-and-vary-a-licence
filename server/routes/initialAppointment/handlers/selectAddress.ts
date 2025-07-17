@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import AddressService from '../../../services/addressService'
 import UserType from '../../../enumeration/userType'
+import { AddAddressRequest } from '../../../@types/licenceApiClientTypes'
+// import { AddAddressRequest } from '../../../@types/licenceApiClientTypes'
 
 export default class SelectAddressRoutes {
   constructor(
@@ -26,12 +28,38 @@ export default class SelectAddressRoutes {
       licenceId,
       searchQuery,
       postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place`,
+      manualAddressEntryUrl: `/licence/create/id/${licenceId}/manual-address-entry`,
     })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
+    const { user } = res.locals
     const basePath = `/licence/create/id/${licenceId}`
+
+    const {
+      reference: uprn,
+      firstLine,
+      secondLine,
+      townOrCity,
+      county,
+      postcode,
+      country,
+    } = JSON.parse(req.body?.selectedAddress)
+
+    const appointmentAddress = {
+      uprn,
+      firstLine,
+      secondLine,
+      townOrCity,
+      county,
+      postcode,
+      country,
+      source: 'OS_PLACES',
+    } as AddAddressRequest
+
+    await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
+
     if (this.userType === UserType.PRISON) {
       res.redirect(`/licence/view/id/${licenceId}/show`)
     } else if (req.query?.fromReview) {

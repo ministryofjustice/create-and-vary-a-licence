@@ -50,6 +50,7 @@ import type {
   PrisonUserSearchRequest,
   UpdateElectronicMonitoringProgrammeRequest,
   AddressSearchResponse,
+  AddAddressRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -144,6 +145,13 @@ export default class LicenceApiClient extends RestClient {
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/appointment-address`, data: appointmentAddress },
+      { username: user.username },
+    )
+  }
+
+  async addAppointmentAddress(licenceId: string, appointmentAddress: AddAddressRequest, user: User): Promise<void> {
+    await this.put(
+      { path: `/licence/id/${licenceId}/appointment/address`, data: appointmentAddress },
       { username: user.username },
     )
   }
