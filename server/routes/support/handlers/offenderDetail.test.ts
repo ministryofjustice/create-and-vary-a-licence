@@ -184,7 +184,7 @@ describe('Route Handlers - Offender detail', () => {
       prisoner: {
         ...prisonerDetail.prisoner,
         recall: false,
-        dateOfBirth: '1995-03-05',
+        dateOfBirth: '1970-01-01',
       },
       cvl: prisonerDetail.cvl,
     }
@@ -208,7 +208,7 @@ describe('Route Handlers - Offender detail', () => {
         confirmedReleaseDate: '01 Jun 2022',
         crn: 'X1234',
         determinate: 'Yes',
-        dob: '05 Mar 1995',
+        dob: '01 Jan 1970',
         hdcStatus: 'APPROVED',
         hdced: '01 May 2022',
         hdcad: '01 May 2022',
@@ -255,7 +255,6 @@ describe('Route Handlers - Offender detail', () => {
         sentenceExpiryDate: emptyDate,
         topupSupervisionExpiryDate: emptyDate,
         recall: false,
-        dateOfBirth: '1995-03-05',
       },
       cvl: prisonerDetail.cvl,
     }
@@ -280,7 +279,7 @@ describe('Route Handlers - Offender detail', () => {
         confirmedReleaseDate: '01 Jun 2022',
         crn: 'X1234',
         determinate: 'Yes',
-        dob: '05 Mar 1995',
+        dob: '01 Jan 1970',
         hdcStatus: 'APPROVED',
         hdced: 'Not found',
         hdcad: 'Not found',
@@ -324,7 +323,7 @@ describe('Route Handlers - Offender detail', () => {
         licenceExpiryDate: '2022-06-01',
         paroleEligibilityDate: emptyDate,
         indeterminateSentence: false,
-        dateOfBirth: '1995-03-05',
+        dateOfBirth: '1970-01-01',
         recall: true,
       },
       cvl: prisonerDetail.cvl,
@@ -361,7 +360,7 @@ describe('Route Handlers - Offender detail', () => {
         ...expectedPrisonerDetail.prisoner,
         conditionalReleaseDate: '01 Jun 2022',
         confirmedReleaseDate: '01 Jun 2022',
-        dob: '05 Mar 1995',
+        dob: '01 Jan 1970',
         crn: 'X1234',
         determinate: 'Yes',
         hdcStatus: 'APPROVED',
@@ -411,8 +410,8 @@ describe('Route Handlers - Offender detail', () => {
   it('should render COM information stored in CVL', async () => {
     const expectedPrisonerDetail = {
       prisoner: {
-        firstName: 'John',
-        lastName: 'Smith',
+        firstName: 'Joe',
+        lastName: 'Bloggs',
         conditionalReleaseDate: '2022-06-01',
         confirmedReleaseDate: '2022-06-01',
         postRecallReleaseDate: '2022-05-01',
@@ -424,7 +423,7 @@ describe('Route Handlers - Offender detail', () => {
         licenceExpiryDate: '2022-06-01',
         paroleEligibilityDate: '2022-01-01',
         indeterminateSentence: false,
-        dateOfBirth: '1995-03-05',
+        dateOfBirth: '1970-01-01',
         recall: true,
       },
       cvl: {
@@ -465,13 +464,13 @@ describe('Route Handlers - Offender detail', () => {
         confirmedReleaseDate: '01 Jun 2022',
         crn: 'X1234',
         determinate: 'Yes',
-        dob: '05 Mar 1995',
+        dob: '01 Jan 1970',
         hdcStatus: 'APPROVED',
         hdced: '01 May 2022',
         hdcad: '01 May 2022',
         hdcEndDate: '01 May 2023',
         licenceExpiryDate: '01 Jun 2022',
-        name: 'John Smith',
+        name: 'Joe Bloggs',
         paroleEligibilityDate: '01 Jan 2022',
         postRecallReleaseDate: '01 May 2022',
         sentenceExpiryDate: '01 Jun 2022',
@@ -499,33 +498,6 @@ describe('Route Handlers - Offender detail', () => {
   })
 
   it('Should render ineligibility reasons if the offender is ineligible for CVL', async () => {
-    const expectedPrisonerDetail = {
-      prisoner: {
-        firstName: 'Joe',
-        lastName: 'Bloggs',
-        conditionalReleaseDate: '2022-06-01',
-        confirmedReleaseDate: '2022-06-01',
-        postRecallReleaseDate: '2022-05-01',
-        topupSupervisionExpiryDate: '2023-05-01',
-        homeDetentionCurfewEligibilityDate: '2022-05-01',
-        homeDetentionCurfewActualDate: '2022-05-01',
-        homeDetentionCurfewEndDate: '2023-05-01',
-        sentenceExpiryDate: '2022-06-01',
-        licenceExpiryDate: '2022-06-01',
-        paroleEligibilityDate: '2022-01-01',
-        indeterminateSentence: false,
-        dateOfBirth: '1970-01-01',
-        recall: true,
-      },
-      cvl: {
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: false,
-        hardStopDate: '03/02/2023',
-        hardStopWarningDate: '01/02/2023',
-      },
-    } as CaseloadItem
-    licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
-
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
         bookingId: '1',
@@ -552,7 +524,7 @@ describe('Route Handlers - Offender detail', () => {
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
-        ...expectedPrisonerDetail.prisoner,
+        ...prisonerDetail.prisoner,
         conditionalReleaseDate: '01 Jun 2022',
         confirmedReleaseDate: '01 Jun 2022',
         crn: 'X1234',
@@ -584,6 +556,7 @@ describe('Route Handlers - Offender detail', () => {
         team: 'Team 1',
         username: 'AB123C',
       },
+      licence: licenceDatesNotFound,
       ineligibilityReasons: ['Reason1', 'Reason2'],
       is91Status: 'No',
     })
