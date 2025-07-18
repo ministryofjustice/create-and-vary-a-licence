@@ -19,6 +19,7 @@ type LicenceDates = {
   tused: string
   hdcad: string
   hdcEndDate: string
+  prrd: string
 }
 
 type CvlCom = {
@@ -139,6 +140,7 @@ export default class OffenderDetailRoutes {
         tused: 'Not found',
         hdcad: 'Not found',
         hdcEndDate: 'Not found',
+        prrd: 'Not found',
       }
     }
 
@@ -153,6 +155,7 @@ export default class OffenderDetailRoutes {
       tused: this.formatLicenceDate(licence.topupSupervisionExpiryDate),
       hdcad: isHdcLicence(licence) ? this.formatLicenceDate(licence.homeDetentionCurfewActualDate) : 'Not found',
       hdcEndDate: isHdcLicence(licence) ? this.formatLicenceDate(licence.homeDetentionCurfewEndDate) : 'Not found',
+      prrd: this.formatLicenceDate(licence.postRecallReleaseDate),
     }
   }
 
