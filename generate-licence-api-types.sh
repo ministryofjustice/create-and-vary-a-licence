@@ -34,7 +34,7 @@ node - <<EOF
   const input = fs.readFileSync(file, 'utf-8');
 
   // The regex finds this exact pattern — two adjacent structures where the second has the same as the first — and removes the second.
-  const cleanedFileWithOutDuplicates = input.replace(/(&\s*\{[\s\S]*?\})\s*\1/g,'$1');
+  const cleanedFileWithOutDuplicates = input.replace(/(&\s*\{[\s\S]*?\})\s*\1/g,'\$1');
 
   fs.writeFileSync(file, cleanedFileWithOutDuplicates);
   console.log('Cleaned duplicate json entries in $OUTPUT_FILE');
