@@ -12,6 +12,7 @@ import PersonName from './types/personName'
 import Address from './types/address'
 import Telephone from './types/telephone'
 import DateTime from './types/dateTime'
+import PostcodeLookupAddress from './types/PostcodeLookupAddress'
 import UserType from '../../enumeration/userType'
 import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import LicenceKind from '../../enumeration/LicenceKind'
@@ -19,6 +20,7 @@ import licenceKindCheckMiddleware from '../../middleware/licenceKindCheckMiddlew
 import config from '../../config'
 import NoAddressFoundRoutes from './handlers/noAddressFound'
 import SelectAddressRoutes from './handlers/selectAddress'
+import ManualAddressEntryRoutes from './handlers/manualAddressEntry'
 
 export default function Index({ licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
@@ -108,7 +110,13 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new SelectAddressRoutes(addressService, UserType.PROBATION)
     get('/create/id/:licenceId/select-address', controller.GET, UserType.PROBATION)
-    post('/create/id/:licenceId/select-address', controller.POST)
+    post('/create/id/:licenceId/select-address', controller.POST, PostcodeLookupAddress)
+  }
+
+  {
+    const controller = new ManualAddressEntryRoutes(UserType.PROBATION)
+    get('/create/id/:licenceId/manual-address-entry', controller.GET, UserType.PROBATION)
+    post('/create/id/:licenceId/manual-address-entry', controller.POST)
   }
   return router
 }
