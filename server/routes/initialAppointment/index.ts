@@ -12,6 +12,7 @@ import PersonName from './types/personName'
 import Address from './types/address'
 import Telephone from './types/telephone'
 import DateTime from './types/dateTime'
+import PostcodeLookupAddress from './types/PostcodeLookupAddress'
 import UserType from '../../enumeration/userType'
 import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import LicenceKind from '../../enumeration/LicenceKind'
@@ -109,7 +110,7 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new SelectAddressRoutes(addressService, UserType.PROBATION)
     get('/create/id/:licenceId/select-address', controller.GET, UserType.PROBATION)
-    post('/create/id/:licenceId/select-address', controller.POST)
+    post('/create/id/:licenceId/select-address', controller.POST, PostcodeLookupAddress)
   }
 
   {
