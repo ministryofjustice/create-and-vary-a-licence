@@ -105,7 +105,7 @@
     "@aws-sdk/client-sqs": "^3.831.0",
     "@ministryofjustice/frontend": "3.7",
     "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^4.6.4",
-    "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
+    "@ministryofjustice/hmpps-monitoring": "^0.0.1",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.7",
     "body-parser": "^2.2.0",
