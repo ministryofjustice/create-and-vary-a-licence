@@ -27,6 +27,7 @@ export default class CaSearch {
   GET = async (req: Request, res: Response): Promise<void> => {
     const queryTerm = req.query?.queryTerm as string
     const { user } = res.locals
+    const { caseloadsSelected = [] } = req.session
 
     let results: PrisonCaseAdminSearchResult
 
@@ -37,12 +38,10 @@ export default class CaSearch {
       }
     } else {
       const allPrisons = await this.prisonerService.getPrisons()
-      const prisonCodes = allPrisons
-        .filter(p => user.prisonCaseload.includes(p.agencyId))
-        .map(prison => {
-          return prison.agencyId
-        })
-      results = await this.searchService.getCaSearchResults(queryTerm, prisonCodes)
+      const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
+      const prisonsToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
+
+      results = await this.searchService.getCaSearchResults(queryTerm, prisonsToDisplay)
     }
 
     const worksAtMoreThanOnePrison = user.prisonCaseload.length > 1

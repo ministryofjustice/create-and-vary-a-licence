@@ -25,6 +25,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       query: {
         queryTerm: '',
       },
+      session: { caseloadsSelected: [] },
     } as unknown as Request
 
     res = {
@@ -34,6 +35,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       locals: {
         user: {
           username: 'test1',
+          activeCaseload: 'BAI',
           prisonCaseload: ['BAI'],
         },
       },
