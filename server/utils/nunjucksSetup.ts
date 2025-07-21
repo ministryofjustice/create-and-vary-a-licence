@@ -18,6 +18,7 @@ import {
   parseCvlDate,
   toIsoDate,
   formatAddressTitleCase,
+  formatAddressLine,
 } from './utils'
 import {
   AdditionalCondition,
@@ -187,6 +188,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('formatAddressAsList', (address?: string) => {
     return address ? address.split(', ').filter(line => line.trim().length > 0) : undefined
   })
+
+  njkEnv.addFilter('formatAddressLine', formatAddressLine)
 
   njkEnv.addFilter('formatListAsString', (list?: string[]): string => {
     if (list) {

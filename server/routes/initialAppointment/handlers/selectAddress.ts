@@ -14,6 +14,8 @@ export default class SelectAddressRoutes {
     const { licenceId } = req.params
     const { searchQuery } = req.query as { searchQuery?: string }
     const { user } = res.locals
+    const fromReview = req.query?.fromReview
+    const fromReviewParam = fromReview ? '?fromReview=true' : ''
 
     const addresses = await this.addressService.searchForAddresses(searchQuery, user)
 
@@ -27,8 +29,8 @@ export default class SelectAddressRoutes {
       addresses,
       licenceId,
       searchQuery,
-      postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place`,
-      manualAddressEntryUrl: `/licence/create/id/${licenceId}/manual-address-entry`,
+      postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place${fromReviewParam}`,
+      manualAddressEntryUrl: `/licence/create/id/${licenceId}/manual-address-entry${fromReviewParam}`,
     })
   }
 
@@ -37,15 +39,7 @@ export default class SelectAddressRoutes {
     const { user } = res.locals
     const basePath = `/licence/create/id/${licenceId}`
 
-    const {
-      reference: uprn,
-      firstLine,
-      secondLine,
-      townOrCity,
-      county,
-      postcode,
-      country,
-    } = JSON.parse(req.body?.selectedAddress)
+    const { uprn, firstLine, secondLine, townOrCity, county, postcode, country } = JSON.parse(req.body?.selectedAddress)
 
     const appointmentAddress = {
       uprn,

@@ -20,7 +20,9 @@ import licenceKindCheckMiddleware from '../../middleware/licenceKindCheckMiddlew
 import config from '../../config'
 import NoAddressFoundRoutes from './handlers/noAddressFound'
 import SelectAddressRoutes from './handlers/selectAddress'
-import ManualAddressEntryRoutes from './handlers/manualAddressEntry'
+import ManualAddressPostcodeLookupRoutes from './handlers/manualAddressPostcodeLookup'
+import ManualAddress from './types/manualAddress'
+import PostcodeLookupInputValidation from './types/PostcodeLookupInputValidation'
 
 export default function Index({ licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
@@ -68,7 +70,7 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PROBATION)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET, UserType.PROBATION)
-    const addressType = config.postcodeLookupEnabled ? undefined : Address
+    const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, addressType)
   }
 
@@ -114,9 +116,9 @@ export default function Index({ licenceService, conditionService, addressService
   }
 
   {
-    const controller = new ManualAddressEntryRoutes(UserType.PROBATION)
+    const controller = new ManualAddressPostcodeLookupRoutes(addressService, UserType.PROBATION)
     get('/create/id/:licenceId/manual-address-entry', controller.GET, UserType.PROBATION)
-    post('/create/id/:licenceId/manual-address-entry', controller.POST)
+    post('/create/id/:licenceId/manual-address-entry', controller.POST, ManualAddress)
   }
   return router
 }

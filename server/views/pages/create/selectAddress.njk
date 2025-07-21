@@ -20,6 +20,7 @@
     {% endfor %}
     {{ govukRadios({
         idPrefix: "radio-option",
+        id: "selectedAddress",
         name: "selectedAddress",
         errorMessage: validationErrors | findError('selectedAddress'),
         attributes: {
@@ -29,7 +30,7 @@
     }) }}
 {% endmacro %}
 
-{% macro renderSingleAddress(address, validationErrors) %}
+{% macro renderSingleAddress(address) %}
     <div data-qa="single-address" class="govuk-body govuk-!-padding-2 govuk-!-margin-bottom-8 address-highlight">
         {{ address | formatAddressTitleCase | safe }}
     </div>
@@ -49,7 +50,7 @@
                 </p>
 
                 {% if addresses.length == 1 %}
-                    {{ renderSingleAddress(addresses[0], validationErrors) }}
+                    {{ renderSingleAddress(addresses[0]) }}
                 {% else %}
                     {{ renderMultipleAddresses(addresses, validationErrors) }}
                 {% endif %}

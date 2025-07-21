@@ -9,6 +9,9 @@
 {% set pageTitle = applicationName + " - Create a licence - Manual address entry" %}
 {% set pageId = "manual-address-entry-page" %}
 {% set backLinkHref = "/" %}
+{% set address = licence.licenceAppointmentAddress if licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL' %}
+{% set fromReview = "?fromReview=true" if fromReview %}
+{% set postcodeLookupUrl = "/licence/create/id/" + licence.id + "/initial-meeting-place" + fromReview %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -39,24 +42,24 @@
                         label: {
                             html: 'Address line 1'
                         },
-                        id: "addressLine1",
-                        name: "addressLine1",
+                        id: "firstLine",
+                        name: "firstLine",
                         autocomplete: "address-line1",
                         classes: 'govuk-!-width-one-third',
-                        errorMessage: validationErrors | findError('addressLine1'),
-                        value: formAddress.addressLine1 | fillFormResponse(formResponses.addressLine1)
+                        errorMessage: validationErrors | findError('firstLine'),
+                        value: address.firstLine | fillFormResponse(formResponses.firstLine)
                     }) }}
 
                     {{ govukInput({
                         label: {
                             html: 'Address line 2 (optional)'
                         },
-                        id: "addressLine2",
-                        name: "addressLine2",
+                        id: "secondLine",
+                        name: "secondLine",
                         autocomplete: "address-line2",
                         classes: 'govuk-!-width-one-third',
-                        errorMessage: validationErrors | findError('addressLine2'),
-                        value: formAddress.addressLine2 | fillFormResponse(formResponses.addressLine2)
+                        errorMessage: validationErrors | findError('secondLine'),
+                        value: address.secondLine | fillFormResponse(formResponses.secondLine)
                     }) }}
 
                     {{ govukInput({
@@ -64,11 +67,11 @@
                             text: "Town or city"
                         },
                         classes: "govuk-!-width-one-quarter",
-                        id: "addressTown",
-                        name: "addressTown",
+                        id: "townOrCity",
+                        name: "townOrCity",
                         autocomplete: "address-level2",
-                        errorMessage: validationErrors | findError('addressTown'),
-                        value: formAddress.addressTown | fillFormResponse(formResponses.addressTown)
+                        errorMessage: validationErrors | findError('townOrCity'),
+                        value: address.townOrCity | fillFormResponse(formResponses.townOrCity)
                     }) }}
 
                     {{ govukInput({
@@ -76,10 +79,10 @@
                             text: "County (optional)"
                         },
                         classes: "govuk-!-width-one-quarter",
-                        id: "addressCounty",
-                        name: "addressCounty",
-                        errorMessage: validationErrors | findError('addressCounty'),
-                        value: formAddress.addressCounty | fillFormResponse(formResponses.addressCounty)
+                        id: "county",
+                        name: "county",
+                        errorMessage: validationErrors | findError('county'),
+                        value: address.county | fillFormResponse(formResponses.county)
                     }) }}
 
                     {{ govukInput({
@@ -87,11 +90,11 @@
                             text: "Postcode"
                         },
                         classes: "govuk-input--width-10",
-                        id: "addressPostcode",
-                        name: "addressPostcode",
+                        id: "postcode",
+                        name: "postcode",
                         autocomplete: "postal-code",
-                        errorMessage: validationErrors | findError('addressPostcode'),
-                        value: formAddress.addressPostcode | fillFormResponse(formResponses.addressPostcode)
+                        errorMessage: validationErrors | findError('postcode'),
+                        value: address.postcode | fillFormResponse(formResponses.postcode)
                     }) }}
 
                 {% endcall %}
@@ -102,6 +105,9 @@
                     attributes: { 'data-qa': 'continue' }
                 }) }}
 
+                 <p class="govuk-body govuk-!-margin-top-3">
+                    <a class="govuk-link" data-qa="postcodeLookupSearch" href={{postcodeLookupUrl}}>Find an address</a>
+                </p>
             </div>
         </div>
     </form>

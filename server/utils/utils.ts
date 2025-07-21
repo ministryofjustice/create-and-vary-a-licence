@@ -204,6 +204,21 @@ const formatAddressTitleCase = (address: AddressSearchResponse, isMultiple: bool
   return isMultiple ? formattedParts.join(', ') : formattedParts.join('<br>')
 }
 
+const formatAddressLine = (address: AddressSearchResponse): string => {
+  if (!address) return ''
+  const { firstLine, secondLine, townOrCity, county, postcode } = address
+
+  const formattedParts = [
+    toAddressCase(firstLine),
+    toAddressCase(secondLine),
+    toAddressCase(townOrCity),
+    toAddressCase(county),
+    postcode.trim(),
+  ].filter(Boolean)
+
+  return formattedParts.join(', ')
+}
+
 const toAddressCase = (str: string): string => {
   if (!str) return ''
 
@@ -281,4 +296,5 @@ export {
   isVariation,
   isHdcLicence,
   formatAddressTitleCase,
+  formatAddressLine,
 }

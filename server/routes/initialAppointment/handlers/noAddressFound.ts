@@ -4,10 +4,13 @@ export default class NoAddressFoundRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { searchQuery } = req.query as { searchQuery?: string }
+    const fromReview = req.query?.fromReview
+    const fromReviewParam = fromReview ? '?fromReview=true' : ''
+
     return res.render('pages/create/NoAddressFound', {
       searchQuery,
-      postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place`,
-      manualAddressEntryUrl: `/licence/create/id/${licenceId}/manual-address-entry`,
+      postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place${fromReviewParam}`,
+      manualAddressEntryUrl: `/licence/create/id/${licenceId}/manual-address-entry${fromReviewParam}`,
     })
   }
 }
