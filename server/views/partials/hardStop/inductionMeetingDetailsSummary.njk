@@ -5,8 +5,10 @@
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
     {% set routepath = "/licence/hard-stop/edit/id/" + licence.id %}
 
+    {% set addressPath = '/manual-address-entry' if (licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL') else '/initial-meeting-place' %}
+
     {% if postcodeLookupEnabled %}
-        {% set addressText = licence.licenceAppointmentAddress | formatAddressTitleCase(true) %}
+        {% set addressText = licence.licenceAppointmentAddress | formatAddressLine %}
     {% elif licence.appointmentAddress %}
         {% set addressText = licence.appointmentAddress | formatAddress %}
     {% else %}
@@ -48,7 +50,7 @@
                 actions: {
                     items: [
                         {
-                            href: routepath + "/initial-meeting-place",
+                            href: routepath + addressPath,
                             text: "Change",
                             visuallyHiddenText: "address",
                             attributes: { "id": "appointmentAddress", "data-qa": "address-change-link" }

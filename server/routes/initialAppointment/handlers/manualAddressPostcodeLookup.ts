@@ -9,7 +9,10 @@ export default class ManualAddressPostcodeLookupRoutes {
     private readonly userType: UserType,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => res.render('pages/create/manualAddressPostcodeLookupForm')
+  GET = async (req: Request, res: Response): Promise<void> =>
+    res.render('pages/create/manualAddressPostcodeLookupForm', {
+      postcodeLookupUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place`,
+    })
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
