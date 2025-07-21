@@ -50,6 +50,7 @@
                 </p>
 
                 {% if addresses.length == 1 %}
+                    <input type="hidden" name="selectedAddress" value="{{ addresses[0] | dump | escape }}">
                     {{ renderSingleAddress(addresses[0]) }}
                 {% else %}
                     {{ renderMultipleAddresses(addresses, validationErrors) }}
