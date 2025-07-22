@@ -343,7 +343,7 @@ describe('Hmpps Rest Client tests', () => {
             testData1: 'testValue1',
           },
         }),
-      ).rejects.toThrowError('Not Found')
+      ).rejects.toThrow('Not Found')
     })
   })
 
