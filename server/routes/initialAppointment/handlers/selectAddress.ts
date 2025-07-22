@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import AddressService from '../../../services/addressService'
 import UserType from '../../../enumeration/userType'
 import { AddAddressRequest } from '../../../@types/licenceApiClientTypes'
-// import { AddAddressRequest } from '../../../@types/licenceApiClientTypes'
 
 export default class SelectAddressRoutes {
   constructor(

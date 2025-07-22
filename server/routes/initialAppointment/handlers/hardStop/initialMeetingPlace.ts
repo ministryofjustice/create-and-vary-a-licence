@@ -30,13 +30,11 @@ export default class InitialMeetingPlaceRoutes {
     const { licenceId } = req.params
     const { user, licence } = res.locals
     const { searchQuery } = req.body
-    const fromReview = req.query?.fromReview
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/hard-stop/${action}/id/${licenceId}`
 
     if (config.postcodeLookupEnabled && searchQuery?.trim()) {
-      const fromReviewParam = fromReview ? '&fromReview=true' : ''
-      return res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}${fromReviewParam}`)
+      return res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}`)
     }
 
     if (!config.postcodeLookupEnabled) {

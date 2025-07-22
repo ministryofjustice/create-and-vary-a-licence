@@ -9,10 +9,15 @@ export default class ManualAddressPostcodeLookupRoutes {
     private readonly userType: UserType,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> =>
+  GET = async (req: Request, res: Response): Promise<void> => {
+    const { licenceId } = req.params
+    const basePath = `/licence/create/id/${licenceId}`
+    const fromReview = req.query?.fromReview
+    const fromReviewParam = fromReview ? '?fromReview=true' : ''
     res.render('pages/create/manualAddressPostcodeLookupForm', {
-      postcodeLookupUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place`,
+      postcodeLookupUrl: `${basePath}/initial-meeting-place${fromReviewParam}`,
     })
+  }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
