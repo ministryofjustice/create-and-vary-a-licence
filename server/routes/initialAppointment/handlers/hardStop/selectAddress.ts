@@ -38,7 +38,7 @@ export default class SelectAddressRoutes {
     const { licenceId } = req.params
     const { user } = res.locals
 
-    const { uprn, firstLine, secondLine, townOrCity, county, postcode, country } = JSON.parse(req.body?.selectedAddress)
+    const { uprn, firstLine, secondLine, townOrCity, county, postcode } = JSON.parse(req.body?.selectedAddress)
 
     const appointmentAddress = {
       uprn,
@@ -47,7 +47,6 @@ export default class SelectAddressRoutes {
       townOrCity,
       county,
       postcode,
-      country,
       source: 'OS_PLACES',
     } as AddAddressRequest
 

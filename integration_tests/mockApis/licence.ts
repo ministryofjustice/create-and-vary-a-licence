@@ -262,7 +262,6 @@ export default {
             townOrCity: 'Faketown',
             county: 'Fakeshire',
             postcode: 'FA11KE',
-            country: 'England',
             source: 'OS_PLACES',
           },
           {
@@ -272,7 +271,6 @@ export default {
             townOrCity: 'Anothertown',
             county: 'Anothershire',
             postcode: 'AN11TH',
-            country: 'England',
             source: 'OS_PLACES',
           },
         ],

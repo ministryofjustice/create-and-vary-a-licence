@@ -73,7 +73,6 @@ describe('Route Handlers - Create Licence - Select an address', () => {
         townOrCity: 'London',
         county: '',
         postcode: 'SW1A 2AA',
-        country: 'England',
       }
 
       beforeEach(() => {

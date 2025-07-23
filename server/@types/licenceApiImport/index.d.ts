@@ -4646,16 +4646,16 @@ export interface components {
       licenceStartDate?: string
       /**
        * Format: date
-       * @description The release date after being recalled
-       * @example 06/06/2023
-       */
-      postRecallReleaseDate?: string
-      /**
-       * Format: date
        * @description The earliest conditional release date of the person on licence
        * @example 13/08/2022
        */
       conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       * @example 06/06/2023
+       */
+      postRecallReleaseDate?: string
       /**
        * Format: date
        * @description The date that the licence will expire
