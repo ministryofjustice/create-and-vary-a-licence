@@ -165,7 +165,7 @@
     {
         attributes: {
             id: 'release-date-' + loop.index,
-            "data-sort-value": offender.releaseDate | dateToUnix
+            "data-sort-value": offender.releaseDate | cvlDateToDateShort | dateToUnix
         },
         html: releaseDate
     },
@@ -244,7 +244,7 @@
     {
         attributes: {
             id: 'release-date-' + loop.index,
-            "data-sort-value": offender.releaseDate | dateToUnix
+            "data-sort-value": offender.releaseDate | cvlDateToDateShort | dateToUnix
         },
         html: releaseDate
     },

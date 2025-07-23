@@ -247,6 +247,6 @@ describe('Release event handler', () => {
 
     await expect(async () => {
       await handler.handle(event)
-    }).rejects.toThrowError('Multiple approved licences found, unable to automatically activate')
+    }).rejects.toThrow('Multiple approved licences found, unable to automatically activate')
   })
 })
