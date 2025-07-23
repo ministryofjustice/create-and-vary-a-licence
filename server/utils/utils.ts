@@ -143,6 +143,10 @@ const toIsoDate = (date: Date) => {
   return date ? format(date, 'yyyy-MM-dd') : null
 }
 
+const formatCvlDateAsEurDate = (date: string) => {
+  return date ? moment(date, 'DD/MM/YYYY').format('D MMM YYYY') : null
+}
+
 const parseCvlDateTime = (date: string, { withSeconds }: { withSeconds: boolean }) => {
   if (withSeconds) {
     return date ? parse(date, 'dd/MM/yyyy HH:mm:ss', new Date()) : null
@@ -278,6 +282,7 @@ export {
   groupingBy,
   isInHardStopPeriod,
   toIsoDate,
+  formatCvlDateAsEurDate,
   isVariation,
   isHdcLicence,
   formatAddressTitleCase,

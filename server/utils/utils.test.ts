@@ -23,6 +23,7 @@ import {
   parseCvlDate,
   parseCvlDateTime,
   toIsoDate,
+  formatCvlDateAsEurDate,
   isVariation,
   isHdcLicence,
 } from './utils'
@@ -303,6 +304,15 @@ describe('toIsoDate', () => {
   })
   it('format date', () => {
     expect(toIsoDate(parseIsoDate('2023-01-23'))).toEqual('2023-01-23')
+  })
+})
+
+describe('formatCvlDateAsEurDate', () => {
+  it('ignores null', () => {
+    expect(formatCvlDateAsEurDate(null)).toEqual(null)
+  })
+  it('format date', () => {
+    expect(formatCvlDateAsEurDate('23/01/2023')).toEqual('23 Jan 2023')
   })
 })
 

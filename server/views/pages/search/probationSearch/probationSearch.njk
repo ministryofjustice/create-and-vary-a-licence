@@ -173,7 +173,7 @@
         {
             attributes: {
                 id: 'release-date-' + loop.index,
-                "data-sort-value": offender.releaseDate | dateToUnix
+                "data-sort-value": offender.releaseDate | formatCvlDateAsEurDate | dateToUnix
             },
             html: releaseDate
         },
