@@ -3,6 +3,7 @@ import { Services } from '../services'
 import createLicenceRoutes from './creatingLicences'
 import createHardStopLicenceRoutes from './creatingLicences/handlers/hardStop'
 import createHdcLicenceRoutes from './creatingLicences/handlers/hdc'
+import createRecallLicenceRoutes from './creatingLicences/handlers/recall'
 import manageConditionRoutes from './manageConditions'
 import varyLicenceRoutes from './varyingLicences'
 import approveLicenceRoutes from './approvingLicences'
@@ -39,6 +40,7 @@ export default function Index(services: Services): Router {
   router.use(createLicenceRoutes(services))
   router.use(createHardStopLicenceRoutes(services))
   router.use(createHdcLicenceRoutes(services))
+  router.use(createRecallLicenceRoutes(services))
   router.use(manageConditionRoutes(services))
   router.use(varyLicenceRoutes(services))
   router.use(approveLicenceRoutes(services))
