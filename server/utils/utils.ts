@@ -143,7 +143,7 @@ const toIsoDate = (date: Date) => {
   return date ? format(date, 'yyyy-MM-dd') : null
 }
 
-const formatCvlDateAsEurDate = (date: string) => {
+const cvlDateToDateShort = (date: string) => {
   return date ? moment(date, 'DD/MM/YYYY').format('D MMM YYYY') : null
 }
 
@@ -282,7 +282,7 @@ export {
   groupingBy,
   isInHardStopPeriod,
   toIsoDate,
-  formatCvlDateAsEurDate,
+  cvlDateToDateShort,
   isVariation,
   isHdcLicence,
   formatAddressTitleCase,

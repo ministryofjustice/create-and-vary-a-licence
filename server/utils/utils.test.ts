@@ -23,7 +23,7 @@ import {
   parseCvlDate,
   parseCvlDateTime,
   toIsoDate,
-  formatCvlDateAsEurDate,
+  cvlDateToDateShort,
   isVariation,
   isHdcLicence,
 } from './utils'
@@ -307,12 +307,12 @@ describe('toIsoDate', () => {
   })
 })
 
-describe('formatCvlDateAsEurDate', () => {
+describe('cvlDateToDateShort', () => {
   it('ignores null', () => {
-    expect(formatCvlDateAsEurDate(null)).toEqual(null)
+    expect(cvlDateToDateShort(null)).toEqual(null)
   })
   it('format date', () => {
-    expect(formatCvlDateAsEurDate('23/01/2023')).toEqual('23 Jan 2023')
+    expect(cvlDateToDateShort('23/01/2023')).toEqual('23 Jan 2023')
   })
 })
 
