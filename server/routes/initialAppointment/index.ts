@@ -132,5 +132,11 @@ export default function Index({ licenceService, conditionService, addressService
     get('/create/id/:licenceId/manual-address-entry', controller.GET, UserType.PROBATION)
     post('/create/id/:licenceId/manual-address-entry', controller.POST, ManualAddress)
   }
+
+  {
+    const controller = new ManualAddressPostcodeLookupRoutes(addressService, UserType.PRISON)
+    get('/view/id/:licenceId/manual-address-entry', controller.GET, UserType.PRISON)
+    post('/view/id/:licenceId/manual-address-entry', controller.POST, ManualAddress)
+  }
   return router
 }

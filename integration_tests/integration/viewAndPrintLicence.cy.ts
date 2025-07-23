@@ -192,9 +192,11 @@ context('View and print licence', () => {
     viewLicencePage = viewLicencePage.clickChangePersonLink().enterPerson('Joe Bloggs').clickContinueToReturn()
     viewLicencePage = viewLicencePage
       .clickChangeAddressLink()
-      .enterAddressOrPostcode('123 Fake St')
-      .findAddress()
-      .selectAddress()
+      .enterFirstLine('123 Fake St')
+      .enterSecondLine('Apt 4B')
+      .enterTownOrCity('Faketown')
+      .enterCounty('Fakesbury')
+      .enterPostcode('FA1 1KE')
       .clickContinueToReturn()
     viewLicencePage = viewLicencePage.clickChangeTelephoneLink().enterTelephone('00000000000').clickContinueToReturn()
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {

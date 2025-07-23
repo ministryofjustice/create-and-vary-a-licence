@@ -4,7 +4,7 @@ import AppointmentTimePage from './appointmentTime'
 import Page from './page'
 import PrintLicenceHtmlPage from './printLicenceHtmlPage'
 import CaSearchPage from './caSearch'
-import AppointmentPlacePage from './appointmentPlace'
+import ManualAddressEntryPage from './manualAddressEntryPage'
 
 export default class ViewALicencePage extends Page {
   constructor() {
@@ -16,9 +16,9 @@ export default class ViewALicencePage extends Page {
     return Page.verifyOnPage(AppointmentPersonPage)
   }
 
-  clickChangeAddressLink = (): AppointmentPlacePage => {
+  clickChangeAddressLink = (): ManualAddressEntryPage => {
     cy.get('[data-qa=address-change-link]').click()
-    return Page.verifyOnPage(AppointmentPlacePage)
+    return Page.verifyOnPage(ManualAddressEntryPage)
   }
 
   clickChangeTelephoneLink = (): AppointmentContactPage => {

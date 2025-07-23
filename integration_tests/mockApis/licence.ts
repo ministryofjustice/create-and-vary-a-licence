@@ -41,6 +41,7 @@ const licencePlaceholder: Licence = {
   forename: 'Test',
   surname: 'Person',
   dateOfBirth: '12/02/1980',
+  appointmentPerson: 'Duty Officer',
   conditionalReleaseDate: '13/03/2021',
   actualReleaseDate: '01/04/2021',
   earliestReleaseDate: '01/04/2021',
@@ -67,6 +68,16 @@ const licencePlaceholder: Licence = {
   dateLastUpdated: '10/09/2021 10:01:00', // Make dynamic to now?
   createdByUsername: 'X12345',
   createdByFullName: 'John Smith',
+  licenceAppointmentAddress: {
+    reference: '1234',
+    uprn: '10000000001',
+    firstLine: '123 Fake Street',
+    secondLine: '',
+    townOrCity: 'Faketown',
+    county: 'Fakeshire',
+    postcode: 'FA11KE',
+    source: 'MANUAL',
+  },
   standardLicenceConditions: [
     { id: 1, code: 'goodBehaviour', sequence: 1, text: 'Be of good behaviour' },
     { id: 2, code: 'notBreakLaw', sequence: 2, text: 'Do not break the law' },

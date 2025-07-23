@@ -11,7 +11,8 @@ export default class ManualAddressPostcodeLookupRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const basePath = `/licence/create/id/${licenceId}`
+    const isPrisonUser = this.userType === UserType.PRISON
+    const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
     const fromReview = req.query?.fromReview
     const fromReviewParam = fromReview ? '?fromReview=true' : ''
     res.render('pages/create/manualAddressPostcodeLookupForm', {
