@@ -14,6 +14,13 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 
+const CVL_DATE = 'DD/MM/YYYY'
+const DATE_SHORT = 'D MMM YYYY'
+const ISO_DATE = 'yyyy-MM-dd'
+const JSON_DATE_TIME = 'DD/MM/YYYY HH:mm'
+const SIMPLE_DATE_TIME = 'D/MM/YYYY HHmm'
+const TWELVE_HOUR_TIME = 'hh:mm a'
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -40,7 +47,7 @@ const hasAuthSource = (user: Express.User, source: string): boolean => user?.aut
  * @param date date to be converted.
  * @returns date converted to format DD/MM/YYYY.
  */
-const convertDateFormat = (date: string): string => (date ? moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY') : undefined)
+const convertDateFormat = (date: string): string => (date ? moment(date, 'YYYY-MM-DD').format(CVL_DATE) : undefined)
 
 /**
  * Converts a SimpleDateTime display value to a JSON string format dd/mm/yyyy hh:mm
@@ -50,7 +57,7 @@ const simpleDateTimeToJson = (dt: SimpleDateTime): string | undefined => {
   const { date, time } = dt
   const dateTimeString = [date.year, date.month, date.day, time.hour, time.minute, time.ampm].join(' ')
   const momentDt = moment(dateTimeString, 'YYYY MM DD hh mm a')
-  return momentDt.isValid() ? momentDt.format('DD/MM/YYYY HH:mm') : undefined
+  return momentDt.isValid() ? momentDt.format(JSON_DATE_TIME) : undefined
 }
 
 /**
@@ -58,7 +65,7 @@ const simpleDateTimeToJson = (dt: SimpleDateTime): string | undefined => {
  * @param date: a date string with format `dd/mm/yyyy`
  */
 const dateStringToSimpleDate = (date: string): SimpleDate | undefined => {
-  const momentDate = moment(date, 'D/MM/YYYY HHmm')
+  const momentDate = moment(date, SIMPLE_DATE_TIME)
   if (!momentDate.isValid()) {
     return undefined
   }
@@ -70,7 +77,7 @@ const dateStringToSimpleDate = (date: string): SimpleDate | undefined => {
  * @param dt: string
  */
 const jsonToSimpleDateTime = (dt: string): SimpleDateTime | undefined => {
-  const momentDt = moment(dt, 'D/MM/YYYY HHmm')
+  const momentDt = moment(dt, SIMPLE_DATE_TIME)
   if (!momentDt.isValid()) {
     return undefined
   }
@@ -107,32 +114,32 @@ const stringToAddressObject = (address: string): Address => {
 }
 
 const jsonDtToDate = (dt: string): string => {
-  const momentDate = moment(dt, 'DD/MM/YYYY HH:mm')
+  const momentDate = moment(dt, JSON_DATE_TIME)
   return momentDate.isValid() ? momentDate.format('D MMMM YYYY') : null
 }
 
 const jsonDtToDateShort = (dt: string): string => {
-  const momentDate = moment(dt, 'DD/MM/YYYY HH:mm')
-  return momentDate.isValid() ? momentDate.format('D MMM YYYY') : null
+  const momentDate = moment(dt, JSON_DATE_TIME)
+  return momentDate.isValid() ? momentDate.format(DATE_SHORT) : null
 }
 
 const jsonDtToDateWithDay = (dt: string): string => {
-  const momentDate = moment(dt, 'DD/MM/YYYY HH:mm')
+  const momentDate = moment(dt, JSON_DATE_TIME)
   return momentDate.isValid() ? momentDate.format('dddd D MMMM YYYY') : null
 }
 
 const jsonDtTo12HourTime = (dt: string): string => {
-  const momentTime = moment(dt, 'DD/MM/YYYY HH:mm')
-  return momentTime.isValid() ? momentTime.format('hh:mm a') : null
+  const momentTime = moment(dt, JSON_DATE_TIME)
+  return momentTime.isValid() ? momentTime.format(TWELVE_HOUR_TIME) : null
 }
 
 const json24HourTimeTo12HourTime = (dt: string): string => {
   const momentTime = moment(dt, 'HH:mm:ss')
-  return momentTime.isValid() ? momentTime.format('hh:mm a') : null
+  return momentTime.isValid() ? momentTime.format(TWELVE_HOUR_TIME) : null
 }
 
 const parseIsoDate = (date: string) => {
-  return date ? parse(date, 'yyyy-MM-dd', new Date()) : null
+  return date ? parse(date, ISO_DATE, new Date()) : null
 }
 
 const parseCvlDate = (date: string) => {
@@ -140,11 +147,11 @@ const parseCvlDate = (date: string) => {
 }
 
 const toIsoDate = (date: Date) => {
-  return date ? format(date, 'yyyy-MM-dd') : null
+  return date ? format(date, ISO_DATE) : null
 }
 
 const cvlDateToDateShort = (date: string) => {
-  return date ? moment(date, 'DD/MM/YYYY').format('D MMM YYYY') : null
+  return date ? moment(date, CVL_DATE).format(DATE_SHORT) : null
 }
 
 const parseCvlDateTime = (date: string, { withSeconds }: { withSeconds: boolean }) => {
@@ -225,7 +232,7 @@ const toAddressCase = (str: string): string => {
 }
 
 const licenceIsTwoDaysToRelease = (licence: Licence) =>
-  moment(licence.licenceStartDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
+  moment(licence.licenceStartDate, CVL_DATE).diff(moment(), 'days') <= 2
 
 const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], keyField: K): T[][] => {
   const results = arr.reduce(
