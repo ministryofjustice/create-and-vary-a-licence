@@ -17,6 +17,7 @@ import {
   jsonDtToDateWithDay,
   parseCvlDate,
   toIsoDate,
+  cvlDateToDateShort,
   formatAddressTitleCase,
   formatAddressLine,
 } from './utils'
@@ -217,10 +218,12 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('dateToUnix', (date: string) => {
-    return moment(date, ['D MMM YYYY', 'YYYY-MM-DD', 'DD/MM/YYYY']).unix()
+    return moment(date, 'D MMM YYYY').unix()
   })
 
   njkEnv.addFilter('toIsoDate', toIsoDate)
+
+  njkEnv.addFilter('cvlDateToDateShort', cvlDateToDateShort)
 
   njkEnv.addFilter('getStatusOrder', (licenceStatus: LicenceStatus) => {
     const licenceStatusOrderMap = new Map()
