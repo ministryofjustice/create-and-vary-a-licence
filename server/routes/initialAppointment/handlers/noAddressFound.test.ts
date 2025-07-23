@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import NoAddressFoundRoutes from './noAddressFound'
+import UserType from '../../../enumeration/userType'
 
 describe('Route Handlers - Create a licence - No address found', () => {
   let req: Request
   let res: Response
-  const handler = new NoAddressFoundRoutes()
+  const handler = new NoAddressFoundRoutes(UserType.PROBATION)
 
   describe('No address found for probation user journey', () => {
     beforeEach(() => {

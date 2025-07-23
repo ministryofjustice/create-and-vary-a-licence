@@ -1,10 +1,10 @@
 import AppointmentContactPage from './appointmentContact'
 import AppointmentPersonPage from './appointmentPerson'
-import AppointmentPlacePage from './appointmentPlace'
 import AppointmentTimePage from './appointmentTime'
 import Page from './page'
 import PrintLicenceHtmlPage from './printLicenceHtmlPage'
 import CaSearchPage from './caSearch'
+import AppointmentPlacePage from './appointmentPlace'
 
 export default class ViewALicencePage extends Page {
   constructor() {

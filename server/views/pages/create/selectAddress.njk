@@ -4,6 +4,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set pageTitle = applicationName + " - Select an address" %}
+{% set pageId = "select-address-page" %}
 {% set backLinkHref = "/" %}
 {% set addressCountLabel = "One address" if addresses.length == 1 else addresses.length + " addresses" %}
 

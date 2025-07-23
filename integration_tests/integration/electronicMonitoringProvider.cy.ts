@@ -10,6 +10,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetLicence', {})
+    cy.task('stubSearchForAddresses')
+    cy.task('stubPutLicenceAppointmentPerson')
     cy.task('stubUpdateStandardConditions')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetLicencePolicyConditions')
@@ -30,12 +32,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const appointmentContactPage = appointmentPlacePage
-      .enterAddressLine1('123 Fake Street')
-      .enterTown('Fakestown')
-      .enterCounty('Fakeshire')
-      .enterPostcode('FA11KE')
-      .clickContinue()
+    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
@@ -123,12 +121,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const appointmentContactPage = appointmentPlacePage
-      .enterAddressLine1('123 Fake Street')
-      .enterTown('Fakestown')
-      .enterCounty('Fakeshire')
-      .enterPostcode('FA11KE')
-      .clickContinue()
+    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
@@ -219,12 +213,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const appointmentContactPage = appointmentPlacePage
-      .enterAddressLine1('123 Fake Street')
-      .enterTown('Fakestown')
-      .enterCounty('Fakeshire')
-      .enterPostcode('FA11KE')
-      .clickContinue()
+    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
@@ -305,12 +295,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const appointmentContactPage = appointmentPlacePage
-      .enterAddressLine1('123 Fake Street')
-      .enterTown('Fakestown')
-      .enterCounty('Fakeshire')
-      .enterPostcode('FA11KE')
-      .clickContinue()
+    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
@@ -409,12 +395,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const appointmentContactPage = appointmentPlacePage
-      .enterAddressLine1('123 Fake Street')
-      .enterTown('Fakestown')
-      .enterCounty('Fakeshire')
-      .enterPostcode('FA11KE')
-      .clickContinue()
+    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
@@ -454,12 +436,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const appointmentContactPage = appointmentPlacePage
-      .enterAddressLine1('123 Fake Street')
-      .enterTown('Fakestown')
-      .enterCounty('Fakeshire')
-      .enterPostcode('FA11KE')
-      .clickContinue()
+    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
@@ -499,12 +477,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const appointmentContactPage = appointmentPlacePage
-      .enterAddressLine1('123 Fake Street')
-      .enterTown('Fakestown')
-      .enterCounty('Fakeshire')
-      .enterPostcode('FA11KE')
-      .clickContinue()
+    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
@@ -579,12 +553,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const appointmentContactPage = appointmentPlacePage
-      .enterAddressLine1('123 Fake Street')
-      .enterTown('Fakestown')
-      .enterCounty('Fakeshire')
-      .enterPostcode('FA11KE')
-      .clickContinue()
+    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 

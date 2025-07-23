@@ -77,7 +77,8 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
     get('/view/id/:licenceId/initial-meeting-place', controller.GET, UserType.PRISON)
-    post('/view/id/:licenceId/initial-meeting-place', controller.POST, Address)
+    const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
+    post('/view/id/:licenceId/initial-meeting-place', controller.POST, addressType)
   }
 
   {
@@ -105,14 +106,25 @@ export default function Index({ licenceService, conditionService, addressService
   }
 
   {
-    const controller = new NoAddressFoundRoutes()
+    const controller = new NoAddressFoundRoutes(UserType.PROBATION)
     get('/create/id/:licenceId/no-address-found', controller.GET, UserType.PROBATION)
+  }
+
+  {
+    const controller = new NoAddressFoundRoutes(UserType.PRISON)
+    get('/view/id/:licenceId/no-address-found', controller.GET, UserType.PRISON)
   }
 
   {
     const controller = new SelectAddressRoutes(addressService, UserType.PROBATION)
     get('/create/id/:licenceId/select-address', controller.GET, UserType.PROBATION)
     post('/create/id/:licenceId/select-address', controller.POST, PostcodeLookupAddress)
+  }
+
+  {
+    const controller = new SelectAddressRoutes(addressService, UserType.PRISON)
+    get('/view/id/:licenceId/select-address', controller.GET, UserType.PRISON)
+    post('/view/id/:licenceId/select-address', controller.POST, PostcodeLookupAddress)
   }
 
   {

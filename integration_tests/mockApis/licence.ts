@@ -220,6 +220,55 @@ export default {
     })
   },
 
+  stubPutLicenceAppointmentPerson: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licences-api/licence/id/(\\d)*/appointment/address`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubSearchForAddresses: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/address/search/by/text/.*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            uprn: '10000000001',
+            firstLine: '123 Fake Street',
+            secondLine: '',
+            townOrCity: 'Faketown',
+            county: 'Fakeshire',
+            postcode: 'FA11KE',
+            country: 'England',
+            source: 'OS_PLACES',
+          },
+          {
+            uprn: '10000000002',
+            firstLine: '456 Another Street',
+            secondLine: '',
+            townOrCity: 'Anothertown',
+            county: 'Anothershire',
+            postcode: 'AN11TH',
+            country: 'England',
+            source: 'OS_PLACES',
+          },
+        ],
+      },
+    })
+  },
+
   stubGetHdcLicenceData: (): SuperAgentRequest => {
     return stubFor({
       request: {

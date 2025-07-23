@@ -29,11 +29,11 @@ export default class InitialMeetingPlaceRoutes {
     const { licenceId } = req.params
     const { user, licence } = res.locals
     const { searchQuery } = req.body
-    const basePath = `/licence/create/id/${licenceId}`
     const fromReview = req.query?.fromReview
     const isPrisonUser = this.userType === UserType.PRISON
 
     if (config.postcodeLookupEnabled && searchQuery?.trim()) {
+      const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
       const fromReviewParam = fromReview ? '&fromReview=true' : ''
       return res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}${fromReviewParam}`)
     }
@@ -44,6 +44,7 @@ export default class InitialMeetingPlaceRoutes {
     }
 
     let redirectPath: string
+    const basePath = `/licence/create/id/${licenceId}`
 
     if (isPrisonUser) {
       redirectPath = `/licence/view/id/${licenceId}/show`
