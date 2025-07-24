@@ -1,20 +1,20 @@
 import { Request, Response } from 'express'
 
-import LicenceService from '../../../services/licenceService'
+import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
-import ProbationService from '../../../services/probationService'
-import { CaseloadItem, CvlPrisoner, LicenceSummary } from '../../../@types/licenceApiClientTypes'
-import logger from '../../../../logger'
+import ProbationService from '../../../../services/probationService'
+import { CaseloadItem, CvlPrisoner, LicenceSummary } from '../../../../@types/licenceApiClientTypes'
+import logger from '../../../../../logger'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 
-jest.mock('../../../services/licenceService')
-jest.mock('../../../services/probationService')
-jest.mock('../../../services/prisonerService')
-jest.mock('../../../../logger')
+jest.mock('../../../../services/licenceService')
+jest.mock('../../../../services/probationService')
+jest.mock('../../../../services/prisonerService')
+jest.mock('../../../../../logger')
 
-describe('Route Handlers - Create Licence - Confirm Create', () => {
+describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
   const handler = new ConfirmCreateRoutes(probationService, licenceService)
   let req: Request
   let res: Response
@@ -129,7 +129,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
       expect(logger.error).toHaveBeenCalledWith(
-        'Access denied to PP licence creation GET due to being in hard stop period',
+        'Access denied to PRRD licence creation GET due to being in hard stop period',
       )
     })
   })
@@ -140,7 +140,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       licenceService.createLicence.mockResolvedValue({ licenceId: 1 } as LicenceSummary)
       await handler.POST(req, res)
       expect(licenceService.createLicence).toHaveBeenCalledWith(
-        { nomsId: 'ABC123', type: 'CRD' },
+        { nomsId: 'ABC123', type: 'PRRD' },
         {
           username: 'joebloggs',
         },
@@ -176,7 +176,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       expect(licenceService.createLicence).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
       expect(logger.error).toHaveBeenCalledWith(
-        'Access denied to PP licence creation POST due to being in hard stop period',
+        'Access denied to PRRD licence creation POST due to being in hard stop period',
       )
     })
   })
