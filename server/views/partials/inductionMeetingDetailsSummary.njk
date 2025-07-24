@@ -1,5 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "pages/selectedAppointmentPerson.njk" import selectedAppointmentPerson %}
+{% from "partials/getFormattedAddress.njk" import getFormattedAddress %}
 
 {% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
@@ -7,14 +8,6 @@
     {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
 
     {% set addressPath = 'manual-address-entry' if (licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL') else 'initial-meeting-place' %}
-
-    {% if postcodeLookupEnabled %}
-        {% set addressText = licence.licenceAppointmentAddress | formatAddressLine %}
-    {% elif licence.appointmentAddress %}
-        {% set addressText = licence.appointmentAddress | formatAddress %}
-    {% else %}
-        {% set addressText = "Not yet entered" %}
-    {% endif %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
@@ -47,7 +40,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
                 key: { text: "Address" },
-                value: { text: addressText },
+                value: { text: getFormattedAddress(licence) },
                 actions: {
                     items: [
                         {

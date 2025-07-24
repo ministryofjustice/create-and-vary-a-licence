@@ -1,0 +1,7 @@
+{% macro getFormattedAddress(licence) %}
+  {% if licence.licenceAppointmentAddress %}
+    {{ licence.licenceAppointmentAddress | formatAddressLine }}
+  {% else %}
+    {{ licence.appointmentAddress | formatAddress }}
+  {% endif %}
+{% endmacro %}
