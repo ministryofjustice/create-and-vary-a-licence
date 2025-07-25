@@ -39,19 +39,31 @@
             {% else %}    
                 <p class="govuk-body" id="message">
                     You can do so up to 2 days before a standard release. From this point, you can only ask the prison to change the initial appointment details. Other changes must be made after release.
-                    <br>
+                </p>
+                <p class="govuk-body" id="continue-message">
                     You can continue to work on licences for people being released early after the 2-day point. 
                 </p>
             {% endif %}
-
-            <p class="govuk-body">
             {{ govukButton({
                 text: "Return to caselist",
-                classes: "govuk-button--primary govuk-!-margin-bottom-0 govuk-body",
+                classes: "govuk-button--primary",
                 href: backLink,
                 attributes: { 'data-qa': 'return-to-caselist' }
             }) }}
-            </p>
+
+            {% if kind == 'PRRD' %}
+                <hr class="help-improve-service-divider">
+                <h2 class="improve-service-header govuk-heading-m govuk-!-margin-top-6">
+                    Help improve this service
+                </h2>
+                <p class="govuk-body">
+                    Fixed-term recalls are new to this service. Your feedback will help make it better. To give feedback you can:
+                </p>
+                <ul class="govuk-list govuk-list--bullet improve-service-link-list">
+                    <li><a href="https://www.smartsurvey.co.uk/s/6BNZ8C" target="_blank" class="govuk-link--no-visited-state">complete a short survey</a></li>
+                    <li><a href="{{serviceNowUrl}}" target="_blank" class="govuk-link--no-visited-state">report a specific problem</a></li>
+                </ul>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

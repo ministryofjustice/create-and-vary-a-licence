@@ -2,6 +2,7 @@ import Page from './page'
 import AdditionalConditionsInputPage from './additionalConditionInput'
 import { Context } from '../support/context'
 import ExclusionZoneConditionInputPage from './exclusionZoneConditionInput'
+import { LicenceKind } from '../../server/enumeration'
 
 export default class AdditionalConditionsPage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -22,10 +23,10 @@ export default class AdditionalConditionsPage extends Page {
     return this
   }
 
-  clickContinue = (): AdditionalConditionsInputPage => {
+  clickContinue = (licenceKind: LicenceKind = LicenceKind.CRD): AdditionalConditionsInputPage => {
     cy.task('stubPutAdditionalConditions')
     cy.task('stubPutAdditionalConditionData')
-    cy.task('stubGetLicenceWithConditionToComplete', this.context?.additionalConditions.shift())
+    cy.task('stubGetLicenceWithConditionToComplete', { code: this.context?.additionalConditions.shift(), licenceKind })
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsInputPage)
   }
@@ -33,7 +34,7 @@ export default class AdditionalConditionsPage extends Page {
   clickContinueToMez = (): ExclusionZoneConditionInputPage => {
     cy.task('stubPutAdditionalConditions')
     cy.task('stubPutAdditionalConditionData')
-    cy.task('stubGetLicenceWithConditionToComplete', this.context?.additionalConditions.shift())
+    cy.task('stubGetLicenceWithConditionToComplete', { code: this.context?.additionalConditions.shift() })
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(ExclusionZoneConditionInputPage)
   }

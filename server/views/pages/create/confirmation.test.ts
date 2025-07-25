@@ -33,7 +33,7 @@ describe('Hdc Confirmation', () => {
       'You can do so up to 2 days before a standard release. From this point, you can only ask the prison to change the initial appointment details. Other changes must be made after release.',
     )
 
-    expect($('#message').text().trim().toString()).toContain(
+    expect($('#continue-message').text().trim().toString()).toContain(
       'You can continue to work on licences for people being released early after the 2-day point.',
     )
 

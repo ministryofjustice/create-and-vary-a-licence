@@ -3,6 +3,7 @@ import Page from './page'
 import { Context } from '../support/context'
 import CheckAnswersPage from './checkAnswers'
 import { ElectronicMonitoringProvider } from '../../server/@types/licenceApiClientTypes'
+import LicenceKind from '../../server/enumeration/LicenceKind'
 
 export default class PssConditionsInputPage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -60,11 +61,13 @@ export default class PssConditionsInputPage extends Page {
   clickContinue = (
     electronicMonitoringProvider?: ElectronicMonitoringProvider,
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE',
+    licenceKind: LicenceKind = LicenceKind.CRD,
   ): CheckAnswersPage => {
     cy.task('stubPutAdditionalConditionData')
     cy.task('stubGetCompletedLicence', {
       statusCode: 'IN_PROGRESS',
       typeCode: 'AP_PSS',
+      kind: licenceKind,
       electronicMonitoringProvider,
       electronicMonitoringProviderStatus,
     })
