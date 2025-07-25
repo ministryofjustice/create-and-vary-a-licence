@@ -73,21 +73,29 @@ export default class CaSearch {
       tabParameters,
       inPrisonResults: inPrisonResults.map(res => {
         const link = this.getLink(res)
+        const licenceStatus = this.getStatus(<LicenceStatus>res.licenceStatus)
         return {
           ...res,
           link,
+          licenceStatus,
         }
       }),
       onProbationResults: onProbationResults.map(res => {
         const link = this.getLink(res)
+        const licenceStatus = this.getStatus(<LicenceStatus>res.licenceStatus)
         return {
           ...res,
           link,
+          licenceStatus,
         }
       }),
       worksAtMoreThanOnePrison,
       recallsEnabled,
     })
+  }
+
+  private getStatus = (licenceStatus: LicenceStatus) => {
+    return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
   }
 
   private getLink = (licence: CaCase): string => {
