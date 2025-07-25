@@ -1,0 +1,112 @@
+
+{% extends "layout.njk" %}
+
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Create a licence - Manual address entry" %}
+{% set pageId = "manual-address-entry-page" %}
+{% set backLinkHref = "/" %}
+{% set address = licence.licenceAppointmentAddress if licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL' %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Enter address</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+
+                {% if licence.isEligibleForEarlyRelease and not licence.kind == "HDC" %}
+                    {{ govukWarningText({
+                        html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href=" + fridayReleasePolicy + ">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
+                        iconFallbackText: "Warning"
+                    }) }}
+                {% endif %}
+
+                {% call govukFieldset({
+                    legend: {
+                        text: "Meeting place address",
+                        classes: "govuk-visually-hidden"
+                    }
+                }) %}
+
+                    {{ govukInput({
+                        label: {
+                            html: 'Address line 1'
+                        },
+                        id: "firstLine",
+                        name: "firstLine",
+                        autocomplete: "address-line1",
+                        classes: 'govuk-!-width-one-third',
+                        errorMessage: validationErrors | findError('firstLine'),
+                        value: address.firstLine | fillFormResponse(formResponses.firstLine)
+                    }) }}
+
+                    {{ govukInput({
+                        label: {
+                            html: 'Address line 2 (optional)'
+                        },
+                        id: "secondLine",
+                        name: "secondLine",
+                        autocomplete: "address-line2",
+                        classes: 'govuk-!-width-one-third',
+                        errorMessage: validationErrors | findError('secondLine'),
+                        value: address.secondLine | fillFormResponse(formResponses.secondLine)
+                    }) }}
+
+                    {{ govukInput({
+                        label: {
+                            text: "Town or city"
+                        },
+                        classes: "govuk-!-width-one-quarter",
+                        id: "townOrCity",
+                        name: "townOrCity",
+                        autocomplete: "address-level2",
+                        errorMessage: validationErrors | findError('townOrCity'),
+                        value: address.townOrCity | fillFormResponse(formResponses.townOrCity)
+                    }) }}
+
+                    {{ govukInput({
+                        label: {
+                            text: "County (optional)"
+                        },
+                        classes: "govuk-!-width-one-quarter",
+                        id: "county",
+                        name: "county",
+                        errorMessage: validationErrors | findError('county'),
+                        value: address.county | fillFormResponse(formResponses.county)
+                    }) }}
+
+                    {{ govukInput({
+                        label: {
+                            text: "Postcode"
+                        },
+                        classes: "govuk-input--width-10",
+                        id: "postcode",
+                        name: "postcode",
+                        autocomplete: "postal-code",
+                        errorMessage: validationErrors | findError('postcode'),
+                        value: address.postcode | fillFormResponse(formResponses.postcode)
+                    }) }}
+
+                {% endcall %}
+
+                {{ govukButton({
+                    text: continueOrSave,
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+
+                 <p class="govuk-body govuk-!-margin-top-3">
+                    <a class="govuk-link" data-qa="postcodeLookupSearch" href={{postcodeLookupUrl}}>Find an address</a>
+                </p>
+            </div>
+        </div>
+    </form>
+{% endblock %}

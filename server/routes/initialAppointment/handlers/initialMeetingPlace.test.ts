@@ -53,6 +53,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
   })
 
   afterEach(() => {
+    jest.clearAllMocks()
     config.postcodeLookupEnabled = false
   })
 
@@ -64,6 +65,16 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
+          manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
+        })
+      })
+
+      it('should render view with fromReviewParam', async () => {
+        req.query.fromReview = 'true'
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
+          formAddress,
+          manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
         })
       })
     })
@@ -85,6 +96,48 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         await handler.POST(req, res)
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PROBATION)
       })
+
+      it('should redirect to /select-address with fromReview flag if postcode lookup is enabled and searchQuery is provided', async () => {
+        config.postcodeLookupEnabled = true
+        req = {
+          params: {
+            licenceId: 123,
+          },
+          body: {
+            searchQuery: 'SW1A 1AA',
+          },
+          query: {
+            fromReview: 'true',
+          },
+        } as unknown as Request
+
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          '/licence/create/id/123/select-address?searchQuery=SW1A%201AA&fromReview=true',
+        )
+        expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
+        expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
+      })
+
+      it('should redirect to /select-address with out fromReview flag if postcode lookup is enabled and searchQuery is provided', async () => {
+        config.postcodeLookupEnabled = true
+        req = {
+          params: {
+            licenceId: 123,
+          },
+          body: {
+            searchQuery: 'SW1A 1AA',
+          },
+          query: {},
+        } as unknown as Request
+
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/select-address?searchQuery=SW1A%201AA')
+        expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
+        expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
+      })
     })
   })
 
@@ -96,6 +149,16 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
+          manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
+        })
+      })
+
+      it('should render view with fromReviewParam', async () => {
+        req.query.fromReview = 'true'
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
+          formAddress,
+          manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
         })
       })
     })

@@ -128,6 +128,22 @@ describe('Nunjucks Filters', () => {
       })
       expect($('body').text()).toBe('12,Peel Street,Grangemouth,Lancashire,GM12 84L')
     })
+
+    it('should remove blank address lines and return a list of strings (no spaces)', () => {
+      const template = '{{ address | formatLicenceAddressAsList }}'
+      const $ = renderTemplate(template, {
+        address: {
+          reference: '123',
+          firstLine: '12',
+          secondLine: 'Peel Street',
+          townOrCity: 'Grangemouth',
+          county: 'Lancashire',
+          postcode: 'GM12 84L',
+          source: 'MANUAL',
+        },
+      })
+      expect($('body').text()).toBe('12,Peel Street,Grangemouth,Lancashire,GM12 84L')
+    })
   })
 
   describe('Format list as string', () => {

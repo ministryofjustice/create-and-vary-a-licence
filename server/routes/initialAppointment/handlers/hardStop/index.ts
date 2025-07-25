@@ -16,8 +16,14 @@ import ViewAndPrintLicenceRoutes from '../../../viewingLicences/handlers/viewLic
 import ConfirmationRoutes from '../../../creatingLicences/handlers/hardStop/confirmation'
 import PathType from '../../../../enumeration/pathType'
 import config from '../../../../config'
+import PostcodeLookupAddress from '../../types/PostcodeLookupAddress'
+import SelectAddressRoutes from './selectAddress'
+import PostcodeLookupInputValidation from '../../types/PostcodeLookupInputValidation'
+import NoAddressFoundRoutes from './noAddressFound'
+import ManualAddressPostcodeLookupRoutes from './manualAddressPostcodeLookup'
+import ManualAddress from '../../types/manualAddress'
 
-export default function Index({ licenceService, conditionService, hdcService }: Services): Router {
+export default function Index({ licenceService, conditionService, hdcService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hard-stop${path}`
@@ -52,13 +58,42 @@ export default function Index({ licenceService, conditionService, hdcService }: 
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET)
-    const addressType = config.postcodeLookupEnabled ? undefined : Address
+    const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, addressType)
   }
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-place', controller.GET)
-    post('/edit/id/:licenceId/initial-meeting-place', controller.POST, Address)
+    const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
+    post('/edit/id/:licenceId/initial-meeting-place', controller.POST, addressType)
+  }
+  {
+    const controller = new SelectAddressRoutes(addressService, PathType.CREATE)
+    get('/create/id/:licenceId/select-address', controller.GET)
+    post('/create/id/:licenceId/select-address', controller.POST, PostcodeLookupAddress)
+  }
+  {
+    const controller = new SelectAddressRoutes(addressService, PathType.EDIT)
+    get('/edit/id/:licenceId/select-address', controller.GET)
+    post('/edit/id/:licenceId/select-address', controller.POST, PostcodeLookupAddress)
+  }
+  {
+    const controller = new NoAddressFoundRoutes(PathType.CREATE)
+    get('/create/id/:licenceId/no-address-found', controller.GET)
+  }
+  {
+    const controller = new NoAddressFoundRoutes(PathType.EDIT)
+    get('/edit/id/:licenceId/no-address-found', controller.GET)
+  }
+  {
+    const controller = new ManualAddressPostcodeLookupRoutes(addressService, PathType.CREATE)
+    get('/create/id/:licenceId/manual-address-entry', controller.GET)
+    post('/create/id/:licenceId/manual-address-entry', controller.POST, ManualAddress)
+  }
+  {
+    const controller = new ManualAddressPostcodeLookupRoutes(addressService, PathType.EDIT)
+    get('/edit/id/:licenceId/manual-address-entry', controller.GET)
+    post('/edit/id/:licenceId/manual-address-entry', controller.POST, ManualAddress)
   }
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)

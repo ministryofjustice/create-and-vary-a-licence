@@ -41,6 +41,7 @@ const licencePlaceholder: Licence = {
   forename: 'Test',
   surname: 'Person',
   dateOfBirth: '12/02/1980',
+  appointmentPerson: 'Duty Officer',
   conditionalReleaseDate: '13/03/2021',
   actualReleaseDate: '01/04/2021',
   earliestReleaseDate: '01/04/2021',
@@ -67,6 +68,16 @@ const licencePlaceholder: Licence = {
   dateLastUpdated: '10/09/2021 10:01:00', // Make dynamic to now?
   createdByUsername: 'X12345',
   createdByFullName: 'John Smith',
+  licenceAppointmentAddress: {
+    reference: '1234',
+    uprn: '10000000001',
+    firstLine: '123 Fake Street',
+    secondLine: '',
+    townOrCity: 'Faketown',
+    county: 'Fakeshire',
+    postcode: 'FA11KE',
+    source: 'MANUAL',
+  },
   standardLicenceConditions: [
     { id: 1, code: 'goodBehaviour', sequence: 1, text: 'Be of good behaviour' },
     { id: 2, code: 'notBreakLaw', sequence: 2, text: 'Do not break the law' },
@@ -216,6 +227,53 @@ export default {
           kind: 'HDC',
           homeDetentionCurfewActualDate: '01/03/2021',
         },
+      },
+    })
+  },
+
+  stubPutLicenceAppointmentPerson: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licences-api/licence/id/(\\d)*/appointment/address`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubSearchForAddresses: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/address/search/by/text/.*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            uprn: '10000000001',
+            firstLine: '123 Fake Street',
+            secondLine: '',
+            townOrCity: 'Faketown',
+            county: 'Fakeshire',
+            postcode: 'FA11KE',
+            source: 'OS_PLACES',
+          },
+          {
+            uprn: '10000000002',
+            firstLine: '456 Another Street',
+            secondLine: '',
+            townOrCity: 'Anothertown',
+            county: 'Anothershire',
+            postcode: 'AN11TH',
+            source: 'OS_PLACES',
+          },
+        ],
       },
     })
   },

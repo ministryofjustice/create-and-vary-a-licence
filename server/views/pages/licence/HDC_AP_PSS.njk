@@ -12,6 +12,13 @@
 
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
+{% set formattedAddress = [] %}
+
+{% if licence.licenceAppointmentAddress %}
+  {% set formattedAddress = licence.licenceAppointmentAddress | formatLicenceAddressAsList %}
+{% else %}
+  {% set formattedAddress = licence.appointmentAddress | formatAddressAsList %}
+{% endif %}
 
 {% block content %}
    <div id="title" class="title">Licence and post sentence supervision order for {{ offenderName }}</div>
@@ -69,7 +76,7 @@
       <div id="meeting-details">
          <p>
                <span data-qa="appointment-person" class="bold line-space-after">{{ licence.appointmentPerson }}</span>
-               {% for a in (licence.appointmentAddress | formatAddressAsList) %}
+               {% for a in formattedAddress %}
                   <span class="bold line-space-after">{{ a }}</span>
                {% endfor %}
          </p>

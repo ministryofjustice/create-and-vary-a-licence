@@ -6,6 +6,16 @@
     {% default %}
         {% set appointmentPerson = licence.appointmentPerson  %}
 {% endswitch %}
+
+{% set formattedAddress = [] %}
+
+{% if licence.licenceAppointmentAddress %}
+  {% set formattedAddress = licence.licenceAppointmentAddress | formatLicenceAddressAsList %}
+{% else %}
+  {% set formattedAddress = licence.appointmentAddress | formatAddressAsList %}
+{% endif %}
+
+
 <div id="induction" class="section">
     <p>
         On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
@@ -15,7 +25,7 @@
     <div id="meeting-details">
         <p>
             <span data-qa="appointment-person" class="bold line-space-after">{{ appointmentPerson }}</span>
-            {% for a in (licence.appointmentAddress | formatAddressAsList) %}
+            {% for a in formattedAddress %}
                 <span class="bold line-space-after">{{ a }}</span>
             {% endfor %}
         </p>

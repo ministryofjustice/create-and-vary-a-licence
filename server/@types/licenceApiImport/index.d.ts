@@ -4646,16 +4646,16 @@ export interface components {
       licenceStartDate?: string
       /**
        * Format: date
-       * @description The release date after being recalled
-       * @example 06/06/2023
-       */
-      postRecallReleaseDate?: string
-      /**
-       * Format: date
        * @description The earliest conditional release date of the person on licence
        * @example 13/08/2022
        */
       conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       * @example 06/06/2023
+       */
+      postRecallReleaseDate?: string
       /**
        * Format: date
        * @description The date that the licence will expire
@@ -4712,6 +4712,12 @@ export interface components {
        * @example 13/09/2022
        */
       sentenceEndDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string
       /**
        * Format: date
        * @description The date when the post sentence supervision period ends, from prison services
@@ -4784,12 +4790,6 @@ export interface components {
        * @example Jane Jones
        */
       submittedByFullName?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
-       */
-      topupSupervisionStartDate?: string
       /**
        * @description The agency description of the detaining prison
        * @example Leeds (HMP)

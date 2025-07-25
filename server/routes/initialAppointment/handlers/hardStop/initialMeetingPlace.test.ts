@@ -48,12 +48,14 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         },
       },
     } as unknown as Response
+    config.postcodeLookupEnabled = false
 
     licenceService.updateAppointmentAddress = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
   })
 
   afterEach(() => {
+    jest.clearAllMocks()
     config.postcodeLookupEnabled = false
   })
 
@@ -66,15 +68,17 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
           formAddress,
           continueOrSaveLabel: 'Continue',
+          manualAddressEntryUrl: '/licence/hard-stop/create/id/1/manual-address-entry',
         })
       })
 
-      it('should render view with save Label', async () => {
+      it('should render view with save Label and manual address entry URL', async () => {
         handler = new InitialMeetingPlaceRoutes(licenceService, PathType.EDIT)
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
           formAddress,
           continueOrSaveLabel: 'Save',
+          manualAddressEntryUrl: '/licence/hard-stop/edit/id/1/manual-address-entry',
         })
       })
     })
@@ -107,10 +111,52 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       })
 
       it('should not call updateAppointmentAddress', async () => {
-        config.postcodeLookupEnabled = true // Mocking the config for postcode lookup
+        config.postcodeLookupEnabled = true
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
         expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalledWith()
+      })
+
+      it('should redirect to /select-address in create flow if postcode lookup is enabled and searchQuery is provided', async () => {
+        const handler = new InitialMeetingPlaceRoutes(licenceService, PathType.CREATE)
+        config.postcodeLookupEnabled = true
+        req = {
+          params: {
+            licenceId: 123,
+          },
+          body: {
+            searchQuery: 'SW1A 1AA',
+          },
+        } as unknown as Request
+
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          '/licence/hard-stop/create/id/123/select-address?searchQuery=SW1A%201AA',
+        )
+        expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
+        expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
+      })
+
+      it('should redirect to /select-address in edit flow if postcode lookup is enabled and searchQuery is provided', async () => {
+        const handler = new InitialMeetingPlaceRoutes(licenceService, PathType.EDIT)
+        config.postcodeLookupEnabled = true
+        req = {
+          params: {
+            licenceId: 123,
+          },
+          body: {
+            searchQuery: 'SW1A 1AA',
+          },
+        } as unknown as Request
+
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          '/licence/hard-stop/edit/id/123/select-address?searchQuery=SW1A%201AA',
+        )
+        expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
+        expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
       })
     })
   })
