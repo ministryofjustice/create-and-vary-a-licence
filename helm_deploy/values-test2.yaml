@@ -38,6 +38,7 @@ generic-service:
     HDC_INTEGRATION_MVP2_ENABLED: 'false'
     HDC_LICENCE_CREATION_BLOCK: 'true'
     CA_NEW_SEARCH_ENABLED: 'false'
+    POSTCODE_LOOKUP_ENABLED: "false"
     SHOW_DPR_REPORTING: "false"
     RECALLS_ENABLED: "false"
 
