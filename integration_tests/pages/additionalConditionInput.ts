@@ -5,6 +5,7 @@ import { Context } from '../support/context'
 import CheckAnswersPage from './checkAnswers'
 import PolicyChangesPage from './policyChangesPage'
 import PathfinderDetailsQuestionPage from './PathfinderDetailsQuestionPage'
+import LicenceKind from '../../server/enumeration/LicenceKind'
 
 export default class AdditionalConditionsInputPage extends Page {
   protected continueButtonId = '[data-qa=continue]'
@@ -88,7 +89,7 @@ export default class AdditionalConditionsInputPage extends Page {
   }
 
   nextCondition = (runAxe = true): AdditionalConditionsInputPage => {
-    cy.task('stubGetLicenceWithConditionToComplete', this.additionalConditionsToInput.shift())
+    cy.task('stubGetLicenceWithConditionToComplete', { code: this.additionalConditionsToInput.shift() })
     cy.get(this.continueButtonId).click()
     cy.reload()
     this.checkOnPage()
@@ -98,9 +99,9 @@ export default class AdditionalConditionsInputPage extends Page {
     return this
   }
 
-  clickContinue = (): BespokeConditionsQuestionPage => {
+  clickContinue = (licenceKind: LicenceKind = LicenceKind.PRRD): BespokeConditionsQuestionPage => {
     cy.get(this.continueButtonId).click()
-    cy.task('stubGetLicence', {})
+    cy.task('stubGetLicence', { licenceKind })
     cy.visit('/licence/create/id/1/bespoke-conditions-question')
     return Page.verifyOnPage(BespokeConditionsQuestionPage)
   }
@@ -112,7 +113,7 @@ export default class AdditionalConditionsInputPage extends Page {
   }
 
   clickSkip = (): BespokeConditionsQuestionPage => {
-    cy.task('stubGetLicenceWithConditionToComplete', this.additionalConditionsToInput.shift())
+    cy.task('stubGetLicenceWithConditionToComplete', { code: this.additionalConditionsToInput.shift() })
     cy.get(this.skipButtonId).click()
     cy.visit('/licence/create/id/1/bespoke-conditions-question')
     return Page.verifyOnPage(BespokeConditionsQuestionPage)

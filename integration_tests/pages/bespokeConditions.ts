@@ -1,5 +1,6 @@
 import Page from './page'
 import PssConditionsQuestionPage from './pssConditionsQuestion'
+import LicenceKind from '../../server/enumeration/LicenceKind'
 
 export default class BespokeConditionsPage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -31,9 +32,9 @@ export default class BespokeConditionsPage extends Page {
     return this
   }
 
-  clickContinue = (): PssConditionsQuestionPage => {
+  clickContinue = (licenceKind: LicenceKind = LicenceKind.PRRD): PssConditionsQuestionPage => {
     cy.task('stubPutBespokeConditions')
-    cy.task('stubGetLicence', {})
+    cy.task('stubGetLicence', { licenceKind })
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(PssConditionsQuestionPage)
   }
