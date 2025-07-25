@@ -26,6 +26,7 @@ import {
   LicenceCreationResponse,
   OverrideLicencePrisonerDetailsRequest,
   UpdateElectronicMonitoringProgrammeRequest,
+  AddAddressRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -131,6 +132,22 @@ describe('Licence API client tests', () => {
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/appointment-address', data: { appointmentAddress: '123 Fake Street' } },
+      { username: 'joebloggs' },
+    )
+  })
+
+  it('Add appointment address', async () => {
+    const addAddressRequest: AddAddressRequest = {
+      firstLine: '123 Fake Street',
+      secondLine: 'Flat 1',
+      townOrCity: 'Faketown',
+      postcode: 'FK1 2AB',
+      county: 'Westshire',
+      source: 'MANUAL',
+    }
+    await licenceApiClient.addAppointmentAddress('1', addAddressRequest, { username: 'joebloggs' } as User)
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/appointment/address', data: addAddressRequest },
       { username: 'joebloggs' },
     )
   })

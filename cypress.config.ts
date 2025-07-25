@@ -55,6 +55,8 @@ export default defineConfig({
         stubUpdatePrisonUserDetails: licence.stubUpdatePrisonUserDetails,
         stubGetLicence: licence.stubGetLicence,
         stubGetHdcLicence: licence.stubGetHdcLicence,
+        stubSearchForAddresses: licence.stubSearchForAddresses,
+        stubPutLicenceAppointmentPerson: licence.stubPutLicenceAppointmentPerson,
         stubGetHdcLicenceData: licence.stubGetHdcLicenceData,
         stubGetEmptyLicence: licence.stubGetEmptyLicence,
         stubGetPssLicence: licence.stubGetPssLicence,

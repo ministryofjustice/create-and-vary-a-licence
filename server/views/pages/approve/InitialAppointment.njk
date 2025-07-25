@@ -1,5 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "pages/selectedAppointmentPerson.njk" import selectedAppointmentPerson %}
+{% from "partials/getFormattedAddress.njk" import getFormattedAddress %}
 
 {% macro InitialAppointment(licence) %}
     {{ govukSummaryList({
@@ -11,7 +12,7 @@
             },
             {
                 key: { text: "Address" },
-                value: { text: licence.appointmentAddress | formatAddress }
+                value: { text: getFormattedAddress(licence) }
             },
             {
                 key: { text: "Date/time", id: "date-time" },

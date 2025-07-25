@@ -8,7 +8,7 @@ import { LicenceApiClient } from '../../../data'
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
 const addressService = new AddressService(licenceApiClient) as jest.Mocked<AddressService>
 
-describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
+describe('Route Handlers - Create Licence - Select an address', () => {
   let req: Request
   let res: Response
 
@@ -28,15 +28,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         user: {
           username: 'joebloggs',
         },
-        licence: {
-          appointmentAddress: 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
-          conditionalReleaseDate: '14/05/2022',
-          isEligibleForEarlyRelease: true,
-        },
       },
     } as unknown as Response
 
     addressService.searchForAddresses = jest.fn()
+    addressService.addAppointmentAddress = jest.fn()
   })
 
   afterEach(() => {
@@ -64,7 +60,54 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           licenceId: req.params.licenceId,
           searchQuery: '123 Fake Street',
           postcodeLookupSearchUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place`,
+          manualAddressEntryUrl: `/licence/create/id/${req.params.licenceId}/manual-address-entry`,
         })
+      })
+    })
+
+    describe('POST /select-address', () => {
+      const selectedAddress = {
+        uprn: '100012345678',
+        firstLine: '10 Downing Street',
+        secondLine: '',
+        townOrCity: 'London',
+        county: '',
+        postcode: 'SW1A 2AA',
+      }
+
+      beforeEach(() => {
+        req.body.selectedAddress = JSON.stringify(selectedAddress)
+      })
+
+      it('should parse selectedAddress and call addAppointmentAddress in create flow', async () => {
+        await handler.POST(req, res)
+
+        expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
+          req.params.licenceId,
+          {
+            ...selectedAddress,
+            source: 'OS_PLACES',
+          },
+          res.locals.user,
+        )
+
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/${req.params.licenceId}/initial-meeting-contact`)
+      })
+
+      it('should parse selectedAddress and call addAppointmentAddress in edit flow', async () => {
+        req.query.fromReview = 'true'
+        await handler.POST(req, res)
+
+        expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
+          req.params.licenceId,
+          {
+            ...selectedAddress,
+            source: 'OS_PLACES',
+          },
+          res.locals.user,
+        )
+
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/${req.params.licenceId}/check-your-answers`)
       })
     })
   })

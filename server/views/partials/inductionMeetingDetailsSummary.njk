@@ -1,10 +1,13 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "pages/selectedAppointmentPerson.njk" import selectedAppointmentPerson %}
+{% from "partials/getFormattedAddress.njk" import getFormattedAddress %}
 
 {% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
     {% set routePath = 'view' if isPrisonUser else 'create' %}
     {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
+
+    {% set addressPath = 'manual-address-entry' if (licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL') else 'initial-meeting-place' %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
@@ -37,11 +40,11 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
                 key: { text: "Address" },
-                value: { text: licence.appointmentAddress | formatAddress if licence.appointmentAddress else "Not yet entered" },
+                value: { text: getFormattedAddress(licence) },
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-place" + routeAppend,
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/" + addressPath + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "address",
                             attributes: { "data-qa": "address-change-link" }

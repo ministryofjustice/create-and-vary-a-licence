@@ -41,6 +41,8 @@ export default class IndexPage extends Page {
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
+    cy.task('stubSearchForAddresses')
+    cy.task('stubPutLicenceAppointmentPerson')
     cy.task('stubGetResponsibleCommunityManager')
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubGetStaffCreateCaseload', {

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import AddressService from '../../../services/addressService'
 import UserType from '../../../enumeration/userType'
 import { AddAddressRequest } from '../../../@types/licenceApiClientTypes'
+import AddressService from '../../../services/addressService'
 
-export default class SelectAddressRoutes {
+export default class ManualAddressPostcodeLookupRoutes {
   constructor(
     private readonly addressService: AddressService,
     private readonly userType: UserType,
@@ -11,25 +11,12 @@ export default class SelectAddressRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { searchQuery } = req.query as { searchQuery?: string }
-    const { user } = res.locals
+    const isPrisonUser = this.userType === UserType.PRISON
+    const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
     const fromReview = req.query?.fromReview
     const fromReviewParam = fromReview ? '?fromReview=true' : ''
-
-    const addresses = await this.addressService.searchForAddresses(searchQuery, user)
-
-    if (!addresses.length) {
-      const redirectUrl = `/licence/create/id/${licenceId}/no-address-found?searchQuery=${encodeURIComponent(searchQuery)}`
-      res.redirect(redirectUrl)
-      return
-    }
-
-    res.render('pages/create/selectAddress', {
-      addresses,
-      licenceId,
-      searchQuery,
-      postcodeLookupSearchUrl: `/licence/create/id/${licenceId}/initial-meeting-place${fromReviewParam}`,
-      manualAddressEntryUrl: `/licence/create/id/${licenceId}/manual-address-entry${fromReviewParam}`,
+    res.render('pages/create/manualAddressPostcodeLookupForm', {
+      postcodeLookupUrl: `${basePath}/initial-meeting-place${fromReviewParam}`,
     })
   }
 
@@ -38,16 +25,15 @@ export default class SelectAddressRoutes {
     const { user } = res.locals
     const basePath = `/licence/create/id/${licenceId}`
 
-    const { uprn, firstLine, secondLine, townOrCity, county, postcode } = JSON.parse(req.body?.selectedAddress)
+    const { firstLine, secondLine, townOrCity, county, postcode } = req.body
 
     const appointmentAddress = {
-      uprn,
       firstLine,
       secondLine,
       townOrCity,
       county,
       postcode,
-      source: 'OS_PLACES',
+      source: 'MANUAL',
     } as AddAddressRequest
 
     await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)

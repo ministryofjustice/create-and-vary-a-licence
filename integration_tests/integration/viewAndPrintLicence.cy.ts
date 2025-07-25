@@ -181,6 +181,8 @@ context('View and print licence', () => {
   it('should allow prison CAs to change initial appointment information in the hard-stop window', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.task('stubGetLicenceInHardStop')
+    cy.task('stubSearchForAddresses')
+    cy.task('stubPutLicenceAppointmentPerson')
     cy.signIn()
 
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -188,7 +190,14 @@ context('View and print licence', () => {
     viewCasesList.clickFutureReleasesTab()
     let viewLicencePage: ViewALicencePage = viewCasesList.clickALicence()
     viewLicencePage = viewLicencePage.clickChangePersonLink().enterPerson('Joe Bloggs').clickContinueToReturn()
-    viewLicencePage = viewLicencePage.clickChangeAddressLink().enterDefaultAddress().clickContinueToReturn()
+    viewLicencePage = viewLicencePage
+      .clickChangeAddressLink()
+      .enterFirstLine('123 Fake St')
+      .enterSecondLine('Apt 4B')
+      .enterTownOrCity('Faketown')
+      .enterCounty('Fakesbury')
+      .enterPostcode('FA1 1KE')
+      .clickContinueToReturn()
     viewLicencePage = viewLicencePage.clickChangeTelephoneLink().enterTelephone('00000000000').clickContinueToReturn()
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       viewLicencePage = viewLicencePage

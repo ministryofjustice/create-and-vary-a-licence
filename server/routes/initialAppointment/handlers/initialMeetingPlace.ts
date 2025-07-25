@@ -12,36 +12,48 @@ export default class InitialMeetingPlaceRoutes {
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
+    const { licenceId } = req.params
     const { licence } = res.locals
+    const basePath = `/licence/create/id/${licenceId}`
+    const fromReview = req.query?.fromReview
+    const fromReviewParam = fromReview ? '?fromReview=true' : ''
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
     return res.render('pages/create/initialMeetingPlace', {
       formAddress,
+      manualAddressEntryUrl: `${basePath}/manual-address-entry${fromReviewParam}`,
     })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
+    const { searchQuery } = req.body
+    const fromReview = req.query?.fromReview
+    const isPrisonUser = this.userType === UserType.PRISON
+
+    if (config.postcodeLookupEnabled && searchQuery?.trim()) {
+      const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
+      const fromReviewParam = fromReview ? '&fromReview=true' : ''
+      return res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}${fromReviewParam}`)
+    }
+
+    if (!config.postcodeLookupEnabled) {
+      await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
+      flashInitialApptUpdatedMessage(req, licence, this.userType)
+    }
+
+    let redirectPath: string
     const basePath = `/licence/create/id/${licenceId}`
 
-    if (config.postcodeLookupEnabled) {
-      const { searchQuery } = req.body
-      if (searchQuery.trim().length > 0) {
-        res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}`)
-      }
-      return
-    }
-
-    await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
-    flashInitialApptUpdatedMessage(req, licence, this.userType)
-
-    if (this.userType === UserType.PRISON) {
-      res.redirect(`/licence/view/id/${licenceId}/show`)
-    } else if (req.query?.fromReview) {
-      res.redirect(`${basePath}/check-your-answers`)
+    if (isPrisonUser) {
+      redirectPath = `/licence/view/id/${licenceId}/show`
+    } else if (fromReview) {
+      redirectPath = `${basePath}/check-your-answers`
     } else {
-      res.redirect(`${basePath}/initial-meeting-contact`)
+      redirectPath = `${basePath}/initial-meeting-contact`
     }
+
+    return res.redirect(redirectPath)
   }
 }
