@@ -15,6 +15,7 @@ import {
   Licence,
   LicencePolicyResponse,
 } from '../../server/@types/licenceApiClientTypes'
+import LicenceKind from '../../server/enumeration/LicenceKind'
 
 const ACTIVE_POLICY_VERSION = '3.0'
 
@@ -195,6 +196,7 @@ export default {
   },
 
   stubGetLicence: (options: {
+    licenceKind?: LicenceKind
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
   }): SuperAgentRequest => {
     return stubFor({
@@ -207,6 +209,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
+          licenceKind: options.licenceKind || LicenceKind.CRD,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
         },
       },
@@ -709,45 +712,6 @@ export default {
     })
   },
 
-  stubPostPssLicence: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: '/licences-api/licence/create',
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          licenceId: 1,
-          licenceType: 'PSS',
-          licenceStatus: 'IN_PROGRESS',
-        },
-      },
-    })
-  },
-
-  stubGetExistingLicenceForOffenderWithResult: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPathPattern: `/licences-api/licence/match`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            licenceId: 1,
-            nomisId: 'G9786GC',
-            hardStopDate: '05/12/2023',
-            hardStopWarningDate: '03/12/2023',
-          },
-        ],
-      },
-    })
-  },
-
   stubGetActiveAndVariationLicencesForOffender: (options: {
     nomisId: string
     status: string
@@ -971,7 +935,7 @@ export default {
     })
   },
 
-  stubGetLicenceWithConditionToComplete: (code: string): SuperAgentRequest => {
+  stubGetLicenceWithConditionToComplete: (options: { code: string; licenceKind?: LicenceKind }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -982,10 +946,11 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
+          kind: options.licenceKind || LicenceKind.CRD,
           additionalLicenceConditions: [
             {
               id: 1,
-              code,
+              code: options.code,
               data: [],
             },
           ],
@@ -1027,82 +992,6 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {},
-      },
-    })
-  },
-
-  stubGetExistingLicencesForOffenders: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPathPattern: `/licences-api/licence/match`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            licenceId: 1,
-            licenceStatus: 'IN_PROGRESS',
-            nomisId: 'G9786GC',
-            hardStopDate: '05/12/2023',
-            hardStopWarningDate: '03/12/2023',
-          },
-        ],
-      },
-    })
-  },
-
-  stubGetExistingLicenceForOffenderNoResult: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPathPattern: `/licences-api/licence/match`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [],
-      },
-    })
-  },
-
-  stubGetLicencesForStatus: (
-    options: { status: string; versionOf?: number; kind?: string } = {
-      status: 'IN_PROGRESS',
-      kind: 'CRD',
-    },
-  ): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPathPattern: `/licences-api/licence/match`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            licenceId: licencePlaceholder.id,
-            licenceType: licencePlaceholder.typeCode,
-            licenceStatus: options.status,
-            nomisId: licencePlaceholder.nomsId,
-            surname: licencePlaceholder.surname,
-            forename: licencePlaceholder.forename,
-            prisonCode: licencePlaceholder.prisonCode,
-            prisonDescription: licencePlaceholder.prisonDescription,
-            conditionalReleaseDate: licencePlaceholder.conditionalReleaseDate,
-            actualReleaseDate: licencePlaceholder.actualReleaseDate,
-            crn: licencePlaceholder.crn,
-            dateOfBirth: licencePlaceholder.dateOfBirth,
-            comUsername: licencePlaceholder.comUsername,
-            variationOf: options.status === 'VARIATION_SUBMITTED' ? 2 : null,
-            versionOf: null,
-            kind: options.kind,
-            hardStopDate: '05/12/2023',
-            hardStopWarningDate: '03/12/2023',
-          },
-        ],
       },
     })
   },
@@ -1374,20 +1263,6 @@ export default {
       request: {
         method: 'DELETE',
         urlPattern: `/licences-api/licence/id/(\\d*)/discard`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
-      },
-    })
-  },
-
-  stubUpdatePrisonInformation: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'PUT',
-        urlPattern: `/licences-api/licence/id/(\\d*)/prison-information`,
       },
       response: {
         status: 200,
@@ -1681,43 +1556,6 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
-          isInHardStopPeriod: true,
-        },
-      },
-    })
-  },
-
-  stubGetTimedOutLicence: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/licence/id/(\\d*)`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          ...licencePlaceholder,
-          statusCode: 'TIMED_OUT',
-          isInHardStopPeriod: true,
-        },
-      },
-    })
-  },
-
-  stubGetTimedOutEditLicence: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/licence/id/(\\d*)`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          ...licencePlaceholder,
-          statusCode: 'TIMED_OUT',
-          versionOf: 1,
           isInHardStopPeriod: true,
         },
       },
