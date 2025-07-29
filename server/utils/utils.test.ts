@@ -26,6 +26,7 @@ import {
   cvlDateToDateShort,
   isVariation,
   isHdcLicence,
+  removeOrdinalSuffixes,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -566,5 +567,49 @@ describe('isHdcLicence', () => {
     expect(isHdcLicence(crdLicence)).toBe(false)
     expect(isHdcLicence(variationLicence)).toBe(false)
     expect(isHdcLicence(hardStopLicence)).toBe(false)
+  })
+})
+
+describe('removeOrdinalSuffixes', () => {
+  it('should remove "st" from day', () => {
+    const input = 'Monday 1st February 2026'
+    const expected = 'Monday 1 February 2026'
+    expect(removeOrdinalSuffixes(input)).toBe(expected)
+  })
+
+  it('should remove "nd" from day', () => {
+    const input = 'Tuesday 2nd February 2026'
+    const expected = 'Tuesday 2 February 2026'
+    expect(removeOrdinalSuffixes(input)).toBe(expected)
+  })
+
+  it('should remove "rd" from day', () => {
+    const input = 'Wednesday 3rd February 2026'
+    const expected = 'Wednesday 3 February 2026'
+    expect(removeOrdinalSuffixes(input)).toBe(expected)
+  })
+
+  it('should remove "th" from day', () => {
+    const input = 'Thursday 4th February 2026'
+    const expected = 'Thursday 4 February 2026'
+    expect(removeOrdinalSuffixes(input)).toBe(expected)
+  })
+
+  it('should not change valid date without ordinal', () => {
+    const input = 'Friday 5 February 2026'
+    const expected = 'Friday 5 February 2026'
+    expect(removeOrdinalSuffixes(input)).toBe(expected)
+  })
+
+  it('should handle full sentence with embedded date', () => {
+    const input = 'Monitoring ends on Monday 23rd February 2026.'
+    const expected = 'Monitoring ends on Monday 23 February 2026.'
+    expect(removeOrdinalSuffixes(input)).toBe(expected)
+  })
+
+  it('should not affect numbers not followed by month names', () => {
+    const input = 'You scored 1st in the race.'
+    const expected = 'You scored 1st in the race.'
+    expect(removeOrdinalSuffixes(input)).toBe(expected)
   })
 })

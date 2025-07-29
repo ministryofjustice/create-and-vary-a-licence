@@ -19,6 +19,7 @@ import {
   cvlDateToDateShort,
   formatAddressTitleCase,
   formatAddressLine,
+  removeOrdinalSuffixes,
 } from './utils'
 import {
   AdditionalCondition,
@@ -180,6 +181,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('formatAddress', formatAddress)
+
+  njkEnv.addFilter('removeOrdinalSuffixes', removeOrdinalSuffixes)
 
   njkEnv.addFilter('formatAddressAsList', (address?: string) => {
     return address ? address.split(', ').filter(line => line.trim().length > 0) : undefined

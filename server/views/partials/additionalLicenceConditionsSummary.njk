@@ -48,12 +48,12 @@
 
 {% macro additionalConditionHtml(condition) %}
     <div class="additional-condition-summary">
-        {{ condition.expandedText }}
+        {{ condition.expandedText | removeOrdinalSuffixes }}
     </div>
     {% if condition.data.length %}
         <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
             {% for entry in condition.data | separatedDataByFieldName %}
-                <span class="govuk-!-display-block govuk-!-margin-top-2">{{ entry | formatAddress }}</span>
+                <span class="govuk-!-display-block govuk-!-margin-top-2">{{ entry | formatAddress | removeOrdinalSuffixes }}</span>
             {% endfor %}
         </div>
     {% endif %}
