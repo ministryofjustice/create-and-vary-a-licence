@@ -311,15 +311,6 @@ export default class LicenceApiClient extends RestClient {
     )) as void
   }
 
-  async removeExclusionZoneFile(licenceId: string, conditionId: string, user: User): Promise<void> {
-    return (await this.put(
-      {
-        path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/remove-upload`,
-      },
-      { username: user?.username },
-    )) as void
-  }
-
   // A readable stream for embedding directly in HTML templates
   async getExclusionZoneImage(licenceId: string, conditionId: string, user: User): Promise<Readable> {
     return (await this.stream(
