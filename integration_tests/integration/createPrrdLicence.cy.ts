@@ -2,6 +2,7 @@ import moment from 'moment'
 import ConfirmCreatePage from '../pages/confirmCreate'
 import IndexPage from '../pages'
 import Page from '../pages/page'
+import LicenceKind from '../../server/enumeration/LicenceKind'
 
 context('Create a licence', () => {
   const dates: string[] = []
@@ -51,7 +52,7 @@ context('Create a licence', () => {
         .selectCondition('df3f08a8-4ae0-41fe-b3bc-d0be1fd2d8aa')
         .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
         .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
+        .clickContinue(LicenceKind.PRRD)
 
       const bespokeConditionsQuestionPage = additionalConditionsInputPage
         .withContext(additionalConditionsPage.getContext())
@@ -70,7 +71,7 @@ context('Create a licence', () => {
         .enterText('Knives', 'item[0]')
         .clickAddAnother()
         .enterText('Needles', 'item[1]')
-        .clickContinue()
+        .clickContinue(LicenceKind.PRRD)
 
       const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
 
@@ -99,9 +100,17 @@ context('Create a licence', () => {
         .enterAddress()
         .nextInput()
         .enterAddress()
-        .clickContinue()
+        .clickContinue(null, null, LicenceKind.PRRD)
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
+
+      cy.get('.improve-service-header').should('contain', 'Help improve this service')
+      cy.get('.improve-service-link-list').within(() => {
+        cy.get('a').should('have.length', 2)
+        cy.get('a').first().should('contain', 'complete a short survey')
+        cy.get('a').last().should('contain', 'report a specific problem')
+      })
+
       const caseloadPageExit = confirmationPage.clickReturn()
       caseloadPageExit.signOut().click()
     })
