@@ -649,14 +649,6 @@ describe('Licence API client tests', () => {
       )
     })
 
-    it('Remove a previously uploaded exclusion zone PDF file', async () => {
-      await licenceApiClient.removeExclusionZoneFile('1', '1', { username: 'joebloggs' } as User)
-      expect(put).toHaveBeenCalledWith(
-        { path: `/exclusion-zone/id/1/condition/id/1/remove-upload` },
-        { username: 'joebloggs' },
-      )
-    })
-
     it('Get the exclusion zone image as a stream', async () => {
       stream.mockResolvedValue(Readable.from('image'))
       const result = await licenceApiClient.getExclusionZoneImage('1', '1', { username: 'joebloggs' } as User)
