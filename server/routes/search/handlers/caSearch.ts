@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import SearchService from '../../../services/searchService'
-import PrisonerService from '../../../services/prisonerService'
 import statusConfig from '../../../licences/licenceStatus'
 import { CaCase, PrisonCaseAdminSearchResult } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
@@ -8,10 +7,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import config from '../../../config'
 
 export default class CaSearch {
-  constructor(
-    private readonly searchService: SearchService,
-    private readonly prisonerService: PrisonerService,
-  ) {}
+  constructor(private readonly searchService: SearchService) {}
 
   nonViewableStatuses = [
     LicenceStatus.NOT_IN_PILOT,
@@ -37,9 +33,8 @@ export default class CaSearch {
         onProbationResults: [],
       }
     } else {
-      const allPrisons = await this.prisonerService.getPrisons()
-      const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
-      const prisonsToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
+      const { activeCaseload } = user
+      const prisonsToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload]
 
       results = await this.searchService.getCaSearchResults(queryTerm, prisonsToDisplay)
     }

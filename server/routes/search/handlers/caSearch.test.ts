@@ -1,8 +1,6 @@
 import { Request, Response } from 'express'
 import CaSearchRoutes from './caSearch'
 import SearchService from '../../../services/searchService'
-import PrisonerService from '../../../services/prisonerService'
-import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { CaCase } from '../../../@types/licenceApiClientTypes'
@@ -12,11 +10,8 @@ import config from '../../../config'
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
 jest.mock('../../../services/searchService')
 
-const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-jest.mock('../../../services/prisonerService')
-
 describe('Route Handlers - Search - Ca Search', () => {
-  const handler = new CaSearchRoutes(searchService, prisonerService)
+  const handler = new CaSearchRoutes(searchService)
   let req: Request
   let res: Response
 
@@ -40,25 +35,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
       },
     } as unknown as Response
-
-    prisonerService.getPrisons.mockResolvedValue([
-      {
-        agencyId: 'BAI',
-        description: 'Belmarsh (HMP)',
-      },
-      {
-        agencyId: 'BXI',
-        description: 'Brixton (HMP)',
-      },
-      {
-        agencyId: 'MDI',
-        description: 'Moorland (HMP)',
-      },
-      {
-        agencyId: 'BMI',
-        description: 'Birmingham (HMP)',
-      },
-    ] as PrisonDetail[])
   })
 
   afterEach(() => {
@@ -209,8 +185,6 @@ describe('Route Handlers - Search - Ca Search', () => {
     searchService.getCaSearchResults.mockResolvedValue(searchResponse)
     req.query = { queryTerm: 'test' }
     await handler.GET(req, res)
-
-    expect(prisonerService.getPrisons).toHaveBeenCalled()
 
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
       queryTerm: 'test',
@@ -429,8 +403,6 @@ describe('Route Handlers - Search - Ca Search', () => {
     searchService.getCaSearchResults.mockResolvedValue(searchResponse)
     req.query = { queryTerm: 'test' }
     await handler.GET(req, res)
-
-    expect(prisonerService.getPrisons).toHaveBeenCalled()
 
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
       queryTerm: 'test',
