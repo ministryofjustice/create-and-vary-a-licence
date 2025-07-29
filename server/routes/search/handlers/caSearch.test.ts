@@ -31,7 +31,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         user: {
           username: 'test1',
           activeCaseload: 'MDI',
-          prisonCaseload: ['MDI'],
         },
       },
     } as unknown as Response
@@ -347,13 +346,13 @@ describe('Route Handlers - Search - Ca Search', () => {
           link: null,
         },
       ],
-      worksAtMoreThanOnePrison: false,
+      selectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })
 
-  it('should render cases and evaluate links when user has multiple caseloads', async () => {
-    res.locals.user.prisonCaseload = ['LEI', 'MDI']
+  it('should render cases and evaluate links when user has selected multiple caseloads', async () => {
+    req.session.caseloadsSelected = ['MDI', 'LEI']
     searchResponse = {
       inPrisonResults: [
         ...searchResponse.inPrisonResults,
@@ -605,7 +604,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           link: '/licence/view/id/9/show',
         },
       ],
-      worksAtMoreThanOnePrison: true,
+      selectedMultiplePrisonCaseloads: true,
       recallsEnabled: config.recallsEnabled,
     })
   })
@@ -797,7 +796,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           link: '/licence/view/id/9/show',
         },
       ],
-      worksAtMoreThanOnePrison: false,
+      selectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })
@@ -872,7 +871,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
       ],
       onProbationResults: [],
-      worksAtMoreThanOnePrison: false,
+      selectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })
@@ -947,7 +946,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
       ],
       onProbationResults: [],
-      worksAtMoreThanOnePrison: false,
+      selectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })
@@ -977,7 +976,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       },
       inPrisonResults: [],
       onProbationResults: [],
-      worksAtMoreThanOnePrison: false,
+      selectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })

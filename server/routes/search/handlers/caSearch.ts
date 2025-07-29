@@ -39,7 +39,7 @@ export default class CaSearch {
       results = await this.searchService.getCaSearchResults(queryTerm, prisonsToDisplay)
     }
 
-    const worksAtMoreThanOnePrison = user.prisonCaseload.length > 1
+    const selectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
     const { inPrisonResults, onProbationResults } = results
 
     const backLink = '/licence/view/cases'
@@ -84,7 +84,7 @@ export default class CaSearch {
           licenceStatus,
         }
       }),
-      worksAtMoreThanOnePrison,
+      selectedMultiplePrisonCaseloads,
       recallsEnabled,
     })
   }
