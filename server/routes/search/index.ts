@@ -16,7 +16,10 @@ export default function Index({ searchService }: Services): Router {
   // Handlers
   const probationSearchHandler = new ProbationSearchRoutes(searchService)
   const caSearchHandler = new CaSearchRoutes(searchService)
+<<<<<<< HEAD
   const approverSearchHandler = new ApproverSearchRoutes(searchService)
+=======
+>>>>>>> 69b5ffbf (CVSL-2916 fix ca search to search in a users selected prisons rather than all prisons (#1300))
 
   // Operations
   get('/probation-search', 'ROLE_LICENCE_RO', probationSearchHandler.GET)
