@@ -38,7 +38,7 @@ class SimpleDate extends Stringable {
     if (!value) return undefined
     // Remove ordinal suffixes like 'st', 'nd', 'rd', 'th' from the day
     const cleanedValue = value.replace(/(\d+)(st|nd|rd|th)/, '$1')
-    const date = moment(cleanedValue, ['dddd D MMMM YYYY'], true)
+    const date = moment(cleanedValue, 'dddd D MMMM YYYY', true)
 
     if (!date.isValid()) return undefined
 
