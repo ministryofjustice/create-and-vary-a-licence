@@ -200,10 +200,6 @@ export default class LicenceService {
     }
   }
 
-  async removeExclusionZoneFile(licenceId: string, conditionId: string, user: User): Promise<void> {
-    return this.licenceApiClient.removeExclusionZoneFile(licenceId, conditionId, user)
-  }
-
   // Get the streamed image data for rendering in HTML templates
   async getExclusionZoneImage(licenceId: string, conditionId: string, user: User): Promise<Readable> {
     return this.licenceApiClient.getExclusionZoneImage(licenceId, conditionId, user)
