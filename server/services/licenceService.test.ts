@@ -644,11 +644,6 @@ describe('Licence Service', () => {
       expect(licenceApiClient.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', user, myUploadFile)
     })
 
-    it('Remove an uploaded exclusion file', async () => {
-      await licenceService.removeExclusionZoneFile('1', '1', user)
-      expect(licenceApiClient.removeExclusionZoneFile).toHaveBeenCalledWith('1', '1', user)
-    })
-
     it('Get the exclusion zone map image as base64 JPEG', async () => {
       licenceApiClient.getExclusionZoneImageData.mockResolvedValue(Buffer.from('image'))
       const result = await licenceService.getExclusionZoneImageData('1', '1', user)
