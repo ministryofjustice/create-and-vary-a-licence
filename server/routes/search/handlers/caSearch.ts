@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import SearchService from '../../../services/searchService'
-import PrisonerService from '../../../services/prisonerService'
 import statusConfig from '../../../licences/licenceStatus'
 import { CaCase, PrisonCaseAdminSearchResult } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
@@ -8,10 +7,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import config from '../../../config'
 
 export default class CaSearch {
-  constructor(
-    private readonly searchService: SearchService,
-    private readonly prisonerService: PrisonerService,
-  ) {}
+  constructor(private readonly searchService: SearchService) {}
 
   nonViewableStatuses = [
     LicenceStatus.NOT_IN_PILOT,
@@ -27,6 +23,7 @@ export default class CaSearch {
   GET = async (req: Request, res: Response): Promise<void> => {
     const queryTerm = req.query?.queryTerm as string
     const { user } = res.locals
+    const { caseloadsSelected = [] } = req.session
 
     let results: PrisonCaseAdminSearchResult
 
@@ -36,16 +33,13 @@ export default class CaSearch {
         onProbationResults: [],
       }
     } else {
-      const allPrisons = await this.prisonerService.getPrisons()
-      const prisonCodes = allPrisons
-        .filter(p => user.prisonCaseload.includes(p.agencyId))
-        .map(prison => {
-          return prison.agencyId
-        })
-      results = await this.searchService.getCaSearchResults(queryTerm, prisonCodes)
+      const { activeCaseload } = user
+      const prisonsToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload]
+
+      results = await this.searchService.getCaSearchResults(queryTerm, prisonsToDisplay)
     }
 
-    const worksAtMoreThanOnePrison = user.prisonCaseload.length > 1
+    const selectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
     const { inPrisonResults, onProbationResults } = results
 
     const backLink = '/licence/view/cases'
@@ -74,21 +68,29 @@ export default class CaSearch {
       tabParameters,
       inPrisonResults: inPrisonResults.map(res => {
         const link = this.getLink(res)
+        const licenceStatus = this.getStatus(<LicenceStatus>res.licenceStatus)
         return {
           ...res,
           link,
+          licenceStatus,
         }
       }),
       onProbationResults: onProbationResults.map(res => {
         const link = this.getLink(res)
+        const licenceStatus = this.getStatus(<LicenceStatus>res.licenceStatus)
         return {
           ...res,
           link,
+          licenceStatus,
         }
       }),
-      worksAtMoreThanOnePrison,
+      selectedMultiplePrisonCaseloads,
       recallsEnabled,
     })
+  }
+
+  private getStatus = (licenceStatus: LicenceStatus) => {
+    return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
   }
 
   private getLink = (licence: CaCase): string => {
