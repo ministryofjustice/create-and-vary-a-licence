@@ -12,10 +12,10 @@
                         {% if isVaryJourney %}
                             {{ licence | dateToDisplay }} 
                         {% else %} 
-                            Release date: {{ licence.licenceStartDate | datetimeToDateShort }}
+                            Release date: {{ licence.licenceStartDate | datetimeToDate }}
                         {% endif %}
                     </span>
-                <span class="pipe-separated__item">Date of birth: {{ licence.dateOfBirth | datetimeToDateShort }}</span>
+                <span class="pipe-separated__item">Date of birth: {{ licence.dateOfBirth | datetimeToDate }}</span>
             </div>
             <span class="govuk-heading-m">{{ licence.forename }} {{ licence.surname }}</span>
         </div>

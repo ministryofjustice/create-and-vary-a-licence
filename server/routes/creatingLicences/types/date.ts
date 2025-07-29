@@ -29,7 +29,7 @@ class SimpleDate extends Stringable {
 
   stringify(): string {
     if (this.year && this.month && this.day) {
-      return this.toMoment().format('dddd Do MMMM YYYY')
+      return this.toMoment().format('dddd D MMMM YYYY')
     }
     return ''
   }
@@ -38,7 +38,7 @@ class SimpleDate extends Stringable {
     if (!value) {
       return undefined
     }
-    const date = moment(value, 'dddd Do MMMM YYYY', true)
+    const date = moment(value, ['dddd Do MMMM YYYY', 'dddd D MMMM YYYY'], true)
     return new SimpleDate(date.format('DD'), date.format('MM'), date.format('YYYY'))
   }
 }
