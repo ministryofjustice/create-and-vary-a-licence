@@ -340,7 +340,7 @@ describe('Licence Service', () => {
           data: [
             {
               field: 'key1',
-              value: 'Thursday 22nd December 2022',
+              value: 'Thursday 22 December 2022',
               sequence: 0,
             },
           ],
