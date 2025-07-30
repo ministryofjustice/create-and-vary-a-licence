@@ -15,7 +15,7 @@
             </h1>
             {% if licence.isInPssPeriod %}
                 <div class="govuk-hint">
-                    This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDateShort }}</span>, so only their post sentence supervision order can be varied.
+                    This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, so only their post sentence supervision order can be varied.
                 </div>
             {% endif %}
         </div>
