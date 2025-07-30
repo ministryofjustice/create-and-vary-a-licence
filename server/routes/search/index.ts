@@ -4,7 +4,7 @@ import { Services } from '../../services'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import CaSearchRoutes from './handlers/caSearch'
 
-export default function Index({ searchService, prisonerService }: Services): Router {
+export default function Index({ searchService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/search${path}`
@@ -14,7 +14,7 @@ export default function Index({ searchService, prisonerService }: Services): Rou
 
   // Handlers
   const probationSearchHandler = new ProbationSearchRoutes(searchService)
-  const caSearchHandler = new CaSearchRoutes(searchService, prisonerService)
+  const caSearchHandler = new CaSearchRoutes(searchService)
 
   // Operations
   get('/probation-search', 'ROLE_LICENCE_RO', probationSearchHandler.GET)

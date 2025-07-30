@@ -115,7 +115,7 @@ describe('View CA Search Results', () => {
       },
       inPrisonResults: [],
       onProbationResults: [],
-      worksAtMoreThanOnePrison: false,
+      selectedMultiplePrisonCaseloads: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People in prison (0 results)')
@@ -150,7 +150,7 @@ describe('View CA Search Results', () => {
       },
       inPrisonResults,
       onProbationResults: [],
-      worksAtMoreThanOnePrison: false,
+      selectedMultiplePrisonCaseloads: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People in prison (2 results)')
@@ -199,7 +199,7 @@ describe('View CA Search Results', () => {
       },
       inPrisonResults: [],
       onProbationResults,
-      worksAtMoreThanOnePrison: false,
+      selectedMultiplePrisonCaseloads: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People on probation (2 results)')
@@ -226,7 +226,7 @@ describe('View CA Search Results', () => {
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('Active')
   })
 
-  it('should display the location column with data when the user works at multiple prisons', () => {
+  it('should display the location column with data when the user has selected multiple prison caseloads', () => {
     const $ = render({
       queryTerm: 'Test',
       backLink: '/licence/view/cases',
@@ -246,7 +246,7 @@ describe('View CA Search Results', () => {
       },
       inPrisonResults,
       onProbationResults: [],
-      worksAtMoreThanOnePrison: true,
+      selectedMultiplePrisonCaseloads: true,
     })
     expect($('thead').text()).toContain('Location')
     expect($('#location-1').text()).toBe('Moorland (HMP)')
