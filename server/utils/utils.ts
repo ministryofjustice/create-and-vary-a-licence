@@ -201,6 +201,7 @@ const formatAddress = (address?: string) => {
 }
 
 const removeOrdinalSuffixes = (text: string) => {
+  if (!text) return ''
   return text.replace(/(\d+)(st|nd|rd|th)(?=\s+\w+)/g, '$1')
 }
 

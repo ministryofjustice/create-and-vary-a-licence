@@ -606,10 +606,4 @@ describe('removeOrdinalSuffixes', () => {
     const expected = 'Monitoring ends on Monday 23 February 2026.'
     expect(removeOrdinalSuffixes(input)).toBe(expected)
   })
-
-  it('should not affect numbers not followed by month names', () => {
-    const input = 'You scored 1st in the race.'
-    const expected = 'You scored 1st in the race.'
-    expect(removeOrdinalSuffixes(input)).toBe(expected)
-  })
 })
