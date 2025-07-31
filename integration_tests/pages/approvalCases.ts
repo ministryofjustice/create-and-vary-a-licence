@@ -1,5 +1,6 @@
 import Page from './page'
 import ApprovalViewPage from './approvalView'
+import ApprovalSearchPage from './approvalSearch'
 import ChangeLocationPage from './changeLocationPage'
 
 export default class ApprovalCasesPage extends Page {
@@ -9,8 +10,18 @@ export default class ApprovalCasesPage extends Page {
 
   private recentlyApprovedTab = '[data-qa=recently-approved-link]'
 
+  private searchTextInput = '#search'
+
+  private searchButtonId = '[data-qa=search-button]'
+
   constructor() {
     super('approval-cases-page')
+  }
+
+  clickSearch = (text: string): ApprovalSearchPage => {
+    cy.get(this.searchTextInput).type(text)
+    cy.get(this.searchButtonId).click()
+    return Page.verifyOnPage(ApprovalSearchPage)
   }
 
   clickApproveLicence = (): ApprovalViewPage => {
