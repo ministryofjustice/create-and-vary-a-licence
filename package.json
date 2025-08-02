@@ -102,9 +102,9 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.848.0",
-    "@ministryofjustice/frontend": "3.7",
-    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^4.6.4",
+    "@aws-sdk/client-sqs": "^3.855.0",
+    "@ministryofjustice/frontend": "3.7.2",
+    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^4.10.2",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.7",
@@ -131,7 +131,7 @@
     "moment": "^2.30.1",
     "multer": "^2.0.2",
     "nocache": "^4.0.0",
-    "npm": "^11.4.2",
+    "npm": "^11.5.1",
     "number-to-words": "^1.2.4",
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
@@ -156,7 +156,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/lodash": "^4.17.20",
     "@types/multer": "^2.0.0",
-    "@types/node": "^22.15.19",
+    "@types/node": "^22.16.5",
     "@types/number-to-words": "^1.2.3",
     "@types/nunjucks": "^3.2.6",
     "@types/nunjucks-date": "^0.0.10",
@@ -192,9 +192,9 @@
     "sass": "^1.89.2",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "overrides": {
-    "semver": "^7.5.3"
+    "semver": "^7.7.2"
   }
 }
