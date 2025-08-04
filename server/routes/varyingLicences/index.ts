@@ -19,7 +19,6 @@ import ReasonForVariation from '../creatingLicences/types/reasonForVariation'
 import ComDetailsRoutes from './handlers/comDetails'
 import TimelineRoutes from './handlers/timeline'
 import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
-import YesOrNotApplicable from '../creatingLicences/types/yesOrNotApplicable'
 import DeleteVariation from './types/deleteVariation'
 import PolicyChangesNoticeRoutes from './handlers/policyChangesNotice'
 import PolicyChangesCallbackRoutes from './handlers/policyChangesCallback'
@@ -27,6 +26,7 @@ import PolicyChangeRoutes from './handlers/policyChange'
 import PolicyChangesInputCallbackRoutes from './handlers/policyChangesInputCallback'
 import PolicyConfirmDeleteRoutes from './handlers/policyConfirmDelete'
 import ReviewLicenceRoutes from './handlers/reviewLicence'
+import YesOrNotApplicableDto from '../creatingLicences/types/yesOrNotApplicable'
 
 function alterResObject() {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -102,7 +102,7 @@ export default function Index({
   get('/id/:licenceId/spo-discussion', spoDiscussionHandler.GET)
   post('/id/:licenceId/spo-discussion', spoDiscussionHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/vlo-discussion', vloDiscussionHandler.GET)
-  post('/id/:licenceId/vlo-discussion', vloDiscussionHandler.POST, YesOrNotApplicable)
+  post('/id/:licenceId/vlo-discussion', vloDiscussionHandler.POST, YesOrNotApplicableDto)
   get('/id/:licenceId/confirm-amend-variation', confirmAmendVariationHandler.GET)
   post('/id/:licenceId/confirm-amend-variation', confirmAmendVariationHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/confirm-discard-variation', confirmDiscardVariationHandler.GET)
