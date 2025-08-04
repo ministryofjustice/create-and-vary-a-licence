@@ -2,7 +2,7 @@
 
 {% macro keyDates(licence, isDueForEarlyRelease) %}
 
-    {% set releaseDate = licence.licenceStartDate | datetimeToDate %}
+    {% set releaseDate = licence.licenceStartDate | datetimeToDateShort %}
 
     {% if licence.kind === 'HDC' %}
         {% set releaseDateHtml = '<span class="urgent-highlight">' + releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
@@ -26,11 +26,11 @@
         {% set dateRows = (dateRows.push(
                  {
                     key: { text: "HDC end date" },
-                    value: { text: licence.homeDetentionCurfewEndDate | datetimeToDate, classes: "hdc-end-date" }
+                    value: { text: licence.homeDetentionCurfewEndDate | datetimeToDateShort, classes: "hdc-end-date" }
                 },
                 {
                     key: { text: "Conditional release date" },
-                    value: { text: licence.conditionalReleaseDate | datetimeToDate, classes: "conditional-release-date" }
+                    value: { text: licence.conditionalReleaseDate | datetimeToDateShort, classes: "conditional-release-date" }
                 }
         ), dateRows) %}
     {% endif %}
@@ -39,11 +39,11 @@
         {% set dateRows = (dateRows.push(
                  {
                     key: { text: "Licence start date" },
-                    value: { text: licence.licenceStartDate | datetimeToDate }
+                    value: { text: licence.licenceStartDate | datetimeToDateShort }
                 },
                 {
                     key: { text: "Licence expiry date" },
-                    value: { text: licence.licenceExpiryDate | datetimeToDate }
+                    value: { text: licence.licenceExpiryDate | datetimeToDateShort }
                 }
         ), dateRows) %}
     {% endif %}
@@ -52,11 +52,11 @@
         {% set dateRows = (dateRows.push(
                 {
                     key: { text: "Post sentence supervision order start date" },
-                    value: { text: licence.topupSupervisionStartDate | datetimeToDate }
+                    value: { text: licence.topupSupervisionStartDate | datetimeToDateShort }
                 },
                 {
                     key: { text: "Post sentence supervision order end date" },
-                    value: { text: licence.topupSupervisionExpiryDate | datetimeToDate }
+                    value: { text: licence.topupSupervisionExpiryDate | datetimeToDateShort }
                 }
         ), dateRows) %}
     {% endif %}
