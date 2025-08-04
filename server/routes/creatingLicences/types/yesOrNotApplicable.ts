@@ -1,14 +1,14 @@
 import { Expose } from 'class-transformer'
 import { IsIn, IsNotEmpty } from 'class-validator'
-import YesOrNo from '../../../enumeration/yesOrNo'
+import { YesOrNotApplicable } from '../../../enumeration/YesOrNotApplicable'
 
 const message = 'Select yes or not applicable'
 
-class YesOrNotApplicable {
+class YesOrNotApplicableDto {
   @Expose()
   @IsNotEmpty({ message })
-  @IsIn(Object.values(YesOrNo), { message })
-  answer: YesOrNo
+  @IsIn(Object.values(YesOrNotApplicable), { message })
+  answer: YesOrNotApplicable
 }
 
-export default YesOrNotApplicable
+export default YesOrNotApplicableDto
