@@ -27,7 +27,7 @@
                     <div class="govuk-hint">{{ config.subtext }}</div>
                 {% endif %}
                 {% if config.pssDates %}
-                    <div class="govuk-hint">The post sentence supervision period starts on {{ licence.topupSupervisionStartDate | datetimeToDate }} and ends on {{ licence.topupSupervisionExpiryDate | datetimeToDate }}</div>
+                    <div class="govuk-hint">The post sentence supervision period starts on {{ licence.topupSupervisionStartDate | datetimeToDateShort }} and ends on {{ licence.topupSupervisionExpiryDate | datetimeToDateShort }}</div>
                 {% endif %}
 
                 {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
