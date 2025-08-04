@@ -47,7 +47,7 @@
                     <th scope="row" class="govuk-table__header">Conditional release date</th>
                     <td class="govuk-table__cell">
                         {% if licence.conditionalReleaseDate %}
-                            {{ licence.conditionalReleaseDate | datetimeToDateShort }}
+                            {{ licence.conditionalReleaseDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
@@ -64,7 +64,7 @@
                     <th scope="row" class="govuk-table__header">Confirmed release date</th>
                     <td class="govuk-table__cell">
                         {% if licence.actualReleaseDate %}
-                            {{ licence.actualReleaseDate | datetimeToDateShort }}
+                            {{ licence.actualReleaseDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
@@ -81,7 +81,7 @@
                     <th scope="row" class="govuk-table__header">Sentence start date</th>
                     <td class="govuk-table__cell">
                         {% if licence.sentenceStartDate %}
-                            {{ licence.sentenceStartDate | datetimeToDateShort }}
+                            {{ licence.sentenceStartDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
@@ -98,7 +98,7 @@
                     <th scope="row" class="govuk-table__header">Sentence end date</th>
                     <td class="govuk-table__cell">
                         {% if licence.sentenceEndDate %}
-                            {{ licence.sentenceEndDate | datetimeToDateShort }}
+                            {{ licence.sentenceEndDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
@@ -115,7 +115,7 @@
                     <th scope="row" class="govuk-table__header">Licence start date</th>
                     <td class="govuk-table__cell">
                         {% if licence.licenceStartDate %}
-                            {{ licence.licenceStartDate | datetimeToDateShort }}
+                            {{ licence.licenceStartDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
@@ -132,7 +132,7 @@
                     <th scope="row" class="govuk-table__header">Licence expiry date</th>
                     <td class="govuk-table__cell">
                         {% if licence.licenceExpiryDate %}
-                            {{ licence.licenceExpiryDate | datetimeToDateShort }}
+                            {{ licence.licenceExpiryDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
@@ -149,7 +149,7 @@
                     <th scope="row" class="govuk-table__header">Top-up supervision start date</th>
                     <td class="govuk-table__cell">
                         {% if licence.topupSupervisionStartDate %}
-                            {{ licence.topupSupervisionStartDate | datetimeToDateShort }}
+                            {{ licence.topupSupervisionStartDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
@@ -166,7 +166,7 @@
                     <th scope="row" class="govuk-table__header">Top-up supervision expiry date</th>
                     <td class="govuk-table__cell">
                         {% if licence.topupSupervisionExpiryDate %}
-                            {{ licence.topupSupervisionExpiryDate | datetimeToDateShort }}
+                            {{ licence.topupSupervisionExpiryDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
@@ -183,7 +183,7 @@
                     <th scope="row" class="govuk-table__header">Home detention curfew actual date</th>
                     <td class="govuk-table__cell">
                         {% if licence.homeDetentionCurfewActualDate %}
-                            {{ licence.homeDetentionCurfewActualDate | datetimeToDateShort }}
+                            {{ licence.homeDetentionCurfewActualDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
@@ -200,7 +200,7 @@
                     <th scope="row" class="govuk-table__header">Home detention curfew end date</th>
                     <td class="govuk-table__cell">
                         {% if licence.homeDetentionCurfewEndDate %}
-                            {{ licence.homeDetentionCurfewEndDate | datetimeToDateShort }}
+                            {{ licence.homeDetentionCurfewEndDate | datetimeToDate }}
                         {% else %}
                             Not found
                         {% endif %}
