@@ -11,6 +11,15 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
   let req: Request
   let res: Response
 
+  const tabParameters = {
+    approvalNeeded: {
+      tabId: 'tab-heading-approval-needed',
+    },
+    recentlyApproved: {
+      tabId: 'tab-heading-recently-approved',
+    },
+  }
+
   beforeEach(() => {
     req = {} as Request
 
@@ -37,6 +46,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/approverSearch/approverSearch', {
         queryTerm: '',
         backLink: '/licence/approve/cases',
+        tabParameters,
       })
     }))
 })
