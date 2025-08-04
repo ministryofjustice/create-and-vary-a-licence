@@ -8,9 +8,19 @@ export default class ApproverSearch {
     const queryTerm = req.query?.queryTerm as string
     const backLink = '/licence/approve/cases'
 
+    const tabParameters = {
+      approvalNeeded: {
+        tabId: 'tab-heading-approval-needed',
+      },
+      recentlyApproved: {
+        tabId: 'tab-heading-recently-approved',
+      },
+    }
+
     return res.render('pages/search/approverSearch/approverSearch', {
       queryTerm,
       backLink,
+      tabParameters,
     })
   }
 }

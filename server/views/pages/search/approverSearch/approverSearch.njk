@@ -1,8 +1,31 @@
 {% extends "layout.njk" %}
 
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+
 {% set pageTitle = applicationName + " - Prison Approver - Search" %}
 {% set pageId = "approval-search-page" %}
 {% set backLinkHref = backLink %}
+{% set noJsBackLink = true %}
+
+{% macro displayResults(tabId, countText, setRecentlyApprovedTab) %}
+    <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <p id="approval-search-empty-state-content">No licence approval requests that match "{{ queryTerm }}". Try searching again.</p>
+            {% if setRecentlyApprovedTab %}
+                <p>If someone’s release date was more than 14 days ago, you will no longer be able to see their licence in this service.</p>
+            {% endif %}
+            <p class="govuk-body">
+                {{ govukButton({
+                    text: "Return to caselist",
+                    classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                    href: backLink,
+                    attributes: { 'data-qa': 'return-to-caselist' }
+                }) }}
+            </p>
+        </div>
+    </div>
+{% endmacro %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -30,5 +53,31 @@
             </form>
         </div>
     </div>
+
+    {% set approvalNeededCountText = "Approval needed (0 results)" %}
+    {% set recentlyApprovedCountText = "Recently approved (0 results)" %}
+
+    {% set approvalNeeded = displayResults(tabParameters.approvalNeeded.tabId, approvalNeededCountText, false) %}
+    {% set recentlyApproved = displayResults(tabParameters.recentlyApproved.tabId, recentlyApprovedCountText, true) %}
+
+
+    {{ govukTabs({
+        items: [
+            {
+                label: "Approval needed",
+                id: "approval-needed",
+                panel: {
+                    html: approvalNeeded
+                }
+            },
+            {
+                label: "Recently approved",
+                id: "recently-approved",
+                panel: {
+                    html: recentlyApproved
+                }
+            }
+        ]
+    }) }}
 
 {% endblock %}
