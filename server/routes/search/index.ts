@@ -16,7 +16,6 @@ export default function Index({ searchService }: Services): Router {
   // Handlers
   const probationSearchHandler = new ProbationSearchRoutes(searchService)
   const caSearchHandler = new CaSearchRoutes(searchService)
-
   const approverSearchHandler = new ApproverSearchRoutes(searchService)
 
   // Operations
