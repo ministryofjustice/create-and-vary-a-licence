@@ -179,12 +179,6 @@ describe('Nunjucks Filters', () => {
       expect($('body').text()).toBe('23 December 2021')
     })
 
-    it('should format a date and time with short GOVUK format', () => {
-      const template = '{{ testDateTime | datetimeToDateShort }}'
-      const $ = renderTemplate(template, { testDateTime: '23/12/2021 11:15' })
-      expect($('body').text()).toBe('23 Dec 2021')
-    })
-
     it('should format a date and time with full day', () => {
       const template = '{{ testDateTime | datetimeToDateWithDay }}'
       const $ = renderTemplate(template, { testDateTime: '23/12/2021 11:15' })
@@ -279,7 +273,7 @@ describe('Nunjucks Filters', () => {
     it('Should handle AP licence with led', () => {
       const licence = { typeCode: 'AP', licenceExpiryDate: '17/12/2022' } as Licence
       const result = registerNunjucks().getFilter('dateToDisplay')(licence)
-      expect(result).toEqual('Licence end date: 17 Dec 2022')
+      expect(result).toEqual('Licence end date: 17 December 2022')
     })
     it('Should handle AP licence without led', () => {
       const licence = { typeCode: 'AP', licenceExpiryDate: undefined } as Licence
@@ -292,13 +286,13 @@ describe('Nunjucks Filters', () => {
       const licenceExpiryDate = '12/12/2022'
       const licence = { typeCode: 'AP_PSS', topupSupervisionStartDate: tomorrow, licenceExpiryDate } as Licence
       const result = registerNunjucks().getFilter('dateToDisplay')(licence)
-      expect(result).toEqual('Licence end date: 12 Dec 2022')
+      expect(result).toEqual('Licence end date: 12 December 2022')
     })
 
     it('Should handle AP_PSS where tussd is today', () => {
       const today = format(new Date(), 'd/MM/yyyy')
       const tused = format(addMonths(new Date(), 1), 'd/MM/yyyy')
-      const tusedInLongerForm = format(addMonths(new Date(), 1), 'd MMM yyy')
+      const tusedInLongerForm = format(addMonths(new Date(), 1), 'd MMMM yyy')
       const licence = {
         typeCode: 'AP_PSS',
         topupSupervisionStartDate: today,
@@ -311,7 +305,7 @@ describe('Nunjucks Filters', () => {
     it('Should handle AP_PSS where led has passed and tused exists but no tussd', () => {
       const yesterday = format(subDays(new Date(), 1), 'd/MM/yyyy')
       const tused = format(addMonths(new Date(), 1), 'd/MM/yyyy')
-      const tusedInLongerForm = format(addMonths(new Date(), 1), 'd MMM yyy')
+      const tusedInLongerForm = format(addMonths(new Date(), 1), 'd MMMM yyy')
       const licence = {
         typeCode: 'AP_PSS',
         licenceExpiryDate: yesterday,
@@ -324,7 +318,7 @@ describe('Nunjucks Filters', () => {
     it('Should handle PSS licence', () => {
       const licence = { typeCode: 'PSS', topupSupervisionExpiryDate: '13/12/2022' } as Licence
       const result = registerNunjucks().getFilter('dateToDisplay')(licence)
-      expect(result).toEqual('PSS end date: 13 Dec 2022')
+      expect(result).toEqual('PSS end date: 13 December 2022')
     })
   })
 

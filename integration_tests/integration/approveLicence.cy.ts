@@ -141,8 +141,8 @@ context('Approve a licence', () => {
     approvalViewPage.getValue(approvalViewPage.approveLicenceId).should('have.text', 'Approve licence')
     approvalViewPage.getValue(approvalViewPage.accordionSectionHeading).should('contain.text', 'HDC and licence dates')
     approvalViewPage.getValue(approvalViewPage.releaseDateHeading).should('contain.text', 'Release date/HDC start date')
-    approvalViewPage.getValue(approvalViewPage.hdcEndDate).should('contain.text', '12 Mar 2021')
-    approvalViewPage.getValue(approvalViewPage.conditionalReleaseDate).should('contain.text', '13 Mar 2021')
+    approvalViewPage.getValue(approvalViewPage.hdcEndDate).should('contain.text', '12 March 2021')
+    approvalViewPage.getValue(approvalViewPage.conditionalReleaseDate).should('contain.text', '13 March 2021')
     approvalViewPage.getValue(approvalViewPage.accordionSectionHeading).should('contain.text', 'HDC curfew details')
     approvalViewPage
       .getValue(approvalViewPage.curfewAddress)
