@@ -193,7 +193,7 @@ export default class VaryApproverCaseloadService {
 
     const releaseDate = licence.licenceStartDate ? format(parseCvlDate(licence.licenceStartDate), 'dd MMM yyyy') : null
     const variationRequestDate = licence.dateCreated
-      ? format(parseCvlDateTime(licence.dateCreated, { withSeconds: false }), 'dd MMMM yyyy')
+      ? format(parseCvlDateTime(licence.dateCreated, { withSeconds: false }), 'dd MMM yyyy')
       : null
 
     return {

@@ -349,7 +349,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     }
 
     if (dateToDisplay) {
-      return `${textToDisplay}: ${format(dateToDisplay, 'd MMM yyy')}`
+      return `${textToDisplay}: ${format(dateToDisplay, 'd MMMM yyyy')}`
     }
 
     return `${textToDisplay}: Not available`
