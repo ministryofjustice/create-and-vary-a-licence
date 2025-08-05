@@ -21,7 +21,7 @@
             {
                 key: { text: "Date", id: "date" },
                 id: "date",
-                value: { text: licence.appointmentTime | datetimeToDateShort }
+                value: { text: licence.appointmentTime | datetimeToDate }
             } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME',
             {
                 key: { text: "Time", id: "time" },

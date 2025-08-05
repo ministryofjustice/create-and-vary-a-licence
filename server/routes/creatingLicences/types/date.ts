@@ -29,16 +29,19 @@ class SimpleDate extends Stringable {
 
   stringify(): string {
     if (this.year && this.month && this.day) {
-      return this.toMoment().format('dddd Do MMMM YYYY')
+      return this.toMoment().format('dddd D MMMM YYYY')
     }
     return ''
   }
 
   static fromString(value: string): SimpleDate {
-    if (!value) {
-      return undefined
-    }
-    const date = moment(value, 'dddd Do MMMM YYYY', true)
+    if (!value) return undefined
+    // Remove ordinal suffixes like 'st', 'nd', 'rd', 'th' from the day
+    const cleanedValue = value.replace(/(\d+)(st|nd|rd|th)/, '$1')
+    const date = moment(cleanedValue, 'dddd D MMMM YYYY', true)
+
+    if (!date.isValid()) return undefined
+
     return new SimpleDate(date.format('DD'), date.format('MM'), date.format('YYYY'))
   }
 }

@@ -13,13 +13,13 @@ import {
   jsonDtTo12HourTime,
   json24HourTimeTo12HourTime,
   jsonDtToDate,
-  jsonDtToDateShort,
   jsonDtToDateWithDay,
   parseCvlDate,
   toIsoDate,
   cvlDateToDateShort,
   formatAddressTitleCase,
   formatAddressLine,
+  removeOrdinalSuffixes,
 } from './utils'
 import {
   AdditionalCondition,
@@ -168,10 +168,6 @@ export function registerNunjucks(app?: express.Express): Environment {
     return jsonDtToDate(dt)
   })
 
-  njkEnv.addFilter('datetimeToDateShort', (dt: string) => {
-    return jsonDtToDateShort(dt)
-  })
-
   njkEnv.addFilter('datetimeToDateWithDay', (dt: string) => {
     return jsonDtToDateWithDay(dt)
   })
@@ -185,6 +181,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('formatAddress', formatAddress)
+
+  njkEnv.addFilter('removeOrdinalSuffixes', removeOrdinalSuffixes)
 
   njkEnv.addFilter('formatAddressAsList', (address?: string) => {
     return address ? address.split(', ').filter(line => line.trim().length > 0) : undefined
