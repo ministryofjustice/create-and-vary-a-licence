@@ -601,26 +601,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/remove-upload': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Removes a previously uploaded exclusion zone file from an additional condition.
-     * @description Removes a previously uploaded exclusion zone file. Requires ROLE_CVL_ADMIN.
-     */
-    put: operations['removeExclusionZoneFile']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/com/update': {
     parameters: {
       query?: never
@@ -1290,6 +1270,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/caseload/prison-approver/case-search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Search for offenders on a given approver's caseload
+     * @description Search for offenders on a given approver's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    post: operations['searchForOffenderOnApproverCaseload']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/caseload/prison-approver/approval-needed': {
     parameters: {
       query?: never
@@ -1442,6 +1442,26 @@ export interface paths {
      * @description Returns a list of licences and audit details for the Prison Reference Number(prn). Requires ROLE_SAR_DATA_ACCESS or ROLE_CVL_ADMIN.
      */
     get: operations['getSarRecordsById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/staff/address/preferred': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve the preferred address for a staff member
+     * @description Fetches the preferred address associated with the given staff identifier. Requires ROLE_CVL_ADMIN.
+     */
+    get: operations['getPreferredAddress']
     put?: never
     post?: never
     delete?: never
@@ -2068,21 +2088,21 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/address/search/by/postcode/{postcode}': {
+  '/staff/address/reference/{reference}': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    /**
-     * Searches for addresses that match the given postcode
-     * @description Searches for addresses that match the given postcode
-     */
-    get: operations['searchForAddressesByPostcode']
+    get?: never
     put?: never
     post?: never
-    delete?: never
+    /**
+     * Delete address by reference
+     * @description Deletes the address linked to a staff member using the provided reference. Requires ROLE_CVL_ADMIN.
+     */
+    delete: operations['deleteAddressByReference']
     options?: never
     head?: never
     patch?: never
@@ -2603,6 +2623,11 @@ export interface components {
        * @enum {string}
        */
       source: 'MANUAL' | 'OS_PLACES'
+      /**
+       * @description Flag to indicate if the address should be added to the user's saved addresses
+       * @example true
+       */
+      isPreferredAddress: boolean
     }
     /** @description Request object for updating the address of the initial appointment */
     AppointmentAddressRequest: {
@@ -3526,6 +3551,11 @@ export interface components {
        */
       fileType?: string
       /**
+       * @description The mime type based on the type of image that has been extracted from the upload
+       * @example image/png
+       */
+      imageType?: string
+      /**
        * Format: int32
        * @description The original file size in bytes
        * @example 27566
@@ -3880,6 +3910,16 @@ export interface components {
        * @enum {string}
        */
       kind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION'
+      /**
+       * @description The agency code where this offender resides or was released from
+       * @example LEI
+       */
+      prisonCode?: string
+      /**
+       * @description The agency description of the detaining prison
+       * @example Leeds (HMP)
+       */
+      prisonDescription?: string
     }
     /** @description Describes a probation practitioner on an approval case */
     ProbationPractitioner: {
@@ -3904,6 +3944,26 @@ export interface components {
        * @example jbloggs
        */
       staffUsername?: string
+    }
+    /** @description Request object for searching for offenders within a set of teams attached to a staff member */
+    ApproverSearchRequest: {
+      /**
+       * @description The prison caseloads of the prison staff member
+       * @example ['BAI']
+       */
+      prisonCaseloads: string[]
+      /**
+       * @description The query the user wishes to search for (e.g. CRN, name, NOMIS ID)
+       * @example Joe Bloggs
+       */
+      query: string
+    }
+    /** @description Response object which describes a result from an approver caseload search */
+    ApproverSearchResponse: {
+      /** @description A list of cases needing approval search results */
+      approvalNeededResponse: components['schemas']['ApprovalCase'][]
+      /** @description A list of recently approved cases search results */
+      recentlyApprovedResponse: components['schemas']['ApprovalCase'][]
     }
     /** @description Request object for requesting a case load for a team */
     TeamCaseloadRequest: {
@@ -4151,7 +4211,7 @@ export interface components {
       query: string
       /**
        * @description The prison caseloads of the prison staff member
-       * @example [BAI]
+       * @example ['BAI']
        */
       prisonCaseloads: string[]
     }
@@ -4194,6 +4254,8 @@ export interface components {
       licences: components['schemas']['SarLicence'][]
       /** @description The list of audit events */
       auditEvents: components['schemas']['SarAuditEvent'][]
+      /** @description The list of referenced attachments */
+      attachments: components['schemas']['SarAttachmentDetail'][]
     }
     /** @description Describes an additional condition */
     SarAdditionalCondition: {
@@ -4223,15 +4285,20 @@ export interface components {
     /** @description Describes the files uploaded for an additional condition */
     SarAdditionalConditionUploadSummary: {
       /**
+       * Format: int32
+       * @description The numeric identifier to identify this attachment
+       */
+      attachmentNumber: number
+      /**
        * @description The original file name uploaded for this condition on this licence
        * @example exclusion-zone.pdf
        */
       filename?: string
       /**
-       * @description The file type uploaded for this condition on this licence
-       * @example application/pdf
+       * @description The mime type based on the type of image that has been extracted from the upload
+       * @example image/png
        */
-      fileType?: string
+      imageType?: string
       /**
        * Format: int32
        * @description The original file size in bytes
@@ -4249,6 +4316,16 @@ export interface components {
        * @example A description of the exclusion zone boundaries
        */
       description?: string
+    }
+    SarAttachmentDetail: {
+      /** Format: int32 */
+      attachmentNumber: number
+      name: string
+      contentType: string
+      url: string
+      filename: string
+      /** Format: int32 */
+      filesize: number
     }
     /** @description Describes an audit event request */
     SarAuditEvent: {
@@ -4338,7 +4415,7 @@ export interface components {
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
-      nomsId?: string
+      prisonNumber?: string
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -4455,6 +4532,45 @@ export interface components {
        * @example Be of generally good behaviour
        */
       text?: string
+    }
+    /** @description A response object for a address */
+    AddressResponse: {
+      /**
+       * @description The address's unique reference
+       * @example f47ac10b-58cc-4372-a567-0e02b2c3d479 or 10023122431
+       */
+      reference: string
+      /**
+       * @description The first line of the address
+       * @example 12
+       */
+      firstLine: string
+      /**
+       * @description The second line of the address
+       * @example Penarth
+       */
+      secondLine?: string
+      /**
+       * @description The town or city of the address
+       * @example Cardiff
+       */
+      townOrCity: string
+      /**
+       * @description The county of the address
+       * @example Vale of Glamorgan
+       */
+      county?: string
+      /**
+       * @description The postcode of the address
+       * @example CF64 1AB
+       */
+      postcode: string
+      /**
+       * @description Source of the address
+       * @example MANUAL
+       * @enum {string}
+       */
+      source: 'MANUAL' | 'OS_PLACES'
     }
     Count: {
       /**
@@ -4626,25 +4742,6 @@ export interface components {
       /** @description The address of initial appointment */
       licenceAppointmentAddress?: components['schemas']['AddressResponse']
       /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number
-      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
-      isEligibleForEarlyRelease: boolean
-      /**
-       * @description The first name of the person on licence
-       * @example Michael
-       */
-      forename?: string
-      /**
-       * Format: date
-       * @description The date that the licence will start
-       * @example 13/09/2022
-       */
-      licenceStartDate?: string
-      /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
        * @example 13/08/2022
@@ -4662,6 +4759,25 @@ export interface components {
        * @example 13/09/2024
        */
       licenceExpiryDate?: string
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
+      /**
+       * Format: date
+       * @description The date that the licence will start
+       * @example 13/09/2022
+       */
+      licenceStartDate?: string
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string
+      /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
+      bookingId?: number
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
@@ -4694,36 +4810,6 @@ export interface components {
        * @example X12444
        */
       crn?: string
-      /**
-       * Format: date
-       * @description The actual release date (if set)
-       * @example 13/09/2022
-       */
-      actualReleaseDate?: string
-      /**
-       * Format: date
-       * @description The sentence start date
-       * @example 13/09/2019
-       */
-      sentenceStartDate?: string
-      /**
-       * Format: date
-       * @description The sentence end date
-       * @example 13/09/2022
-       */
-      sentenceEndDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
-       */
-      topupSupervisionStartDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       * @example 06/06/2023
-       */
-      topupSupervisionExpiryDate?: string
       /**
        * @description The team code that is supervising this licence
        * @example Cardiff-A
@@ -4781,6 +4867,36 @@ export interface components {
        */
       comEmail?: string
       /**
+       * Format: date
+       * @description The actual release date (if set)
+       * @example 13/09/2022
+       */
+      actualReleaseDate?: string
+      /**
+       * Format: date
+       * @description The sentence start date
+       * @example 13/09/2019
+       */
+      sentenceStartDate?: string
+      /**
+       * Format: date
+       * @description The sentence end date
+       * @example 13/09/2022
+       */
+      sentenceEndDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
+       */
+      topupSupervisionExpiryDate?: string
+      /**
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
        */
@@ -4805,6 +4921,11 @@ export interface components {
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean
       /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string
+      /**
        * Format: date-time
        * @description The date and time that this licence was first created
        * @example 24/08/2022 09:30:33
@@ -4820,11 +4941,6 @@ export interface components {
        * @example 1.3
        */
       licenceVersion?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
@@ -4871,45 +4987,6 @@ export interface components {
       | components['schemas']['HdcLicence']
       | components['schemas']['HdcVariationLicence']
     )
-    /** @description A response object for a address */
-    AddressResponse: {
-      /**
-       * @description The address's unique reference
-       * @example f47ac10b-58cc-4372-a567-0e02b2c3d479 or 10023122431
-       */
-      reference: string
-      /**
-       * @description The first line of the address
-       * @example 12
-       */
-      firstLine: string
-      /**
-       * @description The second line of the address
-       * @example Penarth
-       */
-      secondLine?: string
-      /**
-       * @description The town or city of the address
-       * @example Cardiff
-       */
-      townOrCity: string
-      /**
-       * @description The county of the address
-       * @example Vale of Glamorgan
-       */
-      county?: string
-      /**
-       * @description The postcode of the address
-       * @example CF64 1AB
-       */
-      postcode: string
-      /**
-       * @description Source of the address
-       * @example MANUAL
-       * @enum {string}
-       */
-      source: 'MANUAL' | 'OS_PLACES'
-    }
     /** @description Describes a CRD licence within this service */
     CrdLicence: Omit<
       WithRequired<
@@ -8100,72 +8177,6 @@ export interface operations {
       }
     }
   }
-  removeExclusionZoneFile: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-        conditionId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description The exclusion zone file was removed */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   updateComDetails: {
     parameters: {
       query?: never
@@ -10496,6 +10507,75 @@ export interface operations {
       }
     }
   }
+  searchForOffenderOnApproverCaseload: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ApproverSearchRequest']
+      }
+    }
+    responses: {
+      /** @description The query retrieved a set of enriched results */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ApproverSearchResponse']
+        }
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getApprovalNeeded: {
     parameters: {
       query?: never
@@ -11061,6 +11141,71 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getPreferredAddress: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The preferred address was retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressResponse'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -13283,18 +13428,7 @@ export interface operations {
   }
   searchForAddresses: {
     parameters: {
-      query?: {
-        /**
-         * @description Pagination page number, starting at zero
-         * @example 0
-         */
-        page?: number
-        /**
-         * @description Pagination size per page, min/max = 2/200
-         * @example 50
-         */
-        pageSize?: number
-      }
+      query?: never
       header?: never
       path: {
         searchQuery: string
@@ -13426,36 +13560,23 @@ export interface operations {
       }
     }
   }
-  searchForAddressesByPostcode: {
+  deleteAddressByReference: {
     parameters: {
-      query?: {
-        /**
-         * @description Pagination page number, starting at zero
-         * @example 0
-         */
-        page?: number
-        /**
-         * @description Pagination size per page, min/max = 2/200
-         * @example 50
-         */
-        pageSize?: number
-      }
+      query?: never
       header?: never
       path: {
-        postcode: string
+        reference: string
       }
       cookie?: never
     }
     requestBody?: never
     responses: {
-      /** @description Returns addresses matching the given search text */
-      200: {
+      /** @description Address has been removed successfully */
+      204: {
         headers: {
           [name: string]: unknown
         }
-        content: {
-          'application/json': components['schemas']['AddressSearchResponse']
-        }
+        content?: never
       }
       /** @description Bad Request */
       400: {
@@ -13477,6 +13598,15 @@ export interface operations {
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Address with this reference was not found */
+      404: {
         headers: {
           [name: string]: unknown
         }
