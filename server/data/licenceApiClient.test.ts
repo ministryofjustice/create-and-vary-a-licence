@@ -144,6 +144,7 @@ describe('Licence API client tests', () => {
       postcode: 'FK1 2AB',
       county: 'Westshire',
       source: 'MANUAL',
+      isPreferredAddress: true,
     }
     await licenceApiClient.addAppointmentAddress('1', addAddressRequest, { username: 'joebloggs' } as User)
     expect(put).toHaveBeenCalledWith(
