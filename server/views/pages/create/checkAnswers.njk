@@ -146,7 +146,7 @@
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <div class="govuk-button-group margin-top-85">
-                    {% if isInProgress %}
+                    {% if isInProgress and not isInHardStopPeriod %}
                         {{ govukButton({
                             text: submitButtonText,
                             attributes: submitButtonAttrs

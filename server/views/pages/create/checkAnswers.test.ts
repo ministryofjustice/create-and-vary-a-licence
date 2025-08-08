@@ -484,6 +484,16 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('[data-qa=date]').text()).not.toContain('Licence end date')
   })
 
+  it('should hide submit licence button in the hard stop period', () => {
+    const $ = render({
+      licence,
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: true,
+    })
+
+    expect($('[data-qa=send-licence-conditions]').length).toBe(0)
+  })
+
   it('should hide edit licence button in the hard stop period', () => {
     const $ = render({
       licence,
