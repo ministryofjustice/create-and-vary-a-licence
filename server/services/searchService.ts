@@ -1,4 +1,8 @@
-import { PrisonCaseAdminSearchResult, ProbationSearchResult } from '../@types/licenceApiClientTypes'
+import {
+  ApproverSearchResponse,
+  PrisonCaseAdminSearchResult,
+  ProbationSearchResult,
+} from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 
 export default class SearchService {
@@ -16,6 +20,13 @@ export default class SearchService {
     return this.licenceApiClient.searchForOffenderOnPrisonCaseAdminCaseload({
       query: queryTerm,
       prisonCaseloads,
+    })
+  }
+
+  async getPrisonApproverSearchResults(queryTerm: string, prisonCaseloads: string[]): Promise<ApproverSearchResponse> {
+    return this.licenceApiClient.searchForOffenderOnApproverCaseload({
+      prisonCaseloads,
+      query: queryTerm,
     })
   }
 }

@@ -48,6 +48,8 @@ import type {
   VaryApproverCase,
   PrisonCaseAdminSearchResult,
   PrisonUserSearchRequest,
+  ApproverSearchRequest,
+  ApproverSearchResponse,
   UpdateElectronicMonitoringProgrammeRequest,
   AddressSearchResponse,
   AddAddressRequest,
@@ -621,6 +623,13 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username },
     )) as Promise<ApprovalCase[]>
+  }
+
+  async searchForOffenderOnApproverCaseload(searchRequest: ApproverSearchRequest): Promise<ApproverSearchResponse> {
+    return (await this.post({
+      path: `/caseload/prison-approver/case-search`,
+      data: searchRequest,
+    })) as Promise<ApproverSearchResponse>
   }
 
   async getPrisonOmuCaseload(caCaseloadSearch: CaCaseloadSearch, user?: User): Promise<CaCase[]> {
