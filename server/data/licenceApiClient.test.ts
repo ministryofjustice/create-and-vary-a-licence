@@ -27,6 +27,8 @@ import {
   OverrideLicencePrisonerDetailsRequest,
   UpdateElectronicMonitoringProgrammeRequest,
   AddAddressRequest,
+  PrisonUserSearchRequest,
+  ApproverSearchRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -781,6 +783,12 @@ describe('Licence API client tests', () => {
         { username: 'joebloggs' },
       )
     })
+
+    it('Should search for licences', async () => {
+      const searchRequest = { prisonCaseloads: ['PRI'], query: 'search term' } as ApproverSearchRequest
+      await licenceApiClient.searchForOffenderOnApproverCaseload(searchRequest)
+      expect(post).toHaveBeenCalledWith({ path: '/caseload/prison-approver/case-search', data: searchRequest })
+    })
   })
 
   describe('Ca caseloads: ', () => {
@@ -796,6 +804,12 @@ describe('Licence API client tests', () => {
         { path: '/caseload/case-admin/probation-view', data },
         { username: 'joebloggs' },
       )
+    })
+
+    it('Should search for licences', async () => {
+      const searchRequest = { query: 'search term', prisonCaseloads: ['PRI'] } as PrisonUserSearchRequest
+      await licenceApiClient.searchForOffenderOnPrisonCaseAdminCaseload(searchRequest)
+      expect(post).toHaveBeenCalledWith({ path: '/caseload/case-admin/case-search', data: searchRequest })
     })
   })
 

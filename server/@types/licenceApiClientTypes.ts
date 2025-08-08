@@ -70,6 +70,8 @@ export type VaryApproverCase = components['schemas']['VaryApproverCase']
 export type ElectronicMonitoringProvider = components['schemas']['ElectronicMonitoringProvider']
 export type PrisonUserSearchRequest = components['schemas']['PrisonUserSearchRequest']
 export type PrisonCaseAdminSearchResult = components['schemas']['PrisonCaseAdminSearchResult']
+export type ApproverSearchRequest = components['schemas']['ApproverSearchRequest']
+export type ApproverSearchResponse = components['schemas']['ApproverSearchResponse']
 export type UpdateElectronicMonitoringProgrammeRequest =
   components['schemas']['UpdateElectronicMonitoringProgrammeRequest']
 export type AddressSearchResponse = components['schemas']['AddressSearchResponse']
