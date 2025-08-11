@@ -1,5 +1,5 @@
 import { User } from '../@types/CvlUserDetails'
-import { AddAddressRequest, AddressSearchResponse } from '../@types/licenceApiClientTypes'
+import { AddAddressRequest, AddressResponse, AddressSearchResponse } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 
 export default class AddressService {
@@ -15,5 +15,13 @@ export default class AddressService {
 
   async addAppointmentAddress(licenceId: string, appointmentAddress: AddAddressRequest, user: User): Promise<void> {
     return this.licenceApiClient.addAppointmentAddress(licenceId, appointmentAddress, user)
+  }
+
+  async getPreferredAddresses(user: User): Promise<AddressResponse[]> {
+    return this.licenceApiClient.getPreferredAddresses(user)
+  }
+
+  async deleteAddressByReference(reference: string, user: User): Promise<void> {
+    return this.licenceApiClient.deleteAddressByReference(reference, user)
   }
 }

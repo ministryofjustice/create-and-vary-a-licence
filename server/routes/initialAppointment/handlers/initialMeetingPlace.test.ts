@@ -6,10 +6,12 @@ import Address from '../types/address'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 import config from '../../../config'
+import AddressService from '../../../services/addressService'
 
 jest.mock('./initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
+const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
   let req: Request
@@ -58,7 +60,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
   })
 
   describe('Probation user journey', () => {
-    const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PROBATION)
+    const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, UserType.PROBATION)
 
     describe('GET', () => {
       it('should render view', async () => {
@@ -142,7 +144,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
   })
 
   describe('Prison user journey', () => {
-    const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
+    const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, UserType.PRISON)
 
     describe('GET', () => {
       it('should render view', async () => {

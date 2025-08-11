@@ -68,14 +68,14 @@ export default function Index({ licenceService, conditionService, addressService
   }
 
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PROBATION)
+    const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, UserType.PROBATION)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET, UserType.PROBATION)
     const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, addressType)
   }
 
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
+    const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, UserType.PRISON)
     get('/view/id/:licenceId/initial-meeting-place', controller.GET, UserType.PRISON)
     const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/view/id/:licenceId/initial-meeting-place', controller.POST, addressType)

@@ -4,10 +4,13 @@ import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 import config from '../../../config'
+import AddressService from '../../../services/addressService'
+import { AddAddressRequest, AddressResponse } from '../../../@types/licenceApiClientTypes'
 
 export default class InitialMeetingPlaceRoutes {
   constructor(
     private readonly licenceService: LicenceService,
+    private readonly addressService: AddressService,
     private readonly userType: UserType,
   ) {}
 
@@ -17,9 +20,13 @@ export default class InitialMeetingPlaceRoutes {
     const basePath = `/licence/create/id/${licenceId}`
     const fromReview = req.query?.fromReview
     const fromReviewParam = fromReview ? '?fromReview=true' : ''
-
     const formAddress = stringToAddressObject(licence.appointmentAddress)
+    let preferredAddresses: AddressResponse[] = []
+    if (config.postcodeLookupEnabled) {
+      preferredAddresses = await this.addressService.getPreferredAddresses(res.locals.user)
+    }
     return res.render('pages/create/initialMeetingPlace', {
+      preferredAddresses,
       formAddress,
       manualAddressEntryUrl: `${basePath}/manual-address-entry${fromReviewParam}`,
     })
@@ -32,7 +39,24 @@ export default class InitialMeetingPlaceRoutes {
     const fromReview = req.query?.fromReview
     const isPrisonUser = this.userType === UserType.PRISON
 
-    if (config.postcodeLookupEnabled && searchQuery?.trim()) {
+    if (config.postcodeLookupEnabled && req.body?.preferredAddress) {
+      const { uprn, firstLine, secondLine, townOrCity, county, postcode, source } = JSON.parse(
+        req.body?.preferredAddress,
+      )
+
+      const appointmentAddress = {
+        uprn,
+        firstLine,
+        secondLine,
+        townOrCity,
+        county,
+        postcode,
+        source,
+        isPreferredAddress: false,
+      } as AddAddressRequest
+
+      await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
+    } else if (config.postcodeLookupEnabled && searchQuery?.trim()) {
       const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
       const fromReviewParam = fromReview ? '&fromReview=true' : ''
       return res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}${fromReviewParam}`)

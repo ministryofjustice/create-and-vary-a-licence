@@ -5,6 +5,9 @@ class PostcodeLookupAddress {
   @Expose()
   @IsNotEmpty({ message: 'Select address' })
   selectedAddress: string // This will be the JSON string
+
+  @Expose()
+  isPreferredAddress?: string
 }
 
 export default PostcodeLookupAddress

@@ -37,6 +37,7 @@ export default class SelectAddressRoutes {
     const { licenceId } = req.params
     const { user } = res.locals
     const basePath = `/licence/create/id/${licenceId}`
+    const { isPreferredAddress } = req.body
 
     const { uprn, firstLine, secondLine, townOrCity, county, postcode } = JSON.parse(req.body?.selectedAddress)
 
@@ -48,6 +49,7 @@ export default class SelectAddressRoutes {
       county,
       postcode,
       source: 'OS_PLACES',
+      isPreferredAddress: isPreferredAddress === 'true',
     } as AddAddressRequest
 
     await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
