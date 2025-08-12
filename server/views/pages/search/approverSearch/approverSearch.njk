@@ -103,23 +103,23 @@
     {
         text: "Approved on",
         attributes: {
-            "aria-sort": "none"
+            "aria-sort": "descending"
         }
     }
 )) %}
 
 {% for case in approvalNeededCases %}
     {% if case.urgentApproval %}
-        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
+        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">Urgent approval required for<br>upcoming release</span>' %}
     {% elseif case.kind == 'HDC' %}
-        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
+        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif case.isDueForEarlyRelease %}
-        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
+        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
     {% else %}
-        {% set releaseDate = case.releaseDate %}
+        {% set releaseDate = '<span data-qa="releaseDate">' + case.releaseDate  + '</span>' %}
     {% endif %}
 
     {% set result = [
@@ -141,7 +141,7 @@
             id: 'probation-practitioner-' + loop.index,
             "data-sort-value": case.probationPractitioner
         },
-        html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link search-highlight">' + case.probationPractitioner.name + '</a>'
+        html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" data-qa="comLink" class="govuk-link search-highlight">' + case.probationPractitioner.name + '</a>'
     },
     {
         attributes: {
@@ -224,7 +224,7 @@
             id: 'approved-on-' + loop.index,
             "data-sort-value": case.approvedOn | dateToUnix
         },
-        text: case.approvedOn
+        html: '<span data-qa="approvedOnDate">' + case.approvedOn  + '</span>'
     }
     ] %}
 

@@ -3,6 +3,7 @@ import ViewCasesPage from './viewCasesPage'
 import CaseloadPage from './caseload'
 import SearchPage from './search'
 import CaSearchPage from './caSearch'
+import ApprovalSearchPage from './approvalSearch'
 
 export default class ComDetailsPage extends Page {
   constructor() {
@@ -17,6 +18,11 @@ export default class ComDetailsPage extends Page {
   clickBackToCaSearch = (): CaSearchPage => {
     cy.get('.govuk-back-link').click()
     return Page.verifyOnPage(CaSearchPage)
+  }
+
+  clickBackToPrisonApproverSearch = (): ApprovalSearchPage => {
+    cy.get('.govuk-back-link').click()
+    return Page.verifyOnPage(ApprovalSearchPage)
   }
 
   clickReturn = (): ViewCasesPage => {

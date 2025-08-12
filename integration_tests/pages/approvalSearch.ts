@@ -1,4 +1,7 @@
 import Page from './page'
+import ApprovalViewPage from './approvalView'
+import ApprovalCasesPage from './approvalCases'
+import ComDetailsPage from './comDetails'
 
 export default class ApprovalSearchPage extends Page {
   private searchHeading = '#approval-search-heading'
@@ -6,6 +9,14 @@ export default class ApprovalSearchPage extends Page {
   private approvalNeededTabTitle = '#tab-heading-approval-needed'
 
   private recentlyApprovedTabTitle = '#tab-heading-recently-approved'
+
+  private probationPractionerLinkId = '[data-qa=comLink]'
+
+  private licenceLinkId = '#name-1'
+
+  private releaseDate = '[data-qa=releaseDate]'
+
+  private approvedOnDate = '[data-qa=approvedOnDate]'
 
   constructor() {
     super('approval-search-page')
@@ -21,5 +32,39 @@ export default class ApprovalSearchPage extends Page {
 
   getRecentlyApprovedTabTitle = () => {
     return cy.get(this.recentlyApprovedTabTitle)
+  }
+
+  getReleaseDate = n => {
+    return cy.get(this.releaseDate).eq(n)
+  }
+
+  getApprovalDate = n => {
+    return cy.get(this.approvedOnDate).eq(n)
+  }
+
+  clickOffenderName = (): ApprovalViewPage => {
+    cy.get(this.licenceLinkId).click()
+    return Page.verifyOnPage(ApprovalViewPage)
+  }
+
+  clickFirstComName = (): ComDetailsPage => {
+    cy.task('stubGetStaffDetailsByStaffCode')
+    cy.get(this.probationPractionerLinkId).first().click()
+    return Page.verifyOnPage(ComDetailsPage)
+  }
+
+  clickBackToCaseload = (): ApprovalCasesPage => {
+    cy.get('.govuk-back-link').click()
+    return Page.verifyOnPage(ApprovalCasesPage)
+  }
+
+  clickOnApprovalNeededTab = (): ApprovalSearchPage => {
+    cy.get('#tab_approval-needed').click()
+    return Page.verifyOnPage(ApprovalSearchPage)
+  }
+
+  clickOnRecentlyApprovedTab = (): ApprovalSearchPage => {
+    cy.get('#tab_recently-approved').click()
+    return Page.verifyOnPage(ApprovalSearchPage)
   }
 }
