@@ -2202,7 +2202,7 @@ export interface components {
     }
     OmuContact: {
       /** Format: int64 */
-      id: number
+      id?: number
       prisonCode: string
       email: string
       /** Format: date-time */
@@ -2678,7 +2678,7 @@ export interface components {
        * @description The internal ID of this data item, for this condition on this licence
        * @example 98989
        */
-      id: number
+      id?: number
       /**
        * @description The field name of this data item for this condition on this licence
        * @example location
@@ -3562,6 +3562,12 @@ export interface components {
        */
       fileSize: number
       /**
+       * Format: int32
+       * @description The image size in bytes
+       * @example 27566
+       */
+      imageSize?: number
+      /**
        * Format: date-time
        * @description The date and time this file was uploaded
        * @example 12/12/2021 10:35
@@ -4254,8 +4260,6 @@ export interface components {
       licences: components['schemas']['SarLicence'][]
       /** @description The list of audit events */
       auditEvents: components['schemas']['SarAuditEvent'][]
-      /** @description The list of referenced attachments */
-      attachments: components['schemas']['SarAttachmentDetail'][]
     }
     /** @description Describes an additional condition */
     SarAdditionalCondition: {
@@ -4372,6 +4376,8 @@ export interface components {
     SarContent: {
       /** @description SAR content */
       content: components['schemas']['Content']
+      /** @description The list of referenced attachments */
+      attachments: components['schemas']['SarAttachmentDetail'][]
     }
     /** @description Describes a licence within this service1 */
     SarLicence: {
@@ -4541,6 +4547,11 @@ export interface components {
        */
       reference: string
       /**
+       * @description Unique Property Reference Number, acquired from OsPlacesApi, post code and address look up
+       * @example 200010019924
+       */
+      uprn?: string
+      /**
        * @description The first line of the address
        * @example 12
        */
@@ -4621,6 +4632,39 @@ export interface components {
     }
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
@@ -4697,6 +4741,11 @@ export interface components {
        */
       appointmentTime?: string
       /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string
+      /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
        */
@@ -4735,11 +4784,6 @@ export interface components {
        */
       licenceStartDate?: string
       /**
-       * @description The first name of the person on licence
-       * @example Michael
-       */
-      forename?: string
-      /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
        * @example 989898
@@ -4777,6 +4821,41 @@ export interface components {
        * @example X12444
        */
       crn?: string
+      /**
+       * Format: date
+       * @description The actual release date (if set)
+       * @example 13/09/2022
+       */
+      actualReleaseDate?: string
+      /**
+       * Format: date
+       * @description The sentence start date
+       * @example 13/09/2019
+       */
+      sentenceStartDate?: string
+      /**
+       * Format: date
+       * @description The sentence end date
+       * @example 13/09/2022
+       */
+      sentenceEndDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
+       */
+      topupSupervisionExpiryDate?: string
+      /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string
       /**
        * @description The team code that is supervising this licence
        * @example Cardiff-A
@@ -4829,51 +4908,6 @@ export interface components {
        */
       dateOfBirth?: string
       /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string
-      /**
-       * Format: date
-       * @description The actual release date (if set)
-       * @example 13/09/2022
-       */
-      actualReleaseDate?: string
-      /**
-       * Format: date
-       * @description The sentence start date
-       * @example 13/09/2019
-       */
-      sentenceStartDate?: string
-      /**
-       * Format: date
-       * @description The sentence end date
-       * @example 13/09/2022
-       */
-      sentenceEndDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
-       */
-      topupSupervisionStartDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       * @example 06/06/2023
-       */
-      topupSupervisionExpiryDate?: string
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
-      /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string
-      /**
        * @description The agency description of the detaining prison
        * @example Leeds (HMP)
        */
@@ -4888,10 +4922,20 @@ export interface components {
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean
       /**
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
+       */
+      comUsername?: string
+      /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
       updatedByFullName?: string
+      /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
+       */
+      submittedByFullName?: string
       /**
        * Format: date-time
        * @description The date and time that this licence was first created
@@ -4946,39 +4990,6 @@ export interface components {
       updatedByUsername?: string
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
-      /** @deprecated */
-      isVariation: boolean
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string
     } & (
       | components['schemas']['PrrdLicenceResponse']
       | components['schemas']['CrdLicence']
