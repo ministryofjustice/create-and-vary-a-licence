@@ -61,6 +61,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           townOrCity: 'Testville',
           county: 'Testshire',
           postcode: 'TE5 7ST',
+          isPreferredAddress: false,
         }
 
         addressService.addAppointmentAddress = jest.fn()

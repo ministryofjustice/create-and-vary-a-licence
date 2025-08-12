@@ -68,6 +68,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
+          preferredAddresses: [],
         })
       })
 
@@ -77,6 +78,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
+          preferredAddresses: [],
         })
       })
     })
@@ -152,6 +154,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
+          preferredAddresses: [],
         })
       })
 
@@ -161,6 +164,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
+          preferredAddresses: [],
         })
       })
     })
