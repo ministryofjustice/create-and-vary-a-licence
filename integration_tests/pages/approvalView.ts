@@ -1,4 +1,5 @@
 import Page from './page'
+import ApprovalSearchPage from './approvalSearch'
 import ConfirmApprovePage from './confirmApprove'
 import ConfirmRejectPage from './confirmReject'
 
@@ -50,6 +51,11 @@ export default class ApprovalViewPage extends Page {
     // Force: true will click even if a hidden element
     cy.get(this.rejectLicenceButtonId).click({ force: true })
     return Page.verifyOnPage(ConfirmRejectPage)
+  }
+
+  clickBackToPrisonApproverSearch = (): ApprovalSearchPage => {
+    cy.get('.govuk-back-link').click()
+    return Page.verifyOnPage(ApprovalSearchPage)
   }
 
   getValue = id => {
