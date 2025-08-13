@@ -25,11 +25,16 @@ export default class ChangeLocationRoutes {
   public POST(role: AuthRole.CASE_ADMIN | AuthRole.DECISION_MAKER): RequestHandler {
     return async (req, res) => {
       req.session.caseloadsSelected = req.body?.caseload
+      const queryTerm = req.query?.queryTerm as string
       const returnToUrl = req.query?.view ? '/licence/view/cases?view=probation' : '/licence/view/cases'
-      const nextPage =
-        role === AuthRole.CASE_ADMIN
-          ? returnToUrl
-          : `/licence/approve/cases${req.query?.approval ? `?approval=${req.query?.approval}` : ''}`
+      let nextPage
+      if (role === AuthRole.CASE_ADMIN) {
+        nextPage = returnToUrl
+      } else if (queryTerm) {
+        nextPage = `/search/approver-search?queryTerm=${queryTerm}`
+      } else {
+        nextPage = `/licence/approve/cases${req.query?.approval ? `?approval=${req.query?.approval}` : ''}`
+      }
       res.redirect(nextPage)
     }
   }

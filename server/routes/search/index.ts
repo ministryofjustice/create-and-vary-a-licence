@@ -5,7 +5,7 @@ import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import CaSearchRoutes from './handlers/caSearch'
 import ApproverSearchRoutes from './handlers/approverSearch'
 
-export default function Index({ searchService }: Services): Router {
+export default function Index({ searchService, prisonerService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/search${path}`
@@ -16,7 +16,7 @@ export default function Index({ searchService }: Services): Router {
   // Handlers
   const probationSearchHandler = new ProbationSearchRoutes(searchService)
   const caSearchHandler = new CaSearchRoutes(searchService)
-  const approverSearchHandler = new ApproverSearchRoutes(searchService)
+  const approverSearchHandler = new ApproverSearchRoutes(searchService, prisonerService)
 
   // Operations
   get('/probation-search', 'ROLE_LICENCE_RO', probationSearchHandler.GET)

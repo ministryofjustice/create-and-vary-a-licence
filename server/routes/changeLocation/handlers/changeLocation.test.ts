@@ -123,15 +123,39 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
   })
 
   describe('POST', () => {
-    it('Should redirect to caselist page for prison view', async () => {
+    it('Should redirect to prison case admin caselist page for prison view', async () => {
       await handler.POST(AuthRole.CASE_ADMIN)(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
     })
 
-    it('Should redirect to caselist page for probation view', async () => {
+    it('Should redirect to prison case admin caselist page for probation view', async () => {
       req.query.view = 'probation'
       await handler.POST(AuthRole.CASE_ADMIN)(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases?view=probation')
+    })
+
+    it('Should redirect to prison approver search results page when query term present', async () => {
+      req.query.queryTerm = 'test'
+      await handler.POST(AuthRole.DECISION_MAKER)(req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith('/search/approver-search?queryTerm=test')
+    })
+
+    it('Should redirect to prison approver caselist page when query term empty', async () => {
+      req.query.queryTerm = ''
+      await handler.POST(AuthRole.DECISION_MAKER)(req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/approve/cases')
+    })
+
+    it('Should redirect to prison approver caselist page for approval needed view', async () => {
+      req.query.approval = ''
+      await handler.POST(AuthRole.DECISION_MAKER)(req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/approve/cases')
+    })
+
+    it('Should redirect to prison approver caselist page for approved recently view', async () => {
+      req.query.approval = 'recently'
+      await handler.POST(AuthRole.DECISION_MAKER)(req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/approve/cases?approval=recently')
     })
   })
 })
