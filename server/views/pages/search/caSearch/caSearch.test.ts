@@ -115,7 +115,7 @@ describe('View CA Search Results', () => {
       },
       inPrisonResults: [],
       onProbationResults: [],
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People in prison (0 results)')
@@ -150,7 +150,7 @@ describe('View CA Search Results', () => {
       },
       inPrisonResults,
       onProbationResults: [],
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People in prison (2 results)')
@@ -199,7 +199,7 @@ describe('View CA Search Results', () => {
       },
       inPrisonResults: [],
       onProbationResults,
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People on probation (2 results)')
@@ -246,7 +246,7 @@ describe('View CA Search Results', () => {
       },
       inPrisonResults,
       onProbationResults: [],
-      selectedMultiplePrisonCaseloads: true,
+      hasSelectedMultiplePrisonCaseloads: true,
     })
     expect($('thead').text()).toContain('Location')
     expect($('#location-1').text()).toBe('Moorland (HMP)')

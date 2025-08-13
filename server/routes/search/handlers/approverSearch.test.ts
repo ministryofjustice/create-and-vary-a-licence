@@ -167,7 +167,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             tabId: 'tab-heading-recently-approved',
           },
         },
-        selectedMultiplePrisonCaseloads: false,
+        hasSelectedMultiplePrisonCaseloads: false,
         approvalNeededCases: [],
         recentlyApprovedCases: [],
       })
@@ -194,7 +194,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       approvalNeededCases: [
         {
           licenceId: 1,
@@ -368,7 +368,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: true,
+      hasSelectedMultiplePrisonCaseloads: true,
       approvalNeededCases: [
         {
           licenceId: 1,
@@ -534,7 +534,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       approvalNeededCases: [],
       recentlyApprovedCases: [],
     })

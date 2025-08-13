@@ -26,7 +26,7 @@ export default class ApproverSearch {
       results = await this.searchService.getPrisonApproverSearchResults(queryTerm, prisonsToDisplay)
     }
 
-    const selectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
+    const hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
     const { approvalNeededResponse, recentlyApprovedResponse } = results
 
     const approvalNeededCases = approvalNeededResponse.map(c => {
@@ -65,7 +65,7 @@ export default class ApproverSearch {
       queryTerm,
       backLink,
       tabParameters,
-      selectedMultiplePrisonCaseloads,
+      hasSelectedMultiplePrisonCaseloads,
       approvalNeededCases,
       recentlyApprovedCases,
     })

@@ -112,7 +112,7 @@
     }
 ] %}
 
-{% if selectedMultiplePrisonCaseloads %}
+{% if hasSelectedMultiplePrisonCaseloads %}
     {% set searchTableHeadings = (searchTableHeadings.splice(3, 0, {
                 text: "Location",
                 attributes: {
@@ -185,7 +185,7 @@
     }
     ] %}
 
-    {% if selectedMultiplePrisonCaseloads %}
+    {% if hasSelectedMultiplePrisonCaseloads %}
         {% set result = (result.splice(3, 0,
             {
                 attributes: {
@@ -264,7 +264,7 @@
     }
     ] %}
 
-    {% if selectedMultiplePrisonCaseloads %}
+    {% if hasSelectedMultiplePrisonCaseloads %}
         {% set result = (result.splice(3, 0,
             {
                 attributes: {

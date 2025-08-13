@@ -102,7 +102,7 @@ describe('View Prison Approver Search Results', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       approvalNeededCases: [],
       recentlyApprovedCases: [],
     })
@@ -133,7 +133,7 @@ describe('View Prison Approver Search Results', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       approvalNeededCases,
       recentlyApprovedCases: [],
     })
@@ -184,7 +184,7 @@ describe('View Prison Approver Search Results', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       approvalNeededCases: [],
       recentlyApprovedCases,
     })
@@ -234,7 +234,7 @@ describe('View Prison Approver Search Results', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       approvalNeededCases: [
         {
           licenceId: 1,
@@ -291,7 +291,7 @@ describe('View Prison Approver Search Results', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       approvalNeededCases: [
         {
           licenceId: 1,
@@ -348,7 +348,7 @@ describe('View Prison Approver Search Results', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       approvalNeededCases: [
         {
           licenceId: 1,
@@ -405,7 +405,7 @@ describe('View Prison Approver Search Results', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
-      selectedMultiplePrisonCaseloads: true,
+      hasSelectedMultiplePrisonCaseloads: true,
       approvalNeededCases,
       recentlyApprovedCases: [],
     })

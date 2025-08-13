@@ -346,7 +346,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           link: null,
         },
       ],
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })
@@ -604,7 +604,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           link: '/licence/view/id/9/show',
         },
       ],
-      selectedMultiplePrisonCaseloads: true,
+      hasSelectedMultiplePrisonCaseloads: true,
       recallsEnabled: config.recallsEnabled,
     })
   })
@@ -796,7 +796,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           link: '/licence/view/id/9/show',
         },
       ],
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })
@@ -871,7 +871,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
       ],
       onProbationResults: [],
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })
@@ -946,7 +946,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
       ],
       onProbationResults: [],
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })
@@ -976,7 +976,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       },
       inPrisonResults: [],
       onProbationResults: [],
-      selectedMultiplePrisonCaseloads: false,
+      hasSelectedMultiplePrisonCaseloads: false,
       recallsEnabled: config.recallsEnabled,
     })
   })
