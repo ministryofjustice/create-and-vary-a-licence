@@ -13,6 +13,7 @@ context('Create a licence', () => {
     cy.task('stubGetStaffDetails')
     cy.task('stubGetEmptyLicence')
     cy.task('stubSearchForAddresses')
+    cy.task('stubGetStaffPreferredAddresses')
     cy.task('stubPutLicenceAppointmentPerson')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetLicencePolicyConditions')
