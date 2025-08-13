@@ -73,7 +73,7 @@ describe('Route Handlers - Create Licence - Select an address', () => {
         townOrCity: 'London',
         county: '',
         postcode: 'SW1A 2AA',
-        isPreferredAddress: false,
+        isPreferredAddress: '',
       }
 
       beforeEach(() => {
@@ -87,6 +87,7 @@ describe('Route Handlers - Create Licence - Select an address', () => {
           req.params.licenceId,
           {
             ...selectedAddress,
+            isPreferredAddress: false,
             source: 'OS_PLACES',
           },
           res.locals.user,
@@ -97,12 +98,14 @@ describe('Route Handlers - Create Licence - Select an address', () => {
 
       it('should parse selectedAddress and call addAppointmentAddress in edit flow', async () => {
         req.query.fromReview = 'true'
+        req.body.isPreferredAddress = 'true'
         await handler.POST(req, res)
 
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
           req.params.licenceId,
           {
             ...selectedAddress,
+            isPreferredAddress: true,
             source: 'OS_PLACES',
           },
           res.locals.user,

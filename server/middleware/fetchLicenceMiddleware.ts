@@ -9,6 +9,7 @@ export default function fetchLicence(licenceService: LicenceService): RequestHan
       try {
         const { user } = res.locals
         const licence = await licenceService.getLicence(parseInt(req.params.licenceId, 10), user)
+
         if (licence) {
           // Does this prison user have a caseload which allows access this licence?
           if (user?.nomisStaffId) {

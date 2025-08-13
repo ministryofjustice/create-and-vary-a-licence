@@ -6,6 +6,7 @@ import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 import config from '../../../config'
 import AddressService from '../../../services/addressService'
 import { AddAddressRequest, AddressResponse } from '../../../@types/licenceApiClientTypes'
+import { User } from '../../../@types/CvlUserDetails'
 
 export default class InitialMeetingPlaceRoutes {
   constructor(
@@ -35,49 +36,56 @@ export default class InitialMeetingPlaceRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
-    const { searchQuery } = req.body
-    const fromReview = req.query?.fromReview
+    const { searchQuery, preferredAddress } = req.body
+    const fromReview = req.query?.fromReview as string
     const isPrisonUser = this.userType === UserType.PRISON
+    const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
 
-    if (config.postcodeLookupEnabled && req.body?.preferredAddress) {
-      const { uprn, firstLine, secondLine, townOrCity, county, postcode, source } = JSON.parse(
-        req.body?.preferredAddress,
-      )
-
-      const appointmentAddress = {
-        uprn,
-        firstLine,
-        secondLine,
-        townOrCity,
-        county,
-        postcode,
-        source,
-        isPreferredAddress: false,
-      } as AddAddressRequest
-
-      await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
-    } else if (config.postcodeLookupEnabled && searchQuery?.trim()) {
-      const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
-      const fromReviewParam = fromReview ? '&fromReview=true' : ''
-      return res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}${fromReviewParam}`)
-    }
-
-    if (!config.postcodeLookupEnabled) {
+    if (config.postcodeLookupEnabled) {
+      if (preferredAddress) {
+        await this.handlePreferredAddress(licenceId, preferredAddress, user)
+      } else if (searchQuery?.trim()) {
+        const fromReviewParam = fromReview ? '&fromReview=true' : ''
+        return res.redirect(
+          `${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}${fromReviewParam}`,
+        )
+      }
+    } else {
       await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
       flashInitialApptUpdatedMessage(req, licence, this.userType)
     }
 
-    let redirectPath: string
+    return res.redirect(this.getRedirectPath(licenceId, isPrisonUser, fromReview))
+  }
+
+  private async handlePreferredAddress(licenceId: string, preferredAddressJson: string, user: User): Promise<void> {
+    const { uprn, firstLine, secondLine, townOrCity, county, postcode, source } = JSON.parse(preferredAddressJson)
+
+    const appointmentAddress: AddAddressRequest = {
+      uprn,
+      firstLine,
+      secondLine,
+      townOrCity,
+      county,
+      postcode,
+      source,
+      isPreferredAddress: false,
+    }
+
+    await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
+  }
+
+  private getRedirectPath(licenceId: string, isPrisonUser: boolean, fromReview?: string): string {
     const basePath = `/licence/create/id/${licenceId}`
 
     if (isPrisonUser) {
-      redirectPath = `/licence/view/id/${licenceId}/show`
-    } else if (fromReview) {
-      redirectPath = `${basePath}/check-your-answers`
-    } else {
-      redirectPath = `${basePath}/initial-meeting-contact`
+      return `/licence/view/id/${licenceId}/show`
     }
 
-    return res.redirect(redirectPath)
+    if (fromReview) {
+      return `${basePath}/check-your-answers`
+    }
+
+    return `${basePath}/initial-meeting-contact`
   }
 }
