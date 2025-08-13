@@ -3,7 +3,7 @@ import IndexPage from '../pages'
 import ViewALicencePage from '../pages/viewALicence'
 
 context('Postcode lookup', () => {
-  describe('Postcode Lookup', () => {
+  describe('Postcode Lookup - COM', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubProbationSignIn')
@@ -52,7 +52,7 @@ context('Postcode lookup', () => {
     })
   })
 
-  describe('Hardstop', () => {
+  describe('Postcode Lookup Hardstop - CA', () => {
     const dates: string[] = []
 
     const singleCaseload = {
