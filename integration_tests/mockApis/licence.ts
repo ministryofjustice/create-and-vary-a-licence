@@ -281,6 +281,55 @@ export default {
     })
   },
 
+  stubGetStaffPreferredAddresses: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/staff/address/preferred`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            reference: '550e8400-e29b-41d4-a716-446655440000',
+            uprn: '10000000001',
+            firstLine: '123 Fake Street',
+            secondLine: '',
+            townOrCity: 'Faketown',
+            county: 'Fakeshire',
+            postcode: 'FA11KE',
+            source: 'OS_PLACES',
+          },
+          {
+            reference: '550e8400-e29b-41d4-a716-446655440001',
+            uprn: '10000000002',
+            firstLine: '456 Another Street',
+            secondLine: '',
+            townOrCity: 'Anothertown',
+            county: 'Anothershire',
+            postcode: 'AN11TH',
+            source: 'OS_PLACES',
+          },
+        ],
+      },
+    })
+  },
+
+  stubGetStaffNoPreferredAddresses: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/staff/address/preferred`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [],
+      },
+    })
+  },
+
   stubGetHdcLicenceData: (): SuperAgentRequest => {
     return stubFor({
       request: {

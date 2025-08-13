@@ -6,6 +6,10 @@ export default class AppointmentPlacePage extends Page {
 
   private searchAddressesButtonId = '[data-qa=searchAddresses]'
 
+  private useSavedAddress = '[data-qa=use-saved-address]'
+
+  private deleteAddress = '[data-qa^="delete-address-"]'
+
   constructor() {
     super('appointment-place-page')
   }
@@ -18,5 +22,13 @@ export default class AppointmentPlacePage extends Page {
   findAddress = (): SelectAddressPage => {
     cy.get(this.searchAddressesButtonId).click()
     return Page.verifyOnPage(SelectAddressPage)
+  }
+
+  useSavedAddressField = () => {
+    return cy.get(this.useSavedAddress)
+  }
+
+  deleteAddressLink = () => {
+    return cy.get(this.deleteAddress)
   }
 }

@@ -5,6 +5,8 @@ import ViewALicencePage from './viewALicence'
 export default class SelectAddressPage extends Page {
   private continueButtonId = '[data-qa=continue]'
 
+  private isPreferredAddressId = '#isPreferredAddressSelected'
+
   constructor() {
     super('select-address-page')
   }
@@ -22,5 +24,9 @@ export default class SelectAddressPage extends Page {
   clickContinueToReturn = (): ViewALicencePage => {
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(ViewALicencePage)
+  }
+
+  addPreferredAddressCheckbox = () => {
+    return cy.get(this.isPreferredAddressId)
   }
 }
