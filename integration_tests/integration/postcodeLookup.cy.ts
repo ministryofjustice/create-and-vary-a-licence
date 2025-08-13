@@ -50,6 +50,22 @@ context('Postcode lookup', () => {
       selectAddressPage.selectAddress()
       selectAddressPage.addPreferredAddressCheckbox().should('exist')
     })
+
+    it('should display Select an address error message', () => {
+      cy.task('stubGetStaffPreferredAddresses')
+      const indexPage = Page.verifyOnPage(IndexPage)
+      let caseloadPage = indexPage.clickCreateALicence()
+      const comDetailsPage = caseloadPage.clickComName()
+      caseloadPage = comDetailsPage.clickReturnToCaseload()
+      const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+
+      const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+      const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+      appointmentPlacePage.useSavedAddressField().should('exist')
+      appointmentPlacePage.deleteAddressLink().should('exist')
+      appointmentPlacePage.useThisAddressBtnClick()
+      appointmentPlacePage.errorListSummary().should('exist').and('contain.text', 'Select an address')
+    })
   })
 
   describe('Postcode Lookup Hardstop - CA', () => {

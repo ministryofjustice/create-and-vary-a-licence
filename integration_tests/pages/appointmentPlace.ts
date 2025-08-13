@@ -10,6 +10,10 @@ export default class AppointmentPlacePage extends Page {
 
   private deleteAddress = '[data-qa^="delete-address-"]'
 
+  private useThisAddressBtn = '[data-qa="useThisAddress"]'
+
+  private errorList = '.govuk-error-summary__list'
+
   constructor() {
     super('appointment-place-page')
   }
@@ -30,5 +34,14 @@ export default class AppointmentPlacePage extends Page {
 
   deleteAddressLink = () => {
     return cy.get(this.deleteAddress)
+  }
+
+  useThisAddressBtnClick = (): AppointmentPlacePage => {
+    cy.get(this.useThisAddressBtn).click()
+    return this
+  }
+
+  errorListSummary = () => {
+    return cy.get(this.errorList)
   }
 }
