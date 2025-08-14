@@ -10,6 +10,10 @@
             <div class="govuk-grid-column-three-quarters">
                 <h2 id="bespoke-conditions-heading"
                     class="govuk-heading-m">{{ title or "Bespoke licence conditions" }} ({{conditionCount}})</h2>
+                {% if conditionCount == 0 %}
+                    <p class="govuk-body govuk-!-margin-top-4">No bespoke licence conditions added</p>
+                {% endif %}
+
             </div>
             <div class="govuk-grid-column-one-quarter">
                 {% if isEditable %}
@@ -46,5 +50,9 @@
         classes: 'govuk-!-margin-top-7' if conditionCount,
         rows: bespokeConditionRows
     }) }}
+
+    {% if conditionCount == 0 %}
+        <hr class="govuk-section-break govuk-section-break--visible">
+    {% endif %}
 
 {% endmacro %}
