@@ -49,11 +49,13 @@ export default class OffenderSearchRoutes {
 
     const searchResults = nomisRecords
       .map(o => {
+        const crn = deliusRecords.find(d => d.nomisId === o.prisonerNumber)?.crn
         return {
           name: convertToTitleCase(`${o.firstName} ${o.lastName}`),
           prison: o.prisonName,
           nomisId: o.prisonerNumber,
-          crn: deliusRecords.find(d => d.nomisId === o.prisonerNumber)?.crn,
+          crn,
+          isClickable: crn != null,
         }
       })
       .sort((a, b) => {
