@@ -36,6 +36,8 @@
                     }
                 }) %}
 
+                <input type="hidden" name="reference" value="{{ address.reference }}">
+
                     {{ govukInput({
                         label: {
                             html: 'Address line 1'
@@ -96,6 +98,33 @@
                     }) }}
 
                 {% endcall %}
+
+                <h1 class="govuk-heading-s">
+                    Save this address (optional)
+                </h1>
+
+                {{ govukCheckboxes({
+                    id: "isPreferredAddress",
+                    name: "isPreferredAddress",
+                    fieldset: {
+                        legend: {
+                            text: "",
+                            isPageHeading: false,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    items: [
+                        {
+                            id: "isPreferredAddress",
+                            value: "true",
+                            text: "Add to your list of saved addresses",
+                            checked: formResponses.isPreferredAddress == 'true',
+                            label: {
+                                classes: 'govuk-!-padding-top-0'
+                            }
+                        }
+                    ]
+                }) }}
 
                 {{ govukButton({
                     text: continueOrSaveLabel,

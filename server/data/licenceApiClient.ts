@@ -53,6 +53,7 @@ import type {
   UpdateElectronicMonitoringProgrammeRequest,
   AddressSearchResponse,
   AddAddressRequest,
+  AddressResponse,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -156,6 +157,16 @@ export default class LicenceApiClient extends RestClient {
       { path: `/licence/id/${licenceId}/appointment/address`, data: appointmentAddress },
       { username: user.username },
     )
+  }
+
+  async getPreferredAddresses(user: User): Promise<AddressResponse[]> {
+    return (await this.get({ path: `/staff/address/preferred` }, { username: user.username })) as Promise<
+      AddressResponse[]
+    >
+  }
+
+  async deleteAddressByReference(reference: string, user: User): Promise<void> {
+    await this.delete({ path: `/staff/address/reference/${reference}` }, { username: user.username })
   }
 
   async searchForAddresses(requestBody: { searchQuery: string }, user: User): Promise<AddressSearchResponse[]> {

@@ -56,13 +56,13 @@ export default function Index({ licenceService, conditionService, hdcService, ad
     post('/edit/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, PathType.CREATE)
+    const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET)
     const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, addressType)
   }
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, PathType.EDIT)
+    const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-place', controller.GET)
     const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/edit/id/:licenceId/initial-meeting-place', controller.POST, addressType)
