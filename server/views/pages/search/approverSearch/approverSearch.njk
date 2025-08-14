@@ -85,7 +85,7 @@
     ), searchTableHeadings) %}
 {% endif %}
 
-{% set approvalNeededSearchTableHeadings = searchTableHeadings.concat({
+{% set approvalNeededSearchTableHeadings = searchTableHeadings.toSpliced(-1, 0, {
                 text: "Submitted by",
                 attributes: {
                     "aria-sort": "none"
