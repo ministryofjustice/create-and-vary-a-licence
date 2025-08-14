@@ -52,7 +52,9 @@ describe('Route Handlers - Offender search', () => {
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderSearch', {
-        searchResults: [{ crn: 'X1234', name: 'Test Person', nomisId: 'ABC123', prison: 'Pentonville' }],
+        searchResults: [
+          { crn: 'X1234', name: 'Test Person', nomisId: 'ABC123', prison: 'Pentonville', isClickable: true },
+        ],
         searchValues: { crn: 'X1234' },
       })
     })
@@ -81,12 +83,62 @@ describe('Route Handlers - Offender search', () => {
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderSearch', {
-        searchResults: [{ crn: 'X1234', name: 'Test Person', nomisId: 'ABC123', prison: 'Pentonville' }],
+        searchResults: [
+          { crn: 'X1234', name: 'Test Person', nomisId: 'ABC123', prison: 'Pentonville', isClickable: true },
+        ],
         searchValues: {
           firstName: 'Test',
           lastName: 'Person',
           nomisId: 'ABC123',
         },
+      })
+    })
+
+    it('Should set isClickable to false if no Delius record is found', async () => {
+      req.query = {
+        firstName: 'Test',
+        lastName: 'Person',
+        nomisId: 'ABC123',
+      }
+
+      prisonerService.searchPrisoners.mockResolvedValue([
+        {
+          prisonerNumber: 'ABC123',
+          prisonName: 'Pentonville',
+          firstName: 'Test',
+          lastName: 'Person',
+        } as unknown as Prisoner,
+      ])
+      probationService.getProbationers.mockResolvedValue([])
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/support/offenderSearch', {
+        searchResults: [
+          { crn: undefined, name: 'Test Person', nomisId: 'ABC123', prison: 'Pentonville', isClickable: false },
+        ],
+        searchValues: {
+          firstName: 'Test',
+          lastName: 'Person',
+          nomisId: 'ABC123',
+        },
+      })
+    })
+
+    it('returns no results if no NOMIS record is found', async () => {
+      req.query = {
+        crn: 'X1234',
+      }
+
+      probationService.getProbationer.mockResolvedValue({
+        crn: 'X1234',
+        nomisId: null,
+      })
+      prisonerService.searchPrisoners.mockResolvedValue([])
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/support/offenderSearch', {
+        searchResults: [],
+        searchValues: { crn: 'X1234' },
       })
     })
   })
