@@ -10,8 +10,10 @@
     {% if hideHeading != true %}
         <div class="govuk-grid-row check-answers-header govuk-!-padding-top-7">
             <div class="govuk-grid-column-three-quarters">
-                <h2 id="additional-licence-conditions-heading"
-                    class="govuk-heading-m">{{ title or "Additional licence conditions" }} ({{conditionCount}})</h2>
+                <h2 id="additional-licence-conditions-heading" class="govuk-heading-m">{{ title or "Additional licence conditions" }} ({{conditionCount}})</h2>
+                {% if conditionCount == 0 %}
+                    <p class="govuk-body govuk-!-margin-top-4">No additional licence conditions added</p>
+                {% endif %}
             </div>
             <div class="govuk-grid-column-one-quarter">
                 {% if isEditable %}
@@ -43,6 +45,9 @@
         rows: rows | sortConditionsBySequence
 
     }) }}
+    {% if conditionCount == 0 %}
+        <hr class="govuk-section-break govuk-section-break--visible">
+    {% endif %}
 
 {% endmacro %}
 
