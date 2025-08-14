@@ -409,6 +409,7 @@ describe('View Prison Approver Search Results', () => {
       approvalNeededCases,
       recentlyApprovedCases: [],
     })
+    expect($('thead').text()).toContain('Location')
     expect($('#location-1').text()).toBe('Moorland (HMP)')
     expect($('#location-2').text()).toBe('Wormwood Scrubs (HMP)')
   })
