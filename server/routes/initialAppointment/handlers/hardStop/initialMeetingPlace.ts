@@ -28,6 +28,7 @@ export default class InitialMeetingPlaceRoutes {
       preferredAddresses = await this.addressService.getPreferredAddresses(res.locals.user)
     }
     return res.render('pages/create/hardStop/initialMeetingPlace', {
+      action,
       preferredAddresses,
       formAddress,
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',

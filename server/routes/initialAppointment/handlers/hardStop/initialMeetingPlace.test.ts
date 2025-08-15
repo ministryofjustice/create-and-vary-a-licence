@@ -83,6 +83,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
+          action: 'create',
           preferredAddresses: [],
           formAddress,
           continueOrSaveLabel: 'Continue',
@@ -94,6 +95,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
+          action: 'edit',
           preferredAddresses: [],
           formAddress,
           continueOrSaveLabel: 'Save',
@@ -107,6 +109,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
+          action: 'edit',
           preferredAddresses,
           formAddress,
           continueOrSaveLabel: 'Save',
