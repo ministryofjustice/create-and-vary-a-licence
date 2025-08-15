@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import DeletePreferredAddressRoutes from './deletePreferredAddress'
 import AddressService from '../../../../../../services/addressService'
+import DeletePreferredAddressRoutes from './deletePreferredAddress'
 
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
