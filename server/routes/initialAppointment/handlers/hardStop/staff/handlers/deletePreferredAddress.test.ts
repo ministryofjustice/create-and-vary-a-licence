@@ -52,5 +52,16 @@ describe('Route Handlers - Create a licence - Select an address', () => {
         `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
       )
     })
+
+    it('should delete address by reference and redirect to initial meeting place with edit pathType', async () => {
+      const handler = new DeletePreferredAddressRoutes(addressService)
+      req.query.pathType = 'edit'
+      await handler.DELETE(req, res)
+
+      expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/hardStop/edit/id/${req.params.licenceId}/initial-meeting-place`,
+      )
+    })
   })
 })
