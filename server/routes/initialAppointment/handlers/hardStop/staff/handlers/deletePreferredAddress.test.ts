@@ -38,7 +38,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
 
       expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/hardStop/create/id/${req.params.licenceId}/initial-meeting-place`,
+        `/licence/hard-stop/create/id/${req.params.licenceId}/initial-meeting-place`,
       )
     })
 
@@ -49,7 +49,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
 
       expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/hardStop/edit/id/${req.params.licenceId}/initial-meeting-place`,
+        `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
       )
     })
   })
