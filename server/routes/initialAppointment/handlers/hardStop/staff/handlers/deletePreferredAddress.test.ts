@@ -36,7 +36,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
 
       expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/hardStop/id/${req.params.licenceId}/initial-meeting-place`,
+        `/licence/hardStop/create/id/${req.params.licenceId}/initial-meeting-place`,
       )
     })
   })

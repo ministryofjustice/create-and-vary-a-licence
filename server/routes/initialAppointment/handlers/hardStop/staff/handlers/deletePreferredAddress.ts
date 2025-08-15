@@ -8,6 +8,6 @@ export default class DeletePreferredAddressRoutes {
     const { reference, licenceId } = req.params
     const { user } = res.locals
     await this.addressService.deleteAddressByReference(reference, user)
-    res.redirect(`/licence/create/hardStop/id/${licenceId}/initial-meeting-place`)
+    res.redirect(`/licence/hardStop/create/id/${licenceId}/initial-meeting-place`)
   }
 }
