@@ -18,7 +18,7 @@
                 <h1 class="govuk-heading-s">Use a saved address</h1>
                 {% set preferredAddressesOptions = [] %}
                 {% for address in preferredAddresses %}
-                {% set deleteUrl = "/staff/hard-stop/delete/id/" + licence.id + "/address/preferred/" + address.reference %}
+                {% set deleteUrl = "/staff/hard-stop/delete/id/" + licence.id + "/address/preferred/" + address.reference + "?pathType="+ action %}
                 {% set addressHtml = (address | formatAddressTitleCase(true) | safe) + 
                     '&nbsp;&nbsp;<a href="' + deleteUrl + '" class="govuk-link govuk-link--no-visited-state" data-qa="delete-address-' + loop.index + '">Delete</a>' %}
                     {% set preferredAddressesOptions = (preferredAddressesOptions.push({

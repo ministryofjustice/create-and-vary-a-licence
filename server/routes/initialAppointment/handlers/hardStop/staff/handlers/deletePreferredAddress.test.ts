@@ -15,7 +15,9 @@ describe('Route Handlers - Create a licence - Select an address', () => {
           reference: '550e8400-e29b-41d4-a716-446655440000',
         },
         body: {},
-        query: {},
+        query: {
+          PathType: 'create',
+        },
       } as unknown as Request
 
       res = {
@@ -30,13 +32,24 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       addressService.deleteAddressByReference = jest.fn()
       addressService.addAppointmentAddress = jest.fn()
     })
-    it('should delete address by reference and redirect to initial meeting place', async () => {
+    it('should delete address by reference and redirect to initial meeting place with create pathType', async () => {
       const handler = new DeletePreferredAddressRoutes(addressService)
       await handler.DELETE(req, res)
 
       expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/hardStop/create/id/${req.params.licenceId}/initial-meeting-place`,
+      )
+    })
+
+    it('should delete address by reference and redirect to initial meeting place with edit pathType', async () => {
+      const handler = new DeletePreferredAddressRoutes(addressService)
+      req.query.pathType = 'edit'
+      await handler.DELETE(req, res)
+
+      expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/hardStop/edit/id/${req.params.licenceId}/initial-meeting-place`,
       )
     })
   })

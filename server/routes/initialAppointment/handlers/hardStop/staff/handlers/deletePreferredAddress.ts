@@ -7,7 +7,8 @@ export default class DeletePreferredAddressRoutes {
   DELETE = async (req: Request, res: Response): Promise<void> => {
     const { reference, licenceId } = req.params
     const { user } = res.locals
+    const pathType = req.query.pathType === 'edit' ? 'edit' : 'create'
     await this.addressService.deleteAddressByReference(reference, user)
-    res.redirect(`/licence/hardStop/create/id/${licenceId}/initial-meeting-place`)
+    res.redirect(`/licence/hardStop/${pathType}/id/${licenceId}/initial-meeting-place`)
   }
 }
