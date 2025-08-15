@@ -12,7 +12,7 @@ export default class NoAddressFoundRoutes {
     const fromReviewParam = fromReview ? '?fromReview=true' : ''
     const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
 
-    return res.render('pages/create/NoAddressFound', {
+    return res.render('pages/create/noAddressFound', {
       searchQuery,
       postcodeLookupSearchUrl: `${basePath}/initial-meeting-place${fromReviewParam}`,
       manualAddressEntryUrl: `${basePath}/manual-address-entry${fromReviewParam}`,
