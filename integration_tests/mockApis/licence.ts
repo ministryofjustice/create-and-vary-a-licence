@@ -687,6 +687,16 @@ export default {
               uploadSummary: [],
               readyToSubmit: true,
             },
+            {
+              id: 6,
+              code: '9ae2a336-3491-4667-aaed-dd852b09b4b9',
+              category: 'Making or maintaining contact with a person',
+              sequence: 5,
+              text: 'Receive home visits from a Mental Health Worker.',
+              data: [],
+              uploadSummary: [],
+              readyToSubmit: true,
+            },
           ],
           bespokeConditions: [
             {

@@ -275,7 +275,10 @@ export function registerNunjucks(app?: express.Express): Environment {
                         fromReview: true,
                       }),
                   text: isEmptyData ? 'Delete' : 'Change',
-                  visuallyHiddenText: 'Change condition',
+                  visuallyHiddenText: `${isEmptyData ? 'Delete' : 'Change'} condition`,
+                  attributes: {
+                    'data-qa': `condition-action-${condition.id}`,
+                  },
                 },
               ]
             : [],

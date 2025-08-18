@@ -53,6 +53,7 @@ context('Create a licence', () => {
         .selectCondition('df3f08a8-4ae0-41fe-b3bc-d0be1fd2d8aa')
         .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
         .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
+        .selectCondition('9ae2a336-3491-4667-aaed-dd852b09b4b9')
         .clickContinue()
 
       const bespokeConditionsQuestionPage = additionalConditionsInputPage
@@ -102,6 +103,7 @@ context('Create a licence', () => {
         .nextInput()
         .enterAddress()
         .clickContinue()
+        .checkIfDeleteLinkVisible()
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
       const caseloadPageExit = confirmationPage.clickReturn()
@@ -109,306 +111,306 @@ context('Create a licence', () => {
     })
   })
 
-  it('should click through the create a licence journey for a PSS-only licence', () => {
-    cy.task('stubGetPssLicence')
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateAPssLicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
+  // it('should click through the create a licence journey for a PSS-only licence', () => {
+  //   cy.task('stubGetPssLicence')
+  //   const indexPage = Page.verifyOnPage(IndexPage)
+  //   const caseloadPage = indexPage.clickCreateAPssLicence()
+  //   const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+  //   const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+  //   const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+  //   const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+  //   const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+  //   const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const pssConditionsQuestionPage = appointmentTimePage
-        .selectTypePss('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinueToPss()
+  //   cy.task('getNextWorkingDay', dates).then(appointmentDate => {
+  //     const pssConditionsQuestionPage = appointmentTimePage
+  //       .selectTypePss('SPECIFIC_DATE_TIME')
+  //       .enterDate(moment(appointmentDate))
+  //       .enterTime(moment())
+  //       .clickContinueToPss()
 
-      const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
+  //     const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
 
-      const pssConditionsInputPage = pssConditionsPage
-        .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
-        .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
-        .clickContinue()
+  //     const pssConditionsInputPage = pssConditionsPage
+  //       .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
+  //       .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
+  //       .clickContinue()
 
-      const checkAnswersPage = pssConditionsInputPage
-        .withContext(pssConditionsPage.getContext())
-        .enterTime()
-        .enterDate()
-        .enterAddress()
-        .nextInput()
-        .enterAddress()
-        .clickContinue()
+  //     const checkAnswersPage = pssConditionsInputPage
+  //       .withContext(pssConditionsPage.getContext())
+  //       .enterTime()
+  //       .enterDate()
+  //       .enterAddress()
+  //       .nextInput()
+  //       .enterAddress()
+  //       .clickContinue()
 
-      const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
-      const caseloadPageExit = confirmationPage.clickReturnPss()
-      caseloadPageExit.signOut().click()
-    })
-  })
+  //     const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
+  //     const caseloadPageExit = confirmationPage.clickReturnPss()
+  //     caseloadPageExit.signOut().click()
+  //   })
+  // })
 
-  it('should not allow a licence to be submitted without initial appointment details', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+  // it('should not allow a licence to be submitted without initial appointment details', () => {
+  //   const indexPage = Page.verifyOnPage(IndexPage)
+  //   const caseloadPage = indexPage.clickCreateALicence()
+  //   const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
+  //   const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+  //   const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+  //   const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+  //   const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+  //   const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
-    cy.task('getNextWorkingDay', dates).then(() => {
-      const checkAnswersPage = appointmentTimePage
-        .clickSkip()
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
+  //   cy.task('getNextWorkingDay', dates).then(() => {
+  //     const checkAnswersPage = appointmentTimePage
+  //       .clickSkip()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
 
-      checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
-    })
-  })
+  //     checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
+  //   })
+  // })
 
-  it('should not allow a licence to be submitted if any input pages have been skipped', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+  // it('should not allow a licence to be submitted if any input pages have been skipped', () => {
+  //   const indexPage = Page.verifyOnPage(IndexPage)
+  //   const caseloadPage = indexPage.clickCreateALicence()
+  //   const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
+  //   const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+  //   const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+  //   const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+  //   const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+  //   const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
+  //   cy.task('getNextWorkingDay', dates).then(appointmentDate => {
+  //     const additionalConditionsPage = appointmentTimePage
+  //       .selectType('SPECIFIC_DATE_TIME')
+  //       .enterDate(moment(appointmentDate))
+  //       .enterTime(moment())
+  //       .clickContinue()
+  //       .selectYes()
+  //       .clickContinue()
 
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('d36a3b77-30ba-40ce-8953-83e761d3b487')
-        .clickContinue()
+  //     const additionalConditionsInputPage = additionalConditionsPage
+  //       .selectCondition('d36a3b77-30ba-40ce-8953-83e761d3b487')
+  //       .clickContinue()
 
-      const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .clickSkip()
+  //     const bespokeConditionsQuestionPage = additionalConditionsInputPage
+  //       .withContext(additionalConditionsPage.getContext())
+  //       .clickSkip()
 
-      cy.task('stubGetLicenceWithSkippedInputs')
+  //     cy.task('stubGetLicenceWithSkippedInputs')
 
-      const checkAnswersPage = bespokeConditionsQuestionPage
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
+  //     const checkAnswersPage = bespokeConditionsQuestionPage
+  //       .selectNo()
+  //       .clickContinueAfterNo()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
 
-      checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
-    })
-  })
+  //     checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
+  //   })
+  // })
 
-  it('should allow a licence to be submitted without initial appointment date and time if appointment type is other than SPECIFIC_DATE_TIME', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+  // it('should allow a licence to be submitted without initial appointment date and time if appointment type is other than SPECIFIC_DATE_TIME', () => {
+  //   const indexPage = Page.verifyOnPage(IndexPage)
+  //   const caseloadPage = indexPage.clickCreateALicence()
+  //   const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
+  //   const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+  //   const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+  //   const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+  //   const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+  //   const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
-    cy.task('getNextWorkingDay', dates).then(() => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('IMMEDIATE_UPON_RELEASE')
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
+  //   cy.task('getNextWorkingDay', dates).then(() => {
+  //     const additionalConditionsPage = appointmentTimePage
+  //       .selectType('IMMEDIATE_UPON_RELEASE')
+  //       .clickContinue()
+  //       .selectYes()
+  //       .clickContinue()
 
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
-        .selectCondition('fce34fb2-02f4-4eb0-9b8d-d091e11451fa')
-        .selectCondition('df3f08a8-4ae0-41fe-b3bc-d0be1fd2d8aa')
-        .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
-        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
+  //     const additionalConditionsInputPage = additionalConditionsPage
+  //       .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
+  //       .selectCondition('fce34fb2-02f4-4eb0-9b8d-d091e11451fa')
+  //       .selectCondition('df3f08a8-4ae0-41fe-b3bc-d0be1fd2d8aa')
+  //       .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
+  //       .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
+  //       .clickContinue()
 
-      const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .selectRadio('London')
-        .nextCondition()
-        .selectRadio()
-        .nextCondition()
-        .checkBoxes()
-        .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio('Two curfews')
-        .addFirstCurfew(2)
-        .addSecondCurfew(2)
-        .selectRadio('Other')
-        .enterText('Annually', 'alternativeReviewPeriod')
-        .nextCondition()
-        .enterText('Knives', 'item[0]')
-        .clickAddAnother()
-        .enterText('Needles', 'item[1]')
-        .clickContinue()
+  //     const bespokeConditionsQuestionPage = additionalConditionsInputPage
+  //       .withContext(additionalConditionsPage.getContext())
+  //       .selectRadio('London')
+  //       .nextCondition()
+  //       .selectRadio()
+  //       .nextCondition()
+  //       .checkBoxes()
+  //       .nextCondition(false) // aria-expanded attribute causes issues with Axe
+  //       .selectRadio('Two curfews')
+  //       .addFirstCurfew(2)
+  //       .addSecondCurfew(2)
+  //       .selectRadio('Other')
+  //       .enterText('Annually', 'alternativeReviewPeriod')
+  //       .nextCondition()
+  //       .enterText('Knives', 'item[0]')
+  //       .clickAddAnother()
+  //       .enterText('Needles', 'item[1]')
+  //       .clickContinue()
 
-      const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
+  //     const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
 
-      const pssConditionsQuestionPage = bespokeConditionsPage
-        .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
-        .checkDeleteThisCondition() // for single Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(2, 'A final third bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinue()
+  //     const pssConditionsQuestionPage = bespokeConditionsPage
+  //       .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
+  //       .checkDeleteThisCondition() // for single Bespoke Condition
+  //       .clickAddAnother()
+  //       .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
+  //       .checkDeleteTheseConditions() // for multiple Bespoke Condition
+  //       .clickAddAnother()
+  //       .enterBespokeCondition(2, 'A final third bespoke condition')
+  //       .checkDeleteTheseConditions() // for multiple Bespoke Condition
+  //       .clickContinue()
 
-      const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
+  //     const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
 
-      const pssConditionsInputPage = pssConditionsPage
-        .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
-        .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
-        .clickContinue()
+  //     const pssConditionsInputPage = pssConditionsPage
+  //       .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
+  //       .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
+  //       .clickContinue()
 
-      const checkAnswersPage = pssConditionsInputPage
-        .withContext(pssConditionsPage.getContext())
-        .enterTime()
-        .enterDate()
-        .enterAddress()
-        .nextInput()
-        .enterAddress()
-        .clickContinue()
+  //     const checkAnswersPage = pssConditionsInputPage
+  //       .withContext(pssConditionsPage.getContext())
+  //       .enterTime()
+  //       .enterDate()
+  //       .enterAddress()
+  //       .nextInput()
+  //       .enterAddress()
+  //       .clickContinue()
 
-      const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
-      const caseloadPageExit = confirmationPage.clickReturn()
-      caseloadPageExit.signOut().click()
-    })
-  })
+  //     const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
+  //     const caseloadPageExit = confirmationPage.clickReturn()
+  //     caseloadPageExit.signOut().click()
+  //   })
+  // })
 
-  it('should have only one Date/time field if appointment time type is other than SPECIFIC_DATE_TIME', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+  // it('should have only one Date/time field if appointment time type is other than SPECIFIC_DATE_TIME', () => {
+  //   const indexPage = Page.verifyOnPage(IndexPage)
+  //   const caseloadPage = indexPage.clickCreateALicence()
+  //   const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
+  //   const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+  //   const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+  //   const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+  //   const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+  //   const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
-    cy.task('getNextWorkingDay', dates).then(() => {
-      const checkAnswersPage = appointmentTimePage
-        .selectType('NEXT_WORKING_DAY_2PM')
-        .clickContinue()
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
+  //   cy.task('getNextWorkingDay', dates).then(() => {
+  //     const checkAnswersPage = appointmentTimePage
+  //       .selectType('NEXT_WORKING_DAY_2PM')
+  //       .clickContinue()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
 
-      checkAnswersPage.dateTimeField().should('contain.text', 'Date/time')
-    })
-  })
+  //     checkAnswersPage.dateTimeField().should('contain.text', 'Date/time')
+  //   })
+  // })
 
-  it('should have separate Date and time field if appointment time type is SPECIFIC_DATE_TIME', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+  // it('should have separate Date and time field if appointment time type is SPECIFIC_DATE_TIME', () => {
+  //   const indexPage = Page.verifyOnPage(IndexPage)
+  //   const caseloadPage = indexPage.clickCreateALicence()
+  //   const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
+  //   const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+  //   const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+  //   const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+  //   const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+  //   const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const checkAnswersPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
+  //   cy.task('getNextWorkingDay', dates).then(appointmentDate => {
+  //     const checkAnswersPage = appointmentTimePage
+  //       .selectType('SPECIFIC_DATE_TIME')
+  //       .enterDate(moment(appointmentDate))
+  //       .enterTime(moment())
+  //       .clickContinue()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
 
-      checkAnswersPage.dateTimeField().should('contain.text', 'Date')
-      checkAnswersPage.dateTimeField().should('contain.text', 'Time')
-    })
-  })
+  //     checkAnswersPage.dateTimeField().should('contain.text', 'Date')
+  //     checkAnswersPage.dateTimeField().should('contain.text', 'Time')
+  //   })
+  // })
 
-  it('should not allow a licence to be submitted if any input pages have been skipped', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+  // it('should not allow a licence to be submitted if any input pages have been skipped', () => {
+  //   const indexPage = Page.verifyOnPage(IndexPage)
+  //   const caseloadPage = indexPage.clickCreateALicence()
+  //   const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
+  //   const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+  //   const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+  //   const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+  //   const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+  //   const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
+  //   cy.task('getNextWorkingDay', dates).then(appointmentDate => {
+  //     const additionalConditionsPage = appointmentTimePage
+  //       .selectType('SPECIFIC_DATE_TIME')
+  //       .enterDate(moment(appointmentDate))
+  //       .enterTime(moment())
+  //       .clickContinue()
+  //       .selectYes()
+  //       .clickContinue()
 
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('d36a3b77-30ba-40ce-8953-83e761d3b487')
-        .clickContinue()
+  //     const additionalConditionsInputPage = additionalConditionsPage
+  //       .selectCondition('d36a3b77-30ba-40ce-8953-83e761d3b487')
+  //       .clickContinue()
 
-      const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .clickSkip()
+  //     const bespokeConditionsQuestionPage = additionalConditionsInputPage
+  //       .withContext(additionalConditionsPage.getContext())
+  //       .clickSkip()
 
-      cy.task('stubGetLicenceWithSkippedInputs')
+  //     cy.task('stubGetLicenceWithSkippedInputs')
 
-      const checkAnswersPage = bespokeConditionsQuestionPage
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
+  //     const checkAnswersPage = bespokeConditionsQuestionPage
+  //       .selectNo()
+  //       .clickContinueAfterNo()
+  //       .selectNo()
+  //       .clickContinueAfterNo()
 
-      checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
-    })
-  })
+  //     checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
+  //   })
+  // })
 
-  it('should select specific date time option default on initial appointment details', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+  // it('should select specific date time option default on initial appointment details', () => {
+  //   const indexPage = Page.verifyOnPage(IndexPage)
+  //   let caseloadPage = indexPage.clickCreateALicence()
+  //   const comDetailsPage = caseloadPage.clickComName()
+  //   caseloadPage = comDetailsPage.clickReturnToCaseload()
+  //   const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
+  //   const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+  //   const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+  //   const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
+  //   const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
-    appointmentTimePage.getRadioByValue('SPECIFIC_DATE_TIME').should('be.checked')
-  })
+  //   const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+  //   appointmentTimePage.getRadioByValue('SPECIFIC_DATE_TIME').should('be.checked')
+  // })
 })

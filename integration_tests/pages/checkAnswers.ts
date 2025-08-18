@@ -69,4 +69,9 @@ export default class CheckAnswersPage extends Page {
     cy.get('#electronicMonitoringProvider-isToBeTaggedForProgramme').should('not.exist')
     return this
   }
+
+  checkIfDeleteLinkVisible = () => {
+    cy.get('[data-qa="condition-action-6"]').should('contain.text', 'Delete')
+    return this
+  }
 }
