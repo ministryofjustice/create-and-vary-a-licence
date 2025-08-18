@@ -29,7 +29,7 @@ import {
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/initialAppointment/types/address'
-import { getEditConditionHref } from './conditionRoutes'
+import { getEditConditionHref, getDeleteConditionHref } from './conditionRoutes'
 import { LegalStatus, AppointmentTimeType, LicenceKind, CaViewCasesTab, LicenceStatus } from '../enumeration'
 
 const production = process.env.NODE_ENV === 'production'
@@ -253,6 +253,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal(
     'additionalConditionRow',
     (licence: Licence, condition: AdditionalCondition, html: string, isEditable: boolean) => {
+      const isEmptyData = !condition.data || Object.keys(condition.data).length === 0
       return {
         sequence: condition.sequence,
         key: { text: condition.category },
@@ -261,13 +262,19 @@ export function registerNunjucks(app?: express.Express): Environment {
           items: isEditable
             ? [
                 {
-                  href: getEditConditionHref({
-                    licenceId: licence.id,
-                    conditionId: condition.id,
-                    conditionCode: condition.code,
-                    fromReview: true,
-                  }),
-                  text: 'Change',
+                  href: isEmptyData
+                    ? getDeleteConditionHref({
+                        licenceId: licence.id,
+                        conditionId: condition.id,
+                        fromReview: true,
+                      })
+                    : getEditConditionHref({
+                        licenceId: licence.id,
+                        conditionId: condition.id,
+                        conditionCode: condition.code,
+                        fromReview: true,
+                      }),
+                  text: isEmptyData ? 'Delete' : 'Change',
                   visuallyHiddenText: 'Change condition',
                 },
               ]
