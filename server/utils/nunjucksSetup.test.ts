@@ -683,4 +683,33 @@ describe('Nunjucks Filters', () => {
       )
     })
   })
+
+  describe('additionalConditionRow', () => {
+    it('returns a row with "Delete" action when condition.data is empty', () => {
+      const licence = { id: 'LIC123' }
+      const condition = {
+        id: 'COND456',
+        code: 'CODE789',
+        category: 'Test Category',
+        sequence: 1,
+        data: {},
+      }
+      const html = '<p>Condition HTML</p>'
+
+      expect(registerNunjucks().getGlobal('additionalConditionRow')(licence, condition, html, true)).toEqual({
+        sequence: 1,
+        key: { text: 'Test Category' },
+        value: { html: '<p>Condition HTML</p>' },
+        actions: {
+          items: [
+            {
+              href: `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.id}/delete?fromReview=true`,
+              text: 'Delete',
+              visuallyHiddenText: 'Change condition',
+            },
+          ],
+        },
+      })
+    })
+  })
 })
