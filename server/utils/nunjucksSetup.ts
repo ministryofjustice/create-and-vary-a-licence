@@ -254,34 +254,37 @@ export function registerNunjucks(app?: express.Express): Environment {
     'additionalConditionRow',
     (licence: Licence, condition: AdditionalCondition, html: string, isEditable: boolean) => {
       const isEmptyData = !condition.data || Object.keys(condition.data).length === 0
+
+      const getActionItem = () => {
+        const href = isEmptyData
+          ? getDeleteConditionHref({
+              licenceId: licence.id,
+              conditionId: condition.id,
+              fromReview: true,
+            })
+          : getEditConditionHref({
+              licenceId: licence.id,
+              conditionId: condition.id,
+              conditionCode: condition.code,
+              fromReview: true,
+            })
+
+        return {
+          href,
+          text: isEmptyData ? 'Delete' : 'Change',
+          visuallyHiddenText: `${isEmptyData ? 'Delete' : 'Change'} condition`,
+          attributes: {
+            'data-qa': `condition-action-${condition.id}`,
+          },
+        }
+      }
+
       return {
         sequence: condition.sequence,
         key: { text: condition.category },
         value: { html },
         actions: {
-          items: isEditable
-            ? [
-                {
-                  href: isEmptyData
-                    ? getDeleteConditionHref({
-                        licenceId: licence.id,
-                        conditionId: condition.id,
-                        fromReview: true,
-                      })
-                    : getEditConditionHref({
-                        licenceId: licence.id,
-                        conditionId: condition.id,
-                        conditionCode: condition.code,
-                        fromReview: true,
-                      }),
-                  text: isEmptyData ? 'Delete' : 'Change',
-                  visuallyHiddenText: `${isEmptyData ? 'Delete' : 'Change'} condition`,
-                  attributes: {
-                    'data-qa': `condition-action-${condition.id}`,
-                  },
-                },
-              ]
-            : [],
+          items: isEditable ? [getActionItem()] : [],
         },
       }
     },
