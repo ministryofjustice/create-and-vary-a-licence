@@ -64,7 +64,7 @@ export default class OffenderDetailRoutes {
       prisonerDetail: {
         ...prisonerDetail,
         name: (!!prisonerDetail && convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`)) || '',
-        crn: probationPractitioner.case.crn,
+        crn: probationPractitioner.case?.crn,
         conditionalReleaseDate,
         confirmedReleaseDate,
         postRecallReleaseDate,

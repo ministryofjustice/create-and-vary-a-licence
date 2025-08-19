@@ -2,19 +2,26 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% set pageTitle = applicationName + " - prisoner detail" %}
 {% set backLinkHref = "/support/offender-search" %}
 {% set hideLicenceBanner = true %}
 
 {% block content %}
-    <div class="govuk-width-container">
-        <span class="govuk-caption-xl">{{ prisonerDetail.name }}</span>
-        <h1 class="govuk-heading-xl">Offender detail</h1>
-    </div>
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            {% if not prisonerDetail.crn %}
+                {{ mojAlert({
+                    variant: "warning",
+                    dismissible: false,
+                    text: "No Delius record found linked to this NOMIS ID"
+                }) }}
+            {% endif %}
+            <div class="govuk-width-container">
+                <span class="govuk-caption-xl">{{ prisonerDetail.name }}</span>
+                <h1 class="govuk-heading-xl">Offender detail</h1>
+            </div>
             <table class="govuk-table">
                 <caption class="govuk-table__caption govuk-table__caption--m">Offender</caption>
                 <tbody class="govuk-table__body">
@@ -75,7 +82,9 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Team</th>
-                    <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-teams/{{probationPractitioner.teamCode}}/caseload">{{ probationPractitioner.team }}</a></td>
+                    {% if probationPractitioner.team | length %}
+                        <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-teams/{{probationPractitioner.teamCode}}/caseload">{{ probationPractitioner.team }}</a></td>
+                    {% endif %}
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">LDU</th>
@@ -95,7 +104,9 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Caseload</th>
-                    <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-practitioner/{{ probationPractitioner.staffCode }}/caseload">link</a></td>
+                    {% if probationPractitioner.staffCode | length %}
+                        <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-practitioner/{{ probationPractitioner.staffCode }}/caseload">link</a></td>
+                    {% endif %}
                 </tr>
                 </tbody>
             </table>
