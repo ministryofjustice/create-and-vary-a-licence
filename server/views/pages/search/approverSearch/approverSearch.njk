@@ -12,18 +12,20 @@
 {% set approvalNeededResults = [] %}
 {% set recentlyApprovedResults = [] %}
 
-{% macro displayResults(tableHeadings, results, tabId, countText, setRecentlyApprovedTab) %}
+{% macro displayResults(tableHeadings, results, tabId, countText, setApprovalNeededTab) %}
     <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
     {% if results.length == 0 %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                <p id="approval-search-empty-state-content">No licence approval requests that match "{{ queryTerm }}". Try searching again.</p>
-                {% if setRecentlyApprovedTab %}
+                {% if setApprovalNeededTab %}
+                    <p id="approval-needed-empty-state-content">No licence approval requests that match "{{ queryTerm }}". Try searching again.</p>
+                {% else %}
+                    <p id="recently-approved-empty-state-content">No recently approved licences that match "{{ queryTerm }}". Try searching again.</p>
                     <p>If someone’s release date was more than 14 days ago, you will no longer be able to see their licence in this service.</p>
                 {% endif %}
                 <p class="govuk-body">
                     {{ govukButton({
-                        text: "Return to caselist",
+                        text: "Return to case list",
                         classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
                         href: backLink,
                         attributes: { 'data-qa': 'return-to-caselist' }
@@ -47,7 +49,41 @@
     {% endif %}
 {% endmacro %}
 
-{% set searchTableHeadings = [
+{% set approvalNeededSearchTableHeadings = [
+    {
+        text: "Name",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Prison number",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Probation practitioner",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Submitted by",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Release date",
+        attributes: {
+            id: 'release-date-sort',
+            "aria-sort": "ascending"
+        }
+    }
+] %}
+
+{% set recentlyApprovedSearchTableHeadings = [
     {
         text: "Name",
         attributes: {
@@ -72,28 +108,7 @@
             id: 'release-date-sort',
             "aria-sort": "none"
         }
-    }
-] %}
-
-{% if hasSelectedMultiplePrisonCaseloads %}
-    {% set searchTableHeadings = (searchTableHeadings.splice(3, 0, {
-                text: "Location",
-                attributes: {
-                    "aria-sort": "none"
-                }
-            }
-    ), searchTableHeadings) %}
-{% endif %}
-
-{% set approvalNeededSearchTableHeadings = searchTableHeadings.toSpliced(-1, 0, {
-                text: "Submitted by",
-                attributes: {
-                    "aria-sort": "none"
-                }
-            }
-    ) %}
-
-{% set recentlyApprovedSearchTableHeadings = (searchTableHeadings.concat(
+    },
     {
         text: "Approved by",
         attributes: {
@@ -106,7 +121,25 @@
             "aria-sort": "descending"
         }
     }
-)) %}
+] %}
+
+{% if hasSelectedMultiplePrisonCaseloads %}
+    {% set approvalNeededSearchTableHeadings = (approvalNeededSearchTableHeadings.splice(3, 0, {
+                text: "Location",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            }
+    ), approvalNeededSearchTableHeadings) %}
+
+    {% set recentlyApprovedSearchTableHeadings = (recentlyApprovedSearchTableHeadings.splice(3, 0, {
+                text: "Location",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            }
+    ), recentlyApprovedSearchTableHeadings) %}
+{% endif %}
 
 {% for case in approvalNeededCases %}
     {% if case.urgentApproval %}
@@ -222,9 +255,10 @@
     {
         attributes: {
             id: 'approved-on-' + loop.index,
+            "data-qa": "approvedOnDate",
             "data-sort-value": case.approvedOn | dateToUnix
         },
-        html: '<span data-qa="approvedOnDate">' + case.approvedOn  + '</span>'
+        text: case.approvedOn
     }
     ] %}
 
@@ -247,8 +281,8 @@
 {% set approvalNeededCountText = "Approval needed ("  + tabParameters.approvalNeeded.resultsCount + tabParameters.approvalNeeded.resultsCount | pluralise(" result") + ")" %}
 {% set recentlyApprovedCountText = "Recently approved (" + tabParameters.recentlyApproved.resultsCount + tabParameters.recentlyApproved.resultsCount | pluralise(" result") + ")" %}
 
-{% set approvalNeeded = displayResults(approvalNeededSearchTableHeadings, approvalNeededResults, tabParameters.approvalNeeded.tabId, approvalNeededCountText, false) %}
-{% set recentlyApproved = displayResults(recentlyApprovedSearchTableHeadings, recentlyApprovedResults, tabParameters.recentlyApproved.tabId, recentlyApprovedCountText, true) %}
+{% set approvalNeeded = displayResults(approvalNeededSearchTableHeadings, approvalNeededResults, tabParameters.approvalNeeded.tabId, approvalNeededCountText, true) %}
+{% set recentlyApproved = displayResults(recentlyApprovedSearchTableHeadings, recentlyApprovedResults, tabParameters.recentlyApproved.tabId, recentlyApprovedCountText, false) %}
 
 {% block content %}
     <div class="govuk-grid-row">
