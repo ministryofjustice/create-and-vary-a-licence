@@ -103,6 +103,7 @@ context('Create a licence', () => {
         .nextInput()
         .enterAddress()
         .clickContinue()
+        .checkIfChangeLinkVisible()
         .checkIfDeleteLinkVisible()
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()

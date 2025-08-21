@@ -70,6 +70,11 @@ export default class CheckAnswersPage extends Page {
     return this
   }
 
+  checkIfChangeLinkVisible = () => {
+    cy.get('[data-qa="condition-action-1"]').should('contain.text', 'Change')
+    return this
+  }
+
   checkIfDeleteLinkVisible = () => {
     cy.get('[data-qa="condition-action-6"]').should('contain.text', 'Delete')
     return this
