@@ -111,8 +111,11 @@ describe('View Prison Approver Search Results', () => {
     expect($('.govuk-tabs__list a').text()).toContain('Recently approved')
     expect($('#tab-heading-approval-needed').text()).toContain('Approval needed (0 results)')
     expect($('#tab-heading-recently-approved').text()).toContain('Recently approved (0 results)')
-    expect($('#approval-search-empty-state-content').text()).toContain(
-      'No licence approval requests that match "Test". Try searching again',
+    expect($('#approval-needed-empty-state-content').text()).toContain(
+      'No licence approval requests that match "Test". Try searching again.',
+    )
+    expect($('#recently-approved-empty-state-content').text()).toContain(
+      'No recently approved licences that match "Test". Try searching again.',
     )
   })
 
