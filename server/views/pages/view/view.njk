@@ -95,6 +95,9 @@
                     {{ additionalInformationSummary(licence, isEditableByPrison, validationErrors) }}
                 {% endif %}
 
+                {% if isPrintable %}
+                    <h2 class="govuk-heading-m margin-top-85 govuk-!-margin-bottom-4">View and print licence</h2>
+                {% endif %}
                 <div class="govuk-button-group govuk-!-margin-top-8">
                     {% if licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP' %}
                         {{ govukButton({
