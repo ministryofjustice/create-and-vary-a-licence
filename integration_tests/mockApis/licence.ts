@@ -694,6 +694,7 @@ export default {
               sequence: 5,
               text: 'Receive home visits from a Mental Health Worker.',
               data: [],
+              requiresInput: false,
               uploadSummary: [],
               readyToSubmit: true,
             },

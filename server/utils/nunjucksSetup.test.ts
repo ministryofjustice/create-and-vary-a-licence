@@ -693,6 +693,7 @@ describe('Nunjucks Filters', () => {
         category: 'Test Category',
         sequence: 1,
         data: {},
+        requiresInput: false,
       }
       const html = '<p>Condition HTML</p>'
 
@@ -731,6 +732,7 @@ describe('Nunjucks Filters', () => {
             contributesToLicence: true,
           },
         ],
+        requiresInput: true,
       }
       const html = '<p>Condition HTML</p>'
 
