@@ -253,35 +253,37 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal(
     'additionalConditionRow',
     (licence: Licence, condition: AdditionalCondition, html: string, isEditable: boolean) => {
-      const isEmptyData = !condition.data || Object.keys(condition.data).length === 0
+      const { requiresInput, id, code, category, sequence } = condition
 
       const getActionItem = () => {
-        const href = isEmptyData
-          ? getDeleteConditionHref({
+        const href = requiresInput
+          ? getEditConditionHref({
               licenceId: licence.id,
-              conditionId: condition.id,
+              conditionId: id,
+              conditionCode: code,
               fromReview: true,
             })
-          : getEditConditionHref({
+          : getDeleteConditionHref({
               licenceId: licence.id,
-              conditionId: condition.id,
-              conditionCode: condition.code,
+              conditionId: id,
               fromReview: true,
             })
+
+        const actionType = requiresInput ? 'Change' : 'Delete'
 
         return {
           href,
-          text: isEmptyData ? 'Delete' : 'Change',
-          visuallyHiddenText: `${isEmptyData ? 'Delete' : 'Change'} condition`,
+          text: actionType,
+          visuallyHiddenText: `${actionType} condition`,
           attributes: {
-            'data-qa': `condition-action-${condition.id}`,
+            'data-qa': `condition-action-${id}`,
           },
         }
       }
 
       return {
-        sequence: condition.sequence,
-        key: { text: condition.category },
+        sequence,
+        key: { text: category },
         value: { html },
         actions: {
           items: isEditable ? [getActionItem()] : [],
