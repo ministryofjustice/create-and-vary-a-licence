@@ -696,6 +696,7 @@ export default {
               data: [],
               requiresInput: false,
               uploadSummary: [],
+              readyToSubmit: true,
             },
           ],
           bespokeConditions: [
