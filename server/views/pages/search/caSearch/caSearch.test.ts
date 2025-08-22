@@ -1,7 +1,6 @@
 import fs from 'fs'
 import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
-import LicenceKind from '../../../../enumeration/LicenceKind'
-import LicenceStatus from '../../../../enumeration/licenceStatus'
+import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../../enumeration'
 import statusConfig from '../../../../licences/licenceStatus'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/search/caSearch/caSearch.njk').toString())
@@ -112,10 +111,19 @@ describe('View CA Search Results', () => {
           tabHeading: 'People on probation (0 results)',
           tabId: 'tab-heading-probation',
         },
+        attentionNeeded: {
+          resultsCount: 0,
+          tabHeading: 'Attention needed',
+          tabId: 'tab-heading-attention-needed',
+        },
       },
       inPrisonResults: [],
       onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      isSearchPageView: true,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People in prison (0 results)')
@@ -147,10 +155,19 @@ describe('View CA Search Results', () => {
           tabHeading: 'People on probation (0 results)',
           tabId: 'tab-heading-probation',
         },
+        attentionNeeded: {
+          resultsCount: 0,
+          tabHeading: 'Attention needed',
+          tabId: 'tab-heading-attention-needed',
+        },
       },
       inPrisonResults,
       onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      isSearchPageView: true,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People in prison (2 results)')
@@ -196,10 +213,19 @@ describe('View CA Search Results', () => {
           tabHeading: 'People on probation (2 results)',
           tabId: 'tab-heading-probation',
         },
+        attentionNeeded: {
+          resultsCount: 0,
+          tabHeading: 'Attention needed',
+          tabId: 'tab-heading-attention-needed',
+        },
       },
       inPrisonResults: [],
       onProbationResults,
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      isSearchPageView: true,
     })
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People on probation (2 results)')
@@ -243,13 +269,118 @@ describe('View CA Search Results', () => {
           tabHeading: 'People on probation (0 results)',
           tabId: 'tab-heading-probation',
         },
+        attentionNeeded: {
+          resultsCount: 0,
+          tabHeading: 'Attention needed',
+          tabId: 'tab-heading-attention-needed',
+        },
       },
       inPrisonResults,
       onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
       hasSelectedMultiplePrisonCaseloads: true,
+      isSearchPageView: true,
     })
     expect($('thead').text()).toContain('Location')
     expect($('#location-1').text()).toBe('Moorland (HMP)')
     expect($('#location-2').text()).toBe('Wormwood Scrubs (HMP)')
+  })
+
+  it('should hide attention needed tab when no attention needed cases are present', () => {
+    const $ = render({
+      queryTerm: 'Test',
+      backLink: '/licence/view/cases',
+      statusConfig,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prison: {
+          resultsCount: 2,
+          tabHeading: 'People in prison (2 results)',
+          tabId: 'tab-heading-prison',
+        },
+        probation: {
+          resultsCount: 0,
+          tabHeading: 'People on probation (0 results)',
+          tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 0,
+          tabHeading: 'Attention needed',
+          tabId: 'tab-heading-attention-needed',
+        },
+      },
+      inPrisonResults,
+      onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasSelectedMultiplePrisonCaseloads: false,
+      isSearchPageView: true,
+    })
+    expect($('.govuk-tabs__list-item--selected').text()).toContain('People in prison (2 results)')
+    expect($('.govuk-tabs__list a').text()).toContain('People in prison (2 results)')
+    expect($('.govuk-tabs__list a').text()).toContain('People on probation (0 results)')
+    expect($('.govuk-tabs__list a').text()).not.toContain('Attention needed')
+  })
+
+  it('should highlight a HDC licence with a HDC release warning label in prison view for the attention needed tab', () => {
+    const $ = render({
+      queryTerm: 'Test',
+      backLink: '/licence/view/cases',
+      statusConfig,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prison: {
+          resultsCount: 1,
+          tabHeading: 'People in prison (1 results)',
+          tabId: 'tab-heading-prison',
+        },
+        probation: {
+          resultsCount: 0,
+          tabHeading: 'People on probation (0 results)',
+          tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 1,
+          tabHeading: 'Attention needed',
+          tabId: 'tab-heading-attention-needed',
+        },
+      },
+      inPrisonResults: [
+        {
+          kind: LicenceKind.HDC,
+          licenceId: 1,
+          name: 'Test Person 1',
+          prisonerNumber: 'A1234AA',
+          probationPractitioner: {
+            name: 'Test Com 1',
+            staffCode: 'ABC123',
+          },
+          releaseDate: '03/08/2022',
+          releaseDateLabel: 'HDCAD',
+          licenceStatus: LicenceStatus.APPROVED,
+          tabType: 'ATTENTION_NEEDED',
+          nomisLegalStatus: 'SENTENCED',
+          lastWorkedOnBy: 'Test Updater',
+          isDueForEarlyRelease: false,
+          isInHardStopPeriod: true,
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
+          link: '/test1',
+        },
+      ],
+      onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: true,
+      hasSelectedMultiplePrisonCaseloads: false,
+      isSearchPageView: true,
+    })
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#name-button-1').text()).toBe('Test Person 1')
+    expect($('#nomis-id-1').text()).toBe('A1234AA')
+    expect($('#release-date-1').text()).toBe('HDCAD: 03 Aug 2022HDC release')
   })
 })

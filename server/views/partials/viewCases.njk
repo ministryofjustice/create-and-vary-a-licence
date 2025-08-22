@@ -47,6 +47,14 @@
                         }
                     }), licencesHeader)
         %}
+        {% if params.tabType === 'attentionNeeded' and params.hasSelectedMultiplePrisonCaseloads and params.isSearchPageView %}
+            {% set licencesHeader = (licencesHeader.splice(-1, 0, {
+                text: "Location",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            }), licencesHeader) %}
+        {% endif %}
         {% if params.tabType === 'releasesInNextTwoWorkingDays' %}
             {% set licencesHeader = (licencesHeader.push({
                         text: "Last worked on by",
@@ -156,6 +164,17 @@
                 html: releaseDate 
             }
         ), caseData) %}
+        {% if params.tabType === 'attentionNeeded' and params.hasSelectedMultiplePrisonCaseloads and params.isSearchPageView %}
+            {% set caseData = (caseData.splice(-1, 0, 
+                {
+                    attributes: {
+                    id: 'location-' + loop.index,
+                    "data-sort-value": case.prisonDescription
+                    },
+                    text: case.prisonDescription,
+                    classes: "max-width max-width-120"
+                }), caseData) %}
+        {% endif %}
         {% if params.tabType === 'releasesInNextTwoWorkingDays' %}
             {% set caseData = (caseData.push({
                         attributes: {
@@ -178,6 +197,6 @@
         {% endif %}
         {% set licences = (licences.push(caseData), licences) %}
     {% endfor %}
-    {{ casesTable({licences: licences, tabType: params.tabType, probationView: false }) }}
+    {{ casesTable({licences: licences, tabType: params.tabType, probationView: false, hasSelectedMultiplePrisonCaseloads: params.hasSelectedMultiplePrisonCaseloads, isSearchPageView: params.isSearchPageView }) }}
 
 {% endmacro %}
