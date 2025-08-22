@@ -2,6 +2,7 @@
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "partials/hardStop/attentionNeededTab.njk" import attentionNeededTab %}
 {% from "partials/statusBadge.njk" import statusBadge %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -282,6 +283,7 @@
 
 {% set inPrisonCountText = "People in prison ("  + tabParameters.prison.resultsCount + tabParameters.prison.resultsCount | pluralise(" result") + ")" %}
 {% set onProbationCountText = "People on probation (" + tabParameters.probation.resultsCount + tabParameters.probation.resultsCount | pluralise(" result") + ")" %}
+{% set attentionNeededCountText = "Attention needed (" + tabParameters.attentionNeeded.resultsCount + tabParameters.attentionNeeded.resultsCount | pluralise(" result") + ")" %}
 
 {% if recallsEnabled %}
     {%  set recallsMessage = "have not breached a top-up supervision order" %}
@@ -291,6 +293,7 @@
 
 {% set peopleInPrison = displayResults(searchTableHeadings, peopleInPrisonResults, tabParameters.prison.tabId, inPrisonCountText, true, recallsMesage) %}
 {% set peopleOnProbation = displayResults(searchTableHeadings, peopleOnProbationResults, tabParameters.probation.tabId, onProbationCountText, false, recallsMesage) %}
+{% set attentionNeeded = attentionNeededTab({ cases: attentionNeededResults, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: tabParameters.attentionNeeded.resultsCount, activeTab: 'attention-needed', hasSelectedMultiplePrisonCaseloads: hasSelectedMultiplePrisonCaseloads, isSearchPageView: isSearchPageView }) %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -320,8 +323,7 @@
         </div>
     </div>
 
-    {{ govukTabs({
-        items: [
+    {% set caSearchTabs = [
             {
                 label: inPrisonCountText,
                 id: "people-in-prison",
@@ -336,7 +338,23 @@
                     html: peopleOnProbation
                 }
             }
-        ]
+    ] %}
+
+    {% if showAttentionNeededTab %}
+        {% set caSearchTabs = (caSearchTabs.push(
+            {
+                label: attentionNeededCountText,
+                id: "attention-needed",
+                panel: {
+                    html: attentionNeeded
+                }
+            }
+            ), caSearchTabs) 
+        %}
+    {% endif %}
+
+    {{ govukTabs({
+        items: caSearchTabs
     }) }}
 
 {% endblock %}
