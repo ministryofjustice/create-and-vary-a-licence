@@ -276,7 +276,7 @@ export function registerNunjucks(app?: express.Express): Environment {
           text: actionType,
           visuallyHiddenText: `${actionType} condition`,
           attributes: {
-            'data-qa': `condition-action-${id}`,
+            'data-qa': `condition-action-${code}`,
           },
         }
       }
