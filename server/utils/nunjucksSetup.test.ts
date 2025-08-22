@@ -705,7 +705,7 @@ describe('Nunjucks Filters', () => {
           items: [
             {
               attributes: {
-                'data-qa': 'condition-action-COND456',
+                'data-qa': 'condition-action-CODE789',
               },
               href: `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.id}/delete?fromReview=true`,
               text: 'Delete',
@@ -744,7 +744,7 @@ describe('Nunjucks Filters', () => {
           items: [
             {
               attributes: {
-                'data-qa': 'condition-action-COND456',
+                'data-qa': 'condition-action-CODE789',
               },
               href: '/licence/create/id/LIC123/additional-licence-conditions/condition/COND456?fromReview=true',
               text: 'Change',

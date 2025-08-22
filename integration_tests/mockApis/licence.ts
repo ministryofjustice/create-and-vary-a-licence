@@ -692,7 +692,6 @@ export default {
     electronicMonitoringProvider?: ElectronicMonitoringProvider
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
   }): SuperAgentRequest => {
-    console.log('conditions============>', options.conditions)
     return stubFor({
       request: {
         method: 'GET',
