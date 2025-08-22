@@ -44,5 +44,6 @@ export {
   PrisonRegisterApiClient,
   DeliusClient,
   ManageUsersApiClient,
-  RestClientBuilder,
 }
+
+export type { RestClientBuilder }
