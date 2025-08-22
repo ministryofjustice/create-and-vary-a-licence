@@ -1,5 +1,5 @@
 import session from 'express-session'
-import RedisStore from 'connect-redis'
+import { RedisStore } from 'connect-redis'
 import express, { Router } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import { createRedisClient } from '../data/redisClient'
