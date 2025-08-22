@@ -101,7 +101,7 @@ context('Create a licence', () => {
         .enterAddress()
         .nextInput()
         .enterAddress()
-        .clickContinue(null, null, LicenceKind.PRRD)
+        .clickContinue(null, null, null, LicenceKind.PRRD)
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
 

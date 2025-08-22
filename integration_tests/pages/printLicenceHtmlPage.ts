@@ -17,7 +17,7 @@ export default class PrintLicenceHtmlPage extends Page {
     cy.get('#induction').should('be.visible')
     cy.get('#ap-conditions').should('be.visible')
     cy.get('#pss-conditions').should('be.visible')
-    cy.get('.condition').should('have.length', 15)
+    cy.get('.condition').should('have.length', 16)
     cy.get('#cancellation-ap').should('be.visible')
     cy.get('#cancellation-pss').should('be.visible')
     cy.get('#recall').should('be.visible')

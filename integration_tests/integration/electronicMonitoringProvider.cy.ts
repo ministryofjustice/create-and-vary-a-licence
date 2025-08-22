@@ -102,6 +102,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .nextInput()
         .enterAddress()
         .clickContinue(
+          null,
           {
             isToBeTaggedForProgramme: null,
             programmeName: '',
@@ -191,6 +192,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .nextInput()
         .enterAddress()
         .clickContinue(
+          null,
           {
             isToBeTaggedForProgramme: true,
             programmeName: 'Test Programme',
@@ -365,6 +367,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .nextInput()
         .enterAddress()
         .clickContinue(
+          null,
           {
             isToBeTaggedForProgramme: null,
             programmeName: '',

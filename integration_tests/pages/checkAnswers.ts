@@ -69,4 +69,14 @@ export default class CheckAnswersPage extends Page {
     cy.get('#electronicMonitoringProvider-isToBeTaggedForProgramme').should('not.exist')
     return this
   }
+
+  checkIfChangeLinkVisible = (code: string) => {
+    cy.get(`[data-qa="condition-action-${code}"]`).should('contain.text', 'Change')
+    return this
+  }
+
+  checkIfDeleteLinkVisible = (code: string) => {
+    cy.get(`[data-qa="condition-action-${code}"]`).should('contain.text', 'Delete')
+    return this
+  }
 }

@@ -3,6 +3,7 @@ import {
   CURFEW_CONDITION_CODE,
   getConditionCallbackHref,
   getEditConditionHref,
+  getDeleteConditionHref,
   OUT_OF_BOUNDS_PREMISES_CONDITION_CODE,
 } from './conditionRoutes'
 
@@ -122,6 +123,28 @@ describe('conditionRoutes', () => {
           fromReview: false,
         }),
       ).toStrictEqual(`/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads`)
+    })
+  })
+
+  describe('getDeleteConditionHref', () => {
+    test('returns correct URL when fromReview is true', () => {
+      expect(
+        getDeleteConditionHref({
+          licenceId: '1',
+          conditionId: 2,
+          fromReview: true,
+        }),
+      ).toBe('/licence/create/id/1/additional-licence-conditions/condition/2/delete?fromReview=true')
+    })
+
+    test('returns correct URL when fromReview is false', () => {
+      expect(
+        getDeleteConditionHref({
+          licenceId: '1',
+          conditionId: 2,
+          fromReview: false,
+        }),
+      ).toBe('/licence/create/id/1/additional-licence-conditions/condition/2/delete')
     })
   })
 })

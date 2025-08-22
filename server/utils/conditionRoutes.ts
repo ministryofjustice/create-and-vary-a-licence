@@ -17,6 +17,12 @@ type EditConditionHrefArgs = {
   fromReview: boolean
 }
 
+type DeleteConditionHrefArgs = {
+  licenceId: string
+  conditionId: number
+  fromReview: boolean
+}
+
 type ConditionConfig = {
   inputTemplate: string
   getConditionCallbackHref: (args: ConditionCallbackHrefArgs) => string
@@ -93,3 +99,8 @@ export const getEditConditionHref = (args: EditConditionHrefArgs) => {
   const config = getConfigForCondition(args.conditionCode)
   return config.getEditConditionHref(args)
 }
+
+export const getDeleteConditionHref = (args: DeleteConditionHrefArgs) =>
+  `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionId}/delete${
+    args.fromReview ? '?fromReview=true' : ''
+  }`
