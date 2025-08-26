@@ -1,6 +1,8 @@
 import moment from 'moment'
 import Page from '../pages/page'
 import IndexPage from '../pages'
+import { licenceConditions } from '../mockApis/licence'
+import { AdditionalCondition } from '../../server/@types/licenceApiClientTypes'
 
 context('Create a licence', () => {
   const dates: string[] = []
@@ -26,6 +28,15 @@ context('Create a licence', () => {
 
   it('should click through the create a licence journey', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
+    const conditions = [
+      ...licenceConditions.map(condition => {
+        if (condition.code === '9ae2a336-3491-4667-aaed-dd852b09b4b9') {
+          return { ...condition, requiresInput: false }
+        }
+        return condition
+      }),
+    ] as AdditionalCondition[]
+
     let caseloadPage = indexPage.clickCreateALicence()
     const comDetailsPage = caseloadPage.clickComName()
     caseloadPage = comDetailsPage.clickReturnToCaseload()
@@ -53,6 +64,7 @@ context('Create a licence', () => {
         .selectCondition('df3f08a8-4ae0-41fe-b3bc-d0be1fd2d8aa')
         .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
         .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
+        .selectCondition('9ae2a336-3491-4667-aaed-dd852b09b4b9')
         .clickContinue()
 
       const bespokeConditionsQuestionPage = additionalConditionsInputPage
@@ -101,7 +113,9 @@ context('Create a licence', () => {
         .enterAddress()
         .nextInput()
         .enterAddress()
-        .clickContinue()
+        .clickContinue(conditions)
+        .checkIfChangeLinkVisible('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
+        .checkIfDeleteLinkVisible('9ae2a336-3491-4667-aaed-dd852b09b4b9')
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
       const caseloadPageExit = confirmationPage.clickReturn()
