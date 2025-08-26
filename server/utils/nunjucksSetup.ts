@@ -29,7 +29,7 @@ import {
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/initialAppointment/types/address'
-import { getEditConditionHref } from './conditionRoutes'
+import { getEditConditionHref, getDeleteConditionHref } from './conditionRoutes'
 import { LegalStatus, AppointmentTimeType, LicenceKind, CaViewCasesTab, LicenceStatus } from '../enumeration'
 
 const production = process.env.NODE_ENV === 'production'
@@ -253,25 +253,40 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal(
     'additionalConditionRow',
     (licence: Licence, condition: AdditionalCondition, html: string, isEditable: boolean) => {
+      const { requiresInput, id, code, category, sequence } = condition
+
+      const getActionItem = () => {
+        const href = requiresInput
+          ? getEditConditionHref({
+              licenceId: licence.id,
+              conditionId: id,
+              conditionCode: code,
+              fromReview: true,
+            })
+          : getDeleteConditionHref({
+              licenceId: licence.id,
+              conditionId: id,
+              fromReview: true,
+            })
+
+        const actionType = requiresInput ? 'Change' : 'Delete'
+
+        return {
+          href,
+          text: actionType,
+          visuallyHiddenText: `${actionType} condition`,
+          attributes: {
+            'data-qa': `condition-action-${code}`,
+          },
+        }
+      }
+
       return {
-        sequence: condition.sequence,
-        key: { text: condition.category },
+        sequence,
+        key: { text: category },
         value: { html },
         actions: {
-          items: isEditable
-            ? [
-                {
-                  href: getEditConditionHref({
-                    licenceId: licence.id,
-                    conditionId: condition.id,
-                    conditionCode: condition.code,
-                    fromReview: true,
-                  }),
-                  text: 'Change',
-                  visuallyHiddenText: 'Change condition',
-                },
-              ]
-            : [],
+          items: isEditable ? [getActionItem()] : [],
         },
       }
     },
