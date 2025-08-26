@@ -32,6 +32,7 @@ context('Search for a person', () => {
     const caseloadPage = indexPage.clickViewAndPrintALicence()
     let searchPage = caseloadPage.clickSearch('test')
     searchPage.getSearchHeading().contains('Search results for test')
+    searchPage.getAttentionNeededTabTitle().should('not.exist')
     searchPage.getPrisonTabTitle().contains('People in prison (3 results)')
     searchPage.clickOnProbationTab()
     searchPage.getProbationTabTitle().contains('People on probation (3 results)')
@@ -65,5 +66,19 @@ context('Search for a person', () => {
     searchPage.getRow(3).contains('01 May 2025')
     searchPage.getRow(4).contains('30 Apr 2025')
     searchPage.getRow(5).contains('29 Apr 2025')
+  })
+
+  it('should show attention needed tab when attention needed type cases present', () => {
+    cy.task('stubGetCaSearchAttentionNeededPrisonResults')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickViewAndPrintALicence()
+    const searchPage = caseloadPage.clickSearch('test')
+    searchPage.getSearchHeading().contains('Search results for test')
+    searchPage.clickAttentionNeededTab()
+    searchPage.getAttentionNeededTabTitle().contains('Attention needed')
+    // check attention needed cases are ordered by descending nomis legal status by default
+    searchPage.getRow(3).contains('Sentenced')
+    searchPage.getRow(4).contains('Remand')
+    searchPage.getRow(5).contains('Recall')
   })
 })

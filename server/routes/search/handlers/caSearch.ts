@@ -63,8 +63,6 @@ export default class CaSearch {
         resultsCount: onProbationResults.length,
       },
       attentionNeeded: {
-        tabId: 'tab-heading-attention-needed',
-        tabHeading: 'Attention needed',
         resultsCount: attentionNeededResults.length,
       },
     }

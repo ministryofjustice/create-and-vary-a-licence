@@ -202,8 +202,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [
@@ -429,8 +427,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [
@@ -673,8 +669,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         attentionNeeded: {
           resultsCount: 1,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [
@@ -834,8 +828,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [
@@ -978,8 +970,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [
@@ -1062,8 +1052,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [
@@ -1122,8 +1110,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [],

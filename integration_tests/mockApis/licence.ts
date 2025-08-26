@@ -2478,6 +2478,83 @@ export default {
       },
     })
   },
+  stubGetCaSearchAttentionNeededPrisonResults: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          inPrisonResults: [
+            {
+              kind: 'CRD',
+              licenceId: 1,
+              name: 'Test Person 1',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: null,
+              releaseDateLabel: 'CRD',
+              licenceStatus: 'SUBMITTED',
+              tabType: 'ATTENTION_NEEDED',
+              nomisLegalStatus: 'RECALL',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'MDI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+            {
+              kind: 'CRD',
+              licenceId: 2,
+              name: 'Test Person 2',
+              prisonerNumber: 'A1234AB',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: null,
+              releaseDateLabel: 'CRD',
+              licenceStatus: 'SUBMITTED',
+              tabType: 'ATTENTION_NEEDED',
+              nomisLegalStatus: 'REMAND',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'MDI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+            {
+              kind: 'CRD',
+              licenceId: 3,
+              name: 'Test Person 3',
+              prisonerNumber: 'A1234AC',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: null,
+              releaseDateLabel: 'CRD',
+              licenceStatus: 'SUBMITTED',
+              tabType: 'ATTENTION_NEEDED',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'MDI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+          ],
+          onProbationResults: [],
+        },
+      },
+    })
+  },
   stubGetPrisonApproverSearchResults: (): SuperAgentRequest => {
     return stubFor({
       request: {

@@ -18,7 +18,7 @@ const inPrisonResults = [
     releaseDate: '01/07/2025',
     releaseDateLabel: 'Confirmed release date',
     licenceStatus: LicenceStatus.APPROVED,
-    tabType: 'FUTURE_RELEASES',
+    tabType: CaViewCasesTab.FUTURE_RELEASES,
     nomisLegalStatus: 'SENTENCED',
     lastWorkedOnBy: 'Test Updater',
     isDueForEarlyRelease: false,
@@ -38,13 +38,13 @@ const inPrisonResults = [
     releaseDate: '01/08/2025',
     releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.SUBMITTED,
-    tabType: 'FUTURE_RELEASES',
+    tabType: CaViewCasesTab.FUTURE_RELEASES,
     nomisLegalStatus: 'SENTENCED',
     lastWorkedOnBy: 'Test Updater',
     isDueForEarlyRelease: false,
     isInHardStopPeriod: false,
-    prisonCode: 'WSI',
-    prisonDescription: 'Wormwood Scrubs (HMP)',
+    prisonCode: 'MDI',
+    prisonDescription: 'Moorland (HMP)',
     link: '/test2',
   },
 ]
@@ -62,7 +62,7 @@ const onProbationResults = [
     releaseDate: '01/07/2025',
     releaseDateLabel: 'Confirmed release date',
     licenceStatus: LicenceStatus.ACTIVE,
-    tabType: 'FUTURE_RELEASES',
+    tabType: CaViewCasesTab.FUTURE_RELEASES,
     nomisLegalStatus: 'SENTENCED',
     lastWorkedOnBy: 'Test Updater',
     isDueForEarlyRelease: false,
@@ -82,7 +82,7 @@ const onProbationResults = [
     releaseDate: '01/08/2025',
     releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.ACTIVE,
-    tabType: 'FUTURE_RELEASES',
+    tabType: CaViewCasesTab.FUTURE_RELEASES,
     nomisLegalStatus: 'SENTENCED',
     lastWorkedOnBy: 'Test Updater',
     isDueForEarlyRelease: false,
@@ -90,6 +90,29 @@ const onProbationResults = [
     prisonCode: 'MDI',
     prisonDescription: 'Moorland (HMP)',
     link: '/test1',
+  },
+]
+
+const attentionNeededResults = [
+  {
+    kind: 'CRD',
+    licenceId: 1,
+    name: 'Test Person 1',
+    prisonerNumber: 'A1234AA',
+    probationPractitioner: {
+      name: 'Test Com 1',
+      staffCode: 'A12345',
+    },
+    releaseDate: 'not found',
+    releaseDateLabel: 'CRD',
+    licenceStatus: 'SUBMITTED',
+    tabType: CaViewCasesTab.ATTENTION_NEEDED,
+    nomisLegalStatus: 'RECALL',
+    lastWorkedOnBy: 'Test Updater',
+    isDueForEarlyRelease: false,
+    isInHardStopPeriod: true,
+    prisonCode: 'MDI',
+    prisonDescription: 'Moorland (HMP)',
   },
 ]
 
@@ -113,8 +136,6 @@ describe('View CA Search Results', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [],
@@ -157,8 +178,6 @@ describe('View CA Search Results', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults,
@@ -215,8 +234,6 @@ describe('View CA Search Results', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [],
@@ -252,7 +269,111 @@ describe('View CA Search Results', () => {
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('Active')
   })
 
+  it('should display the results in a table without links to the licence and with links to the assigned COM details page for the attention needed tab', () => {
+    const $ = render({
+      queryTerm: 'Test',
+      backLink: '/licence/view/cases',
+      statusConfig,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prison: {
+          resultsCount: 1,
+          tabHeading: 'People in prison (1 result)',
+          tabId: 'tab-heading-prison',
+        },
+        probation: {
+          resultsCount: 0,
+          tabHeading: 'People on probation (0 results)',
+          tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 1,
+        },
+      },
+      inPrisonResults: [],
+      onProbationResults: [],
+      attentionNeededResults,
+      CaViewCasesTab,
+      showAttentionNeededTab: true,
+      hasSelectedMultiplePrisonCaseloads: false,
+      isSearchPageView: true,
+    })
+    expect($('#ca-search-heading').text()).toBe('Search results for Test')
+    expect($('.govuk-tabs__list a').text()).toContain('Attention needed (1 result)')
+    expect($('div #attention-needed').text()).toContain('Attention needed')
+    expect($('div #attention-needed > .govuk-table > .govuk-table__body > .govuk-table__row').length).toBe(1)
+    expect($('#nomis-legal-status-1').text()).toBe('Recall')
+    expect($('#name-1').text()).toContain('Test Person 1')
+    expect($('#name-1 > .caseload-offender-name > a').attr('href')).toBe(undefined)
+    expect($('#nomis-id-1').text()).toBe('A1234AA')
+    expect($('#com-1').text()).toBe('Test Com 1')
+    expect($('#com-1 > .govuk-link').attr('href').trim()).toBe(
+      '/licence/view/probation-practitioner/staffCode/A12345?activeTab=attention-needed',
+    )
+
+    expect($('thead').text()).not.toContain('Location')
+
+    expect($('#release-date-1').text()).toContain('CRD: not found')
+  })
+
   it('should display the location column with data when the user has selected multiple prison caseloads', () => {
+    const $ = render({
+      queryTerm: 'Test',
+      backLink: '/licence/view/cases',
+      statusConfig,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prison: {
+          resultsCount: 3,
+          tabHeading: 'People in prison (3 results)',
+          tabId: 'tab-heading-prison',
+        },
+        probation: {
+          resultsCount: 0,
+          tabHeading: 'People on probation (0 results)',
+          tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
+      },
+      inPrisonResults: [
+        ...inPrisonResults,
+        {
+          kind: LicenceKind.CRD,
+          licenceId: 3,
+          name: 'Test Person 3',
+          prisonerNumber: 'A1234AC',
+          probationPractitioner: {
+            name: '',
+          },
+          releaseDate: '01/08/2025',
+          releaseDateLabel: 'CRD',
+          licenceStatus: LicenceStatus.SUBMITTED,
+          tabType: CaViewCasesTab.FUTURE_RELEASES,
+          nomisLegalStatus: 'SENTENCED',
+          lastWorkedOnBy: 'Test Updater',
+          isDueForEarlyRelease: false,
+          isInHardStopPeriod: false,
+          prisonCode: 'WSI',
+          prisonDescription: 'Wormwood Scrubs (HMP)',
+          link: '/test3',
+        },
+      ],
+      onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasSelectedMultiplePrisonCaseloads: true,
+      isSearchPageView: true,
+    })
+    expect($('thead').text()).toContain('Location')
+    expect($('#location-1').text()).toBe('Moorland (HMP)')
+    expect($('#location-2').text()).toBe('Moorland (HMP)')
+    expect($('#location-3').text()).toBe('Wormwood Scrubs (HMP)')
+  })
+
+  it('should display the location column with data on the attention needed tab when the user has selected multiple prison caseloads', () => {
     const $ = render({
       queryTerm: 'Test',
       backLink: '/licence/view/cases',
@@ -270,19 +391,43 @@ describe('View CA Search Results', () => {
           tabId: 'tab-heading-probation',
         },
         attentionNeeded: {
-          resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
+          resultsCount: 2,
         },
       },
-      inPrisonResults,
+      inPrisonResults: [],
       onProbationResults: [],
-      attentionNeededResults: [],
+      attentionNeededResults: [
+        ...attentionNeededResults,
+        {
+          kind: 'CRD',
+          licenceId: 2,
+          name: 'Test Person 2',
+          prisonerNumber: 'A1234AB',
+          probationPractitioner: {
+            name: 'Test Com 1',
+            staffCode: 'A12345',
+          },
+          releaseDate: 'not found',
+          releaseDateLabel: 'CRD',
+          licenceStatus: 'SUBMITTED',
+          tabType: CaViewCasesTab.ATTENTION_NEEDED,
+          nomisLegalStatus: 'RECALL',
+          lastWorkedOnBy: 'Test Updater',
+          isDueForEarlyRelease: false,
+          isInHardStopPeriod: true,
+          prisonCode: 'WSI',
+          prisonDescription: 'Wormwood Scrubs (HMP)',
+        },
+      ],
       CaViewCasesTab,
-      showAttentionNeededTab: false,
+      showAttentionNeededTab: true,
       hasSelectedMultiplePrisonCaseloads: true,
       isSearchPageView: true,
     })
+    expect($('#ca-search-heading').text()).toBe('Search results for Test')
+    expect($('.govuk-tabs__list a').text()).toContain('Attention needed (2 results)')
+    expect($('div #attention-needed').text()).toContain('Attention needed')
+    expect($('div #attention-needed > .govuk-table > .govuk-table__body > .govuk-table__row').length).toBe(2)
     expect($('thead').text()).toContain('Location')
     expect($('#location-1').text()).toBe('Moorland (HMP)')
     expect($('#location-2').text()).toBe('Wormwood Scrubs (HMP)')
@@ -307,8 +452,6 @@ describe('View CA Search Results', () => {
         },
         attentionNeeded: {
           resultsCount: 0,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults,
@@ -344,8 +487,6 @@ describe('View CA Search Results', () => {
         },
         attentionNeeded: {
           resultsCount: 1,
-          tabHeading: 'Attention needed',
-          tabId: 'tab-heading-attention-needed',
         },
       },
       inPrisonResults: [
