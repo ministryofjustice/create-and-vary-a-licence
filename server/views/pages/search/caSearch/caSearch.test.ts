@@ -381,8 +381,8 @@ describe('View CA Search Results', () => {
       tabParameters: {
         activeTab: '#people-in-prison',
         prison: {
-          resultsCount: 2,
-          tabHeading: 'People in prison (2 results)',
+          resultsCount: 0,
+          tabHeading: 'People in prison (0 results)',
           tabId: 'tab-heading-prison',
         },
         probation: {
