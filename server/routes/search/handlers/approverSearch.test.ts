@@ -1,14 +1,18 @@
 import { Request, Response } from 'express'
 import ApproverSearchRoutes from './approverSearch'
+import PrisonerService from '../../../services/prisonerService'
 import SearchService from '../../../services/searchService'
+import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { ApprovalCase } from '../../../@types/licenceApiClientTypes'
 
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
+const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../../../services/searchService')
+jest.mock('../../../services/prisonerService')
 
 describe('Route Handlers - Search - Prison Approver Search', () => {
-  const handler = new ApproverSearchRoutes(searchService)
+  const handler = new ApproverSearchRoutes(searchService, prisonerService)
   let req: Request
   let res: Response
 
@@ -24,10 +28,30 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
       locals: {
         user: {
           activeCaseload: 'MDI',
+          prisonCaseload: ['MDI'],
         },
       },
       render: jest.fn(),
     } as unknown as Response
+
+    prisonerService.getPrisons.mockResolvedValue([
+      {
+        agencyId: 'BAI',
+        description: 'Belmarsh (HMP)',
+      },
+      {
+        agencyId: 'BXI',
+        description: 'Brixton (HMP)',
+      },
+      {
+        agencyId: 'MDI',
+        description: 'Moorland (HMP)',
+      },
+      {
+        agencyId: 'LEI',
+        description: 'Leeds (HMP)',
+      },
+    ] as PrisonDetail[])
   })
 
   afterEach(() => {
@@ -154,6 +178,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/approverSearch/approverSearch', {
         queryTerm: '',
         backLink: '/licence/approve/cases',
+        changeLocationHref: '/licence/approve/change-location',
         tabParameters: {
           activeTab: '#approval-needed',
           approvalNeeded: {
@@ -167,7 +192,14 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             tabId: 'tab-heading-recently-approved',
           },
         },
+        hasMultipleCaseloadsInNomis: false,
         hasSelectedMultiplePrisonCaseloads: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'MDI',
+            description: 'Moorland (HMP)',
+          },
+        ],
         approvalNeededCases: [],
         recentlyApprovedCases: [],
       })
@@ -181,6 +213,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
     expect(res.render).toHaveBeenCalledWith('pages/search/approverSearch/approverSearch', {
       queryTerm: 'test',
       backLink: '/licence/approve/cases',
+      changeLocationHref: '/licence/approve/change-location?queryTerm=test',
       tabParameters: {
         activeTab: '#approval-needed',
         approvalNeeded: {
@@ -194,7 +227,14 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
+      hasMultipleCaseloadsInNomis: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [
+        {
+          agencyId: 'MDI',
+          description: 'Moorland (HMP)',
+        },
+      ],
       approvalNeededCases: [
         {
           licenceId: 1,
@@ -305,6 +345,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
   })
 
   it('should render cases and evaluate links when user has selected multiple caseloads', async () => {
+    res.locals.user.prisonCaseload = ['MDI', 'LEI']
     req.session.caseloadsSelected = ['MDI', 'LEI']
     searchResponse = {
       approvalNeededResponse: [
@@ -355,6 +396,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
     expect(res.render).toHaveBeenCalledWith('pages/search/approverSearch/approverSearch', {
       queryTerm: 'test',
       backLink: '/licence/approve/cases',
+      changeLocationHref: '/licence/approve/change-location?queryTerm=test',
       tabParameters: {
         activeTab: '#approval-needed',
         approvalNeeded: {
@@ -368,7 +410,18 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
+      hasMultipleCaseloadsInNomis: true,
       hasSelectedMultiplePrisonCaseloads: true,
+      prisonsToDisplay: [
+        {
+          agencyId: 'MDI',
+          description: 'Moorland (HMP)',
+        },
+        {
+          agencyId: 'LEI',
+          description: 'Leeds (HMP)',
+        },
+      ],
       approvalNeededCases: [
         {
           licenceId: 1,
@@ -521,6 +574,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
     expect(res.render).toHaveBeenCalledWith('pages/search/approverSearch/approverSearch', {
       queryTerm: '',
       backLink: '/licence/approve/cases',
+      changeLocationHref: '/licence/approve/change-location',
       tabParameters: {
         activeTab: '#approval-needed',
         approvalNeeded: {
@@ -534,7 +588,14 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
+      hasMultipleCaseloadsInNomis: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [
+        {
+          agencyId: 'MDI',
+          description: 'Moorland (HMP)',
+        },
+      ],
       approvalNeededCases: [],
       recentlyApprovedCases: [],
     })

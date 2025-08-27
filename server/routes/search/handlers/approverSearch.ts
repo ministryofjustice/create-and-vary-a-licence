@@ -1,16 +1,29 @@
 import { Request, Response } from 'express'
 import { format } from 'date-fns'
+import PrisonerService from '../../../services/prisonerService'
 import SearchService from '../../../services/searchService'
 import { ApproverSearchResponse } from '../../../@types/licenceApiClientTypes'
 import { parseCvlDate, parseCvlDateTime } from '../../../utils/utils'
 
 export default class ApproverSearch {
-  constructor(private readonly searchService: SearchService) {}
+  constructor(
+    private readonly searchService: SearchService,
+    private readonly prisonerService: PrisonerService,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const queryTerm = req.query?.queryTerm as string
     const { user } = res.locals
     const { caseloadsSelected = [] } = req.session
+    const hasMultipleCaseloadsInNomis = user.prisonCaseload.length > 1
+    const hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
+    const { activeCaseload } = user
+    const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload]
+
+    const changeLocationHref =
+      queryTerm.length > 0
+        ? `/licence/approve/change-location?queryTerm=${queryTerm}`
+        : '/licence/approve/change-location'
 
     let results: ApproverSearchResponse
 
@@ -20,13 +33,9 @@ export default class ApproverSearch {
         recentlyApprovedResponse: [],
       }
     } else {
-      const { activeCaseload } = user
-      const prisonsToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload]
-
-      results = await this.searchService.getPrisonApproverSearchResults(queryTerm, prisonsToDisplay)
+      results = await this.searchService.getPrisonApproverSearchResults(queryTerm, prisonCaseloadToDisplay)
     }
 
-    const hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
     const { approvalNeededResponse, recentlyApprovedResponse } = results
 
     const approvalNeededCases = approvalNeededResponse.map(c => {
@@ -61,13 +70,19 @@ export default class ApproverSearch {
       },
     }
 
+    const allPrisons = await this.prisonerService.getPrisons()
+    const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
+
     return res.render('pages/search/approverSearch/approverSearch', {
       queryTerm,
       backLink,
       tabParameters,
+      hasMultipleCaseloadsInNomis,
       hasSelectedMultiplePrisonCaseloads,
+      prisonsToDisplay,
       approvalNeededCases,
       recentlyApprovedCases,
+      changeLocationHref,
     })
   }
 }
