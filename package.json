@@ -100,8 +100,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.875.0",
-    "@ministryofjustice/frontend": "3.7",
-    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "4.6.4",
+    "@ministryofjustice/frontend": "3.7.2",
+    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "4.11.6",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
@@ -118,7 +118,7 @@
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "filesize": "^11.0.2",
-    "govuk-frontend": "5.11.1",
+    "govuk-frontend": "5.11.2",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.0",
     "jquery": "^3.7.1",
@@ -168,7 +168,7 @@
     "better-npm-audit": "^3.11.0",
     "cheerio": "^1.1.2",
     "concurrently": "^9.2.1",
-    "cypress": "^14.5.3",
+    "cypress": "^14.5.4",
     "cypress-axe": "^1.6.0",
     "cypress-multi-reporters": "^2.0.5",
     "dotenv": "^17.2.1",
@@ -191,6 +191,6 @@
     "typescript": "^5.9.2"
   },
   "overrides": {
-    "semver": "^7.5.3"
+    "semver": "^7.7.2"
   }
 }
