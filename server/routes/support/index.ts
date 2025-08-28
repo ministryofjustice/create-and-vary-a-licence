@@ -25,6 +25,7 @@ import LicencePrisonerDetailsRoutes from './handlers/licencePrisonerDetails'
 import AuditDetailsRoutes from './handlers/auditDetails'
 import VaryApproverPduCaseloadHandler from './handlers/VaryApproverPduCaseloadHandler'
 import VaryApproverRegionCaseloadHandler from './handlers/VaryApproverRegionCaseloadHandler'
+import OffenderAllocationRoutes from './handlers/offenderAllocation'
 
 export default function Index({
   probationService,
@@ -55,6 +56,7 @@ export default function Index({
   const offenderLicenceHandler = new OffenderLicencesRoutes(licenceService)
   const offenderAuditHandler = new OffenderAuditRoutes(licenceService)
   const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
+  const offenderAllocationHandler = new OffenderAllocationRoutes(licenceService, probationService)
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
   const offenderLicenceTypeHandler = new OffenderLicenceTypeRoutes(licenceService, licenceOverrideService)
@@ -94,6 +96,8 @@ export default function Index({
     licencePrisonerDetailsHandler.POST,
     LicencePrisonerDetails,
   )
+  get('/offender/:nomsId/allocation', offenderAllocationHandler.GET)
+  post('/offender/:nomsId/allocation', offenderAllocationHandler.POST)
   get('/probation-teams/:teamCode/caseload', probationTeamHandler.GET)
   get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
   get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
