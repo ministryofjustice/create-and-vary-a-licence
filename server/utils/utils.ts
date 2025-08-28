@@ -200,6 +200,11 @@ const formatAddress = (address?: string) => {
     : undefined
 }
 
+const removeOrdinalSuffixes = (text: string) => {
+  if (!text) return ''
+  return text.replace(/(\d+)(st|nd|rd|th)(?=\s+\w+)/g, '$1')
+}
+
 const formatAddressTitleCase = (address: AddressSearchResponse, isMultiple: boolean = false): string => {
   if (!address) return ''
 
@@ -309,4 +314,5 @@ export {
   isHdcLicence,
   formatAddressTitleCase,
   formatAddressLine,
+  removeOrdinalSuffixes,
 }
