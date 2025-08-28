@@ -308,11 +308,11 @@ describe('toIsoDate', () => {
 })
 
 describe('cvlDateToDateShort', () => {
-  it('ignores null', () => {
-    expect(cvlDateToDateShort(null)).toEqual(null)
+  it('format null as not found', () => {
+    expect(cvlDateToDateShort(null)).toEqual('not found')
   })
   it('format date', () => {
-    expect(cvlDateToDateShort('23/01/2023')).toEqual('23 Jan 2023')
+    expect(cvlDateToDateShort('01/01/2023')).toEqual('1 Jan 2023')
   })
 })
 

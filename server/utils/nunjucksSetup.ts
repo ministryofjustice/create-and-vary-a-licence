@@ -413,10 +413,6 @@ export function registerNunjucks(app?: express.Express): Environment {
     return isHardStopLicence ? LicenceStatus.TIMED_OUT : <LicenceStatus>licence.licenceStatus
   })
 
-  njkEnv.addFilter('cvlDateToDateShort', (releaseDate: string): string => {
-    return releaseDate ? format(parseCvlDate(releaseDate), 'dd MMM yyyy') : 'not found'
-  })
-
   njkEnv.addFilter('legalStatus', (status: string) => {
     const legalStatus: Record<string, string> = LegalStatus
     return legalStatus[status]

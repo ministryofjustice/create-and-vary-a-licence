@@ -4,6 +4,7 @@ import statusConfig from '../../../licences/licenceStatus'
 import { CaCase, PrisonCaseAdminSearchResult } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { CaViewCasesTab } from '../../../enumeration'
 import config from '../../../config'
 
 export default class CaSearch {
@@ -41,6 +42,7 @@ export default class CaSearch {
 
     const hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
     const { inPrisonResults, onProbationResults } = results
+    const attentionNeededResults = inPrisonResults.filter(res => res.tabType === 'ATTENTION_NEEDED')
 
     const backLink = '/licence/view/cases'
 
@@ -57,6 +59,9 @@ export default class CaSearch {
         tabId: 'tab-heading-probation',
         tabHeading: 'People on probation',
         resultsCount: onProbationResults.length,
+      },
+      attentionNeeded: {
+        resultsCount: attentionNeededResults.length,
       },
     }
 
@@ -84,8 +89,18 @@ export default class CaSearch {
           licenceStatus,
         }
       }),
+      attentionNeededResults: attentionNeededResults.map(res => {
+        return {
+          ...res,
+          nomisLegalStatus: res.nomisLegalStatus,
+          tabType: CaViewCasesTab[res.tabType],
+        }
+      }),
+      CaViewCasesTab,
+      showAttentionNeededTab: attentionNeededResults.length > 0,
       hasSelectedMultiplePrisonCaseloads,
       recallsEnabled,
+      isSearchPageView: true,
     })
   }
 
@@ -95,7 +110,12 @@ export default class CaSearch {
 
   private getLink = (licence: CaCase): string => {
     if (
-      !this.isClickable(<LicenceKind>licence.kind, <LicenceStatus>licence.licenceStatus, licence.isInHardStopPeriod)
+      !this.isClickable(
+        <LicenceKind>licence.kind,
+        <LicenceStatus>licence.licenceStatus,
+        licence.isInHardStopPeriod,
+        licence.tabType,
+      )
     ) {
       return null
     }
@@ -117,7 +137,15 @@ export default class CaSearch {
     return null
   }
 
-  private isClickable = (kind: LicenceKind, licenceStatus: LicenceStatus, isInHardStopPeriod: boolean): boolean => {
+  private isClickable = (
+    kind: LicenceKind,
+    licenceStatus: LicenceStatus,
+    isInHardStopPeriod: boolean,
+    tabType: string,
+  ): boolean => {
+    if (tabType === 'ATTENTION_NEEDED') {
+      return false
+    }
     if (isInHardStopPeriod && this.isEditableInHardStop(kind, licenceStatus)) {
       return true
     }
