@@ -203,14 +203,14 @@ describe('View CA Search Results', () => {
 
     expect($('thead').text()).not.toContain('Location')
 
-    expect($('#release-date-1').text()).toBe('Confirmed release date: 01 Jul 2025')
+    expect($('#release-date-1').text()).toBe('Confirmed release date: 1 Jul 2025')
     expect($('#licence-last-worked-on-by-1').text()).toBe('Test Updater')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Approved')
 
     expect($('#name-2 > .search-offender-name > a').text()).toBe('Test Person 2')
     expect($('#nomis-id-2').text()).toBe('A1234AB')
     expect($('#probation-practitioner-2').text()).toBe('Unallocated')
-    expect($('#release-date-2').text()).toBe('CRD: 01 Aug 2025')
+    expect($('#release-date-2').text()).toBe('CRD: 1 Aug 2025')
     expect($('#licence-last-worked-on-by-2').text()).toBe('Test Updater')
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('Submitted')
   })
@@ -257,14 +257,14 @@ describe('View CA Search Results', () => {
     )
     expect($('thead').text()).not.toContain('Location')
 
-    expect($('#release-date-1').text()).toBe('Confirmed release date: 01 Jul 2025')
+    expect($('#release-date-1').text()).toBe('Confirmed release date: 1 Jul 2025')
     expect($('#licence-last-worked-on-by-1').text()).toBe('Test Updater')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Active')
 
     expect($('#name-2 > .search-offender-name > a').text()).toBe('Test Person 2')
     expect($('#nomis-id-2').text()).toBe('A1234AB')
     expect($('#probation-practitioner-2').text()).toBe('Unallocated')
-    expect($('#release-date-2').text()).toBe('CRD: 01 Aug 2025')
+    expect($('#release-date-2').text()).toBe('CRD: 1 Aug 2025')
     expect($('#licence-last-worked-on-by-2').text()).toBe('Test Updater')
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('Active')
   })
@@ -522,6 +522,6 @@ describe('View CA Search Results', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#name-button-1').text()).toBe('Test Person 1')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
-    expect($('#release-date-1').text()).toBe('HDCAD: 03 Aug 2022HDC release')
+    expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
   })
 })
