@@ -1,8 +1,6 @@
 import { Request, Response } from 'express'
-import { format } from 'date-fns/format'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
-import { parseCvlDate } from '../../../utils/utils'
 import { CaCase, PrisonCaseAdminSearchResult } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
@@ -94,7 +92,6 @@ export default class CaSearch {
       attentionNeededResults: attentionNeededResults.map(res => {
         return {
           ...res,
-          releaseDate: res.releaseDate ? format(parseCvlDate(res.releaseDate), 'dd MMM yyyy') : 'not found',
           nomisLegalStatus: res.nomisLegalStatus,
           tabType: CaViewCasesTab[res.tabType],
         }

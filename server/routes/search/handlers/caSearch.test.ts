@@ -703,7 +703,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           probationPractitioner: {
             name: 'Test Com 1',
           },
-          releaseDate: '01 May 2025',
+          releaseDate: '01/05/2025',
           releaseDateLabel: 'Confirmed release date',
           licenceStatus: LicenceStatus.NOT_STARTED,
           tabType: 'attentionNeeded',
