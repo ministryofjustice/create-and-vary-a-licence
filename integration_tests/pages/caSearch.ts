@@ -10,6 +10,8 @@ export default class CaSearchPage extends Page {
 
   private probationTabTitle = '#tab-heading-probation'
 
+  private attentionNeededTabTitle = '#tab-heading-attention-needed'
+
   private probationPractionerLinkId = '[data-qa=comLink]'
 
   private licenceLinkId = '#name-button-1'
@@ -30,8 +32,16 @@ export default class CaSearchPage extends Page {
     return cy.get(this.probationTabTitle)
   }
 
+  getAttentionNeededTabTitle = () => {
+    return cy.get(this.attentionNeededTabTitle)
+  }
+
   getRow = n => {
     return cy.get('tbody  tr').eq(n)
+  }
+
+  getSearchTableHeadings = () => {
+    return cy.get('.govuk-table__header')
   }
 
   clickOffenderName = (): ViewALicencePage => {
@@ -57,6 +67,11 @@ export default class CaSearchPage extends Page {
 
   clickOnProbationTab = (): CaSearchPage => {
     cy.get('#tab_people-on-probation').click()
+    return Page.verifyOnPage(CaSearchPage)
+  }
+
+  clickAttentionNeededTab = (): CaSearchPage => {
+    cy.get('#tab_attention-needed').click()
     return Page.verifyOnPage(CaSearchPage)
   }
 
