@@ -365,8 +365,8 @@ describe('Nunjucks Filters', () => {
       expect(registerNunjucks().getFilter('cvlDateToDateShort')('')).toEqual('not found')
     })
 
-    it('should return dd MMM yyyy date format', () => {
-      expect(registerNunjucks().getFilter('cvlDateToDateShort')('20/04/2024')).toEqual('20 Apr 2024')
+    it('should return d MMM yyyy date format', () => {
+      expect(registerNunjucks().getFilter('cvlDateToDateShort')('01/04/2024')).toEqual('1 Apr 2024')
     })
   })
 
