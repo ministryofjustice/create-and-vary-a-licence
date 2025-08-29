@@ -1,6 +1,7 @@
 import Page from './page'
 import ViewCasesPage from './viewCasesPage'
 import ApprovalCasesPage from './approvalCases'
+import CaSearchPage from './caSearch'
 
 export default class ChangeLocationPage extends Page {
   constructor() {
@@ -14,6 +15,11 @@ export default class ChangeLocationPage extends Page {
   clickCancelLink = (): ViewCasesPage => {
     cy.get('[data-qa=cancel-link]').click()
     return Page.verifyOnPage(ViewCasesPage)
+  }
+
+  clickCancelForCaSearch = (queryTerm): CaSearchPage => {
+    cy.get(`[href="/search/ca-search?queryTerm=${queryTerm}`).click()
+    return Page.verifyOnPage(CaSearchPage)
   }
 
   clickCancelForApprover = (): ApprovalCasesPage => {

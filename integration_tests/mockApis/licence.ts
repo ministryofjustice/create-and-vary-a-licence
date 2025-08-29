@@ -2361,6 +2361,83 @@ export default {
       },
     })
   },
+  stubGetCaSearchInPrisonResult: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          inPrisonResults: [
+            {
+              kind: 'CRD',
+              licenceId: 1,
+              name: 'Test Person 1',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: '01/07/2025',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'APPROVED',
+              tabType: 'FUTURE_RELEASES',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'LEI',
+              prisonDescription: 'Leeds (HMP)',
+            },
+          ],
+          onProbationResults: [],
+        },
+      },
+    })
+  },
+  stubGetCaSearchOnProbationResult: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          inPrisonResults: [],
+          onProbationResults: [
+            {
+              kind: 'CRD',
+              licenceId: 4,
+              licenceVersionOf: 1.3,
+              name: 'Test Person 4',
+              prisonerNumber: 'A1234DD',
+              probationPractitioner: {
+                name: 'Test Com 2',
+                staffCode: 'B12345',
+                staffIdentifier: 120001212,
+                staffUsername: 'tcom2',
+              },
+              releaseDate: '01/05/2025',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'ACTIVE',
+              tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'LEI',
+              prisonDescription: 'Leeds (HMP)',
+            },
+          ],
+        },
+      },
+    })
+  },
   stubGetCaSearchResults: (): SuperAgentRequest => {
     return stubFor({
       request: {

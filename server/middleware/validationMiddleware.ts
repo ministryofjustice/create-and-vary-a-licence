@@ -14,11 +14,13 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       const { licence } = res.locals
 
       let classType
-      if (licence) {
+      if (licence && req.body?.code) {
         classType =
           (await conditionService.getAdditionalConditionByCode(req.body?.code, licence.version))?.validatorType || type
-      } else {
+      } else if (req.body?.code) {
         classType = (await conditionService.getAdditionalConditionByCode(req.body?.code))?.validatorType || type
+      } else {
+        classType = type
       }
       // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
       if (req.file && req.file.fieldname === 'outOfBoundFilename') {
