@@ -1,33 +1,60 @@
 import Page from '../pages/page'
 import IndexPage from '../pages'
+import ChangeLocationPage from '../pages/changeLocationPage'
 
 context('Search for a person', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
     cy.task('stubGetPrisonUserDetails')
-    cy.task('stubGetPrisonUserCaseloads', {
-      details: [
-        {
-          caseLoadId: 'LEI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: true,
-          description: 'Leeds (HMP)',
-          type: 'INST',
-        },
-      ],
-    })
     cy.task('stubGetPrisonOmuCaseload')
     cy.task('stubGetProbationOmuCaseload')
     cy.task('stubGetPrisons')
     cy.task('stubFeComponents')
-    cy.task('stubGetCaSearchResults')
     cy.task('stubGetCompletedLicence', { statusCode: 'APPROVED', typeCode: 'AP_PSS' })
     cy.task('stubRecordAuditEvent')
-    cy.signIn()
   })
+  const singleCaseload = {
+    details: [
+      {
+        caseLoadId: 'LEI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: true,
+        description: 'Leeds (HMP)',
+        type: 'INST',
+      },
+    ],
+  }
+  const multipleCaseloads = {
+    details: [
+      {
+        caseLoadId: 'LEI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: true,
+        description: 'Leeds (HMP)',
+        type: 'INST',
+      },
+      {
+        caseLoadId: 'MDI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: false,
+        description: 'Moorland (HMP)',
+        type: 'INST',
+      },
+      {
+        caseLoadId: 'BAI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: false,
+        description: 'Belmarsh (HMP)',
+        type: 'INST',
+      },
+    ],
+  }
 
   it('should click through the ca search journey', () => {
+    cy.task('stubGetCaSearchResults')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickViewAndPrintALicence()
     let searchPage = caseloadPage.clickSearch('test')
@@ -46,6 +73,9 @@ context('Search for a person', () => {
   })
 
   it('should order by release date', () => {
+    cy.task('stubGetCaSearchResults')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickViewAndPrintALicence()
     const searchPage = caseloadPage.clickSearch('test')
@@ -69,6 +99,9 @@ context('Search for a person', () => {
   })
 
   it('should show attention needed tab when attention needed type cases present', () => {
+    cy.task('stubGetCaSearchResults')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
     cy.task('stubGetCaSearchAttentionNeededPrisonResults')
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickViewAndPrintALicence()
@@ -80,5 +113,99 @@ context('Search for a person', () => {
     searchPage.getRow(3).contains('Sentenced')
     searchPage.getRow(4).contains('Remand')
     searchPage.getRow(5).contains('Recall')
+  })
+
+  it("should not show caseload information because doesn't have multiple caseloads", () => {
+    cy.task('stubGetCaSearchInPrisonResult')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const searchPage = viewCasesList.clickSearch('test')
+    searchPage.getChangeCaseloadOption().should('not.exist')
+  })
+
+  it('should allow user to change caseload', () => {
+    cy.task('stubGetCaSearchInPrisonResult')
+    cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const searchPage = viewCasesList.clickSearch('test')
+    searchPage.getChangeCaseloadOption().should('exist')
+    searchPage.getCaseloadNames().contains('Leeds (HMP)')
+    searchPage.clickChangeLocationsLink()
+    const changeLocationPage = Page.verifyOnPage(ChangeLocationPage)
+    changeLocationPage.clickCheckBox('Leeds')
+    changeLocationPage.clickCheckBox('Moorland')
+    changeLocationPage.clickContinue()
+    searchPage.getCaseloadNames().contains('Leeds (HMP), Moorland (HMP)')
+  })
+
+  it('change caseload cancel link should return user to their original in prison view', () => {
+    cy.task('stubGetCaSearchInPrisonResult')
+    cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const searchPage = viewCasesList.clickSearch('test')
+    searchPage.clickChangeLocationsLink()
+    const changeLocationPage = Page.verifyOnPage(ChangeLocationPage)
+    changeLocationPage.clickCancelForCaSearch('test')
+    cy.url().should('eq', 'http://localhost:3007/search/ca-search?queryTerm=test#people-in-prison')
+  })
+
+  it('change caseload cancel link should return user to their original on probation view', () => {
+    cy.task('stubGetCaSearchOnProbationResult')
+    cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const searchPage = viewCasesList.clickSearch('test')
+    searchPage.clickChangeLocationsLink()
+    const changeLocationPage = Page.verifyOnPage(ChangeLocationPage)
+    changeLocationPage.clickCancelForCaSearch('test')
+    cy.url().should('eq', 'http://localhost:3007/search/ca-search?queryTerm=test#people-on-probation')
+  })
+
+  it('change caseload continue button should return user to their original in prison view', () => {
+    cy.task('stubGetCaSearchInPrisonResult')
+    cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const searchPage = viewCasesList.clickSearch('test')
+    searchPage.clickChangeLocationsLink()
+    const changeLocationPage = Page.verifyOnPage(ChangeLocationPage)
+    changeLocationPage.clickCheckBox('Leeds')
+    changeLocationPage.clickContinue()
+    cy.url().should('eq', 'http://localhost:3007/search/ca-search?queryTerm=test#people-in-prison')
+  })
+
+  it('change caseload continue button should return user to their original on probation view', () => {
+    cy.task('stubGetCaSearchOnProbationResult')
+    cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const searchPage = viewCasesList.clickSearch('test')
+    searchPage.clickChangeLocationsLink()
+    const changeLocationPage = Page.verifyOnPage(ChangeLocationPage)
+    changeLocationPage.clickCheckBox('Leeds')
+    changeLocationPage.clickContinue()
+    cy.url().should('eq', 'http://localhost:3007/search/ca-search?queryTerm=test#people-on-probation')
+  })
+
+  it('Should display errors if Continue without selecting any checkbox', () => {
+    cy.task('stubGetCaSearchInPrisonResult')
+    cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const searchPage = viewCasesList.clickSearch('test')
+    searchPage.clickChangeLocationsLink()
+    const changeLocationPage = Page.verifyOnPage(ChangeLocationPage)
+    changeLocationPage.clickContinue()
+    changeLocationPage.getErrorSummary().should('exist')
   })
 })

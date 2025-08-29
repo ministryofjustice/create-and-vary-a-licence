@@ -199,7 +199,7 @@ describe('validationMiddleware', () => {
 
       req = {
         params: { nomisId: 'AB1234E' },
-        body: {},
+        body: { code: 'condition1' },
       } as unknown as Request
 
       await validationMiddleware(conditionService, DummyAddress)(req, res, next)
@@ -208,6 +208,18 @@ describe('validationMiddleware', () => {
           cause: 'Error',
         }),
       )
+    })
+
+    it('should not call to retrieve condition data if none present in request', async () => {
+      const next = jest.fn()
+
+      req = {
+        params: { nomisId: 'AB1234E' },
+      } as unknown as Request
+
+      await validationMiddleware(conditionService, DummyAddress)(req, res, next)
+      expect(next).toHaveBeenCalledWith()
+      expect(conditionService.getAdditionalConditionByCode).not.toHaveBeenCalled()
     })
 
     it('should handle redirection if no referer set to header', async () => {

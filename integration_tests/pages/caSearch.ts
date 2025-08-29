@@ -2,6 +2,7 @@ import ComDetailsPage from './comDetails'
 import Page from './page'
 import ViewALicencePage from './viewALicence'
 import ViewCasesPage from './viewCasesPage'
+import ChangeLocationPage from './changeLocationPage'
 
 export default class CaSearchPage extends Page {
   private searchHeading = '#ca-search-heading'
@@ -15,6 +16,8 @@ export default class CaSearchPage extends Page {
   private probationPractionerLinkId = '[data-qa=comLink]'
 
   private licenceLinkId = '#name-button-1'
+
+  private changeLocationsLink = '[data-qa=change-location-link]'
 
   constructor() {
     super('ca-search-page')
@@ -37,7 +40,7 @@ export default class CaSearchPage extends Page {
   }
 
   getRow = n => {
-    return cy.get('tbody  tr').eq(n)
+    return cy.get('tbody tr').eq(n)
   }
 
   getSearchTableHeadings = () => {
@@ -78,5 +81,18 @@ export default class CaSearchPage extends Page {
   clickSortByReleaseDate = (): CaSearchPage => {
     cy.get('#release-date-sort').click()
     return Page.verifyOnPage(CaSearchPage)
+  }
+
+  getChangeCaseloadOption = () => {
+    return cy.get('[data-qa=change-caseload]')
+  }
+
+  getCaseloadNames = () => {
+    return cy.get('[data-qa=caseload-names]')
+  }
+
+  clickChangeLocationsLink = (): ChangeLocationPage => {
+    cy.get(this.changeLocationsLink).click()
+    return Page.verifyOnPage(ChangeLocationPage)
   }
 }

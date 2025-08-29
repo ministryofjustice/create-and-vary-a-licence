@@ -316,6 +316,7 @@ describe('createLicenceRoutes', () => {
         } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
+          .send({ code: 'condition1' })
           .set('Referer', '/validation-error-page')
           .expect(302)
           .expect('Location', '/validation-error-page')
