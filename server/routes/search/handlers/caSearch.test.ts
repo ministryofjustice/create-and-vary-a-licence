@@ -7,6 +7,7 @@ import { CaCase } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
 import config from '../../../config'
 import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../enumeration'
+import { User } from '../../../@types/CvlUserDetails'
 
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -23,7 +24,6 @@ describe('Route Handlers - Search - Ca Search', () => {
       query: {
         queryTerm: '',
       },
-      session: { caseloadsSelected: [] },
     } as unknown as Request
 
     res = {
@@ -32,9 +32,9 @@ describe('Route Handlers - Search - Ca Search', () => {
       render: jest.fn(),
       locals: {
         user: {
-          username: 'test1',
-          activeCaseload: 'MDI',
-          prisonCaseload: ['MDI'],
+          hasMultipleCaseloadsInNomis: false,
+          prisonCaseloadToDisplay: ['MDI'],
+          hasSelectedMultiplePrisonCaseloads: false,
         },
       },
     } as unknown as Response
@@ -390,8 +390,11 @@ describe('Route Handlers - Search - Ca Search', () => {
   })
 
   it('should render cases and evaluate links when user has selected multiple caseloads', async () => {
-    res.locals.user.prisonCaseload = ['MDI', 'LEI']
-    req.session.caseloadsSelected = ['MDI', 'LEI']
+    res.locals.user = {
+      hasMultipleCaseloadsInNomis: true,
+      prisonCaseloadToDisplay: ['MDI', 'LEI'],
+      hasSelectedMultiplePrisonCaseloads: true,
+    } as User
     searchResponse = {
       inPrisonResults: [
         ...searchResponse.inPrisonResults,

@@ -31,6 +31,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
         const { user } = res.locals
         if (!req.session?.currentUser) {
           const cvlUser = new CvlUserDetails()
+          const { caseloadsSelected = [] } = req.session
 
           if (user.authSource === 'nomis') {
             // Assemble user information from Nomis via prison API
@@ -45,6 +46,9 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             cvlUser.activeCaseload = prisonUser.activeCaseLoadId
             cvlUser.nomisStaffId = prisonUser.staffId
             cvlUser.prisonCaseload = removeDuplicates(prisonUserCaseload.map(cs => cs.caseLoadId))
+            cvlUser.hasMultipleCaseloadsInNomis = cvlUser.prisonCaseload.length > 1
+            cvlUser.hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
+            cvlUser.prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [cvlUser.activeCaseload]
 
             logger.info(
               `Prison user session : username ${prisonUser?.username} name ${cvlUser?.displayName} caseload ${cvlUser?.prisonCaseload}`,
