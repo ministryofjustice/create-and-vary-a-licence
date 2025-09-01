@@ -156,6 +156,14 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases?view=probation')
     })
 
+    it('Should update current prison case admin user caseload data', async () => {
+      req.body.caseload = ['MDI', 'BMI']
+
+      await handler.POST(AuthRole.DECISION_MAKER)(req, res, next)
+      expect(req.session.currentUser.hasSelectedMultiplePrisonCaseloads).toStrictEqual(true)
+      expect(req.session.currentUser.prisonCaseloadToDisplay).toStrictEqual(['MDI', 'BMI'])
+    })
+
     it('Should redirect to prison approver caselist page for approval needed view', async () => {
       await handler.POST(AuthRole.DECISION_MAKER)(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/cases')
@@ -165,6 +173,14 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       req.query.approval = 'recently'
       await handler.POST(AuthRole.DECISION_MAKER)(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/cases?approval=recently')
+    })
+
+    it('Should update current prison approver user caseload data', async () => {
+      req.body.caseload = ['MDI', 'BMI']
+
+      await handler.POST(AuthRole.DECISION_MAKER)(req, res, next)
+      expect(req.session.currentUser.hasSelectedMultiplePrisonCaseloads).toStrictEqual(true)
+      expect(req.session.currentUser.prisonCaseloadToDisplay).toStrictEqual(['MDI', 'BMI'])
     })
   })
 })

@@ -36,6 +36,15 @@ export default class ChangeLocationRoutes {
   public POST(role: AuthRole.CASE_ADMIN | AuthRole.DECISION_MAKER): RequestHandler {
     return async (req, res) => {
       req.session.caseloadsSelected = req.body?.caseload
+
+      req.session.currentUser = {
+        ...req.session.currentUser,
+        hasSelectedMultiplePrisonCaseloads: req.session.caseloadsSelected.length > 1,
+        prisonCaseloadToDisplay: req.session.caseloadsSelected.length
+          ? req.session.caseloadsSelected
+          : [res.locals.user.activeCaseload],
+      }
+
       const nextPage = this.getReturnLink(role, req)
 
       res.redirect(nextPage)
