@@ -2,7 +2,7 @@
 {% from "partials/viewCases.njk" import viewCases %}
 
 {%  macro attentionNeededTabDescription(params) %}
-    <h2 class="govuk-heading-l" id="tab-heading-attention-needed">Attention needed</h2>
+    <h2 class="govuk-heading-l" id="tab-heading-attention-needed">{{ params.tabHeading }}</h2>
     {% if params.count !== 0 %}
         <p class="govuk-body">Check the legal status of people below to see if you need to request support. 
             <br><strong>You cannot release someone on the list with a licence created in this service</strong>.</p>
@@ -28,7 +28,8 @@
 
 {% macro attentionNeededTab(params) %}
     <div id="attention-needed" role="tabpanel" aria-labelledby="tab_attention-needed">
-        {{ attentionNeededTabDescription({count: params.count}) }}
+        {% set tabHeading = params.tabHeadingText if params.isSearchPageView else "Attention needed" %}
+        {{ attentionNeededTabDescription({count: params.count, tabHeading: tabHeading }) }}
         {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config, activeTab: params.activeTab, hasSelectedMultiplePrisonCaseloads: params.hasSelectedMultiplePrisonCaseloads, isSearchPageView: params.isSearchPageView}) }}
     </div>
 {% endmacro %}

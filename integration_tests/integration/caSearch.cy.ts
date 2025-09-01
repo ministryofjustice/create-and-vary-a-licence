@@ -75,7 +75,7 @@ context('Search for a person', () => {
     const searchPage = caseloadPage.clickSearch('test')
     searchPage.getSearchHeading().contains('Search results for test')
     searchPage.clickAttentionNeededTab()
-    searchPage.getAttentionNeededTabTitle().contains('Attention needed')
+    searchPage.getAttentionNeededTabTitle().contains('Attention needed (3 results)')
     // check attention needed cases are ordered by descending nomis legal status by default
     searchPage.getRow(3).contains('Sentenced')
     searchPage.getRow(4).contains('Remand')
