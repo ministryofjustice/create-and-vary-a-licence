@@ -139,7 +139,7 @@ describe('Timeline Service', () => {
         createdByFullName: 'OTHER USER',
         dateLastUpdated: '12/11/2022 10:00:00',
         prisonDescription: 'Moorland (hmp)',
-        dateCreated: '10/11/2022 11:00:00',
+        dateCreated: '11/11/2022 11:00:00',
       } as Licence
 
       licenceApiClient.matchLicenceEvents.mockResolvedValue([
@@ -157,22 +157,22 @@ describe('Timeline Service', () => {
 
       const expected = [
         {
-          createdBy: 'Other User, Moorland (HMP)',
-          eventType: 'CREATION',
-          lastUpdate: '10/11/2022 11:00:00',
-          licenceId: 2,
-          statusCode: 'ACTIVE',
-          title: 'Licence created',
-          createdAt: '10/11/2022 11:00:00',
-        },
-        {
           createdBy: 'Test User',
           eventType: 'REVIEWED_WITHOUT_VARIATION',
           lastUpdate: '12/11/2022 12:30:00',
           licenceId: 2,
           statusCode: 'ACTIVE',
           title: 'Licence reviewed without being varied',
-          createdAt: '10/11/2022 11:00:00',
+          createdAt: '12/11/2022 12:30:00',
+        },
+        {
+          createdBy: 'Other User, Moorland (HMP)',
+          eventType: 'CREATION',
+          lastUpdate: '11/11/2022 11:00:00',
+          licenceId: 2,
+          statusCode: 'ACTIVE',
+          title: 'Licence created',
+          createdAt: '11/11/2022 11:00:00',
         },
       ]
 
@@ -228,7 +228,7 @@ describe('Timeline Service', () => {
           licenceId: 2,
           statusCode: 'ACTIVE',
           title: 'Licence reviewed without being varied',
-          createdAt: '10/11/2022 11:00:00',
+          createdAt: undefined,
         },
       ]
 

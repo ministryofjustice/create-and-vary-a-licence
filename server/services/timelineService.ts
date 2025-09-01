@@ -29,7 +29,7 @@ export default class TimelineService {
           convertToTitleCase(`${e.forenames} ${e.surname}`),
           licence.id,
           e.eventTime,
-          licence.dateCreated,
+          e.eventTime,
         ),
     )
   }
