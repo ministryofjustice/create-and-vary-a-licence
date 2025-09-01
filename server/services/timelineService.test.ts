@@ -228,7 +228,7 @@ describe('Timeline Service', () => {
           licenceId: 2,
           statusCode: 'ACTIVE',
           title: 'Licence reviewed without being varied',
-          createdAt: undefined,
+          createdAt: undefined as string,
         },
       ]
 
