@@ -1,9 +1,25 @@
-import { RequestHandler } from 'express'
+import { RequestHandler, Request } from 'express'
 import UserService from '../../../services/userService'
 import AuthRole from '../../../enumeration/authRole'
 
 export default class ChangeLocationRoutes {
   constructor(private readonly userService: UserService) {}
+
+  private getReturnLink = (role: AuthRole.CASE_ADMIN | AuthRole.DECISION_MAKER, req: Request): string => {
+    let returnLink
+    if (role === AuthRole.CASE_ADMIN) {
+      if (req.query?.queryTerm) {
+        returnLink = `/search/ca-search?queryTerm=${req.query?.queryTerm}`
+      } else if (req.query?.view) {
+        returnLink = '/licence/view/cases?view=probation'
+      } else {
+        returnLink = '/licence/view/cases'
+      }
+    } else {
+      returnLink = `/licence/approve/cases${req.query?.approval ? `?approval=${req.query?.approval}` : ''}`
+    }
+    return returnLink
+  }
 
   public GET(role: AuthRole.CASE_ADMIN | AuthRole.DECISION_MAKER): RequestHandler {
     return async (req, res) => {
@@ -11,20 +27,8 @@ export default class ChangeLocationRoutes {
       const prisonCaseloadFromNomis = await this.userService.getPrisonUserCaseloads(user)
       const caseload = prisonCaseloadFromNomis.map(c => ({ value: c.caseLoadId, text: c.description }))
       const checked = req.session.caseloadsSelected
-      const queryTerm = req.query?.queryTerm as string
-      let cancelLink
+      const cancelLink = this.getReturnLink(role, req)
 
-      if (role === AuthRole.CASE_ADMIN) {
-        if (queryTerm) {
-          cancelLink = `/search/ca-search?queryTerm=${queryTerm}`
-        } else if (req.query?.view) {
-          cancelLink = '/licence/view/cases?view=probation'
-        } else {
-          cancelLink = '/licence/view/cases'
-        }
-      } else {
-        cancelLink = `/licence/approve/cases${req.query?.approval ? `?approval=${req.query?.approval}` : ''}`
-      }
       res.render('pages/changeLocation', { caseload, checked, cancelLink })
     }
   }
@@ -32,20 +36,7 @@ export default class ChangeLocationRoutes {
   public POST(role: AuthRole.CASE_ADMIN | AuthRole.DECISION_MAKER): RequestHandler {
     return async (req, res) => {
       req.session.caseloadsSelected = req.body?.caseload
-      const queryTerm = req.query?.queryTerm as string
-      let nextPage
-
-      if (role === AuthRole.CASE_ADMIN) {
-        if (queryTerm) {
-          nextPage = `/search/ca-search?queryTerm=${queryTerm}`
-        } else if (req.query?.view) {
-          nextPage = '/licence/view/cases?view=probation'
-        } else {
-          nextPage = '/licence/view/cases'
-        }
-      } else {
-        nextPage = `/licence/approve/cases${req.query?.approval ? `?approval=${req.query?.approval}` : ''}`
-      }
+      const nextPage = this.getReturnLink(role, req)
 
       res.redirect(nextPage)
     }
