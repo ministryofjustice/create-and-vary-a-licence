@@ -15,9 +15,10 @@ export default class TimelineEvent {
     private readonly createdBy: string,
     private readonly licenceId: number,
     private readonly lastUpdate: string,
+    private readonly createdAt: string,
   ) {}
 
   getSortTime() {
-    return parseCvlDateTime(this.lastUpdate, { withSeconds: true })?.getTime()
+    return parseCvlDateTime(this.createdAt, { withSeconds: true })?.getTime()
   }
 }
