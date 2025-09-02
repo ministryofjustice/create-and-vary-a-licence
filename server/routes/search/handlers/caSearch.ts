@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import PrisonerService from '../../../services/prisonerService'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 import { CaCase, PrisonCaseAdminSearchResult } from '../../../@types/licenceApiClientTypes'
@@ -8,7 +9,10 @@ import { CaViewCasesTab } from '../../../enumeration'
 import config from '../../../config'
 
 export default class CaSearch {
-  constructor(private readonly searchService: SearchService) {}
+  constructor(
+    private readonly searchService: SearchService,
+    private readonly prisonerService: PrisonerService,
+  ) {}
 
   nonViewableStatuses = [
     LicenceStatus.NOT_IN_PILOT,
@@ -23,8 +27,10 @@ export default class CaSearch {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const queryTerm = req.query?.queryTerm as string
-    const { user } = res.locals
-    const { caseloadsSelected = [] } = req.session
+    const { hasMultipleCaseloadsInNomis, prisonCaseloadToDisplay, hasSelectedMultiplePrisonCaseloads } = res.locals.user
+
+    const changeLocationHref =
+      queryTerm.length > 0 ? `/licence/view/change-location?queryTerm=${queryTerm}` : '/licence/view/change-location'
 
     let results: PrisonCaseAdminSearchResult
 
@@ -34,13 +40,9 @@ export default class CaSearch {
         onProbationResults: [],
       }
     } else {
-      const { activeCaseload } = user
-      const prisonsToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload]
-
-      results = await this.searchService.getCaSearchResults(queryTerm, prisonsToDisplay)
+      results = await this.searchService.getCaSearchResults(queryTerm, prisonCaseloadToDisplay)
     }
 
-    const hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
     const { inPrisonResults, onProbationResults } = results
     const attentionNeededResults = inPrisonResults.filter(res => res.tabType === 'ATTENTION_NEEDED')
 
@@ -64,6 +66,9 @@ export default class CaSearch {
         resultsCount: attentionNeededResults.length,
       },
     }
+
+    const allPrisons = await this.prisonerService.getPrisons()
+    const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
 
     const { recallsEnabled } = config
     return res.render('pages/search/caSearch/caSearch', {
@@ -98,7 +103,10 @@ export default class CaSearch {
       }),
       CaViewCasesTab,
       showAttentionNeededTab: attentionNeededResults.length > 0,
+      hasMultipleCaseloadsInNomis,
       hasSelectedMultiplePrisonCaseloads,
+      prisonsToDisplay,
+      changeLocationHref,
       recallsEnabled,
       isSearchPageView: true,
     })

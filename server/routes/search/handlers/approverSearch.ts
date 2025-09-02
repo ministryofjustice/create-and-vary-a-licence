@@ -9,8 +9,7 @@ export default class ApproverSearch {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const queryTerm = req.query?.queryTerm as string
-    const { user } = res.locals
-    const { caseloadsSelected = [] } = req.session
+    const { prisonCaseloadToDisplay, hasSelectedMultiplePrisonCaseloads } = res.locals.user
 
     let results: ApproverSearchResponse
 
@@ -20,13 +19,9 @@ export default class ApproverSearch {
         recentlyApprovedResponse: [],
       }
     } else {
-      const { activeCaseload } = user
-      const prisonsToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload]
-
-      results = await this.searchService.getPrisonApproverSearchResults(queryTerm, prisonsToDisplay)
+      results = await this.searchService.getPrisonApproverSearchResults(queryTerm, prisonCaseloadToDisplay)
     }
 
-    const hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
     const { approvalNeededResponse, recentlyApprovedResponse } = results
 
     const approvalNeededCases = approvalNeededResponse.map(c => {

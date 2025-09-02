@@ -115,6 +115,9 @@ describe('populateCurrentUser', () => {
       lastName: 'Bloggs',
       nomisStaffId: 3000,
       prisonCaseload: ['MDI', 'BMI'],
+      hasMultipleCaseloadsInNomis: true,
+      hasSelectedMultiplePrisonCaseloads: false,
+      prisonCaseloadToDisplay: ['MDI'],
     })
     expect(licenceServiceMock.updatePrisonUserDetails).toHaveBeenCalledWith({
       staffUsername: 'joebloggs',
@@ -161,6 +164,9 @@ describe('populateCurrentUser', () => {
       lastName: 'Bloggs',
       nomisStaffId: 3000,
       prisonCaseload: ['MDI', 'BMI'],
+      hasMultipleCaseloadsInNomis: true,
+      hasSelectedMultiplePrisonCaseloads: false,
+      prisonCaseloadToDisplay: ['MDI'],
     })
     expect(licenceServiceMock.updatePrisonUserDetails).toHaveBeenCalledWith({
       staffUsername: 'joebloggs',

@@ -126,6 +126,8 @@ export default defineConfig({
         stubDeleteAdditionalConditionById: licence.stubDeleteAdditionalConditionById,
         stubDeleteAdditionalConditionsByCode: licence.stubDeleteAdditionalConditionsByCode,
         stubPostExclusionZone: licence.stubPostExclusionZone,
+        stubGetCaSearchInPrisonResult: licence.stubGetCaSearchInPrisonResult,
+        stubGetCaSearchOnProbationResult: licence.stubGetCaSearchOnProbationResult,
         stubGetCaSearchResults: licence.stubGetCaSearchResults,
         stubGetCaSearchAttentionNeededPrisonResults: licence.stubGetCaSearchAttentionNeededPrisonResults,
         stubGetPrisonApproverSearchResults: licence.stubGetPrisonApproverSearchResults,
