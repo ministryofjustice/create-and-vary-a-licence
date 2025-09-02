@@ -293,7 +293,7 @@
 
 {% set peopleInPrison = displayResults(searchTableHeadings, peopleInPrisonResults, tabParameters.prison.tabId, inPrisonCountText, true, recallsMesage) %}
 {% set peopleOnProbation = displayResults(searchTableHeadings, peopleOnProbationResults, tabParameters.probation.tabId, onProbationCountText, false, recallsMesage) %}
-{% set attentionNeeded = attentionNeededTab({ cases: attentionNeededResults, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: tabParameters.attentionNeeded.resultsCount, activeTab: 'attention-needed', hasSelectedMultiplePrisonCaseloads: hasSelectedMultiplePrisonCaseloads, isSearchPageView: isSearchPageView }) %}
+{% set attentionNeeded = attentionNeededTab({ cases: attentionNeededResults, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: tabParameters.attentionNeeded.resultsCount, activeTab: 'attention-needed', hasSelectedMultiplePrisonCaseloads: hasSelectedMultiplePrisonCaseloads, isSearchPageView: isSearchPageView, tabHeadingText: attentionNeededCountText }) %}
 
 {% block content %}
     <div class="govuk-grid-row">
