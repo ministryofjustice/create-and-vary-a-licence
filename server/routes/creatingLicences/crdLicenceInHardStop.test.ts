@@ -1,17 +1,13 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import { Expose } from 'class-transformer'
-import { IsString } from 'class-validator'
 import LicenceService from '../../services/licenceService'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { CaseloadItem, CvlPrisoner, Licence, OmuContact } from '../../@types/licenceApiClientTypes'
 import ProbationService from '../../services/probationService'
 import ConditionService from '../../services/conditionService'
-import { AdditionalConditionAp } from '../../@types/LicencePolicy'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
 import { DeliusManager } from '../../@types/deliusClientTypes'
 import { User } from '../../@types/CvlUserDetails'
-import AppointmentTimeAndPlace from '../manageConditions/types/additionalConditionInputs/appointmentTimeAndPlace'
 
 let app: Express
 
@@ -41,12 +37,6 @@ const user = {
   userRoles: ['ROLE_LICENCE_RO'],
 } as User
 
-class DummyAddress {
-  @Expose()
-  @IsString()
-  addressLine: string
-}
-
 beforeEach(() => {
   app = appWithAllRoutes({
     services: { licenceService, conditionService, ukBankHolidayFeedService, probationService },
@@ -57,7 +47,6 @@ beforeEach(() => {
   licenceService.createLicence.mockResolvedValue({ licenceId: 1 })
 
   conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([])
-  conditionService.getAdditionalConditionByCode.mockResolvedValue({ validatorType: null } as AdditionalConditionAp)
 
   probationService.getProbationer.mockResolvedValue({
     crn: 'X12345',
@@ -180,9 +169,6 @@ describe('createLicenceRoutes', () => {
       })
 
       it('should redirect to access-denied when trying to submit a licence via CYA page', () => {
-        conditionService.getAdditionalConditionByCode.mockResolvedValue({
-          validatorType: AppointmentTimeAndPlace,
-        } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
           .expect(302)
@@ -301,24 +287,10 @@ describe('createLicenceRoutes', () => {
       })
 
       it('should redirect to confirmation page when submitting a licence via CYA page', () => {
-        conditionService.getAdditionalConditionByCode.mockResolvedValue({
-          validatorType: AppointmentTimeAndPlace,
-        } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
           .expect(302)
           .expect('Location', '/licence/create/id/1/confirmation')
-      })
-
-      it('should redirect back on validation failure', () => {
-        conditionService.getAdditionalConditionByCode.mockResolvedValue({
-          validatorType: DummyAddress,
-        } as AdditionalConditionAp)
-        return request(app)
-          .post('/licence/create/id/1/check-your-answers')
-          .set('Referer', '/validation-error-page')
-          .expect(302)
-          .expect('Location', '/validation-error-page')
       })
     })
   })

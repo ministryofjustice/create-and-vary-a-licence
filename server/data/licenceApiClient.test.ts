@@ -845,4 +845,21 @@ describe('Licence API client tests', () => {
       expect(get).toHaveBeenCalledWith({ path: '/address/search/by/text/123 Fake Street' }, { username: 'joebloggs' })
     })
   })
+
+  describe('getPreferredAddresses', () => {
+    it('should fetch preferred addresses for a user', async () => {
+      const user = { username: 'joebloggs' } as User
+      await licenceApiClient.getPreferredAddresses(user)
+      expect(get).toHaveBeenCalledWith({ path: '/staff/address/preferred' }, { username: 'joebloggs' })
+    })
+  })
+
+  describe('deleteAddressByReference', () => {
+    it('should delete an address by reference for a user', async () => {
+      const reference = 'ABC123'
+      const user = { username: 'joebloggs' } as User
+      await licenceApiClient.deleteAddressByReference(reference, user)
+      expect(del).toHaveBeenCalledWith({ path: `/staff/address/reference/${reference}` }, { username: 'joebloggs' })
+    })
+  })
 })

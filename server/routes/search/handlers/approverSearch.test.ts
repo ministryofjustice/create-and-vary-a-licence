@@ -21,14 +21,12 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
       query: {
         queryTerm: '',
       },
-      session: { caseloadsSelected: [] },
     } as unknown as Request
 
     res = {
       locals: {
         user: {
-          activeCaseload: 'MDI',
-          prisonCaseload: ['MDI'],
+          hasSelectedMultiplePrisonCaseloads: false,
         },
       },
       render: jest.fn(),
@@ -345,8 +343,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
   })
 
   it('should render cases and evaluate links when user has selected multiple caseloads', async () => {
-    res.locals.user.prisonCaseload = ['MDI', 'LEI']
-    req.session.caseloadsSelected = ['MDI', 'LEI']
+    res.locals.user.hasSelectedMultiplePrisonCaseloads = true
     searchResponse = {
       approvalNeededResponse: [
         ...searchResponse.approvalNeededResponse,

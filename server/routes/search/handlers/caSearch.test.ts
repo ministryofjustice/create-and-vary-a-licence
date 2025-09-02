@@ -1,17 +1,21 @@
 import { Request, Response } from 'express'
 import CaSearchRoutes from './caSearch'
+import PrisonerService from '../../../services/prisonerService'
 import SearchService from '../../../services/searchService'
-import LicenceKind from '../../../enumeration/LicenceKind'
-import LicenceStatus from '../../../enumeration/licenceStatus'
+import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { CaCase } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
 import config from '../../../config'
+import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../enumeration'
+import { User } from '../../../@types/CvlUserDetails'
 
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
+const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 jest.mock('../../../services/searchService')
+jest.mock('../../../services/prisonerService')
 
 describe('Route Handlers - Search - Ca Search', () => {
-  const handler = new CaSearchRoutes(searchService)
+  const handler = new CaSearchRoutes(searchService, prisonerService)
   let req: Request
   let res: Response
 
@@ -20,7 +24,6 @@ describe('Route Handlers - Search - Ca Search', () => {
       query: {
         queryTerm: '',
       },
-      session: { caseloadsSelected: [] },
     } as unknown as Request
 
     res = {
@@ -29,11 +32,31 @@ describe('Route Handlers - Search - Ca Search', () => {
       render: jest.fn(),
       locals: {
         user: {
-          username: 'test1',
-          activeCaseload: 'MDI',
+          hasMultipleCaseloadsInNomis: false,
+          prisonCaseloadToDisplay: ['MDI'],
+          hasSelectedMultiplePrisonCaseloads: false,
         },
       },
     } as unknown as Response
+
+    prisonerService.getPrisons.mockResolvedValue([
+      {
+        agencyId: 'BAI',
+        description: 'Belmarsh (HMP)',
+      },
+      {
+        agencyId: 'BXI',
+        description: 'Brixton (HMP)',
+      },
+      {
+        agencyId: 'MDI',
+        description: 'Moorland (HMP)',
+      },
+      {
+        agencyId: 'LEI',
+        description: 'Leeds (HMP)',
+      },
+    ] as PrisonDetail[])
   })
 
   afterEach(() => {
@@ -201,6 +224,9 @@ describe('Route Handlers - Search - Ca Search', () => {
           tabHeading: 'People on probation',
           tabId: 'tab-heading-probation',
         },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
       },
       inPrisonResults: [
         {
@@ -346,13 +372,29 @@ describe('Route Handlers - Search - Ca Search', () => {
           link: null,
         },
       ],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasMultipleCaseloadsInNomis: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [
+        {
+          agencyId: 'MDI',
+          description: 'Moorland (HMP)',
+        },
+      ],
+      changeLocationHref: '/licence/view/change-location?queryTerm=test',
       recallsEnabled: config.recallsEnabled,
+      isSearchPageView: true,
     })
   })
 
   it('should render cases and evaluate links when user has selected multiple caseloads', async () => {
-    req.session.caseloadsSelected = ['MDI', 'LEI']
+    res.locals.user = {
+      hasMultipleCaseloadsInNomis: true,
+      prisonCaseloadToDisplay: ['MDI', 'LEI'],
+      hasSelectedMultiplePrisonCaseloads: true,
+    } as User
     searchResponse = {
       inPrisonResults: [
         ...searchResponse.inPrisonResults,
@@ -418,6 +460,9 @@ describe('Route Handlers - Search - Ca Search', () => {
           resultsCount: 3,
           tabHeading: 'People on probation',
           tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 0,
         },
       },
       inPrisonResults: [
@@ -604,8 +649,130 @@ describe('Route Handlers - Search - Ca Search', () => {
           link: '/licence/view/id/9/show',
         },
       ],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasMultipleCaseloadsInNomis: true,
       hasSelectedMultiplePrisonCaseloads: true,
+      prisonsToDisplay: [
+        {
+          agencyId: 'MDI',
+          description: 'Moorland (HMP)',
+        },
+        { agencyId: 'LEI', description: 'Leeds (HMP)' },
+      ],
+      changeLocationHref: '/licence/view/change-location?queryTerm=test',
       recallsEnabled: config.recallsEnabled,
+      isSearchPageView: true,
+    })
+  })
+
+  it('should return link as null if tabType is ATTENTION_NEEDED', async () => {
+    searchResponse = {
+      inPrisonResults: [
+        {
+          kind: LicenceKind.CRD,
+          licenceId: 1,
+          name: 'Test Person 1',
+          prisonerNumber: 'A1234AA',
+          probationPractitioner: {
+            name: 'Test Com 1',
+          },
+          releaseDate: '01/05/2025',
+          releaseDateLabel: 'Confirmed release date',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          tabType: 'ATTENTION_NEEDED',
+          nomisLegalStatus: 'SENTENCED',
+          lastWorkedOnBy: 'Test Updater',
+          isDueForEarlyRelease: false,
+          isInHardStopPeriod: true,
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
+        },
+      ] as CaCase[],
+      onProbationResults: [],
+    }
+    searchService.getCaSearchResults.mockResolvedValue(searchResponse)
+    req.query = { queryTerm: 'test' }
+    await handler.GET(req, res)
+
+    expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
+      queryTerm: 'test',
+      backLink: '/licence/view/cases',
+      statusConfig,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prison: {
+          resultsCount: 1,
+          tabHeading: 'People in prison',
+          tabId: 'tab-heading-prison',
+        },
+        probation: {
+          resultsCount: 0,
+          tabHeading: 'People on probation',
+          tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 1,
+        },
+      },
+      inPrisonResults: [
+        {
+          kind: LicenceKind.CRD,
+          licenceId: 1,
+          name: 'Test Person 1',
+          prisonerNumber: 'A1234AA',
+          probationPractitioner: {
+            name: 'Test Com 1',
+          },
+          releaseDate: '01/05/2025',
+          releaseDateLabel: 'Confirmed release date',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          tabType: 'ATTENTION_NEEDED',
+          nomisLegalStatus: 'SENTENCED',
+          lastWorkedOnBy: 'Test Updater',
+          isDueForEarlyRelease: false,
+          isInHardStopPeriod: true,
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
+          link: null,
+        },
+      ],
+      onProbationResults: [],
+      attentionNeededResults: [
+        {
+          kind: LicenceKind.CRD,
+          licenceId: 1,
+          name: 'Test Person 1',
+          prisonerNumber: 'A1234AA',
+          probationPractitioner: {
+            name: 'Test Com 1',
+          },
+          releaseDate: '01/05/2025',
+          releaseDateLabel: 'Confirmed release date',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          tabType: 'attentionNeeded',
+          nomisLegalStatus: 'SENTENCED',
+          lastWorkedOnBy: 'Test Updater',
+          isDueForEarlyRelease: false,
+          isInHardStopPeriod: true,
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
+        },
+      ],
+      CaViewCasesTab,
+      showAttentionNeededTab: true,
+      hasMultipleCaseloadsInNomis: false,
+      hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [
+        {
+          agencyId: 'MDI',
+          description: 'Moorland (HMP)',
+        },
+      ],
+      changeLocationHref: '/licence/view/change-location?queryTerm=test',
+      recallsEnabled: config.recallsEnabled,
+      isSearchPageView: true,
     })
   })
 
@@ -628,8 +795,8 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
         },
         {
           kind: LicenceKind.HARD_STOP,
@@ -647,8 +814,8 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
         },
       ],
       onProbationResults: [
@@ -667,8 +834,8 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: false,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
         },
         {
           kind: LicenceKind.CRD,
@@ -686,8 +853,8 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
         },
       ],
     }
@@ -712,6 +879,9 @@ describe('Route Handlers - Search - Ca Search', () => {
           tabHeading: 'People on probation',
           tabId: 'tab-heading-probation',
         },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
       },
       inPrisonResults: [
         {
@@ -730,8 +900,8 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
           link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
         },
         {
@@ -750,8 +920,8 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
           link: '/licence/hard-stop/id/7/check-your-answers',
         },
       ],
@@ -771,8 +941,8 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: false,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
           link: null,
         },
         {
@@ -791,13 +961,20 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
           link: '/licence/view/id/9/show',
         },
       ],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasMultipleCaseloadsInNomis: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
+      changeLocationHref: '/licence/view/change-location?queryTerm=test',
       recallsEnabled: config.recallsEnabled,
+      isSearchPageView: true,
     })
   })
 
@@ -820,8 +997,8 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
         },
       ],
       onProbationResults: [],
@@ -847,6 +1024,9 @@ describe('Route Handlers - Search - Ca Search', () => {
           tabHeading: 'People on probation',
           tabId: 'tab-heading-probation',
         },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
       },
       inPrisonResults: [
         {
@@ -865,14 +1045,21 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
           link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
         },
       ],
       onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasMultipleCaseloadsInNomis: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
+      changeLocationHref: '/licence/view/change-location?queryTerm=test',
       recallsEnabled: config.recallsEnabled,
+      isSearchPageView: true,
     })
   })
 
@@ -895,8 +1082,8 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
         },
       ],
       onProbationResults: [],
@@ -922,6 +1109,9 @@ describe('Route Handlers - Search - Ca Search', () => {
           tabHeading: 'People on probation',
           tabId: 'tab-heading-probation',
         },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
       },
       inPrisonResults: [
         {
@@ -940,14 +1130,21 @@ describe('Route Handlers - Search - Ca Search', () => {
           lastWorkedOnBy: 'Test Updater',
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          prisonCode: 'LEI',
-          prisonDescription: 'Leeds (HMP)',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
           link: '/licence/hard-stop/id/7/check-your-answers',
         },
       ],
       onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasMultipleCaseloadsInNomis: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
+      changeLocationHref: '/licence/view/change-location?queryTerm=test',
       recallsEnabled: config.recallsEnabled,
+      isSearchPageView: true,
     })
   })
 
@@ -973,11 +1170,21 @@ describe('Route Handlers - Search - Ca Search', () => {
           tabHeading: 'People on probation',
           tabId: 'tab-heading-probation',
         },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
       },
       inPrisonResults: [],
       onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasMultipleCaseloadsInNomis: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
+      changeLocationHref: '/licence/view/change-location',
       recallsEnabled: config.recallsEnabled,
+      isSearchPageView: true,
     })
   })
 })

@@ -13,6 +13,7 @@ context('Create a licence', () => {
     cy.task('stubGetStaffDetails')
     cy.task('stubGetLicence', {})
     cy.task('stubSearchForAddresses')
+    cy.task('stubGetStaffPreferredAddresses')
     cy.task('stubPutLicenceAppointmentPerson')
     cy.task('stubUpdateStandardConditions')
     cy.task('stubRecordAuditEvent')
@@ -100,7 +101,7 @@ context('Create a licence', () => {
         .enterAddress()
         .nextInput()
         .enterAddress()
-        .clickContinue(null, null, LicenceKind.PRRD)
+        .clickContinue(null, null, null, LicenceKind.PRRD)
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
 

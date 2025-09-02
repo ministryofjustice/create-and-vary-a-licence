@@ -47,6 +47,14 @@
                         }
                     }), licencesHeader)
         %}
+        {% if params.tabType === 'attentionNeeded' and params.hasSelectedMultiplePrisonCaseloads and params.isSearchPageView %}
+            {% set licencesHeader = (licencesHeader.splice(-1, 0, {
+                text: "Location",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            }), licencesHeader) %}
+        {% endif %}
         {% if params.tabType === 'releasesInNextTwoWorkingDays' %}
             {% set licencesHeader = (licencesHeader.push({
                         text: "Last worked on by",
@@ -117,11 +125,11 @@
         {% endif %}
 
         {% if case.kind == 'HDC' %}
-            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
         {% elseif case.isDueForEarlyRelease %}
-            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
+            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
         {% else %}
-            {% set releaseDate = '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' %}
+            {% set releaseDate = '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</p>' %}
         {% endif %}
 
         {% set caseData = (caseData.push({
@@ -151,11 +159,22 @@
             {
                 attributes: {
                     id: 'release-date-' + loop.index,
-                    "data-sort-value": case.releaseDate | dateToUnix
+                    "data-sort-value": case.releaseDate | cvlDateToDateShort | dateToUnix
                 },
                 html: releaseDate 
             }
         ), caseData) %}
+        {% if params.tabType === 'attentionNeeded' and params.hasSelectedMultiplePrisonCaseloads and params.isSearchPageView %}
+            {% set caseData = (caseData.splice(-1, 0, 
+                {
+                    attributes: {
+                    id: 'location-' + loop.index,
+                    "data-sort-value": case.prisonDescription
+                    },
+                    text: case.prisonDescription,
+                    classes: "max-width max-width-120"
+                }), caseData) %}
+        {% endif %}
         {% if params.tabType === 'releasesInNextTwoWorkingDays' %}
             {% set caseData = (caseData.push({
                         attributes: {
@@ -178,6 +197,6 @@
         {% endif %}
         {% set licences = (licences.push(caseData), licences) %}
     {% endfor %}
-    {{ casesTable({licences: licences, tabType: params.tabType, probationView: false }) }}
+    {{ casesTable({licences: licences, tabType: params.tabType, probationView: false, hasSelectedMultiplePrisonCaseloads: params.hasSelectedMultiplePrisonCaseloads, isSearchPageView: params.isSearchPageView }) }}
 
 {% endmacro %}

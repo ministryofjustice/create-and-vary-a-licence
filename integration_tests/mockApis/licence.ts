@@ -135,6 +135,166 @@ const licencePlaceholder: Licence = {
   additionalPssConditions: [],
 }
 
+export const licenceConditions: AdditionalCondition[] = [
+  {
+    id: 1,
+    code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
+    category: 'Residence at a specific place',
+    sequence: 0,
+    text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
+    expandedText:
+      'You must reside within London while of no fixed abode, unless otherwise approved by your supervising officer.',
+    data: [
+      {
+        id: 1,
+        sequence: 0,
+        field: 'probationRegion',
+        value: 'London',
+        contributesToLicence: false,
+      },
+    ],
+    requiresInput: true,
+    uploadSummary: [],
+    readyToSubmit: true,
+  },
+  {
+    id: 2,
+    code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
+    category: 'Restriction of residency',
+    sequence: 1,
+    text: 'Not to reside (not even to stay for one night) in the same household as [ANY / ANY FEMALE / ANY MALE] child under the age of [INSERT AGE] without the prior approval of your supervising officer.',
+    data: [
+      {
+        id: 2,
+        sequence: 0,
+        field: 'gender',
+        value: 'Any',
+        contributesToLicence: false,
+      },
+      {
+        id: 3,
+        sequence: 0,
+        field: 'age',
+        value: '16',
+        contributesToLicence: false,
+      },
+    ],
+    requiresInput: true,
+    uploadSummary: [],
+    readyToSubmit: true,
+  },
+  {
+    id: 3,
+    code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
+    category: 'Programmes or activities',
+    sequence: 2,
+    text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
+    data: [
+      {
+        id: 4,
+        sequence: 0,
+        field: 'behaviourProblems',
+        value: 'gambling',
+        contributesToLicence: false,
+      },
+      {
+        id: 5,
+        sequence: 1,
+        field: 'behaviourProblems',
+        value: 'debt',
+        contributesToLicence: false,
+      },
+    ],
+    requiresInput: true,
+    uploadSummary: [],
+    readyToSubmit: true,
+  },
+  {
+    id: 4,
+    code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
+    category: 'Programmes or activities',
+    sequence: 3,
+    text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+    data: [
+      {
+        id: 6,
+        sequence: 0,
+        field: 'numberOfCurfews',
+        value: 'One curfew',
+        contributesToLicence: false,
+      },
+      {
+        id: 7,
+        sequence: 1,
+        field: 'curfewStart',
+        value: '7:30pm',
+        contributesToLicence: false,
+      },
+      {
+        id: 8,
+        sequence: 2,
+        field: 'curfewEnd',
+        value: '7:30am',
+        contributesToLicence: false,
+      },
+      {
+        id: 9,
+        sequence: 3,
+        field: 'reviewPeriod',
+        value: 'Other',
+        contributesToLicence: false,
+      },
+      {
+        id: 10,
+        sequence: 4,
+        field: 'alternativeReviewPeriod',
+        value: 'Annually',
+        contributesToLicence: false,
+      },
+    ],
+    requiresInput: true,
+    uploadSummary: [],
+    readyToSubmit: true,
+  },
+  {
+    id: 5,
+    code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
+    category: 'Items and documents',
+    sequence: 4,
+    text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
+    data: [
+      {
+        id: 11,
+        sequence: 0,
+        field: 'item',
+        value: 'Knives',
+        contributesToLicence: false,
+      },
+      {
+        id: 12,
+        sequence: 1,
+        field: 'item',
+        value: 'Needles',
+        contributesToLicence: false,
+      },
+    ],
+    requiresInput: true,
+    uploadSummary: [],
+    readyToSubmit: true,
+  },
+  {
+    id: 6,
+    code: '9ae2a336-3491-4667-aaed-dd852b09b4b9',
+    category: 'Making or maintaining contact with a person',
+    sequence: 5,
+    text: 'Receive home visits from a Mental Health Worker.',
+    data: [],
+    requiresInput: true,
+    uploadSummary: [],
+    readyToSubmit: true,
+  },
+]
+
 const nextMonth = format(addMonths(new Date(), 1), 'yyyy-MM-dd')
 const nextThirtyDays = format(addDays(new Date(), 30), 'yyyy-MM-dd')
 const probationPractitionerPlaceholder = {
@@ -277,6 +437,55 @@ export default {
             source: 'OS_PLACES',
           },
         ],
+      },
+    })
+  },
+
+  stubGetStaffPreferredAddresses: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/staff/address/preferred`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            reference: '550e8400-e29b-41d4-a716-446655440000',
+            uprn: '10000000001',
+            firstLine: '123 Fake Street',
+            secondLine: '',
+            townOrCity: 'Faketown',
+            county: 'Fakeshire',
+            postcode: 'FA11KE',
+            source: 'OS_PLACES',
+          },
+          {
+            reference: '550e8400-e29b-41d4-a716-446655440001',
+            uprn: '10000000002',
+            firstLine: '456 Another Street',
+            secondLine: '',
+            townOrCity: 'Anothertown',
+            county: 'Anothershire',
+            postcode: 'AN11TH',
+            source: 'OS_PLACES',
+          },
+        ],
+      },
+    })
+  },
+
+  stubGetStaffNoPreferredAddresses: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/staff/address/preferred`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [],
       },
     })
   },
@@ -508,137 +717,7 @@ export default {
             : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate,
           homeDetentionCurfewEndDate: options.homeDetentionCurfewEndDate,
-          additionalLicenceConditions: options.conditions || [
-            {
-              id: 1,
-              code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
-              category: 'Residence at a specific place',
-              sequence: 0,
-              text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
-              expandedText:
-                'You must reside within London while of no fixed abode, unless otherwise approved by your supervising officer.',
-              data: [
-                {
-                  id: 1,
-                  sequence: 0,
-                  field: 'probationRegion',
-                  value: 'London',
-                },
-              ],
-              uploadSummary: [],
-              readyToSubmit: true,
-            },
-            {
-              id: 2,
-              code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
-              category: 'Restriction of residency',
-              sequence: 1,
-              text: 'Not to reside (not even to stay for one night) in the same household as [ANY / ANY FEMALE / ANY MALE] child under the age of [INSERT AGE] without the prior approval of your supervising officer.',
-              data: [
-                {
-                  id: 2,
-                  sequence: 0,
-                  field: 'gender',
-                  value: 'Any',
-                },
-                {
-                  id: 3,
-                  sequence: 0,
-                  field: 'age',
-                  value: '16',
-                },
-              ],
-              uploadSummary: [],
-              readyToSubmit: true,
-            },
-            {
-              id: 3,
-              code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
-              category: 'Programmes or activities',
-              sequence: 2,
-              text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
-              data: [
-                {
-                  id: 4,
-                  sequence: 0,
-                  field: 'behaviourProblems',
-                  value: 'gambling',
-                },
-                {
-                  id: 5,
-                  sequence: 1,
-                  field: 'behaviourProblems',
-                  value: 'debt',
-                },
-              ],
-              uploadSummary: [],
-              readyToSubmit: true,
-            },
-            {
-              id: 4,
-              code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
-              category: 'Programmes or activities',
-              sequence: 3,
-              text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
-              data: [
-                {
-                  id: 6,
-                  sequence: 0,
-                  field: 'numberOfCurfews',
-                  value: 'One curfew',
-                },
-                {
-                  id: 7,
-                  sequence: 1,
-                  field: 'curfewStart',
-                  value: '7:30pm',
-                },
-                {
-                  id: 8,
-                  sequence: 2,
-                  field: 'curfewEnd',
-                  value: '7:30am',
-                },
-                {
-                  id: 9,
-                  sequence: 3,
-                  field: 'reviewPeriod',
-                  value: 'Other',
-                },
-                {
-                  id: 10,
-                  sequence: 4,
-                  field: 'alternativeReviewPeriod',
-                  value: 'Annually',
-                },
-              ],
-              uploadSummary: [],
-              readyToSubmit: true,
-            },
-            {
-              id: 5,
-              code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
-              category: 'Items and documents',
-              sequence: 4,
-              text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
-              data: [
-                {
-                  id: 11,
-                  sequence: 0,
-                  field: 'item',
-                  value: 'Knives',
-                },
-                {
-                  id: 12,
-                  sequence: 1,
-                  field: 'item',
-                  value: 'Needles',
-                },
-              ],
-              uploadSummary: [],
-              readyToSubmit: true,
-            },
-          ],
+          additionalLicenceConditions: options.conditions || licenceConditions,
           bespokeConditions: [
             {
               id: 133,
@@ -2282,6 +2361,83 @@ export default {
       },
     })
   },
+  stubGetCaSearchInPrisonResult: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          inPrisonResults: [
+            {
+              kind: 'CRD',
+              licenceId: 1,
+              name: 'Test Person 1',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: '01/07/2025',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'APPROVED',
+              tabType: 'FUTURE_RELEASES',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'LEI',
+              prisonDescription: 'Leeds (HMP)',
+            },
+          ],
+          onProbationResults: [],
+        },
+      },
+    })
+  },
+  stubGetCaSearchOnProbationResult: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          inPrisonResults: [],
+          onProbationResults: [
+            {
+              kind: 'CRD',
+              licenceId: 4,
+              licenceVersionOf: 1.3,
+              name: 'Test Person 4',
+              prisonerNumber: 'A1234DD',
+              probationPractitioner: {
+                name: 'Test Com 2',
+                staffCode: 'B12345',
+                staffIdentifier: 120001212,
+                staffUsername: 'tcom2',
+              },
+              releaseDate: '01/05/2025',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'ACTIVE',
+              tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'LEI',
+              prisonDescription: 'Leeds (HMP)',
+            },
+          ],
+        },
+      },
+    })
+  },
   stubGetCaSearchResults: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -2425,6 +2581,83 @@ export default {
               prisonDescription: 'Leeds (HMP)',
             },
           ],
+        },
+      },
+    })
+  },
+  stubGetCaSearchAttentionNeededPrisonResults: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          inPrisonResults: [
+            {
+              kind: 'CRD',
+              licenceId: 1,
+              name: 'Test Person 1',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: null,
+              releaseDateLabel: 'CRD',
+              licenceStatus: 'SUBMITTED',
+              tabType: 'ATTENTION_NEEDED',
+              nomisLegalStatus: 'RECALL',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'MDI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+            {
+              kind: 'CRD',
+              licenceId: 2,
+              name: 'Test Person 2',
+              prisonerNumber: 'A1234AB',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: null,
+              releaseDateLabel: 'CRD',
+              licenceStatus: 'SUBMITTED',
+              tabType: 'ATTENTION_NEEDED',
+              nomisLegalStatus: 'REMAND',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'MDI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+            {
+              kind: 'CRD',
+              licenceId: 3,
+              name: 'Test Person 3',
+              prisonerNumber: 'A1234AC',
+              probationPractitioner: {
+                name: 'Test Com 1',
+                staffCode: 'A12345',
+              },
+              releaseDate: null,
+              releaseDateLabel: 'CRD',
+              licenceStatus: 'SUBMITTED',
+              tabType: 'ATTENTION_NEEDED',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'Test Updater',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+              prisonCode: 'MDI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+          ],
+          onProbationResults: [],
         },
       },
     })

@@ -13,12 +13,7 @@ export default class ApproverSearch {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const queryTerm = req.query?.queryTerm as string
-    const { user } = res.locals
-    const { caseloadsSelected = [] } = req.session
-    const hasMultipleCaseloadsInNomis = user.prisonCaseload.length > 1
-    const hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
-    const { activeCaseload } = user
-    const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload]
+    const { prisonCaseloadToDisplay, hasSelectedMultiplePrisonCaseloads } = res.locals.user
 
     const changeLocationHref =
       queryTerm.length > 0

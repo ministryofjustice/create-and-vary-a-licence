@@ -98,11 +98,13 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display additional licence conditions section if licence type is AP', () => {
     const $ = render({ licence: { ...licence, typeCode: 'AP' } })
     expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (0)')
+    expect($('#additional-licence-conditions-heading + p').text()).toBe('No additional licence conditions added')
   })
 
   it('should display additional licence conditions section if licence type is AP_PSS', () => {
     const $ = render({ licence })
     expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (0)')
+    expect($('#additional-licence-conditions-heading + p').text()).toBe('No additional licence conditions added')
   })
 
   it('should not display additional licence conditions section if licence type is PSS', () => {
@@ -159,6 +161,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(2)
     expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (2)')
+    expect($('#additional-licence-conditions-heading + p').length).toBe(0)
 
     // Check actual condition wording - 1st
     expect($('#additionalLicenceConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
@@ -189,6 +192,7 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: { ...licence, typeCode: 'PSS' },
     })
     expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements (2)')
+    expect($('#additional-pss-conditions-heading + p').length).toBe(0)
   })
 
   it('should display additional PSS conditions section if licence type is AP_PSS', () => {
@@ -196,6 +200,7 @@ describe('Create a Licence Views - Check Answers', () => {
       licence,
     })
     expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements (2)')
+    expect($('#additional-pss-conditions-heading + p').length).toBe(0)
   })
 
   it('should not display additional PSS licence conditions section if licence type is AP', () => {
@@ -232,6 +237,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
     expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)
     expect($('#bespoke-conditions-heading').text()).toBe('Bespoke licence conditions (2)')
+    expect($('#bespoke-conditions-heading + p').length).toBe(0)
 
     expect($('#bespoke-conditions-details > div:nth-child(1) > .govuk-summary-list__value').text().trim()).toBe(
       'Bespoke condition 1',
@@ -513,7 +519,6 @@ describe('Create a Licence Views - Check Answers', () => {
     })
 
     expect($('[data-qa=return-to-caselist]').length).toBe(1)
-    expect($('[data-qa=return-to-caselist]').length).toBe(1)
   })
 
   it('should show a "Return to caselist" button on an approved licence in the hard stop period', () => {
@@ -523,7 +528,6 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: true,
     })
 
-    expect($('[data-qa=return-to-caselist]').length).toBe(1)
     expect($('[data-qa=return-to-caselist]').length).toBe(1)
   })
 

@@ -15,8 +15,8 @@ export default function Index({ searchService, prisonerService }: Services): Rou
 
   // Handlers
   const probationSearchHandler = new ProbationSearchRoutes(searchService)
-  const caSearchHandler = new CaSearchRoutes(searchService)
   const approverSearchHandler = new ApproverSearchRoutes(searchService, prisonerService)
+  const caSearchHandler = new CaSearchRoutes(searchService, prisonerService)
 
   // Operations
   get('/probation-search', 'ROLE_LICENCE_RO', probationSearchHandler.GET)
