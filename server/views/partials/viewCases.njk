@@ -125,11 +125,11 @@
         {% endif %}
 
         {% if case.kind == 'HDC' %}
-            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
         {% elseif case.isDueForEarlyRelease %}
-            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
+            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
         {% else %}
-            {% set releaseDate = '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' %}
+            {% set releaseDate = '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</p>' %}
         {% endif %}
 
         {% set caseData = (caseData.push({
@@ -159,7 +159,7 @@
             {
                 attributes: {
                     id: 'release-date-' + loop.index,
-                    "data-sort-value": case.releaseDate | dateToUnix
+                    "data-sort-value": case.releaseDate | cvlDateToDateShort | dateToUnix
                 },
                 html: releaseDate 
             }

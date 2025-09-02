@@ -103,7 +103,7 @@ const attentionNeededResults = [
       name: 'Test Com 1',
       staffCode: 'A12345',
     },
-    releaseDate: 'not found',
+    releaseDate: '01/11/2022',
     releaseDateLabel: 'CRD',
     licenceStatus: 'SUBMITTED',
     tabType: CaViewCasesTab.ATTENTION_NEEDED,
@@ -313,7 +313,7 @@ describe('View CA Search Results', () => {
 
     expect($('thead').text()).not.toContain('Location')
 
-    expect($('#release-date-1').text()).toContain('CRD: not found')
+    expect($('#release-date-1').text()).toContain('CRD: 1 Nov 2022')
   })
 
   it('should display the location column with data when the user has selected multiple prison caseloads', () => {
