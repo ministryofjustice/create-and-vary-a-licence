@@ -15,6 +15,8 @@ export default class ChangeLocationRoutes {
       } else {
         returnLink = '/licence/view/cases'
       }
+    } else if (role === AuthRole.DECISION_MAKER && req.query?.queryTerm) {
+      returnLink = `/search/approver-search?queryTerm=${req.query?.queryTerm}`
     } else {
       returnLink = `/licence/approve/cases${req.query?.approval ? `?approval=${req.query?.approval}` : ''}`
     }

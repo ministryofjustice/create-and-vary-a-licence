@@ -1,14 +1,19 @@
 import { Request, Response } from 'express'
 import ApproverSearchRoutes from './approverSearch'
+import PrisonerService from '../../../services/prisonerService'
 import SearchService from '../../../services/searchService'
+import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { ApprovalCase } from '../../../@types/licenceApiClientTypes'
+import { User } from '../../../@types/CvlUserDetails'
 
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
+const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../../../services/searchService')
+jest.mock('../../../services/prisonerService')
 
 describe('Route Handlers - Search - Prison Approver Search', () => {
-  const handler = new ApproverSearchRoutes(searchService)
+  const handler = new ApproverSearchRoutes(searchService, prisonerService)
   let req: Request
   let res: Response
 
@@ -22,11 +27,32 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
     res = {
       locals: {
         user: {
+          hasMultipleCaseloadsInNomis: false,
+          prisonCaseloadToDisplay: ['MDI'],
           hasSelectedMultiplePrisonCaseloads: false,
         },
       },
       render: jest.fn(),
     } as unknown as Response
+
+    prisonerService.getPrisons.mockResolvedValue([
+      {
+        agencyId: 'BAI',
+        description: 'Belmarsh (HMP)',
+      },
+      {
+        agencyId: 'BXI',
+        description: 'Brixton (HMP)',
+      },
+      {
+        agencyId: 'MDI',
+        description: 'Moorland (HMP)',
+      },
+      {
+        agencyId: 'LEI',
+        description: 'Leeds (HMP)',
+      },
+    ] as PrisonDetail[])
   })
 
   afterEach(() => {
@@ -166,7 +192,10 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             tabId: 'tab-heading-recently-approved',
           },
         },
+        hasMultipleCaseloadsInNomis: false,
         hasSelectedMultiplePrisonCaseloads: false,
+        prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
+        changeLocationHref: '/licence/approve/change-location',
         approvalNeededCases: [],
         recentlyApprovedCases: [],
       })
@@ -193,7 +222,10 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
+      hasMultipleCaseloadsInNomis: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
+      changeLocationHref: '/licence/approve/change-location?queryTerm=test',
       approvalNeededCases: [
         {
           licenceId: 1,
@@ -203,7 +235,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Four',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '01 May 2024',
+          releaseDate: '01/05/2024',
           urgentApproval: false,
           isDueForEarlyRelease: false,
           approvedBy: null,
@@ -220,7 +252,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Three',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '01 May 2024',
+          releaseDate: '01/05/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: null,
@@ -237,7 +269,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Three',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '10 Jun 2024',
+          releaseDate: '10/06/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: null,
@@ -254,7 +286,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Three',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '02 May 2024',
+          releaseDate: '02/05/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: null,
@@ -273,11 +305,11 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Four',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '01 May 2024',
+          releaseDate: '01/05/2024',
           urgentApproval: false,
           isDueForEarlyRelease: false,
           approvedBy: 'An Approver',
-          approvedOn: '10 Apr 2023',
+          approvedOn: '10/04/2023 00:00:00',
           kind: 'CRD',
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
@@ -290,11 +322,11 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Two',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '12 Apr 2024',
+          releaseDate: '12/04/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: 'An Approver',
-          approvedOn: '12 Apr 2023',
+          approvedOn: '12/04/2023 00:00:00',
           kind: 'CRD',
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
@@ -304,7 +336,11 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
   })
 
   it('should render cases and evaluate links when user has selected multiple caseloads', async () => {
-    res.locals.user.hasSelectedMultiplePrisonCaseloads = true
+    res.locals.user = {
+      hasMultipleCaseloadsInNomis: true,
+      prisonCaseloadToDisplay: ['MDI', 'LEI'],
+      hasSelectedMultiplePrisonCaseloads: true,
+    } as User
     searchResponse = {
       approvalNeededResponse: [
         ...searchResponse.approvalNeededResponse,
@@ -367,7 +403,16 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
+      hasMultipleCaseloadsInNomis: true,
       hasSelectedMultiplePrisonCaseloads: true,
+      prisonsToDisplay: [
+        {
+          agencyId: 'MDI',
+          description: 'Moorland (HMP)',
+        },
+        { agencyId: 'LEI', description: 'Leeds (HMP)' },
+      ],
+      changeLocationHref: '/licence/approve/change-location?queryTerm=test',
       approvalNeededCases: [
         {
           licenceId: 1,
@@ -377,7 +422,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Four',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '01 May 2024',
+          releaseDate: '01/05/2024',
           urgentApproval: false,
           isDueForEarlyRelease: false,
           approvedBy: null,
@@ -394,7 +439,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Three',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '01 May 2024',
+          releaseDate: '01/05/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: null,
@@ -411,7 +456,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Three',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '10 Jun 2024',
+          releaseDate: '10/06/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: null,
@@ -428,7 +473,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Three',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '02 May 2024',
+          releaseDate: '02/05/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: null,
@@ -445,7 +490,7 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Three',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '02 Nov 2024',
+          releaseDate: '02/11/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: null,
@@ -464,11 +509,11 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Four',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '01 May 2024',
+          releaseDate: '01/05/2024',
           urgentApproval: false,
           isDueForEarlyRelease: false,
           approvedBy: 'An Approver',
-          approvedOn: '10 Apr 2023',
+          approvedOn: '10/04/2023 00:00:00',
           kind: 'CRD',
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
@@ -481,11 +526,11 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Two',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '12 Apr 2024',
+          releaseDate: '12/04/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: 'An Approver',
-          approvedOn: '12 Apr 2023',
+          approvedOn: '12/04/2023 00:00:00',
           kind: 'CRD',
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
@@ -498,11 +543,11 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
             name: 'Com Two',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '11 May 2024',
+          releaseDate: '11/05/2024',
           urgentApproval: true,
           isDueForEarlyRelease: true,
           approvedBy: 'An Approver',
-          approvedOn: '10 Dec 2023',
+          approvedOn: '10/12/2023 00:00:00',
           kind: 'CRD',
           prisonCode: 'LEI',
           prisonDescription: 'Leeds (HMP)',
@@ -533,7 +578,10 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
           tabId: 'tab-heading-recently-approved',
         },
       },
+      hasMultipleCaseloadsInNomis: false,
       hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
+      changeLocationHref: '/licence/approve/change-location',
       approvalNeededCases: [],
       recentlyApprovedCases: [],
     })

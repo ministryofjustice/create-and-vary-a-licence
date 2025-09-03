@@ -16,7 +16,7 @@ const approvalNeededCases = [
       staffCode: 'ABC123',
     },
     submittedByFullName: 'Submitted Person',
-    releaseDate: '01 May 2024',
+    releaseDate: '01/05/2024',
     urgentApproval: false,
     isDueForEarlyRelease: false,
     approvedBy: null,
@@ -34,7 +34,7 @@ const approvalNeededCases = [
       staffCode: 'ABC456',
     },
     submittedByFullName: 'Submitted Person',
-    releaseDate: '01 May 2024',
+    releaseDate: '01/05/2024',
     urgentApproval: false,
     isDueForEarlyRelease: false,
     approvedBy: null,
@@ -50,7 +50,7 @@ const recentlyApprovedCases = [
     licenceId: 5,
     name: 'Test Person 5',
     prisonerNumber: 'A1234AE',
-    releaseDate: '01 May 2024',
+    releaseDate: '01/05/2024',
     probationPractitioner: {
       name: 'Test Com 1',
       staffCode: 'ABC123',
@@ -59,7 +59,7 @@ const recentlyApprovedCases = [
     urgentApproval: false,
     isDueForEarlyRelease: false,
     approvedBy: 'An Approver',
-    approvedOn: '10 Apr 2023',
+    approvedOn: '10/04/2023 00:00:00',
     kind: 'CRD',
     prisonCode: 'MDI',
     prisonDescription: 'Moorland (HMP)',
@@ -73,11 +73,11 @@ const recentlyApprovedCases = [
       staffCode: 'ABC456',
     },
     submittedByFullName: 'Submitted Person',
-    releaseDate: '12 Apr 2024',
+    releaseDate: '12/04/2024',
     urgentApproval: false,
     isDueForEarlyRelease: false,
     approvedBy: 'An Approver',
-    approvedOn: '12 Apr 2023',
+    approvedOn: '12/04/2023 00:00:00',
     kind: 'CRD',
     prisonCode: 'MDI',
     prisonDescription: 'Moorland (HMP)',
@@ -156,7 +156,7 @@ describe('View Prison Approver Search Results', () => {
     expect($('thead').text()).not.toContain('Location')
 
     expect($('#submitted-by-1').text()).toBe('Submitted Person')
-    expect($('#release-date-1').text()).toBe('01 May 2024')
+    expect($('#release-date-1').text()).toBe('1 May 2024')
 
     expect($('#name-2 > a').text()).toBe('Test Person 2')
     expect($('#name-2 > a').attr('href').trim()).toBe('/licence/approve/id/2/view')
@@ -167,7 +167,7 @@ describe('View Prison Approver Search Results', () => {
       '/licence/approve/id/2/probation-practitioner',
     )
     expect($('#submitted-by-2').text()).toBe('Submitted Person')
-    expect($('#release-date-2').text()).toBe('01 May 2024')
+    expect($('#release-date-2').text()).toBe('1 May 2024')
   })
 
   it('should display the results in a table with links to the licence and COM details page for the recently approved tab', () => {
@@ -205,7 +205,7 @@ describe('View Prison Approver Search Results', () => {
     )
     expect($('thead').text()).not.toContain('Location')
 
-    expect($('#release-date-1').text()).toBe('01 May 2024')
+    expect($('#release-date-1').text()).toBe('1 May 2024')
     expect($('#approved-by-1').text()).toBe('An Approver')
     expect($('#approved-on-1').text()).toBe('10 Apr 2023')
 
@@ -248,7 +248,7 @@ describe('View Prison Approver Search Results', () => {
             staffCode: 'ABC123',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '01 May 2024',
+          releaseDate: '01/05/2024',
           urgentApproval: true,
           isDueForEarlyRelease: false,
           approvedBy: null,
@@ -274,7 +274,7 @@ describe('View Prison Approver Search Results', () => {
     )
 
     expect($('#submitted-by-1').text()).toBe('Submitted Person')
-    expect($('#release-date-1').text()).toBe('01 May 2024Urgent approval required forupcoming release')
+    expect($('#release-date-1').text()).toBe('1 May 2024Urgent approval required forupcoming release')
   })
 
   it('should display HDC release warning label when kind is HDC and approval is needed', () => {
@@ -305,7 +305,7 @@ describe('View Prison Approver Search Results', () => {
             staffCode: 'ABC123',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '01 May 2024',
+          releaseDate: '01/05/2024',
           urgentApproval: false,
           isDueForEarlyRelease: false,
           approvedBy: null,
@@ -331,7 +331,7 @@ describe('View Prison Approver Search Results', () => {
     )
 
     expect($('#submitted-by-1').text()).toBe('Submitted Person')
-    expect($('#release-date-1').text()).toBe('01 May 2024HDC release')
+    expect($('#release-date-1').text()).toBe('1 May 2024HDC release')
   })
 
   it('should display early release warning label when needed', () => {
@@ -362,7 +362,7 @@ describe('View Prison Approver Search Results', () => {
             staffCode: 'ABC123',
           },
           submittedByFullName: 'Submitted Person',
-          releaseDate: '01 May 2024',
+          releaseDate: '01/05/2024',
           urgentApproval: false,
           isDueForEarlyRelease: true,
           approvedBy: null,
@@ -388,7 +388,7 @@ describe('View Prison Approver Search Results', () => {
     )
 
     expect($('#submitted-by-1').text()).toBe('Submitted Person')
-    expect($('#release-date-1').text()).toBe('01 May 2024Early release')
+    expect($('#release-date-1').text()).toBe('1 May 2024Early release')
   })
 
   it('should display the location column with data when the user has selected multiple prison caseloads', () => {
