@@ -130,6 +130,8 @@ export default defineConfig({
         stubGetCaSearchOnProbationResult: licence.stubGetCaSearchOnProbationResult,
         stubGetCaSearchResults: licence.stubGetCaSearchResults,
         stubGetCaSearchAttentionNeededPrisonResults: licence.stubGetCaSearchAttentionNeededPrisonResults,
+        stubGetPrisonApproverSearchApprovalNeededResult: licence.stubGetPrisonApproverSearchApprovalNeededResult,
+        stubGetPrisonApproverSearchRecentlyApprovedResult: licence.stubGetPrisonApproverSearchRecentlyApprovedResult,
         stubGetPrisonApproverSearchResults: licence.stubGetPrisonApproverSearchResults,
 
         stubGetProbationer: delius.stubGetProbationer,

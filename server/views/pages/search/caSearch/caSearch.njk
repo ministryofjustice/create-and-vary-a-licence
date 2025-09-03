@@ -305,7 +305,7 @@
     </div>
 
    <div class="govuk-grid-row">
-        <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
+        <div class="moj-search govuk-grid-column-one-half {{ "govuk-!-margin-bottom-8" if not hasMultipleCaseloadsInNomis }}">
             <form method="GET">
                 <div class="govuk-form-group">
                     <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
@@ -324,7 +324,7 @@
     </div>
 
     {% if hasMultipleCaseloadsInNomis %}
-        <div class="govuk-!-padding-top-2 govuk-!-padding-bottom-2 border-bottom">
+        <div class="govuk-!-padding-top-7 govuk-!-padding-bottom-9">
             <p  data-qa="change-caseload">
                 Showing:
                 <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
