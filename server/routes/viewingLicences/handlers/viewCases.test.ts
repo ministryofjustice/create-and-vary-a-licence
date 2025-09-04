@@ -220,7 +220,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Other Com',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
@@ -237,7 +237,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Test Com',
             },
-            releaseDate: '10 Jun 2022',
+            releaseDate: '10/06/2022',
             nomisLegalStatus: 'SENTENCED',
             isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
@@ -254,7 +254,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Four',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
@@ -271,7 +271,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Five',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'CRD',
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
@@ -315,7 +315,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Other Com',
             },
-            releaseDate: '01 Jul 2022',
+            releaseDate: '01/07/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -329,7 +329,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Three',
             },
-            releaseDate: '01 Jun 2022',
+            releaseDate: '01/06/2022',
             releaseDateLabel: 'Confirmed release date',
           },
           {
@@ -341,7 +341,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Four',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             kind: LicenceKind.HARD_STOP,
           },
@@ -354,7 +354,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Five',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
           },
         ],
@@ -393,7 +393,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Other Com',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -410,7 +410,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Test Com',
             },
-            releaseDate: '10 Jun 2022',
+            releaseDate: '10/06/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -427,7 +427,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Four',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -444,7 +444,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Five',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'CRD',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -485,7 +485,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Other Com',
             },
-            releaseDate: '01 Jul 2022',
+            releaseDate: '01/07/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -499,7 +499,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Three',
             },
-            releaseDate: '01 Jun 2022',
+            releaseDate: '01/06/2022',
             releaseDateLabel: 'Confirmed release date',
           },
           {
@@ -511,7 +511,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Four',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             kind: LicenceKind.HARD_STOP,
           },
@@ -524,7 +524,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Five',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
           },
         ],
@@ -559,7 +559,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Three',
             },
-            releaseDate: '01 Jun 2022',
+            releaseDate: '01/06/2022',
             releaseDateLabel: 'Confirmed release date',
             isDueForEarlyRelease: true,
           },
@@ -595,7 +595,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Four',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             isDueForEarlyRelease: true,
             kind: LicenceKind.HARD_STOP,
@@ -636,7 +636,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Other Com',
             },
-            releaseDate: '01 Jul 2022',
+            releaseDate: '01/07/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -650,7 +650,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Three',
             },
-            releaseDate: '01 Jun 2022',
+            releaseDate: '01/06/2022',
             releaseDateLabel: 'Confirmed release date',
           },
           {
@@ -662,7 +662,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Four',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             kind: LicenceKind.HARD_STOP,
           },
@@ -675,7 +675,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Five',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
           },
         ],
@@ -714,7 +714,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Other Com',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -731,7 +731,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Test Com',
             },
-            releaseDate: '10 Jun 2022',
+            releaseDate: '10/06/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -748,7 +748,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Four',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -765,7 +765,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Com Five',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'CRD',
             tabType: 'releasesInNextTwoWorkingDays',
             kind: LicenceKind.CRD,
@@ -808,7 +808,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Other Com',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'attentionNeeded',
             kind: LicenceKind.CRD,

@@ -14,6 +14,15 @@ export default class CvlUserDetails {
   // e.g. ['LEI', 'MDI']
   prisonCaseload?: string[] = []
 
+  // True if user has more than one caseload in Nomis
+  hasMultipleCaseloadsInNomis?: boolean
+
+  // True if user has selected more than one caseload to view
+  hasSelectedMultiplePrisonCaseloads?: boolean
+
+  // Caseloads to display - either selected by user or activeCaseload if none selected
+  prisonCaseloadToDisplay?: string[] = []
+
   // Prison staff id in Nomis
   nomisStaffId?: number
 

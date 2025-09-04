@@ -365,8 +365,8 @@ describe('Nunjucks Filters', () => {
       expect(registerNunjucks().getFilter('cvlDateToDateShort')('')).toEqual('not found')
     })
 
-    it('should return dd MMM yyyy date format', () => {
-      expect(registerNunjucks().getFilter('cvlDateToDateShort')('20/04/2024')).toEqual('20 Apr 2024')
+    it('should return d MMM yyyy date format', () => {
+      expect(registerNunjucks().getFilter('cvlDateToDateShort')('01/04/2024')).toEqual('1 Apr 2024')
     })
   })
 
@@ -681,6 +681,78 @@ describe('Nunjucks Filters', () => {
       expect(registerNunjucks().getFilter('formatAddressTitleCase')(address, false)).toBe(
         '10 Downing Street<br>London<br>SW1A 2AA',
       )
+    })
+  })
+
+  describe('additionalConditionRow', () => {
+    it('returns a row with "Delete" action when condition.data is empty', () => {
+      const licence = { id: 'LIC123' }
+      const condition = {
+        id: 'COND456',
+        code: 'CODE789',
+        category: 'Test Category',
+        sequence: 1,
+        data: {},
+        requiresInput: false,
+      }
+      const html = '<p>Condition HTML</p>'
+
+      expect(registerNunjucks().getGlobal('additionalConditionRow')(licence, condition, html, true)).toEqual({
+        sequence: 1,
+        key: { text: 'Test Category' },
+        value: { html: '<p>Condition HTML</p>' },
+        actions: {
+          items: [
+            {
+              attributes: {
+                'data-qa': 'condition-action-CODE789',
+              },
+              href: `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.id}/delete?fromReview=true`,
+              text: 'Delete',
+              visuallyHiddenText: 'Delete condition',
+            },
+          ],
+        },
+      })
+    })
+
+    it('returns a row with "Change" action when condition.data is empty', () => {
+      const licence = { id: 'LIC123' }
+      const condition = {
+        id: 'COND456',
+        code: 'CODE789',
+        category: 'Test Category',
+        sequence: 1,
+        data: [
+          {
+            id: 1,
+            sequence: 0,
+            field: 'probationRegion',
+            value: 'London',
+            contributesToLicence: true,
+          },
+        ],
+        requiresInput: true,
+      }
+      const html = '<p>Condition HTML</p>'
+
+      expect(registerNunjucks().getGlobal('additionalConditionRow')(licence, condition, html, true)).toEqual({
+        sequence: 1,
+        key: { text: 'Test Category' },
+        value: { html: '<p>Condition HTML</p>' },
+        actions: {
+          items: [
+            {
+              attributes: {
+                'data-qa': 'condition-action-CODE789',
+              },
+              href: '/licence/create/id/LIC123/additional-licence-conditions/condition/COND456?fromReview=true',
+              text: 'Change',
+              visuallyHiddenText: 'Change condition',
+            },
+          ],
+        },
+      })
     })
   })
 })
