@@ -143,16 +143,16 @@
 
 {% for case in approvalNeededCases %}
     {% if case.urgentApproval %}
-        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate
+        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">Urgent approval required for<br>upcoming release</span>' %}
     {% elseif case.kind == 'HDC' %}
-        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate
+        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif case.isDueForEarlyRelease %}
-        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate
+        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
     {% else %}
-        {% set releaseDate = '<span data-qa="releaseDate">' + case.releaseDate  + '</span>' %}
+        {% set releaseDate = '<span data-qa="releaseDate">' + case.releaseDate | cvlDateToDateShort  + '</span>' %}
     {% endif %}
 
     {% set result = [
@@ -186,7 +186,7 @@
     {
         attributes: {
             id: 'release-date-' + loop.index,
-            "data-sort-value": case.releaseDate | dateToUnix
+            "data-sort-value": case.releaseDate | cvlDateToDateShort | dateToUnix
         },
         html: releaseDate
     }
@@ -210,10 +210,10 @@
 
 {% for case in recentlyApprovedCases %}
     {% if case.kind == 'HDC' %}
-        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
+        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% else %}
-        {% set releaseDate = case.releaseDate %}
+        {% set releaseDate = case.releaseDate | cvlDateToDateShort %}
     {% endif %}
 
     {% set result = [
@@ -241,7 +241,7 @@
     {
         attributes: {
             id: 'release-date-' + loop.index,
-            "data-sort-value": case.releaseDate | dateToUnix
+            "data-sort-value": case.releaseDate | cvlDateToDateShort | dateToUnix
         },
         html: releaseDate
     },
@@ -256,9 +256,9 @@
         attributes: {
             id: 'approved-on-' + loop.index,
             "data-qa": "approvedOnDate",
-            "data-sort-value": case.approvedOn | dateToUnix
+            "data-sort-value": case.approvedOn | cvlDateToDateShort | dateToUnix
         },
-        text: case.approvedOn
+        text: case.approvedOn | cvlDateToDateShort
     }
     ] %}
 
@@ -294,7 +294,7 @@
     </div>
 
    <div class="govuk-grid-row">
-        <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
+        <div class="moj-search govuk-grid-column-one-half {{ "govuk-!-margin-bottom-8" if not hasMultipleCaseloadsInNomis }}">
             <form method="GET">
                 <div class="govuk-form-group">
                     <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
@@ -311,6 +311,20 @@
             </form>
         </div>
     </div>
+
+    {% if hasMultipleCaseloadsInNomis %}
+        <div class="govuk-!-padding-top-7 govuk-!-padding-bottom-9">
+            <p  data-qa="change-caseload">
+                Showing:
+                <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
+                    {{prisonsToDisplay | extractAttr('description') | join(', ')}} 
+                </span>
+                <a class="govuk-link govuk-!-margin-left-3" href="{{ changeLocationHref }}" data-qa="change-location-link">
+                    Licences for other establishments
+                </a>
+            </p>
+        </div>
+    {% endif %}
 
     {{ govukTabs({
         items: [

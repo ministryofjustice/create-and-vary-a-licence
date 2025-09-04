@@ -2662,6 +2662,74 @@ export default {
       },
     })
   },
+  stubGetPrisonApproverSearchApprovalNeededResult: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/prison-approver/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          approvalNeededResponse: [
+            {
+              licenceId: 1,
+              name: 'Test Person 1',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Com Four',
+              },
+              submittedByFullName: 'Submitted Person',
+              releaseDate: '01/07/2025',
+              urgentApproval: false,
+              isDueForEarlyRelease: false,
+              approvedBy: null,
+              approvedOn: null,
+              kind: 'CRD',
+              prisonCode: 'MDI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+          ],
+          recentlyApprovedResponse: [],
+        },
+      },
+    })
+  },
+  stubGetPrisonApproverSearchRecentlyApprovedResult: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/prison-approver/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          approvalNeededResponse: [],
+          recentlyApprovedResponse: [
+            {
+              licenceId: 4,
+              name: 'Test Person 4',
+              prisonerNumber: 'A1234AD',
+              releaseDate: '01/05/2025',
+              probationPractitioner: {
+                name: 'Com Four',
+              },
+              submittedByFullName: 'Submitted Person',
+              urgentApproval: false,
+              isDueForEarlyRelease: false,
+              approvedBy: 'An Approver',
+              approvedOn: '13/04/2023 00:00:00',
+              kind: 'CRD',
+              prisonCode: 'MDI',
+              prisonDescription: 'Moorland (HMP)',
+            },
+          ],
+        },
+      },
+    })
+  },
   stubGetPrisonApproverSearchResults: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -2704,8 +2772,8 @@ export default {
               approvedBy: null,
               approvedOn: null,
               kind: 'CRD',
-              prisonCode: 'MDI',
-              prisonDescription: 'Moorland (HMP)',
+              prisonCode: 'LEI',
+              prisonDescription: 'Leeds (HMP)',
             },
             {
               licenceId: 3,
@@ -2774,8 +2842,8 @@ export default {
               approvedBy: 'An Approver',
               approvedOn: '12/04/2023 00:00:00',
               kind: 'CRD',
-              prisonCode: 'MDI',
-              prisonDescription: 'Moorland (HMP)',
+              prisonCode: 'BAI',
+              prisonDescription: 'Belmarsh (HMP)',
             },
           ],
         },
