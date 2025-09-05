@@ -733,7 +733,7 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({ path: `/definitions` }, user)) as Promise<DprReportDefinition[]>
   }
 
-  async syncComAllocation(crn: string): Promise<void> {
-    await this.put({ path: `/offender/sync-com/crn/${crn}` })
+  async syncComAllocation(crn: string, user?: User): Promise<void> {
+    await this.put({ path: `/offender/sync-com/crn/${crn}` }, { username: user?.username })
   }
 }
