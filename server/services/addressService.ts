@@ -57,11 +57,11 @@ export default class AddressService {
   }
 
   private compareAddressPrioritySequences(a: number[], b: number[]): number {
-    const len = Math.min(a.length, b.length)
-    let i = 0
-    while (i < len) {
-      if (a[i] !== b[i]) return a[i] - b[i]
-      i += 1
+    const loopLength = Math.min(a.length, b.length)
+    let index = 0
+    while (index < loopLength) {
+      if (a[index] !== b[index]) return a[index] - b[index]
+      index += 1
     }
     return a.length - b.length
   }
