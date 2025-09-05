@@ -47,7 +47,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
 
         await handler.GET(req, res)
 
-        expect(addressService.searchForAddresses).toHaveBeenCalledWith(searchQuery, res.locals.user, ['probation'])
+        expect(addressService.searchForAddresses).toHaveBeenCalledWith(searchQuery, res.locals.user, 'probation')
         expect(res.redirect).toHaveBeenCalledWith(
           `/licence/hard-stop/create/id/${req.params.licenceId}/no-address-found?searchQuery=SW1A%201AA`,
         )
