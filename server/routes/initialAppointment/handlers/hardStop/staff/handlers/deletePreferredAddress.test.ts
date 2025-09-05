@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import DeletePreferredAddressRoutes from './deletePreferredAddress'
 import AddressService from '../../../../../../services/addressService'
+import DeletePreferredAddressRoutes from './deletePreferredAddress'
 
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
@@ -39,6 +39,17 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/hard-stop/create/id/${req.params.licenceId}/initial-meeting-place`,
+      )
+    })
+
+    it('should delete address by reference and redirect to initial meeting place with edit pathType', async () => {
+      const handler = new DeletePreferredAddressRoutes(addressService)
+      req.query.pathType = 'edit'
+      await handler.DELETE(req, res)
+
+      expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
       )
     })
 
