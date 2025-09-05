@@ -16,7 +16,7 @@ export default class SelectAddressRoutes {
     const fromReview = req.query?.fromReview
     const fromReviewParam = fromReview ? '?fromReview=true' : ''
 
-    const addresses = await this.addressService.searchForAddresses(searchQuery, user)
+    const addresses = await this.addressService.searchForAddresses(searchQuery, user, ['probation'])
 
     if (!addresses.length) {
       const redirectUrl = `/licence/create/id/${licenceId}/no-address-found?searchQuery=${encodeURIComponent(searchQuery)}`

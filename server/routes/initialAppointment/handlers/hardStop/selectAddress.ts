@@ -16,7 +16,7 @@ export default class SelectAddressRoutes {
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/hard-stop/${action}/id/${licenceId}`
 
-    const addresses = await this.addressService.searchForAddresses(searchQuery, user)
+    const addresses = await this.addressService.searchForAddresses(searchQuery, user, ['probation'])
 
     if (!addresses.length) {
       const redirectUrl = `${basePath}/no-address-found?searchQuery=${encodeURIComponent(searchQuery)}`
