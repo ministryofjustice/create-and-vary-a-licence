@@ -108,7 +108,7 @@ describe('AddressService', () => {
       const results = await runSearch(addresses, priorityStrings)
 
       // Then
-      // "Office" is now highest priority → uprn 20 comes before 21
+      // "Liverpool Office Probation" is now highest priority over Office Probation as there is more matches
       expect(results).toEqual(['20', '21'])
     })
 
