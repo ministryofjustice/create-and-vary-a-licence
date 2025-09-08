@@ -135,12 +135,12 @@
     "qrcode": "^1.5.4",
     "redis": "^5.8.2",
     "reflect-metadata": "^0.2.2",
-    "sqs-consumer": "^12.0.0",
+    "sqs-consumer": "^13.0.0",
     "superagent": "^10.2.3",
-    "uuid": "^11.1.0"
+    "uuid": "^12.0.0"
   },
   "devDependencies": {
-    "@ministryofjustice/eslint-config-hmpps": "^0.0.3",
+    "@ministryofjustice/eslint-config-hmpps": "^0.0.4",
     "@ministryofjustice/hmpps-precommit-hooks": "^0.0.3",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
