@@ -2,6 +2,7 @@ import ComDetailsPage from './comDetails'
 import Page from './page'
 import ViewALicencePage from './viewALicence'
 import ViewCasesPage from './viewCasesPage'
+import ChangeLocationPage from './changeLocationPage'
 
 export default class CaSearchPage extends Page {
   private searchHeading = '#ca-search-heading'
@@ -10,9 +11,13 @@ export default class CaSearchPage extends Page {
 
   private probationTabTitle = '#tab-heading-probation'
 
+  private attentionNeededTabTitle = '#tab-heading-attention-needed'
+
   private probationPractionerLinkId = '[data-qa=comLink]'
 
   private licenceLinkId = '#name-button-1'
+
+  private changeLocationsLink = '[data-qa=change-location-link]'
 
   constructor() {
     super('ca-search-page')
@@ -30,8 +35,16 @@ export default class CaSearchPage extends Page {
     return cy.get(this.probationTabTitle)
   }
 
+  getAttentionNeededTabTitle = () => {
+    return cy.get(this.attentionNeededTabTitle)
+  }
+
   getRow = n => {
-    return cy.get('tbody  tr').eq(n)
+    return cy.get('tbody tr').eq(n)
+  }
+
+  getSearchTableHeadings = () => {
+    return cy.get('.govuk-table__header')
   }
 
   clickOffenderName = (): ViewALicencePage => {
@@ -60,8 +73,26 @@ export default class CaSearchPage extends Page {
     return Page.verifyOnPage(CaSearchPage)
   }
 
+  clickAttentionNeededTab = (): CaSearchPage => {
+    cy.get('#tab_attention-needed').click()
+    return Page.verifyOnPage(CaSearchPage)
+  }
+
   clickSortByReleaseDate = (): CaSearchPage => {
     cy.get('#release-date-sort').click()
     return Page.verifyOnPage(CaSearchPage)
+  }
+
+  getChangeCaseloadOption = () => {
+    return cy.get('[data-qa=change-caseload]')
+  }
+
+  getCaseloadNames = () => {
+    return cy.get('[data-qa=caseload-names]')
+  }
+
+  clickChangeLocationsLink = (): ChangeLocationPage => {
+    cy.get(this.changeLocationsLink).click()
+    return Page.verifyOnPage(ChangeLocationPage)
   }
 }

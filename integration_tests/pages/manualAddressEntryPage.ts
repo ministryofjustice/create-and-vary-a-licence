@@ -1,3 +1,4 @@
+import AppointmentPlacePage from './appointmentPlace'
 import Page from './page'
 import ViewALicencePage from './viewALicence'
 
@@ -13,6 +14,8 @@ export default class ManualAddressEntryPage extends Page {
   private postcodeTextInputId = '#postcode'
 
   private continueButtonId = '[data-qa=continue]'
+
+  private postcodeLookupSearch = '[data-qa=postcodeLookupSearch]'
 
   constructor() {
     super('manual-address-entry-page')
@@ -55,5 +58,10 @@ export default class ManualAddressEntryPage extends Page {
   clickContinueToReturn = (): ViewALicencePage => {
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(ViewALicencePage)
+  }
+
+  findAnAddressBtnClick = (): AppointmentPlacePage => {
+    cy.get(this.postcodeLookupSearch).click()
+    return Page.verifyOnPage(AppointmentPlacePage)
   }
 }

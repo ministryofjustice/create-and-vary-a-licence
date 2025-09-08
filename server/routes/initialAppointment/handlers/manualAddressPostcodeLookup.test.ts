@@ -61,6 +61,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           townOrCity: 'Testville',
           county: 'Testshire',
           postcode: 'TE5 7ST',
+          isPreferredAddress: '',
         }
 
         addressService.addAppointmentAddress = jest.fn()
@@ -73,6 +74,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           licenceId,
           {
             ...req.body,
+            isPreferredAddress: false,
             source: 'MANUAL',
           },
           user,
@@ -88,6 +90,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           licenceId,
           {
             ...req.body,
+            isPreferredAddress: false,
             source: 'MANUAL',
           },
           user,
@@ -97,12 +100,14 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
 
       it('should redirect to show route for prison view', async () => {
         const handler = new ManualAddressPostcodeLookupRoutes(addressService, UserType.PRISON)
+        req.body.isPreferredAddress = 'true'
         await handler.POST(req, res)
 
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
           licenceId,
           {
             ...req.body,
+            isPreferredAddress: true,
             source: 'MANUAL',
           },
           user,

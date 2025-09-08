@@ -6,15 +6,30 @@ import Address from '../types/address'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 import config from '../../../config'
+import AddressService from '../../../services/addressService'
+import { AddressResponse } from '../../../@types/licenceApiClientTypes'
 
 jest.mock('./initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
+const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
   let req: Request
   let res: Response
   let formAddress: Address
+  const preferredAddresses: AddressResponse[] = [
+    {
+      uprn: '123456789',
+      reference: 'ref123',
+      firstLine: '123 Test Street',
+      secondLine: 'Test Area',
+      townOrCity: 'Test City',
+      county: 'Test County',
+      postcode: 'TE1 2ST',
+      source: 'OS_PLACES',
+    },
+  ]
 
   beforeEach(() => {
     formAddress = {
@@ -50,15 +65,16 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
 
     licenceService.updateAppointmentAddress = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
+    addressService.getPreferredAddresses = jest.fn()
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
     config.postcodeLookupEnabled = false
+    jest.clearAllMocks()
   })
 
   describe('Probation user journey', () => {
-    const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PROBATION)
+    const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, UserType.PROBATION)
 
     describe('GET', () => {
       it('should render view', async () => {
@@ -66,6 +82,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
+          preferredAddresses: [],
         })
       })
 
@@ -75,6 +92,18 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
+          preferredAddresses: [],
+        })
+      })
+
+      it('should render view with fromReviewParam and preferredAddresses when postcode lookup is enabled', async () => {
+        config.postcodeLookupEnabled = true
+        addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
+          formAddress,
+          manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
+          preferredAddresses,
         })
       })
     })
@@ -138,11 +167,42 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
         expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
       })
+
+      it('should add appointment address when postcode lookup is enabled and preferredAddress is provided', async () => {
+        const preferredAddress = {
+          uprn: '123456',
+          firstLine: '123 Test Street',
+          secondLine: 'Apt 4',
+          townOrCity: 'Testville',
+          county: 'Testshire',
+          postcode: 'TE5 7ST',
+          source: 'test-source',
+        }
+
+        req = { ...req, body: { preferredAddress: JSON.stringify(preferredAddress) }, query: {} } as unknown as Request
+
+        config.postcodeLookupEnabled = true
+        const mockAddAppointmentAddress = jest.fn()
+        addressService.addAppointmentAddress = mockAddAppointmentAddress
+
+        await handler.POST(req, res)
+
+        expect(mockAddAppointmentAddress).toHaveBeenCalledWith(
+          req.params.licenceId,
+          {
+            ...preferredAddress,
+            isPreferredAddress: false,
+          },
+          res.locals.user,
+        )
+
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/${req.params.licenceId}/initial-meeting-contact`)
+      })
     })
   })
 
   describe('Prison user journey', () => {
-    const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
+    const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, UserType.PRISON)
 
     describe('GET', () => {
       it('should render view', async () => {
@@ -150,6 +210,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
+          preferredAddresses: [],
         })
       })
 
@@ -159,6 +220,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
+          preferredAddresses: [],
         })
       })
     })

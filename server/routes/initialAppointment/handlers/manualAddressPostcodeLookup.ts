@@ -24,7 +24,7 @@ export default class ManualAddressPostcodeLookupRoutes {
     const { licenceId } = req.params
     const { user } = res.locals
     const basePath = `/licence/create/id/${licenceId}`
-
+    const { isPreferredAddress } = req.body
     const { firstLine, secondLine, townOrCity, county, postcode } = req.body
 
     const appointmentAddress = {
@@ -34,6 +34,7 @@ export default class ManualAddressPostcodeLookupRoutes {
       county,
       postcode,
       source: 'MANUAL',
+      isPreferredAddress: isPreferredAddress === 'true',
     } as AddAddressRequest
 
     await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)

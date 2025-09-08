@@ -557,4 +557,8 @@ export default class LicenceService {
       updateElectronicMonitoringProgrammeRequest,
     )
   }
+
+  async syncComAllocation(crn: string, user: User = null): Promise<void> {
+    return this.licenceApiClient.syncComAllocation(crn, user)
+  }
 }

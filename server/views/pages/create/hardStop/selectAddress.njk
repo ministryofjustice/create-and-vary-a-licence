@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% set pageTitle = applicationName + " - Select an address" %}
 {% set backLinkHref = "/" %}
@@ -55,6 +56,32 @@
                 {% else %}
                     {{ renderMultipleAddresses(addresses, validationErrors) }}
                 {% endif %}
+
+                                <h1 class="govuk-heading-s">
+                    Save this address (optional)
+                </h1>
+
+                {{ govukCheckboxes({
+                    id: "isPreferredAddress",
+                    name: "isPreferredAddress",
+                    fieldset: {
+                        legend: {
+                            text: "",
+                            isPageHeading: false,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    items: [
+                        {
+                            id: "isPreferredAddressSelected",
+                            value: "true",
+                            text: "Add to your list of saved addresses",
+                            label: {
+                                classes: 'govuk-!-padding-top-0'
+                            }
+                        }
+                    ]
+                }) }}
 
                 {{ govukButton({
                     text: continueOrSaveLabel,
