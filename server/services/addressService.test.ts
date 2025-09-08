@@ -43,7 +43,7 @@ describe('AddressService', () => {
   describe('searchForAddresses', () => {
     const priorityString = 'Probation'
 
-    it('should sort addresses based on priority string matches and preserve original order within groups', async () => {
+    it('should sort addresses based on priority string matches and alphanumeric', async () => {
       // Given
       const mockResponse: AddressSearchResponse[] = [
         makeAddress('1', 'Probation Services', 'Main Street', 'Townsville'), // match in first line
@@ -65,18 +65,18 @@ describe('AddressService', () => {
 
       // Then
       expect(results).toEqual([
-        '1', // matches 'Probation'
-        '5', // matches 'Probation'
-        '6', // matches 'Probation'
-        '8', // matches 'Probation'
+        '8', // matches 'Probation' (first line)
+        '6', // matches 'Probation' (second line)
         '10', // matches 'Probation'
-        '12', // matches 'Probation'
-        '2', // no match
-        '3', // no match, preserves input order after '2'
+        '5', // matches 'Probation'
+        '12', // matches 'Probation x 3'
+        '1', // matches 'Probation'
         '4', // no match
         '7', // no match
-        '9', // no match
+        '2', // no match
+        '3', // no match
         '11', // no match
+        '9', // no match
       ])
     })
 
@@ -91,7 +91,7 @@ describe('AddressService', () => {
       expect(results).toHaveLength(0)
     })
 
-    it('when no priority results should be in orginal order', async () => {
+    it('when no priority results should be in alphanumeric', async () => {
       // Given
       const mockResponse: AddressSearchResponse[] = [
         makeAddress('1', 'Probation Services', 'Main Street', 'Townsville'),
