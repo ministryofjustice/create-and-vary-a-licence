@@ -9,19 +9,26 @@ export default class AddressService {
     if (!searchQuery?.trim()) return []
 
     const requestBody = { searchQuery }
+
     const results = await this.licenceApiClient.searchForAddresses(requestBody, user)
 
     if (results.length > 1 && priorityString?.trim()) {
       const lowercasePriority = priorityString.toLowerCase()
 
-      const rankedAddresses = results.map((address, index) => {
+      const rankedAddresses = results.map(address => {
         const addressText = [address.firstLine, address.secondLine ?? ''].join(',').toLowerCase()
         const matchPriority = addressText.includes(lowercasePriority) ? 1 : 0
-        return { address, matchPriority, originalIndex: index }
+        return { address, matchPriority, addressText }
       })
 
-      rankedAddresses.sort((a, b) => b.matchPriority - a.matchPriority || a.originalIndex - b.originalIndex)
-
+      rankedAddresses.sort((a, b) => {
+        // Sort by priority first
+        if (b.matchPriority !== a.matchPriority) {
+          return b.matchPriority - a.matchPriority
+        }
+        // Then alphabetical by address text
+        return a.addressText.localeCompare(b.addressText)
+      })
       return rankedAddresses.map(ranked => ranked.address)
     }
 
