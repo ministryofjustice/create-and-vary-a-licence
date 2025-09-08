@@ -29,6 +29,7 @@ export default class TimelineService {
           convertToTitleCase(`${e.forenames} ${e.surname}`),
           licence.id,
           e.eventTime,
+          e.eventTime,
         ),
     )
   }
@@ -72,6 +73,7 @@ export default class TimelineService {
           creator,
           licence.id,
           licence.dateLastUpdated,
+          licence.dateCreated,
         )
 
       case LicenceStatus.VARIATION_SUBMITTED:
@@ -82,6 +84,7 @@ export default class TimelineService {
           creator,
           licence.id,
           licence.dateLastUpdated,
+          licence.dateCreated,
         )
 
       case LicenceStatus.VARIATION_REJECTED:
@@ -92,6 +95,7 @@ export default class TimelineService {
           creator,
           licence.id,
           licence.dateLastUpdated,
+          licence.dateCreated,
         )
 
       case LicenceStatus.VARIATION_APPROVED:
@@ -102,6 +106,7 @@ export default class TimelineService {
           creator,
           licence.id,
           licence.dateLastUpdated,
+          licence.dateCreated,
         )
 
       case LicenceStatus.ACTIVE:
@@ -116,6 +121,7 @@ export default class TimelineService {
               creator,
               licence.id,
               licence.dateLastUpdated,
+              licence.dateCreated,
             )
           : new TimelineEvent(
               TimelineEventType.CREATION,
@@ -123,6 +129,7 @@ export default class TimelineService {
               licence.statusCode,
               `${creator}${licence.kind === LicenceKind.HARD_STOP ? `, ${prisonName}` : ''}`,
               licence.id,
+              licence.dateCreated,
               licence.dateCreated,
             )
       }

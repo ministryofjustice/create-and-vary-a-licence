@@ -151,7 +151,7 @@ const toIsoDate = (date: Date) => {
 }
 
 const cvlDateToDateShort = (date: string) => {
-  return date ? moment(date, CVL_DATE).format(DATE_SHORT) : null
+  return date ? moment(date, CVL_DATE).format(DATE_SHORT) : 'not found'
 }
 
 const parseCvlDateTime = (date: string, { withSeconds }: { withSeconds: boolean }) => {

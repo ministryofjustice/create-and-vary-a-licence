@@ -24,6 +24,9 @@
             <div class="govuk-grid-column-three-quarters">
                 <h2 id="additional-pss-conditions-heading"
                     class="govuk-heading-m">{{ title or "Additional post sentence supervision requirements" }} ({{conditionCount}})</h2>
+                {% if conditionCount == 0 %}
+                    <p class="govuk-body govuk-!-margin-top-4">No additional post sentence supervision requirements added</p>
+                {% endif %}
             </div>
             <div class="govuk-grid-column-one-quarter">
                 {% if isEditable %}
@@ -54,13 +57,11 @@
         }), additionalPssConditions) %}
     {% endfor %}
 
-    {% if additionalPssConditions.length > 0 %}
-      {{ govukSummaryList({
+    {{ govukSummaryList({
         attributes: { id: 'additionalPssConditions' },
-        classes: 'govuk-!-margin-bottom-9 govuk-!-margin-top-7',
+        classes: 'govuk-!-margin-top-7' if conditionCount,
         rows: additionalPssConditions
-      }) }}
-    {% endif %}
+    }) }}
 
     {% if conditionCount == 0 %}
         <hr class="govuk-section-break govuk-section-break--visible">

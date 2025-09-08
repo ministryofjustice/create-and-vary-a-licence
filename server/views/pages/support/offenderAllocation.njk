@@ -1,0 +1,117 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
+
+{% set pageTitle = applicationName + " - prisoner detail" %}
+{% set backLinkHref = "/support/offender-search" %}
+{% set hideLicenceBanner = true %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if not crn %}
+                {{ mojAlert({
+                    variant: "warning",
+                    dismissible: false,
+                    text: "No Delius record found linked to this NOMIS ID"
+                }) }}
+            {% endif %}
+            <div class="govuk-width-container">
+                <span class="govuk-caption-xl">{{ offenderName }}</span>
+                <h1 class="govuk-heading-xl">COM Allocation</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">Probation practitioner</caption>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Name</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.name }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Email</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.email }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Telephone</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.telephone }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Team</th>
+                    {% if probationPractitioner.team | length %}
+                        <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-teams/{{probationPractitioner.teamCode}}/caseload">{{ probationPractitioner.team }}</a></td>
+                    {% endif %}
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">LDU</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.ldu }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">LAU</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.lau }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">PDU</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.pdu }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Region</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.region }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Caseload</th>
+                    {% if probationPractitioner.staffCode | length %}
+                        <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-practitioner/{{ probationPractitioner.staffCode }}/caseload">link</a></td>
+                    {% endif %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--m">COM details stored by Create and vary a licence</caption>
+        <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Email</th>
+            <td class="govuk-table__cell">{{ cvlCom.email }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Username</th>
+            <td class="govuk-table__cell">{{ cvlCom.username }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Team</th>
+            <td class="govuk-table__cell">{{ cvlCom.team }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">LAU</th>
+            <td class="govuk-table__cell">{{ cvlCom.lau }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">PDU</th>
+            <td class="govuk-table__cell">{{ cvlCom.pdu }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Region</th>
+            <td class="govuk-table__cell">{{ cvlCom.region }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <input type="hidden" name="crn" value="{{ crn }}">
+
+        <div class="govuk-button-group">
+            <button class="govuk-button" data-module="govuk-button">Sync allocation</button>
+            <a class="govuk-button govuk-button--secondary" href="/support">Cancel</a>
+        </div>
+    </form>
+{% endblock %}

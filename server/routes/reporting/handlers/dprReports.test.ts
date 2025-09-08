@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import ReportListUtils from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils'
 import DprService from '../../../services/dprService'
 import DprReportsRoutes from './dprReports'
+import { DprReportDefinition } from '../../../@types/dprReportingTypes'
 
 const dprService = new DprService(null) as jest.Mocked<DprService>
 jest.mock('../../../services/dprService')
@@ -16,28 +17,13 @@ describe('Route Handlers - DPR Reports', () => {
   beforeEach(() => {
     req = {
       params: {
-        id: 'id-1',
+        id: '1',
       },
     } as unknown as Request
 
     res = {
       render: jest.fn(),
       locals: {
-        reportDefinitions: [
-          {
-            id: 'id-1',
-            name: 'name-1',
-            description: 'description-1',
-            variants: [
-              {
-                id: 'id-1',
-                name: 'report-1',
-                descripion: 'description-1',
-              },
-            ],
-            authorised: true,
-          },
-        ],
         user: {
           token: 'token',
           username: 'joebloggs',
@@ -45,6 +31,22 @@ describe('Route Handlers - DPR Reports', () => {
       },
     } as unknown as Response
     next = jest.fn() as NextFunction
+
+    dprService.getDefinitions.mockResolvedValue([
+      {
+        id: '1',
+        name: 'definition',
+        description: 'This is a definition',
+        variants: [
+          {
+            id: '1',
+            name: 'report name 1',
+            description: 'report description 1',
+          },
+        ],
+        authorised: true,
+      },
+    ] as unknown as DprReportDefinition[])
   })
 
   describe('GET', () => {
@@ -53,10 +55,10 @@ describe('Route Handlers - DPR Reports', () => {
       await handler.GET(req, res, next)
       expect(ReportListUtils.createReportListRequestHandler).toHaveBeenCalledWith(
         expect.objectContaining({
-          definitionName: 'id-1',
+          definitionName: '1',
           layoutTemplate: 'partials/dprReport.njk',
           title: 'CVL Reports',
-          variantName: 'id-1',
+          variantName: '1',
         }),
       )
       expect(dprHandler).toHaveBeenCalledWith(req, res, next)

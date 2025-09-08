@@ -2,7 +2,7 @@ import moment from 'moment'
 import Page from './page'
 import { Context } from '../support/context'
 import CheckAnswersPage from './checkAnswers'
-import { ElectronicMonitoringProvider } from '../../server/@types/licenceApiClientTypes'
+import { AdditionalCondition, ElectronicMonitoringProvider } from '../../server/@types/licenceApiClientTypes'
 import LicenceKind from '../../server/enumeration/LicenceKind'
 
 export default class PssConditionsInputPage extends Page {
@@ -59,6 +59,7 @@ export default class PssConditionsInputPage extends Page {
   }
 
   clickContinue = (
+    conditions?: AdditionalCondition[],
     electronicMonitoringProvider?: ElectronicMonitoringProvider,
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE',
     licenceKind: LicenceKind = LicenceKind.CRD,
@@ -70,6 +71,7 @@ export default class PssConditionsInputPage extends Page {
       kind: licenceKind,
       electronicMonitoringProvider,
       electronicMonitoringProviderStatus,
+      conditions,
     })
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)

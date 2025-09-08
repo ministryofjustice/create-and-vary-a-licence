@@ -149,7 +149,13 @@
                     <div class="govuk-button-group margin-top-85">
                 {% endif %}
                     {% if isInProgress and not isInHardStopPeriod %}
-                        <h2 class="govuk-heading-m margin-top-85 govuk-!-margin-bottom-4">Send this licence for approval</h2>
+
+                        {% if licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION' %}
+                            <h2 class="govuk-heading-m margin-top-85 govuk-!-margin-bottom-6">Add reasons for variation</h2>
+                        {% else %}
+                            <h2 class="govuk-heading-m margin-top-85 govuk-!-margin-bottom-6">Send to prison for approval</h2>
+                        {% endif %}
+
                         <div class="govuk-button-group">
                         {{ govukButton({
                             text: submitButtonText,

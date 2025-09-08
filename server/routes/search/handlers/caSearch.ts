@@ -1,13 +1,18 @@
 import { Request, Response } from 'express'
+import PrisonerService from '../../../services/prisonerService'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 import { CaCase, PrisonCaseAdminSearchResult } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { CaViewCasesTab } from '../../../enumeration'
 import config from '../../../config'
 
 export default class CaSearch {
-  constructor(private readonly searchService: SearchService) {}
+  constructor(
+    private readonly searchService: SearchService,
+    private readonly prisonerService: PrisonerService,
+  ) {}
 
   nonViewableStatuses = [
     LicenceStatus.NOT_IN_PILOT,
@@ -22,8 +27,10 @@ export default class CaSearch {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const queryTerm = req.query?.queryTerm as string
-    const { user } = res.locals
-    const { caseloadsSelected = [] } = req.session
+    const { hasMultipleCaseloadsInNomis, prisonCaseloadToDisplay, hasSelectedMultiplePrisonCaseloads } = res.locals.user
+
+    const changeLocationHref =
+      queryTerm.length > 0 ? `/licence/view/change-location?queryTerm=${queryTerm}` : '/licence/view/change-location'
 
     let results: PrisonCaseAdminSearchResult
 
@@ -33,14 +40,11 @@ export default class CaSearch {
         onProbationResults: [],
       }
     } else {
-      const { activeCaseload } = user
-      const prisonsToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload]
-
-      results = await this.searchService.getCaSearchResults(queryTerm, prisonsToDisplay)
+      results = await this.searchService.getCaSearchResults(queryTerm, prisonCaseloadToDisplay)
     }
 
-    const hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
     const { inPrisonResults, onProbationResults } = results
+    const attentionNeededResults = inPrisonResults.filter(res => res.tabType === 'ATTENTION_NEEDED')
 
     const backLink = '/licence/view/cases'
 
@@ -58,7 +62,13 @@ export default class CaSearch {
         tabHeading: 'People on probation',
         resultsCount: onProbationResults.length,
       },
+      attentionNeeded: {
+        resultsCount: attentionNeededResults.length,
+      },
     }
+
+    const allPrisons = await this.prisonerService.getPrisons()
+    const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
 
     const { recallsEnabled } = config
     return res.render('pages/search/caSearch/caSearch', {
@@ -84,8 +94,21 @@ export default class CaSearch {
           licenceStatus,
         }
       }),
+      attentionNeededResults: attentionNeededResults.map(res => {
+        return {
+          ...res,
+          nomisLegalStatus: res.nomisLegalStatus,
+          tabType: CaViewCasesTab[res.tabType],
+        }
+      }),
+      CaViewCasesTab,
+      showAttentionNeededTab: attentionNeededResults.length > 0,
+      hasMultipleCaseloadsInNomis,
       hasSelectedMultiplePrisonCaseloads,
+      prisonsToDisplay,
+      changeLocationHref,
       recallsEnabled,
+      isSearchPageView: true,
     })
   }
 
@@ -95,7 +118,12 @@ export default class CaSearch {
 
   private getLink = (licence: CaCase): string => {
     if (
-      !this.isClickable(<LicenceKind>licence.kind, <LicenceStatus>licence.licenceStatus, licence.isInHardStopPeriod)
+      !this.isClickable(
+        <LicenceKind>licence.kind,
+        <LicenceStatus>licence.licenceStatus,
+        licence.isInHardStopPeriod,
+        licence.tabType,
+      )
     ) {
       return null
     }
@@ -117,7 +145,15 @@ export default class CaSearch {
     return null
   }
 
-  private isClickable = (kind: LicenceKind, licenceStatus: LicenceStatus, isInHardStopPeriod: boolean): boolean => {
+  private isClickable = (
+    kind: LicenceKind,
+    licenceStatus: LicenceStatus,
+    isInHardStopPeriod: boolean,
+    tabType: string,
+  ): boolean => {
+    if (tabType === 'ATTENTION_NEEDED') {
+      return false
+    }
     if (isInHardStopPeriod && this.isEditableInHardStop(kind, licenceStatus)) {
       return true
     }
