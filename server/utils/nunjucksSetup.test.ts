@@ -755,4 +755,51 @@ describe('Nunjucks Filters', () => {
       })
     })
   })
+
+  describe('merge filter', () => {
+    it('merges two objects with overlapping keys', () => {
+      const obj1 = { a: 1, b: 2 }
+      const obj2 = { b: 3, c: 4 }
+
+      const result = registerNunjucks().getFilter('merge')(obj1, obj2)
+
+      expect(result).toEqual({ a: 1, b: 3, c: 4 })
+    })
+
+    it('returns the second object when the first is empty', () => {
+      const result = registerNunjucks().getFilter('merge')({}, { x: 10 })
+      expect(result).toEqual({ x: 10 })
+    })
+
+    it('returns the first object when the second is empty', () => {
+      const result = registerNunjucks().getFilter('merge')({ y: 20 }, {})
+      expect(result).toEqual({ y: 20 })
+    })
+  })
+
+  describe('getLastNonEmpty filter', () => {
+    it('returns the last non-empty string from an array', () => {
+      const input = ['', 'first', '', 'second']
+      const result = registerNunjucks().getFilter('getLastNonEmpty')(input)
+      expect(result).toBe('second')
+    })
+
+    it('returns an empty string when all elements are empty', () => {
+      const input = ['', '', '']
+      const result = registerNunjucks().getFilter('getLastNonEmpty')(input)
+      expect(result).toBe('')
+    })
+
+    it('returns the value as-is when input is not an array', () => {
+      const input = 'directValue'
+      const result = registerNunjucks().getFilter('getLastNonEmpty')(input)
+      expect(result).toBe('directValue')
+    })
+
+    it('returns the last non-empty value even if it’s a number or boolean', () => {
+      const input = ['', 0, false, 'yes']
+      const result = registerNunjucks().getFilter('getLastNonEmpty')(input)
+      expect(result).toBe('yes')
+    })
+  })
 })

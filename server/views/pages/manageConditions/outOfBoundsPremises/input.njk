@@ -45,8 +45,18 @@
                     {% if config.subtext %}
                         <div class="govuk-hint">{{ config.subtext }}</div>
                     {% endif %}
+                    {{ 
+                        formBuilder({
+                            licenceId: licence.id,
+                            config: config,
+                            additionalCondition: additionalCondition,
+                            validationErrors: validationErrors,
+                            formResponses: formResponses,
+                            csrfToken: csrfToken,
+                            isCurfewField: false
+                        }) 
+                    }}
 
-                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken, false) }}
                     <div class="govuk-button-group">
                         {{ govukButton({
                             text: "Continue",

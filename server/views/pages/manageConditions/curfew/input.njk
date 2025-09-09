@@ -45,7 +45,18 @@
                         <div class="govuk-hint">{{ config.subtext }}</div>
                     {% endif %}
 
-                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken, true) }}
+
+                    {{
+                        formBuilder({
+                            licenceId: licence.id,
+                            config: config,
+                            additionalCondition: additionalCondition,
+                            validationErrors: validationErrors,
+                            formResponses: formResponses,
+                            csrfToken: csrfToken,
+                            isCurfewField: true
+                        }) 
+                    }}
 
                     <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
 

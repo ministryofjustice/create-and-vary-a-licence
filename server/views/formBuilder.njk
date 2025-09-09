@@ -12,14 +12,18 @@
 {# TODO: Currently, this form builder only supports the "add another" functionality for the text input type. #}
 {# It can be extended in future if the other field types require Add Another functionality #}
 
-{% macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken, isCurfewField) %}
+{% macro formBuilder(params) %}
+  {% set licenceId = params.licenceId %}
+  {% set config = params.config %}
+  {% set additionalCondition = params.additionalCondition %}
+  {% set validationErrors = params.validationErrors %}
+  {% set formResponses = params.formResponses %}
+  {% set csrfToken = params.csrfToken %}
+  {% set isCurfewField = params.isCurfewField %}
+
     {% for input in config.inputs %}
         {% set validationError = validationErrors | findError(input.name) %}
         {% set formValues = getFormResponses(formResponses, input.name) %}
-
-        {% if formValues == "" %}
-            {% set formValues = null %}
-        {% endif %}
 
         {% if not formValues %}
             {% if isCurfewField %}
@@ -79,7 +83,15 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken, isCurfewField)
+                            html: formBuilder({
+                                    licenceId: licenceId,
+                                    config: option.conditional,
+                                    additionalCondition: additionalCondition,
+                                    validationErrors: validationErrors,
+                                    formResponses: formResponses,
+                                    csrfToken: csrfToken,
+                                    isCurfewField: isCurfewField
+                                })
                         } if option.conditional
                     }), options) %}
                 {% endfor %}
@@ -206,7 +218,15 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken, isCurfewField)
+                            html: formBuilder({
+                                    licenceId: licenceId,
+                                    config: option.conditional,
+                                    additionalCondition: additionalCondition,
+                                    validationErrors: validationErrors,
+                                    formResponses: formResponses,
+                                    csrfToken: csrfToken,
+                                    isCurfewField: isCurfewField
+                                })
                         } if option.conditional
                     }), options) %}
                 {% endfor %}
