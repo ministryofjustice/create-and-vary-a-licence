@@ -45,7 +45,7 @@
                         <div class="govuk-hint">{{ config.subtext }}</div>
                     {% endif %}
 
-                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken, true) }}
 
                     <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
 
@@ -71,7 +71,7 @@
                         }) }}
                         {{ govukButton({
                             text: "Delete this condition",
-                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + additionalCondition.code + "/delete" + fromReview + fromPolicyReviewQuery,
+                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + additionalConditionCode + "/delete" + fromReview + fromPolicyReviewQuery,
                             classes: 'govuk-button--secondary',
                             attributes: { 'data-qa': 'delete' },
                             preventDoubleClick: true

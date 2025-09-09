@@ -158,6 +158,18 @@ export function registerNunjucks(app?: express.Express): Environment {
     return times[index]
   })
 
+  njkEnv.addFilter('merge', (obj1, obj2) => {
+    return { ...obj1, ...obj2 }
+  })
+
+  njkEnv.addFilter('getLastNonEmpty', value => {
+    if (Array.isArray(value)) {
+      const nonEmpty = value.filter(v => v !== '')
+      return nonEmpty.length > 0 ? nonEmpty[nonEmpty.length - 1] : ''
+    }
+    return value
+  })
+
   njkEnv.addFilter('getValueFromAddress', (formValues: string[], property: keyof Address, index = 0) => {
     const addresses = formValues.map(value => (typeof value === 'string' ? Address.fromString(value) : value))
     return addresses[index] ? addresses[index][property] : ''
@@ -245,10 +257,41 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addGlobal('getValueFromAdditionalCondition', (additionalCondition: AdditionalCondition, inputName: string) => {
+    console.log('getValueFromAdditionalCondition - additionalCondition ==========________>', inputName)
     return additionalCondition
       ? additionalCondition.data.filter(item => item.field === inputName).map(item => item.value)
       : undefined
   })
+
+  njkEnv.addGlobal(
+    'lookupCurfewConditionValue',
+    (additionalCondition: AdditionalCondition | AdditionalCondition[], inputName: string) => {
+      console.log(
+        'lookupCurfewConditionValue - additionalCondition===========>',
+        inputName,
+        Array.isArray(additionalCondition),
+      )
+      if (!additionalCondition) return []
+
+      const data = Array.isArray(additionalCondition)
+        ? additionalCondition.flatMap(instance => instance.data)
+        : additionalCondition.data
+
+      // Extract base field name and optional index (e.g., curfewStart2 → curfewStart + 1)
+      const match = inputName.match(/^([a-zA-Z]+)(\d+)?$/)
+      if (!match) return []
+
+      const baseField = match[1]
+      const index = match[2] ? parseInt(match[2], 10) - 1 : 0
+      console.log('baseField, index', baseField, index)
+      console.log('data', data)
+
+      const values = data.filter(item => item.field === baseField)?.map(item => item.value)
+      console.log('values', values, values[index] ? [String(values[index])] : [])
+
+      return values[index] ? [String(values[index])] : []
+    },
+  )
 
   njkEnv.addGlobal(
     'additionalConditionRow',

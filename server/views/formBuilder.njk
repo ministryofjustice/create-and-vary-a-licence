@@ -12,10 +12,22 @@
 {# TODO: Currently, this form builder only supports the "add another" functionality for the text input type. #}
 {# It can be extended in future if the other field types require Add Another functionality #}
 
-{% macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken) %}
+{% macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken, isCurfewField) %}
     {% for input in config.inputs %}
         {% set validationError = validationErrors | findError(input.name) %}
-        {% set formValues = getFormResponses(formResponses, input.name) or getValueFromAdditionalCondition(additionalCondition, input.name) %}
+        {% set formValues = getFormResponses(formResponses, input.name) %}
+
+        {% if formValues == "" %}
+            {% set formValues = null %}
+        {% endif %}
+
+        {% if not formValues %}
+            {% if isCurfewField %}
+                {% set formValues = lookupCurfewConditionValue(additionalCondition, input.name) %}
+            {% else %}
+                {% set formValues = getValueFromAdditionalCondition(additionalCondition, input.name) %}
+            {% endif %}
+        {% endif %}
 
         <div data-module="moj-condition-add-another">
             {% if input.type == 'text' %}
@@ -38,7 +50,6 @@
                         selected: option.value in formValues
                     }), options) %}
                 {% endfor %}
-
                 {{ govukSelect({
                     id: input.name,
                     name: input.name,
@@ -55,12 +66,20 @@
             {% if input.type == 'radio' %}
                 {% set options = [] %}
                 {% for option in input.options %}
+
+                    {% set updatedInputs = [] %}
+                    {% for input in option.conditional.inputs %}
+                        {% set updatedInput = input | merge({ name: (option.value | trim) + '-' + input.name }) %}
+                        {% set updatedInputs = (updatedInputs.push(updatedInput), updatedInputs) %}
+                    {% endfor %}
+
+                    {% set updatedConditional = option.conditional | merge({ inputs: updatedInputs }) %}
                     {% set options = (options.push({
                         text: option.value,
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken)
+                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken, isCurfewField)
                         } if option.conditional
                     }), options) %}
                 {% endfor %}
@@ -187,7 +206,7 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken)
+                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken, isCurfewField)
                         } if option.conditional
                     }), options) %}
                 {% endfor %}

@@ -30,7 +30,7 @@
                     <div class="govuk-hint">The post sentence supervision period starts on {{ licence.topupSupervisionStartDate | datetimeToDate }} and ends on {{ licence.topupSupervisionExpiryDate | datetimeToDate }}</div>
                 {% endif %}
 
-                {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+                {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken, false) }}
 
                 {{ govukButton({
                     text: "Continue",
