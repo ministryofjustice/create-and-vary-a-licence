@@ -5,12 +5,34 @@ import LicenceApiClient from '../data/licenceApiClient'
 export default class AddressService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
-  async searchForAddresses(searchQuery: string, user: User): Promise<AddressSearchResponse[]> {
-    if (!searchQuery || searchQuery.trim().length === 0) {
-      return []
+  async searchForAddresses(searchQuery: string, user: User, priorityString?: string): Promise<AddressSearchResponse[]> {
+    if (!searchQuery?.trim()) return []
+
+    const requestBody = { searchQuery }
+
+    const results = await this.licenceApiClient.searchForAddresses(requestBody, user)
+
+    if (results.length > 1 && priorityString?.trim()) {
+      const lowercasePriority = priorityString.toLowerCase()
+
+      const rankedAddresses = results.map(address => {
+        const addressText = [address.firstLine, address.secondLine ?? ''].join(',').toLowerCase()
+        const matchPriority = addressText.includes(lowercasePriority) ? 1 : 0
+        return { address, matchPriority, addressText }
+      })
+
+      rankedAddresses.sort((a, b) => {
+        // Sort by priority first
+        if (b.matchPriority !== a.matchPriority) {
+          return b.matchPriority - a.matchPriority
+        }
+        // Then alphabetical by address text
+        return a.addressText.localeCompare(b.addressText)
+      })
+      return rankedAddresses.map(ranked => ranked.address)
     }
-    const requestBody = { searchQuery } as { searchQuery: string }
-    return this.licenceApiClient.searchForAddresses(requestBody, user)
+
+    return results
   }
 
   async addAppointmentAddress(licenceId: string, appointmentAddress: AddAddressRequest, user: User): Promise<void> {
