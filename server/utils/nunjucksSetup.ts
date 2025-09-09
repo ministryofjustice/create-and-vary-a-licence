@@ -257,7 +257,6 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addGlobal('getValueFromAdditionalCondition', (additionalCondition: AdditionalCondition, inputName: string) => {
-    console.log('getValueFromAdditionalCondition - additionalCondition ==========________>', inputName)
     return additionalCondition
       ? additionalCondition.data.filter(item => item.field === inputName).map(item => item.value)
       : undefined
@@ -265,31 +264,22 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addGlobal(
     'lookupCurfewConditionValue',
-    (additionalCondition: AdditionalCondition | AdditionalCondition[], inputName: string) => {
-      console.log(
-        'lookupCurfewConditionValue - additionalCondition===========>',
-        inputName,
-        Array.isArray(additionalCondition),
-      )
+    (additionalCondition: AdditionalCondition | AdditionalCondition[], inputName: string): string[] => {
       if (!additionalCondition) return []
 
-      const data = Array.isArray(additionalCondition)
-        ? additionalCondition.flatMap(instance => instance.data)
+      const allData = Array.isArray(additionalCondition)
+        ? additionalCondition.flatMap(condition => condition.data)
         : additionalCondition.data
 
-      // Extract base field name and optional index (e.g., curfewStart2 → curfewStart + 1)
       const match = inputName.match(/^([a-zA-Z]+)(\d+)?$/)
       if (!match) return []
 
-      const baseField = match[1]
-      const index = match[2] ? parseInt(match[2], 10) - 1 : 0
-      console.log('baseField, index', baseField, index)
-      console.log('data', data)
+      const [, baseField, indexStr] = match
+      const index = indexStr ? parseInt(indexStr, 10) - 1 : 0
 
-      const values = data.filter(item => item.field === baseField)?.map(item => item.value)
-      console.log('values', values, values[index] ? [String(values[index])] : [])
+      const matchingValues = allData.filter(item => item.field === baseField).map(item => item.value)
 
-      return values[index] ? [String(values[index])] : []
+      return matchingValues[index] ? [String(matchingValues[index])] : []
     },
   )
 
