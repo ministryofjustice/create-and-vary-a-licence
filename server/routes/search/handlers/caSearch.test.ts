@@ -781,6 +781,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       inPrisonResults: [
         {
           kind: LicenceKind.CRD,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 6,
           name: 'Test Person 6',
           prisonerNumber: 'A1234AB',
@@ -800,6 +801,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         {
           kind: LicenceKind.HARD_STOP,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 7,
           name: 'Test Person 7',
           prisonerNumber: 'A1234AC',
@@ -821,6 +823,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       onProbationResults: [
         {
           licenceId: 8,
+          releaseDateKind: LicenceKind.CRD,
           name: 'Test Person 8',
           prisonerNumber: 'A1234AD',
           probationPractitioner: {
@@ -839,6 +842,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         {
           kind: LicenceKind.CRD,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 9,
           name: 'Test Person 9',
           prisonerNumber: 'A1234AI',
@@ -886,6 +890,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       inPrisonResults: [
         {
           kind: LicenceKind.CRD,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 6,
           name: 'Test Person 6',
           prisonerNumber: 'A1234AB',
@@ -906,6 +911,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         {
           kind: LicenceKind.HARD_STOP,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 7,
           name: 'Test Person 7',
           prisonerNumber: 'A1234AC',
@@ -928,6 +934,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       onProbationResults: [
         {
           licenceId: 8,
+          releaseDateKind: LicenceKind.CRD,
           name: 'Test Person 8',
           prisonerNumber: 'A1234AD',
           probationPractitioner: {
@@ -947,6 +954,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
         {
           kind: LicenceKind.CRD,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 9,
           name: 'Test Person 9',
           prisonerNumber: 'A1234AI',
@@ -983,6 +991,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       inPrisonResults: [
         {
           kind: LicenceKind.CRD,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 6,
           name: 'Test Person 6',
           prisonerNumber: 'A1234AB',
@@ -1031,6 +1040,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       inPrisonResults: [
         {
           kind: LicenceKind.CRD,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 6,
           name: 'Test Person 6',
           prisonerNumber: 'A1234AB',
@@ -1068,6 +1078,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       inPrisonResults: [
         {
           kind: LicenceKind.HARD_STOP,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 7,
           name: 'Test Person 7',
           prisonerNumber: 'A1234AC',
@@ -1116,6 +1127,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       inPrisonResults: [
         {
           kind: LicenceKind.HARD_STOP,
+          releaseDateKind: LicenceKind.CRD,
           licenceId: 7,
           name: 'Test Person 7',
           prisonerNumber: 'A1234AC',

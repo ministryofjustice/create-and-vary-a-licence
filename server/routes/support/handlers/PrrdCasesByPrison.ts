@@ -15,7 +15,7 @@ export default class PrrdCasesByPrisonRoutes {
     )
 
     const caseload = cases
-      .filter(aCase => aCase.kind === 'PRRD')
+      .filter(aCase => aCase.releaseDateKind === 'PRRD')
       .map(aCase => ({
         ...aCase,
         probationPractitioner: aCase.probationPractitioner.name,
