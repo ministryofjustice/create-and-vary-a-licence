@@ -39,6 +39,46 @@ describe('URL access checks for licence statuses', () => {
       path = '/licence/hard-stop/id/1/check-your-answers'
       expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
     })
+
+    it('should allow access to no address found', () => {
+      path = '/licence/create/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
+
+    it('should allow access to view no address found', () => {
+      path = '/licence/view/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
+
+    it('should allow access to hardstop flow no address found', () => {
+      path = '/licence/hard-stop/create/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
+
+    it('should allow access to hardstop flow select address', () => {
+      path = '/licence/hard-stop/create/id/1/select-address'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
+
+    it('should allow access to hardstop flow manual address entry', () => {
+      path = '/licence/hard-stop/create/id/1/manual-address-entry'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
+
+    it('should allow access to hardstop flow edit no address found', () => {
+      path = '/licence/hard-stop/edit/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
+
+    it('should allow access to hardstop flow edit select address', () => {
+      path = '/licence/hard-stop/edit/id/1/select-address'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
+
+    it('should allow access to hardstop flow edit manual address entry', () => {
+      path = '/licence/hard-stop/edit/id/1/manual-address-entry'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
   })
 
   describe('URL access checks for SUBMITTED', () => {
@@ -84,6 +124,36 @@ describe('URL access checks for licence statuses', () => {
 
     it('should allow access to licence-created-by-prison page', () => {
       path = '/licence/create/id/1/licence-created-by-prison'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
+    })
+
+    it('should allow access to create no address found', () => {
+      path = '/licence/create/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
+    })
+
+    it('should allow access to view no address found', () => {
+      path = '/licence/view/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
+    })
+
+    it('should allow access to view select address', () => {
+      path = '/licence/view/id/1/select-address'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
+    })
+
+    it('should allow access to view manual address entry', () => {
+      path = '/licence/view/id/1/manual-address-entry'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
+    })
+
+    it('should not allow access to hardstop create flow no address found', () => {
+      path = '/licence/hard-stop/create/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(false)
+    })
+
+    it('should allow access to hardstop edit flow no address found', () => {
+      path = '/licence/hard-stop/edit/id/1/no-address-found'
       expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
     })
   })
@@ -136,6 +206,36 @@ describe('URL access checks for licence statuses', () => {
 
     it('should allow access to licence-created-by-prison page', () => {
       path = '/licence/create/id/1/licence-created-by-prison'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
+    it('should allow access to create no address found', () => {
+      path = '/licence/create/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
+    it('should allow access to view no address found', () => {
+      path = '/licence/view/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
+    it('should allow access to view select address', () => {
+      path = '/licence/view/id/1/select-address'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
+    it('should allow access to view manual address entry', () => {
+      path = '/licence/view/id/1/manual-address-entry'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
+    it('should not allow access to hardstop create flow no address found', () => {
+      path = '/licence/hard-stop/create/id/1/no-address-found'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(false)
+    })
+
+    it('should allow access to hardstop edit flow no address found', () => {
+      path = '/licence/hard-stop/edit/id/1/no-address-found'
       expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
     })
   })
