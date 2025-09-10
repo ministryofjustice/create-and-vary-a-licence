@@ -1,18 +1,16 @@
 {% extends "layout.njk" %}
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "partials/licenceDescription.njk" import licenceDescription %}
 
-{% set pageTitle = applicationName + " - Licences awaiting variation approval" %}
-{% set pageId = "vary-approval-cases-page" %}
-{% set backLinkHref = "/" %}
+{% set pageTitle = applicationName + " - PRRD cases by Prison" %}
+{% set pageId = "prrd-case-by-prison-page" %}
+{% set backLinkHref = "/support" %}
 {% set noJsBackLink = true %}
 
-{% macro offenderName(offenderName, crn, nomisId, licenceId, index) %}
+{% macro offenderName(offenderName, nomisId, licenceId, index) %}
     <div class="caseload-offender-name">
         <a href="/support/offender/{{ nomisId }}/detail" id="name-link-{{ index }}"
            class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
-        <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
     </div>
 {% endmacro %}
 
@@ -26,13 +24,21 @@
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crnNumber, offender.nomisId, offender.licenceId, loop.index)
+            html: offenderName(offender.name, offender.prisonerNumber, offender.licenceId, loop.index)
         },
         {
             attributes: {
-                id: 'licence-type-' + loop.index
+                id: 'prison-number-' + loop.index,
+                "data-sort-value": offender.prisonerNumber
             },
-            html: licenceDescription(offender.licenceType)
+            html: offender.prisonerNumber
+        },
+        {
+            attributes: {
+                id: 'licence-status-' + loop.index,
+                "data-sort-value": offender.licenceStatus
+            },
+            html: offender.licenceStatus
         },
         {
             attributes: {
@@ -40,15 +46,14 @@
                 "data-sort-value": offender.probationPractitioner
             },
             classes: "max-width max-width-200",
-            html: '<a class="govuk-link" href="/licence/vary-approve/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner + '</a>'
+            text: offender.probationPractitioner
         },
         {
             attributes: {
-                id: 'variation-request-date-' + loop.index,
-                "data-sort-value": offender.variationRequestDate
+                id: 'release-date-type' + loop.index,
+                "data-sort-value": offender.releaseDateLabel
             },
-            classes: "max-width max-width-200",
-            html: offender.variationRequestDate
+            text: offender.releaseDateLabel
         },
         {
             attributes: {
@@ -63,10 +68,9 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">Licences awaiting variation approval</h1>
+            <h1 class="govuk-heading-xl">PRRD cases by Prison: {{ user.activeCaseload }}</h1>
         </div>
     </div>
-
     {% if caseload.length > 0 %}
         {{ govukTable({
             attributes: {
@@ -82,7 +86,16 @@
                     }
                 },
                 {
-                    text: "Licence type"
+                    text: "Prison number",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Licence status",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
                 },
                 {
                     text: "Probation practitioner",
@@ -91,9 +104,9 @@
                     }
                 },
                 {
-                    text: "Variation request date",
+                    text: "Release date type",
                     attributes: {
-                       "aria-sort": "descending"
+                        "aria-sort": "none"
                     }
                 },
                 {
@@ -108,7 +121,7 @@
     {% else %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                <h2 class="govuk-heading-s">There are no licence variations which meet the search criteria.</h2>
+                <h2 class="govuk-heading-s">There are no PRRD cases which meet the eligibility criteria.</h2>
             </div>
         </div>
     {% endif %}
