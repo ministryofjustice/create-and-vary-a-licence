@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer'
+import { Expose, Transform } from 'class-transformer'
 import { IsNotEmpty, Matches, IsOptional } from 'class-validator'
 
 /*
@@ -36,6 +36,7 @@ class TelephoneNumbers {
 
   @Expose()
   @IsOptional()
+  @Transform(({ value }) => (value === '' ? null : value))
   @Matches(/^((\+44\s?[1-9]\d{1,4}|\(0\d{2,5}\)|0\d{2,5})\s?\d{3,4}\s?\d{3,4})(\s?(?:#|ext|x)\s?\d{1,5})?$/, {
     message: 'Enter a phone number in the correct format, like 01632 960901',
   })

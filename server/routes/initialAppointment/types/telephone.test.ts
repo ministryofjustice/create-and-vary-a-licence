@@ -36,7 +36,7 @@ describe('Telephone validator test', () => {
   ]
 
   const invalidNumbers = [
-    '', // empty
+    '', // empty (telephone only — alt is handled differently)
     '12345', // too short
     'abcd', // not numeric
     '(02079460958)', // no spacing inside brackets
@@ -128,6 +128,19 @@ describe('Telephone validator test', () => {
     // Then
     expect(errorsNull.length).toBe(0)
     expect(errorsUndefined.length).toBe(0)
+  })
+
+  it('should treat empty string telephoneAlternative as null (valid)', async () => {
+    // Given
+    const telephone = new TelephoneNumbers()
+    telephone.telephone = '01632 960901'
+    telephone.telephoneAlternative = null
+
+    // When
+    const errors: ValidationError[] = await validate(telephone)
+
+    // Then
+    expect(errors.length).toBe(0)
   })
 
   it('should allow valid numbers for telephoneAlternative', async () => {
