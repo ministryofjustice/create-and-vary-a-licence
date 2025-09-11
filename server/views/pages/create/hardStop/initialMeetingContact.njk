@@ -39,10 +39,10 @@
                     label: {
                         text: "Alternative UK telephone number (optional)"
                     },
-                    id: "telephoneAlt",
-                    name: "telephoneAlt",
+                    id: "telephoneAlternative",
+                    name: "telephoneAlternative",
                     classes: "govuk-input--width-20",
-                    errorMessage: validationErrors | findError('telephoneAlt'),
+                    errorMessage: validationErrors | findError('telephoneAlternative'),
                     value: licence.appointmentAlternativeTelephoneNumber | fillFormResponse(formResponses.telephoneAlternative)
                 }) }}
                 {{ govukButton({

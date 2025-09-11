@@ -93,10 +93,10 @@ export default class LicenceService {
   }
 
   async updateContactNumber(id: string, formData: TelephoneNumbers, user: User): Promise<void> {
-    const requestBody = {
+    const requestBody: ContactNumberRequest = {
       telephone: formData.telephone,
       telephoneAlternative: formData.telephoneAlternative,
-    } as ContactNumberRequest
+    }
     return this.licenceApiClient.updateContactNumber(id, requestBody, user)
   }
 

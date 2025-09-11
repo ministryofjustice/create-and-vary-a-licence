@@ -5,7 +5,7 @@ import ViewALicencePage from './viewALicence'
 export default class AppointmentContactPage extends Page {
   private telephoneTextboxId = '#telephone'
 
-  private telephoneAltTextboxId = '#telephoneAlt'
+  private telephoneAltTextboxId = '#telephoneAlternative'
 
   private continueButtonId = '[data-qa=continue]'
 
