@@ -14,10 +14,10 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
   let req: Request
   let res: Response
-  let contactNumber: TelephoneNumbers
+  let telephoneNumbers: TelephoneNumbers
 
   beforeEach(() => {
-    contactNumber = {
+    telephoneNumbers = {
       telephone: '0114 2556556',
     } as TelephoneNumbers
 
@@ -25,7 +25,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       params: {
         licenceId: 1,
       },
-      body: contactNumber,
+      body: telephoneNumbers,
       query: {},
     } as unknown as Request
 
@@ -85,7 +85,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
           params: {
             licenceId: 1,
           },
-          body: contactNumber,
+          body: telephoneNumbers,
           query: {},
         } as unknown as Request
         await handler.POST(req, res)
