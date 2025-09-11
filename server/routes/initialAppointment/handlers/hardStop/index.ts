@@ -9,7 +9,7 @@ import InitialMeetingNameRoutes from './initialMeetingName'
 import Address from '../../types/address'
 import InitialMeetingPlaceRoutes from './initialMeetingPlace'
 import InitialMeetingContactRoutes from './initialMeetingContact'
-import Telephone from '../../types/telephone'
+import TelephoneNumbers from '../../types/telephoneNumbers'
 import InitialMeetingTimeRoutes from './initialMeetingTime'
 import DateTime from '../../types/dateTime'
 import ViewAndPrintLicenceRoutes from '../../../viewingLicences/handlers/viewLicence'
@@ -98,12 +98,12 @@ export default function Index({ licenceService, conditionService, hdcService, ad
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-contact', controller.GET)
-    post('/create/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
+    post('/create/id/:licenceId/initial-meeting-contact', controller.POST, TelephoneNumbers)
   }
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-contact', controller.GET)
-    post('/edit/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
+    post('/edit/id/:licenceId/initial-meeting-contact', controller.POST, TelephoneNumbers)
   }
   {
     const controller = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)

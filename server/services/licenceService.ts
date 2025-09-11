@@ -37,7 +37,7 @@ import { CaseloadItem, OmuContact, UpdateOffenderDetailsRequest } from '../@type
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
-import Telephone from '../routes/initialAppointment/types/telephone'
+import TelephoneNumbers from '../routes/initialAppointment/types/telephoneNumbers'
 import Address from '../routes/initialAppointment/types/address'
 import { addressObjectToString, filterCentralCaseload, isVariation, objectIsEmpty } from '../utils/utils'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
@@ -92,8 +92,11 @@ export default class LicenceService {
     return this.licenceApiClient.updateAppointmentAddress(id, requestBody, user)
   }
 
-  async updateContactNumber(id: string, formData: Telephone, user: User): Promise<void> {
-    const requestBody = { telephone: formData.telephone } as ContactNumberRequest
+  async updateContactNumber(id: string, formData: TelephoneNumbers, user: User): Promise<void> {
+    const requestBody = {
+      telephone: formData.telephone,
+      telephoneAlternative: formData.telephoneAlternative,
+    } as ContactNumberRequest
     return this.licenceApiClient.updateContactNumber(id, requestBody, user)
   }
 
