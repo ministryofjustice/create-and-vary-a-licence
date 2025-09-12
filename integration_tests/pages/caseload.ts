@@ -51,7 +51,6 @@ export default class CaseloadPage extends Page {
   }
 
   clickSearch = (text: string): SearchPage => {
-    cy.task('stubGetProbationSearchResults')
     cy.get(this.searchTextInput).type(text)
     cy.get(this.searchButtonId).click()
     return Page.verifyOnPage(SearchPage)
