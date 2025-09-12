@@ -5,7 +5,11 @@ import Page from './page'
 export default class SearchPage extends Page {
   private licenceLinkId = '#name-button-1'
 
-  private probationPractionerLinkId = '[data-qa=comLink]'
+  private prisonTabTitle = '#tab_people-in-prison'
+
+  private probationTabTitle = '#tab_people-on-probation'
+
+  private probationPractitionerLinkId = '[data-qa=comLink]'
 
   constructor() {
     super('probation-search-page')
@@ -21,7 +25,24 @@ export default class SearchPage extends Page {
 
   clickComName = (): ComDetailsPage => {
     cy.task('stubGetStaffDetailsByStaffCode')
-    cy.get(this.probationPractionerLinkId).click()
+    cy.get(this.probationPractitionerLinkId).click()
     return Page.verifyOnPage(ComDetailsPage)
+  }
+
+  getRow = (row: number) => {
+    return cy.get('tbody tr').eq(row)
+  }
+
+  getPrisonTabTitle = () => {
+    return cy.get(this.prisonTabTitle)
+  }
+
+  getProbationTabTitle = () => {
+    return cy.get(this.probationTabTitle)
+  }
+
+  clickOnProbationTab = (): SearchPage => {
+    cy.get(this.probationTabTitle).click()
+    return Page.verifyOnPage(SearchPage)
   }
 }

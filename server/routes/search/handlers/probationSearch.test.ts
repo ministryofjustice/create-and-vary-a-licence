@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
+import { FoundProbationRecord, ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
 import ProbationSearchRoutes from './probationSearch'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
@@ -32,6 +32,23 @@ describe('Route Handlers - Search - Probation Search', () => {
     inPrisonCount: 1,
     onProbationCount: 0,
   }
+
+  const peopleInPrison = [
+    {
+      name: 'Test Person',
+      crn: 'A123456',
+      nomisId: 'A1234BC',
+      comName: 'Test Staff',
+      comStaffCode: '3000',
+      teamName: 'Test Team',
+      releaseDate: '2023-08-16',
+      licenceId: 1,
+      licenceType: 'AP',
+      licenceStatus: 'IN_PROGRESS',
+      isOnProbation: false,
+    },
+  ]
+  const peopleOnProbation: FoundProbationRecord[] = []
 
   let previousCaseloadPage = 'create'
 
@@ -73,12 +90,14 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'Test',
-        searchResponse,
+        peopleInPrison,
+        peopleOnProbation: [],
         backLink: '/licence/create/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
       })
     })
 
@@ -92,12 +111,14 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'A123456',
-        searchResponse,
+        peopleInPrison,
+        peopleOnProbation,
         backLink: '/licence/create/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
       })
     })
 
@@ -111,12 +132,14 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'staff',
-        searchResponse,
+        peopleInPrison,
+        peopleOnProbation,
         backLink: '/licence/create/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
       })
     })
 
@@ -136,12 +159,14 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: '',
-        searchResponse,
+        peopleInPrison: [],
+        peopleOnProbation: [],
         backLink: '/licence/create/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
       })
     })
 
@@ -162,12 +187,14 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: '',
-        searchResponse,
+        peopleInPrison: [],
+        peopleOnProbation: [],
         backLink: '/licence/vary/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
       })
     })
   })

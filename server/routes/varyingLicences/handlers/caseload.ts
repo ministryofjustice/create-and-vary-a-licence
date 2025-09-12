@@ -67,6 +67,7 @@ export default class CaseloadRoutes {
         )
       })
       .sort(this.prioritiseReviewNeeded)
+    const hasPriorityCases = caseloadViewModel.filter(c => c.isReviewNeeded).length > 0
 
     res.render('pages/vary/caseload', {
       caseload: caseloadViewModel,
@@ -77,6 +78,7 @@ export default class CaseloadRoutes {
       search,
       myCount,
       teamCount: teams.reduce((totalCount, teams) => totalCount + teams.count, 0),
+      hasPriorityCases,
     })
   }
 
