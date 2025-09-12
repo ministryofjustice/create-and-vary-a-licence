@@ -23,11 +23,13 @@ import {
   UpdateProbationTeamRequest,
   CaseloadItem,
   UpdateElectronicMonitoringProgrammeRequest,
+  ContactNumberRequest,
 } from '../@types/licenceApiClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
 import { AdditionalConditionsConfig } from '../@types/LicencePolicy'
+import TelephoneNumbers from '../routes/initialAppointment/types/telephoneNumbers'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./conditionService')
@@ -192,8 +194,21 @@ describe('Licence Service', () => {
   })
 
   it('Update contact number', async () => {
-    await licenceService.updateContactNumber('1', { telephone: '07624726976' }, user)
-    expect(licenceApiClient.updateContactNumber).toHaveBeenCalledWith('1', { telephone: '07624726976' }, user)
+    // Given
+    const telephoneNumbers = {
+      telephone: '07624726976',
+      telephoneAlternative: '0123877368',
+    }
+
+    // When
+    await licenceService.updateContactNumber('1', telephoneNumbers as TelephoneNumbers, user)
+
+    // Then
+    expect(licenceApiClient.updateContactNumber).toHaveBeenCalledWith(
+      '1',
+      telephoneNumbers as ContactNumberRequest,
+      user,
+    )
   })
 
   describe('Update additional conditions', () => {

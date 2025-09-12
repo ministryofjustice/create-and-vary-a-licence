@@ -198,7 +198,10 @@ context('View and print licence', () => {
       .enterCounty('Fakesbury')
       .enterPostcode('FA1 1KE')
       .clickContinueToReturn()
-    viewLicencePage = viewLicencePage.clickChangeTelephoneLink().enterTelephone('00000000000').clickContinueToReturn()
+    viewLicencePage = viewLicencePage
+      .clickChangeTelephoneLink()
+      .enterTelephone('012345678', '012345679')
+      .clickContinueToReturn()
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       viewLicencePage = viewLicencePage
         .clickChangeDateLink()

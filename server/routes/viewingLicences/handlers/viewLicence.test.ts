@@ -395,7 +395,8 @@ describe('Route - view and approve a licence', () => {
             appointmentPersonType: 'DUTY_OFFICER',
             appointmentPerson: '',
             appointmentAddress: 'some address',
-            appointmentContact: '0123455666',
+            appointmentTelephoneNumber: '0123456789',
+            appointmentAlternativeTelephoneNumber: '02234567890',
             appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
           },
         },
@@ -436,7 +437,7 @@ describe('Route - view and approve a licence', () => {
       expect(res.redirect).toHaveBeenCalledWith('/previous-page')
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        '[{"field":"appointmentPersonType","message":"Select \'Change\' to go back and add who to meet"},{"field":"appointmentAddress","message":"Select \'Change\' to go back and add appointment address"},{"field":"appointmentContact","message":"Select \'Change\' to go back and add appointment telephone number"},{"field":"appointmentTimeType","message":"Select \'Change\' to go back and add appointment date and time"}]',
+        '[{"field":"appointmentPersonType","message":"Select \'Change\' to go back and add who to meet"},{"field":"appointmentAddress","message":"Select \'Change\' to go back and add appointment address"},{"field":"appointmentTelephoneNumber","message":"Select \'Change\' to go back and add appointment telephone number"},{"field":"appointmentTimeType","message":"Select \'Change\' to go back and add appointment date and time"}]',
       )
     })
 
@@ -463,7 +464,8 @@ describe('Route - view and approve a licence', () => {
             appointmentPersonType: 'SPECIFIC_PERSON',
             appointmentPerson: '',
             appointmentAddress: 'some address',
-            appointmentContact: '0123455666',
+            appointmentTelephoneNumber: '0123456789',
+            appointmentAlternativeTelephoneNumber: '02234567890',
             appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
           },
         },
