@@ -38,7 +38,7 @@ export default class ValidCurfewTime implements ValidatorConstraintInterface {
     }
 
     // Case: AMPM selected but hour/minute missing
-    if (hasAmPm && (!hasHour || !hasMinute)) {
+    if (hasAmPm && !hasHour && !hasMinute) {
       return `${timePrefix} must include hours and minutes`
     }
 

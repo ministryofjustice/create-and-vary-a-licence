@@ -204,6 +204,7 @@ describe('Route handlers - Curfew routes', () => {
       curfewStart2: SimpleTime.fromString('03:00 am'),
       curfewEnd2: SimpleTime.fromString('04:00 am'),
       reviewPeriod2: 'monthly',
+      alternativeReviewPeriod: '',
     }
 
     it('adds an instance of the curfew condition to the licence', async () => {
@@ -222,7 +223,9 @@ describe('Route handlers - Curfew routes', () => {
         CURFEW_CONDITION_CODE,
         inputs.curfewStart2,
         inputs.curfewEnd2,
-        inputs,
+        inputs.numberOfCurfews,
+        inputs.reviewPeriod,
+        inputs.alternativeReviewPeriod,
       )
       expect(licenceService.addAdditionalCondition).toHaveBeenCalledWith('1', 'AP', request, res.locals.user)
     })
@@ -245,7 +248,9 @@ describe('Route handlers - Curfew routes', () => {
         CURFEW_CONDITION_CODE,
         inputs.curfewStart2,
         inputs.curfewEnd2,
-        inputs,
+        inputs.numberOfCurfews,
+        inputs.reviewPeriod,
+        inputs.alternativeReviewPeriod,
       )
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
