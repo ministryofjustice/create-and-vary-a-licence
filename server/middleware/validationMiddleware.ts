@@ -2,10 +2,12 @@ import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
 import ConditionService from '../services/conditionService'
+import { getCurfewSummary } from '../utils/utils'
 
 export type FieldValidationError = {
   field: string
   message: string
+  summaryMessage?: string
 }
 
 function validationMiddleware(conditionService: ConditionService, type?: new () => object): RequestHandler {
@@ -45,10 +47,16 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         constraints: {
           [type: string]: string
         },
-      ): FieldValidationError => ({
-        field: error.property,
-        message: Object.values(constraints)[Object.values(constraints).length - 1],
-      })
+      ): FieldValidationError => {
+        const message = Object.values(constraints)[Object.values(constraints).length - 1]
+        const summaryMessage = error?.constraints?.ValidCurfewTime ? getCurfewSummary(error.property, message) : message
+
+        return {
+          field: error.property,
+          message,
+          summaryMessage,
+        }
+      }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const flattenErrors: any = (errorList: ValidationError[]) => {
