@@ -18,9 +18,9 @@ export default class CurfewRoutes {
     const additionalCondition = licence.additionalLicenceConditions.find(
       (condition: AdditionalCondition) => condition.code === conditionCode,
     )
-    const conditionInstances = (licence.additionalLicenceConditions as AdditionalCondition[])
-      .filter(condition => condition.code === conditionCode)
-      .sort((a, b) => a.id - b.id)
+    // const conditionInstances = (licence.additionalLicenceConditions as AdditionalCondition[])
+    //   .filter(condition => condition.code === conditionCode)
+    //   .sort((a, b) => a.id - b.id)
     const config = await this.conditionService.getAdditionalConditionByCode(conditionCode, licence.version)
 
     if (!additionalCondition) {
@@ -31,16 +31,16 @@ export default class CurfewRoutes {
       )
     }
 
-    const formResponses = Object.fromEntries(
-      conditionInstances.flatMap((instance, index) =>
-        instance.data.map(conditionData => {
-          const key = index === 0 ? conditionData.field : `${conditionData.field}${index + 1}`
-          return [key, conditionData.value]
-        }),
-      ),
-    )
+    // const formResponses = Object.fromEntries(
+    //   conditionInstances.flatMap((instance, index) =>
+    //     instance.data.map(conditionData => {
+    //       const key = index === 0 ? conditionData.field : `${conditionData.field}${index + 1}`
+    //       return [key, conditionData.value]
+    //     }),
+    //   ),
+    // )
 
-    return res.render('pages/manageConditions/curfew/input', { additionalCondition, config, formResponses })
+    return res.render('pages/manageConditions/curfew/input', { additionalCondition, config })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

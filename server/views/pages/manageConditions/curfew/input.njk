@@ -1,7 +1,8 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/timePicker.njk" import timePicker %}
 {% from "formBuilder.njk" import formBuilder %}
 
 {% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
@@ -45,7 +46,123 @@
                         <div class="govuk-hint">{{ config.subtext }}</div>
                     {% endif %}
 
-                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+                    {% macro renderTimePicker(id, labelText, formResponses) %}
+                        {{ timePicker({
+                            name: id,
+                            id: id,
+                            label: {
+                            text: labelText,
+                            classes: "govuk-!-font-weight-bold"
+                            },
+                            hint: {
+                            text: "For example, 9:30am or 2:55pm"
+                            },
+                            errorMessage: validationErrors | findError(id),
+                            formResponses: formResponses[id]
+                        }) }}
+                    {% endmacro %}
+
+                    {% set options = [] %}
+                    {% set options = [
+                        {
+                            text: "One curfew",
+                            value: "One curfew",
+                            checked: formResponses.numberOfCurfews == "One curfew",
+                            conditional: {
+                            html:
+                                renderTimePicker("oneCurfewStart", "Enter the curfew start time", formResponses) +
+                                renderTimePicker("oneCurfewEnd", "Enter the curfew end time", formResponses)
+                            }
+                        },
+                        {
+                            text: "Two curfews",
+                            value: "Two curfews",
+                            checked: formResponses.numberOfCurfews == "Two curfews",
+                            conditional: {
+                            html:
+                                renderTimePicker("twoCurfewStart", "First curfew – enter the start time", formResponses) +
+                                renderTimePicker("twoCurfewEnd", "First curfew – enter the end time", formResponses) +
+                                renderTimePicker("twoCurfewStart2", "Second curfew – enter the start time", formResponses) +
+                                renderTimePicker("twoCurfewEnd2", "Second curfew – enter the end time", formResponses)
+                            }
+                        },
+                        {
+                            text: "Three curfews",
+                            value: "Three curfews",
+                            checked: formResponses.numberOfCurfews == "Three curfews",
+                            conditional: {
+                            html:
+                                renderTimePicker("threeCurfewStart", "First curfew – enter the start time", formResponses) +
+                                renderTimePicker("threeCurfewEnd", "First curfew – enter the end time", formResponses) +
+                                renderTimePicker("threeCurfewStart2", "Second curfew – enter the start time", formResponses) +
+                                renderTimePicker("threeCurfewEnd2", "Second curfew – enter the end time", formResponses) +
+                                renderTimePicker("threeCurfewStart3", "Third curfew – enter the start time", formResponses) +
+                                renderTimePicker("threeCurfewEnd3", "Third curfew – enter the end time", formResponses)
+                            }
+                        }
+                    ] %}
+
+                    {{
+                        govukRadios({
+                            idPrefix: "numberOfCurfews",
+                            name: "numberOfCurfews",
+                            fieldset: {
+                                legend: {
+                                    text: "Select the number of curfews needed",
+                                    classes: "govuk-fieldset__legend govuk-fieldset__legend--m radio-numberOfCurfews-legend"
+                                }
+                            },
+                            items: options,
+                            errorMessage: validationErrors | findError('numberOfCurfews')
+                        })
+                    }}
+
+                    {% set reviewOptions = [
+                        {
+                            text: "Weekly",
+                            value: "Weekly",
+                            checked: formResponses.reviewPeriod == "Weekly"
+                        },
+                        {
+                            text: "Monthly",
+                            value: "Monthly",
+                            checked: formResponses.reviewPeriod == "Monthly"
+                        },
+                        {
+                            text: "Other",
+                            value: "Other",
+                            checked: formResponses.reviewPeriod == "Other",
+                            conditional: {
+                            html: govukInput({
+                                id: "alternativeReviewPeriod",
+                                name: "alternativeReviewPeriod",
+                                label: {
+                                text: "Enter a review period",
+                                classes: "govuk-!-font-weight-bold"
+                                },
+                                classes: "govuk-input",
+                                value: formResponses.alternativeReviewPeriod,
+                                errorMessage: validationErrors.alternativeReviewPeriod
+                            })
+                            }
+                        }
+                        ] %}
+
+                    {{ govukRadios({
+                    idPrefix: "reviewPeriod",
+                    name: "reviewPeriod",
+                    fieldset: {
+                        legend: {
+                        text: "Select a review period",
+                        classes: "govuk-fieldset__legend govuk-fieldset__legend--m"
+                        }
+                    },
+                    items: reviewOptions,
+                    errorMessage: validationErrors | findError('reviewPeriod')
+                    }) }}
+
+
+                    {# {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }} #}
 
                     <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
 

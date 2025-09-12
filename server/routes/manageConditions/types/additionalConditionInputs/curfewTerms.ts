@@ -1,70 +1,99 @@
 import { Expose, Transform, Type } from 'class-transformer'
 import { IsNotEmpty, Validate, ValidateIf } from 'class-validator'
 import { SimpleTime } from '..'
-import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
+import ValidCurfewTime from '../../../../validators/curfewTimeValidator'
 
 class CurfewTerms {
   @Expose()
   @IsNotEmpty({ message: 'Select a number of curfews' })
   numberOfCurfews: string
 
+  // One curfew
   @Expose()
   @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => {
-    const enteredValues = splitTimes(value)
-    return selectRelevantEntry(obj.numberOfCurfews, enteredValues)
-  })
-  @Validate(ValidSimpleTime)
-  curfewStart: SimpleTime
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'One curfew' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'One curfew')
+  @Validate(ValidCurfewTime)
+  oneCurfewStart: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => {
-    const enteredValues = splitTimes(value)
-    return selectRelevantEntry(obj.numberOfCurfews, enteredValues)
-  })
-  @Validate(ValidSimpleTime)
-  curfewEnd: SimpleTime
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'One curfew' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'One curfew')
+  @Validate(ValidCurfewTime)
+  oneCurfewEnd: SimpleTime
+
+  // Two curfews
+  @Expose()
+  @Type(() => SimpleTime)
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
+  @Validate(ValidCurfewTime)
+  twoCurfewStart: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => {
-    const enteredValues = splitTimes(value)
-    return selectRelevantEntry(obj.numberOfCurfews, enteredValues)
-  })
-  @Validate(ValidSimpleTime)
-  @ValidateIf(o => o.numberOfCurfews === 'Two curfews' || o.numberOfCurfews === 'Three curfews')
-  curfewStart2: SimpleTime
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
+  @Validate(ValidCurfewTime)
+  twoCurfewEnd: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => {
-    const enteredValues = splitTimes(value)
-    return selectRelevantEntry(obj.numberOfCurfews, enteredValues)
-  })
-  @Validate(ValidSimpleTime)
-  @ValidateIf(o => o.numberOfCurfews === 'Two curfews' || o.numberOfCurfews === 'Three curfews')
-  curfewEnd2: SimpleTime
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
+  @Validate(ValidCurfewTime)
+  twoCurfewStart2: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => {
-    const enteredValues = splitTimes(value)
-    return selectRelevantEntry(obj.numberOfCurfews, enteredValues)
-  })
-  @Validate(ValidSimpleTime)
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
+  @Validate(ValidCurfewTime)
+  twoCurfewEnd2: SimpleTime
+
+  // Three curfews
+  @Expose()
+  @Type(() => SimpleTime)
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  curfewStart3: SimpleTime
+  @Validate(ValidCurfewTime)
+  threeCurfewStart: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => {
-    const enteredValues = splitTimes(value)
-    return selectRelevantEntry(obj.numberOfCurfews, enteredValues)
-  })
-  @Validate(ValidSimpleTime)
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  curfewEnd3: SimpleTime
+  @Validate(ValidCurfewTime)
+  threeCurfewEnd: SimpleTime
+
+  @Expose()
+  @Type(() => SimpleTime)
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
+  @Validate(ValidCurfewTime)
+  threeCurfewStart2: SimpleTime
+
+  @Expose()
+  @Type(() => SimpleTime)
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
+  @Validate(ValidCurfewTime)
+  threeCurfewEnd2: SimpleTime
+
+  @Expose()
+  @Type(() => SimpleTime)
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
+  @Validate(ValidCurfewTime)
+  threeCurfewStart3: SimpleTime
+
+  @Expose()
+  @Type(() => SimpleTime)
+  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
+  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
+  @Validate(ValidCurfewTime)
+  threeCurfewEnd3: SimpleTime
 
   @Expose()
   @IsNotEmpty({ message: 'Select a review period' })
@@ -77,30 +106,6 @@ class CurfewTerms {
   @ValidateIf(o => o.reviewPeriod === 'Other')
   @IsNotEmpty({ message: 'Enter a review period' })
   alternativeReviewPeriod: string
-}
-
-const splitTimes = (value: SimpleTime) => {
-  if (!Array.isArray(value.hour)) {
-    return [value]
-  }
-  return value.hour.map((h: string, index) => {
-    const hour = h.length === 1 ? `0${h}` : h
-    const minute = value.minute[index].length === 1 ? `0${value.minute[index]}` : value.minute[index]
-    return SimpleTime.fromString(`${hour}:${minute} ${value.ampm[index]}`)
-  })
-}
-
-const selectRelevantEntry = (numberOfCurfews: string, enteredValues: SimpleTime[]) => {
-  if (numberOfCurfews === 'One curfew') {
-    return enteredValues[enteredValues.length - 3]
-  }
-  if (numberOfCurfews === 'Two curfews') {
-    return enteredValues[enteredValues.length - 2]
-  }
-  if (numberOfCurfews === 'Three curfews') {
-    return enteredValues[enteredValues.length - 1]
-  }
-  return undefined
 }
 
 export default CurfewTerms
