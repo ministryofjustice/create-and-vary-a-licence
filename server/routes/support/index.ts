@@ -38,6 +38,7 @@ export default function Index({
   comCaseloadService,
   varyApproverCaseloadService,
   caCaseloadService,
+  userService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -76,7 +77,7 @@ export default function Index({
     varyApproverCaseloadService,
   )
 
-  const prrdCasesByPrisonHandler = new PrrdCasesByPrisonRoutes(caCaseloadService)
+  const prrdCasesByPrisonHandler = new PrrdCasesByPrisonRoutes(caCaseloadService, probationService, userService)
 
   get('/', supportHomeHandler.GET)
 
@@ -119,6 +120,9 @@ export default function Index({
 
   // get PRRD case by prison
   get('/prrd-cases/by-prison', prrdCasesByPrisonHandler.GET)
+  post('/prrd-cases/by-prison', prrdCasesByPrisonHandler.POST)
+  get('/prrd-cases/by-prison/:prisonCode', prrdCasesByPrisonHandler.GET)
+  get('/prrd-cases/by-prison/:prisonCode/download-csv', prrdCasesByPrisonHandler.GET_CSV)
 
   return router
 }
