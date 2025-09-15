@@ -12,7 +12,6 @@ import {
   json24HourTimeTo12HourTime,
   jsonDtToDate,
   removeDuplicates,
-  filterCentralCaseload,
   jsonDtToDateWithDay,
   objectIsEmpty,
   hasAuthSource,
@@ -398,18 +397,6 @@ describe('Remove duplicates', () => {
   it('should remove duplicates from a more challenging list', () => {
     const listWithDuplicates = ['MDI', 'LEI', 'MDI', 'LEI', 'BMI', 'LEI', 'MDI']
     expect(removeDuplicates(listWithDuplicates)).toEqual(['MDI', 'LEI', 'BMI'])
-  })
-})
-
-describe('Filter central case load', () => {
-  it('should remove central caseload CADM*', () => {
-    const withCentralCaseoad = ['A', 'B', 'CADM_I', 'D', 'E']
-    expect(filterCentralCaseload(withCentralCaseoad)).toEqual(['A', 'B', 'D', 'E'])
-  })
-
-  it('should return an empty list', () => {
-    const onlyCentralCaseload = ['CADM_I']
-    expect(filterCentralCaseload(onlyCentralCaseload)).toHaveLength(0)
   })
 })
 
