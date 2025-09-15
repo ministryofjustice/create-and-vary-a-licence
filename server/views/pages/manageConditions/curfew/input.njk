@@ -19,6 +19,9 @@
 {% else %}
   {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
 {% endif %}
+{% set selectedCurfew = formResponses.numberOfCurfews or numberOfCurfews %}
+{% set selectedReviewPeriod = formResponses.reviewPeriod or reviewPeriod %}
+{% set enteredAlternativeReviewPeriod = formResponses.alternativeReviewPeriod or alternativeReviewPeriod %}
 
 {% block content %}
     {% if fromPolicyReview %}
@@ -67,7 +70,7 @@
                         {
                             text: "One curfew",
                             value: "One curfew",
-                            checked: formResponses.numberOfCurfews == "One curfew" or numberOfCurfews == "One curfew",
+                            checked: selectedCurfew == "One curfew",
                             conditional: {
                             html:
                                 renderTimePicker("oneCurfewStart", "Enter the curfew start time", formResponses) +
@@ -77,7 +80,7 @@
                         {
                             text: "Two curfews",
                             value: "Two curfews",
-                            checked: formResponses.numberOfCurfews == "Two curfews" or numberOfCurfews == "Two curfews",
+                            checked: selectedCurfew == "Two curfews",
                             conditional: {
                             html:
                                 renderTimePicker("twoCurfewStart", "First curfew – enter the start time", formResponses) +
@@ -89,7 +92,7 @@
                         {
                             text: "Three curfews",
                             value: "Three curfews",
-                            checked: formResponses.numberOfCurfews == "Three curfews" or numberOfCurfews == "Three curfews",
+                            checked: selectedCurfew == "Three curfews",
                             conditional: {
                             html:
                                 renderTimePicker("threeCurfewStart", "First curfew – enter the start time", formResponses) +
@@ -121,17 +124,17 @@
                         {
                             text: "Weekly",
                             value: "Weekly",
-                            checked: formResponses.reviewPeriod == "Weekly" or reviewPeriod == "Weekly"
+                            checked: selectedReviewPeriod == "Weekly"
                         },
                         {
                             text: "Monthly",
                             value: "Monthly",
-                            checked: formResponses.reviewPeriod == "Monthly" or reviewPeriod == "Monthly"
+                            checked: selectedReviewPeriod == "Monthly"
                         },
                         {
                             text: "Other",
                             value: "Other",
-                            checked: formResponses.reviewPeriod == "Other" or reviewPeriod == "Other",
+                            checked: selectedReviewPeriod == "Other",
                             conditional: {
                             html: govukInput({
                                     id: "alternativeReviewPeriod",
@@ -141,7 +144,7 @@
                                     classes: "govuk-!-font-weight-bold"
                                     },
                                     classes: "govuk-input",
-                                    value: formResponses.alternativeReviewPeriod or alternativeReviewPeriod,
+                                    value: enteredAlternativeReviewPeriod,
                                     errorMessage: validationErrors | findError('alternativeReviewPeriod')
                                 })
                             }
@@ -149,17 +152,18 @@
                         ] %}
 
                     {{ govukRadios({
-                    idPrefix: "reviewPeriod",
-                    name: "reviewPeriod",
-                    fieldset: {
-                        legend: {
-                        text: "Select a review period",
-                        classes: "govuk-fieldset__legend govuk-fieldset__legend--m"
-                        }
-                    },
-                    items: reviewOptions,
-                    errorMessage: validationErrors | findError('reviewPeriod')
-                    }) }}
+                                    idPrefix: "reviewPeriod",
+                                    name: "reviewPeriod",
+                                    fieldset: {
+                                        legend: {
+                                        text: "Select a review period",
+                                        classes: "govuk-fieldset__legend govuk-fieldset__legend--m"
+                                        }
+                                    },
+                                    items: reviewOptions,
+                                    errorMessage: validationErrors | findError('reviewPeriod')
+                                })
+                    }}
 
                     <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
 

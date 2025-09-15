@@ -13,14 +13,14 @@ class CurfewTerms {
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'One curfew' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'One curfew')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
   oneCurfewStart: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'One curfew' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'One curfew')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
   oneCurfewEnd: SimpleTime
 
   // Two curfews
@@ -28,28 +28,28 @@ class CurfewTerms {
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
   twoCurfewStart: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
   twoCurfewEnd: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the second curfew,' } })
   twoCurfewStart2: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the second curfew,' } })
   twoCurfewEnd2: SimpleTime
 
   // Three curfews
@@ -57,42 +57,42 @@ class CurfewTerms {
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
   threeCurfewStart: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
   threeCurfewEnd: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the second curfew,' } })
   threeCurfewStart2: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the second curfew,' } })
   threeCurfewEnd2: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the third curfew,' } })
   threeCurfewStart3: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime)
+  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the third curfew,' } })
   threeCurfewEnd3: SimpleTime
 
   @Expose()

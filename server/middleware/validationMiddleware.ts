@@ -2,12 +2,20 @@ import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
 import ConditionService from '../services/conditionService'
-import { getCurfewSummary } from '../utils/utils'
+import { getSummaryMessage } from '../utils/utils'
 
 export type FieldValidationError = {
   field: string
   message: string
   summaryMessage?: string
+}
+
+type SummaryPrefix = {
+  summaryPrefix: () => string
+}
+
+type ValidationContext = {
+  [type: string]: SummaryPrefix
 }
 
 function validationMiddleware(conditionService: ConditionService, type?: new () => object): RequestHandler {
@@ -44,17 +52,22 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
 
       const buildError = (
         error: ValidationError,
-        constraints: {
-          [type: string]: string
-        },
+        constraints: { [type: string]: string },
+        contexts?: ValidationContext,
       ): FieldValidationError => {
-        const message = Object.values(constraints)[Object.values(constraints).length - 1]
-        const summaryMessage = error?.constraints?.ValidCurfewTime ? getCurfewSummary(error.property, message) : message
+        const constraintKeys = Object.keys(constraints)
+        const lastConstraintKey = constraintKeys[constraintKeys.length - 1]
+        const message = constraints[lastConstraintKey]
+
+        let prefix = ''
+        if (contexts && contexts[lastConstraintKey]?.summaryPrefix) {
+          prefix = contexts[lastConstraintKey].summaryPrefix()
+        }
 
         return {
           field: error.property,
           message,
-          summaryMessage,
+          summaryMessage: prefix ? getSummaryMessage(prefix, message) : message,
         }
       }
 
@@ -62,7 +75,9 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       const flattenErrors: any = (errorList: ValidationError[]) => {
         // Flat pack a list of errors with child errors into a 1-dimensional list of errors.
         return errorList.flatMap(error => {
-          return error.children.length > 0 ? flattenErrors(error.children) : buildError(error, error.constraints)
+          return error.children.length > 0
+            ? flattenErrors(error.children)
+            : buildError(error, error.constraints, error?.contexts)
         })
       }
 

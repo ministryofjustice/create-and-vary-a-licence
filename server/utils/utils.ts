@@ -277,30 +277,9 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
   return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
 }
 
-function getCurfewSummary(fieldName: string, message: string): string {
-  const prefix = getCurfewPrefix(fieldName)
+function getSummaryMessage(prefix: string, message: string): string {
   const formattedMessage = message.charAt(0).toLowerCase() + message.slice(1)
   return `${prefix} ${formattedMessage}`
-}
-
-function getCurfewPrefix(fieldName: string): string {
-  const curfewPrefixes: Record<string, string> = {
-    first: 'For the first curfew,',
-    second: 'For the second curfew,',
-    third: 'For the third curfew,',
-  }
-
-  if (fieldName.endsWith('Start') || fieldName.endsWith('End')) {
-    return curfewPrefixes.first
-  }
-  if (fieldName.endsWith('Start2') || fieldName.endsWith('End2')) {
-    return curfewPrefixes.second
-  }
-  if (fieldName.endsWith('Start3') || fieldName.endsWith('End3')) {
-    return curfewPrefixes.third
-  }
-
-  return ''
 }
 
 export {
@@ -335,5 +314,5 @@ export {
   isHdcLicence,
   formatAddressTitleCase,
   formatAddressLine,
-  getCurfewSummary,
+  getSummaryMessage,
 }

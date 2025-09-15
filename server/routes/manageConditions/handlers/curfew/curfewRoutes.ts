@@ -41,17 +41,14 @@ export default class CurfewRoutes {
       ),
     )
 
+    const getFieldValue = (fieldName: string): string | undefined =>
+      additionalCondition.data.find((data: { field: string; value: string }) => data.field === fieldName)?.value
+
     return res.render('pages/manageConditions/curfew/input', {
       additionalConditionCode: additionalCondition.code,
-      reviewPeriod: additionalCondition.data.find(
-        (data: { field: string; value: string }) => data.field === 'reviewPeriod',
-      )?.value,
-      alternativeReviewPeriod: additionalCondition.data.find(
-        (data: { field: string; value: string }) => data.field === 'alternativeReviewPeriod',
-      )?.value,
-      numberOfCurfews: additionalCondition.data.find(
-        (data: { field: string; value: string }) => data.field === 'numberOfCurfews',
-      )?.value as CurfewType,
+      reviewPeriod: getFieldValue('reviewPeriod'),
+      alternativeReviewPeriod: getFieldValue('alternativeReviewPeriod'),
+      numberOfCurfews: getFieldValue('numberOfCurfews') as CurfewType,
       curfewTimes: this.formatCurfewTimes(curfewTimes),
       config,
     })
@@ -210,29 +207,31 @@ export default class CurfewRoutes {
   }
 
   formatCurfewTimes(curfewTimes: Record<string, string>): Record<string, SimpleTime> {
+    const parse = (key: string): SimpleTime => SimpleTime.fromString(curfewTimes[key])
+
     switch (curfewTimes.numberOfCurfews as CurfewType) {
       case 'One curfew':
         return {
-          oneCurfewStart: SimpleTime.fromString(curfewTimes.curfewStart),
-          oneCurfewEnd: SimpleTime.fromString(curfewTimes.curfewEnd),
+          oneCurfewStart: parse('curfewStart'),
+          oneCurfewEnd: parse('curfewEnd'),
         }
 
       case 'Two curfews':
         return {
-          twoCurfewStart: SimpleTime.fromString(curfewTimes.curfewStart),
-          twoCurfewEnd: SimpleTime.fromString(curfewTimes.curfewEnd),
-          twoCurfewStart2: SimpleTime.fromString(curfewTimes.curfewStart2),
-          twoCurfewEnd2: SimpleTime.fromString(curfewTimes.curfewEnd2),
+          twoCurfewStart: parse('curfewStart'),
+          twoCurfewEnd: parse('curfewEnd'),
+          twoCurfewStart2: parse('curfewStart2'),
+          twoCurfewEnd2: parse('curfewEnd2'),
         }
 
       case 'Three curfews':
         return {
-          threeCurfewStart: SimpleTime.fromString(curfewTimes.curfewStart),
-          threeCurfewEnd: SimpleTime.fromString(curfewTimes.curfewEnd),
-          threeCurfewStart2: SimpleTime.fromString(curfewTimes.curfewStart2),
-          threeCurfewEnd2: SimpleTime.fromString(curfewTimes.curfewEnd2),
-          threeCurfewStart3: SimpleTime.fromString(curfewTimes.curfewStart3),
-          threeCurfewEnd3: SimpleTime.fromString(curfewTimes.curfewEnd3),
+          threeCurfewStart: parse('curfewStart'),
+          threeCurfewEnd: parse('curfewEnd'),
+          threeCurfewStart2: parse('curfewStart2'),
+          threeCurfewEnd2: parse('curfewEnd2'),
+          threeCurfewStart3: parse('curfewStart3'),
+          threeCurfewEnd3: parse('curfewEnd3'),
         }
 
       default:
