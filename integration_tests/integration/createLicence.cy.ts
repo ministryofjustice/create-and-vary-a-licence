@@ -76,8 +76,7 @@ context('Create a licence', () => {
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
         .selectRadio('Two curfews')
-        .addFirstCurfew(2)
-        .addSecondCurfew(2)
+        .addTwoCurfews(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')
         .nextCondition()
@@ -267,8 +266,7 @@ context('Create a licence', () => {
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
         .selectRadio('Two curfews')
-        .addFirstCurfew(2)
-        .addSecondCurfew(2)
+        .addTwoCurfews(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')
         .nextCondition()
