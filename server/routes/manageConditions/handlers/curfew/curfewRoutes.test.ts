@@ -36,13 +36,13 @@ describe('Route handlers - Curfew routes', () => {
       {
         id: 2,
         field: 'curfewStart',
-        value: SimpleTime.fromString('01:00 am'),
+        value: '01:00 am',
         sequence: 1,
       },
       {
         id: 3,
         field: 'curfewEnd',
-        value: SimpleTime.fromString('02:00 am'),
+        value: '02:00 am',
         sequence: 2,
       },
       {
@@ -66,13 +66,13 @@ describe('Route handlers - Curfew routes', () => {
       {
         id: 2,
         field: 'curfewStart',
-        value: SimpleTime.fromString('04:00 am'),
+        value: '04:00 am',
         sequence: 1,
       },
       {
         id: 3,
         field: 'curfewEnd',
-        value: SimpleTime.fromString('05:00 am'),
+        value: '05:00 am',
         sequence: 2,
       },
       {
@@ -134,23 +134,21 @@ describe('Route handlers - Curfew routes', () => {
 
     it('should format multiple instances of the condition into a single set of form values', async () => {
       res.locals.licence.additionalLicenceConditions = [curfewInstance1, curfewInstance2] as AdditionalCondition[]
-      const formResponses = {
-        numberOfCurfews: 'Two curfews',
-        curfewStart: SimpleTime.fromString('01:00 am'),
-        curfewEnd: SimpleTime.fromString('02:00 am'),
-        reviewPeriod: 'weekly',
-        numberOfCurfews2: 'Two curfews',
-        curfewStart2: SimpleTime.fromString('04:00 am'),
-        curfewEnd2: SimpleTime.fromString('05:00 am'),
-        reviewPeriod2: 'weekly',
-      }
 
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/manageConditions/curfew/input', {
-        additionalCondition: curfewInstance1,
+        additionalConditionCode: curfewInstance1.code,
+        reviewPeriod: 'weekly',
+        alternativeReviewPeriod: null,
+        numberOfCurfews: 'Two curfews',
+        curfewTimes: {
+          twoCurfewStart: SimpleTime.fromString('01:00 am'),
+          twoCurfewEnd: SimpleTime.fromString('02:00 am'),
+          twoCurfewStart2: SimpleTime.fromString('04:00 am'),
+          twoCurfewEnd2: SimpleTime.fromString('05:00 am'),
+        },
         config: conditionConfig,
-        formResponses,
       })
     })
   })
@@ -239,7 +237,7 @@ describe('Route handlers - Curfew routes', () => {
         curfewStart: SimpleTime.fromString('03:00 am'),
         curfewEnd: SimpleTime.fromString('04:00 am'),
         reviewPeriod: 'monthly',
-        alternativeReviewPeriod: undefined,
+        alternativeReviewPeriod: null,
       } as Record<string, string | SimpleTime>
 
       await handler.addCurfewCondition(

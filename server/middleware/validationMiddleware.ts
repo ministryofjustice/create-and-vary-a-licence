@@ -64,6 +64,10 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
           prefix = contexts[lastConstraintKey].summaryPrefix()
         }
 
+        console.log('error.property', error.property)
+        console.log('message', message)
+        console.log('prefix', prefix)
+
         return {
           field: error.property,
           message,

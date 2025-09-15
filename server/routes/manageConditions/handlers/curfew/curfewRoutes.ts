@@ -47,7 +47,7 @@ export default class CurfewRoutes {
     return res.render('pages/manageConditions/curfew/input', {
       additionalConditionCode: additionalCondition.code,
       reviewPeriod: getFieldValue('reviewPeriod'),
-      alternativeReviewPeriod: getFieldValue('alternativeReviewPeriod'),
+      alternativeReviewPeriod: getFieldValue('alternativeReviewPeriod') || null,
       numberOfCurfews: getFieldValue('numberOfCurfews') as CurfewType,
       curfewTimes: this.formatCurfewTimes(curfewTimes),
       config,
