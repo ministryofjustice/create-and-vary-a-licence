@@ -29,7 +29,7 @@ context('Search for a person', () => {
     caseloadPageExit.signOut().click()
   })
 
-  it('should sort search results', () => {
+  it('should sort search results by release date and name', () => {
     cy.task('stubGetProbationSearchMultipleResults')
 
     const indexPage = Page.verifyOnPage(IndexPage)
