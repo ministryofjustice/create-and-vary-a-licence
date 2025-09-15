@@ -17,7 +17,7 @@
 
         <div id="electronicMonitoringProvider-isToBeTaggedForProgramme" class="govuk-!-margin-top-4 {% if error %} urgent-highlight {% endif %}">
             <h2 class="govuk-heading-m">Additional information</h2>
-            <p>This information will not appear on the licence.</p>
+            <p id="information" >This information will not appear on the licence.</p>
             {% if error %}
                 <p class="govuk-error-message">
                     <span>{{ error.text }}</span>

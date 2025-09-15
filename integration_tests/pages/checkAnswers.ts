@@ -17,7 +17,7 @@ export default class CheckAnswersPage extends Page {
   private backToCaseloadLinkId = '[data-qa=back-to-caseload-link]'
 
   constructor() {
-    super('check-answers-page')
+    super('check-answers-page', false, { 'link-name': { enabled: true } })
   }
 
   clickEditLicence = (): EditLicenceQuestionPage => {
