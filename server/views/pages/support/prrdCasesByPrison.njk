@@ -1,15 +1,17 @@
 {% extends "layout.njk" %}
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - PRRD cases by Prison" %}
 {% set pageId = "prrd-case-by-prison-page" %}
 {% set backLinkHref = "/support" %}
 {% set noJsBackLink = true %}
 
-{% macro offenderName(offenderName, nomisId, licenceId, index) %}
+{% macro offenderName(offenderName, prisonNumber, licenceId, index) %}
     <div class="caseload-offender-name">
-        <a href="/support/offender/{{ nomisId }}/detail" id="name-link-{{ index }}"
+        <a href="/support/offender/{{ prisonNumber }}/detail" id="name-link-{{ index }}"
            class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
     </div>
 {% endmacro %}
@@ -24,14 +26,14 @@
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.prisonerNumber, offender.licenceId, loop.index)
+            html: offenderName(offender.name, offender.prisonNumber, offender.licenceId, loop.index)
         },
         {
             attributes: {
                 id: 'prison-number-' + loop.index,
-                "data-sort-value": offender.prisonerNumber
+                "data-sort-value": offender.crn
             },
-            html: offender.prisonerNumber
+            html: offender.crn
         },
         {
             attributes: {
@@ -48,12 +50,13 @@
             classes: "max-width max-width-200",
             text: offender.probationPractitioner
         },
-        {
+                {
             attributes: {
-                id: 'release-date-type' + loop.index,
-                "data-sort-value": offender.releaseDateLabel
+                id: 'probation-practitioner-email-' + loop.index,
+                "data-sort-value": offender.probationPractitionerEmail
             },
-            text: offender.releaseDateLabel
+            classes: "max-width max-width-200",
+            text: offender.probationPractitionerEmail
         },
         {
             attributes: {
@@ -68,7 +71,29 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">PRRD cases by Prison: {{ user.activeCaseload }}</h1>
+            <h1 class="govuk-heading-xl">PRRD cases by Prison</h1>
+            <form method="POST" action="/support/prrd-cases/by-prison">
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+              {{ govukSelect({
+                id: "prisonCode",
+                name: "prisonCode",
+                label: {
+                    text: "Currently showing cases in:"
+                },
+                items: prisons
+                }) }}
+                <div class="govuk-button-group">
+                {{ govukButton({
+                    text: "Switch prison"
+                }) }}
+                {{ govukButton({
+                    text: "Download CSV",
+                    href: "/support/prrd-cases/by-prison/" + prisonCode + "/download-csv",
+                    classes: "govuk-button--secondary"
+                }) }}
+                </div>
+            </form>  
+           
         </div>
     </div>
     {% if caseload.length > 0 %}
@@ -86,7 +111,7 @@
                     }
                 },
                 {
-                    text: "Prison number",
+                    text: "CRN",
                     attributes: {
                         "aria-sort": "none"
                     }
@@ -104,7 +129,7 @@
                     }
                 },
                 {
-                    text: "Release date type",
+                    text: "Probation practitioner Email",
                     attributes: {
                         "aria-sort": "none"
                     }
@@ -118,6 +143,7 @@
             ],
             rows: licences
         }) }}
+
     {% else %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
