@@ -176,9 +176,9 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<AddressSearchResponse[]>
   }
 
-  async updateContactNumber(licenceId: string, contactNumber: ContactNumberRequest, user: User): Promise<void> {
+  async updateContactNumber(licenceId: string, contactNumberRequest: ContactNumberRequest, user: User): Promise<void> {
     await this.put(
-      { path: `/licence/id/${licenceId}/contact-number`, data: contactNumber },
+      { path: `/licence/id/${licenceId}/contact-number`, data: contactNumberRequest },
       { username: user.username },
     )
   }

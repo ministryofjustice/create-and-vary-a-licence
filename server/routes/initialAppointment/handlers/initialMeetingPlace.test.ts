@@ -10,6 +10,8 @@ import AddressService from '../../../services/addressService'
 import { AddressResponse } from '../../../@types/licenceApiClientTypes'
 
 jest.mock('./initialMeetingUpdatedFlashMessage')
+jest.mock('../../../services/licenceService')
+jest.mock('../../../services/addressService')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
@@ -62,10 +64,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         },
       },
     } as unknown as Response
-
-    licenceService.updateAppointmentAddress = jest.fn()
-    licenceService.recordAuditEvent = jest.fn()
-    addressService.getPreferredAddresses = jest.fn()
   })
 
   afterEach(() => {
@@ -78,6 +76,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
 
     describe('GET', () => {
       it('should render view', async () => {
+        addressService.getPreferredAddresses.mockResolvedValue([])
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
