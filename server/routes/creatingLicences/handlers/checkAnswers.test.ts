@@ -81,8 +81,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           appointmentPersonType: 'SPECIFIC_PERSON',
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
-          appointmentTelephoneNumber: '07891245678',
-          appointmentAlternativeTelephoneNumber: '07891245678',
+          appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
           appointmentTimeType: 'SPECIFIC_DATE_TIME',
           additionalLicenceConditions: [],
@@ -303,7 +302,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       res.locals.licence = {
         appointmentPerson: '',
         appointmentAddress: '',
-        appointmentTelephoneNumber: '',
+        appointmentContact: '',
         appointmentTime: '',
         additionalLicenceConditions: [],
         additionalPssConditions: [],
@@ -316,10 +315,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         JSON.stringify([
           { field: 'appointmentPersonType', message: "Select 'Change' to go back and add who to meet" },
           { field: 'appointmentAddress', message: "Select 'Change' to go back and add appointment address" },
-          {
-            field: 'appointmentTelephoneNumber',
-            message: "Select 'Change' to go back and add appointment telephone number",
-          },
+          { field: 'appointmentContact', message: "Select 'Change' to go back and add appointment telephone number" },
           { field: 'appointmentTimeType', message: "Select 'Change' to go back and add appointment date and time" },
         ]),
       )
