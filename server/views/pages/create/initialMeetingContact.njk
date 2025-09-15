@@ -33,18 +33,9 @@
                     name: "telephone",
                     classes: "govuk-input--width-20",
                     errorMessage: validationErrors | findError('telephone'),
-                    value: licence.appointmentTelephoneNumber | fillFormResponse(formResponses.telephone)
+                    value: licence.appointmentContact | fillFormResponse(formResponses.telephone)
                 }) }}
-                {{ govukInput({
-                    label: {
-                        text: "Alternative UK telephone number (optional)"
-                    },
-                    id: "telephoneAlternative",
-                    name: "telephoneAlternative",
-                    classes: "govuk-input--width-20",
-                    errorMessage: validationErrors | findError('telephoneAlternative'),
-                    value: licence.appointmentAlternativeTelephoneNumber | fillFormResponse(formResponses.telephoneAlternative)
-                }) }}
+
                 {{ govukButton({
                     text: continueOrSave,
                     type: "submit",

@@ -36,7 +36,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -126,7 +126,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -219,7 +219,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -301,7 +301,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -402,7 +402,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -443,7 +443,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -484,7 +484,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -560,7 +560,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage

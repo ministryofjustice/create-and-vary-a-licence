@@ -52,16 +52,16 @@
                 } if isEditable
             },
             {
-                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTelephoneNumber'),
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentContact'),
                 key: { text: "Contact phone number" },
-                value: { text: licence.appointmentTelephoneNumber },
+                value: { text: licence.appointmentContact },
                 actions: {
                     items: [
                         {
                             href: routepath + "/initial-meeting-contact",
                             text: "Change",
                             visuallyHiddenText: "telephone",
-                            attributes: { "id": "appointmentTelephoneNumber",  "data-qa": "telephone-change-link" }
+                            attributes: { "id": "appointmentContact",  "data-qa": "telephone-change-link" }
                         }
                     ]
                 } if isEditable
