@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import InitialMeetingContactRoutes from './initialMeetingContact'
 import LicenceService from '../../../services/licenceService'
-import TelephoneNumbers from '../types/telephoneNumbers'
+import Telephone from '../types/telephone'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 
@@ -13,19 +13,18 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
   let req: Request
   let res: Response
-  let telephoneNumbers: TelephoneNumbers
+  let contactNumber: Telephone
 
   beforeEach(() => {
-    telephoneNumbers = {
+    contactNumber = {
       telephone: '0114 2556556',
-      telephoneAlternative: '0114 2556558',
-    } as TelephoneNumbers
+    } as Telephone
 
     req = {
       params: {
         licenceId: 1,
       },
-      body: telephoneNumbers,
+      body: contactNumber,
       query: {},
     } as unknown as Request
 
@@ -62,7 +61,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         await handler.POST(req, res)
         expect(licenceService.updateContactNumber).toHaveBeenCalledWith(
           1,
-          { telephone: '0114 2556556', telephoneAlternative: '0114 2556558' },
+          { telephone: '0114 2556556' },
           { username: 'joebloggs' },
         )
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-time')
@@ -96,7 +95,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         await handler.POST(req, res)
         expect(licenceService.updateContactNumber).toHaveBeenCalledWith(
           1,
-          { telephone: '0114 2556556', telephoneAlternative: '0114 2556558' },
+          { telephone: '0114 2556556' },
           { username: 'joebloggs' },
         )
         expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')

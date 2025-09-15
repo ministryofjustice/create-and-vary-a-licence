@@ -7,8 +7,7 @@ describe('@ValidateIf for electronicMonitoringProvider', () => {
     const plain = {
       appointmentPersonType: 'DUTY_OFFICER',
       appointmentAddress: 'address',
-      appointmentTelephoneNumber: '0123456789',
-      appointmentAlternativeTelephoneNumber: '02234567890',
+      appointmentContact: '0123456789',
       appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
       additionalLicenceConditions: [] as string[],
       additionalPssConditions: [] as string[],
@@ -24,8 +23,7 @@ describe('@ValidateIf for electronicMonitoringProvider', () => {
     const plain = {
       appointmentPersonType: 'DUTY_OFFICER',
       appointmentAddress: 'address',
-      appointmentTelephoneNumber: '0123456789',
-      appointmentAlternativeTelephoneNumber: '02234567890',
+      appointmentContact: '0123456789',
       appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
       additionalLicenceConditions: [] as string[],
       additionalPssConditions: [] as string[],

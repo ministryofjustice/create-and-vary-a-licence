@@ -1,5 +1,5 @@
 import { validate, ValidationError } from 'class-validator'
-import TelephoneNumbers from './telephoneNumbers'
+import Telephone from './telephone'
 
 describe('Telephone validator test', () => {
   const validNumbers = [
@@ -36,7 +36,7 @@ describe('Telephone validator test', () => {
   ]
 
   const invalidNumbers = [
-    '', // empty (telephone only — alt is handled differently)
+    '', // empty
     '12345', // too short
     'abcd', // not numeric
     '(02079460958)', // no spacing inside brackets
@@ -53,15 +53,15 @@ describe('Telephone validator test', () => {
     '01632 960901 ext.123', // dot suffix not allowed
   ]
 
-  it('should allow the following phone numbers for telephone', async () => {
+  it('should allow the following phone numbers', async () => {
     const validations = await Promise.all(
       validNumbers.map(async number => {
         // Given
-        const telephone = new TelephoneNumbers()
+        const telephone = new Telephone()
         telephone.telephone = number
 
         // When
-        const errors: ValidationError[] = await validate(telephone)
+        const errors = await validate(telephone)
 
         return { number, errors }
       }),
@@ -73,15 +73,15 @@ describe('Telephone validator test', () => {
     })
   })
 
-  it('should not allow the following phone numbers for telephone', async () => {
+  it('should not allow the following phone numbers', async () => {
     const validations = await Promise.all(
       invalidNumbers.map(async number => {
         // Given
-        const telephone = new TelephoneNumbers()
+        const telephone = new Telephone()
         telephone.telephone = number
 
         // When
-        const errors: ValidationError[] = await validate(telephone)
+        const errors = await validate(telephone)
 
         return { number, errors }
       }),
@@ -91,100 +91,23 @@ describe('Telephone validator test', () => {
       // Then
       expect(errors.length).toBe(1)
       expect(errors[0].constraints).toHaveProperty('matches')
-      expect(errors[0].constraints?.matches).toEqual('Enter a phone number in the correct format, like 01632 960901')
+      expect(errors[0].constraints.matches).toEqual('Enter a phone number in the correct format, like 01632 960901')
     })
   })
 
   it('should fail when telephone is empty', async () => {
-    // Given
-    const telephone = new TelephoneNumbers()
-    telephone.telephone = ''
+    const validateEmptyTelephone = async (): Promise<{ telephone: Telephone; errors: ValidationError[] }> => {
+      const telephone = new Telephone()
+      telephone.telephone = ''
 
-    // When
-    const errors: ValidationError[] = await validate(telephone)
+      const errors = await validate(telephone)
+      return { telephone, errors }
+    }
 
     // Then
+    const { errors } = await validateEmptyTelephone()
     expect(errors).not.toHaveLength(0)
     expect(errors[0].property).toBe('telephone')
     expect(errors[0].constraints?.isNotEmpty).toBe('Enter a phone number')
-  })
-
-  //
-  // Tests for telephoneAlternative
-  //
-  it('should allow telephoneAlternative to be null or undefined', async () => {
-    // Given
-    const telephone = new TelephoneNumbers()
-    telephone.telephone = '01632 960901'
-    telephone.telephoneAlternative = null
-
-    // When
-    const errorsNull: ValidationError[] = await validate(telephone)
-
-    // Given again with undefined
-    telephone.telephoneAlternative = undefined
-    const errorsUndefined: ValidationError[] = await validate(telephone)
-
-    // Then
-    expect(errorsNull.length).toBe(0)
-    expect(errorsUndefined.length).toBe(0)
-  })
-
-  it('should treat empty string telephoneAlternative as null (valid)', async () => {
-    // Given
-    const telephone = new TelephoneNumbers()
-    telephone.telephone = '01632 960901'
-    telephone.telephoneAlternative = null
-
-    // When
-    const errors: ValidationError[] = await validate(telephone)
-
-    // Then
-    expect(errors.length).toBe(0)
-  })
-
-  it('should allow valid numbers for telephoneAlternative', async () => {
-    const validations = await Promise.all(
-      validNumbers.map(async number => {
-        // Given
-        const telephone = new TelephoneNumbers()
-        telephone.telephone = '01632 960901'
-        telephone.telephoneAlternative = number
-
-        // When
-        const errors: ValidationError[] = await validate(telephone)
-
-        return { number, errors }
-      }),
-    )
-
-    validations.forEach(({ errors }) => {
-      // Then
-      expect(errors.length).toBe(0)
-    })
-  })
-
-  it('should not allow invalid numbers for telephoneAlternative', async () => {
-    const validations = await Promise.all(
-      invalidNumbers.map(async number => {
-        // Given
-        const telephone = new TelephoneNumbers()
-        telephone.telephone = '01632 960901'
-        telephone.telephoneAlternative = number
-
-        // When
-        const errors: ValidationError[] = await validate(telephone)
-
-        return { number, errors }
-      }),
-    )
-
-    validations.forEach(({ errors }) => {
-      // Then
-      expect(errors.length).toBe(1)
-      expect(errors[0].property).toBe('telephoneAlternative')
-      expect(errors[0].constraints).toHaveProperty('matches')
-      expect(errors[0].constraints?.matches).toEqual('Enter a phone number in the correct format, like 01632 960901')
-    })
   })
 })

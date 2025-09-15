@@ -1,5 +1,5 @@
-import { Expose, Transform } from 'class-transformer'
-import { IsNotEmpty, Matches, IsOptional } from 'class-validator'
+import { Expose } from 'class-transformer'
+import { IsNotEmpty, Matches } from 'class-validator'
 
 /*
   Regular expression breakdown:
@@ -25,22 +25,13 @@ import { IsNotEmpty, Matches, IsOptional } from 'class-validator'
 
   $/                                        → End of string
 */
-
-class TelephoneNumbers {
+class Telephone {
   @Expose()
   @IsNotEmpty({ message: 'Enter a phone number' })
   @Matches(/^((\+44\s?[1-9]\d{1,4}|\(0\d{2,5}\)|0\d{2,5})\s?\d{3,4}\s?\d{3,4})(\s?(?:#|ext|x)\s?\d{1,5})?$/, {
     message: 'Enter a phone number in the correct format, like 01632 960901',
   })
   telephone: string
-
-  @Expose()
-  @IsOptional()
-  @Transform(({ value }) => (value === '' ? null : value))
-  @Matches(/^((\+44\s?[1-9]\d{1,4}|\(0\d{2,5}\)|0\d{2,5})\s?\d{3,4}\s?\d{3,4})(\s?(?:#|ext|x)\s?\d{1,5})?$/, {
-    message: 'Enter a phone number in the correct format, like 01632 960901',
-  })
-  telephoneAlternative?: string | null
 }
 
-export default TelephoneNumbers
+export default Telephone
