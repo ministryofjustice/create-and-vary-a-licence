@@ -73,7 +73,7 @@
     {% endif %}
 {% endmacro %}
 
-{% set searchTableHeadings = [
+{% set inPrisonSearchTableHeadings = [
     {
         text: "Name",
         attributes: {
@@ -96,7 +96,47 @@
         text: "Release date",
         attributes: {
             id: 'release-date-sort',
+            "aria-sort": "ascending"
+        }
+    },
+    {
+        text: "Last worked on by",
+        attributes: {
             "aria-sort": "none"
+        }
+    },
+    {
+        text: "Status",
+        attributes: {
+            "aria-sort": "none"
+        }
+    }
+] %}
+
+{% set onProbationSearchTableHeadings = [
+    {
+        text: "Name",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Prison number",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Probation practitioner",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Release date",
+        attributes: {
+            id: 'release-date-sort',
+            "aria-sort": "descending"
         }
     },
     {
@@ -114,13 +154,21 @@
 ] %}
 
 {% if hasSelectedMultiplePrisonCaseloads %}
-    {% set searchTableHeadings = (searchTableHeadings.splice(3, 0, {
+    {% set inPrisonSearchTableHeadings = (inPrisonSearchTableHeadings.splice(3, 0, {
                 text: "Location",
                 attributes: {
                     "aria-sort": "none"
                 }
             }
-    ), searchTableHeadings) %}
+    ), inPrisonSearchTableHeadings) %}
+
+    {% set onProbationSearchTableHeadings = (onProbationSearchTableHeadings.splice(3, 0, {
+                text: "Location",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            }
+    ), onProbationSearchTableHeadings) %}
 {% endif %}
 
 {% for offender in inPrisonResults %}
@@ -291,8 +339,8 @@
     {%  set recallsMessage = "have not been recalled or breached a top up supervision order" %}
 {% endif %}
 
-{% set peopleInPrison = displayResults(searchTableHeadings, peopleInPrisonResults, tabParameters.prison.tabId, inPrisonCountText, true, recallsMesage) %}
-{% set peopleOnProbation = displayResults(searchTableHeadings, peopleOnProbationResults, tabParameters.probation.tabId, onProbationCountText, false, recallsMesage) %}
+{% set peopleInPrison = displayResults(inPrisonSearchTableHeadings, peopleInPrisonResults, tabParameters.prison.tabId, inPrisonCountText, true, recallsMesage) %}
+{% set peopleOnProbation = displayResults(onProbationSearchTableHeadings, peopleOnProbationResults, tabParameters.probation.tabId, onProbationCountText, false, recallsMesage) %}
 {% set attentionNeeded = attentionNeededTab({ cases: attentionNeededResults, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: tabParameters.attentionNeeded.resultsCount, activeTab: 'attention-needed', hasSelectedMultiplePrisonCaseloads: hasSelectedMultiplePrisonCaseloads, isSearchPageView: isSearchPageView, tabHeadingText: attentionNeededCountText }) %}
 
 {% block content %}
