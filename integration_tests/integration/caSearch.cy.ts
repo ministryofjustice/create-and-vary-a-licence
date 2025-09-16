@@ -80,19 +80,17 @@ context('Search for a person', () => {
     const caseloadPage = indexPage.clickViewAndPrintALicence()
     const searchPage = caseloadPage.clickSearch('test')
     searchPage.getSearchHeading().contains('Search results for test')
-    // check people in prison are ordered by ascending release date by default
+    // check people in prison are ordered by descending release date by default
     searchPage.getRow(0).contains('1 Jul 2025')
     searchPage.getRow(1).contains('1 Aug 2025')
     searchPage.getRow(2).contains('2 Aug 2025')
-    // first click sorts ascending but already ascending by default
-    searchPage.clickSortByReleaseDate()
-    // second click sorts descending
+    // second click sorts ascending
     searchPage.clickSortByReleaseDate()
     searchPage.getRow(0).contains('2 Aug 2025')
     searchPage.getRow(1).contains('1 Aug 2025')
     searchPage.getRow(2).contains('1 Jul 2025')
     searchPage.clickOnProbationTab()
-    // check people on probation are ordered by descending release date by default
+    // check people on probation are ordered by ascending release date by default
     searchPage.getRow(3).contains('1 May 2025')
     searchPage.getRow(4).contains('30 Apr 2025')
     searchPage.getRow(5).contains('29 Apr 2025')

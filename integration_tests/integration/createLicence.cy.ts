@@ -47,7 +47,7 @@ context('Create a licence', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -132,7 +132,7 @@ context('Create a licence', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const pssConditionsQuestionPage = appointmentTimePage
@@ -173,7 +173,7 @@ context('Create a licence', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(() => {
       const checkAnswersPage = appointmentTimePage
@@ -199,7 +199,7 @@ context('Create a licence', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -240,7 +240,7 @@ context('Create a licence', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(() => {
       const additionalConditionsPage = appointmentTimePage
@@ -320,7 +320,7 @@ context('Create a licence', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(() => {
       const checkAnswersPage = appointmentTimePage
@@ -347,7 +347,7 @@ context('Create a licence', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const checkAnswersPage = appointmentTimePage
@@ -377,7 +377,7 @@ context('Create a licence', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -420,7 +420,7 @@ context('Create a licence', () => {
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
     appointmentTimePage.getRadioByValue('SPECIFIC_DATE_TIME').should('be.checked')
   })
 })

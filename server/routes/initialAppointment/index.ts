@@ -10,7 +10,7 @@ import InitialMeetingTimeRoutes from './handlers/initialMeetingTime'
 import { Services } from '../../services'
 import PersonName from './types/personName'
 import Address from './types/address'
-import Telephone from './types/telephone'
+import TelephoneNumbers from './types/telephoneNumbers'
 import DateTime from './types/dateTime'
 import PostcodeLookupAddress from './types/PostcodeLookupAddress'
 import UserType from '../../enumeration/userType'
@@ -84,13 +84,13 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingContactRoutes(licenceService, UserType.PROBATION)
     get('/create/id/:licenceId/initial-meeting-contact', controller.GET, UserType.PROBATION)
-    post('/create/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
+    post('/create/id/:licenceId/initial-meeting-contact', controller.POST, TelephoneNumbers)
   }
 
   {
     const controller = new InitialMeetingContactRoutes(licenceService, UserType.PRISON)
     get('/view/id/:licenceId/initial-meeting-contact', controller.GET, UserType.PRISON)
-    post('/view/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
+    post('/view/id/:licenceId/initial-meeting-contact', controller.POST, TelephoneNumbers)
   }
 
   {
