@@ -4,6 +4,7 @@ import EditLicenceQuestionPage from './editLicenceQuestion'
 import ReasonForVariationPage from './reasonForVariationPage'
 import DiscardPage from './discardPage'
 import CaseloadPage from './caseload'
+import AppointmentContactPage from './appointmentContact'
 
 export default class CheckAnswersPage extends Page {
   private sendLicenceConditionsButtonId = '[data-qa=send-licence-conditions]'
@@ -78,5 +79,33 @@ export default class CheckAnswersPage extends Page {
   checkIfDeleteLinkVisible = (code: string) => {
     cy.get(`[data-qa="condition-action-${code}"]`).should('contain.text', 'Delete')
     return this
+  }
+
+  clickChangeTelephoneLink = (): AppointmentContactPage => {
+    cy.get('[data-qa=telephone-change-link]').click()
+    return Page.verifyOnPage(AppointmentContactPage)
+  }
+
+  clickChangeAlternativeTelephoneLink = (): AppointmentContactPage => {
+    cy.get('[data-qa=alternative-telephone-change-link]').click()
+    return Page.verifyOnPage(AppointmentContactPage)
+  }
+
+  checkAlternativeTelephoneNotEntered() {
+    cy.get('.govuk-summary-list__row')
+      .contains('dt.govuk-summary-list__key', 'Alternative contact phone number')
+      .siblings('dd.govuk-summary-list__value')
+      .should('contain.text', 'Not entered')
+  }
+
+  checkTelephoneNotEntered() {
+    cy.get('.govuk-summary-list__row')
+      .contains('dt.govuk-summary-list__key', 'Contact phone number')
+      .siblings('dd.govuk-summary-list__value')
+      .should('contain.text', 'Not yet entered')
+  }
+
+  checkAlternativeTelephoneLinkDoesNotExist() {
+    cy.get('[data-qa=alternative-telephone-change-link]').should('not.exist')
   }
 }

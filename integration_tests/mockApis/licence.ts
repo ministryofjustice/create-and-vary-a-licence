@@ -69,6 +69,8 @@ const licencePlaceholder: Licence = {
   dateLastUpdated: '10/09/2021 10:01:00', // Make dynamic to now?
   createdByUsername: 'X12345',
   createdByFullName: 'John Smith',
+  appointmentTelephoneNumber: '01234567890',
+  appointmentAlternativeTelephoneNumber: '01234567891',
   licenceAppointmentAddress: {
     reference: '1234',
     uprn: '10000000001',
@@ -691,6 +693,8 @@ export default {
     conditions: AdditionalCondition[]
     electronicMonitoringProvider?: ElectronicMonitoringProvider
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+    appointmentTelephoneNumber?: '01234567890'
+    appointmentAlternativeTelephoneNumber?: '01234567891'
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -708,8 +712,8 @@ export default {
           appointmentPersonType: 'SPECIFIC_PERSON',
           appointmentPerson: 'Duty Officer',
           appointmentAddress: 'Some address, Some town',
-          appointmentTelephoneNumber: '00000000000',
-          appointmentAlternativeTelephoneNumber: '1234567890',
+          appointmentTelephoneNumber: options.appointmentTelephoneNumber,
+          appointmentAlternativeTelephoneNumber: options.appointmentAlternativeTelephoneNumber,
           appointmentTime: '01/12/2021 12:34',
           appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
           isInHardStopPeriod: options.isInHardStopPeriod || false,
@@ -1627,7 +1631,15 @@ export default {
     })
   },
 
-  stubGetLicenceInHardStop: (): SuperAgentRequest => {
+  stubGetLicenceInHardStop: (
+    options: {
+      appointmentTelephoneNumber?: string
+      appointmentAlternativeTelephoneNumber?: string
+    } = {
+      appointmentTelephoneNumber: '0123456789',
+      appointmentAlternativeTelephoneNumber: '0987654321',
+    },
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -1639,6 +1651,8 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           isInHardStopPeriod: true,
+          appointmentTelephoneNumber: options.appointmentTelephoneNumber,
+          appointmentAlternativeTelephoneNumber: options.appointmentAlternativeTelephoneNumber,
         },
       },
     })

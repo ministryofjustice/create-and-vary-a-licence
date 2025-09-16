@@ -1,6 +1,7 @@
 import Page from './page'
 import AppointmentTimePage from './appointmentTime'
 import ViewALicencePage from './viewALicence'
+import CheckAnswersPage from './checkAnswers'
 
 export default class AppointmentContactPage extends Page {
   private telephoneTextboxId = '#telephone'
@@ -13,11 +14,15 @@ export default class AppointmentContactPage extends Page {
     super('appointment-contact-page')
   }
 
-  enterTelephone = (telephoneText: string, telephoneAltText: string = null): AppointmentContactPage => {
-    cy.get(this.telephoneTextboxId).type(telephoneText)
-    if (telephoneAltText !== null) {
-      cy.get(this.telephoneAltTextboxId).type(telephoneAltText)
+  enterTelephone = (telephoneText?: string, telephoneAltText?: string): AppointmentContactPage => {
+    const typeText = (selector: string, value?: string) => {
+      if (value !== undefined && value !== null) {
+        cy.get(selector).clear({ force: true })
+        cy.get(selector).type(value, { force: true })
+      }
     }
+    typeText(this.telephoneTextboxId, telephoneText)
+    typeText(this.telephoneAltTextboxId, telephoneAltText)
     return this
   }
 
@@ -27,9 +32,15 @@ export default class AppointmentContactPage extends Page {
     return Page.verifyOnPage(AppointmentTimePage)
   }
 
-  clickContinueToReturn = (): ViewALicencePage => {
+  clickContinueToReturnToViewLicencePage = (): ViewALicencePage => {
     cy.task('stubPutContactNumber')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(ViewALicencePage)
+  }
+
+  clickContinueToReturnToCheckAnswersPage = (): CheckAnswersPage => {
+    cy.task('stubPutContactNumber')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(CheckAnswersPage)
   }
 }

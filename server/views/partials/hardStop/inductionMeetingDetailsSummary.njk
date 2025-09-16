@@ -58,13 +58,28 @@
                 actions: {
                     items: [
                         {
-                            href: routepath + "/initial-meeting-contact",
+                            href: routepath + "/initial-meeting-contact?edit=telNumber",
                             text: "Change",
                             visuallyHiddenText: "telephone",
                             attributes: { "id": "appointmentTelephoneNumber",  "data-qa": "telephone-change-link" }
                         }
                     ]
                 } if isEditable
+            },
+            {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAlternativeTelephoneNumber'),
+                key: { text: "Alternative contact phone number" },
+                value: { text: licence.appointmentAlternativeTelephoneNumber | fillFormResponse(formResponses.telephoneAlternative) | default("Not entered", true) },
+                actions: {
+                items: [
+                    {
+                        href: routepath + "/initial-meeting-contact?edit=altTelNumber",
+                        text: "Change",
+                        visuallyHiddenText: "alternative telephone",
+                        attributes: { "id": "appointmentAlternativeTelephoneNumber",  "data-qa": "alternative-telephone-change-link" }
+                    }
+                ]
+                } if isEditable and licence.appointmentTelephoneNumber
             },
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTimeType'),

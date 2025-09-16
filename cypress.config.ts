@@ -15,6 +15,7 @@ import prisonRegister from './integration_tests/mockApis/prisonRegister'
 import gotenbergApi from './integration_tests/mockApis/gotenberg'
 
 export default defineConfig({
+  projectId: 'ckh82p',
   chromeWebSecurity: false,
   fixturesFolder: 'integration_tests/fixtures',
   screenshotsFolder: 'integration_tests/screenshots',

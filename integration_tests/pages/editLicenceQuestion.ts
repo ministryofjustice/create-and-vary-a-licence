@@ -15,9 +15,21 @@ export default class EditLicenceQuestionPage extends Page {
     return this
   }
 
-  clickContinue = (): CheckAnswersPage => {
+  clickContinue = ({
+    appointmentTelephoneNumber = '01234567890',
+    appointmentAlternativeTelephoneNumber = '09876543210',
+  }: {
+    appointmentTelephoneNumber?: string
+    appointmentAlternativeTelephoneNumber?: string
+  } = {}): CheckAnswersPage => {
     cy.task('stubUpdateLicenceStatus')
-    cy.task('stubGetCompletedLicence', { statusCode: 'IN_PROGRESS', typeCode: 'AP_PSS' })
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'IN_PROGRESS',
+      typeCode: 'AP_PSS',
+      appointmentTelephoneNumber,
+      appointmentAlternativeTelephoneNumber,
+    })
+
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
   }
