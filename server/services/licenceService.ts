@@ -558,7 +558,7 @@ export default class LicenceService {
     )
   }
 
-  async syncComAllocation(crn: string): Promise<void> {
-    return this.licenceApiClient.syncComAllocation(crn)
+  async syncComAllocation(crn: string, user: User = null): Promise<void> {
+    return this.licenceApiClient.syncComAllocation(crn, user)
   }
 }

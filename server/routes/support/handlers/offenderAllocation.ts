@@ -51,9 +51,10 @@ export default class OffenderAllocationRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { nomsId } = req.params
+    const { user } = res.locals
 
     const probationPractitioner = await this.probationService.getResponsibleCommunityManager(nomsId)
-    await this.licenceService.syncComAllocation(probationPractitioner.case?.crn)
+    await this.licenceService.syncComAllocation(probationPractitioner.case?.crn, user)
     return res.redirect(`/support/offender/${nomsId}/detail`)
   }
 

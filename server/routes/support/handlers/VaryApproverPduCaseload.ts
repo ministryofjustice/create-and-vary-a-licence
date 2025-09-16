@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import VaryApproverCaseloadService from '../../../services/lists/varyApproverCaseloadService'
-import { VaryApproverCase } from '../../../@types/licenceApiClientTypes'
+import type { VaryApproverCase } from '../../../@types/licenceApiClientTypes'
 import ProbationService from '../../../services/probationService'
 
 type CaseWithNomisId = VaryApproverCase & { nomisId: string }
 
-export default class VaryApproverRegionCaseloadHandler {
+export default class VaryApproverPduCaseloadRoutes {
   constructor(
     private readonly probationService: ProbationService,
     private readonly varyApproverCaseloadService: VaryApproverCaseloadService,
@@ -13,14 +13,15 @@ export default class VaryApproverRegionCaseloadHandler {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { region, mode } = req.query
+    const { pdu, mode } = req.query
 
+    const probationPduCodes = (pdu as string)?.split(',')
     let caseload: CaseWithNomisId[] = []
-    if (region) {
-      const cases = await this.varyApproverCaseloadService.getVaryApproverCaseloadByRegion(
+    if (probationPduCodes && probationPduCodes.length > 0) {
+      const cases = await this.varyApproverCaseloadService.getVaryApproverCaseload(
         {
           ...user,
-          probationAreaCode: region as string,
+          probationPduCodes,
         },
         null,
         mode !== 'old',
@@ -34,7 +35,6 @@ export default class VaryApproverRegionCaseloadHandler {
         }
       })
     }
-
     return res.render('pages/support/variationApproverCaseload', { caseload })
   }
 }

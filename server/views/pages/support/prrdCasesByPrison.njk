@@ -1,0 +1,155 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - PRRD cases by Prison" %}
+{% set pageId = "prrd-case-by-prison-page" %}
+{% set backLinkHref = "/support" %}
+{% set noJsBackLink = true %}
+
+{% macro offenderName(offenderName, prisonNumber, licenceId, index) %}
+    <div class="caseload-offender-name">
+        <a href="/support/offender/{{ prisonNumber }}/detail" id="name-link-{{ index }}"
+           class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+    </div>
+{% endmacro %}
+
+{% set licences = [] %}
+
+{% for offender in caseload %}
+    {% set licences = (licences.push([
+        {
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": offender.name
+            },
+            classes: "max-width max-width-220",
+            html: offenderName(offender.name, offender.prisonNumber, offender.licenceId, loop.index)
+        },
+        {
+            attributes: {
+                id: 'prison-number-' + loop.index,
+                "data-sort-value": offender.crn
+            },
+            html: offender.crn
+        },
+        {
+            attributes: {
+                id: 'licence-status-' + loop.index,
+                "data-sort-value": offender.licenceStatus
+            },
+            html: offender.licenceStatus
+        },
+        {
+            attributes: {
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": offender.probationPractitioner
+            },
+            classes: "max-width max-width-200",
+            text: offender.probationPractitioner
+        },
+                {
+            attributes: {
+                id: 'probation-practitioner-email-' + loop.index,
+                "data-sort-value": offender.probationPractitionerEmail
+            },
+            classes: "max-width max-width-200",
+            text: offender.probationPractitionerEmail
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": offender.releaseDate | dateToUnix
+            },
+            text: offender.releaseDate
+        }
+    ]), licences) %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl">PRRD cases by Prison</h1>
+            <form method="POST" action="/support/prrd-cases/by-prison">
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+              {{ govukSelect({
+                id: "prisonCode",
+                name: "prisonCode",
+                label: {
+                    text: "Currently showing cases in:"
+                },
+                items: prisons
+                }) }}
+                <div class="govuk-button-group">
+                {{ govukButton({
+                    text: "Switch prison"
+                }) }}
+                {{ govukButton({
+                    text: "Download CSV",
+                    href: "/support/prrd-cases/by-prison/" + prisonCode + "/download-csv",
+                    classes: "govuk-button--secondary"
+                }) }}
+                </div>
+            </form>  
+           
+        </div>
+    </div>
+    {% if caseload.length > 0 %}
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Caseload",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "Name",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "CRN",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Licence status",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Probation practitioner",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Probation practitioner Email",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Release date",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                }
+            ],
+            rows: licences
+        }) }}
+
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h2 class="govuk-heading-s">There are no PRRD cases which meet the eligibility criteria.</h2>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

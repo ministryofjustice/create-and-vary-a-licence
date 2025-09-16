@@ -6,10 +6,11 @@ import config from '../../../config'
 export default class DprReportsRoutes {
   constructor(private readonly dprService: DprService) {}
 
-  GET = (req: Request, res: Response, next: NextFunction) => {
+  GET = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params
-    const dprReports = res.locals.reportDefinitions
+    const { user } = res.locals
 
+    const dprReports = await this.dprService.getDefinitions(user)
     const reportDefinition = dprReports.find(report => report.id === id)
     const variant = reportDefinition.variants.find(variant => variant.id === id)
 
@@ -20,7 +21,7 @@ export default class DprReportsRoutes {
       apiUrl: config.apis.licenceApi.url,
       apiTimeout: config.apis.licenceApi.timeout.deadline,
       layoutTemplate: 'partials/dprReport.njk',
-      tokenProvider: (req, res) => res.locals.user?.token,
+      tokenProvider: () => user?.token,
     })(req, res, next)
   }
 }
