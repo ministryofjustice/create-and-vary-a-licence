@@ -187,7 +187,8 @@ describe('createLicenceRoutes', () => {
         appointmentPersonType: 'SPECIFIC_PERSON',
         appointmentPerson: 'Bob Smith',
         appointmentAddress: '123 Fake St',
-        appointmentContact: '00000000000',
+        appointmentTelephoneNumber: '00000000000',
+        appointmentAlternativeTelephoneNumber: '07891245678',
         appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
       } as Licence)
       licenceService.getPrisonerDetail.mockResolvedValue({
