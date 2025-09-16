@@ -65,6 +65,29 @@
                         }) }}
                     {% endmacro %}
 
+
+                    {% set oneCurfewHtml %}
+                        {{ renderTimePicker("oneCurfewStart", "Enter the curfew start time", formResponses) }}
+                        {{ renderTimePicker("oneCurfewEnd", "Enter the curfew end time", formResponses) }}
+                    {% endset %}
+
+                    {% set twoCurfewsHtml %}
+                        {{ renderTimePicker("twoCurfewStart", "First curfew – enter the start time", formResponses) }}
+                        {{ renderTimePicker("twoCurfewEnd", "First curfew – enter the end time", formResponses) }}
+                        {{ renderTimePicker("twoCurfewStart2", "Second curfew – enter the start time", formResponses) }}
+                        {{ renderTimePicker("twoCurfewEnd2", "Second curfew – enter the end time", formResponses) }}
+                    {% endset %}
+
+                    {% set threeCurfewsHtml %}
+                        {{ renderTimePicker("threeCurfewStart", "First curfew – enter the start time", formResponses) }}
+                        {{ renderTimePicker("threeCurfewEnd", "First curfew – enter the end time", formResponses) }}
+                        {{ renderTimePicker("threeCurfewStart2", "Second curfew – enter the start time", formResponses) }}
+                        {{ renderTimePicker("threeCurfewEnd2", "Second curfew – enter the end time", formResponses) }}
+                        {{ renderTimePicker("threeCurfewStart3", "Third curfew – enter the start time", formResponses) }}
+                        {{ renderTimePicker("threeCurfewEnd3", "Third curfew – enter the end time", formResponses) }}
+                    {% endset %}
+
+
                     {% set options = [] %}
                     {% set options = [
                         {
@@ -72,9 +95,7 @@
                             value: "One curfew",
                             checked: selectedCurfew == "One curfew",
                             conditional: {
-                            html:
-                                renderTimePicker("oneCurfewStart", "Enter the curfew start time", formResponses) +
-                                renderTimePicker("oneCurfewEnd", "Enter the curfew end time", formResponses)
+                                html: oneCurfewHtml
                             }
                         },
                         {
@@ -82,11 +103,7 @@
                             value: "Two curfews",
                             checked: selectedCurfew == "Two curfews",
                             conditional: {
-                            html:
-                                renderTimePicker("twoCurfewStart", "First curfew – enter the start time", formResponses) +
-                                renderTimePicker("twoCurfewEnd", "First curfew – enter the end time", formResponses) +
-                                renderTimePicker("twoCurfewStart2", "Second curfew – enter the start time", formResponses) +
-                                renderTimePicker("twoCurfewEnd2", "Second curfew – enter the end time", formResponses)
+                                html: twoCurfewsHtml
                             }
                         },
                         {
@@ -94,13 +111,7 @@
                             value: "Three curfews",
                             checked: selectedCurfew == "Three curfews",
                             conditional: {
-                            html:
-                                renderTimePicker("threeCurfewStart", "First curfew – enter the start time", formResponses) +
-                                renderTimePicker("threeCurfewEnd", "First curfew – enter the end time", formResponses) +
-                                renderTimePicker("threeCurfewStart2", "Second curfew – enter the start time", formResponses) +
-                                renderTimePicker("threeCurfewEnd2", "Second curfew – enter the end time", formResponses) +
-                                renderTimePicker("threeCurfewStart3", "Third curfew – enter the start time", formResponses) +
-                                renderTimePicker("threeCurfewEnd3", "Third curfew – enter the end time", formResponses)
+                                html: threeCurfewsHtml
                             }
                         }
                     ] %}
