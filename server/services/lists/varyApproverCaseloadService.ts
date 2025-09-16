@@ -6,7 +6,7 @@ import LicenceService from '../licenceService'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
-import type { CvlFields, CvlPrisoner, LicenceSummary, VaryApproverCase } from '../../@types/licenceApiClientTypes'
+import type { CvlPrisoner, LicenceSummary, VaryApproverCase } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
 import { convertToTitleCase, parseCvlDate, parseCvlDateTime } from '../../utils/utils'
 import { nameToString } from '../../data/deliusClient'
@@ -39,7 +39,6 @@ type AcoCase = {
   nomisRecord?: CvlPrisoner
   licences?: Licence[]
   probationPractitioner?: string
-  cvlFields: CvlFields
 }
 
 export default class VaryApproverCaseloadService {
@@ -101,12 +100,10 @@ export default class VaryApproverCaseloadService {
 
     return managedOffenders
       .map(offender => {
-        const { prisoner, cvl: cvlFields } =
-          nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.nomisId) || {}
+        const { prisoner } = nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.nomisId) || {}
         return {
           deliusRecord: offender,
           nomisRecord: prisoner,
-          cvlFields,
         }
       })
       .filter(offender => offender.nomisRecord, 'unable to find prison record')
