@@ -237,30 +237,25 @@ describe('Licence API client tests', () => {
     it('Should pass parameters to sort the matched licences', async () => {
       post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
 
-      const result = await licenceApiClient.matchLicences(
-        [LicenceStatus.IN_PROGRESS],
-        ['MDI'],
-        [1],
-        ['ABC1234'],
-        [],
-        'conditionalReleaseDate',
-        'DESC',
-        { username: 'joebloggs' } as User,
-      )
+      const result = await licenceApiClient.matchLicences({
+        statuses: [LicenceStatus.IN_PROGRESS],
+        nomisIds: ['ABC1234'],
+        pdus: [],
+        sortBy: 'conditionalReleaseDate',
+        user: { username: 'joebloggs' } as User,
+      })
 
       expect(post).toHaveBeenCalledWith(
         {
           path: '/licence/match',
           data: {
-            prison: ['MDI'],
             status: [LicenceStatus.IN_PROGRESS],
-            staffId: [1],
             nomsId: ['ABC1234'],
             pdu: [],
           },
           query: {
             sortBy: 'conditionalReleaseDate',
-            sortOrder: 'DESC',
+            sortOrder: undefined,
           },
         },
         { username: 'joebloggs' },
@@ -271,24 +266,18 @@ describe('Licence API client tests', () => {
     it('Should call the endpoint without the sort query params', async () => {
       post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
 
-      const result = await licenceApiClient.matchLicences(
-        [LicenceStatus.IN_PROGRESS],
-        ['MDI'],
-        [1],
-        ['ABC1234'],
-        [],
-        null,
-        null,
-        { username: 'joebloggs' } as User,
-      )
+      const result = await licenceApiClient.matchLicences({
+        statuses: [LicenceStatus.IN_PROGRESS],
+        nomisIds: ['ABC1234'],
+        pdus: [],
+        user: { username: 'joebloggs' } as User,
+      })
 
       expect(post).toHaveBeenCalledWith(
         {
           path: '/licence/match',
           data: {
-            prison: ['MDI'],
             status: [LicenceStatus.IN_PROGRESS],
-            staffId: [1],
             nomsId: ['ABC1234'],
             pdu: [],
           },
