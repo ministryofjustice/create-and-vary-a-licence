@@ -53,9 +53,9 @@
                 } if isEditable
             },
             {
-                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentContact'),
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTelephoneNumber'),
                 key: { text: "Contact phone number" },
-                value: { text: licence.appointmentContact if licence.appointmentContact else "Not yet entered" },
+                value: { text: licence.appointmentTelephoneNumber if licence.appointmentTelephoneNumber else "Not yet entered" },
                 actions: {
                     items: [
                         {
