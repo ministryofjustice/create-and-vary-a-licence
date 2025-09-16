@@ -156,18 +156,16 @@ describe('Licence API client tests', () => {
   })
 
   it('Update contact number', async () => {
-    // Given
-    const contactNumber: ContactNumberRequest = {
-      telephone: '0112877368',
-      telephoneAlternative: '0123877368',
-    }
-    const user = { username: 'joebloggs' } as User
+    await licenceApiClient.updateContactNumber(
+      '1',
+      { telephone: '0112877368' } as ContactNumberRequest,
+      { username: 'joebloggs' } as User,
+    )
 
-    // When
-    await licenceApiClient.updateContactNumber('1', contactNumber, user)
-
-    // Then
-    expect(put).toHaveBeenCalledWith({ path: '/licence/id/1/contact-number', data: contactNumber }, user)
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/contact-number', data: { telephone: '0112877368' } },
+      { username: 'joebloggs' },
+    )
   })
 
   it('Update bespoke conditions', async () => {

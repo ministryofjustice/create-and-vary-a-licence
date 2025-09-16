@@ -18,7 +18,7 @@ class HardStopLicenceToSubmit {
 
   @Expose()
   @IsNotEmpty({ message: "Select 'Change' to go back and add appointment telephone number" })
-  appointmentTelephoneNumber: string
+  appointmentContact: string
 
   @Expose()
   @IsNotEmpty({ message: "Select 'Change' to go back and add appointment date and time" })
