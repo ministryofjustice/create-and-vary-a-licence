@@ -265,31 +265,31 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/submit`, data: body }, { username: user.username })
   }
 
-  async matchLicences(
-    statuses?: string[],
-    prisons?: string[],
-    staffIds?: number[],
-    nomisIds?: string[],
-    pdus?: string[],
-    sortBy?: string,
-    sortOrder?: string,
-    user?: User,
-    probationAreaCodes?: string[],
-  ): Promise<LicenceSummary[]> {
+  async matchLicences({
+    statuses,
+    nomisIds,
+    pdus,
+    sortBy,
+    user,
+  }: {
+    statuses?: string[]
+    nomisIds?: string[]
+    pdus?: string[]
+    sortBy?: string
+    sortOrder?: string
+    user?: User
+  }): Promise<LicenceSummary[]> {
     return (await this.post(
       {
         path: `/licence/match`,
         data: {
-          prison: prisons,
           status: statuses,
-          staffId: staffIds,
           nomsId: nomisIds,
           pdu: pdus,
-          probationAreaCodes,
         },
         query: {
           sortBy: sortBy || undefined,
-          sortOrder: sortOrder || undefined,
+          sortOrder: undefined,
         },
       },
       { username: user?.username },
