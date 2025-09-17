@@ -8,6 +8,16 @@
 {% set pageId = "appointment-contact-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-place" %}
 
+{% set telClasses = "govuk-input--width-20" %}
+{% if edit == "altTelNumber" %}
+    {% set telClasses = telClasses + " govuk-!-display-none" %}
+{% endif %}
+
+{% set altTelClasses = "govuk-input--width-20" %}
+{% if edit == "telNumber" %}
+    {% set altTelClasses = altTelClasses + " govuk-!-display-none" %}
+{% endif %}
+
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
@@ -24,27 +34,30 @@
                         iconFallbackText: "Warning"
                     }) }}
                 {% endif %}
-
-                {{ govukInput({
-                    label: {
-                        text: "UK telephone number"
-                    },
-                    id: "telephone",
-                    name: "telephone",
-                    classes: "govuk-input--width-20",
-                    errorMessage: validationErrors | findError('telephone'),
-                    value: licence.appointmentTelephoneNumber | fillFormResponse(formResponses.telephone)
-                }) }}
-                {{ govukInput({
-                    label: {
-                        text: "Alternative UK telephone number (optional)"
-                    },
-                    id: "telephoneAlternative",
-                    name: "telephoneAlternative",
-                    classes: "govuk-input--width-20",
-                    errorMessage: validationErrors | findError('telephoneAlternative'),
-                    value: licence.appointmentAlternativeTelephoneNumber | fillFormResponse(formResponses.telephoneAlternative)
-                }) }}
+                <div class="{{ telClasses }}">
+                    {{ govukInput({
+                        label: {
+                            text: "UK telephone number"
+                        },
+                        id: "telephone",
+                        name: "telephone",
+                        classes: "govuk-input--width-20",
+                        errorMessage: validationErrors | findError('telephone'),
+                        value: licence.appointmentTelephoneNumber | fillFormResponse(formResponses.telephone)
+                    }) }}
+                </div>
+                <div class="{{ altTelClasses }}">
+                    {{ govukInput({
+                        label: {
+                            text: "Alternative UK telephone number (optional)"
+                        },
+                        id: "telephoneAlternative",
+                        name: "telephoneAlternative",
+                        classes: "govuk-input--width-20",
+                        errorMessage: validationErrors | findError('telephoneAlternative'),
+                        value: licence.appointmentAlternativeTelephoneNumber | fillFormResponse(formResponses.telephoneAlternative)
+                    }) }}
+                </div>
                 {{ govukButton({
                     text: continueOrSaveLabel,
                     type: "submit",
