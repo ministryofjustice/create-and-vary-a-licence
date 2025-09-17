@@ -244,6 +244,23 @@ context('View and print licence', () => {
     viewLicencePage.checkAlternativeTelephoneNotEntered()
   })
 
+  it('should show as expected when when telephone number are given on licence page', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetLicenceInHardStop')
+    cy.task('stubSearchForAddresses')
+    cy.task('stubPutLicenceAppointmentPerson')
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
+    const viewLicencePage: ViewALicencePage = viewCasesList.clickALicence()
+
+    viewLicencePage.checkTelephoneEntered('0123456789')
+    viewLicencePage.checkAlternativeTelephoneLinkDoesExist()
+    viewLicencePage.checkAlternativeTelephoneEntered('0987654321')
+  })
+
   it('should populate electronic monitoring additional information', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()

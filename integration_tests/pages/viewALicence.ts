@@ -45,8 +45,26 @@ export default class ViewALicencePage extends Page {
       .should('contain.text', 'Not yet entered')
   }
 
+  checkTelephoneEntered(telephone: string) {
+    cy.get('.govuk-summary-list__row')
+      .contains('dt.govuk-summary-list__key', 'Contact phone number')
+      .siblings('dd.govuk-summary-list__value')
+      .should('contain.text', telephone)
+  }
+
+  checkAlternativeTelephoneEntered(telephone: string) {
+    cy.get('.govuk-summary-list__row')
+      .contains('dt.govuk-summary-list__key', 'Alternative contact phone number')
+      .siblings('dd.govuk-summary-list__value')
+      .should('contain.text', telephone)
+  }
+
   checkAlternativeTelephoneLinkDoesNotExist() {
     cy.get('[data-qa=alternative-telephone-change-link]').should('not.exist')
+  }
+
+  checkAlternativeTelephoneLinkDoesExist() {
+    cy.get('[data-qa=alternative-telephone-change-link]').should('exist')
   }
 
   clickChangeDateLink = (): AppointmentTimePage => {

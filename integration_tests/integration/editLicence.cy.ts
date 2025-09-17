@@ -71,4 +71,16 @@ context('Edit a licence before release', () => {
     checkAnswersPage.checkAlternativeTelephoneLinkDoesNotExist()
     checkAnswersPage.checkAlternativeTelephoneNotEntered()
   })
+
+  it('should show as expected when when telephone number are given on licence page', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicenceToEdit()
+    let checkAnswersPage = caseloadPage.clickNameToEditLicence()
+    const editLicenceQuestionPage = checkAnswersPage.clickEditLicence()
+    checkAnswersPage = editLicenceQuestionPage.selectYes().clickContinue()
+
+    checkAnswersPage.checkTelephoneEntered('0123456789')
+    checkAnswersPage.checkAlternativeTelephoneLinkDoesExist()
+    checkAnswersPage.checkAlternativeTelephoneEntered('0987654321')
+  })
 })
