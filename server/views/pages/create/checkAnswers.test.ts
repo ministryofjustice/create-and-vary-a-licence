@@ -93,6 +93,8 @@ describe('Create a Licence Views - Check Answers', () => {
     ],
     bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
     electronicMonitoringProviderStatus: 'NOT_NEEDED',
+    appointmentTelephoneNumber: '01632960901',
+    appointmentAlternativeTelephoneNumber: '01632960902',
   } as Licence
 
   it('should display additional licence conditions section if licence type is AP', () => {
@@ -297,7 +299,7 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: false,
     })
 
-    expect($('.govuk-summary-list__actions').length).toBe(11)
+    expect($('.govuk-summary-list__actions').length).toBe(12)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
 
     const $2 = render({
@@ -349,7 +351,7 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: false,
     })
 
-    expect($2('.govuk-summary-list__actions').length).toBe(10)
+    expect($2('.govuk-summary-list__actions').length).toBe(11)
     expect($2('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 
