@@ -21,7 +21,7 @@ class LicenceToSubmit {
 
   @Expose()
   @IsNotEmpty({ message: "Select 'Change' to go back and add appointment telephone number" })
-  appointmentContact: string
+  appointmentTelephoneNumber: string
 
   @Expose()
   @IsNotEmpty({ message: "Select 'Change' to go back and add appointment date and time" })

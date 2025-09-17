@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import InitialMeetingContactRoutes from './initialMeetingContact'
 import LicenceService from '../../../../services/licenceService'
-import Telephone from '../../types/telephone'
+import TelephoneNumbers from '../../types/telephoneNumbers'
 import UserType from '../../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
 import PathType from '../../../../enumeration/pathType'
@@ -14,18 +14,18 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
   let req: Request
   let res: Response
-  let contactNumber: Telephone
+  let telephoneNumbers: TelephoneNumbers
 
   beforeEach(() => {
-    contactNumber = {
+    telephoneNumbers = {
       telephone: '0114 2556556',
-    } as Telephone
+    } as TelephoneNumbers
 
     req = {
       params: {
         licenceId: 1,
       },
-      body: contactNumber,
+      body: telephoneNumbers,
       query: {},
     } as unknown as Request
 
@@ -85,7 +85,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
           params: {
             licenceId: 1,
           },
-          body: contactNumber,
+          body: telephoneNumbers,
           query: {},
         } as unknown as Request
         await handler.POST(req, res)
