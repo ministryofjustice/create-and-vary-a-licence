@@ -28,8 +28,17 @@
     </div>
 {% endmacro %}
 
-{% macro displayResults(countText, caption, tabId, results, setPeopleInPrisonTab) %}
+{% macro displayResults(countText, caption, tabId, results, setPeopleInPrisonTab, hasPriorityCases) %}
     {% set caption = caption %}
+    {% if setPeopleInPrisonTab %}
+        {% set sortOrder = 'ascending' %}
+    {% else %}
+        {% if hasPriorityCases %}
+            {% set sortOrder = 'descending' %}
+        {% else %}
+            {% set sortOrder = 'none' %}
+        {% endif %}
+    {% endif %}
     <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
     {% if results.length == 0 %}
         <div class="govuk-grid-row">
@@ -93,7 +102,7 @@
                     {
                         text: "Release date",
                         attributes: {
-                            "aria-sort": "none"
+                            "aria-sort": sortOrder
                         }
                     },
                     {
@@ -117,13 +126,9 @@
     {%  set recallsMessage = "have not been recalled or breached a post sentence supervision order" %}
 {% endif %}
 
-{% for offender in searchResponse.results %}
+{% for offender in peopleInPrison %}
     {% if offender.comName %}
-        {% if offender.isOnProbation %}
-            {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.comName + '</a>' %}
-        {% else %}
-            {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
-        {% endif %}
+        {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
     {% else %}
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
@@ -186,11 +191,75 @@
         }
     ] %}
 
-    {% if offender.isOnProbation %}
-        {% set peopleOnProbationResults = (peopleOnProbationResults.push(result), peopleOnProbationResults) %}
+    {% set peopleInPrisonResults = (peopleInPrisonResults.push(result), peopleInPrisonResults) %}
+{% endfor %}
+
+{% for offender in peopleOnProbation %}
+    {% if offender.comName %}
+        {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.comName + '</a>' %}
     {% else %}
-        {% set peopleInPrisonResults = (peopleInPrisonResults.push(result), peopleInPrisonResults) %}
+        {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
+
+    {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort
+            + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+    {% elseif offender.isDueForEarlyRelease %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
+    {% elseif offender | shouldShowHardStopWarning %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
+    {% else %}
+        {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
+    {% endif %}
+
+    {% set result = [
+        {
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": offender.name
+            },
+            classes: "max-width max-width-220",
+            html: offenderName(offender, loop.index)
+        },
+        {
+            attributes: {
+                id: 'licence-type-' + loop.index
+            },
+            html:licenceDescription(offender.licenceType)
+        },
+        {
+            attributes: {
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": offender.comName
+            },
+            classes: "max-width max-width-200",
+            html: comDetailsHtml
+        },
+        {
+            attributes: {
+                id: 'team-name-' + loop.index,
+                "data-sort-value": offender.teamName
+            },
+            classes: "max-width max-width-200",
+            html: offender.teamName
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": offender.releaseDate | cvlDateToDateShort | dateToUnix
+            },
+            html: releaseDate
+        },
+        {
+            attributes: {
+                id: 'licence-status-' + loop.index,
+                "data-sort-value": offender.licenceStatus | getStatusOrder
+            },
+            html: statusBadge({ status: offender | getlicenceStatusForSearchResults, size: 'small' }, statusConfig)
+        }
+    ] %}
+
+    {% set peopleOnProbationResults = (peopleOnProbationResults.push(result), peopleOnProbationResults) %}
 {% endfor %}
 
 {% block content %}
@@ -222,8 +291,8 @@
         </div>
     </div>
 
-    {% set inPrisonCountText = "People in prison ("  + searchResponse.inPrisonCount + searchResponse.inPrisonCount | pluralise(" result") + ")" %}
-    {% set onProbationCountText = "People on probation (" + searchResponse.onProbationCount + searchResponse.onProbationCount | pluralise(" result") + ")" %}
+    {% set inPrisonCountText = "People in prison ("  + peopleInPrison.length + peopleInPrison.length | pluralise(" result") + ")" %}
+    {% set onProbationCountText = "People on probation (" + peopleOnProbation.length + peopleOnProbation.length | pluralise(" result") + ")" %}
 
     {% set peopleInPrison = displayResults(inPrisonCountText, tabParameters.prisonTabCaption, tabParameters.prisonTabId, peopleInPrisonResults, true) %}
     {% set peopleOnProbation = displayResults(onProbationCountText, tabParameters.probationTabCaption, tabParameters.probationTabId, peopleOnProbationResults, false) %}
