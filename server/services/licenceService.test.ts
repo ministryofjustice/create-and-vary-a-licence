@@ -411,16 +411,11 @@ describe('Licence Service', () => {
 
   it('Get licences by nomis ids and statuses', async () => {
     await licenceService.getLicencesByNomisIdsAndStatus(['ABC1234'], [LicenceStatus.APPROVED], user)
-    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
-      ['APPROVED'],
-      null,
-      null,
-      ['ABC1234'],
-      null,
-      null,
-      null,
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith({
+      statuses: ['APPROVED'],
+      nomisIds: ['ABC1234'],
       user,
-    )
+    })
   })
 
   it('Get latest licence by nomis ids and statuses', async () => {
@@ -429,62 +424,19 @@ describe('Licence Service', () => {
       { licenceId: 2 } as LicenceSummary,
     ])
     const result = await licenceService.getLatestLicenceByNomisIdsAndStatus(['ABC1234'], [], user)
-    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith([], null, null, ['ABC1234'], null, null, null, user)
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith({ statuses: [], nomisIds: ['ABC1234'], user })
     expect(result).toEqual({ licenceId: 2 })
   })
 
   it('Get licences for variation approval', async () => {
     const approver = { ...user, probationPduCodes: ['A'] }
     await licenceService.getLicencesForVariationApproval(approver)
-    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
-      ['VARIATION_SUBMITTED'],
-      null,
-      null,
-      null,
-      ['A'],
-      'conditionalReleaseDate',
-      null,
-      approver,
-    )
-  })
-
-  it('should get pre-release licences created within an OMU users prison', async () => {
-    jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
-    licenceApiClient.matchLicences.mockResolvedValue([{ licenceId: 1 } as LicenceSummary])
-
-    const result = await licenceService.getPreReleaseAndActiveLicencesForOmu(user, [])
-    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
-      ['APPROVED', 'SUBMITTED', 'IN_PROGRESS', 'TIMED_OUT', 'ACTIVE'],
-      ['MDI'],
-      null,
-      null,
-      null,
-      'conditionalReleaseDate',
-      null,
-      user,
-    )
-    expect(result).toEqual([{ licenceId: 1 }])
-  })
-
-  it('should get post-release licences created within an OMU users prison', async () => {
-    jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
-    licenceApiClient.matchLicences.mockResolvedValue([
-      { licenceId: 1 } as LicenceSummary,
-      { licenceId: 2 } as LicenceSummary,
-    ])
-
-    const result = await licenceService.getPostReleaseLicencesForOmu(user, [])
-    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
-      ['ACTIVE', 'VARIATION_APPROVED', 'VARIATION_IN_PROGRESS', 'VARIATION_SUBMITTED'],
-      ['MDI'],
-      null,
-      null,
-      null,
-      'conditionalReleaseDate',
-      null,
-      user,
-    )
-    expect(result).toEqual([{ licenceId: 1 }, { licenceId: 2 }])
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith({
+      statuses: ['VARIATION_SUBMITTED'],
+      pdus: ['A'],
+      sortBy: 'conditionalReleaseDate',
+      user: approver,
+    })
   })
 
   it('should update COM responsible for an offender', async () => {
@@ -723,7 +675,7 @@ describe('Licence Service', () => {
   })
 
   it('will get variations of a licence', async () => {
-    const nomisId = '250412'
+    const nomisId = 'A1234AA'
     const licenceVariation = {
       licenceId: 2,
       nomisId,
@@ -734,21 +686,16 @@ describe('Licence Service', () => {
     const licenceVariations = await licenceService.getIncompleteLicenceVariations(nomisId)
 
     expect(licenceVariations).toEqual([licenceVariation])
-    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
-      [
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith({
+      statuses: [
         LicenceStatus.VARIATION_IN_PROGRESS,
         LicenceStatus.VARIATION_SUBMITTED,
         LicenceStatus.VARIATION_REJECTED,
         LicenceStatus.VARIATION_APPROVED,
       ],
-      null,
-      null,
-      [nomisId],
-      null,
-      null,
-      null,
-      undefined,
-    )
+      nomisIds: [nomisId],
+      user: undefined,
+    })
   })
 
   it('Get prisoner details', async () => {

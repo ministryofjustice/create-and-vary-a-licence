@@ -39,7 +39,7 @@ import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
 import TelephoneNumbers from '../routes/initialAppointment/types/telephoneNumbers'
 import Address from '../routes/initialAppointment/types/address'
-import { addressObjectToString, filterCentralCaseload, isVariation, objectIsEmpty } from '../utils/utils'
+import { addressObjectToString, isVariation, objectIsEmpty } from '../utils/utils'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
@@ -250,7 +250,7 @@ export default class LicenceService {
     statuses: LicenceStatus[],
     user?: User,
   ): Promise<LicenceSummary[]> {
-    return this.licenceApiClient.matchLicences(statuses, null, null, nomisIds, null, null, null, user)
+    return this.licenceApiClient.matchLicences({ statuses, nomisIds, user })
   }
 
   async getLatestLicenceByNomisIdsAndStatus(
@@ -258,51 +258,9 @@ export default class LicenceService {
     statuses: LicenceStatus[],
     user?: User,
   ): Promise<LicenceSummary | null | undefined> {
-    const licences = await this.licenceApiClient.matchLicences(statuses, null, null, nomisIds, null, null, null, user)
+    const licences = await this.licenceApiClient.matchLicences({ statuses, nomisIds, user })
     const licencesSortedDesc = licences.sort((a, b) => a.licenceId - b.licenceId)
     return _.last(licencesSortedDesc)
-  }
-
-  async getPreReleaseAndActiveLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
-    // No need to include VARIATION_X licences, as all of these will also have an ACTIVE licence
-    const statuses = [
-      LicenceStatus.APPROVED.valueOf(),
-      LicenceStatus.SUBMITTED.valueOf(),
-      LicenceStatus.IN_PROGRESS.valueOf(),
-      LicenceStatus.TIMED_OUT,
-      LicenceStatus.ACTIVE,
-    ]
-    const filteredPrisons = filterCentralCaseload(prisonCaseload)
-    return this.licenceApiClient.matchLicences(
-      statuses,
-      filteredPrisons,
-      null,
-      null,
-      null,
-      'conditionalReleaseDate',
-      null,
-      user,
-    )
-  }
-
-  async getPostReleaseLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
-    const statuses = [
-      LicenceStatus.ACTIVE.valueOf(),
-      LicenceStatus.VARIATION_APPROVED.valueOf(),
-      LicenceStatus.VARIATION_IN_PROGRESS.valueOf(),
-      LicenceStatus.VARIATION_SUBMITTED.valueOf(),
-    ]
-    const filteredPrisons = filterCentralCaseload(prisonCaseload)
-    return this.licenceApiClient.matchLicences(
-      statuses,
-      filteredPrisons,
-      null,
-      null,
-      null,
-      'conditionalReleaseDate',
-      null,
-      user,
-    )
   }
 
   async getComReviewCount(user: User): Promise<ComReviewCount> {
@@ -311,16 +269,12 @@ export default class LicenceService {
 
   async getLicencesForVariationApproval(user: User): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.VARIATION_SUBMITTED.valueOf()]
-    return this.licenceApiClient.matchLicences(
+    return this.licenceApiClient.matchLicences({
       statuses,
-      null,
-      null,
-      null,
-      user?.probationPduCodes,
-      'conditionalReleaseDate',
-      null,
+      pdus: user?.probationPduCodes,
+      sortBy: 'conditionalReleaseDate',
       user,
-    )
+    })
   }
 
   async getLicencesForVariationApprovalByRegion(user: User): Promise<LicenceSummary[]> {
