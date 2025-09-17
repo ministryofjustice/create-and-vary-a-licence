@@ -1554,6 +1554,69 @@ export default {
     })
   },
 
+  stubSearchForOffendersOnStaffCaseloadMultipleResults: (): SuperAgentRequest => {
+    const result1 = {
+      name: 'Test Person',
+      crn: 'A123456',
+      nomisId: 'A1234BC',
+      comName: 'Test Staff',
+      comStaffCode: '3000',
+      teamName: 'Test Team',
+      releaseDate: '16/08/2023',
+      licenceId: 1,
+      licenceType: 'AP',
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      isOnProbation: false,
+      isDueForEarlyRelease: false,
+      releaseDateLabel: 'CRD',
+    }
+    const result2 = {
+      ...result1,
+      name: 'Def Person2',
+      crn: 'A123457',
+      nomisId: 'A1234BD',
+      releaseDate: '15/08/2023',
+    }
+    const result3 = {
+      ...result1,
+      name: 'Abc Person3',
+      crn: 'A123458',
+      nomisId: 'A1234BE',
+      releaseDate: '15/08/2023',
+    }
+    const result4 = {
+      ...result1,
+      name: 'Test Person4',
+      crn: 'A123459',
+      nomisId: 'A1234BF',
+      releaseDate: '15/08/2023',
+      isOnProbation: true,
+    }
+    const result5 = {
+      ...result4,
+      name: 'Test Person5',
+      crn: 'A123460',
+      nomisId: 'A1234BG',
+      releaseDate: '17/08/2023',
+    }
+
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/com/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          results: [result1, result2, result3, result4, result5],
+          inPrisonCount: 2,
+          onProbationCount: 2,
+        },
+      },
+    })
+  },
+
   stubGetBankHolidays: (dates: string[]): SuperAgentRequest => {
     return stubFor({
       request: {
