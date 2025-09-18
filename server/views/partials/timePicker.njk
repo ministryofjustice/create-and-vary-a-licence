@@ -27,7 +27,7 @@
                             maxlength="2"
                             id="{{ params.id }}-hour"
                             name="{{ params.id }}[hour]" type="text" pattern="[0-9]*" inputmode="numeric"
-                            value="{{ params.formResponses['hour'] }}">
+                            value="{{ params.formResponses['hour'] | getLastNonEmpty }}">
                     </div>
                 </div>
                 <div class="govuk-date-input__item">
@@ -39,7 +39,7 @@
                             maxlength="2"
                             id="{{ params.id }}-minute"
                             name="{{ params.id }}[minute]" type="text" pattern="[0-9]*" inputmode="numeric"
-                            value="{{ params.formResponses['minute'] }}">
+                            value="{{ params.formResponses['minute'] | getLastNonEmpty }}">
                     </div>
                 </div>
                 <div class="govuk-date-input__item">
@@ -51,12 +51,12 @@
                                 id="{{ params.id }}-ampm"
                                 name="{{ params.id }}[ampm]">
                             <option value="">
-                                -
+                                Choose am or pm
                             </option>
-                            <option value="am" {% if params.formResponses['ampm'] == 'am' %} selected {% endif %}>
+                            <option value="am" {% if params.formResponses['ampm'] | getLastNonEmpty == 'am' %} selected {% endif %}>
                                 am
                             </option>
-                            <option value="pm" {% if params.formResponses['ampm'] == 'pm' %} selected {% endif %}>
+                            <option value="pm" {% if params.formResponses['ampm'] | getLastNonEmpty == 'pm' %} selected {% endif %}>
                                 pm
                             </option>
                         </select>

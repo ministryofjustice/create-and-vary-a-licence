@@ -134,23 +134,12 @@ describe('Route handlers - Curfew routes', () => {
 
     it('should format multiple instances of the condition into a single set of form values', async () => {
       res.locals.licence.additionalLicenceConditions = [curfewInstance1, curfewInstance2] as AdditionalCondition[]
-      const formResponses = {
-        numberOfCurfews: 'Two curfews',
-        curfewStart: SimpleTime.fromString('01:00 am'),
-        curfewEnd: SimpleTime.fromString('02:00 am'),
-        reviewPeriod: 'weekly',
-        numberOfCurfews2: 'Two curfews',
-        curfewStart2: SimpleTime.fromString('04:00 am'),
-        curfewEnd2: SimpleTime.fromString('05:00 am'),
-        reviewPeriod2: 'weekly',
-      }
-
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/manageConditions/curfew/input', {
-        additionalCondition: curfewInstance1,
+        additionalCondition: res.locals.licence.additionalLicenceConditions,
+        additionalConditionCode: curfewInstance1.code,
         config: conditionConfig,
-        formResponses,
       })
     })
   })

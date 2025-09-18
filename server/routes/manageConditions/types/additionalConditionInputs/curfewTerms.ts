@@ -80,7 +80,7 @@ class CurfewTerms {
 }
 
 const splitTimes = (value: SimpleTime) => {
-  if (!Array.isArray(value.hour)) {
+  if (!value || !value.hour || !Array.isArray(value.hour)) {
     return [value]
   }
   return value.hour.map((h: string, index) => {
@@ -91,15 +91,9 @@ const splitTimes = (value: SimpleTime) => {
 }
 
 const selectRelevantEntry = (numberOfCurfews: string, enteredValues: SimpleTime[]) => {
-  if (numberOfCurfews === 'One curfew') {
-    return enteredValues[enteredValues.length - 3]
-  }
-  if (numberOfCurfews === 'Two curfews') {
-    return enteredValues[enteredValues.length - 2]
-  }
-  if (numberOfCurfews === 'Three curfews') {
-    return enteredValues[enteredValues.length - 1]
-  }
+  if (numberOfCurfews === 'One curfew') return enteredValues[enteredValues.length - 3]
+  if (numberOfCurfews === 'Two curfews') return enteredValues[enteredValues.length - 2]
+  if (numberOfCurfews === 'Three curfews') return enteredValues[enteredValues.length - 1]
   return undefined
 }
 
