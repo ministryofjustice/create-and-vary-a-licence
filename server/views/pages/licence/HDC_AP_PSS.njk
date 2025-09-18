@@ -81,7 +81,13 @@
                {% endfor %}
          </p>
          <p data-qa="appointment-time">On <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}</span> at <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime }}</span></p>
-         <p>Contact telephone number: <span class="bold">{{ licence.appointmentTelephoneNumber }}</span></p>
+         <p data-qa="appointment-phone-number">Contact telephone number: <span class="bold">{{ licence.appointmentTelephoneNumber }}</span></p>
+         {% if licence.appointmentAlternativeTelephoneNumber %}
+            <p data-qa="appointment-alternative-phone-number">
+               Alternative contact phone number:
+               <span class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
+            </p>
+         {% endif %}
       </div>
    </div>
 

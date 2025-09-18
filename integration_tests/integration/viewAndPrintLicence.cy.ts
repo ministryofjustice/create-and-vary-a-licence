@@ -25,6 +25,8 @@ context('View and print licence', () => {
       typeCode: 'AP_PSS',
       electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
       electronicMonitoringProviderStatus: 'COMPLETE',
+      appointmentTelephoneNumber: '0123456789',
+      appointmentAlternativeTelephoneNumber: '0987654321',
     })
     cy.task('stubGetHdcStatus')
     cy.task('stubRecordAuditEvent')
@@ -82,8 +84,35 @@ context('View and print licence', () => {
     viewCasesList = comDetails.clickReturn()
     viewCasesList.clickFutureReleasesTab()
     const viewLicencePage = viewCasesList.clickALicence()
+    viewLicencePage.checkTelephoneEntered('0123456789')
+    viewLicencePage.checkAlternativeTelephoneEntered('0987654321')
     const printALicencePage = viewLicencePage.printALicence()
-    printALicencePage.checkPrintTemplate()
+    printALicencePage.checkPrintTemplate('0123456789', '0987654321')
+  })
+
+  it('when alternative telephone not given then Not entered should be displayed on page and nothing in document', () => {
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'APPROVED',
+      typeCode: 'AP_PSS',
+      electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
+      electronicMonitoringProviderStatus: 'COMPLETE',
+      appointmentTelephoneNumber: '0123456789',
+    })
+
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
+    const comDetails = viewCasesList.clickComDetails()
+    viewCasesList = comDetails.clickReturn()
+    viewCasesList.clickFutureReleasesTab()
+    const viewLicencePage = viewCasesList.clickALicence()
+    viewLicencePage.checkTelephoneEntered('0123456789')
+    viewLicencePage.checkAlternativeTelephoneNotEntered()
+    const printALicencePage = viewLicencePage.printALicence()
+    printALicencePage.checkPrintTemplate('0123456789')
   })
 
   it("should not show caseload information because doesn't have multiple caseloads", () => {
