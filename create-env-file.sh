@@ -1,4 +1,4 @@
-#
+#!/bin/sh
 # This script is used to create an .env file to allow us to set env vars
 #
 set -e
@@ -8,16 +8,20 @@ rm -f $fileToAddVars 2> /dev/null
 
 # Match with the credentials set in docker-compose.yml
 echo "Get SYSTEM_CLIENT_ID"
-export SYSTEM_CLIENT_ID=$(kubectl -n create-and-vary-a-licence-dev get secrets create-and-vary-a-licence -o json | jq -r '.data.SYSTEM_CLIENT_ID | @base64d')
+export SYSTEM_CLIENT_ID
+SYSTEM_CLIENT_ID=$(kubectl -n create-and-vary-a-licence-dev get secrets create-and-vary-a-licence -o json | jq -r '.data.SYSTEM_CLIENT_ID | @base64d')
 
 echo "Get SYSTEM_CLIENT_SECRET"
-export SYSTEM_CLIENT_SECRET=$(kubectl -n create-and-vary-a-licence-dev get secrets create-and-vary-a-licence -o json | jq -r '.data.SYSTEM_CLIENT_SECRET | @base64d')
+export SYSTEM_CLIENT_SECRET
+SYSTEM_CLIENT_SECRET=$(kubectl -n create-and-vary-a-licence-dev get secrets create-and-vary-a-licence -o json | jq -r '.data.SYSTEM_CLIENT_SECRET | @base64d')
 
 echo "Get API_CLIENT_ID"
-export API_CLIENT_ID=$(kubectl -n create-and-vary-a-licence-dev get secrets create-and-vary-a-licence -o json | jq -r '.data.API_CLIENT_ID | @base64d')
+export API_CLIENT_ID
+API_CLIENT_ID=$(kubectl -n create-and-vary-a-licence-dev get secrets create-and-vary-a-licence -o json | jq -r '.data.API_CLIENT_ID | @base64d')
 
 echo "Get API_CLIENT_SECRET"
-export API_CLIENT_SECRET=$(kubectl -n create-and-vary-a-licence-dev get secrets create-and-vary-a-licence -o json | jq -r '.data.API_CLIENT_SECRET | @base64d')
+export API_CLIENT_SECRET
+API_CLIENT_SECRET=$(kubectl -n create-and-vary-a-licence-dev get secrets create-and-vary-a-licence -o json | jq -r '.data.API_CLIENT_SECRET | @base64d')
 
 # Provide other env vars
 export HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
@@ -37,7 +41,6 @@ export DPS_URL=https://digital-dev.prison.service.justice.gov.uk
 
 export LICENCE_WATERMARK=true
 export POSTCODE_LOOKUP_ENABLED=true
-export SHOW_WHATS_NEW_HELP_ALERT=true
 export COMMON_COMPONENTS_ENABLED=false
 export SHOW_WHATS_NEW_BANNER=false
 export HDC_INTEGRATION_MVP2_ENABLED=true
@@ -77,7 +80,6 @@ cat <<EOF > $fileToAddVars
 # === Boolean flags ===
   LICENCE_WATERMARK=$LICENCE_WATERMARK
   POSTCODE_LOOKUP_ENABLED=$POSTCODE_LOOKUP_ENABLED
-  SHOW_WHATS_NEW_HELP_ALERT=$SHOW_WHATS_NEW_HELP_ALERT
   COMMON_COMPONENTS_ENABLED=$COMMON_COMPONENTS_ENABLED
   SHOW_WHATS_NEW_BANNER=$SHOW_WHATS_NEW_BANNER
   HDC_INTEGRATION_MVP2_ENABLED=$HDC_INTEGRATION_MVP2_ENABLED

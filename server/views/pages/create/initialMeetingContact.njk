@@ -8,16 +8,6 @@
 {% set pageId = "appointment-contact-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-place" %}
 
-{% set telClasses = "govuk-input--width-20" %}
-{% if edit == "altTelNumber" %}
-    {% set telClasses = telClasses + " govuk-!-display-none" %}
-{% endif %}
-
-{% set altTelClasses = "govuk-input--width-20" %}
-{% if edit == "telNumber" %}
-    {% set altTelClasses = altTelClasses + " govuk-!-display-none" %}
-{% endif %}
-
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
@@ -34,7 +24,7 @@
                         iconFallbackText: "Warning"
                     }) }}
                 {% endif %}
-                <div class="{{ telClasses }}">
+                <div class="govuk-input--width-20">
                     {{ govukInput({
                         label: {
                             text: "UK telephone number"
@@ -46,7 +36,7 @@
                         value: licence.appointmentTelephoneNumber | fillFormResponse(formResponses.telephone)
                     }) }}
                 </div>
-                <div class="{{ altTelClasses }}">
+                <div class="govuk-input--width-20">
                     {{ govukInput({
                         label: {
                             text: "Alternative UK telephone number (optional)"
