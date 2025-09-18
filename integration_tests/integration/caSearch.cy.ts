@@ -84,7 +84,7 @@ context('Search for a person', () => {
     searchPage.getRow(0).contains('1 Jul 2025')
     searchPage.getRow(1).contains('1 Aug 2025')
     searchPage.getRow(2).contains('2 Aug 2025')
-    // second click sorts ascending
+    // click to sort by ascending
     searchPage.clickSortByReleaseDate()
     searchPage.getRow(0).contains('2 Aug 2025')
     searchPage.getRow(1).contains('1 Aug 2025')
