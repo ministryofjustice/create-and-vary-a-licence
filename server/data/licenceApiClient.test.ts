@@ -36,7 +36,6 @@ import { User } from '../@types/CvlUserDetails'
 import LicenceEventType from '../enumeration/licenceEventType'
 import { InMemoryTokenStore } from './tokenStore'
 import logger from '../../logger'
-import { parseCvlDate } from '../utils/utils'
 
 const licenceApiClient = new LicenceApiClient(
   new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
@@ -306,36 +305,6 @@ describe('Licence API client tests', () => {
 
   it('Search prisoners by nomis ids is not called with no prison numbers', async () => {
     await licenceApiClient.searchPrisonersByNomsIds([], { username: 'joebloggs' } as User)
-    expect(post).not.toHaveBeenCalled()
-  })
-
-  it('Search prisoners by release date', async () => {
-    await licenceApiClient.searchPrisonersByReleaseDate(
-      parseCvlDate('01/02/2024'),
-      parseCvlDate('02/03/2025'),
-      ['MDI'],
-      1,
-      {
-        username: 'joebloggs',
-      } as User,
-    )
-    expect(post).toHaveBeenCalledWith(
-      {
-        path: '/release-date-by-prison',
-        query: { page: 1 },
-        data: {
-          earliestReleaseDate: '2024-02-01',
-          latestReleaseDate: '2025-03-02',
-          prisonIds: ['MDI'],
-        },
-      },
-      { username: 'joebloggs' },
-    )
-  })
-  it('Search prisoners by release date is not called with no prison ids', async () => {
-    await licenceApiClient.searchPrisonersByReleaseDate(parseCvlDate('01/02/2024'), parseCvlDate('02/03/2025'), [], 1, {
-      username: 'joebloggs',
-    } as User)
     expect(post).not.toHaveBeenCalled()
   })
 

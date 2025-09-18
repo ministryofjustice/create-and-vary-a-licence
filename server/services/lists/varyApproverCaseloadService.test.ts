@@ -59,7 +59,7 @@ describe('Caseload Service', () => {
           releaseDate: tenDaysFromNow,
           status: 'INACTIVE OUT',
         },
-        cvl: {},
+        licenceStartDate: tenDaysFromNow,
       } as CaseloadItem,
     ])
     deliusService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -114,7 +114,7 @@ describe('Caseload Service', () => {
           releaseDate: tenDaysFromNow,
           status: 'INACTIVE OUT',
         },
-        cvl: {},
+        licenceStartDate: tenDaysFromNow,
       } as CaseloadItem,
     ])
     deliusService.getStaffDetailsByUsernameList.mockResolvedValue([

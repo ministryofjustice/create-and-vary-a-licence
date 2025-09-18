@@ -1,5 +1,4 @@
 import { Readable } from 'stream'
-import { format } from 'date-fns'
 import RestClient from './hmppsRestClient'
 import type {
   ContactNumberRequest,
@@ -36,7 +35,6 @@ import type {
   CaseloadItem,
   LicenceCreationResponse,
   ApprovalCase,
-  SearchResultsPage,
   CaCaseloadSearch,
   CaCase,
   ComCase,
@@ -54,6 +52,7 @@ import type {
   AddressSearchResponse,
   AddAddressRequest,
   AddressResponse,
+  PrisonerWithCvlFields,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -557,11 +556,11 @@ export default class LicenceApiClient extends RestClient {
     )
   }
 
-  async getPrisonerDetail(nomsId: string, user: User): Promise<CaseloadItem> {
+  async getPrisonerDetail(nomsId: string, user: User): Promise<PrisonerWithCvlFields> {
     return (await this.get(
       { path: `/prisoner-search/nomisid/${nomsId}` },
       { username: user.username },
-    )) as Promise<CaseloadItem>
+    )) as Promise<PrisonerWithCvlFields>
   }
 
   async searchPrisonersByNomsIds(prisonerNumbers: string[], user?: User): Promise<CaseloadItem[]> {
@@ -575,30 +574,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username },
     )) as Promise<CaseloadItem[]>
-  }
-
-  async searchPrisonersByReleaseDate(
-    earliestReleaseDate: Date,
-    latestReleaseDate: Date,
-    prisonIds: string[],
-    page: number,
-    user?: User,
-  ): Promise<SearchResultsPage> {
-    if (prisonIds.length < 1) {
-      return null
-    }
-    return (await this.post(
-      {
-        path: `/release-date-by-prison`,
-        query: { page },
-        data: {
-          earliestReleaseDate: format(earliestReleaseDate, 'yyyy-MM-dd'),
-          latestReleaseDate: format(latestReleaseDate, 'yyyy-MM-dd'),
-          prisonIds,
-        },
-      },
-      { username: user?.username },
-    )) as Promise<SearchResultsPage>
   }
 
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
