@@ -6,6 +6,11 @@ import { SimpleTime } from '../../types'
 import { User } from '../../../../@types/CvlUserDetails'
 
 type CurfewType = 'One curfew' | 'Two curfews' | 'Three curfews'
+const curfewCountMap: Record<CurfewType, number> = {
+  'One curfew': 1,
+  'Two curfews': 2,
+  'Three curfews': 3,
+}
 export default class CurfewRoutes {
   constructor(
     private readonly licenceService: LicenceService,
@@ -19,9 +24,11 @@ export default class CurfewRoutes {
     const additionalCondition = licence.additionalLicenceConditions.find(
       (condition: AdditionalCondition) => condition.code === conditionCode,
     )
+
     const conditionInstances = (licence.additionalLicenceConditions as AdditionalCondition[])
       .filter(condition => condition.code === conditionCode)
       .sort((a, b) => a.id - b.id)
+
     const config = await this.conditionService.getAdditionalConditionByCode(conditionCode, licence.version)
 
     if (!additionalCondition) {
@@ -32,24 +39,31 @@ export default class CurfewRoutes {
       )
     }
 
-    const curfewTimes = Object.fromEntries(
-      conditionInstances.flatMap((instance, index) =>
-        instance.data.map(conditionData => {
-          const key = index === 0 ? conditionData.field : `${conditionData.field}${index + 1}`
-          return [key, conditionData.value]
-        }),
-      ),
-    )
-
     const getFieldValue = (fieldName: string): string | undefined =>
       additionalCondition.data.find((data: { field: string; value: string }) => data.field === fieldName)?.value
+
+    const numberOfCurfewsLabel = getFieldValue('numberOfCurfews') as CurfewType
+
+    const numberOfCurfews = curfewCountMap[numberOfCurfewsLabel] || 0
+
+    const curfews: Record<number, { start: SimpleTime; end: SimpleTime }[]> = {
+      [numberOfCurfews]: conditionInstances.map(instance => {
+        const startStr = instance?.data.find(d => d.field === 'curfewStart')?.value
+        const endStr = instance?.data.find(d => d.field === 'curfewEnd')?.value
+
+        return {
+          start: SimpleTime.fromString(startStr),
+          end: SimpleTime.fromString(endStr),
+        }
+      }),
+    }
 
     return res.render('pages/manageConditions/curfew/input', {
       additionalConditionCode: additionalCondition.code,
       reviewPeriod: getFieldValue('reviewPeriod'),
       alternativeReviewPeriod: getFieldValue('alternativeReviewPeriod') || null,
-      numberOfCurfews: getFieldValue('numberOfCurfews') as CurfewType,
-      curfewTimes: this.formatCurfewTimes(curfewTimes),
+      numberOfCurfews,
+      curfews,
       config,
     })
   }
@@ -59,101 +73,38 @@ export default class CurfewRoutes {
     const { user, licence } = res.locals
     const inputs = req.body
 
-    const numberOfCurfews = inputs.numberOfCurfews as CurfewType
+    const numberOfCurfews = parseInt(inputs.numberOfCurfews, 10)
+    const curfews = inputs.curfews || []
+    console.log('curfews==========>', curfews)
 
-    const {
-      oneCurfewStart,
-      oneCurfewEnd,
-      twoCurfewStart,
-      twoCurfewEnd,
-      twoCurfewStart2,
-      twoCurfewEnd2,
-      threeCurfewStart,
-      threeCurfewEnd,
-      threeCurfewStart2,
-      threeCurfewEnd2,
-      threeCurfewStart3,
-      threeCurfewEnd3,
-      reviewPeriod,
-      alternativeReviewPeriod,
-    } = inputs
+    const { reviewPeriod, alternativeReviewPeriod } = inputs
 
     await this.licenceService.deleteAdditionalConditionsByCode([conditionCode], licence.id, user)
 
-    if (numberOfCurfews === 'One curfew') {
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        oneCurfewStart,
-        oneCurfewEnd,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-    }
+    await (async () => {
+      for await (const curfew of curfews) {
+        const { start, end } = curfew
 
-    if (numberOfCurfews === 'Two curfews') {
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        twoCurfewStart,
-        twoCurfewEnd,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        twoCurfewStart2,
-        twoCurfewEnd2,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-    }
+        if (start && end) {
+          await this.addCurfewCondition(
+            licence,
+            user,
+            conditionCode,
+            new SimpleTime(start.hour, start.minute, start.ampm),
+            new SimpleTime(end.hour, end.minute, end.ampm),
+            this.getCurfewLabel(numberOfCurfews),
+            reviewPeriod,
+            alternativeReviewPeriod,
+          )
+        }
+      }
+    })()
 
-    if (numberOfCurfews === 'Three curfews') {
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        threeCurfewStart,
-        threeCurfewEnd,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        threeCurfewStart2,
-        threeCurfewEnd2,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        threeCurfewStart3,
-        threeCurfewEnd3,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-    }
+    // const redirectUrl = `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
+    //   req.query?.fromReview ? '?fromReview=true' : ''
+    // }`
 
-    const redirectUrl = `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
-      req.query?.fromReview ? '?fromReview=true' : ''
-    }`
-
-    return res.redirect(redirectUrl)
+    // return res.redirect(redirectUrl)
   }
 
   addCurfewCondition = async (
@@ -195,7 +146,7 @@ export default class CurfewRoutes {
       curfewStart: startDate,
       curfewEnd: endDate,
       reviewPeriod,
-      alternativeReviewPeriod: reviewPeriod === 'Other' ? alternativeReviewPeriod : null,
+      alternativeReviewPeriod: reviewPeriod === 'Other' ? alternativeReviewPeriod : '',
     }
 
     await this.licenceService.updateAdditionalConditionData(
@@ -206,36 +157,6 @@ export default class CurfewRoutes {
     )
   }
 
-  formatCurfewTimes(curfewTimes: Record<string, string>): Record<string, SimpleTime> {
-    const parse = (key: string): SimpleTime => SimpleTime.fromString(curfewTimes[key])
-
-    switch (curfewTimes.numberOfCurfews as CurfewType) {
-      case 'One curfew':
-        return {
-          oneCurfewStart: parse('curfewStart'),
-          oneCurfewEnd: parse('curfewEnd'),
-        }
-
-      case 'Two curfews':
-        return {
-          twoCurfewStart: parse('curfewStart'),
-          twoCurfewEnd: parse('curfewEnd'),
-          twoCurfewStart2: parse('curfewStart2'),
-          twoCurfewEnd2: parse('curfewEnd2'),
-        }
-
-      case 'Three curfews':
-        return {
-          threeCurfewStart: parse('curfewStart'),
-          threeCurfewEnd: parse('curfewEnd'),
-          threeCurfewStart2: parse('curfewStart2'),
-          threeCurfewEnd2: parse('curfewEnd2'),
-          threeCurfewStart3: parse('curfewStart3'),
-          threeCurfewEnd3: parse('curfewEnd3'),
-        }
-
-      default:
-        return null
-    }
-  }
+  getCurfewLabel = (count: number): CurfewType =>
+    Object.entries(curfewCountMap).find(([_, value]) => value === count)?.[0] as CurfewType
 }

@@ -1,99 +1,67 @@
 import { Expose, Transform, Type } from 'class-transformer'
-import { IsNotEmpty, Validate, ValidateIf } from 'class-validator'
-import { SimpleTime } from '..'
-import ValidCurfewTime from '../../../../validators/curfewTimeValidator'
+import { IsArray, IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator'
+import { CurfewTimeRange } from './curfewTimeRange'
 
-class CurfewTerms {
+export class CurfewTerms {
   @Expose()
   @IsNotEmpty({ message: 'Select a number of curfews' })
   numberOfCurfews: string
 
-  // One curfew
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'One curfew' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'One curfew')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
-  oneCurfewStart: SimpleTime
+  // @Expose()
+  // @Transform(({ obj, value }) => {
+  //   const numberOfCurfews = parseInt(obj.numberOfCurfews, 10)
+  //   const selected = value[numberOfCurfews - 1] ?? []
+  //   // const curfews: CurfewTimeRange[] = []
+
+  //   // selected.forEach((timeValue: CurfewTimeRange, index: number) => {
+  //   //   const { start, end } = timeValue as CurfewTimeRange
+
+  //   //   curfews.push({
+  //   //     start,
+  //   //     end,
+  //   //     curfewIndex: numberOfCurfews,
+  //   //     slotIndex: index,
+  //   //   })
+  //   // })
+
+  //   const curfews: CurfewTimeRange[] = selected.map((timeValue: CurfewTimeRange, index: number) => {
+  //     const instance = new CurfewTimeRange()
+  //     instance.start = timeValue.start
+  //     instance.end = timeValue.end
+  //     instance.curfewIndex = numberOfCurfews
+  //     instance.slotIndex = index
+  //     return instance
+  //   })
+
+  //   console.log('curfews', curfews)
+  //   return curfews
+  // })
+  // @ValidateNested({ each: true })
+  // @Type(() => CurfewTimeRange)
+  // @IsArray()
+  // curfews: CurfewTimeRange[]
 
   @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'One curfew' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'One curfew')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
-  oneCurfewEnd: SimpleTime
+  @Transform(({ obj, value }) => {
+    const numberOfCurfews = parseInt(obj.numberOfCurfews, 10)
+    const selected = value[numberOfCurfews - 1] ?? []
 
-  // Two curfews
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
-  twoCurfewStart: SimpleTime
+    const curfews: CurfewTimeRange[] = selected.map((timeValue: CurfewTimeRange, index: number) => {
+      const instance = new CurfewTimeRange()
+      instance.start = timeValue.start
+      instance.end = timeValue.end
+      instance.curfewIndex = numberOfCurfews
+      instance.slotIndex = index
+      return instance
+    })
 
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
-  twoCurfewEnd: SimpleTime
-
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the second curfew,' } })
-  twoCurfewStart2: SimpleTime
-
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Two curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Two curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the second curfew,' } })
-  twoCurfewEnd2: SimpleTime
-
-  // Three curfews
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
-  threeCurfewStart: SimpleTime
-
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the first curfew,' } })
-  threeCurfewEnd: SimpleTime
-
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the second curfew,' } })
-  threeCurfewStart2: SimpleTime
-
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the second curfew,' } })
-  threeCurfewEnd2: SimpleTime
-
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the third curfew,' } })
-  threeCurfewStart3: SimpleTime
-
-  @Expose()
-  @Type(() => SimpleTime)
-  @Transform(({ obj, value }) => (obj.numberOfCurfews === 'Three curfews' ? value : undefined))
-  @ValidateIf(o => o.numberOfCurfews === 'Three curfews')
-  @Validate(ValidCurfewTime, { context: { summaryPrefix: () => 'For the third curfew,' } })
-  threeCurfewEnd3: SimpleTime
+    console.log('curfews', curfews)
+    return curfews
+  })
+  @ValidateNested({ each: true })
+  @Type(() => CurfewTimeRange)
+  @IsArray()
+  curfews: CurfewTimeRange[]
 
   @Expose()
   @IsNotEmpty({ message: 'Select a review period' })

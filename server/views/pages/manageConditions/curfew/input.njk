@@ -49,7 +49,25 @@
                         <div class="govuk-hint">{{ config.subtext }}</div>
                     {% endif %}
 
-                    {% macro renderTimePicker(id, labelText, formResponses) %}
+                    {% macro renderCurfewGroup(count, formResponses, validationErrors) %}
+                            {% set html = "" %}
+                            {% for i in range(0, count) %}
+                                {% set startId = "curfews[" ~ count ~ "][" ~ i ~ "][start]" %}
+                                {% set endId = "curfews[" ~ count ~ "][" ~ i ~ "][end]" %}
+                                {% set startTime = formResponses[startId] or curfews[count][i].start if curfews[count] and curfews[count][i] %}
+                                {% set endTime = formResponses[endId] or curfews[count][i].end if curfews[count] and curfews[count][i] %}
+                                {% set html = html + renderTimePicker(startId, "Curfew " ~ (i + 1) ~ " – start time", startTime) %}
+                                {% set html = html + renderTimePicker(endId, "Curfew " ~ (i + 1) ~ " – end time", endTime) %}
+                            {% endfor %}
+                            {{ html | safe }}
+                        {# </div> #}
+                    {% endmacro %}
+
+                    {% macro renderTimePicker(id, labelText, timeValue) %}
+                    <pre>selectedCurfew{{selectedCurfew}}</pre>
+                    <pre>validationErrors: {{validationErrors | dump }}</pre>
+                    <pre>formResponses: {{formResponses | dump }}</pre>
+                    <pre>timeValue: {{timeValue }}</pre>
                         {{ timePicker({
                             name: id,
                             id: id,
@@ -61,74 +79,45 @@
                             text: "For example, 9:30am or 2:55pm"
                             },
                             errorMessage: validationErrors | findError(id),
-                            formResponses: formResponses[id] or curfewTimes[id]
+                            formResponses: timeValue
                         }) }}
                     {% endmacro %}
 
-
-                    {% set oneCurfewHtml %}
-                        {{ renderTimePicker("oneCurfewStart", "Enter the curfew start time", formResponses) }}
-                        {{ renderTimePicker("oneCurfewEnd", "Enter the curfew end time", formResponses) }}
-                    {% endset %}
-
-                    {% set twoCurfewsHtml %}
-                        {{ renderTimePicker("twoCurfewStart", "First curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("twoCurfewEnd", "First curfew – enter the end time", formResponses) }}
-                        {{ renderTimePicker("twoCurfewStart2", "Second curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("twoCurfewEnd2", "Second curfew – enter the end time", formResponses) }}
-                    {% endset %}
-
-                    {% set threeCurfewsHtml %}
-                        {{ renderTimePicker("threeCurfewStart", "First curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewEnd", "First curfew – enter the end time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewStart2", "Second curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewEnd2", "Second curfew – enter the end time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewStart3", "Third curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewEnd3", "Third curfew – enter the end time", formResponses) }}
-                    {% endset %}
-
-
                     {% set options = [] %}
                     {% set options = [
-                        {
-                            text: "One curfew",
-                            value: "One curfew",
-                            checked: selectedCurfew == "One curfew",
-                            conditional: {
-                                html: oneCurfewHtml
-                            }
-                        },
-                        {
-                            text: "Two curfews",
-                            value: "Two curfews",
-                            checked: selectedCurfew == "Two curfews",
-                            conditional: {
-                                html: twoCurfewsHtml
-                            }
-                        },
-                        {
-                            text: "Three curfews",
-                            value: "Three curfews",
-                            checked: selectedCurfew == "Three curfews",
-                            conditional: {
-                                html: threeCurfewsHtml
-                            }
-                        }
-                    ] %}
-
-                    {{
-                        govukRadios({
-                            idPrefix: "numberOfCurfews",
-                            name: "numberOfCurfews",
-                            fieldset: {
-                                legend: {
-                                    text: "Select the number of curfews needed",
-                                    classes: "govuk-fieldset__legend govuk-fieldset__legend--m radio-numberOfCurfews-legend"
-                                }
+                            {
+                                text: "One curfew",
+                                value: 1,
+                                checked: selectedCurfew == 1,
+                                conditional: { html: renderCurfewGroup(1, formResponses, validationErrors) }
                             },
-                            items: options,
-                            errorMessage: validationErrors | findError('numberOfCurfews')
-                        })
+                            {
+                                text: "Two curfews",
+                                value: 2,
+                                checked: selectedCurfew == 2,
+                                conditional: { html: renderCurfewGroup(2, formResponses, validationErrors) }
+                            },
+                            {
+                                text: "Three curfews",
+                                value: 3,
+                                checked: selectedCurfew == 3,
+                                conditional: { html: renderCurfewGroup(3, formResponses, validationErrors) }
+                            }
+                        ] 
+                    %}
+
+                    {{ govukRadios({
+                        idPrefix: "numberOfCurfews",
+                        name: "numberOfCurfews",
+                        fieldset: {
+                            legend: {
+                            text: "Select the number of curfews needed",
+                            classes: "govuk-fieldset__legend govuk-fieldset__legend--m radio-numberOfCurfews-legend"
+                            }
+                        },
+                        items: options,
+                        errorMessage: validationErrors | findError('numberOfCurfews')
+                        }) 
                     }}
 
                     {% set reviewOptions = [
@@ -189,7 +178,6 @@
                         html: "Add an hour to the total length of someone's curfews each time you ask them to report to a police station or approved premises in an additional licence condition.</br></br>If this total is more than 12 hours, you must use a bespoke condition approved by PPCS.</br></br>For example, if someone had an 11-hour curfew and had to report to a police station twice a day, the total length of their curfews would be 13 hours. This would need PPCS approval.",
                         classes: "govuk-!-margin-1"
                     }) }}
-
                     <div class="govuk-button-group">
                         {{ govukButton({
                             text: "Continue",

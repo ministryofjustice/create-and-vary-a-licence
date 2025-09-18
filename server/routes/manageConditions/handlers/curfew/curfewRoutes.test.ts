@@ -259,74 +259,74 @@ describe('Route handlers - Curfew routes', () => {
     })
   })
 
-  describe('formatCurfewTimes', () => {
-    it('should format one curfew correctly', () => {
-      const input = {
-        numberOfCurfews: 'One curfew',
-        curfewStart: '08:00 am',
-        curfewEnd: '06:00 pm',
-      }
+  // describe('formatCurfewTimes', () => {
+  //   it('should format one curfew correctly', () => {
+  //     const input = {
+  //       numberOfCurfews: 'One curfew',
+  //       curfewStart: '08:00 am',
+  //       curfewEnd: '06:00 pm',
+  //     }
 
-      const result = handler.formatCurfewTimes(input)
+  //     const result = handler.formatCurfewTimes(input)
 
-      expect(result).toEqual({
-        oneCurfewStart: SimpleTime.fromString('08:00 am'),
-        oneCurfewEnd: SimpleTime.fromString('06:00 pm'),
-      })
-    })
+  //     expect(result).toEqual({
+  //       oneCurfewStart: SimpleTime.fromString('08:00 am'),
+  //       oneCurfewEnd: SimpleTime.fromString('06:00 pm'),
+  //     })
+  //   })
 
-    it('should format two curfews correctly', () => {
-      const input = {
-        numberOfCurfews: 'Two curfews',
-        curfewStart: '08:00 am',
-        curfewEnd: '10:00 pm',
-        curfewStart2: '02:00 pm',
-        curfewEnd2: '04:00 pm',
-      }
+  //   it('should format two curfews correctly', () => {
+  //     const input = {
+  //       numberOfCurfews: 'Two curfews',
+  //       curfewStart: '08:00 am',
+  //       curfewEnd: '10:00 pm',
+  //       curfewStart2: '02:00 pm',
+  //       curfewEnd2: '04:00 pm',
+  //     }
 
-      const result = handler.formatCurfewTimes(input)
+  //     const result = handler.formatCurfewTimes(input)
 
-      expect(result).toEqual({
-        twoCurfewStart: SimpleTime.fromString('08:00 am'),
-        twoCurfewEnd: SimpleTime.fromString('10:00 pm'),
-        twoCurfewStart2: SimpleTime.fromString('02:00 pm'),
-        twoCurfewEnd2: SimpleTime.fromString('04:00 pm'),
-      })
-    })
+  //     expect(result).toEqual({
+  //       twoCurfewStart: SimpleTime.fromString('08:00 am'),
+  //       twoCurfewEnd: SimpleTime.fromString('10:00 pm'),
+  //       twoCurfewStart2: SimpleTime.fromString('02:00 pm'),
+  //       twoCurfewEnd2: SimpleTime.fromString('04:00 pm'),
+  //     })
+  //   })
 
-    it('should format three curfews correctly', () => {
-      const input = {
-        numberOfCurfews: 'Three curfews',
-        curfewStart: '06:00 am',
-        curfewEnd: '08:00 am',
-        curfewStart2: '12:00 pm',
-        curfewEnd2: '02:00 pm',
-        curfewStart3: '06:00 pm',
-        curfewEnd3: '08:00 pm',
-      }
+  //   it('should format three curfews correctly', () => {
+  //     const input = {
+  //       numberOfCurfews: 'Three curfews',
+  //       curfewStart: '06:00 am',
+  //       curfewEnd: '08:00 am',
+  //       curfewStart2: '12:00 pm',
+  //       curfewEnd2: '02:00 pm',
+  //       curfewStart3: '06:00 pm',
+  //       curfewEnd3: '08:00 pm',
+  //     }
 
-      const result = handler.formatCurfewTimes(input)
+  //     const result = handler.formatCurfewTimes(input)
 
-      expect(result).toEqual({
-        threeCurfewStart: SimpleTime.fromString('06:00 am'),
-        threeCurfewEnd: SimpleTime.fromString('08:00 am'),
-        threeCurfewStart2: SimpleTime.fromString('12:00 pm'),
-        threeCurfewEnd2: SimpleTime.fromString('02:00 pm'),
-        threeCurfewStart3: SimpleTime.fromString('06:00 pm'),
-        threeCurfewEnd3: SimpleTime.fromString('08:00 pm'),
-      })
-    })
+  //     expect(result).toEqual({
+  //       threeCurfewStart: SimpleTime.fromString('06:00 am'),
+  //       threeCurfewEnd: SimpleTime.fromString('08:00 am'),
+  //       threeCurfewStart2: SimpleTime.fromString('12:00 pm'),
+  //       threeCurfewEnd2: SimpleTime.fromString('02:00 pm'),
+  //       threeCurfewStart3: SimpleTime.fromString('06:00 pm'),
+  //       threeCurfewEnd3: SimpleTime.fromString('08:00 pm'),
+  //     })
+  //   })
 
-    it('should return null for unknown curfew type', () => {
-      const input = {
-        numberOfCurfews: 'Unknown',
-        curfewStart: '08:00',
-        curfewEnd: '18:00',
-      }
+  //   it('should return null for unknown curfew type', () => {
+  //     const input = {
+  //       numberOfCurfews: 'Unknown',
+  //       curfewStart: '08:00',
+  //       curfewEnd: '18:00',
+  //     }
 
-      const result = handler.formatCurfewTimes(input)
+  //     const result = handler.formatCurfewTimes(input)
 
-      expect(result).toBeNull()
-    })
-  })
+  //     expect(result).toBeNull()
+  //   })
+  // })
 })

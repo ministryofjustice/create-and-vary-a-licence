@@ -3,6 +3,7 @@ import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
 import ConditionService from '../services/conditionService'
 import { getSummaryMessage } from '../utils/utils'
+import CurfewTimeRange from '../routes/manageConditions/types/additionalConditionInputs/curfewTimeRange'
 
 export type FieldValidationError = {
   field: string
@@ -11,7 +12,9 @@ export type FieldValidationError = {
 }
 
 type SummaryPrefix = {
-  summaryPrefix: () => string
+  summaryPrefix: (curfewTimeRange: CurfewTimeRange) => string
+  curfewIndex?: number
+  slotIndex?: number
 }
 
 type ValidationContext = {
@@ -58,14 +61,22 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         const constraintKeys = Object.keys(constraints)
         const lastConstraintKey = constraintKeys[constraintKeys.length - 1]
         const message = constraints[lastConstraintKey]
+        const target = error?.target instanceof CurfewTimeRange ? (error?.target as CurfewTimeRange) : null
 
         let prefix = ''
         if (contexts && contexts[lastConstraintKey]?.summaryPrefix) {
-          prefix = contexts[lastConstraintKey].summaryPrefix()
+          prefix = contexts[lastConstraintKey].summaryPrefix(target)
+        }
+
+        let fieldName = ''
+        const curfewIndex = target?.curfewIndex
+        const slotIndex = target?.slotIndex
+        if (target) {
+          fieldName = `curfews[${curfewIndex}][${slotIndex}][${error.property}]`
         }
 
         return {
-          field: error.property,
+          field: fieldName || error.property,
           message,
           summaryMessage: prefix ? getSummaryMessage(prefix, message) : message,
         }
