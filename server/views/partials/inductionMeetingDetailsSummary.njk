@@ -7,9 +7,6 @@
     {% set routePath = 'view' if isPrisonUser else 'create' %}
     {% set baseURL = "/licence/"+routePath+"/id/" + licence.id %}
     {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
-    {% set telQuery = routeAppend + '&edit=telNumber' if routeAppend else '?edit=telNumber' %}
-    {% set altTelQuery = routeAppend + '&edit=altTelNumber' if routeAppend else '?edit=altTelNumber' %}
-
 
     {% set addressPath = 'manual-address-entry' if (licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL') else 'initial-meeting-place' %}
 
@@ -63,7 +60,7 @@
                 actions: {
                     items: [
                         {
-                            href: baseURL + "/initial-meeting-contact" + telQuery,
+                            href: baseURL + "/initial-meeting-contact" + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "telephone",
                             attributes: { "id": "appointmentTelephoneNumber", "data-qa": "telephone-change-link" }
@@ -78,13 +75,13 @@
                 actions: {
                 items: [
                     {
-                        href: baseURL + "/initial-meeting-contact" + altTelQuery,
+                        href: baseURL + "/initial-meeting-contact" + routeAppend,
                         text: "Change",
                         visuallyHiddenText: "alternative telephone",
                         attributes: { "id": "appointmentAlternativeTelephoneNumber",  "data-qa": "alternative-telephone-change-link" }
                     }
                 ]
-                } if isEditable and licence.appointmentTelephoneNumber
+                } if isEditable
             },
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTimeType'),

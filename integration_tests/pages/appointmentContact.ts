@@ -16,6 +16,7 @@ export default class AppointmentContactPage extends Page {
 
   enterTelephone = (telephoneText?: string, telephoneAltText?: string): AppointmentContactPage => {
     const typeText = (selector: string, value?: string) => {
+      cy.get(selector).should('be.visible') // ensure field is visible
       if (value !== undefined && value !== null) {
         cy.get(selector).clear({ force: true })
         cy.get(selector).type(value, { force: true })
