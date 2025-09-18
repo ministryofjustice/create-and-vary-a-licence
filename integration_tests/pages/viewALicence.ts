@@ -59,10 +59,6 @@ export default class ViewALicencePage extends Page {
       .should('contain.text', telephone)
   }
 
-  checkAlternativeTelephoneLinkDoesNotExist() {
-    cy.get('[data-qa=alternative-telephone-change-link]').should('not.exist')
-  }
-
   checkAlternativeTelephoneLinkDoesExist() {
     cy.get('[data-qa=alternative-telephone-change-link]').should('exist')
   }
