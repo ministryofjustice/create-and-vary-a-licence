@@ -38,6 +38,12 @@
         {% else %}
             <p></p>
         {% endif %}
-        <p>Contact telephone number: <span class="bold">{{ licence.appointmentTelephoneNumber }}</span></p>
+        <p data-qa="appointment-phone-number">Contact telephone number: <span class="bold">{{ licence.appointmentTelephoneNumber }}</span></p>
+        {% if licence.appointmentAlternativeTelephoneNumber %}
+            <p data-qa="appointment-alternative-phone-number">
+                Alternative contact phone number:
+                <span class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
+            </p>
+        {% endif %}
     </div>
 </div>
