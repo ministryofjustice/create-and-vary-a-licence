@@ -418,23 +418,3 @@ describe('View and print - single standard licence view', () => {
     expect($('h1').text()).toContain('Check licence details')
   })
 })
-
-describe('whatsNewHelpAlert', () => {
-  it('renders whatsNewHelpAlert when showWhatsNewHelpAlert is true', () => {
-    const $ = render({
-      showWhatsNewHelpAlert: true,
-      licence: { statusCode: 'APPROVED', typeCode: 'AP', forename: 'John', surname: 'Smith', id: 1 },
-    })
-    expect($.html()).toContain('What’s new')
-    expect($.html()).toContain('If electronic monitoring is a licence condition')
-  })
-
-  it('does not render whatsNewHelpAlert when showWhatsNewHelpAlert is false', () => {
-    const $ = render({
-      showWhatsNewHelpAlert: false,
-      licence: { statusCode: 'APPROVED', typeCode: 'AP', forename: 'John', surname: 'Smith', id: 1 },
-    })
-    expect($.html()).not.toContain('What’s new')
-    expect($.html()).not.toContain('If electronic monitoring is a licence condition')
-  })
-})
