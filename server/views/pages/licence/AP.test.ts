@@ -54,8 +54,8 @@ describe('Print an AP licence', () => {
     // Check the offender image is present
     expect($('#offender > #offender-image').length).toBe(1)
 
-    // Check the objectives section is present - 2 paragraphs, 1 bullet-point list
-    expect($('#objectives > p').length).toBe(2)
+    // Check the objectives section is present - 3 paragraphs, 1 bullet-point list
+    expect($('#objectives > p').length).toBe(3)
     expect($('#objectives > .bullet-point').length).toBe(1)
 
     // Check the supervision section is present with 2 bold dates
