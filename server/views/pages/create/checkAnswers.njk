@@ -197,13 +197,13 @@
 
                     {% if isInHardStopPeriod%}
                         {{ govukButton({
-                            text: "Return to caselist",
+                            text: "Return to case list",
                             classes: "govuk-button--primary" if statusCode === 'SUBMITTED' else "govuk-button--secondary",
                             attributes: { 'data-qa': 'return-to-caselist' },
                             href: backLink
                         }) }}
                     {% else %}
-                        <a href="{{ backLink }}" class="govuk-link govuk-!-font-size-19" data-qa="back-to-caseload-link">Return to caselist</a>
+                        <a href="{{ backLink }}" class="govuk-link govuk-!-font-size-19" data-qa="back-to-caseload-link">Return to case list</a>
                     {% endif %}
                 </div>
             </form>
