@@ -196,7 +196,6 @@ export default {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
   },
   showWhatsNewBanner: get('SHOW_WHATS_NEW_BANNER', 'false', requiredInProduction) === 'true',
-  showWhatsNewHelpAlert: get('SHOW_WHATS_NEW_HELP_ALERT', 'false', requiredInProduction) === 'true',
   fridayReleasePolicy: get(
     'FRIDAY_RELEASE_POLICY',
     'https://www.gov.uk/government/publications/discretionary-fridaypre-bank-holiday-release-scheme-policy-framework',

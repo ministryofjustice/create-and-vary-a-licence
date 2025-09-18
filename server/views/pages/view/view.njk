@@ -27,9 +27,6 @@
 {% set backLinkHref = "/licence/view/cases" %}
 
 {% block content %}
-    {% if showWhatsNewHelpAlert %}
-        {% include 'partials/whatsNewHelpAlert.njk' %}
-    {% endif %}
     {% if initialApptUpdatedMessage | length > 0%}
         {{ mojBanner({
             type: 'success',
