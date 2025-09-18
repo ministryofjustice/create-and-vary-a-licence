@@ -693,8 +693,8 @@ export default {
     conditions: AdditionalCondition[]
     electronicMonitoringProvider?: ElectronicMonitoringProvider
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
-    appointmentTelephoneNumber?: '01234567890'
-    appointmentAlternativeTelephoneNumber?: '01234567891'
+    appointmentTelephoneNumber: string | null
+    appointmentAlternativeTelephoneNumber: string | null
   }): SuperAgentRequest => {
     return stubFor({
       request: {
