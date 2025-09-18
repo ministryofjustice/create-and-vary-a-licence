@@ -44,12 +44,12 @@ context('Edit a licence before release', () => {
     })
     checkAnswersPage
       .clickChangeTelephoneLink()
-      .enterTelephone('01632960901', null)
+      .enterTelephone('01632960901', '01632960904')
       .clickContinueToReturnToCheckAnswersPage()
 
     checkAnswersPage = checkAnswersPage
       .clickChangeAlternativeTelephoneLink()
-      .enterTelephone(null, '01632960902')
+      .enterTelephone('01632960903', '01632960904')
       .clickContinueToReturnToCheckAnswersPage()
 
     const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
@@ -68,7 +68,7 @@ context('Edit a licence before release', () => {
     })
 
     checkAnswersPage.checkTelephoneNotEntered()
-    checkAnswersPage.checkAlternativeTelephoneLinkDoesNotExist()
+    checkAnswersPage.checkAlternativeTelephoneLinkDoesExist()
     checkAnswersPage.checkAlternativeTelephoneNotEntered()
   })
 
