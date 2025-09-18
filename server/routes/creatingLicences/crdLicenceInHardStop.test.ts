@@ -2,7 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import LicenceService from '../../services/licenceService'
 import { appWithAllRoutes } from '../__testutils/appSetup'
-import { CaseloadItem, CvlPrisoner, Licence, OmuContact } from '../../@types/licenceApiClientTypes'
+import { CvlPrisoner, Licence, OmuContact, PrisonerWithCvlFields } from '../../@types/licenceApiClientTypes'
 import ProbationService from '../../services/probationService'
 import ConditionService from '../../services/conditionService'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
@@ -87,7 +87,7 @@ describe('createLicenceRoutes', () => {
   describe('in hard stop period', () => {
     beforeEach(() => {
       licenceService.getLicence.mockResolvedValue({ ...licence, isInHardStopPeriod: true } as Licence)
-      licenceService.getPrisonerDetail.mockResolvedValue({ cvl: { isInHardStopPeriod: true } } as CaseloadItem)
+      licenceService.getPrisonerDetail.mockResolvedValue({ cvl: { isInHardStopPeriod: true } } as PrisonerWithCvlFields)
     })
     describe('GETs', () => {
       it('should redirect to access-denied when trying to access create a licence page', () => {
@@ -200,7 +200,7 @@ describe('createLicenceRoutes', () => {
           lastName: 'Bloggs',
         } as CvlPrisoner,
         cvl: { isInHardStopPeriod: false },
-      } as CaseloadItem)
+      } as PrisonerWithCvlFields)
     })
     describe('GETs', () => {
       it('should allow access create a licence page', () => {
