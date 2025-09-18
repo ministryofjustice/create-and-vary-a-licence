@@ -25,6 +25,8 @@ context('View and print licence', () => {
       typeCode: 'AP_PSS',
       electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
       electronicMonitoringProviderStatus: 'COMPLETE',
+      appointmentTelephoneNumber: '0123456789',
+      appointmentAlternativeTelephoneNumber: '0987654321',
     })
     cy.task('stubGetHdcStatus')
     cy.task('stubRecordAuditEvent')
@@ -82,8 +84,35 @@ context('View and print licence', () => {
     viewCasesList = comDetails.clickReturn()
     viewCasesList.clickFutureReleasesTab()
     const viewLicencePage = viewCasesList.clickALicence()
+    viewLicencePage.checkTelephoneEntered('0123456789')
+    viewLicencePage.checkAlternativeTelephoneEntered('0987654321')
     const printALicencePage = viewLicencePage.printALicence()
-    printALicencePage.checkPrintTemplate()
+    printALicencePage.checkPrintTemplate('0123456789', '0987654321')
+  })
+
+  it('when alternative telephone not given then Not entered should be displayed on page and nothing in document', () => {
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'APPROVED',
+      typeCode: 'AP_PSS',
+      electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
+      electronicMonitoringProviderStatus: 'COMPLETE',
+      appointmentTelephoneNumber: '0123456789',
+    })
+
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
+    const comDetails = viewCasesList.clickComDetails()
+    viewCasesList = comDetails.clickReturn()
+    viewCasesList.clickFutureReleasesTab()
+    const viewLicencePage = viewCasesList.clickALicence()
+    viewLicencePage.checkTelephoneEntered('0123456789')
+    viewLicencePage.checkAlternativeTelephoneNotEntered()
+    const printALicencePage = viewLicencePage.printALicence()
+    printALicencePage.checkPrintTemplate('0123456789')
   })
 
   it("should not show caseload information because doesn't have multiple caseloads", () => {
@@ -192,16 +221,23 @@ context('View and print licence', () => {
     viewLicencePage = viewLicencePage.clickChangePersonLink().enterPerson('Joe Bloggs').clickContinueToReturn()
     viewLicencePage = viewLicencePage
       .clickChangeAddressLink()
-      .enterFirstLine('123 Fake St')
+      .enterFirstLine('124 New Fake St')
       .enterSecondLine('Apt 4B')
       .enterTownOrCity('Faketown')
       .enterCounty('Fakesbury')
       .enterPostcode('FA1 1KE')
       .clickContinueToReturn()
+
     viewLicencePage = viewLicencePage
       .clickChangeTelephoneLink()
-      .enterTelephone('012345678', '012345679')
-      .clickContinueToReturn()
+      .enterTelephone('012345600', null)
+      .clickContinueToReturnToViewLicencePage()
+
+    viewLicencePage = viewLicencePage
+      .clickChangeAlternativeTelephoneLink()
+      .enterTelephone(null, '012345601')
+      .clickContinueToReturnToViewLicencePage()
+
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       viewLicencePage = viewLicencePage
         .clickChangeDateLink()
@@ -215,6 +251,43 @@ context('View and print licence', () => {
         .enterTime(moment())
         .clickContinueToReturn()
     })
+  })
+
+  it('should show as expected when when telephone number not given on licence page', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetLicenceInHardStop', {
+      appointmentTelephoneNumber: null,
+      appointmentAlternativeTelephoneNumber: null,
+    })
+    cy.task('stubSearchForAddresses')
+    cy.task('stubPutLicenceAppointmentPerson')
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
+    const viewLicencePage: ViewALicencePage = viewCasesList.clickALicence()
+
+    viewLicencePage.checkTelephoneNotEntered()
+    viewLicencePage.checkAlternativeTelephoneLinkDoesNotExist()
+    viewLicencePage.checkAlternativeTelephoneNotEntered()
+  })
+
+  it('should show as expected when when telephone number are given on licence page', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetLicenceInHardStop')
+    cy.task('stubSearchForAddresses')
+    cy.task('stubPutLicenceAppointmentPerson')
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
+    const viewLicencePage: ViewALicencePage = viewCasesList.clickALicence()
+
+    viewLicencePage.checkTelephoneEntered('0123456789')
+    viewLicencePage.checkAlternativeTelephoneLinkDoesExist()
+    viewLicencePage.checkAlternativeTelephoneEntered('0987654321')
   })
 
   it('should populate electronic monitoring additional information', () => {

@@ -69,6 +69,8 @@ const licencePlaceholder: Licence = {
   dateLastUpdated: '10/09/2021 10:01:00', // Make dynamic to now?
   createdByUsername: 'X12345',
   createdByFullName: 'John Smith',
+  appointmentTelephoneNumber: '01234567890',
+  appointmentAlternativeTelephoneNumber: '01234567891',
   licenceAppointmentAddress: {
     reference: '1234',
     uprn: '10000000001',
@@ -691,6 +693,8 @@ export default {
     conditions: AdditionalCondition[]
     electronicMonitoringProvider?: ElectronicMonitoringProvider
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+    appointmentTelephoneNumber: string | null
+    appointmentAlternativeTelephoneNumber: string | null
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -708,8 +712,8 @@ export default {
           appointmentPersonType: 'SPECIFIC_PERSON',
           appointmentPerson: 'Duty Officer',
           appointmentAddress: 'Some address, Some town',
-          appointmentTelephoneNumber: '00000000000',
-          appointmentAlternativeTelephoneNumber: '1234567890',
+          appointmentTelephoneNumber: options.appointmentTelephoneNumber,
+          appointmentAlternativeTelephoneNumber: options.appointmentAlternativeTelephoneNumber,
           appointmentTime: '01/12/2021 12:34',
           appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
           isInHardStopPeriod: options.isInHardStopPeriod || false,
@@ -1554,6 +1558,69 @@ export default {
     })
   },
 
+  stubSearchForOffendersOnStaffCaseloadMultipleResults: (): SuperAgentRequest => {
+    const result1 = {
+      name: 'Test Person',
+      crn: 'A123456',
+      nomisId: 'A1234BC',
+      comName: 'Test Staff',
+      comStaffCode: '3000',
+      teamName: 'Test Team',
+      releaseDate: '16/08/2023',
+      licenceId: 1,
+      licenceType: 'AP',
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      isOnProbation: false,
+      isDueForEarlyRelease: false,
+      releaseDateLabel: 'CRD',
+    }
+    const result2 = {
+      ...result1,
+      name: 'Def Person2',
+      crn: 'A123457',
+      nomisId: 'A1234BD',
+      releaseDate: '15/08/2023',
+    }
+    const result3 = {
+      ...result1,
+      name: 'Abc Person3',
+      crn: 'A123458',
+      nomisId: 'A1234BE',
+      releaseDate: '15/08/2023',
+    }
+    const result4 = {
+      ...result1,
+      name: 'Test Person4',
+      crn: 'A123459',
+      nomisId: 'A1234BF',
+      releaseDate: '15/08/2023',
+      isOnProbation: true,
+    }
+    const result5 = {
+      ...result4,
+      name: 'Test Person5',
+      crn: 'A123460',
+      nomisId: 'A1234BG',
+      releaseDate: '17/08/2023',
+    }
+
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/com/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          results: [result1, result2, result3, result4, result5],
+          inPrisonCount: 2,
+          onProbationCount: 2,
+        },
+      },
+    })
+  },
+
   stubGetBankHolidays: (dates: string[]): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -1627,7 +1694,15 @@ export default {
     })
   },
 
-  stubGetLicenceInHardStop: (): SuperAgentRequest => {
+  stubGetLicenceInHardStop: (
+    options: {
+      appointmentTelephoneNumber?: string
+      appointmentAlternativeTelephoneNumber?: string
+    } = {
+      appointmentTelephoneNumber: '0123456789',
+      appointmentAlternativeTelephoneNumber: '0987654321',
+    },
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -1639,6 +1714,8 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           isInHardStopPeriod: true,
+          appointmentTelephoneNumber: options.appointmentTelephoneNumber,
+          appointmentAlternativeTelephoneNumber: options.appointmentAlternativeTelephoneNumber,
         },
       },
     })

@@ -255,6 +255,8 @@ context('Create a licence', () => {
         typeCode: 'AP_PSS',
         isInHardStopPeriod: false,
         kind: 'CRD',
+        appointmentTelephoneNumber: '01234567890',
+        appointmentAlternativeTelephoneNumber: '01234567892',
         conditions: [
           {
             id: 1,
@@ -369,6 +371,8 @@ context('Create a licence', () => {
         isInHardStopPeriod: false,
         kind: 'CRD',
         conditions: [],
+        appointmentTelephoneNumber: '01234567890',
+        appointmentAlternativeTelephoneNumber: '01234567892',
       })
 
       const pssConditionsQuestionPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()

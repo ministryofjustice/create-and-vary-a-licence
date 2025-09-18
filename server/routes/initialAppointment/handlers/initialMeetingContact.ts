@@ -10,7 +10,10 @@ export default class InitialMeetingContactRoutes {
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    return res.render('pages/create/initialMeetingContact')
+    const { edit } = req.query
+    return res.render('pages/create/initialMeetingContact', {
+      edit,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
