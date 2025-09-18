@@ -523,7 +523,7 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('[data-qa=return-to-caselist]').length).toBe(1)
   })
 
-  it('should show a "Return to caselist" button on an approved licence in the hard stop period', () => {
+  it('should show a "Return to case list" button on an approved licence in the hard stop period', () => {
     const $ = render({
       licence,
       statusCode: 'APPROVED',

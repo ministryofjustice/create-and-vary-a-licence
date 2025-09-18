@@ -34,9 +34,9 @@
         {% set sortOrder = 'ascending' %}
     {% else %}
         {% if hasPriorityCases %}
-            {% set sortOrder = 'descending' %}
-        {% else %}
             {% set sortOrder = 'none' %}
+        {% else %}
+            {% set sortOrder = 'descending' %}
         {% endif %}
     {% endif %}
     <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
@@ -60,7 +60,7 @@
                     <p>If you think someone’s licence is missing, tell us by <a id="serviceNowUrl" class="govuk-link" href="{{serviceNowUrl}}">filling in a support request form.</a></p>
                     <p class="govuk-body">
                         {{ govukButton({
-                            text: "Return to caselist",
+                            text: "Return to case list",
                             classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
                             href: backLink,
                             attributes: { 'data-qa': 'return-to-caselist' }
