@@ -34,9 +34,9 @@
         {% set sortOrder = 'ascending' %}
     {% else %}
         {% if hasPriorityCases %}
-            {% set sortOrder = 'descending' %}
-        {% else %}
             {% set sortOrder = 'none' %}
+        {% else %}
+            {% set sortOrder = 'descending' %}
         {% endif %}
     {% endif %}
     <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
