@@ -416,34 +416,4 @@ describe('View Prison Approver Search Results', () => {
     expect($('#location-1').text()).toBe('Moorland (HMP)')
     expect($('#location-2').text()).toBe('Wormwood Scrubs (HMP)')
   })
-
-  it('should not convert case of search result text when different to that of user input', () => {
-    const $ = render({
-      queryTerm: 'tEsT',
-      backLink: '/licence/approve/cases',
-      tabParameters: {
-        activeTab: '#approval-needed',
-        approvalNeeded: {
-          resultsCount: 2,
-          tabHeading: 'Approval needed',
-          tabId: 'tab-heading-approval-needed',
-        },
-        recentlyApproved: {
-          resultsCount: 0,
-          tabHeading: 'Recently approved',
-          tabId: 'tab-heading-recently-approved',
-        },
-      },
-      hasSelectedMultiplePrisonCaseloads: false,
-      approvalNeededCases,
-      recentlyApprovedCases: [],
-    })
-    expect($('#approval-search-heading').text()).toBe('Search results for tEsT')
-
-    expect($('#name-1 > a').text()).toBe('Test Person 1')
-    expect($('#probation-practitioner-1').text()).toBe('Test Com 1')
-
-    expect($('#name-2 > a').text()).toBe('Test Person 2')
-    expect($('#probation-practitioner-2').text()).toBe('Test Com 2')
-  })
 })

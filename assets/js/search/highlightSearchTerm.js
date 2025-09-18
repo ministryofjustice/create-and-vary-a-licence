@@ -42,11 +42,10 @@ function highlightTextInDOM(targetText, searchResult) {
 
   for (const textNode of nodesToUpdate) {
     const span = document.createElement('span')
-    const regEx = new RegExp(targetText, 'ig')
-    const newContent = textNode.nodeValue.match(regEx)
+    const regEx = new RegExp(`(${RegExp.escape(targetText)})`, 'ig')
     span.innerHTML = textNode.nodeValue.replaceAll(
       regEx,
-      '<mark class="highlight-search-term"><strong>' + newContent + '</strong></mark>'
+      '<mark class="highlight-search-term"><strong>$1</strong></mark>'
     )
     textNode.parentNode?.replaceChild(span, textNode)
   }
