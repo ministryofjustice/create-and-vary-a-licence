@@ -11,8 +11,10 @@ export default class InitialMeetingContactRoutes {
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
+    const { edit } = req.query
     return res.render('pages/create/hardStop/initialMeetingContact', {
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
+      edit,
     })
   }
 

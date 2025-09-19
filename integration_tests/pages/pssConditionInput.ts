@@ -72,6 +72,8 @@ export default class PssConditionsInputPage extends Page {
       electronicMonitoringProvider,
       electronicMonitoringProviderStatus,
       conditions,
+      appointmentTelephoneNumber: '01234567890',
+      appointmentAlternativeTelephoneNumber: '09876543210',
     })
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)

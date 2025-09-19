@@ -119,7 +119,7 @@ describe('View and print - single licence view', () => {
     expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
 
     // Check the initial meeting details are populated
-    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
+    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
 
     // Check the additional conditions count
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(2)
@@ -170,7 +170,7 @@ describe('View and print - single licence view', () => {
       appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
     })
     // Check the initial meeting details are populated
-    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(4)
+    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
   })
 
   it('Print buttons are not visible when licence is not approved or active', () => {
@@ -343,7 +343,7 @@ describe('View and print - single standard licence view', () => {
     expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
 
     // Check the initial meeting details are populated
-    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
+    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
 
     // Check the additional conditions count
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(0)
@@ -372,7 +372,7 @@ describe('View and print - single standard licence view', () => {
       appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
     })
     // Check the initial meeting details are populated
-    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(4)
+    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
   })
 
   it('should render standard post sentence supervision text', () => {
@@ -416,25 +416,5 @@ describe('View and print - single standard licence view', () => {
     })
 
     expect($('h1').text()).toContain('Check licence details')
-  })
-})
-
-describe('whatsNewHelpAlert', () => {
-  it('renders whatsNewHelpAlert when showWhatsNewHelpAlert is true', () => {
-    const $ = render({
-      showWhatsNewHelpAlert: true,
-      licence: { statusCode: 'APPROVED', typeCode: 'AP', forename: 'John', surname: 'Smith', id: 1 },
-    })
-    expect($.html()).toContain('What’s new')
-    expect($.html()).toContain('If electronic monitoring is a licence condition')
-  })
-
-  it('does not render whatsNewHelpAlert when showWhatsNewHelpAlert is false', () => {
-    const $ = render({
-      showWhatsNewHelpAlert: false,
-      licence: { statusCode: 'APPROVED', typeCode: 'AP', forename: 'John', surname: 'Smith', id: 1 },
-    })
-    expect($.html()).not.toContain('What’s new')
-    expect($.html()).not.toContain('If electronic monitoring is a licence condition')
   })
 })

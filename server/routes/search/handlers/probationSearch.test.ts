@@ -1,9 +1,11 @@
 import { Request, Response } from 'express'
-import { ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
+import { FoundProbationRecord, ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
 import ProbationSearchRoutes from './probationSearch'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 import config from '../../../config'
+import LicenceStatus from '../../../enumeration/licenceStatus'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
 jest.mock('../../../services/searchService')
@@ -32,6 +34,23 @@ describe('Route Handlers - Search - Probation Search', () => {
     inPrisonCount: 1,
     onProbationCount: 0,
   }
+
+  const peopleInPrison = [
+    {
+      name: 'Test Person',
+      crn: 'A123456',
+      nomisId: 'A1234BC',
+      comName: 'Test Staff',
+      comStaffCode: '3000',
+      teamName: 'Test Team',
+      releaseDate: '2023-08-16',
+      licenceId: 1,
+      licenceType: 'AP',
+      licenceStatus: 'IN_PROGRESS',
+      isOnProbation: false,
+    },
+  ]
+  const peopleOnProbation: FoundProbationRecord[] = []
 
   let previousCaseloadPage = 'create'
 
@@ -73,12 +92,14 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'Test',
-        searchResponse,
+        peopleInPrison,
+        peopleOnProbation: [],
         backLink: '/licence/create/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
       })
     })
 
@@ -92,16 +113,18 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'A123456',
-        searchResponse,
+        peopleInPrison,
+        peopleOnProbation,
         backLink: '/licence/create/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
       })
     })
 
-    it('calls the search service to search by probation practioner', async () => {
+    it('calls the search service to search by probation practitioner', async () => {
       req.query = { queryTerm: 'staff', previousPage: 'create' }
 
       await handler.GET(req, res)
@@ -111,12 +134,14 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'staff',
-        searchResponse,
+        peopleInPrison,
+        peopleOnProbation,
         backLink: '/licence/create/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
       })
     })
 
@@ -136,12 +161,14 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: '',
-        searchResponse,
+        peopleInPrison: [],
+        peopleOnProbation: [],
         backLink: '/licence/create/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
       })
     })
 
@@ -162,12 +189,103 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: '',
-        searchResponse,
+        peopleInPrison: [],
+        peopleOnProbation: [],
         backLink: '/licence/vary/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
         recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: false,
+      })
+    })
+
+    it('should sort by review needed and then release date descending of the probation tab', async () => {
+      const peopleOnProbation: FoundProbationRecord[] = [
+        {
+          name: 'Test Person1',
+          crn: 'A123456',
+          nomisId: 'A1234BC',
+          comName: 'Test Staff',
+          comStaffCode: '3000',
+          teamName: 'Test Team',
+          releaseDate: '13/09/2028',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.ACTIVE,
+          releaseDateLabel: 'CRD',
+          kind: LicenceKind.CRD,
+          isOnProbation: true,
+          isReviewNeeded: false,
+          isInHardStopPeriod: false,
+          isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+        {
+          name: 'Test Person2',
+          crn: 'A123457',
+          nomisId: 'A1234BD',
+          comName: 'Test Staff',
+          comStaffCode: '3000',
+          teamName: 'Test Team',
+          releaseDate: '25/05/2027',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.ACTIVE,
+          releaseDateLabel: 'CRD',
+          kind: LicenceKind.CRD,
+          isOnProbation: true,
+          isReviewNeeded: true,
+          isInHardStopPeriod: false,
+          isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+        {
+          name: 'Test Person3',
+          crn: 'A123458',
+          nomisId: 'A1234BE',
+          comName: 'Test Staff',
+          comStaffCode: '3000',
+          teamName: 'Test Team',
+          releaseDate: '11/09/2032',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.ACTIVE,
+          releaseDateLabel: 'CRD',
+          kind: LicenceKind.CRD,
+          isOnProbation: true,
+          isReviewNeeded: false,
+          isInHardStopPeriod: false,
+          isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+      ]
+
+      const searchResponse = {
+        results: peopleOnProbation,
+        inPrisonCount: 0,
+        onProbationCount: 1,
+      }
+
+      const expectedSortedResults = [peopleOnProbation[1], peopleOnProbation[2], peopleOnProbation[0]]
+      searchService.getProbationSearchResults.mockResolvedValue(searchResponse as ProbationSearchResult)
+
+      req.query = { queryTerm: 'Test', previousPage: 'vary' }
+      previousCaseloadPage = 'vary'
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
+        deliusStaffIdentifier: 3000,
+        queryTerm: 'Test',
+        peopleInPrison: [],
+        peopleOnProbation: expectedSortedResults,
+        backLink: '/licence/vary/caseload',
+        tabParameters: { ...tabParameters, activeTab: '#people-on-probation' },
+        statusConfig,
+        previousCaseloadPage,
+        recallsEnabled: config.recallsEnabled,
+        hasPriorityCases: true,
       })
     })
   })

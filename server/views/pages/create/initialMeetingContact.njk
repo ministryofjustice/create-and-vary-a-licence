@@ -24,27 +24,30 @@
                         iconFallbackText: "Warning"
                     }) }}
                 {% endif %}
-
-                {{ govukInput({
-                    label: {
-                        text: "UK telephone number"
-                    },
-                    id: "telephone",
-                    name: "telephone",
-                    classes: "govuk-input--width-20",
-                    errorMessage: validationErrors | findError('telephone'),
-                    value: licence.appointmentTelephoneNumber | fillFormResponse(formResponses.telephone)
-                }) }}
-                {{ govukInput({
-                    label: {
-                        text: "Alternative UK telephone number (optional)"
-                    },
-                    id: "telephoneAlternative",
-                    name: "telephoneAlternative",
-                    classes: "govuk-input--width-20",
-                    errorMessage: validationErrors | findError('telephoneAlternative'),
-                    value: licence.appointmentAlternativeTelephoneNumber | fillFormResponse(formResponses.telephoneAlternative)
-                }) }}
+                <div class="govuk-input--width-20">
+                    {{ govukInput({
+                        label: {
+                            text: "UK telephone number"
+                        },
+                        id: "telephone",
+                        name: "telephone",
+                        classes: "govuk-input--width-20",
+                        errorMessage: validationErrors | findError('telephone'),
+                        value: licence.appointmentTelephoneNumber | fillFormResponse(formResponses.telephone)
+                    }) }}
+                </div>
+                <div class="govuk-input--width-20">
+                    {{ govukInput({
+                        label: {
+                            text: "Alternative UK telephone number (optional)"
+                        },
+                        id: "telephoneAlternative",
+                        name: "telephoneAlternative",
+                        classes: "govuk-input--width-20",
+                        errorMessage: validationErrors | findError('telephoneAlternative'),
+                        value: licence.appointmentAlternativeTelephoneNumber | fillFormResponse(formResponses.telephoneAlternative)
+                    }) }}
+                </div>
                 {{ govukButton({
                     text: continueOrSave,
                     type: "submit",

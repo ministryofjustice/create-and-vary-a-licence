@@ -59,6 +59,8 @@ export default class ExclusionZoneConditionInputPage extends AdditionalCondition
       isInHardStopPeriod: false,
       kind: 'CRD',
       conditions,
+      appointmentTelephoneNumber: '01234567890',
+      appointmentAlternativeTelephoneNumber: '09876543210',
     })
     cy.get(this.continueButtonId).click()
     return this

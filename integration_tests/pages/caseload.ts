@@ -23,8 +23,14 @@ export default class CaseloadPage extends Page {
     return Page.verifyOnPage(ConfirmCreatePage)
   }
 
-  clickNameToEditLicence = (): CheckAnswersPage => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'APPROVED', typeCode: 'AP_PSS' })
+  clickNameToEditLicence(): CheckAnswersPage {
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'APPROVED',
+      typeCode: 'AP_PSS',
+      appointmentTelephoneNumber: '01234567890',
+      appointmentAlternativeTelephoneNumber: '09876543210',
+    })
+
     cy.get(this.createLicenceButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
   }
@@ -51,7 +57,6 @@ export default class CaseloadPage extends Page {
   }
 
   clickSearch = (text: string): SearchPage => {
-    cy.task('stubGetProbationSearchResults')
     cy.get(this.searchTextInput).type(text)
     cy.get(this.searchButtonId).click()
     return Page.verifyOnPage(SearchPage)

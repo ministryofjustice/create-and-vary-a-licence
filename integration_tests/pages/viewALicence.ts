@@ -26,6 +26,43 @@ export default class ViewALicencePage extends Page {
     return Page.verifyOnPage(AppointmentContactPage)
   }
 
+  clickChangeAlternativeTelephoneLink = (): AppointmentContactPage => {
+    cy.get('[data-qa=alternative-telephone-change-link]').click()
+    return Page.verifyOnPage(AppointmentContactPage)
+  }
+
+  checkAlternativeTelephoneNotEntered() {
+    cy.get('.govuk-summary-list__row')
+      .contains('dt.govuk-summary-list__key', 'Alternative contact phone number')
+      .siblings('dd.govuk-summary-list__value')
+      .should('contain.text', 'Not entered')
+  }
+
+  checkTelephoneNotEntered() {
+    cy.get('.govuk-summary-list__row')
+      .contains('dt.govuk-summary-list__key', 'Contact phone number')
+      .siblings('dd.govuk-summary-list__value')
+      .should('contain.text', 'Not yet entered')
+  }
+
+  checkTelephoneEntered(telephone: string) {
+    cy.get('.govuk-summary-list__row')
+      .contains('dt.govuk-summary-list__key', 'Contact phone number')
+      .siblings('dd.govuk-summary-list__value')
+      .should('contain.text', telephone)
+  }
+
+  checkAlternativeTelephoneEntered(telephone: string) {
+    cy.get('.govuk-summary-list__row')
+      .contains('dt.govuk-summary-list__key', 'Alternative contact phone number')
+      .siblings('dd.govuk-summary-list__value')
+      .should('contain.text', telephone)
+  }
+
+  checkAlternativeTelephoneLinkDoesExist() {
+    cy.get('[data-qa=alternative-telephone-change-link]').should('exist')
+  }
+
   clickChangeDateLink = (): AppointmentTimePage => {
     cy.get('[data-qa=date-change-link]').click()
     return Page.verifyOnPage(AppointmentTimePage)

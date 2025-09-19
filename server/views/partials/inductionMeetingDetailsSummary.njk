@@ -5,6 +5,7 @@
 {% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
     {% set routePath = 'view' if isPrisonUser else 'create' %}
+    {% set baseURL = "/licence/"+routePath+"/id/" + licence.id %}
     {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
 
     {% set addressPath = 'manual-address-entry' if (licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL') else 'initial-meeting-place' %}
@@ -29,7 +30,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-name" + routeAppend,
+                            href: baseURL + "/initial-meeting-name" + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "name",
                             attributes: { "data-qa": "person-change-link" }
@@ -44,7 +45,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/" + addressPath + routeAppend,
+                            href: baseURL + "/" + addressPath + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "address",
                             attributes: { "data-qa": "address-change-link" }
@@ -59,12 +60,27 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-contact" + routeAppend,
+                            href: baseURL + "/initial-meeting-contact" + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "telephone",
-                            attributes: { "data-qa": "telephone-change-link" }
+                            attributes: { "id": "appointmentTelephoneNumber", "data-qa": "telephone-change-link" }
                         }
                     ]
+                } if isEditable
+            },
+            {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAlternativeTelephoneNumber'),
+                key: { text: "Alternative contact phone number" },
+                value: { text: licence.appointmentAlternativeTelephoneNumber | fillFormResponse(formResponses.telephoneAlternative) | default("Not entered", true) },
+                actions: {
+                items: [
+                    {
+                        href: baseURL + "/initial-meeting-contact" + routeAppend,
+                        text: "Change",
+                        visuallyHiddenText: "alternative telephone",
+                        attributes: { "id": "appointmentAlternativeTelephoneNumber",  "data-qa": "alternative-telephone-change-link" }
+                    }
+                ]
                 } if isEditable
             },
             {
@@ -74,7 +90,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
+                            href: baseURL + "/initial-meeting-time" + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "date",
                             attributes: { "data-qa": "date-change-link" }
@@ -89,7 +105,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
+                            href: baseURL + "/initial-meeting-time" + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "date",
                             attributes: { "data-qa": "date-change-link" }
@@ -104,7 +120,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
+                            href: baseURL + "/initial-meeting-time" + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "time",
                             attributes: { "data-qa": "time-change-link" }
