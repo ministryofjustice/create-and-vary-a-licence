@@ -1,6 +1,7 @@
 import moment from 'moment'
 import Page from '../pages/page'
 import IndexPage from '../pages'
+import CurfewType from '../../server/enumeration/CurfewType'
 
 context('Create a licence that needs pathfinder or programme question', () => {
   const dates: string[] = []
@@ -63,9 +64,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .nextCondition()
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio('Two curfews')
-        .addFirstCurfew(2)
-        .addSecondCurfew(2)
+        .selectRadio(CurfewType.TWO_CURFEWS)
+        .addTwoCurfews(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')
         .nextCondition()
@@ -153,9 +153,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .nextCondition()
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio('Two curfews')
-        .addFirstCurfew(2)
-        .addSecondCurfew(2)
+        .selectRadio(CurfewType.TWO_CURFEWS)
+        .addTwoCurfews(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')
         .nextCondition()
@@ -246,9 +245,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .nextCondition()
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio('Two curfews')
-        .addFirstCurfew(2)
-        .addSecondCurfew(2)
+        .selectRadio(CurfewType.TWO_CURFEWS)
+        .addTwoCurfews(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')
         .nextCondition()
@@ -328,9 +326,8 @@ context('Create a licence that needs pathfinder or programme question', () => {
         .nextCondition()
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio('Two curfews')
-        .addFirstCurfew(2)
-        .addSecondCurfew(2)
+        .selectRadio(CurfewType.TWO_CURFEWS)
+        .addTwoCurfews(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')
         .nextCondition()

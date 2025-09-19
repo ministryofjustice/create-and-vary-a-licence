@@ -86,7 +86,7 @@ describe('validationMiddleware', () => {
       expect(next).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        JSON.stringify([{ field: 'name', message: notValidMessage }]),
+        JSON.stringify([{ field: 'name', message: notValidMessage, summaryMessage: notValidMessage }]),
       )
       expect(req.flash).toHaveBeenCalledWith('formResponses', JSON.stringify(req.body))
     })
@@ -126,7 +126,7 @@ describe('validationMiddleware', () => {
       expect(next).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        JSON.stringify([{ field: 'id', message: notEmptyMessage }]),
+        JSON.stringify([{ field: 'id', message: notEmptyMessage, summaryMessage: notEmptyMessage }]),
       )
       expect(req.flash).toHaveBeenCalledWith('formResponses', JSON.stringify(req.body))
     })
@@ -151,7 +151,7 @@ describe('validationMiddleware', () => {
       expect(next).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        JSON.stringify([{ field: 'name', message: notEmptyMessage }]),
+        JSON.stringify([{ field: 'name', message: notEmptyMessage, summaryMessage: notEmptyMessage }]),
       )
     })
 

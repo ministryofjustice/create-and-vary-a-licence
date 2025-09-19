@@ -1,7 +1,8 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/timePicker.njk" import timePicker %}
 {% from "formBuilder.njk" import formBuilder %}
 
 {% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
@@ -18,6 +19,9 @@
 {% else %}
   {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
 {% endif %}
+{% set selectedCurfew = formResponses.numberOfCurfews or numberOfCurfews %}
+{% set selectedReviewPeriod = formResponses.reviewPeriod or reviewPeriod %}
+{% set enteredAlternativeReviewPeriod = formResponses.alternativeReviewPeriod or alternativeReviewPeriod %}
 
 {% block content %}
     {% if fromPolicyReview %}
@@ -45,7 +49,133 @@
                         <div class="govuk-hint">{{ config.subtext }}</div>
                     {% endif %}
 
-                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+                    {% macro renderTimePicker(id, labelText, formResponses) %}
+                        {{ timePicker({
+                            name: id,
+                            id: id,
+                            label: {
+                            text: labelText,
+                            classes: "govuk-!-font-weight-bold"
+                            },
+                            hint: {
+                            text: "For example, 9:30am or 2:55pm"
+                            },
+                            errorMessage: validationErrors | findError(id),
+                            formResponses: formResponses[id] or curfewTimes[id]
+                        }) }}
+                    {% endmacro %}
+
+                    {% macro renderCurfews(prefix, count, formResponses) %}
+                        {% set ordinals = ['First', 'Second', 'Third', 'Fourth', 'Fifth'] %}
+                        {% for i in range(1, count + 1) %}
+                            {% set suffix = '' if i === 1 else i %}
+                            {% set startId = prefix ~ 'CurfewStart' ~ suffix %}
+                            {% set endId = prefix ~ 'CurfewEnd' ~ suffix %}
+                            {% set labelPrefix = ordinals[i - 1] %}
+                            {{ renderTimePicker(startId, labelPrefix ~ ' curfew – enter the curfew start time', formResponses) }}
+                            {{ renderTimePicker(endId, labelPrefix ~ ' curfew – enter the curfew end time', formResponses) }}
+                        {% endfor %}
+                    {% endmacro %}
+
+                    {% set oneCurfewHtml %}
+                        {{ renderCurfews('one', 1, formResponses) }}
+                    {% endset %}
+
+                    {% set twoCurfewsHtml %}
+                        {{ renderCurfews('two', 2, formResponses) }}
+                    {% endset %}
+
+                    {% set threeCurfewsHtml %}
+                        {{ renderCurfews('three', 3, formResponses) }}
+                    {% endset %}
+
+                    {% set options = [] %}
+                    {% set options = [
+                        {
+                            text: curfewType.ONE_CURFEW,
+                            value: curfewType.ONE_CURFEW,
+                            checked: selectedCurfew == curfewType.ONE_CURFEW,
+                            conditional: {
+                                html: oneCurfewHtml
+                            }
+                        },
+                        {
+                            text: curfewType.TWO_CURFEWS,
+                            value: curfewType.TWO_CURFEWS,
+                            checked: selectedCurfew == curfewType.TWO_CURFEWS,
+                            conditional: {
+                                html: twoCurfewsHtml
+                            }
+                        },
+                        {
+                            text: curfewType.THREE_CURFEWS,
+                            value: curfewType.THREE_CURFEWS,
+                            checked: selectedCurfew == curfewType.THREE_CURFEWS,
+                            conditional: {
+                                html: threeCurfewsHtml
+                            }
+                        }
+                    ] %}
+
+                    {{
+                        govukRadios({
+                            idPrefix: "numberOfCurfews",
+                            name: "numberOfCurfews",
+                            fieldset: {
+                                legend: {
+                                    text: "Select the number of curfews needed",
+                                    classes: "govuk-fieldset__legend govuk-fieldset__legend--m radio-numberOfCurfews-legend"
+                                }
+                            },
+                            items: options,
+                            errorMessage: validationErrors | findError('numberOfCurfews')
+                        })
+                    }}
+
+                    {% set reviewOptions = [
+                        {
+                            text: "Weekly",
+                            value: "Weekly",
+                            checked: selectedReviewPeriod == "Weekly"
+                        },
+                        {
+                            text: "Monthly",
+                            value: "Monthly",
+                            checked: selectedReviewPeriod == "Monthly"
+                        },
+                        {
+                            text: "Other",
+                            value: "Other",
+                            checked: selectedReviewPeriod == "Other",
+                            conditional: {
+                            html: govukInput({
+                                    id: "alternativeReviewPeriod",
+                                    name: "alternativeReviewPeriod",
+                                    label: {
+                                    text: "Enter a review period",
+                                    classes: "govuk-!-font-weight-bold"
+                                    },
+                                    classes: "govuk-input",
+                                    value: enteredAlternativeReviewPeriod,
+                                    errorMessage: validationErrors | findError('alternativeReviewPeriod')
+                                })
+                            }
+                        }
+                        ] %}
+
+                    {{ govukRadios({
+                                    idPrefix: "reviewPeriod",
+                                    name: "reviewPeriod",
+                                    fieldset: {
+                                        legend: {
+                                        text: "Select a review period",
+                                        classes: "govuk-fieldset__legend govuk-fieldset__legend--m"
+                                        }
+                                    },
+                                    items: reviewOptions,
+                                    errorMessage: validationErrors | findError('reviewPeriod')
+                                })
+                    }}
 
                     <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
 
@@ -71,7 +201,7 @@
                         }) }}
                         {{ govukButton({
                             text: "Delete this condition",
-                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + additionalCondition.code + "/delete" + fromReview + fromPolicyReviewQuery,
+                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + additionalConditionCode + "/delete" + fromReview + fromPolicyReviewQuery,
                             classes: 'govuk-button--secondary',
                             attributes: { 'data-qa': 'delete' },
                             preventDoubleClick: true

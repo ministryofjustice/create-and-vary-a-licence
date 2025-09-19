@@ -25,6 +25,7 @@ import {
   cvlDateToDateShort,
   isVariation,
   isHdcLicence,
+  lowercaseFirstLetter,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -553,5 +554,23 @@ describe('isHdcLicence', () => {
     expect(isHdcLicence(crdLicence)).toBe(false)
     expect(isHdcLicence(variationLicence)).toBe(false)
     expect(isHdcLicence(hardStopLicence)).toBe(false)
+  })
+})
+
+describe('  lowercaseFirstLetter', () => {
+  it('should lowercase the first character of the message and prepend the prefix', () => {
+    expect(lowercaseFirstLetter('Something went wrong')).toBe('something went wrong')
+  })
+
+  it('should handle messages that already start with a lowercase letter', () => {
+    expect(lowercaseFirstLetter('already lowercase')).toBe('already lowercase')
+  })
+
+  it('should handle empty message string', () => {
+    expect(lowercaseFirstLetter('')).toBe('')
+  })
+
+  it('should handle single character message', () => {
+    expect(lowercaseFirstLetter('X')).toBe('x')
   })
 })

@@ -3,6 +3,7 @@ import ConfirmCreatePage from '../pages/confirmCreate'
 import IndexPage from '../pages'
 import Page from '../pages/page'
 import LicenceKind from '../../server/enumeration/LicenceKind'
+import CurfewType from '../../server/enumeration/CurfewType'
 
 context('Create a licence', () => {
   const dates: string[] = []
@@ -63,9 +64,8 @@ context('Create a licence', () => {
         .nextCondition()
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio('Two curfews')
-        .addFirstCurfew(2)
-        .addSecondCurfew(2)
+        .selectRadio(CurfewType.TWO_CURFEWS)
+        .addTwoCurfews(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')
         .nextCondition()
