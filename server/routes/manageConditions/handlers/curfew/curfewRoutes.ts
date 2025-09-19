@@ -4,8 +4,8 @@ import ConditionService from '../../../../services/conditionService'
 import { AddAdditionalConditionRequest, AdditionalCondition, Licence } from '../../../../@types/licenceApiClientTypes'
 import { SimpleTime } from '../../types'
 import { User } from '../../../../@types/CvlUserDetails'
+import CurfewType from '../../../../enumeration/CurfewType'
 
-type CurfewType = 'One curfew' | 'Two curfews' | 'Three curfews'
 export default class CurfewRoutes {
   constructor(
     private readonly licenceService: LicenceService,
@@ -41,16 +41,17 @@ export default class CurfewRoutes {
       ),
     )
 
-    const getFieldValue = (fieldName: string): string | undefined =>
+    const getFieldValue = (fieldName: string): CurfewType =>
       additionalCondition.data.find((data: { field: string; value: string }) => data.field === fieldName)?.value
 
     return res.render('pages/manageConditions/curfew/input', {
       additionalConditionCode: additionalCondition.code,
       reviewPeriod: getFieldValue('reviewPeriod'),
       alternativeReviewPeriod: getFieldValue('alternativeReviewPeriod') || null,
-      numberOfCurfews: getFieldValue('numberOfCurfews') as CurfewType,
+      numberOfCurfews: getFieldValue('numberOfCurfews'),
       curfewTimes: this.formatCurfewTimes(curfewTimes),
       config,
+      curfewType: CurfewType,
     })
   }
 
@@ -80,7 +81,7 @@ export default class CurfewRoutes {
 
     await this.licenceService.deleteAdditionalConditionsByCode([conditionCode], licence.id, user)
 
-    if (numberOfCurfews === 'One curfew') {
+    if (numberOfCurfews === CurfewType.ONE_CURFEW) {
       await this.addCurfewCondition(
         licence,
         user,
@@ -93,7 +94,7 @@ export default class CurfewRoutes {
       )
     }
 
-    if (numberOfCurfews === 'Two curfews') {
+    if (numberOfCurfews === CurfewType.TWO_CURFEWS) {
       await this.addCurfewCondition(
         licence,
         user,
@@ -116,7 +117,7 @@ export default class CurfewRoutes {
       )
     }
 
-    if (numberOfCurfews === 'Three curfews') {
+    if (numberOfCurfews === CurfewType.THREE_CURFEWS) {
       await this.addCurfewCondition(
         licence,
         user,
@@ -210,13 +211,13 @@ export default class CurfewRoutes {
     const parse = (key: string): SimpleTime => SimpleTime.fromString(curfewTimes[key])
 
     switch (curfewTimes.numberOfCurfews as CurfewType) {
-      case 'One curfew':
+      case CurfewType.ONE_CURFEW:
         return {
           oneCurfewStart: parse('curfewStart'),
           oneCurfewEnd: parse('curfewEnd'),
         }
 
-      case 'Two curfews':
+      case CurfewType.TWO_CURFEWS:
         return {
           twoCurfewStart: parse('curfewStart'),
           twoCurfewEnd: parse('curfewEnd'),
@@ -224,7 +225,7 @@ export default class CurfewRoutes {
           twoCurfewEnd2: parse('curfewEnd2'),
         }
 
-      case 'Three curfews':
+      case CurfewType.THREE_CURFEWS:
         return {
           threeCurfewStart: parse('curfewStart'),
           threeCurfewEnd: parse('curfewEnd'),

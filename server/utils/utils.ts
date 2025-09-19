@@ -267,10 +267,7 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
   return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
 }
 
-function getSummaryMessage(prefix: string, message: string): string {
-  const formattedMessage = message.charAt(0).toLowerCase() + message.slice(1)
-  return `${prefix} ${formattedMessage}`
-}
+const lowercaseFirstLetter = (message: string): string => message.charAt(0).toLowerCase() + message.slice(1)
 
 export {
   convertToTitleCase,
@@ -303,5 +300,5 @@ export {
   isHdcLicence,
   formatAddressTitleCase,
   formatAddressLine,
-  getSummaryMessage,
+  lowercaseFirstLetter,
 }

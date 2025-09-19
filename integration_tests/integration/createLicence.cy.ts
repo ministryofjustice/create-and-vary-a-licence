@@ -3,6 +3,7 @@ import Page from '../pages/page'
 import IndexPage from '../pages'
 import { licenceConditions } from '../mockApis/licence'
 import { AdditionalCondition } from '../../server/@types/licenceApiClientTypes'
+import CurfewType from '../../server/enumeration/CurfewType'
 
 context('Create a licence', () => {
   const dates: string[] = []
@@ -75,7 +76,7 @@ context('Create a licence', () => {
         .nextCondition()
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio('Two curfews')
+        .selectRadio(CurfewType.TWO_CURFEWS)
         .addTwoCurfews(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')
@@ -265,7 +266,7 @@ context('Create a licence', () => {
         .nextCondition()
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio('Two curfews')
+        .selectRadio(CurfewType.TWO_CURFEWS)
         .addTwoCurfews(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')

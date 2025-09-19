@@ -25,7 +25,7 @@ import {
   cvlDateToDateShort,
   isVariation,
   isHdcLicence,
-  getSummaryMessage,
+  lowercaseFirstLetter,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -557,28 +557,20 @@ describe('isHdcLicence', () => {
   })
 })
 
-describe('getSummaryMessage', () => {
+describe('  lowercaseFirstLetter', () => {
   it('should lowercase the first character of the message and prepend the prefix', () => {
-    expect(getSummaryMessage('Error:', 'Something went wrong')).toBe('Error: something went wrong')
+    expect(lowercaseFirstLetter('Something went wrong')).toBe('something went wrong')
   })
 
   it('should handle messages that already start with a lowercase letter', () => {
-    expect(getSummaryMessage('Note:', 'already lowercase')).toBe('Note: already lowercase')
+    expect(lowercaseFirstLetter('already lowercase')).toBe('already lowercase')
   })
 
   it('should handle empty message string', () => {
-    expect(getSummaryMessage('Info:', '')).toBe('Info: ')
+    expect(lowercaseFirstLetter('')).toBe('')
   })
 
   it('should handle single character message', () => {
-    expect(getSummaryMessage('Alert:', 'X')).toBe('Alert: x')
-  })
-
-  it('should handle empty prefix', () => {
-    expect(getSummaryMessage('', 'Message')).toBe(' message')
-  })
-
-  it('should handle both prefix and message being empty', () => {
-    expect(getSummaryMessage('', '')).toBe(' ')
+    expect(lowercaseFirstLetter('X')).toBe('x')
   })
 })

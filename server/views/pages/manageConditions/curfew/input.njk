@@ -65,51 +65,52 @@
                         }) }}
                     {% endmacro %}
 
+                    {% macro renderCurfews(prefix, count, formResponses) %}
+                        {% set ordinals = ['First', 'Second', 'Third', 'Fourth', 'Fifth'] %}
+                        {% for i in range(1, count + 1) %}
+                            {% set suffix = '' if i === 1 else i %}
+                            {% set startId = prefix ~ 'CurfewStart' ~ suffix %}
+                            {% set endId = prefix ~ 'CurfewEnd' ~ suffix %}
+                            {% set labelPrefix = ordinals[i - 1] %}
+                            {{ renderTimePicker(startId, labelPrefix ~ ' curfew – enter the curfew start time', formResponses) }}
+                            {{ renderTimePicker(endId, labelPrefix ~ ' curfew – enter the curfew end time', formResponses) }}
+                        {% endfor %}
+                    {% endmacro %}
 
                     {% set oneCurfewHtml %}
-                        {{ renderTimePicker("oneCurfewStart", "Enter the curfew start time", formResponses) }}
-                        {{ renderTimePicker("oneCurfewEnd", "Enter the curfew end time", formResponses) }}
+                        {{ renderCurfews('one', 1, formResponses) }}
                     {% endset %}
 
                     {% set twoCurfewsHtml %}
-                        {{ renderTimePicker("twoCurfewStart", "First curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("twoCurfewEnd", "First curfew – enter the end time", formResponses) }}
-                        {{ renderTimePicker("twoCurfewStart2", "Second curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("twoCurfewEnd2", "Second curfew – enter the end time", formResponses) }}
+                        {{ renderCurfews('two', 2, formResponses) }}
                     {% endset %}
 
                     {% set threeCurfewsHtml %}
-                        {{ renderTimePicker("threeCurfewStart", "First curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewEnd", "First curfew – enter the end time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewStart2", "Second curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewEnd2", "Second curfew – enter the end time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewStart3", "Third curfew – enter the start time", formResponses) }}
-                        {{ renderTimePicker("threeCurfewEnd3", "Third curfew – enter the end time", formResponses) }}
+                        {{ renderCurfews('three', 3, formResponses) }}
                     {% endset %}
-
 
                     {% set options = [] %}
                     {% set options = [
                         {
-                            text: "One curfew",
-                            value: "One curfew",
-                            checked: selectedCurfew == "One curfew",
+                            text: curfewType.ONE_CURFEW,
+                            value: curfewType.ONE_CURFEW,
+                            checked: selectedCurfew == curfewType.ONE_CURFEW,
                             conditional: {
                                 html: oneCurfewHtml
                             }
                         },
                         {
-                            text: "Two curfews",
-                            value: "Two curfews",
-                            checked: selectedCurfew == "Two curfews",
+                            text: curfewType.TWO_CURFEWS,
+                            value: curfewType.TWO_CURFEWS,
+                            checked: selectedCurfew == curfewType.TWO_CURFEWS,
                             conditional: {
                                 html: twoCurfewsHtml
                             }
                         },
                         {
-                            text: "Three curfews",
-                            value: "Three curfews",
-                            checked: selectedCurfew == "Three curfews",
+                            text: curfewType.THREE_CURFEWS,
+                            value: curfewType.THREE_CURFEWS,
+                            checked: selectedCurfew == curfewType.THREE_CURFEWS,
                             conditional: {
                                 html: threeCurfewsHtml
                             }
