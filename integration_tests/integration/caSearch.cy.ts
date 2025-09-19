@@ -84,7 +84,7 @@ context('Search for a person', () => {
     searchPage.getRow(0).contains('1 Jul 2025')
     searchPage.getRow(1).contains('1 Aug 2025')
     searchPage.getRow(2).contains('2 Aug 2025')
-    // second click sorts ascending
+    // click to sort by ascending
     searchPage.clickSortByReleaseDate()
     searchPage.getRow(0).contains('2 Aug 2025')
     searchPage.getRow(1).contains('1 Aug 2025')
@@ -94,6 +94,18 @@ context('Search for a person', () => {
     searchPage.getRow(3).contains('1 May 2025')
     searchPage.getRow(4).contains('30 Apr 2025')
     searchPage.getRow(5).contains('29 Apr 2025')
+  })
+
+  it('should not convert case of search result text when different to that of user input', () => {
+    cy.task('stubGetCaSearchResults')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickViewAndPrintALicence()
+    const searchPage = caseloadPage.clickSearch('tEsT')
+    searchPage.getSearchHeading().contains('Search results for tEsT')
+    searchPage.getOffenderName().contains('Test')
+    searchPage.getOffenderName().should('not.have.value', 'tEsT')
   })
 
   it('should show attention needed tab when attention needed type cases present', () => {
