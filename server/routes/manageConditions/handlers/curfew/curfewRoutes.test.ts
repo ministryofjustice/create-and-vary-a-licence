@@ -6,6 +6,7 @@ import { SimpleTime } from '../../types'
 import { CURFEW_CONDITION_CODE } from '../../../../utils/conditionRoutes'
 import { AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 import LicenceType from '../../../../enumeration/licenceType'
+import CurfewType from '../../../../enumeration/CurfewType'
 
 jest.mock('../../../../services/licenceService')
 jest.mock('../../../../services/conditionService')
@@ -141,7 +142,7 @@ describe('Route handlers - Curfew routes', () => {
         additionalConditionCode: curfewInstance1.code,
         reviewPeriod: 'weekly',
         alternativeReviewPeriod: null,
-        numberOfCurfews: 'Two curfews',
+        numberOfCurfews: CurfewType.TWO_CURFEWS,
         curfewTimes: {
           twoCurfewStart: SimpleTime.fromString('01:00 am'),
           twoCurfewEnd: SimpleTime.fromString('02:00 am'),
@@ -149,6 +150,7 @@ describe('Route handlers - Curfew routes', () => {
           twoCurfewEnd2: SimpleTime.fromString('05:00 am'),
         },
         config: conditionConfig,
+        curfewType: CurfewType,
       })
     })
   })
@@ -194,11 +196,11 @@ describe('Route handlers - Curfew routes', () => {
     })
 
     const inputs = {
-      numberOfCurfews: 'Two curfews',
+      numberOfCurfews: CurfewType.TWO_CURFEWS,
       curfewStart: SimpleTime.fromString('01:00 am'),
       curfewEnd: SimpleTime.fromString('02:00 am'),
       reviewPeriod: 'monthly',
-      numberOfCurfews2: 'Two curfews',
+      numberOfCurfews2: CurfewType.TWO_CURFEWS,
       curfewStart2: SimpleTime.fromString('03:00 am'),
       curfewEnd2: SimpleTime.fromString('04:00 am'),
       reviewPeriod2: 'monthly',
@@ -233,7 +235,7 @@ describe('Route handlers - Curfew routes', () => {
       licenceService.addAdditionalCondition.mockResolvedValue(licenceCondition)
 
       const expectedSubmission = {
-        numberOfCurfews: 'Two curfews',
+        numberOfCurfews: CurfewType.TWO_CURFEWS,
         curfewStart: SimpleTime.fromString('03:00 am'),
         curfewEnd: SimpleTime.fromString('04:00 am'),
         reviewPeriod: 'monthly',
@@ -262,7 +264,7 @@ describe('Route handlers - Curfew routes', () => {
   describe('formatCurfewTimes', () => {
     it('should format one curfew correctly', () => {
       const input = {
-        numberOfCurfews: 'One curfew',
+        numberOfCurfews: CurfewType.ONE_CURFEW,
         curfewStart: '08:00 am',
         curfewEnd: '06:00 pm',
       }
@@ -277,7 +279,7 @@ describe('Route handlers - Curfew routes', () => {
 
     it('should format two curfews correctly', () => {
       const input = {
-        numberOfCurfews: 'Two curfews',
+        numberOfCurfews: CurfewType.TWO_CURFEWS,
         curfewStart: '08:00 am',
         curfewEnd: '10:00 pm',
         curfewStart2: '02:00 pm',
@@ -296,7 +298,7 @@ describe('Route handlers - Curfew routes', () => {
 
     it('should format three curfews correctly', () => {
       const input = {
-        numberOfCurfews: 'Three curfews',
+        numberOfCurfews: CurfewType.THREE_CURFEWS,
         curfewStart: '06:00 am',
         curfewEnd: '08:00 am',
         curfewStart2: '12:00 pm',
