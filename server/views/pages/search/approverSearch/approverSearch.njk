@@ -18,9 +18,9 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 {% if setApprovalNeededTab %}
-                    <p id="approval-needed-empty-state-content">No licence approval requests that match "{{ queryTerm }}". Try searching again.</p>
+                    <p id="approval-needed-empty-state-content">No licence approval requests that match '{{ queryTerm }}'. Try searching again.</p>
                 {% else %}
-                    <p id="recently-approved-empty-state-content">No recently approved licences that match "{{ queryTerm }}". Try searching again.</p>
+                    <p id="recently-approved-empty-state-content">No recently approved licences that match '{{ queryTerm }}'. Try searching again.</p>
                     <p>If someone’s release date was more than 14 days ago, you will no longer be able to see their licence in this service.</p>
                 {% endif %}
                 <p class="govuk-body">
@@ -303,7 +303,7 @@
                     <div id="search-hint" class="govuk-hint moj-search__hint approver-caseload-search">
                     Search by name, prison number or probation practitioner
                     </div>
-                    <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint">
+                    <input class="govuk-input moj-search__input" id="search" name="queryTerm" value="{{ queryTerm }}" aria-describedby="search-hint">
                 </div>
                 <button class="govuk-button moj-search__button " data-module="govuk-button">
                     Search
