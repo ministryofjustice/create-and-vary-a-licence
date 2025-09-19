@@ -18,6 +18,10 @@ window.onload = function () {
   }
 }
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}
+
 function highlightTextInDOM(targetText, searchResult) {
   const walker = document.createTreeWalker(
     searchResult,
@@ -42,8 +46,11 @@ function highlightTextInDOM(targetText, searchResult) {
 
   for (const textNode of nodesToUpdate) {
     const span = document.createElement('span')
-    const regEx = new RegExp(targetText, 'ig')
-    span.innerHTML = textNode.nodeValue.replaceAll(regEx, '<mark>' + targetText + '</mark>')
+    const regEx = new RegExp(`(${escapeRegExp(targetText)})`, 'ig')
+    span.innerHTML = textNode.nodeValue.replaceAll(
+      regEx,
+      '<mark class="highlight-search-term"><strong>$1</strong></mark>'
+    )
     textNode.parentNode?.replaceChild(span, textNode)
   }
 }

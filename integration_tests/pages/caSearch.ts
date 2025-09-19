@@ -35,6 +35,10 @@ export default class CaSearchPage extends Page {
     return cy.get(this.probationTabTitle)
   }
 
+  getOffenderName = () => {
+    return cy.get(this.licenceLinkId)
+  }
+
   getAttentionNeededTabTitle = () => {
     return cy.get(this.attentionNeededTabTitle)
   }

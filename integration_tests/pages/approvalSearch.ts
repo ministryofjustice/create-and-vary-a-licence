@@ -37,6 +37,10 @@ export default class ApprovalSearchPage extends Page {
     return cy.get(this.recentlyApprovedTabTitle)
   }
 
+  getOffenderName = () => {
+    return cy.get(this.licenceLinkId)
+  }
+
   getReleaseDate = n => {
     return cy.get(this.releaseDate).eq(n)
   }
