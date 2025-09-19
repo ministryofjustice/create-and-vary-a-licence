@@ -61,89 +61,32 @@ export default class CurfewRoutes {
     const inputs = req.body
 
     const numberOfCurfews = inputs.numberOfCurfews as CurfewType
-
-    const {
-      oneCurfewStart,
-      oneCurfewEnd,
-      twoCurfewStart,
-      twoCurfewEnd,
-      twoCurfewStart2,
-      twoCurfewEnd2,
-      threeCurfewStart,
-      threeCurfewEnd,
-      threeCurfewStart2,
-      threeCurfewEnd2,
-      threeCurfewStart3,
-      threeCurfewEnd3,
-      reviewPeriod,
-      alternativeReviewPeriod,
-    } = inputs
+    const { reviewPeriod, alternativeReviewPeriod } = inputs
 
     await this.licenceService.deleteAdditionalConditionsByCode([conditionCode], licence.id, user)
 
-    if (numberOfCurfews === CurfewType.ONE_CURFEW) {
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        oneCurfewStart,
-        oneCurfewEnd,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
+    const curfewMap: Record<CurfewType, Array<[SimpleTime, SimpleTime]>> = {
+      [CurfewType.ONE_CURFEW]: [[inputs.oneCurfewStart, inputs.oneCurfewEnd]],
+      [CurfewType.TWO_CURFEWS]: [
+        [inputs.twoCurfewStart, inputs.twoCurfewEnd],
+        [inputs.twoCurfewStart2, inputs.twoCurfewEnd2],
+      ],
+      [CurfewType.THREE_CURFEWS]: [
+        [inputs.threeCurfewStart, inputs.threeCurfewEnd],
+        [inputs.threeCurfewStart2, inputs.threeCurfewEnd2],
+        [inputs.threeCurfewStart3, inputs.threeCurfewEnd3],
+      ],
     }
 
-    if (numberOfCurfews === CurfewType.TWO_CURFEWS) {
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        twoCurfewStart,
-        twoCurfewEnd,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        twoCurfewStart2,
-        twoCurfewEnd2,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-    }
+    const curfews = curfewMap[numberOfCurfews] || []
 
-    if (numberOfCurfews === CurfewType.THREE_CURFEWS) {
+    for await (const [start, end] of curfews) {
       await this.addCurfewCondition(
         licence,
         user,
         conditionCode,
-        threeCurfewStart,
-        threeCurfewEnd,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        threeCurfewStart2,
-        threeCurfewEnd2,
-        numberOfCurfews,
-        reviewPeriod,
-        alternativeReviewPeriod,
-      )
-      await this.addCurfewCondition(
-        licence,
-        user,
-        conditionCode,
-        threeCurfewStart3,
-        threeCurfewEnd3,
+        start,
+        end,
         numberOfCurfews,
         reviewPeriod,
         alternativeReviewPeriod,
