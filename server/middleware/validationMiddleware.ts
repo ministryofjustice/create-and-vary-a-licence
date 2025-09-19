@@ -58,12 +58,12 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         const constraintKeys = Object.keys(constraints)
         const lastConstraintKey = constraintKeys[constraintKeys.length - 1]
         const message = constraints[lastConstraintKey]
-        const prefix = contexts?.[lastConstraintKey]?.summaryPrefix?.(lowercaseFirstLetter(message)) || ''
+        const summaryMessage = contexts?.[lastConstraintKey]?.summaryPrefix?.(lowercaseFirstLetter(message)) || message
 
         return {
           field: error.property,
           message,
-          summaryMessage: prefix || message,
+          summaryMessage,
         }
       }
 
