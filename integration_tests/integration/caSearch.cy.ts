@@ -96,6 +96,18 @@ context('Search for a person', () => {
     searchPage.getRow(5).contains('29 Apr 2025')
   })
 
+  it('should not convert case of search result text when different to that of user input', () => {
+    cy.task('stubGetCaSearchResults')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickViewAndPrintALicence()
+    const searchPage = caseloadPage.clickSearch('tEsT')
+    searchPage.getSearchHeading().contains('Search results for tEsT')
+    searchPage.getOffenderName().contains('Test')
+    searchPage.getOffenderName().should('not.have.value', 'tEsT')
+  })
+
   it('should show attention needed tab when attention needed type cases present', () => {
     cy.task('stubGetCaSearchResults')
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
