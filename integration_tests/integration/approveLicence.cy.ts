@@ -258,15 +258,15 @@ context('Approve a licence', () => {
     })
   })
 
-  it('should show correct sort default sort icons on tabs', () => {
+  it('should show correct default sort icons on tabs', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.task('stubGetRecentlyApprovedCaseload')
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
-    approvalCasesPage.checkColumnSort('Release date', 'ascending')
+    approvalCasesPage.checkColumnSortIcon('Release date', 'ascending')
     approvalCasesPage.clickRecentlyApprovedLink()
-    approvalCasesPage.checkColumnSort('Approved on', 'descending')
+    approvalCasesPage.checkColumnSortIcon('Approved on', 'descending')
     approvalCasesPage.signOut().click()
   })
 })
