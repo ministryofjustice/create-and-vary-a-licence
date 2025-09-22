@@ -258,7 +258,7 @@ context('Approve a licence', () => {
     })
   })
 
-  it('should show correct sort icons on licence approve tabs', () => {
+  it('should show correct sort default sort icons on tabs', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.task('stubGetRecentlyApprovedCaseload')
     cy.signIn()
