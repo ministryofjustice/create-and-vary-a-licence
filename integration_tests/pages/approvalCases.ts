@@ -29,6 +29,10 @@ export default class ApprovalCasesPage extends Page {
     return Page.verifyOnPage(ApprovalViewPage)
   }
 
+  checkColumnSort = (columnName: string, expectedSort: 'ascending' | 'descending' | 'none'): void => {
+    cy.contains('th[scope="col"] button', columnName).parent('th').should('have.attr', 'aria-sort', expectedSort)
+  }
+
   clickChangeLocationsLink = (): ChangeLocationPage => {
     cy.get(this.changeLocationsLink).click()
     return Page.verifyOnPage(ChangeLocationPage)
