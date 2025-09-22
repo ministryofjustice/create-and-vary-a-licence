@@ -5,6 +5,7 @@ import ValidCurfewTime from '../../../../validators/curfewTimeValidator'
 import CurfewType from '../../../../enumeration/CurfewType'
 import { lowercaseFirstLetter } from '../../../../utils/utils'
 
+const prepend = (prefix: string) => (message: string) => `${prefix} ${lowercaseFirstLetter(message)}`
 class CurfewTerms {
   @Expose()
   @IsNotEmpty({ message: 'Select a number of curfews' })
@@ -17,7 +18,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.ONE_CURFEW)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the first curfew,'),
     },
   })
   oneCurfewStart: SimpleTime
@@ -28,7 +29,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.ONE_CURFEW)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the first curfew,'),
     },
   })
   oneCurfewEnd: SimpleTime
@@ -40,7 +41,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.TWO_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the first curfew,'),
     },
   })
   twoCurfewStart: SimpleTime
@@ -51,7 +52,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.TWO_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the first curfew,'),
     },
   })
   twoCurfewEnd: SimpleTime
@@ -62,7 +63,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.TWO_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the second curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the second curfew,'),
     },
   })
   twoCurfewStart2: SimpleTime
@@ -73,7 +74,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.TWO_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the second curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the second curfew,'),
     },
   })
   twoCurfewEnd2: SimpleTime
@@ -85,7 +86,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the first curfew,'),
     },
   })
   threeCurfewStart: SimpleTime
@@ -96,7 +97,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the first curfew,'),
     },
   })
   threeCurfewEnd: SimpleTime
@@ -107,7 +108,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the second curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the second curfew,'),
     },
   })
   threeCurfewStart2: SimpleTime
@@ -118,7 +119,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the second curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the second curfew,'),
     },
   })
   threeCurfewEnd2: SimpleTime
@@ -129,7 +130,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the third curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the third curfew,'),
     },
   })
   threeCurfewStart3: SimpleTime
@@ -140,7 +141,7 @@ class CurfewTerms {
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
     context: {
-      summaryMessageBuilder: (fieldMessage: string) => `For the third curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+      summaryMessageBuilder: prepend('For the third curfew,'),
     },
   })
   threeCurfewEnd3: SimpleTime
