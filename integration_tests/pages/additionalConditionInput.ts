@@ -135,30 +135,38 @@ export default class AdditionalConditionsInputPage extends Page {
     return Page.verifyOnPage(CheckAnswersPage)
   }
 
-  addFirstCurfew = (numberOfCurfews: number): AdditionalConditionsInputPage => {
+  addOneCurfew = (numberOfCurfews: number): AdditionalConditionsInputPage => {
     const parentSelector = `#conditional-numberOfCurfews${numberOfCurfews === 1 ? '' : `-${numberOfCurfews}`}`
 
-    cy.get(parentSelector).find(`#curfewStart-hour`).type('7')
-    cy.get(parentSelector).find(`#curfewStart-minute`).type('30')
-    cy.get(parentSelector).find(`#curfewStart-ampm`).select('am')
+    cy.get(parentSelector).find(`#oneCurfewStart-hour`).type('7')
+    cy.get(parentSelector).find(`#oneCurfewStart-minute`).type('30')
+    cy.get(parentSelector).find(`#oneCurfewStart-ampm`).select('am')
 
-    cy.get(parentSelector).find(`#curfewEnd-hour`).type('8')
-    cy.get(parentSelector).find(`#curfewEnd-minute`).type('30')
-    cy.get(parentSelector).find(`#curfewEnd-ampm`).select('am')
+    cy.get(parentSelector).find(`#oneCurfewEnd-hour`).type('8')
+    cy.get(parentSelector).find(`#oneCurfewEnd-minute`).type('30')
+    cy.get(parentSelector).find(`#oneCurfewEnd-ampm`).select('am')
 
     return this
   }
 
-  addSecondCurfew = (numberOfCurfews: number): AdditionalConditionsInputPage => {
+  addTwoCurfews = (numberOfCurfews: number): AdditionalConditionsInputPage => {
     const parentSelector = `#conditional-numberOfCurfews${numberOfCurfews === 1 ? '' : `-${numberOfCurfews}`}`
 
-    cy.get(parentSelector).find(`#curfewStart2-hour`).type('5')
-    cy.get(parentSelector).find(`#curfewStart2-minute`).type('30')
-    cy.get(parentSelector).find(`#curfewStart2-ampm`).select('pm')
+    cy.get(parentSelector).find(`#twoCurfewStart-hour`).type('7')
+    cy.get(parentSelector).find(`#twoCurfewStart-minute`).type('30')
+    cy.get(parentSelector).find(`#twoCurfewStart-ampm`).select('am')
 
-    cy.get(parentSelector).find(`#curfewEnd2-hour`).type('6')
-    cy.get(parentSelector).find(`#curfewEnd2-minute`).type('30')
-    cy.get(parentSelector).find(`#curfewEnd2-ampm`).select('pm')
+    cy.get(parentSelector).find(`#twoCurfewEnd-hour`).type('8')
+    cy.get(parentSelector).find(`#twoCurfewEnd-minute`).type('30')
+    cy.get(parentSelector).find(`#twoCurfewEnd-ampm`).select('am')
+
+    cy.get(parentSelector).find(`#twoCurfewStart2-hour`).type('5')
+    cy.get(parentSelector).find(`#twoCurfewStart2-minute`).type('30')
+    cy.get(parentSelector).find(`#twoCurfewStart2-ampm`).select('pm')
+
+    cy.get(parentSelector).find(`#twoCurfewEnd2-hour`).type('6')
+    cy.get(parentSelector).find(`#twoCurfewEnd2-minute`).type('30')
+    cy.get(parentSelector).find(`#twoCurfewEnd2-ampm`).select('pm')
 
     return this
   }

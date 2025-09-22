@@ -6,6 +6,7 @@ import { SimpleTime } from '../../types'
 import { CURFEW_CONDITION_CODE } from '../../../../utils/conditionRoutes'
 import { AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 import LicenceType from '../../../../enumeration/licenceType'
+import CurfewType from '../../../../enumeration/CurfewType'
 
 jest.mock('../../../../services/licenceService')
 jest.mock('../../../../services/conditionService')
@@ -36,13 +37,13 @@ describe('Route handlers - Curfew routes', () => {
       {
         id: 2,
         field: 'curfewStart',
-        value: SimpleTime.fromString('01:00 am'),
+        value: '01:00 am',
         sequence: 1,
       },
       {
         id: 3,
         field: 'curfewEnd',
-        value: SimpleTime.fromString('02:00 am'),
+        value: '02:00 am',
         sequence: 2,
       },
       {
@@ -66,13 +67,13 @@ describe('Route handlers - Curfew routes', () => {
       {
         id: 2,
         field: 'curfewStart',
-        value: SimpleTime.fromString('04:00 am'),
+        value: '04:00 am',
         sequence: 1,
       },
       {
         id: 3,
         field: 'curfewEnd',
-        value: SimpleTime.fromString('05:00 am'),
+        value: '05:00 am',
         sequence: 2,
       },
       {
@@ -134,23 +135,22 @@ describe('Route handlers - Curfew routes', () => {
 
     it('should format multiple instances of the condition into a single set of form values', async () => {
       res.locals.licence.additionalLicenceConditions = [curfewInstance1, curfewInstance2] as AdditionalCondition[]
-      const formResponses = {
-        numberOfCurfews: 'Two curfews',
-        curfewStart: SimpleTime.fromString('01:00 am'),
-        curfewEnd: SimpleTime.fromString('02:00 am'),
-        reviewPeriod: 'weekly',
-        numberOfCurfews2: 'Two curfews',
-        curfewStart2: SimpleTime.fromString('04:00 am'),
-        curfewEnd2: SimpleTime.fromString('05:00 am'),
-        reviewPeriod2: 'weekly',
-      }
 
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/manageConditions/curfew/input', {
-        additionalCondition: curfewInstance1,
+        additionalConditionCode: curfewInstance1.code,
+        reviewPeriod: 'weekly',
+        alternativeReviewPeriod: null,
+        numberOfCurfews: CurfewType.TWO_CURFEWS,
+        curfewTimes: {
+          twoCurfewStart: SimpleTime.fromString('01:00 am'),
+          twoCurfewEnd: SimpleTime.fromString('02:00 am'),
+          twoCurfewStart2: SimpleTime.fromString('04:00 am'),
+          twoCurfewEnd2: SimpleTime.fromString('05:00 am'),
+        },
         config: conditionConfig,
-        formResponses,
+        curfewType: CurfewType,
       })
     })
   })
@@ -196,14 +196,15 @@ describe('Route handlers - Curfew routes', () => {
     })
 
     const inputs = {
-      numberOfCurfews: 'Two curfews',
+      numberOfCurfews: CurfewType.TWO_CURFEWS,
       curfewStart: SimpleTime.fromString('01:00 am'),
       curfewEnd: SimpleTime.fromString('02:00 am'),
       reviewPeriod: 'monthly',
-      numberOfCurfews2: 'Two curfews',
+      numberOfCurfews2: CurfewType.TWO_CURFEWS,
       curfewStart2: SimpleTime.fromString('03:00 am'),
       curfewEnd2: SimpleTime.fromString('04:00 am'),
       reviewPeriod2: 'monthly',
+      alternativeReviewPeriod: '',
     }
 
     it('adds an instance of the curfew condition to the licence', async () => {
@@ -222,7 +223,9 @@ describe('Route handlers - Curfew routes', () => {
         CURFEW_CONDITION_CODE,
         inputs.curfewStart2,
         inputs.curfewEnd2,
-        inputs,
+        inputs.numberOfCurfews,
+        inputs.reviewPeriod,
+        inputs.alternativeReviewPeriod,
       )
       expect(licenceService.addAdditionalCondition).toHaveBeenCalledWith('1', 'AP', request, res.locals.user)
     })
@@ -232,11 +235,11 @@ describe('Route handlers - Curfew routes', () => {
       licenceService.addAdditionalCondition.mockResolvedValue(licenceCondition)
 
       const expectedSubmission = {
-        numberOfCurfews: 'Two curfews',
+        numberOfCurfews: CurfewType.TWO_CURFEWS,
         curfewStart: SimpleTime.fromString('03:00 am'),
         curfewEnd: SimpleTime.fromString('04:00 am'),
         reviewPeriod: 'monthly',
-        alternativeReviewPeriod: undefined,
+        alternativeReviewPeriod: null,
       } as Record<string, string | SimpleTime>
 
       await handler.addCurfewCondition(
@@ -245,7 +248,9 @@ describe('Route handlers - Curfew routes', () => {
         CURFEW_CONDITION_CODE,
         inputs.curfewStart2,
         inputs.curfewEnd2,
-        inputs,
+        inputs.numberOfCurfews,
+        inputs.reviewPeriod,
+        inputs.alternativeReviewPeriod,
       )
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
@@ -253,6 +258,77 @@ describe('Route handlers - Curfew routes', () => {
         expectedSubmission,
         res.locals.user,
       )
+    })
+  })
+
+  describe('formatCurfewTimes', () => {
+    it('should format one curfew correctly', () => {
+      const input = {
+        numberOfCurfews: CurfewType.ONE_CURFEW,
+        curfewStart: '08:00 am',
+        curfewEnd: '06:00 pm',
+      }
+
+      const result = handler.formatCurfewTimes(input)
+
+      expect(result).toEqual({
+        oneCurfewStart: SimpleTime.fromString('08:00 am'),
+        oneCurfewEnd: SimpleTime.fromString('06:00 pm'),
+      })
+    })
+
+    it('should format two curfews correctly', () => {
+      const input = {
+        numberOfCurfews: CurfewType.TWO_CURFEWS,
+        curfewStart: '08:00 am',
+        curfewEnd: '10:00 pm',
+        curfewStart2: '02:00 pm',
+        curfewEnd2: '04:00 pm',
+      }
+
+      const result = handler.formatCurfewTimes(input)
+
+      expect(result).toEqual({
+        twoCurfewStart: SimpleTime.fromString('08:00 am'),
+        twoCurfewEnd: SimpleTime.fromString('10:00 pm'),
+        twoCurfewStart2: SimpleTime.fromString('02:00 pm'),
+        twoCurfewEnd2: SimpleTime.fromString('04:00 pm'),
+      })
+    })
+
+    it('should format three curfews correctly', () => {
+      const input = {
+        numberOfCurfews: CurfewType.THREE_CURFEWS,
+        curfewStart: '06:00 am',
+        curfewEnd: '08:00 am',
+        curfewStart2: '12:00 pm',
+        curfewEnd2: '02:00 pm',
+        curfewStart3: '06:00 pm',
+        curfewEnd3: '08:00 pm',
+      }
+
+      const result = handler.formatCurfewTimes(input)
+
+      expect(result).toEqual({
+        threeCurfewStart: SimpleTime.fromString('06:00 am'),
+        threeCurfewEnd: SimpleTime.fromString('08:00 am'),
+        threeCurfewStart2: SimpleTime.fromString('12:00 pm'),
+        threeCurfewEnd2: SimpleTime.fromString('02:00 pm'),
+        threeCurfewStart3: SimpleTime.fromString('06:00 pm'),
+        threeCurfewEnd3: SimpleTime.fromString('08:00 pm'),
+      })
+    })
+
+    it('should return null for unknown curfew type', () => {
+      const input = {
+        numberOfCurfews: 'Unknown',
+        curfewStart: '08:00',
+        curfewEnd: '18:00',
+      }
+
+      const result = handler.formatCurfewTimes(input)
+
+      expect(result).toBeNull()
     })
   })
 })
