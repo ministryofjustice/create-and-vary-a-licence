@@ -3,6 +3,7 @@ import { IsNotEmpty, Validate, ValidateIf } from 'class-validator'
 import { SimpleTime } from '..'
 import ValidCurfewTime from '../../../../validators/curfewTimeValidator'
 import CurfewType from '../../../../enumeration/CurfewType'
+import { lowercaseFirstLetter } from '../../../../utils/utils'
 
 class CurfewTerms {
   @Expose()
@@ -15,7 +16,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.ONE_CURFEW ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.ONE_CURFEW)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the first curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   oneCurfewStart: SimpleTime
 
@@ -24,7 +27,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.ONE_CURFEW ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.ONE_CURFEW)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the first curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   oneCurfewEnd: SimpleTime
 
@@ -34,7 +39,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.TWO_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.TWO_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the first curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   twoCurfewStart: SimpleTime
 
@@ -43,7 +50,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.TWO_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.TWO_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the first curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   twoCurfewEnd: SimpleTime
 
@@ -52,7 +61,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.TWO_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.TWO_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the second curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the second curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   twoCurfewStart2: SimpleTime
 
@@ -61,7 +72,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.TWO_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.TWO_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the second curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the second curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   twoCurfewEnd2: SimpleTime
 
@@ -71,7 +84,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.THREE_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the first curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   threeCurfewStart: SimpleTime
 
@@ -80,7 +95,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.THREE_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the first curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the first curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   threeCurfewEnd: SimpleTime
 
@@ -89,7 +106,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.THREE_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the second curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the second curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   threeCurfewStart2: SimpleTime
 
@@ -98,7 +117,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.THREE_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the second curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the second curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   threeCurfewEnd2: SimpleTime
 
@@ -107,7 +128,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.THREE_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the third curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the third curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   threeCurfewStart3: SimpleTime
 
@@ -116,7 +139,9 @@ class CurfewTerms {
   @Transform(({ obj, value }) => (obj.numberOfCurfews === CurfewType.THREE_CURFEWS ? value : undefined))
   @ValidateIf(o => o.numberOfCurfews === CurfewType.THREE_CURFEWS)
   @Validate(ValidCurfewTime, {
-    context: { summaryPrefix: (fieldMessage: string) => `For the third curfew, ${fieldMessage}` },
+    context: {
+      summaryMessageBuilder: (fieldMessage: string) => `For the third curfew, ${lowercaseFirstLetter(fieldMessage)}`,
+    },
   })
   threeCurfewEnd3: SimpleTime
 

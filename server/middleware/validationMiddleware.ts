@@ -2,7 +2,6 @@ import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
 import ConditionService from '../services/conditionService'
-import { lowercaseFirstLetter } from '../utils/utils'
 
 export type FieldValidationError = {
   field: string
@@ -10,12 +9,12 @@ export type FieldValidationError = {
   summaryMessage?: string
 }
 
-type SummaryPrefix = {
-  summaryPrefix: (message: string) => string
+type ValidationContextValue = {
+  summaryMessageBuilder: (message: string) => string
 }
 
 type ValidationContext = {
-  [type: string]: SummaryPrefix
+  [type: string]: ValidationContextValue
 }
 
 function validationMiddleware(conditionService: ConditionService, type?: new () => object): RequestHandler {
@@ -58,7 +57,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         const constraintKeys = Object.keys(constraints)
         const lastConstraintKey = constraintKeys[constraintKeys.length - 1]
         const message = constraints[lastConstraintKey]
-        const summaryMessage = contexts?.[lastConstraintKey]?.summaryPrefix?.(lowercaseFirstLetter(message)) || message
+        const summaryMessage = contexts?.[lastConstraintKey]?.summaryMessageBuilder?.(message) || message
 
         return {
           field: error.property,
