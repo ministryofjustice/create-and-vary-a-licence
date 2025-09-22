@@ -281,7 +281,7 @@
             id: 'nomis-id-' + loop.index,
             "data-sort-value": offender.prisonerNumber
         },
-        text: offender.prisonerNumber
+        html: '<span class="search-highlight">' + offender.prisonerNumber  + '</span>'
     },
     {
         attributes: {
