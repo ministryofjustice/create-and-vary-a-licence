@@ -158,6 +158,18 @@ export function registerNunjucks(app?: express.Express): Environment {
     return times[index]
   })
 
+  njkEnv.addFilter('merge', (obj1, obj2) => {
+    return { ...obj1, ...obj2 }
+  })
+
+  njkEnv.addFilter('getLastNonEmpty', value => {
+    if (Array.isArray(value)) {
+      const nonEmpty = value.filter(v => v !== '')
+      return nonEmpty.length > 0 ? nonEmpty[nonEmpty.length - 1] : ''
+    }
+    return value
+  })
+
   njkEnv.addFilter('getValueFromAddress', (formValues: string[], property: keyof Address, index = 0) => {
     const addresses = formValues.map(value => (typeof value === 'string' ? Address.fromString(value) : value))
     return addresses[index] ? addresses[index][property] : ''
@@ -249,6 +261,27 @@ export function registerNunjucks(app?: express.Express): Environment {
       ? additionalCondition.data.filter(item => item.field === inputName).map(item => item.value)
       : undefined
   })
+
+  njkEnv.addGlobal(
+    'lookupCurfewConditionValue',
+    (additionalCondition: AdditionalCondition | AdditionalCondition[], inputName: string): string[] => {
+      if (!additionalCondition) return []
+
+      const allData = Array.isArray(additionalCondition)
+        ? additionalCondition.flatMap(condition => condition.data)
+        : additionalCondition.data
+
+      const match = inputName.match(/^([a-zA-Z]+)(\d+)?$/)
+      if (!match) return []
+
+      const [, baseField, indexStr] = match
+      const index = indexStr ? parseInt(indexStr, 10) - 1 : 0
+
+      const matchingValues = allData.filter(item => item.field === baseField).map(item => item.value)
+
+      return matchingValues[index] ? [String(matchingValues[index])] : []
+    },
+  )
 
   njkEnv.addGlobal(
     'additionalConditionRow',

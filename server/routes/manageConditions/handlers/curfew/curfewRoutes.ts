@@ -31,16 +31,11 @@ export default class CurfewRoutes {
       )
     }
 
-    const formResponses = Object.fromEntries(
-      conditionInstances.flatMap((instance, index) =>
-        instance.data.map(conditionData => {
-          const key = index === 0 ? conditionData.field : `${conditionData.field}${index + 1}`
-          return [key, conditionData.value]
-        }),
-      ),
-    )
-
-    return res.render('pages/manageConditions/curfew/input', { additionalCondition, config, formResponses })
+    return res.render('pages/manageConditions/curfew/input', {
+      additionalCondition: conditionInstances,
+      additionalConditionCode: conditionCode,
+      config,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

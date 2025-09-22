@@ -2,7 +2,7 @@ import { templateRenderer } from '../utils/__testutils/templateTestUtils'
 
 describe('View Partials - Form builder', () => {
   const template =
-    '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken)}}'
+    '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder({licenceId: licenceId,config: config,additionalCondition: additionalCondition,validationErrors: validationErrors,formResponses: formResponses,csrfToken: csrfToken,isCurfewField: isCurfewField}) }}'
 
   const render = templateRenderer(template)
 
@@ -346,5 +346,70 @@ describe('View Partials - Form builder', () => {
     expect($('.govuk-form-group').length).toBe(1)
     expect($('.govuk-label').text().trim()).toBe('label for file upload')
     expect($('.govuk-file-upload').length).toBe(1)
+  })
+
+  it('should build a conditional reveal input with timepicker correctly when isCurfewField is true', () => {
+    const $ = render({
+      formResponses: [],
+      additionalCondition: {
+        data: [],
+      },
+      config: {
+        inputs: [
+          {
+            type: 'radio',
+            label: 'Choose a time slot',
+            name: 'radioWithTimepicker',
+            options: [
+              {
+                value: 'day',
+              },
+              {
+                value: 'night',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'timePicker',
+                      label: 'Select time',
+                      name: 'nightTime',
+                      isCurfewField: false,
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      },
+      csrfToken: 'not-real',
+      isCurfewField: true,
+    })
+
+    // Check radio group
+    expect($('.govuk-fieldset__legend').first().text().trim()).toBe('Choose a time slot')
+    expect($('.govuk-radios__item').length).toBe(2)
+    expect($('.govuk-radios__item:nth-child(1) > label').text().trim()).toBe('day')
+    expect($('.govuk-radios__item:nth-child(2) > label').text().trim()).toBe('night')
+
+    // Check conditional reveal container for second radio option
+    const conditional = $('#conditional-radioWithTimepicker-2')
+    expect(conditional.length).toBe(1)
+
+    // Check timePicker structure inside conditional
+    expect(conditional.find('.govuk-date-input').length).toBe(1)
+    expect(conditional.find('.govuk-date-input').attr('id')).toBe('nightTime')
+
+    // Check legend and hint
+    expect(conditional.find('legend').text().trim()).toBe('Select time')
+    expect(conditional.find(`#nightTime-hint`).text().trim()).toBe('For example, 9:30am or 2:55pm')
+
+    // Check input fields and labels
+    expect(conditional.find(`#nightTime-hour`).length).toBe(1)
+    expect(conditional.find(`#nightTime-minute`).length).toBe(1)
+    expect(conditional.find(`#nightTime-ampm`).length).toBe(1)
+
+    expect(conditional.find(`label[for="nightTime-hour"]`).text().trim()).toBe('Hour')
+    expect(conditional.find(`label[for="nightTime-minute"]`).text().trim()).toBe('Minute')
+    expect(conditional.find(`label[for="nightTime-ampm"]`).text().trim()).toBe('am or pm')
   })
 })
