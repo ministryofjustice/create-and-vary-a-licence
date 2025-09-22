@@ -49,7 +49,7 @@
                 <p>If you think someone’s licence is missing, tell us by <a id="serviceNowUrl" class="govuk-link" href="{{serviceNowUrl}}">filling in a support request form.</a></p>
                 <p class="govuk-body">
                     {{ govukButton({
-                        text: "Return to caselist",
+                        text: "Return to case list",
                         classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
                         href: backLink,
                         attributes: { 'data-qa': 'return-to-caselist' }
@@ -281,7 +281,7 @@
             id: 'nomis-id-' + loop.index,
             "data-sort-value": offender.prisonerNumber
         },
-        text: offender.prisonerNumber
+        html: '<span class="search-highlight">' + offender.prisonerNumber  + '</span>'
     },
     {
         attributes: {

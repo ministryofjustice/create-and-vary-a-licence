@@ -103,6 +103,19 @@ context('Search for a person', () => {
     searchPage.getApprovalDate(2).contains('10 Apr 2023')
   })
 
+  it('should not convert case of search result text when different to that of user input', () => {
+    cy.task('stubGetPrisonApproverSearchResults')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.clickSearch('tEsT')
+    const searchPage = Page.verifyOnPage(ApprovalSearchPage)
+    searchPage.getSearchHeading().contains('Search results for tEsT')
+    searchPage.getOffenderName().contains('Test')
+    searchPage.getOffenderName().should('not.have.value', 'tEsT')
+  })
+
   it("should not show caseload information because doesn't have multiple caseloads", () => {
     cy.task('stubGetPrisonApproverSearchApprovalNeededResult')
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)

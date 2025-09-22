@@ -196,7 +196,6 @@ export default {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
   },
   showWhatsNewBanner: get('SHOW_WHATS_NEW_BANNER', 'false', requiredInProduction) === 'true',
-  showWhatsNewHelpAlert: get('SHOW_WHATS_NEW_HELP_ALERT', 'false', requiredInProduction) === 'true',
   fridayReleasePolicy: get(
     'FRIDAY_RELEASE_POLICY',
     'https://www.gov.uk/government/publications/discretionary-fridaypre-bank-holiday-release-scheme-policy-framework',
@@ -208,6 +207,7 @@ export default {
   getAcoCaseloadFromBackEnd: get('ACO_CASELOAD_BACKEND_ENABLED', 'false', requiredInProduction) === 'true',
   caNewSearchEnabled: get('CA_NEW_SEARCH_ENABLED', 'false', requiredInProduction) === 'true',
   approverNewSearchEnabled: get('APPROVER_NEW_SEARCH_ENABLED', 'false', requiredInProduction) === 'true',
+  pduHeadNewSearchEnabled: get('PDU_HEAD_NEW_SEARCH_ENABLED', 'false', requiredInProduction) === 'true',
   dprReportingEnabled: get('SHOW_DPR_REPORTING', 'false', requiredInProduction) === 'true',
   postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
   recallsEnabled: get('RECALLS_ENABLED', 'false', requiredInProduction) === 'true',

@@ -268,7 +268,7 @@ context('View and print licence', () => {
     const viewLicencePage: ViewALicencePage = viewCasesList.clickALicence()
 
     viewLicencePage.checkTelephoneNotEntered()
-    viewLicencePage.checkAlternativeTelephoneLinkDoesNotExist()
+    viewLicencePage.checkAlternativeTelephoneLinkDoesExist()
     viewLicencePage.checkAlternativeTelephoneNotEntered()
   })
 
