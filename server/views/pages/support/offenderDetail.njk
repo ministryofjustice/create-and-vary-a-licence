@@ -8,6 +8,10 @@
 {% set backLinkHref = "/support/offender-search" %}
 {% set hideLicenceBanner = true %}
 
+{% set redirectPath = "/prisoner/" + prisonerDetail.prisonerNumber %}
+{% set returnPath = "/support/offender/" + prisonerDetail.prisonerNumber + "/detail" %}
+{% set dpsBackLink = dpsUrl+ "/save-backlink?service=" + serviceName + "&returnPath=" + returnPath + "&redirectPath=" + redirectPath %}
+
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -35,7 +39,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Prison number</th>
-                        <td class="govuk-table__cell">{{ prisonerDetail.prisonerNumber }}</td>
+                        <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="{{dpsBackLink}}">{{ prisonerDetail.prisonerNumber }}</a></td>
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">CRN</th>
@@ -203,6 +207,10 @@
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">PED</th>
                         <td class="govuk-table__cell">{{ prisonerDetail.paroleEligibilityDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">APD</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.actualParoleDate }}</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">Determinate</th>
