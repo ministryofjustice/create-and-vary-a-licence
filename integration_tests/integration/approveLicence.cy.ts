@@ -267,6 +267,7 @@ context('Approve a licence', () => {
     approvalCasesPage.checkColumnSortIcon('Release date', 'ascending')
     approvalCasesPage.clickRecentlyApprovedLink()
     approvalCasesPage.checkColumnSortIcon('Approved on', 'descending')
+    approvalCasesPage.checkColumnSortIcon('Release date', 'none')
     approvalCasesPage.signOut().click()
   })
 })
