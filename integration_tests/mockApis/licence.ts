@@ -298,7 +298,6 @@ export const licenceConditions: AdditionalCondition[] = [
 ]
 
 const nextMonth = format(addMonths(new Date(), 1), 'yyyy-MM-dd')
-const nextThirtyDays = format(addDays(new Date(), 30), 'yyyy-MM-dd')
 const probationPractitionerPlaceholder = {
   staffCode: 'X1234',
   name: 'Joe Bloggs',
@@ -2036,78 +2035,6 @@ export default {
             },
           },
         ],
-      },
-    })
-  },
-
-  searchPrisonersByReleaseDate: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPathPattern: `/licences-api/release-date-by-prison`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          page: {
-            size: 2000,
-            number: 0,
-            totalElements: 1,
-            totalPages: 1,
-          },
-          content: {
-            cvl: {
-              licenceType: 'AP',
-              hardStopDate: '03/01/2023',
-              hardStopWarningDate: '01/01/2023',
-              isInHardStopPeriod: true,
-              isDueForEarlyRelease: true,
-            },
-            prisoner: {
-              prisonerNumber: 'G9786GC',
-              bookingId: '1',
-              bookNumber: '38518A',
-              firstName: 'TEST',
-              lastName: 'PERSON',
-              dateOfBirth: '1940-12-20',
-              gender: 'Male',
-              youthOffender: false,
-              status: 'ACTIVE IN',
-              lastMovementTypeCode: 'ADM',
-              lastMovementReasonCode: '24',
-              inOutStatus: 'IN',
-              prisonId: 'MDI',
-              prisonName: 'Moorland (HMP & YOI)',
-              cellLocation: 'RECP',
-              aliases: [
-                {
-                  firstName: 'OTHER',
-                  lastName: 'NAME',
-                  dateOfBirth: '1939-11-19',
-                  gender: 'Male',
-                  ethnicity: 'Some ethnicity',
-                },
-              ],
-              alerts: [
-                {
-                  alertType: 'H',
-                  alertCode: 'HA2',
-                  active: true,
-                  expired: false,
-                },
-              ],
-              legalStatus: 'RECALL',
-              imprisonmentStatus: 'CUR_ORA',
-              imprisonmentStatusDescription: 'ORA Recalled from Curfew Conditions',
-              indeterminateSentence: false,
-              receptionDate: '2021-01-08',
-              locationDescription: 'Moorland (HMP & YOI)',
-              restrictedPatient: false,
-              conditionalReleaseDate: nextThirtyDays,
-            },
-          },
-        },
       },
     })
   },
