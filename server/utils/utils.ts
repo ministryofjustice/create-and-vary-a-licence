@@ -267,6 +267,8 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
   return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
 }
 
+const lowercaseFirstLetter = (message: string): string => message.charAt(0).toLowerCase() + message.slice(1)
+
 export {
   convertToTitleCase,
   hasRole,
@@ -298,4 +300,5 @@ export {
   isHdcLicence,
   formatAddressTitleCase,
   formatAddressLine,
+  lowercaseFirstLetter,
 }

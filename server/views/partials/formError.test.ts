@@ -16,6 +16,7 @@ describe('View Partials - Form Error', () => {
         {
           field: 'field',
           message: 'Error',
+          summaryMessage: 'Error',
         },
       ],
     })

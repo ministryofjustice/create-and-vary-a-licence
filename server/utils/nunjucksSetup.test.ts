@@ -44,11 +44,11 @@ describe('Nunjucks Filters', () => {
         errors: [
           {
             field: 'field1',
-            message: 'message1',
+            summaryMessage: 'message1',
           },
           {
             field: 'field2',
-            message: 'message2',
+            summaryMessage: 'message2',
           },
         ],
       })

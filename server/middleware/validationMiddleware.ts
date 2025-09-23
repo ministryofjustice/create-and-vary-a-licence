@@ -6,6 +6,15 @@ import ConditionService from '../services/conditionService'
 export type FieldValidationError = {
   field: string
   message: string
+  summaryMessage?: string
+}
+
+type ValidationContextValue = {
+  summaryMessageBuilder: (message: string) => string
+}
+
+type ValidationContext = {
+  [type: string]: ValidationContextValue
 }
 
 function validationMiddleware(conditionService: ConditionService, type?: new () => object): RequestHandler {
@@ -42,19 +51,28 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
 
       const buildError = (
         error: ValidationError,
-        constraints: {
-          [type: string]: string
-        },
-      ): FieldValidationError => ({
-        field: error.property,
-        message: Object.values(constraints)[Object.values(constraints).length - 1],
-      })
+        constraints: { [type: string]: string },
+        contexts?: ValidationContext,
+      ): FieldValidationError => {
+        const constraintKeys = Object.keys(constraints)
+        const lastConstraintKey = constraintKeys[constraintKeys.length - 1]
+        const message = constraints[lastConstraintKey]
+        const summaryMessage = contexts?.[lastConstraintKey]?.summaryMessageBuilder?.(message) || message
+
+        return {
+          field: error.property,
+          message,
+          summaryMessage,
+        }
+      }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const flattenErrors: any = (errorList: ValidationError[]) => {
         // Flat pack a list of errors with child errors into a 1-dimensional list of errors.
         return errorList.flatMap(error => {
-          return error.children.length > 0 ? flattenErrors(error.children) : buildError(error, error.constraints)
+          return error.children.length > 0
+            ? flattenErrors(error.children)
+            : buildError(error, error.constraints, error?.contexts)
         })
       }
 
