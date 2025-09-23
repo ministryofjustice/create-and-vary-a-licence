@@ -54,6 +54,7 @@ export default class OffenderDetailRoutes {
     const sentenceExpiryDate = this.formatNomisDate(prisonerDetail.sentenceExpiryDate)
     const licenceExpiryDate = this.formatNomisDate(prisonerDetail.licenceExpiryDate)
     const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
+    const actualParoleDate = this.formatNomisDate(prisonerDetail.actualParoleDate)
 
     const licenceSummary = await this.licenceService.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
     const licence = licenceSummary ? await this.licenceService.getLicence(licenceSummary.licenceId, user) : null
@@ -76,6 +77,7 @@ export default class OffenderDetailRoutes {
         sentenceExpiryDate,
         licenceExpiryDate,
         paroleEligibilityDate,
+        actualParoleDate,
         hardStop: {
           cutoffDate: hardStopDetails.hardStopDate,
           warningDate: hardStopDetails.hardStopWarningDate,
