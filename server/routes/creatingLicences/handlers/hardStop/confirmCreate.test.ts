@@ -3,7 +3,7 @@ import { Session } from 'express-session'
 
 import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
-import { CaseloadItem, LicenceSummary } from '../../../../@types/licenceApiClientTypes'
+import { LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -57,7 +57,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, licenceStartDate: '18/07/2024' },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmCreate', {
