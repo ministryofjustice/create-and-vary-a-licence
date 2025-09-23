@@ -148,7 +148,6 @@ export default defineConfig({
 
         searchPrisonersByNomisIds: licence.searchPrisonersByNomisIds,
         searchPssPrisonersByNomisIds: licence.searchPssPrisonersByNomisIds,
-        searchPrisonersByReleaseDate: licence.searchPrisonersByReleaseDate,
         searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
         stubPrisonerSearchApiPing: prisonerSearch.stubPing,
 

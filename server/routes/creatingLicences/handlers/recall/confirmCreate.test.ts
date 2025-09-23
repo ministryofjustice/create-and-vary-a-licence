@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import ProbationService from '../../../../services/probationService'
-import { CaseloadItem, CvlPrisoner, LicenceSummary } from '../../../../@types/licenceApiClientTypes'
+import { CvlPrisoner, LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
 import logger from '../../../../../logger'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
@@ -58,7 +58,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
         isEligibleForEarlyRelease: true,
         licenceStartDate: '19/11/2022',
       },
-    } as CaseloadItem)
+    } as PrisonerWithCvlFields)
   })
 
   afterEach(() => {
@@ -124,7 +124,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
           isEligibleForEarlyRelease: true,
           licenceStartDate: '19/11/2022',
         },
-      } as CaseloadItem)
+      } as PrisonerWithCvlFields)
 
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
@@ -169,7 +169,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
           isEligibleForEarlyRelease: true,
           licenceStartDate: '19/11/2022',
         },
-      } as CaseloadItem)
+      } as PrisonerWithCvlFields)
 
       req.body.answer = 'Yes'
       await handler.POST(req, res)

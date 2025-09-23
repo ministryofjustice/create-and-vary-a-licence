@@ -3,7 +3,7 @@ import { Session } from 'express-session'
 
 import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
-import { CaseloadItem, LicenceSummary } from '../../../../@types/licenceApiClientTypes'
+import { LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
 import ProbationService from '../../../../services/probationService'
 import PrisonerService from '../../../../services/prisonerService'
 import config from '../../../../config'
@@ -62,7 +62,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         dateOfBirth: '1992-12-06',
       },
       cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
-    } as CaseloadItem
+    } as PrisonerWithCvlFields
     licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
     prisonerService.isHdcApproved.mockResolvedValue(true)
   })
@@ -100,7 +100,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
@@ -119,7 +119,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: true, licenceStartDate: '18/07/2024' },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
@@ -138,7 +138,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       prisonerService.isHdcApproved.mockResolvedValue(false)
       await handler.GET(req, res)
@@ -158,7 +158,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       prisonerService.isHdcApproved.mockResolvedValue(true)
       await handler.GET(req, res)
@@ -178,7 +178,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       prisonerService.isHdcApproved.mockResolvedValue(true)
       await handler.GET(req, res)
@@ -227,7 +227,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: true },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
@@ -246,7 +246,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: false },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       prisonerService.isHdcApproved.mockResolvedValue(false)
       await handler.POST(req, res)
@@ -265,7 +265,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: false },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
@@ -284,7 +284,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: false },
-      } as CaseloadItem
+      } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')

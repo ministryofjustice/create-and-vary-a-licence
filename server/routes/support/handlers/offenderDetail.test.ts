@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
 import OffenderDetailRoutes from './offenderDetail'
-import type { LicenceSummary, Licence, CaseloadItem } from '../../../@types/licenceApiClientTypes'
+import type { LicenceSummary, Licence, PrisonerWithCvlFields } from '../../../@types/licenceApiClientTypes'
 import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
 import { DeliusManager } from '../../../@types/deliusClientTypes'
@@ -55,7 +55,7 @@ const prisonerDetail = {
     hardStopDate: '03/02/2023',
     hardStopWarningDate: '01/02/2023',
   },
-} as CaseloadItem
+} as PrisonerWithCvlFields
 
 const probationPractitioner = {
   staffCode: 'X12345',
@@ -438,7 +438,7 @@ describe('Route Handlers - Offender detail', () => {
         hardStopDate: '03/02/2023',
         hardStopWarningDate: '01/02/2023',
       },
-    } as CaseloadItem
+    } as PrisonerWithCvlFields
 
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 

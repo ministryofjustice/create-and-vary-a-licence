@@ -24,6 +24,7 @@ import {
   CaseloadItem,
   UpdateElectronicMonitoringProgrammeRequest,
   ContactNumberRequest,
+  PrisonerWithCvlFields,
 } from '../@types/licenceApiClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
@@ -715,7 +716,7 @@ describe('Licence Service', () => {
         conditionalReleaseDate: '2022-09-01',
       },
       cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
-    } as CaseloadItem
+    } as PrisonerWithCvlFields
     licenceApiClient.getPrisonerDetail.mockResolvedValue(prisonerDetails)
     const nomsId = 'G4169UO'
     const callToGetPrisonerDetails = await licenceService.getPrisonerDetail(nomsId, user)
@@ -739,7 +740,7 @@ describe('Licence Service', () => {
         licenceExpiryDate: '2028-08-31',
         conditionalReleaseDate: '2022-09-01',
       },
-      cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+      licenceStartDate: '2024-07-19',
     } as CaseloadItem
     licenceApiClient.searchPrisonersByNomsIds.mockResolvedValue([prisonerDetails])
     const nomsId = 'G4169UO'
@@ -749,64 +750,6 @@ describe('Licence Service', () => {
     expect(licenceApiClient.searchPrisonersByNomsIds).toHaveBeenCalledWith([nomsId], user)
 
     expect(result).toEqual([prisonerDetails])
-  })
-
-  it('Search prisoners by nomis ids', async () => {
-    const prisonerDetails = {
-      prisoner: {
-        prisonerNumber: 'G4169UO',
-        firstName: 'EMAJINHANY',
-        lastName: 'ELYSASHA',
-        dateOfBirth: '1962-04-26',
-        status: 'ACTIVE IN',
-        prisonId: 'BAI',
-        sentenceStartDate: '2017-03-01',
-        releaseDate: '2024-07-19',
-        confirmedReleaseDate: '2024-07-19',
-        sentenceExpiryDate: '2028-08-31',
-        licenceExpiryDate: '2028-08-31',
-        conditionalReleaseDate: '2022-09-01',
-      },
-      cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
-    } as CaseloadItem
-    licenceApiClient.searchPrisonersByReleaseDate.mockResolvedValue({
-      page: { totalPages: 3 },
-      content: [prisonerDetails],
-    })
-
-    const startDate = utils.parseCvlDate('01/02/2024')
-    const endDate = utils.parseCvlDate('01/02/2025')
-
-    const result = await licenceService.searchPrisonersByReleaseDate(startDate, endDate, ['MDI'], user)
-
-    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenNthCalledWith(
-      1,
-      startDate,
-      endDate,
-      ['MDI'],
-      0,
-      user,
-    )
-    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenNthCalledWith(
-      2,
-      startDate,
-      endDate,
-      ['MDI'],
-      1,
-      user,
-    )
-    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenNthCalledWith(
-      3,
-      startDate,
-      endDate,
-      ['MDI'],
-      2,
-      user,
-    )
-
-    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenCalledTimes(3)
-
-    expect(result).toEqual([prisonerDetails, prisonerDetails, prisonerDetails])
   })
 
   it('Get IS-91 status', async () => {

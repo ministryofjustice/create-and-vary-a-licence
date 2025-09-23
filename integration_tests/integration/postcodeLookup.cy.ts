@@ -91,7 +91,6 @@ context('Postcode lookup', () => {
       cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
       cy.task('stubGetProbationers')
       cy.task('searchPrisonersByNomisIds')
-      cy.task('searchPrisonersByReleaseDate')
       cy.task('stubGetStaffDetailsByList')
       cy.task('stubGetStaffDetailsByStaffCode')
       cy.task('stubGetCompletedLicence', {
