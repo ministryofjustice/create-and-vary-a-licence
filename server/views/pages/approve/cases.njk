@@ -35,30 +35,30 @@
     {% set caseData = [
         {
             attributes: {
-            id: 'name-' + loop.index,
-            "data-sort-value": case.name
-        },
+                id: 'name-' + loop.index,
+                "data-sort-value": case.name
+            },
             html: '<a href="' + nameLink + '" class="govuk-link" target="' + linkTarget + '">' + case.name + '</a>'
         },
         {
             attributes: {
-            id: 'nomis-id-' + loop.index,
-            "data-sort-value": case.prisonerNumber
-        },
+                id: 'nomis-id-' + loop.index,
+                "data-sort-value": case.prisonerNumber
+            },
             text: case.prisonerNumber
         },
         {
             attributes: {
-            id: 'com-' + loop.index,
-            "data-sort-value": case.probationPractitioner
-        },
+                id: 'com-' + loop.index,
+                "data-sort-value": case.probationPractitioner
+            },
             html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner.name + '</a>'
         },
         {
             attributes: {
-            id: 'release-date-' + loop.index,
-            "data-sort-value": case.releaseDate | dateToUnix
-        },
+                id: 'release-date-' + loop.index,
+                "data-sort-value": case.releaseDate | dateToUnix
+            },
             classes: 'approval-due-date',
             html: releaseDate
         }
@@ -68,16 +68,16 @@
         {% set caseData = (caseData.push(
             {
                 attributes: {
-                id: 'approved-by-' + loop.index,
-                "data-sort-value": case.approvedBy
-            },
+                    id: 'approved-by-' + loop.index,
+                    "data-sort-value": case.approvedBy
+                },
                 text: case.approvedBy
             },
             {
                 attributes: {
-                id: 'approved-on-' + loop.index,
-                "data-sort-value": case.approvedOn | dateToUnix
-            },
+                    id: 'approved-on-' + loop.index,
+                    "data-sort-value": case.approvedOn | dateToUnix
+                },
                 text: case.approvedOn
             }
 
@@ -88,9 +88,9 @@
         {% set caseData = (caseData.splice(3, 0,
             {
                 attributes: {
-                id: 'approved-by-' + loop.index,
-                "data-sort-value": case.submittedByFullName
-            },
+                    id: 'approved-by-' + loop.index,
+                    "data-sort-value": case.submittedByFullName
+                },
                 text: case.submittedByFullName
             }
         ), caseData) %}
