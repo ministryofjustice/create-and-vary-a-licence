@@ -4238,10 +4238,12 @@ export interface components {
     }
     /** @description Describes an enriched prison case admin search result */
     PrisonCaseAdminSearchResult: {
-      /** @description A list of offender in prison search results */
+      /** @description A list of offenders that are in prison */
       inPrisonResults: components['schemas']['CaCase'][]
-      /** @description A list of offender on probation search results */
+      /** @description A list of offenders that are on probation */
       onProbationResults: components['schemas']['CaCase'][]
+      /** @description A list of offenders that require attention */
+      attentionNeededResults: components['schemas']['CaCase'][]
     }
     /** @description Describes an audit event request */
     AuditRequest: {

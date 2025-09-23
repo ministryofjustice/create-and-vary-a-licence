@@ -38,17 +38,27 @@ export default class CaSearch {
       results = {
         inPrisonResults: [],
         onProbationResults: [],
+        attentionNeededResults: [],
       }
     } else {
       results = await this.searchService.getCaSearchResults(queryTerm, prisonCaseloadToDisplay)
     }
 
-    const { inPrisonResults, onProbationResults } = results
-    const attentionNeededResults = inPrisonResults.filter(res => res.tabType === 'ATTENTION_NEEDED')
+    const { inPrisonResults, onProbationResults, attentionNeededResults } = results
 
     const backLink = '/licence/view/cases'
 
-    const activeTab = inPrisonResults.length >= onProbationResults.length ? '#people-in-prison' : '#people-on-probation'
+    let activeTab: string
+
+    if (inPrisonResults.length >= onProbationResults.length || inPrisonResults.length >= attentionNeededResults.length)
+      activeTab = '#people-in-prison'
+    if (
+      attentionNeededResults.length > inPrisonResults.length &&
+      attentionNeededResults.length >= onProbationResults.length
+    )
+      activeTab = '#attention-needed'
+    if (onProbationResults.length > inPrisonResults.length && onProbationResults.length > attentionNeededResults.length)
+      activeTab = '#people-on-probation'
 
     const tabParameters = {
       activeTab,
