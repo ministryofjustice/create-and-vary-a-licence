@@ -20,6 +20,7 @@ import type {
   LicenceCreationResponse,
   LicenceSummary,
   NotifyRequest,
+  PrisonerWithCvlFields,
   ReferVariationRequest,
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
@@ -460,37 +461,12 @@ export default class LicenceService {
     return this.licenceApiClient.reviewWithoutVariation(licenceId, user)
   }
 
-  async getPrisonerDetail(nomsId: string, user: User): Promise<CaseloadItem> {
+  async getPrisonerDetail(nomsId: string, user: User): Promise<PrisonerWithCvlFields> {
     return this.licenceApiClient.getPrisonerDetail(nomsId, user)
   }
 
   async searchPrisonersByNomsIds(nomsIds: string[], user: User): Promise<CaseloadItem[]> {
     return this.licenceApiClient.searchPrisonersByNomsIds(nomsIds, user)
-  }
-
-  async searchPrisonersByReleaseDate(
-    earliestReleaseDate: Date,
-    latestReleaseDate: Date,
-    prisonIds: string[],
-    user?: User,
-  ): Promise<CaseloadItem[]> {
-    let pageNumber = 0
-    let results: CaseloadItem[] = []
-
-    while (pageNumber >= 0) {
-      // eslint-disable-next-line no-await-in-loop
-      const { content, page } = await this.licenceApiClient.searchPrisonersByReleaseDate(
-        earliestReleaseDate,
-        latestReleaseDate,
-        prisonIds,
-        pageNumber,
-        user,
-      )
-      pageNumber = pageNumber < page.totalPages - 1 ? pageNumber + 1 : -1
-      results = results.concat(content)
-    }
-
-    return results
   }
 
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
