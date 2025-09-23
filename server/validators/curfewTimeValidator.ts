@@ -52,12 +52,12 @@ export default class ValidCurfewTime implements ValidatorConstraintInterface {
       return `${timePrefix} must include an hour in 12-hour clock format and minute between 0 and 59`
     }
 
-    // Case: invalid hour, valid minute and AMPM
+    // Case: invalid hour, valid minute
     if (!isHourValid && isMinuteValid) {
       return `${timePrefix} must include an hour in 12-hour clock format`
     }
 
-    // Case: valid hour, invalid minute and AMPM
+    // Case: valid hour, invalid minute
     if (isHourValid && !isMinuteValid) {
       return `${timePrefix} must include a minute between 0 and 59`
     }
