@@ -33,7 +33,7 @@ describe('ValidCurfewTime', () => {
   test('should return error for invalid hour and minute without AMPM', () => {
     const time = new SimpleTime('0', '60', undefined)
     const args = mockArgs(time, 'startTime')
-    expect(validator.defaultMessage(args)).toBe('Start time time must be in 12-hour clock format')
+    expect(validator.defaultMessage(args)).toBe('Start time must be in 12-hour clock format')
   })
 
   test('should return error for invalid hour and minute with AMPM', () => {
@@ -59,7 +59,7 @@ describe('ValidCurfewTime', () => {
   test('should return error for missing AMPM', () => {
     const time = new SimpleTime('10', '30', undefined)
     const args = mockArgs(time, 'startTime')
-    expect(validator.defaultMessage(args)).toBe('Start time must include AM or PM')
+    expect(validator.defaultMessage(args)).toBe('Start time must include am or pm')
   })
 
   test('should validate correct time', () => {
