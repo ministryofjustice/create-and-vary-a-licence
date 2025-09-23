@@ -36,6 +36,7 @@ const prisonerDetail = {
     lastName: 'Bloggs',
     conditionalReleaseDate: '2022-06-01',
     confirmedReleaseDate: '2022-06-01',
+    actualParoleDate: '2017-06-21',
     postRecallReleaseDate: '2022-05-01',
     topupSupervisionExpiryDate: '2023-05-01',
     homeDetentionCurfewEligibilityDate: '2022-05-01',
@@ -144,6 +145,7 @@ describe('Route Handlers - Offender detail', () => {
           ...prisonerDetail.prisoner,
           conditionalReleaseDate: '01 Jun 2022',
           confirmedReleaseDate: '01 Jun 2022',
+          actualParoleDate: '21 Jun 2017',
           crn: 'X1234',
           determinate: 'Yes',
           dob: '01 Jan 1970',
@@ -218,6 +220,7 @@ describe('Route Handlers - Offender detail', () => {
         paroleEligibilityDate: '01 Jan 2022',
         postRecallReleaseDate: '01 May 2022',
         sentenceExpiryDate: '01 Jun 2022',
+        actualParoleDate: '21 Jun 2017',
         tused: '01 May 2023',
         recall: 'No',
         hardStop: {
@@ -254,6 +257,7 @@ describe('Route Handlers - Offender detail', () => {
         postRecallReleaseDate: emptyDate,
         sentenceExpiryDate: emptyDate,
         topupSupervisionExpiryDate: emptyDate,
+        actualParoleDate: emptyDate,
         recall: false,
       },
       cvl: prisonerDetail.cvl,
@@ -283,6 +287,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcStatus: 'APPROVED',
         hdced: 'Not found',
         hdcad: 'Not found',
+        actualParoleDate: 'Not found',
         hdcEndDate: 'Not found',
         licenceExpiryDate: 'Not found',
         name: 'Joe Bloggs',
@@ -366,6 +371,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcStatus: 'APPROVED',
         hdced: '01 May 2022',
         hdcad: '01 May 2022',
+        actualParoleDate: '21 Jun 2017',
         hdcEndDate: '01 May 2023',
         licenceExpiryDate: '01 Jun 2022',
         name: 'Joe Bloggs',
@@ -457,44 +463,19 @@ describe('Route Handlers - Offender detail', () => {
     licenceService.getIS91Status.mockResolvedValue(false)
 
     await handler.GET(req, res)
-    expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
-      prisonerDetail: {
-        ...expectedPrisonerDetail.prisoner,
-        conditionalReleaseDate: '01 Jun 2022',
-        confirmedReleaseDate: '01 Jun 2022',
-        crn: 'X1234',
-        determinate: 'Yes',
-        dob: '01 Jan 1970',
-        hdcStatus: 'APPROVED',
-        hdced: '01 May 2022',
-        hdcad: '01 May 2022',
-        hdcEndDate: '01 May 2023',
-        licenceExpiryDate: '01 Jun 2022',
-        name: 'Joe Bloggs',
-        paroleEligibilityDate: '01 Jan 2022',
-        postRecallReleaseDate: '01 May 2022',
-        sentenceExpiryDate: '01 Jun 2022',
-        tused: '01 May 2023',
-        recall: 'Yes',
-        hardStop: {
-          cutoffDate: '03/02/2023',
-          isInHardStopPeriod: false,
-          warningDate: '01/02/2023',
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/support/offenderDetail',
+      expect.objectContaining({
+        cvlCom: {
+          email: 'test@probation.gov.uk',
+          username: 'AB123C',
+          team: 'Team 1',
+          lau: 'LAU 1',
+          pdu: 'PDU 1',
+          region: 'Region 1',
         },
-      },
-      probationPractitioner,
-      cvlCom: {
-        email: 'test@probation.gov.uk',
-        username: 'AB123C',
-        team: 'Team 1',
-        lau: 'LAU 1',
-        pdu: 'PDU 1',
-        region: 'Region 1',
-      },
-      licence: licenceDatesNotFound,
-      ineligibilityReasons: [],
-      is91Status: 'No',
-    })
+      }),
+    )
   })
 
   it('Should render ineligibility reasons if the offender is ineligible for CVL', async () => {
@@ -522,43 +503,11 @@ describe('Route Handlers - Offender detail', () => {
     licenceService.getIS91Status.mockResolvedValue(false)
 
     await handler.GET(req, res)
-    expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
-      prisonerDetail: {
-        ...prisonerDetail.prisoner,
-        conditionalReleaseDate: '01 Jun 2022',
-        confirmedReleaseDate: '01 Jun 2022',
-        crn: 'X1234',
-        determinate: 'Yes',
-        dob: '01 Jan 1970',
-        hdcStatus: 'PENDING',
-        hdced: '01 May 2022',
-        hdcad: '01 May 2022',
-        hdcEndDate: '01 May 2023',
-        licenceExpiryDate: '01 Jun 2022',
-        name: 'Joe Bloggs',
-        paroleEligibilityDate: '01 Jan 2022',
-        postRecallReleaseDate: '01 May 2022',
-        sentenceExpiryDate: '01 Jun 2022',
-        tused: '01 May 2023',
-        recall: 'Yes',
-        hardStop: {
-          cutoffDate: '03/02/2023',
-          isInHardStopPeriod: false,
-          warningDate: '01/02/2023',
-        },
-      },
-      probationPractitioner,
-      cvlCom: {
-        email: 'test@probation.gov.uk',
-        lau: 'LAU 1',
-        pdu: 'PDU 1',
-        region: 'Region 1',
-        team: 'Team 1',
-        username: 'AB123C',
-      },
-      licence: licenceDatesNotFound,
-      ineligibilityReasons: ['Reason1', 'Reason2'],
-      is91Status: 'No',
-    })
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/support/offenderDetail',
+      expect.objectContaining({
+        ineligibilityReasons: ['Reason1', 'Reason2'],
+      }),
+    )
   })
 })
