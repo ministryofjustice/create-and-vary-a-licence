@@ -130,7 +130,7 @@ export default defineConfig({
         stubGetCaSearchInPrisonResult: licence.stubGetCaSearchInPrisonResult,
         stubGetCaSearchOnProbationResult: licence.stubGetCaSearchOnProbationResult,
         stubGetCaSearchResults: licence.stubGetCaSearchResults,
-        stubGetCaSearchAttentionNeededPrisonResults: licence.stubGetCaSearchAttentionNeededPrisonResults,
+        stubGetCaSearchAttentionNeededResults: licence.stubGetCaSearchAttentionNeededResults,
         stubGetPrisonApproverSearchApprovalNeededResult: licence.stubGetPrisonApproverSearchApprovalNeededResult,
         stubGetPrisonApproverSearchRecentlyApprovedResult: licence.stubGetPrisonApproverSearchRecentlyApprovedResult,
         stubGetPrisonApproverSearchResults: licence.stubGetPrisonApproverSearchResults,

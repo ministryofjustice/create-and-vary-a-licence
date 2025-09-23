@@ -112,7 +112,7 @@ context('Search for a person', () => {
     cy.task('stubGetCaSearchResults')
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
-    cy.task('stubGetCaSearchAttentionNeededPrisonResults')
+    cy.task('stubGetCaSearchAttentionNeededResults')
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickViewAndPrintALicence()
     const searchPage = caseloadPage.clickSearch('test')
@@ -120,9 +120,9 @@ context('Search for a person', () => {
     searchPage.clickAttentionNeededTab()
     searchPage.getAttentionNeededTabTitle().contains('Attention needed (3 results)')
     // check attention needed cases are ordered by descending nomis legal status by default
-    searchPage.getRow(3).contains('Sentenced')
-    searchPage.getRow(4).contains('Remand')
-    searchPage.getRow(5).contains('Recall')
+    searchPage.getRow(0).contains('Sentenced')
+    searchPage.getRow(1).contains('Remand')
+    searchPage.getRow(2).contains('Recall')
   })
 
   it("should not show caseload information because doesn't have multiple caseloads", () => {
