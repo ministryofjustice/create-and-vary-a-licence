@@ -40,7 +40,7 @@ describe('ValidCurfewTime', () => {
     const time = new SimpleTime('0', '60', AmPm.PM)
     const args = mockArgs(time, 'endTime')
     expect(validator.defaultMessage(args)).toBe(
-      'End time must include an hour in 12-hour clock format and minute between 0 and 59',
+      'End time must include an hour in 12-hour clock format and minutes between 0 and 59',
     )
   })
 
@@ -53,7 +53,7 @@ describe('ValidCurfewTime', () => {
   test('should return error for invalid minute only', () => {
     const time = new SimpleTime('10', '60', AmPm.PM)
     const args = mockArgs(time, 'endTime')
-    expect(validator.defaultMessage(args)).toBe('End time must include a minute between 0 and 59')
+    expect(validator.defaultMessage(args)).toBe('End time must include minutes between 0 and 59')
   })
 
   test('should return error for missing AMPM', () => {
