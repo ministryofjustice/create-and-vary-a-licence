@@ -19,6 +19,8 @@ export default class CaSearchPage extends Page {
 
   private changeLocationsLink = '[data-qa=change-location-link]'
 
+  private searchInputId = '#search'
+
   constructor() {
     super('ca-search-page')
   }
@@ -94,5 +96,9 @@ export default class CaSearchPage extends Page {
   clickChangeLocationsLink = (): ChangeLocationPage => {
     cy.get(this.changeLocationsLink).click()
     return Page.verifyOnPage(ChangeLocationPage)
+  }
+
+  getSearchInput = () => {
+    return cy.get(this.searchInputId)
   }
 }
