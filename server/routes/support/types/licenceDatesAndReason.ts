@@ -55,6 +55,11 @@ class LicenceDatesAndReason {
   hdcEndDate: SimpleDate
 
   @Expose()
+  @Type(() => SimpleDate)
+  @Validate(ValidOptionalSimpleDate)
+  prrd: SimpleDate
+
+  @Expose()
   @IsNotEmpty({ message: 'You must enter a reason' })
   dateChangeReason: string
 }

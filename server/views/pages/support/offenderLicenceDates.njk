@@ -180,6 +180,23 @@
                     </td>
                 </tr>
                 <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Post recall release date</th>
+                    <td class="govuk-table__cell">
+                        {% if licence.postRecallReleaseDate %}
+                            {{ licence.postRecallReleaseDate | datetimeToDate }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "prrd",
+                            errorMessage: validationErrors | findError('prrd'),
+                            formResponses: formResponses.prrd or licenceDates.prrd
+                        }) }}JGA
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Home detention curfew actual date</th>
                     <td class="govuk-table__cell">
                         {% if licence.homeDetentionCurfewActualDate %}
