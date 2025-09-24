@@ -83,7 +83,7 @@ describe('View and print a licence - case list', () => {
     expect($('#release-date-2').text()).toBe('1 Sep 2022')
   })
 
-  it('should load pepople in prison tab with three sub tabs', () => {
+  it('should load people in prison tab with three sub tabs', () => {
     const search = ''
     const prisonsToDisplay = ''
     const probationView = false
