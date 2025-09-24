@@ -61,6 +61,7 @@ export default class OffenderLicenceDatesRoutes {
       led: dateStringToSimpleDate(licence.licenceExpiryDate),
       tussd: dateStringToSimpleDate(licence.topupSupervisionStartDate),
       tused: dateStringToSimpleDate(licence.topupSupervisionExpiryDate),
+      prrd: dateStringToSimpleDate(licence.postRecallReleaseDate),
       hdcad: isHdcLicence(licence) ? dateStringToSimpleDate(licence.homeDetentionCurfewActualDate) : undefined,
       hdcEndDate: isHdcLicence(licence) ? dateStringToSimpleDate(licence.homeDetentionCurfewEndDate) : undefined,
     }
@@ -76,6 +77,7 @@ export default class OffenderLicenceDatesRoutes {
       licenceExpiryDate: this.simpleDateToLicenceDate(formData.led),
       topupSupervisionStartDate: this.simpleDateToLicenceDate(formData.tussd),
       topupSupervisionExpiryDate: this.simpleDateToLicenceDate(formData.tused),
+      postRecallReleaseDate: this.simpleDateToLicenceDate(formData.prrd),
       homeDetentionCurfewActualDate: this.simpleDateToLicenceDate(formData.hdcad),
       homeDetentionCurfewEndDate: this.simpleDateToLicenceDate(formData.hdcEndDate),
     }

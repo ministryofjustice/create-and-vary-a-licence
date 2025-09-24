@@ -25,6 +25,7 @@ describe('Route handlers - Licence dates override', () => {
     licenceExpiryDate: '05/01/2022',
     topupSupervisionStartDate: '06/01/2022',
     topupSupervisionExpiryDate: '07/01/2022',
+    postRecallReleaseDate: '24/06/2026',
   }
 
   const licenceSimpleDates = {
@@ -36,6 +37,7 @@ describe('Route handlers - Licence dates override', () => {
     led: dateStringToSimpleDate(licenceDates.licenceExpiryDate),
     tussd: dateStringToSimpleDate(licenceDates.topupSupervisionStartDate),
     tused: dateStringToSimpleDate(licenceDates.topupSupervisionExpiryDate),
+    prrd: dateStringToSimpleDate(licenceDates.postRecallReleaseDate),
   }
 
   const hdcLicenceDates = {
