@@ -35,6 +35,7 @@ context('Search for a person', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicenceToEdit()
     const searchPage = caseloadPage.clickSearch('Test')
+    searchPage.getSearchInput().should('have.value', 'Test')
 
     searchPage.getPrisonTabTitle().contains('People in prison (3 results)')
     searchPage.getProbationTabTitle().contains('People on probation (2 results)')

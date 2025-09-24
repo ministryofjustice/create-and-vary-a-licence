@@ -11,6 +11,8 @@ export default class SearchPage extends Page {
 
   private probationPractitionerLinkId = '[data-qa=comLink]'
 
+  private searchInputId = '#search'
+
   constructor() {
     super('probation-search-page')
   }
@@ -44,5 +46,9 @@ export default class SearchPage extends Page {
   clickOnProbationTab = (): SearchPage => {
     cy.get(this.probationTabTitle).click()
     return Page.verifyOnPage(SearchPage)
+  }
+
+  getSearchInput = () => {
+    return cy.get(this.searchInputId)
   }
 }
