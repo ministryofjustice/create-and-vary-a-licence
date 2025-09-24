@@ -1,7 +1,7 @@
 import Page from './page'
 import ViewCasesPage from './viewCasesPage'
 import CaseloadPage from './caseload'
-import SearchPage from './search'
+import SearchPage from './comSearch'
 import CaSearchPage from './caSearch'
 import ApprovalSearchPage from './approvalSearch'
 
