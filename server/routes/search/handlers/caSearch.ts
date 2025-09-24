@@ -48,17 +48,18 @@ export default class CaSearch {
 
     const backLink = '/licence/view/cases'
 
-    let activeTab: string
-
-    if (inPrisonResults.length >= onProbationResults.length || inPrisonResults.length >= attentionNeededResults.length)
-      activeTab = '#people-in-prison'
-    if (
+    const inPrisonIsActiveTab =
+      inPrisonResults.length >= onProbationResults.length && inPrisonResults.length >= attentionNeededResults.length
+    const attentionNeededIsActiveTab =
       attentionNeededResults.length > inPrisonResults.length &&
       attentionNeededResults.length >= onProbationResults.length
-    )
-      activeTab = '#attention-needed'
-    if (onProbationResults.length > inPrisonResults.length && onProbationResults.length > attentionNeededResults.length)
-      activeTab = '#people-on-probation'
+    const onProbationIsActiveTab =
+      onProbationResults.length > inPrisonResults.length && onProbationResults.length > attentionNeededResults.length
+    let activeTab: string
+
+    if (inPrisonIsActiveTab) activeTab = '#people-in-prison'
+    if (attentionNeededIsActiveTab) activeTab = '#attention-needed'
+    if (onProbationIsActiveTab) activeTab = '#people-on-probation'
 
     const tabParameters = {
       activeTab,
