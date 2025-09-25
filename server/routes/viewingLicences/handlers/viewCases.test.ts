@@ -79,7 +79,6 @@ describe('Route handlers - View and print case list', () => {
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
-      isDueForEarlyRelease: false,
       isInHardStopPeriod: true,
     },
     {
@@ -96,7 +95,6 @@ describe('Route handlers - View and print case list', () => {
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
-      isDueForEarlyRelease: false,
       isInHardStopPeriod: true,
     },
     {
@@ -113,7 +111,6 @@ describe('Route handlers - View and print case list', () => {
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
-      isDueForEarlyRelease: false,
       isInHardStopPeriod: true,
     },
     {
@@ -130,7 +127,6 @@ describe('Route handlers - View and print case list', () => {
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
-      isDueForEarlyRelease: true,
       isInHardStopPeriod: true,
     },
   ] as CaCase[]
@@ -142,7 +138,6 @@ describe('Route handlers - View and print case list', () => {
         kind: LicenceKind.CRD,
         licenceId: 5,
         licenceStatus: LicenceStatus.ACTIVE,
-        isDueForEarlyRelease: true,
         isInHardStopPeriod: true,
         releaseDate: '01/07/2022',
         releaseDateLabel: 'Confirmed release date',
@@ -159,7 +154,6 @@ describe('Route handlers - View and print case list', () => {
         ...caCase,
         licenceId: 6,
         licenceStatus: LicenceStatus.TIMED_OUT,
-        isDueForEarlyRelease: true,
         isInHardStopPeriod: true,
         releaseDate: '01/06/2022',
         releaseDateLabel: 'Confirmed release date',
@@ -173,7 +167,6 @@ describe('Route handlers - View and print case list', () => {
         kind: LicenceKind.HARD_STOP,
         licenceId: 7,
         licenceStatus: LicenceStatus.IN_PROGRESS,
-        isDueForEarlyRelease: true,
         isInHardStopPeriod: true,
         releaseDate: '01/05/2022',
         releaseDateLabel: 'Confirmed release date',
@@ -186,7 +179,6 @@ describe('Route handlers - View and print case list', () => {
         ...caCase,
         licenceId: 8,
         licenceStatus: LicenceStatus.VARIATION_APPROVED,
-        isDueForEarlyRelease: false,
         isInHardStopPeriod: true,
         releaseDate: '01/05/2022',
         releaseDateLabel: 'Confirmed release date',
@@ -225,7 +217,6 @@ describe('Route handlers - View and print case list', () => {
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
             lastWorkedOnBy: 'Test Updater',
-            isDueForEarlyRelease: false,
             kind: LicenceKind.CRD,
           },
           {
@@ -239,7 +230,6 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '10/06/2022',
             nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
@@ -258,7 +248,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
             kind: LicenceKind.CRD,
           },
@@ -275,7 +264,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: true,
             lastWorkedOnBy: 'Test Updater',
             kind: LicenceKind.CRD,
           },
@@ -304,7 +292,6 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isDueForEarlyRelease: true,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 5,
             licenceStatus: 'ACTIVE',
@@ -321,7 +308,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.CRD,
           },
           {
-            isDueForEarlyRelease: true,
             licenceId: 6,
             licenceStatus: 'NOT_STARTED',
             link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
@@ -333,7 +319,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
           },
           {
-            isDueForEarlyRelease: true,
             licenceId: 7,
             licenceStatus: 'IN_PROGRESS',
             link: '/licence/hard-stop/id/7/check-your-answers',
@@ -346,7 +331,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.HARD_STOP,
           },
           {
-            isDueForEarlyRelease: false,
             licenceId: 8,
             licenceStatus: 'VARIATION_APPROVED',
             link: null,
@@ -382,7 +366,6 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 1,
             licenceStatus: 'NOT_STARTED',
@@ -399,7 +382,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.CRD,
           },
           {
-            isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 2,
             licenceStatus: 'APPROVED',
@@ -416,7 +398,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.CRD,
           },
           {
-            isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
@@ -433,7 +414,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.CRD,
           },
           {
-            isDueForEarlyRelease: true,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 4,
             licenceStatus: 'SUBMITTED',
@@ -474,7 +454,6 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isDueForEarlyRelease: true,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 5,
             licenceStatus: 'ACTIVE',
@@ -491,7 +470,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.CRD,
           },
           {
-            isDueForEarlyRelease: true,
             licenceId: 6,
             licenceStatus: 'NOT_STARTED',
             link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
@@ -503,7 +481,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
           },
           {
-            isDueForEarlyRelease: true,
             licenceId: 7,
             licenceStatus: 'IN_PROGRESS',
             link: '/licence/hard-stop/id/7/check-your-answers',
@@ -516,7 +493,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.HARD_STOP,
           },
           {
-            isDueForEarlyRelease: false,
             licenceId: 8,
             licenceStatus: 'VARIATION_APPROVED',
             link: null,
@@ -561,7 +537,6 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01/06/2022',
             releaseDateLabel: 'Confirmed release date',
-            isDueForEarlyRelease: true,
           },
         ],
         CaViewCasesTab,
@@ -597,7 +572,6 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
-            isDueForEarlyRelease: true,
             kind: LicenceKind.HARD_STOP,
           },
         ],
@@ -625,7 +599,6 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isDueForEarlyRelease: true,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 5,
             licenceStatus: 'ACTIVE',
@@ -642,7 +615,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.CRD,
           },
           {
-            isDueForEarlyRelease: true,
             licenceId: 6,
             licenceStatus: 'NOT_STARTED',
             link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
@@ -654,7 +626,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
           },
           {
-            isDueForEarlyRelease: true,
             licenceId: 7,
             licenceStatus: 'IN_PROGRESS',
             link: '/licence/hard-stop/id/7/check-your-answers',
@@ -667,7 +638,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.HARD_STOP,
           },
           {
-            isDueForEarlyRelease: false,
             licenceId: 8,
             licenceStatus: 'VARIATION_APPROVED',
             link: null,
@@ -703,7 +673,6 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 1,
             licenceStatus: 'NOT_STARTED',
@@ -720,7 +689,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.CRD,
           },
           {
-            isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 2,
             licenceStatus: 'APPROVED',
@@ -737,7 +705,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.CRD,
           },
           {
-            isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
@@ -754,7 +721,6 @@ describe('Route handlers - View and print case list', () => {
             kind: LicenceKind.CRD,
           },
           {
-            isDueForEarlyRelease: true,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 4,
             licenceStatus: 'SUBMITTED',
@@ -797,7 +763,6 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
             licenceId: 5,
             licenceStatus: 'NOT_STARTED',

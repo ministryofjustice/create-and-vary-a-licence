@@ -55,7 +55,6 @@ export default class ViewAndPrintCaseRoutes {
           tabType: CaViewCasesTab[c.tabType],
           nomisLegalStatus: c.nomisLegalStatus,
           lastWorkedOnBy: c.lastWorkedOnBy,
-          isDueForEarlyRelease: c.isDueForEarlyRelease,
           link,
           licenceStatus,
           kind: c.kind,
