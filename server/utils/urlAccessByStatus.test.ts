@@ -287,6 +287,11 @@ describe('URL access checks for licence statuses', () => {
       path = '/licence/approve/id/1/view'
       expect(getUrlAccessByStatus(path, 1, 'ACTIVE', username)).toEqual(false)
     })
+
+    it('should allow access to view probation practitioner details', () => {
+      path = '/licence/approve/id/1/probation-practitioner'
+      expect(getUrlAccessByStatus(path, 1, 'ACTIVE', username)).toEqual(true)
+    })
   })
 
   describe('URL access checks for INACTIVE', () => {
