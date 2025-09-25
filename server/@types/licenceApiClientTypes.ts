@@ -77,3 +77,5 @@ export type UpdateElectronicMonitoringProgrammeRequest =
 export type AddressSearchResponse = components['schemas']['AddressSearchResponse']
 export type AddAddressRequest = components['schemas']['AddAddressRequest']
 export type AddressResponse = components['schemas']['AddressResponse']
+export type TimeServedCase = components['schemas']['TimeServedCase']
+export type TimeServedCaseload = components['schemas']['TimeServedCaseload']
