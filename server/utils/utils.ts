@@ -181,6 +181,10 @@ const objectIsEmpty = (value: unknown) => {
   return empty(value)
 }
 
+const getFirstMaxValueKey = (params: Array<{ key: string; count: number }>): string => {
+  return params.sort((a, b) => b.count - a.count)[0].key
+}
+
 const formatAddress = (address?: string) => {
   return address
     ? address
@@ -290,6 +294,7 @@ export {
   convertDateFormat,
   removeDuplicates,
   objectIsEmpty,
+  getFirstMaxValueKey,
   formatAddress,
   licenceIsTwoDaysToRelease,
   groupingBy,
