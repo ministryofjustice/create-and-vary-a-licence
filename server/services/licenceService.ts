@@ -348,19 +348,17 @@ export default class LicenceService {
   }
 
   async getAuditEvents(
-    // eslint-disable-next-line default-param-last
-    forLicenceId: number = null,
-    // eslint-disable-next-line default-param-last
-    forUsername: string = null,
-    startTime: Date,
-    endTime: Date,
     user: User,
+    forLicenceId: number = null,
+    forUsername: string = null,
+    startTime: Date = null,
+    endTime: Date = null,
   ): Promise<AuditEvent[]> {
     const requestBody = {
       username: forUsername || null,
       licenceId: forLicenceId || null,
-      startTime: format(startTime, 'dd/MM/yyyy HH:mm:ss'),
-      endTime: format(endTime, 'dd/MM/yyyy HH:mm:ss'),
+      startTime: startTime ? format(startTime, 'dd/MM/yyyy HH:mm:ss') : null,
+      endTime: endTime ? format(endTime, 'dd/MM/yyyy HH:mm:ss') : null,
     } as AuditRequest
 
     return this.licenceApiClient.getAuditEvents(requestBody, user)
