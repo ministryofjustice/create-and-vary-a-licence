@@ -649,7 +649,7 @@ describe('Licence Service', () => {
     })
 
     it('will get a list of events for a user', async () => {
-      await licenceService.getAuditEvents(null, 'username', eventStart, eventEnd, user)
+      await licenceService.getAuditEvents(user, null, 'username', eventStart, eventEnd)
       expect(licenceApiClient.getAuditEvents).toHaveBeenCalledWith(
         {
           username: 'username',
@@ -662,7 +662,7 @@ describe('Licence Service', () => {
     })
 
     it('will get a list of events for licence', async () => {
-      await licenceService.getAuditEvents(1, null, eventStart, eventEnd, user)
+      await licenceService.getAuditEvents(user, 1, null, eventStart, eventEnd)
       expect(licenceApiClient.getAuditEvents).toHaveBeenCalledWith(
         {
           username: null,

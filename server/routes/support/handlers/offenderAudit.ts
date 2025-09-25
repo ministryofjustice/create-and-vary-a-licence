@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { subYears } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import { convertToTitleCase } from '../../../utils/utils'
 
@@ -11,13 +10,7 @@ export default class OffenderAuditRoutes {
     const { nomsId, licenceId } = req.params
 
     const { prisoner } = await this.licenceServer.getPrisonerDetail(nomsId, user)
-    const audit = await this.licenceServer.getAuditEvents(
-      parseInt(licenceId, 10),
-      null,
-      subYears(new Date(), 2),
-      new Date(),
-      user,
-    )
+    const audit = await this.licenceServer.getAuditEvents(user, parseInt(licenceId, 10))
 
     res.render('pages/support/offenderAudit', {
       prisonerDetail: {
