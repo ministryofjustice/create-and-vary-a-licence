@@ -146,7 +146,7 @@ describe('Timeline Service', () => {
         {
           id: 1,
           licenceId: 2,
-          eventType: LicenceEventType.HARD_STOP_REVIEWED_WITHOUT_VARIATION,
+          eventType: LicenceEventType.REVIEWED_WITHOUT_VARIATION,
           username: 'TEST_USER',
           forenames: 'Test',
           surname: 'User',
@@ -180,7 +180,7 @@ describe('Timeline Service', () => {
       expect(timelineEvents).toEqual(expected)
       expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith(
         '2',
-        ['HARD_STOP_REVIEWED_WITHOUT_VARIATION'],
+        ['REVIEWED_WITHOUT_VARIATION'],
         'eventTime',
         'DESC',
         user,
@@ -202,7 +202,7 @@ describe('Timeline Service', () => {
         {
           id: 1,
           licenceId: 2,
-          eventType: LicenceEventType.HARD_STOP_REVIEWED_WITHOUT_VARIATION,
+          eventType: LicenceEventType.REVIEWED_WITHOUT_VARIATION,
           username: 'TEST_USER',
           forenames: 'Test',
           surname: 'User',
@@ -236,7 +236,7 @@ describe('Timeline Service', () => {
       expect(timelineEvents).toEqual(expected)
       expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith(
         '2',
-        ['HARD_STOP_REVIEWED_WITHOUT_VARIATION'],
+        ['REVIEWED_WITHOUT_VARIATION'],
         'eventTime',
         'DESC',
         user,
