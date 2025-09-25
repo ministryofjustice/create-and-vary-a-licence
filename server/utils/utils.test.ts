@@ -14,6 +14,7 @@ import {
   removeDuplicates,
   jsonDtToDateWithDay,
   objectIsEmpty,
+  getFirstMaxValueKey,
   hasAuthSource,
   licenceIsTwoDaysToRelease,
   groupingBy,
@@ -432,6 +433,35 @@ describe('Check empty object', () => {
         field3: undefined,
       }),
     ).toBe(false)
+  })
+})
+
+describe('Get max value key', () => {
+  it('should return key of the max value', () => {
+    const array = [
+      { key: 'some key', count: 2 },
+      { key: 'another key', count: 5 },
+      { key: 'final key', count: 3 },
+    ]
+    expect(getFirstMaxValueKey(array)).toBe('another key')
+  })
+
+  it('should return the first key of the max value if multiple values are the same', () => {
+    const array = [
+      { key: 'some key', count: 2 },
+      { key: 'another key', count: 5 },
+      { key: 'final key', count: 5 },
+    ]
+    expect(getFirstMaxValueKey(array)).toBe('another key')
+  })
+
+  it('should return the first key if values all 0', () => {
+    const array = [
+      { key: 'some key', count: 0 },
+      { key: 'another key', count: 0 },
+      { key: 'final key', count: 0 },
+    ]
+    expect(getFirstMaxValueKey(array)).toBe('some key')
   })
 })
 

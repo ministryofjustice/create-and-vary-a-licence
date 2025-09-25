@@ -7,6 +7,7 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { CaViewCasesTab } from '../../../enumeration'
 import config from '../../../config'
+import { getFirstMaxValueKey } from '../../../utils/utils'
 
 export default class CaSearch {
   constructor(
@@ -48,21 +49,14 @@ export default class CaSearch {
 
     const backLink = '/licence/view/cases'
 
-    const inPrisonIsActiveTab =
-      inPrisonResults.length >= onProbationResults.length && inPrisonResults.length >= attentionNeededResults.length
-    const attentionNeededIsActiveTab =
-      attentionNeededResults.length > inPrisonResults.length &&
-      attentionNeededResults.length >= onProbationResults.length
-    const onProbationIsActiveTab =
-      onProbationResults.length > inPrisonResults.length && onProbationResults.length > attentionNeededResults.length
-    let activeTab: string
-
-    if (inPrisonIsActiveTab) activeTab = '#people-in-prison'
-    if (attentionNeededIsActiveTab) activeTab = '#attention-needed'
-    if (onProbationIsActiveTab) activeTab = '#people-on-probation'
+    const numberOfTabResults = [
+      { key: '#people-in-prison', count: inPrisonResults.length },
+      { key: '#attention-needed', count: attentionNeededResults.length },
+      { key: '#people-on-probation', count: onProbationResults.length },
+    ]
 
     const tabParameters = {
-      activeTab,
+      activeTab: getFirstMaxValueKey(numberOfTabResults),
       prison: {
         tabId: 'tab-heading-prison',
         tabHeading: 'People in prison',
