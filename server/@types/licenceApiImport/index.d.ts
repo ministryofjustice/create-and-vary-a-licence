@@ -1189,6 +1189,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/cases/time-served/{prisonCode}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Returns a list of time served cases for a prison */
+    post: operations['getTimeServedCases']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/caseload/vary-approver': {
     parameters: {
       query?: never
@@ -3687,6 +3704,123 @@ export interface components {
        */
       onProbationCount: number
     }
+    /** @description Describes a probation practitioner on an approval case */
+    ProbationPractitioner: {
+      /**
+       * @description The unique staff code for the probation practitioner
+       * @example SH00001
+       */
+      staffCode?: string
+      /**
+       * @description The full name of the probation practitioner
+       * @example Joe Bloggs
+       */
+      name: string
+      /**
+       * Format: int64
+       * @description Probation staffIdentifier in nDelius
+       * @example 120003434
+       */
+      staffIdentifier?: number
+      /**
+       * @description The NOMIS username of the case administrator
+       * @example jbloggs
+       */
+      staffUsername?: string
+    }
+    /** @description Describes a Time Served case */
+    TimeServedCase: {
+      /**
+       * @description The full name of the person on licence
+       * @example John Doe
+       */
+      name: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      prisonerNumber: string
+      /** @description The details for the active supervising probation officer */
+      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       * @example 30/11/2022
+       */
+      releaseDate?: string
+      /**
+       * Format: date
+       * @description The sentence start date
+       * @example 30/11/2022
+       */
+      sentenceStartDate?: string
+      /**
+       * Format: date
+       * @description The conditional release date
+       * @example 30/11/2022
+       */
+      conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The conditional override release date
+       * @example 30/11/2022
+       */
+      conditionalReleaseDateOverride?: string
+      /**
+       * Format: date
+       * @description The confirmed release date
+       * @example 30/11/2022
+       */
+      confirmedReleaseDate?: string
+      /**
+       * @description Legal Status
+       * @example SENTENCED
+       * @enum {string}
+       */
+      nomisLegalStatus?:
+        | 'RECALL'
+        | 'DEAD'
+        | 'INDETERMINATE_SENTENCE'
+        | 'SENTENCED'
+        | 'CONVICTED_UNSENTENCED'
+        | 'CIVIL_PRISONER'
+        | 'IMMIGRATION_DETAINEE'
+        | 'REMAND'
+        | 'UNKNOWN'
+        | 'OTHER'
+      /**
+       * @description The agency code where this offender resides or was released from
+       * @example MDI
+       */
+      prisonCode?: string
+      /**
+       * @description This case is a time served based on CRDS rule
+       * @example true
+       */
+      isTimeServedCaseByCrdsRule: boolean
+      /**
+       * @description This case is a time served based on CRDS rule
+       * @example true
+       */
+      isTimeServedCaseByNonCrdsRule: boolean
+      /**
+       * @description This case is a time served based on All prison rule
+       * @example true
+       */
+      isTimeServedCaseByAllPrisonRule: boolean
+      /**
+       * @description This is a suspected time serve case
+       * @example true
+       */
+      isTimeServedCase: boolean
+    }
+    /** @description Describes a Time Served case */
+    TimeServedCaseload: {
+      /** @description List of the cases we have identified as being time served cases */
+      identifiedCases: components['schemas']['TimeServedCase'][]
+      /** @description Other cases coming up for release */
+      otherCases: components['schemas']['TimeServedCase'][]
+    }
     /** @description Search criteria for vary approver caseload search */
     VaryApproverCaseloadSearchRequest: {
       /**
@@ -3813,30 +3947,6 @@ export interface components {
        * @example Leeds (HMP)
        */
       prisonDescription?: string
-    }
-    /** @description Describes a probation practitioner on an approval case */
-    ProbationPractitioner: {
-      /**
-       * @description The unique staff code for the probation practitioner
-       * @example SH00001
-       */
-      staffCode?: string
-      /**
-       * @description The full name of the probation practitioner
-       * @example Joe Bloggs
-       */
-      name: string
-      /**
-       * Format: int64
-       * @description Probation staffIdentifier in nDelius
-       * @example 120003434
-       */
-      staffIdentifier?: number
-      /**
-       * @description The NOMIS username of the case administrator
-       * @example jbloggs
-       */
-      staffUsername?: string
     }
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
     ApproverSearchRequest: {
@@ -4539,57 +4649,6 @@ export interface components {
     }
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
-      /** @deprecated */
-      isVariation: boolean
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string
-      /** @description The address of initial appointment */
-      licenceAppointmentAddress?: components['schemas']['AddressResponse']
-      /**
-       * @deprecated
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentContact?: string
-      /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentTelephoneNumber?: string
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
@@ -4631,12 +4690,24 @@ export interface components {
        * @example Smith
        */
       surname?: string
-      kind: string
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
       nomsId?: string
+      kind: string
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       * @example 06/06/2023
+       */
+      postRecallReleaseDate?: string
+      /**
+       * Format: date
+       * @description The earliest conditional release date of the person on licence
+       * @example 13/08/2022
+       */
+      conditionalReleaseDate?: string
       /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
@@ -4654,6 +4725,12 @@ export interface components {
        * @enum {string}
        */
       appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
+      /**
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
+       */
+      appointmentTime?: string
       /**
        * @description The team description
        * @example Cardiff South
@@ -4700,28 +4777,10 @@ export interface components {
        */
       forename?: string
       /**
-       * Format: date-time
-       * @description The date and time of the initial appointment
-       * @example 23/08/2022 12:12
-       */
-      appointmentTime?: string
-      /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
       appointmentAddress?: string
-      /**
-       * Format: date
-       * @description The release date after being recalled
-       * @example 06/06/2023
-       */
-      postRecallReleaseDate?: string
-      /**
-       * Format: date
-       * @description The earliest conditional release date of the person on licence
-       * @example 13/08/2022
-       */
-      conditionalReleaseDate?: string
       /**
        * Format: date
        * @description The date that the licence will start
@@ -4796,15 +4855,15 @@ export interface components {
        */
       comEmail?: string
       /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string
-      /**
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
        */
       comUsername?: string
+      /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
+       */
+      submittedByFullName?: string
       /**
        * @description The agency description of the detaining prison
        * @example Leeds (HMP)
@@ -4908,6 +4967,57 @@ export interface components {
       updatedByUsername?: string
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string
+      /** @description The address of initial appointment */
+      licenceAppointmentAddress?: components['schemas']['AddressResponse']
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentTelephoneNumber?: string
+      /**
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string
     } & (
       | components['schemas']['PrrdLicenceResponse']
       | components['schemas']['CrdLicence']
@@ -5543,8 +5653,6 @@ export interface components {
         | 'SUPERSEDED'
         | 'HARD_STOP_CREATED'
         | 'HARD_STOP_SUBMITTED'
-        | 'HARD_STOP_REVIEWED_WITHOUT_VARIATION'
-        | 'HARD_STOP_REVIEWED_WITH_VARIATION'
         | 'VARIATION_CREATED'
         | 'VARIATION_SUBMITTED_REASON'
         | 'VARIATION_IN_PROGRESS'
@@ -5556,10 +5664,8 @@ export interface components {
         | 'VERSION_CREATED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
-        | 'TIME_SERVED_CREATED'
-        | 'TIME_SERVED_SUBMITTED'
-        | 'TIME_SERVED_REVIEWED_WITHOUT_VARIATION'
-        | 'TIME_SERVED_REVIEWED_WITH_VARIATION'
+        | 'REVIEWED_WITHOUT_VARIATION'
+        | 'REVIEWED_WITH_VARIATION'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -10267,6 +10373,73 @@ export interface operations {
       }
     }
   }
+  getTimeServedCases: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns a list of time served cases */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TimeServedCaseload'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getVaryApproverCaseload: {
     parameters: {
       query?: never
@@ -12689,8 +12862,6 @@ export interface operations {
           | 'SUPERSEDED'
           | 'HARD_STOP_CREATED'
           | 'HARD_STOP_SUBMITTED'
-          | 'HARD_STOP_REVIEWED_WITHOUT_VARIATION'
-          | 'HARD_STOP_REVIEWED_WITH_VARIATION'
           | 'VARIATION_CREATED'
           | 'VARIATION_SUBMITTED_REASON'
           | 'VARIATION_IN_PROGRESS'
@@ -12702,10 +12873,8 @@ export interface operations {
           | 'VERSION_CREATED'
           | 'NOT_STARTED'
           | 'TIMED_OUT'
-          | 'TIME_SERVED_CREATED'
-          | 'TIME_SERVED_SUBMITTED'
-          | 'TIME_SERVED_REVIEWED_WITHOUT_VARIATION'
-          | 'TIME_SERVED_REVIEWED_WITH_VARIATION'
+          | 'REVIEWED_WITHOUT_VARIATION'
+          | 'REVIEWED_WITH_VARIATION'
         )[]
         sortBy?: string
         sortOrder?: string
