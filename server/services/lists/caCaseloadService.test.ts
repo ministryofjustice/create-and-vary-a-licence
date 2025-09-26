@@ -32,7 +32,6 @@ describe('Caseload Service', () => {
     tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
     nomisLegalStatus: 'SENTENCED',
     lastWorkedOnBy: 'X Y',
-    isDueForEarlyRelease: true,
     isInHardStopPeriod: false,
   } as CaCase
 

@@ -50,7 +50,6 @@ const prisonerDetail = {
     recall: true,
   },
   cvl: {
-    isDueForEarlyRelease: false,
     isInHardStopPeriod: false,
     hardStopDate: '03/02/2023',
     hardStopWarningDate: '01/02/2023',
@@ -433,7 +432,6 @@ describe('Route Handlers - Offender detail', () => {
         recall: true,
       },
       cvl: {
-        isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         hardStopDate: '03/02/2023',
         hardStopWarningDate: '01/02/2023',

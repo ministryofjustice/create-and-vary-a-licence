@@ -65,7 +65,6 @@ describe('Route Handlers - Offender licences', () => {
         comUsername: 'Test Com',
         viewable: true,
         isReviewNeeded: false,
-        isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: true,
       } as LicenceSummary

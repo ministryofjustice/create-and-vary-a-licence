@@ -302,7 +302,6 @@ describe('View Prison Approver Search Results', () => {
           submittedByFullName: 'Submitted Person',
           releaseDate: '01/05/2024',
           urgentApproval: false,
-          isDueForEarlyRelease: false,
           approvedBy: null,
           approvedOn: null,
           kind: 'HDC',
