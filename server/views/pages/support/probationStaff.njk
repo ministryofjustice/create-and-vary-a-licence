@@ -31,8 +31,6 @@
 
     {% if offender.kind === 'HDC' or offender.kind === 'HDC_VARIATION' %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
-    {% elseif offender.isDueForEarlyRelease %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
     {% elseif offender.showHardStopWarning %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate +'</span>' %}
     {% else %}
