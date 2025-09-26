@@ -1,0 +1,305 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% set pageTitle = applicationName + " - Time Served cases by Prison" %}
+{% set pageId = "time-served-cases-by-prison-page" %}
+{% set backLinkHref = "/support" %}
+{% set noJsBackLink = true %}
+
+{% macro offenderName(offenderName, prisonNumber, licenceId, index) %}
+    <div class="caseload-offender-name">
+        <a href="/support/offender/{{ prisonNumber }}/detail" id="name-link-{{ index }}"
+           class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+                 <div class="govuk-hint govuk-!-font-size-16">Prison number: {{ prisonNumber }}</div>
+    </div>
+{% endmacro %}
+
+{% set identifiedCases = [] %}
+{% for offender in caseload.identifiedCases %}
+    {% set identifiedCases = (identifiedCases.push([
+        {
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": offender.name
+            },
+            classes: "max-width max-width-220",
+            html: offenderName(offender.name, offender.prisonNumber, offender.licenceId, loop.index)
+        },
+        {
+            attributes: {
+                id: 'time-served-all-' + loop.index
+            },
+            classes: "max-width max-width-200",
+            text: offender.isTimeServedCaseByAllPrisonRule
+        },
+        {
+            attributes: {
+                id: 'time-served-crds-' + loop.index
+            },
+            classes: "max-width max-width-200",
+            text: offender.isTimeServedCaseByCrdsRule
+        },
+        {
+            attributes: {
+                id: 'time-served-noncrds-' + loop.index
+            },
+            classes: "max-width max-width-200",
+            text: offender.isTimeServedCaseByNonCrdsRule
+        },
+        {
+            attributes: {
+                id: 'crd-' + loop.index,
+                "data-sort-value": offender.conditionalReleaseDate | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            text: offender.conditionalReleaseDate
+        },
+        {
+            attributes: {
+                id: 'crd-override-' + loop.index,
+                "data-sort-value": offender.conditionalReleaseDateOverride | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            text: offender.conditionalReleaseDateOverride
+        },
+        {
+            attributes: {
+                id: 'ard-' + loop.index,
+                "data-sort-value": offender.confirmedReleaseDate | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            text: offender.confirmedReleaseDate
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": offender.releaseDate | cvlDateToDateShort | dateToUnix
+            },
+            text: offender.releaseDate
+        }
+    ]), identifiedCases) %}
+{% endfor %}
+
+{% set otherCases = [] %}
+{% for offender in caseload.otherCases %}
+    {% set otherCases = (otherCases.push([
+        {
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": offender.name
+            },
+            classes: "max-width max-width-220",
+            html: offenderName(offender.name, offender.prisonNumber, offender.licenceId, loop.index)
+        },
+        {
+            attributes: {
+                id: 'crd-' + loop.index,
+                "data-sort-value": offender.conditionalReleaseDate | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            text: offender.conditionalReleaseDate
+        },
+        {
+            attributes: {
+                id: 'crd-override-' + loop.index,
+                "data-sort-value": offender.conditionalReleaseDateOverride | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            text: offender.conditionalReleaseDateOverride
+        },
+        {
+            attributes: {
+                id: 'ard-' + loop.index,
+                "data-sort-value": offender.confirmedReleaseDate | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            text: offender.confirmedReleaseDate
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": offender.releaseDate | cvlDateToDateShort | dateToUnix
+            },
+            text: offender.releaseDate
+        }
+    ]), otherCases) %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-body">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl">Time Served cases by prison</h1>
+            <form method="POST" action="/support/time-served-cases/by-prison">
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+              {{ govukSelect({
+                id: "prisonCode",
+                name: "prisonCode",
+                label: {
+                    text: "Currently showing cases in:"
+                },
+                items: prisons
+                }) }}
+                <div class="govuk-button-group">
+                {{ govukButton({
+                    text: "Switch prison"
+                }) }}
+                {{ govukButton({
+                    text: "Download CSV",
+                    href: "/support/time-served-cases/by-prison/" + prisonCode + "/download-csv",
+                    classes: "govuk-button--secondary"
+                }) }}
+                </div>
+            </form>  
+        </div>
+    </div>
+    {% set detail %}
+      <div class="govuk-body">
+        <p>There are 3 different ways of detecting whether a case is time served:
+            <ul>
+              <li class="govuk-!-padding-bottom-3">CRDS prisons:
+                <ul> 
+                    <li><code>sentenceStartDate</code> is today AND</li>
+                    <li><code>confirmedReleaseDate</code> is today AND</li>
+                    <li><code>conditionalReleaseDate</code> is today</li>
+                </ul>
+              </li>
+
+              <li class="govuk-!-padding-bottom-3">NON-CRDS Prisons: 
+                <ul> 
+                    <li><code>sentenceStartDate</code> is today AND</li>
+                    <li><code>confirmedReleaseDate</code> is today AND</li>
+                    <li><code>conditionalReleaseDate</code> is yesterday AND</li>
+                    <li><code>conditionalReleaseDateOverride</code> is today</li>
+                </ul>
+              </li>
+              <li class="govuk-!-padding-bottom-3">All prisons: 
+                <ul> 
+                    <li><code>sentenceStartDate</code> is today AND</li>
+                    <li><code>confirmedReleaseDate</code> is today AND</li>
+                    <li> (<code>conditionalReleaseDateOverrideDate</code> (if present) OR <code>conditionalReleaseDate</code> is today)</li>
+                </ul>   
+              </li>      
+            </ul>
+        <p>
+      </div>
+    {% endset %}
+    {{ govukDetails({ summaryText: "Explanation", html: detail }) }}
+
+    {% if identifiedCases.length > 0 %}
+        <h2>Cases identified as being time served</h2>
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Time Served Cases",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "Name",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "All Rule"
+                },
+                {
+                    text: "CRDS Rule"
+                },
+                {
+                    text: "Non-CRDS Rule"
+                },
+                {
+                    text: "Conditional Release Date",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Conditional Release Date Override",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Confirmed Release Date",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Release date",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                }
+            ],
+            rows: identifiedCases
+        }) }}
+
+
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h2 class="govuk-heading-s">There are no identified time served cases today.</h2>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if otherCases.length > 0 %}
+        <h2>Other upcoming releases</h2>
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Other upcoming releases",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "Name",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Conditional Release Date",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Conditional Release Date Override",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Confirmed Release Date",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Release date",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                }
+            ],
+            rows: otherCases
+        }) }}
+
+
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h2 class="govuk-heading-s">There are no other cases that are going to be released in the next 5 days.</h2>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -53,6 +53,7 @@ import type {
   AddAddressRequest,
   AddressResponse,
   PrisonerWithCvlFields,
+  TimeServedCaseload,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -626,6 +627,15 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username },
     )) as Promise<CaCase[]>
+  }
+
+  async getTimeServedCases(prisonCode: string, user?: User): Promise<TimeServedCaseload> {
+    return (await this.post(
+      {
+        path: `/cases/time-served/${prisonCode}`,
+      },
+      { username: user?.username },
+    )) as Promise<TimeServedCaseload>
   }
 
   async getProbationOmuCaseload(caCaseloadSearch: CaCaseloadSearch, user?: User): Promise<CaCase[]> {

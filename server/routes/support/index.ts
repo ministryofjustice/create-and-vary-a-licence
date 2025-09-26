@@ -23,10 +23,11 @@ import LicenceTypeChange from './types/licenceTypeChange'
 import LicencePrisonerDetails from './types/licencePrisonerDetails'
 import LicencePrisonerDetailsRoutes from './handlers/licencePrisonerDetails'
 import AuditDetailsRoutes from './handlers/auditDetails'
-import VaryApproverPduCaseloadRoutes from './handlers/VaryApproverPduCaseload'
-import VaryApproverRegionCaseloadRoutes from './handlers/VaryApproverRegionCaseload'
+import VaryApproverPduCaseloadRoutes from './handlers/varyApproverPduCaseload'
+import VaryApproverRegionCaseloadRoutes from './handlers/varyApproverRegionCaseload'
 import OffenderAllocationRoutes from './handlers/offenderAllocation'
-import PrrdCasesByPrisonRoutes from './handlers/PrrdCasesByPrison'
+import PrrdCasesByPrisonRoutes from './handlers/prrdCasesByPrison'
+import TimeServedCaseByPrisonRoutes from './handlers/timeServedCasesByPrison'
 
 export default function Index({
   probationService,
@@ -68,16 +69,6 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(probationService)
   const licencePrisonerDetailsHandler = new LicencePrisonerDetailsRoutes(licenceService, licenceOverrideService)
   const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
-  const varyApproverPduCaseloadHandler = new VaryApproverPduCaseloadRoutes(
-    probationService,
-    varyApproverCaseloadService,
-  )
-  const varyApproverRegionCaseloadHandler = new VaryApproverRegionCaseloadRoutes(
-    probationService,
-    varyApproverCaseloadService,
-  )
-
-  const prrdCasesByPrisonHandler = new PrrdCasesByPrisonRoutes(caCaseloadService, probationService, userService)
 
   get('/', supportHomeHandler.GET)
 
@@ -115,14 +106,33 @@ export default function Index({
   get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
 
   // get vary approver case load by pdu and region
+  const varyApproverRegionCaseloadHandler = new VaryApproverRegionCaseloadRoutes(
+    probationService,
+    varyApproverCaseloadService,
+  )
+  const varyApproverPduCaseloadHandler = new VaryApproverPduCaseloadRoutes(
+    probationService,
+    varyApproverCaseloadService,
+  )
   get('/variation-approver/cases/by-pdu', varyApproverPduCaseloadHandler.GET)
   get('/variation-approver/cases/by-region', varyApproverRegionCaseloadHandler.GET)
 
-  // get PRRD case by prison
+  // get PRRD cases by prison
+  const prrdCasesByPrisonHandler = new PrrdCasesByPrisonRoutes(caCaseloadService, probationService, userService)
   get('/prrd-cases/by-prison', prrdCasesByPrisonHandler.GET)
   post('/prrd-cases/by-prison', prrdCasesByPrisonHandler.POST)
   get('/prrd-cases/by-prison/:prisonCode', prrdCasesByPrisonHandler.GET)
   get('/prrd-cases/by-prison/:prisonCode/download-csv', prrdCasesByPrisonHandler.GET_CSV)
 
+  // get Time Served cases by prison
+  const timeServedCasesByPrisonHandler = new TimeServedCaseByPrisonRoutes(
+    caCaseloadService,
+    probationService,
+    userService,
+  )
+  get('/time-served-cases/by-prison', timeServedCasesByPrisonHandler.GET)
+  post('/time-served-cases/by-prison', timeServedCasesByPrisonHandler.POST)
+  get('/time-served-cases/by-prison/:prisonCode', timeServedCasesByPrisonHandler.GET)
+  get('/time-served-cases/by-prison/:prisonCode/download-csv', timeServedCasesByPrisonHandler.GET_CSV)
   return router
 }
