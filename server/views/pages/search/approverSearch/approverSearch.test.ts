@@ -18,7 +18,6 @@ const approvalNeededCases = [
     submittedByFullName: 'Submitted Person',
     releaseDate: '01/05/2024',
     urgentApproval: false,
-    isDueForEarlyRelease: false,
     approvedBy: null,
     approvedOn: null,
     kind: 'CRD',
@@ -36,7 +35,6 @@ const approvalNeededCases = [
     submittedByFullName: 'Submitted Person',
     releaseDate: '01/05/2024',
     urgentApproval: false,
-    isDueForEarlyRelease: false,
     approvedBy: null,
     approvedOn: null,
     kind: 'CRD',
@@ -57,7 +55,6 @@ const recentlyApprovedCases = [
     },
     submittedByFullName: 'Submitted Person',
     urgentApproval: false,
-    isDueForEarlyRelease: false,
     approvedBy: 'An Approver',
     approvedOn: '10/04/2023 00:00:00',
     kind: 'CRD',
@@ -75,7 +72,6 @@ const recentlyApprovedCases = [
     submittedByFullName: 'Submitted Person',
     releaseDate: '12/04/2024',
     urgentApproval: false,
-    isDueForEarlyRelease: false,
     approvedBy: 'An Approver',
     approvedOn: '12/04/2023 00:00:00',
     kind: 'CRD',
@@ -250,7 +246,6 @@ describe('View Prison Approver Search Results', () => {
           submittedByFullName: 'Submitted Person',
           releaseDate: '01/05/2024',
           urgentApproval: true,
-          isDueForEarlyRelease: false,
           approvedBy: null,
           approvedOn: null,
           kind: 'CRD',
@@ -332,63 +327,6 @@ describe('View Prison Approver Search Results', () => {
 
     expect($('#submitted-by-1').text()).toBe('Submitted Person')
     expect($('#release-date-1').text()).toBe('1 May 2024HDC release')
-  })
-
-  it('should display early release warning label when needed', () => {
-    const $ = render({
-      queryTerm: 'Test',
-      backLink: '/licence/approve/cases',
-      tabParameters: {
-        activeTab: '#approval-needed',
-        approvalNeeded: {
-          resultsCount: 1,
-          tabHeading: 'Approval needed',
-          tabId: 'tab-heading-approval-needed',
-        },
-        recentlyApproved: {
-          resultsCount: 0,
-          tabHeading: 'Recently approved',
-          tabId: 'tab-heading-recently-approved',
-        },
-      },
-      hasSelectedMultiplePrisonCaseloads: false,
-      approvalNeededCases: [
-        {
-          licenceId: 1,
-          name: 'Test Person 1',
-          prisonerNumber: 'A1234AA',
-          probationPractitioner: {
-            name: 'Test Com 1',
-            staffCode: 'ABC123',
-          },
-          submittedByFullName: 'Submitted Person',
-          releaseDate: '01/05/2024',
-          urgentApproval: false,
-          isDueForEarlyRelease: true,
-          approvedBy: null,
-          approvedOn: null,
-          kind: 'CRD',
-          prisonCode: 'MDI',
-          prisonDescription: 'Moorland (HMP)',
-        },
-      ],
-      recentlyApprovedCases: [],
-    })
-    expect($('#approval-search-heading').text()).toBe('Search results for Test')
-    expect($('.govuk-tabs__list a').text()).toContain('Approval needed (1 result)')
-    expect($('#tab-heading-approval-needed').text()).toContain('Approval needed (1 result)')
-    expect($('tbody .govuk-table__row').length).toBe(1)
-
-    expect($('#name-1 > a').text()).toBe('Test Person 1')
-    expect($('#name-1 > a').attr('href').trim()).toBe('/licence/approve/id/1/view')
-    expect($('#nomis-id-1').text()).toBe('A1234AA')
-    expect($('#probation-practitioner-1').text()).toBe('Test Com 1')
-    expect($('#probation-practitioner-1 > .govuk-link').attr('href').trim()).toBe(
-      '/licence/approve/id/1/probation-practitioner',
-    )
-
-    expect($('#submitted-by-1').text()).toBe('Submitted Person')
-    expect($('#release-date-1').text()).toBe('1 May 2024Early release')
   })
 
   it('should display the location column with data when the user has selected multiple prison caseloads', () => {

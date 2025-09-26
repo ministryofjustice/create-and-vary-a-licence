@@ -148,9 +148,6 @@
     {% elseif case.kind == 'HDC' %}
         {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
-    {% elseif case.isDueForEarlyRelease %}
-        {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate | cvlDateToDateShort
-            + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
     {% else %}
         {% set releaseDate = '<span data-qa="releaseDate">' + case.releaseDate | cvlDateToDateShort  + '</span>' %}
     {% endif %}
