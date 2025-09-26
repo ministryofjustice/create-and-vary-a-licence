@@ -45,10 +45,6 @@ export default class ApprovalViewRoutes {
           email: comDetails?.email,
         },
         returnPath,
-        isDueForEarlyRelease:
-          licence.kind !== LicenceKind.VARIATION &&
-          licence.kind !== LicenceKind.HDC_VARIATION &&
-          licence.isDueForEarlyRelease,
         hdcLicenceData,
       })
     } else {
