@@ -218,7 +218,6 @@ describe('Route Handlers - Search - Probation Search', () => {
           isOnProbation: true,
           isReviewNeeded: false,
           isInHardStopPeriod: false,
-          isDueForEarlyRelease: false,
           isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         {
@@ -237,7 +236,6 @@ describe('Route Handlers - Search - Probation Search', () => {
           isOnProbation: true,
           isReviewNeeded: true,
           isInHardStopPeriod: false,
-          isDueForEarlyRelease: false,
           isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         {
@@ -256,7 +254,6 @@ describe('Route Handlers - Search - Probation Search', () => {
           isOnProbation: true,
           isReviewNeeded: false,
           isInHardStopPeriod: false,
-          isDueForEarlyRelease: false,
           isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
       ]

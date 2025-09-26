@@ -92,7 +92,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           forename: 'Test',
           surname: 'Person',
           statusCode: LicenceStatus.IN_PROGRESS,
-          isDueForEarlyRelease: true,
           isInHardStopPeriod: false,
           kind: LicenceKind.CRD,
         } as Licence,

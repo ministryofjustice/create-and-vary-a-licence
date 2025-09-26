@@ -26,7 +26,6 @@ describe('Approval Caseload Service', () => {
       licenceId: 1,
       approvedBy: 'Jim Smith',
       approvedOn: '25/04/2014 00:00:00',
-      isDueForEarlyRelease: false,
       name: 'The Prisoner',
       prisonerNumber: 'AB1234E',
       releaseDate: '25/05/2024',

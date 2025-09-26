@@ -43,7 +43,6 @@ describe('COM Caseload Service', () => {
           name: 'Joe Bloggs',
           staffCode: 'X1234',
         },
-        isDueForEarlyRelease: false,
         isReviewNeeded: false,
       },
       {
@@ -52,7 +51,6 @@ describe('COM Caseload Service', () => {
         releaseDate: convertDateFormat(tenDaysFromNow),
         licenceStatus: 'NOT_STARTED',
         licenceType: 'PSS',
-        isDueForEarlyRelease: false,
         isReviewNeeded: false,
       },
       {
@@ -66,7 +64,6 @@ describe('COM Caseload Service', () => {
           staffCode: 'X54321',
           name: 'Test Com',
         },
-        isDueForEarlyRelease: false,
         isReviewNeeded: false,
       },
     ] as ComCase[]
@@ -89,7 +86,6 @@ describe('COM Caseload Service', () => {
           staffCode: 'X1234',
           name: 'Joe Bloggs',
         },
-        isDueForEarlyRelease: false,
         isReviewNeeded: false,
       },
       {
@@ -102,7 +98,6 @@ describe('COM Caseload Service', () => {
           staffCode: 'X54321',
           name: 'Test Com',
         },
-        isDueForEarlyRelease: false,
         isReviewNeeded: false,
       },
     ] as ComCase[]
@@ -125,7 +120,6 @@ describe('COM Caseload Service', () => {
           staffCode: 'X54321',
           name: 'Test Com',
         },
-        isDueForEarlyRelease: false,
         isReviewNeeded: false,
       },
     ] as ComCase[]
@@ -148,7 +142,6 @@ describe('COM Caseload Service', () => {
           staffCode: 'X1234',
           name: 'Joe Bloggs',
         },
-        isDueForEarlyRelease: false,
         isReviewNeeded: false,
       },
       {
@@ -161,7 +154,6 @@ describe('COM Caseload Service', () => {
           staffCode: 'X54321',
           name: 'Test Com',
         },
-        isDueForEarlyRelease: false,
         isReviewNeeded: false,
       },
     ] as ComCase[]
