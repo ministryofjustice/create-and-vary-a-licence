@@ -181,8 +181,6 @@
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
-    {% elseif offender.isDueForEarlyRelease %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
     {% else %}
@@ -260,8 +258,6 @@
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
-    {% elseif offender.isDueForEarlyRelease %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
     {% else %}
