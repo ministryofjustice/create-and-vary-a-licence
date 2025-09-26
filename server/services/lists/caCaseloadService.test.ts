@@ -1,6 +1,6 @@
 import { addDays, format } from 'date-fns'
 import { User } from '../../@types/CvlUserDetails'
-import { CaCase } from '../../@types/licenceApiClientTypes'
+import { CaCase, TimeServedCaseload } from '../../@types/licenceApiClientTypes'
 import CaCaseloadService from './caCaseloadService'
 import LicenceApiClient from '../../data/licenceApiClient'
 
@@ -57,6 +57,35 @@ describe('Caseload Service', () => {
     it('should return prison caseload', async () => {
       const result = await serviceUnderTest.getProbationOmuCaseload(user, ['BAI'], '')
       expect(result).toMatchObject([{ ...caCase, tabType: null }])
+    })
+  })
+
+  describe('Time Served cases', () => {
+    it('should return time served caseload', async () => {
+      const response: TimeServedCaseload = {
+        otherCases: [],
+        identifiedCases: [
+          {
+            name: 'Some Person',
+            nomisLegalStatus: 'SENTENCED',
+            prisonCode: 'MDI',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: { name: 'Probation User' },
+            releaseDate: '12/12/2024',
+            isTimeServedCase: true,
+            isTimeServedCaseByAllPrisonRule: true,
+            isTimeServedCaseByCrdsRule: true,
+            isTimeServedCaseByNonCrdsRule: true,
+            conditionalReleaseDate: '01/02/2024',
+            conditionalReleaseDateOverride: '02/02/2024',
+            confirmedReleaseDate: '03/02/2024',
+            sentenceStartDate: '04/02/2024',
+          },
+        ],
+      }
+      licenceApiClient.getTimeServedCases.mockResolvedValue(response)
+      const result = await serviceUnderTest.getTimeServedCases(user, 'BAI')
+      expect(result).toMatchObject(response)
     })
   })
 })
