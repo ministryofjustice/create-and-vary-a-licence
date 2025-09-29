@@ -1,1 +1,12 @@
-
+{
+  "england-and-wales": {
+    "division": "england-and-wales",
+    "events": [
+      {
+        "title": "New Year’s Day",
+        "date": "2024-01-01",
+        "notes": "",
+        "bunting": true
+      }
+  }
+}
