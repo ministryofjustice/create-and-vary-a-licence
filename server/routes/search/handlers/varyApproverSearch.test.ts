@@ -11,6 +11,15 @@ describe('Route Handlers - Search - Prison Vary Approver Search', () => {
   let req: Request
   let res: Response
 
+  const tabParameters = {
+    pduCases: {
+      tabId: 'tab-heading-pdu-cases',
+    },
+    regionCases: {
+      tabId: 'tab-heading-region-cases',
+    },
+  }
+
   beforeEach(() => {
     req = {} as Request
 
@@ -35,6 +44,7 @@ describe('Route Handlers - Search - Prison Vary Approver Search', () => {
       expect(res.render).toHaveBeenCalledWith('pages/search/varyApproverSearch/varyApproverSearch', {
         queryTerm: '',
         backLink: '/licence/vary-approve/list',
+        tabParameters,
       })
     }))
 })
