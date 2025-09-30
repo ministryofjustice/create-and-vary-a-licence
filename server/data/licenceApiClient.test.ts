@@ -825,7 +825,7 @@ describe('Licence API client tests', () => {
   })
 
   describe('get licence permissions', () => {
-    it('should delete an address by reference for a user', async () => {
+    it('should get licence permissions for a user', async () => {
       const user = { username: 'joebloggs' } as User
       const request: LicencePermissionsRequest = { teamCodes: ['team 1'] }
 
