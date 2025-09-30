@@ -50,6 +50,14 @@
             classes: "max-width max-width-200",
             text: offender.isTimeServedCaseByNonCrdsRule
         },
+         {
+            attributes: {
+                id: 'ssd-' + loop.index,
+                "data-sort-value": offender.sentenceStartDate | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            text: offender.sentenceStartDate
+        },
         {
             attributes: {
                 id: 'crd-' + loop.index,
@@ -94,6 +102,14 @@
             },
             classes: "max-width max-width-220",
             html: offenderName(offender.name, offender.prisonNumber, offender.licenceId, loop.index)
+        },
+        {
+            attributes: {
+                id: 'ssd-' + loop.index,
+                "data-sort-value": offender.sentenceStartDate | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            text: offender.sentenceStartDate
         },
         {
             attributes: {
@@ -214,6 +230,12 @@
                     text: "Non-CRDS Rule"
                 },
                 {
+                    text: "Sentence Start Date",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
                     text: "Conditional Release Date",
                     attributes: {
                         "aria-sort": "none"
@@ -261,6 +283,12 @@
             head: [
                 {
                     text: "Name",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                                {
+                    text: "Sentence Start Date",
                     attributes: {
                         "aria-sort": "none"
                     }
