@@ -62,4 +62,8 @@ export default class ViewCasesPage extends Page {
   clickLinkWithDataQa = id => {
     return cy.get(`[data-qa=${id}]`).click()
   }
+
+  checkIfFutureReleasesTabIsActive = () => {
+    return cy.get('#tab_future-releases').should('have.attr', 'aria-selected', 'true')
+  }
 }

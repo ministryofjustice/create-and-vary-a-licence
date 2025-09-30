@@ -320,4 +320,19 @@ context('View and print licence', () => {
     const viewLicencePage = viewCasesList.clickALicence()
     viewLicencePage.checkIfElectronicMonitoringAdditionalInformationDoesNotExist()
   })
+
+  it('Should navigate back to the "Future Release" tab when clicking the "Back" link', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
+    const comDetails = viewCasesList.clickComDetails()
+    viewCasesList = comDetails.clickReturn()
+    viewCasesList.clickFutureReleasesTab()
+    const viewLicencePage = viewCasesList.clickALicence()
+    viewLicencePage.clickBackToViewCases()
+    viewCasesList.checkIfFutureReleasesTabIsActive()
+  })
 })

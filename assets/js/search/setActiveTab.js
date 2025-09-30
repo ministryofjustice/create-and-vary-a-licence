@@ -1,1 +1,4 @@
-window.location.hash = document.getElementById('activeTab').value
+const activeTabValue = document.getElementById('activeTab')?.value
+if (activeTabValue) {
+  window.location.hash = activeTabValue
+}
