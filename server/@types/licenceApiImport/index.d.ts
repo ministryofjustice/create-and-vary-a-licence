@@ -761,6 +761,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/licence/id/{licenceId}/permissions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Check what access a user has to a licence
+     * @description Check what access a user has to a licence
+     */
+    post: operations['getLicencePermissions']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/licence/id/{licenceId}/override/type': {
     parameters: {
       query?: never
@@ -1220,6 +1240,26 @@ export interface paths {
      * @description Returns an enriched list of cases for people that have a variation to be approved
      */
     post: operations['getVaryApproverCaseload']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/caseload/vary-approver/case-search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Search for offenders on a given variation approver's caseload
+     * @description Search for offenders on a given variation approver's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    post: operations['searchForOffenderOnVaryApproverCaseload']
     delete?: never
     options?: never
     head?: never
@@ -3253,6 +3293,22 @@ export interface components {
        */
       homeDetentionCurfewActualDate?: string
     }
+    /** @description Request object for checking what access a user has to a licence */
+    LicencePermissionsRequest: {
+      /**
+       * @description For a COM user, the teams they are allocated to
+       * @example ['team-A', 'team-S']
+       */
+      teamCodes: string[]
+    }
+    /** @description Response object containing permissions a user has for a licence */
+    LicencePermissionsResponse: {
+      /**
+       * @description If true then the user can view the licence
+       * @example true
+       */
+      view: boolean
+    }
     /** @description Request object for overriding a licence type */
     OverrideLicenceTypeRequest: {
       /**
@@ -3833,7 +3889,7 @@ export interface components {
       probationAreaCode?: string
       /**
        * @description Search text to filter caseload
-       * @example 2022-04-20
+       * @example Joe Bloggs
        */
       searchTerm?: string
     }
@@ -3875,6 +3931,13 @@ export interface components {
       releaseDate?: string
       /** @description The details for the active supervising probation officer */
       probationPractitioner?: string
+    }
+    /** @description Response object which describes a result from a vary approver caseload search */
+    VaryApproverCaseloadSearchResponse: {
+      /** @description A list of cases in a pdu search results */
+      pduCasesResponse: components['schemas']['VaryApproverCase'][]
+      /** @description A list of cases in a region search results */
+      regionCasesResponse: components['schemas']['VaryApproverCase'][]
     }
     /** @description Describes an approval case */
     ApprovalCase: {
@@ -8850,6 +8913,86 @@ export interface operations {
       }
     }
   }
+  getLicencePermissions: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['LicencePermissionsRequest']
+      }
+    }
+    responses: {
+      /** @description The permissions the user has for the licence are returned */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['LicencePermissionsResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   changeType: {
     parameters: {
       query?: never
@@ -10438,6 +10581,75 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForOffenderOnVaryApproverCaseload: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['VaryApproverCaseloadSearchRequest']
+      }
+    }
+    responses: {
+      /** @description The query retrieved a set of enriched results */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VaryApproverCaseloadSearchResponse']
+        }
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
