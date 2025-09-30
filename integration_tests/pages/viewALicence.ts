@@ -5,6 +5,7 @@ import Page from './page'
 import PrintLicenceHtmlPage from './printLicenceHtmlPage'
 import CaSearchPage from './caSearch'
 import ManualAddressEntryPage from './manualAddressEntryPage'
+import ViewCasesPage from './viewCasesPage'
 
 export default class ViewALicencePage extends Page {
   constructor() {
@@ -99,5 +100,10 @@ export default class ViewALicencePage extends Page {
   checkIfElectronicMonitoringAdditionalInformationDoesNotExist = () => {
     cy.get('#electronicMonitoringProvider-isToBeTaggedForProgramme').should('not.exist')
     return this
+  }
+
+  clickBackToViewCases = (): ViewCasesPage => {
+    cy.get('.govuk-back-link').click()
+    return Page.verifyOnPage(ViewCasesPage)
   }
 }
