@@ -180,7 +180,7 @@ describe('Timeline Service', () => {
       expect(timelineEvents).toEqual(expected)
       expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith(
         '2',
-        ['REVIEWED_WITHOUT_VARIATION', 'HARD_STOP_REVIEWED_WITHOUT_VARIATION'],
+        ['REVIEWED_WITHOUT_VARIATION'],
         'eventTime',
         'DESC',
         user,
@@ -236,7 +236,7 @@ describe('Timeline Service', () => {
       expect(timelineEvents).toEqual(expected)
       expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith(
         '2',
-        ['REVIEWED_WITHOUT_VARIATION', 'HARD_STOP_REVIEWED_WITHOUT_VARIATION'],
+        ['REVIEWED_WITHOUT_VARIATION'],
         'eventTime',
         'DESC',
         user,
