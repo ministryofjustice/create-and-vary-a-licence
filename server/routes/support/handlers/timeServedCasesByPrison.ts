@@ -82,14 +82,17 @@ export default class TimeServedCasesByPrisonRoutes {
       .join('\n')
 
     res.type('text/csv')
-    res.setHeader(`Content-disposition`, `attachment; filename=prrd-case-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`)
+    res.setHeader(
+      `Content-disposition`,
+      `attachment; filename=time-served-case-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`,
+    )
     res.send(`${header.join(',')}\n${csv}`)
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonCode } = req.body
-    return res.redirect(`/support/prrd-cases/by-prison/${prisonCode || user.activeCaseload}`)
+    return res.redirect(`/support/time-served-cases/by-prison/${prisonCode || user.activeCaseload}`)
   }
 
   private async getCases(user: Express.LocalsUser, prisonCode: string) {
