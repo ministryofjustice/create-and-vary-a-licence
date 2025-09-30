@@ -131,4 +131,25 @@ describe('fetchLicenceMiddleware', () => {
     expect(licenceService.getLicence).toHaveBeenCalledTimes(1)
     expect(next).toHaveBeenCalledTimes(1)
   })
+
+  it('should allow access for a probation user to a licence linked to a different team where a newer licence version is linked to their team ', async () => {
+    res = probationRes
+    res.locals.licence = undefined
+    res.locals.user = {
+      ...res.locals.user,
+      probationTeamCodes: ['N55A'],
+      userRoles: ['ROLE_LICENCE_RO'],
+    }
+
+    const anotherLicence = { ...licence, probationTeamCode: 'another-team' }
+    licenceService.getLicence.mockResolvedValue(anotherLicence)
+    licenceService.canComAccessLicence.mockResolvedValue(true)
+
+    await middleware(req, res, next)
+
+    expect(res.locals.licence).toEqual(anotherLicence)
+    expect(licenceService.getLicence).toHaveBeenCalledTimes(1)
+    expect(licenceService.canComAccessLicence).toHaveBeenCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
+  })
 })

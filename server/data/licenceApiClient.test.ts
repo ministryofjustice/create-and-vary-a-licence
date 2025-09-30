@@ -2,33 +2,34 @@ import { Readable } from 'stream'
 import { Buffer } from 'buffer'
 import LicenceApiClient from './licenceApiClient'
 import {
+  AddAddressRequest,
   AdditionalConditionsRequest,
   AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
+  ApproverSearchRequest,
   AuditEvent,
   AuditRequest,
   BespokeConditionsRequest,
+  CaCaseloadSearch,
   ContactNumberRequest,
   Licence,
+  LicenceCreationResponse,
+  LicencePermissionsRequest,
   LicenceSummary,
+  OverrideLicencePrisonerDetailsRequest,
+  PrisonUserSearchRequest,
   ReferVariationRequest,
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
-  UpdatePrisonUserRequest,
+  UpdateElectronicMonitoringProgrammeRequest,
   UpdatePrisonInformationRequest,
+  UpdatePrisonUserRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
-  CaCaseloadSearch,
-  LicenceCreationResponse,
-  OverrideLicencePrisonerDetailsRequest,
-  UpdateElectronicMonitoringProgrammeRequest,
-  AddAddressRequest,
-  PrisonUserSearchRequest,
-  ApproverSearchRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -820,6 +821,17 @@ describe('Licence API client tests', () => {
       const user = { username: 'joebloggs' } as User
       await licenceApiClient.deleteAddressByReference(reference, user)
       expect(del).toHaveBeenCalledWith({ path: `/staff/address/reference/${reference}` }, { username: 'joebloggs' })
+    })
+  })
+
+  describe('get licence permissions', () => {
+    it('should delete an address by reference for a user', async () => {
+      const user = { username: 'joebloggs' } as User
+      const request: LicencePermissionsRequest = { teamCodes: ['team 1'] }
+
+      await licenceApiClient.getLicencePermissions(1, request, user)
+
+      expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/permissions', data: request }, { username: 'joebloggs' })
     })
   })
 })

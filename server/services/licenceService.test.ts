@@ -5,6 +5,7 @@ import LicenceApiClient from '../data/licenceApiClient'
 import LicenceService from './licenceService'
 import * as utils from '../utils/utils'
 import * as licenceComparator from '../utils/licenceComparator'
+import { VariedConditions } from '../utils/licenceComparator'
 import DateTime from '../routes/initialAppointment/types/dateTime'
 import Address from '../routes/initialAppointment/types/address'
 import LicenceType from '../enumeration/licenceType'
@@ -14,19 +15,18 @@ import BespokeConditions from '../routes/manageConditions/types/bespokeCondition
 import LicenceStatus from '../enumeration/licenceStatus'
 import {
   AdditionalCondition,
+  CaseloadItem,
+  ContactNumberRequest,
   Licence,
   LicenceSummary,
+  PrisonerWithCvlFields,
   StandardCondition,
   UpdateComRequest,
-  UpdatePrisonUserRequest,
-  UpdatePrisonInformationRequest,
-  UpdateProbationTeamRequest,
-  CaseloadItem,
   UpdateElectronicMonitoringProgrammeRequest,
-  ContactNumberRequest,
-  PrisonerWithCvlFields,
+  UpdatePrisonInformationRequest,
+  UpdatePrisonUserRequest,
+  UpdateProbationTeamRequest,
 } from '../@types/licenceApiClientTypes'
-import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
 import { AdditionalConditionsConfig } from '../@types/LicencePolicy'
@@ -765,6 +765,14 @@ describe('Licence Service', () => {
       }
       await licenceService.updateElectronicMonitoringProgramme(1, request)
       expect(licenceApiClient.updateElectronicMonitoringProgramme).toHaveBeenCalledWith(1, request)
+    })
+  })
+
+  describe('Can COM access licence', () => {
+    it('should check if a COM has permission to view a licence', async () => {
+      licenceApiClient.getLicencePermissions.mockResolvedValue({ view: true })
+      await licenceService.canComAccessLicence(1, user)
+      expect(licenceApiClient.getLicencePermissions).toHaveBeenCalled()
     })
   })
 })

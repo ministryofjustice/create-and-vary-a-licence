@@ -2260,6 +2260,11 @@ export interface components {
        */
       staffIdentifier: number
       /**
+       * @description The Delius staff code for the COM
+       * @example X012345
+       */
+      staffCode?: string
+      /**
        * @description The Delius username for the COM
        * @example jbloggs
        */
@@ -4693,6 +4698,57 @@ export interface components {
     }
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string
+      /** @description The address of initial appointment */
+      licenceAppointmentAddress?: components['schemas']['AddressResponse']
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentTelephoneNumber?: string
+      /**
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
@@ -4883,6 +4939,12 @@ export interface components {
        */
       crn?: string
       /**
+       * Format: date
+       * @description The sentence end date
+       * @example 13/09/2022
+       */
+      sentenceEndDate?: string
+      /**
        * @description The middle names of the person on licence
        * @example John Peter
        */
@@ -4934,12 +4996,6 @@ export interface components {
        * @example 13/09/2019
        */
       sentenceStartDate?: string
-      /**
-       * Format: date
-       * @description The sentence end date
-       * @example 13/09/2022
-       */
-      sentenceEndDate?: string
       /**
        * Format: date
        * @description The date when the post sentence supervision period starts, from prison services
@@ -5011,57 +5067,6 @@ export interface components {
       updatedByUsername?: string
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
-      /** @deprecated */
-      isVariation: boolean
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string
-      /** @description The address of initial appointment */
-      licenceAppointmentAddress?: components['schemas']['AddressResponse']
-      /**
-       * @deprecated
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentContact?: string
-      /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentTelephoneNumber?: string
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
     } & (
       | components['schemas']['PrrdLicenceResponse']
       | components['schemas']['CrdLicence']
