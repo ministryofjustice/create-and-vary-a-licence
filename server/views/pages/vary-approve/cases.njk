@@ -67,6 +67,32 @@
         </div>
     </div>
 
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <div class="moj-search govuk-!-margin-bottom-8">
+                 {% if pduHeadNewSearchEnabled %}
+                    <form method="GET" action="/search/vary-approver-search">
+                        <input type="hidden" id="activeTab" value="{{ activeTab }}">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+                                Find a case
+                            </label>
+                            <div id="search-hint" class="govuk-hint moj-search__hint">
+                                Search by name, CRN or probation practitioner
+                            </div>
+                            <input class="govuk-input moj-search__input" id="search" name="queryTerm"
+                                   aria-describedby="search-hint" value="{{ search }}">
+                        </div>
+                        <button class="govuk-button moj-search__button " data-module="govuk-button"
+                                data-qa="search-button">
+                            Search
+                        </button>
+                    </form>
+                 {% endif %}
+            </div>
+        </div>
+    </div>
+
     <nav class="moj-sub-navigation" aria-label="Sub navigation">
         <ul class="moj-sub-navigation__list">
             <li class="moj-sub-navigation__item">
@@ -77,6 +103,7 @@
                 <a id="allRegions" class="moj-sub-navigation__link" {% if regionCases %}aria-current="page"{% endif %}
                    href="?view=region">All cases in this region</a>
             </li>
+            {% if not pduHeadNewSearchEnabled %}
             <li class="moj-sub-navigation__item govuk-!-margin-right-0 govuk-!-width-one-half float-right">
                 <div class="moj-search">
                     <form method="GET">
@@ -95,6 +122,7 @@
                     </form>
                 </div>
             </li>
+            {% endif %}
         </ul>
     </nav>
 
