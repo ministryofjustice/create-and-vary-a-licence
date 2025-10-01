@@ -492,4 +492,13 @@ export default class LicenceService {
   async syncComAllocation(crn: string, user: User = null): Promise<void> {
     return this.licenceApiClient.syncComAllocation(crn, user)
   }
+
+  async canComAccessLicence(licenceId: number, user: User): Promise<boolean> {
+    const permissions = await this.licenceApiClient.getLicencePermissions(
+      licenceId,
+      { teamCodes: user.probationTeamCodes },
+      user,
+    )
+    return permissions.view
+  }
 }

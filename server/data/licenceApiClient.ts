@@ -1,63 +1,65 @@
 import { Readable } from 'stream'
 import RestClient from './hmppsRestClient'
 import type {
-  ContactNumberRequest,
-  CreateLicenceRequest,
-  LicenceSummary,
-  Licence,
-  LicenceEvent,
+  AddAdditionalConditionRequest,
+  AddAddressRequest,
+  AdditionalCondition,
+  AdditionalConditionsRequest,
+  AddressResponse,
+  AddressSearchResponse,
+  AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
-  AppointmentAddressRequest,
+  ApprovalCase,
+  ApproverSearchRequest,
+  ApproverSearchResponse,
   AuditEvent,
   AuditRequest,
   BespokeConditionsRequest,
-  StatusUpdateRequest,
-  AdditionalConditionsRequest,
-  UpdateAdditionalConditionDataRequest,
-  UpdateSpoDiscussionRequest,
-  UpdateVloDiscussionRequest,
-  UpdateReasonForVariationRequest,
-  UpdatePrisonInformationRequest,
-  ReferVariationRequest,
-  UpdateProbationTeamRequest,
-  NotifyRequest,
-  UpdateStandardConditionDataRequest,
-  OmuContact,
+  CaCase,
+  CaCaseloadSearch,
+  CaseloadItem,
+  ComCase,
+  ContactNumberRequest,
+  CreateLicenceRequest,
+  HdcLicenceData,
+  Licence,
   LicenceConditionChange,
-  AdditionalCondition,
-  AddAdditionalConditionRequest,
+  LicenceCreationResponse,
+  LicenceEvent,
   LicencePolicyResponse,
+  LicenceSummary,
+  NotifyRequest,
+  OmuContact,
   OverrideLicenceDatesRequest,
-  UpdateOffenderDetailsRequest,
+  OverrideLicencePrisonerDetailsRequest,
+  OverrideLicenceTypeRequest,
+  PrisonCaseAdminSearchResult,
+  PrisonerWithCvlFields,
+  PrisonUserSearchRequest,
   ProbationSearchRequest,
   ProbationSearchResult,
-  CaseloadItem,
-  LicenceCreationResponse,
-  ApprovalCase,
-  CaCaseloadSearch,
-  CaCase,
-  ComCase,
+  ReferVariationRequest,
+  StatusUpdateRequest,
   TeamCaseloadRequest,
-  HdcLicenceData,
-  OverrideLicenceTypeRequest,
-  OverrideLicencePrisonerDetailsRequest,
-  VaryApproverCaseloadSearchRequest,
-  VaryApproverCase,
-  PrisonCaseAdminSearchResult,
-  PrisonUserSearchRequest,
-  ApproverSearchRequest,
-  ApproverSearchResponse,
+  UpdateAdditionalConditionDataRequest,
   UpdateElectronicMonitoringProgrammeRequest,
-  AddressSearchResponse,
-  AddAddressRequest,
-  AddressResponse,
-  PrisonerWithCvlFields,
+  UpdateOffenderDetailsRequest,
+  UpdatePrisonInformationRequest,
+  UpdateProbationTeamRequest,
+  UpdateReasonForVariationRequest,
+  UpdateSpoDiscussionRequest,
+  UpdateStandardConditionDataRequest,
+  UpdateVloDiscussionRequest,
+  VaryApproverCase,
+  VaryApproverCaseloadSearchRequest,
   TimeServedCaseload,
+  LicencePermissionsRequest,
+  LicencePermissionsResponse,
 } from '../@types/licenceApiClientTypes'
+import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-import { UpdateComRequest, UpdatePrisonUserRequest, ComReviewCount } from '../@types/licenceApiClientTypes'
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
@@ -720,5 +722,16 @@ export default class LicenceApiClient extends RestClient {
 
   async syncComAllocation(crn: string, user?: User): Promise<void> {
     await this.put({ path: `/offender/sync-com/crn/${crn}` }, { username: user?.username })
+  }
+
+  async getLicencePermissions(
+    licenceId: number,
+    request: LicencePermissionsRequest,
+    user: User,
+  ): Promise<LicencePermissionsResponse> {
+    return (await this.post(
+      { path: `/licence/id/${licenceId}/permissions`, data: request },
+      { username: user.username },
+    )) as Promise<LicencePermissionsResponse>
   }
 }
