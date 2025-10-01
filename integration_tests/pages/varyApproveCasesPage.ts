@@ -1,4 +1,5 @@
 import Page from './page'
+import VaryApproveSearchPage from './varyApproveSearchPage'
 import VaryApproveViewPage from './varyApproveViewPage'
 
 export default class VaryApproveCasesPage extends Page {
@@ -6,8 +7,18 @@ export default class VaryApproveCasesPage extends Page {
 
   private allRegionsId = '#allRegions'
 
+  private searchTextInput = '#search'
+
+  private searchButtonId = '[data-qa=search-button]'
+
   constructor() {
     super('vary-approval-cases-page')
+  }
+
+  clickSearch = (text: string): VaryApproveSearchPage => {
+    cy.get(this.searchTextInput).type(text)
+    cy.get(this.searchButtonId).click()
+    return Page.verifyOnPage(VaryApproveSearchPage)
   }
 
   selectCase = (): VaryApproveViewPage => {
