@@ -273,7 +273,17 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
 
 const lowercaseFirstLetter = (message: string): string => message.charAt(0).toLowerCase() + message.slice(1)
 
+function escapeCsv(value: string | null | undefined): string {
+  if (value == null) return ''
+  const escaped = value.replace(/"/g, '""')
+  if (/[",\n]/.test(escaped)) {
+    return `"${escaped}"`
+  }
+  return escaped
+}
+
 export {
+  escapeCsv,
   convertToTitleCase,
   hasRole,
   hasAuthSource,

@@ -15,6 +15,7 @@ import type {
   ComReviewCount,
   ContactNumberRequest,
   CreateLicenceRequest,
+  LastMinuteHandoverCaseResponse,
   Licence,
   LicenceConditionChange,
   LicenceCreationResponse,
@@ -477,6 +478,10 @@ export default class LicenceService {
 
   async getIS91Status(nomsId: string): Promise<boolean> {
     return this.licenceApiClient.getIS91Status(nomsId)
+  }
+
+  async getLastMinuteCases(): Promise<LastMinuteHandoverCaseResponse[]> {
+    return this.licenceApiClient.getLastMinuteCases()
   }
 
   async updateElectronicMonitoringProgramme(

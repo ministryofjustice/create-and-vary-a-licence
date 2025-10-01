@@ -28,6 +28,7 @@ import VaryApproverRegionCaseloadRoutes from './handlers/varyApproverRegionCasel
 import OffenderAllocationRoutes from './handlers/offenderAllocation'
 import PrrdCasesByPrisonRoutes from './handlers/prrdCasesByPrison'
 import TimeServedCaseByPrisonRoutes from './handlers/timeServedCasesByPrison'
+import LastMinuteHandoverCasesRoutes from './handlers/lastMinuteHandoverCases'
 
 export default function Index({
   probationService,
@@ -123,6 +124,10 @@ export default function Index({
   post('/prrd-cases/by-prison', prrdCasesByPrisonHandler.POST)
   get('/prrd-cases/by-prison/:prisonCode', prrdCasesByPrisonHandler.GET)
   get('/prrd-cases/by-prison/:prisonCode/download-csv', prrdCasesByPrisonHandler.GET_CSV)
+
+  const lastMinuteHandoverCasesRoutes = new LastMinuteHandoverCasesRoutes(licenceService)
+  get('/last-minute-handover-cases', lastMinuteHandoverCasesRoutes.GET)
+  get('/last-minute-handover-cases/download-csv', lastMinuteHandoverCasesRoutes.GET_CSV)
 
   // get Time Served cases by prison
   const timeServedCasesByPrisonHandler = new TimeServedCaseByPrisonRoutes(
