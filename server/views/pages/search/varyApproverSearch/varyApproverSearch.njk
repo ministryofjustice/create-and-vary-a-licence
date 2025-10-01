@@ -1,8 +1,31 @@
 {% extends "layout.njk" %}
 
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+
 {% set pageTitle = applicationName + " - Prison Vary Approver - Search" %}
 {% set pageId = "vary-approval-search-page" %}
 {% set backLinkHref = backLink %}
+{% set noJsBackLink = true %}
+
+{% macro displayResults(tabId, countText) %}
+    <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <p id="vary-approval-search-empty-state-content">No licence variation requests that match '{{ queryTerm }}'. Try searching again.</p>
+            <p><strong>If you still cannot find a variation request</strong></p>
+            <p>Check if it was approved by another PDU head in this region.</p>
+            <p>Contact helpdesk by calling 0800 917 5148, or #6598 from inside a prison, if you think a variation request is missing.</p>
+            <p class="govuk-body">
+                {{ govukButton({
+                    text: "Return to case list",
+                    classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                    href: backLink,
+                    attributes: { 'data-qa': 'return-to-caselist' }
+                }) }}
+            </p>
+        </div>
+    </div>
+{% endmacro %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -30,5 +53,30 @@
             </form>
         </div>
     </div>
+
+    {% set pduCasesCountText = "Cases in this PDU (0 results)" %}
+    {% set regionCasesCountText = "All cases in this region (0 results)" %}
+
+    {% set pduCases = displayResults(tabParameters.pduCases.tabId, pduCasesCountText) %}
+    {% set regionCases = displayResults(tabParameters.regionCases.tabId, regionCasesCountText) %}
+
+    {{ govukTabs({
+        items: [
+            {
+                label: pduCasesCountText,
+                id: "pdu-cases",
+                panel: {
+                    html: pduCases
+                }
+            },
+            {
+                label: regionCasesCountText,
+                id: "region-cases",
+                panel: {
+                    html: regionCases
+                }
+            }
+        ]
+    }) }}
 
 {% endblock %}
