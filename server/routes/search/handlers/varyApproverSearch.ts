@@ -8,9 +8,19 @@ export default class VaryApproverSearch {
     const queryTerm = req.query?.queryTerm as string
     const backLink = '/licence/vary-approve/list'
 
+    const tabParameters = {
+      pduCases: {
+        tabId: 'tab-heading-pdu-cases',
+      },
+      regionCases: {
+        tabId: 'tab-heading-region-cases',
+      },
+    }
+
     return res.render('pages/search/varyApproverSearch/varyApproverSearch', {
       queryTerm,
       backLink,
+      tabParameters,
     })
   }
 }
