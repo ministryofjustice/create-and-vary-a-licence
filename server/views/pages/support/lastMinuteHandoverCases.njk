@@ -86,7 +86,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-four-quarters">
             <h1 class="govuk-heading-xl">Upcoming Releases with Incomplete Licences</h1>
-            <h2 class="govuk-heading-s">There are {{ lastMinuteCases.length }} upcoming releases with incomplete licences in next 7 days</h2>
+            <h2 class="govuk-heading-s">There are {{ lastMinuteCases.length }} upcoming releases with incomplete licences in the next 7 days</h2>
             <div class="govuk-button-group">
                         {{ govukButton({
                             text: "Download CSV",
@@ -155,13 +155,6 @@
             ],
             rows: cases
         }) }}
-
-    {% else %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
-                <h2 class="govuk-heading-s">There are no upcoming releases with incomplete licences</h2>
-            </div>
-        </div>
     {% endif %}
 
 {% endblock %}

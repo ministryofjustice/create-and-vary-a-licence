@@ -13,6 +13,7 @@ import {
   BespokeConditionsRequest,
   CaCaseloadSearch,
   ContactNumberRequest,
+  LastMinuteHandoverCaseResponse,
   Licence,
   LicenceCreationResponse,
   LicencePermissionsRequest,
@@ -832,6 +833,61 @@ describe('Licence API client tests', () => {
       await licenceApiClient.getLicencePermissions(1, request, user)
 
       expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/permissions', data: request }, { username: 'joebloggs' })
+    })
+  })
+
+  const createLastMinuteCase = (
+    overrides?: Partial<LastMinuteHandoverCaseResponse>,
+  ): LastMinuteHandoverCaseResponse => ({
+    releaseDate: '2025-10-15',
+    probationRegion: 'North West',
+    prisonerNumber: 'A1234BC',
+    crn: 'X123456',
+    prisonerName: 'John Smith',
+    probationPractitioner: 'Jane Doe',
+    status: 'IN_PROGRESS',
+    prisonCode: 'LEI',
+    prisonName: 'Leeds Prison',
+    ...overrides,
+  })
+
+  describe('get last minute cases', () => {
+    it('should call the correct endpoint and return cases', async () => {
+      // Given
+      const mockResponse = [createLastMinuteCase()]
+      ;(get as jest.Mock).mockResolvedValue(mockResponse)
+
+      // When
+      const result = await licenceApiClient.getLastMinuteCases()
+
+      // Then
+      expect(get).toHaveBeenCalledWith({
+        path: '/offender/support/report/last-minute-handover-cases',
+      })
+      expect(result).toEqual(mockResponse)
+    })
+
+    it('should return an empty array if no cases exist', async () => {
+      // Given
+      ;(get as jest.Mock).mockResolvedValue([])
+
+      // When
+      const result = await licenceApiClient.getLastMinuteCases()
+
+      // Then
+      expect(get).toHaveBeenCalledWith({
+        path: '/offender/support/report/last-minute-handover-cases',
+      })
+      expect(result).toEqual([])
+    })
+
+    it('should propagate errors if the request fails', async () => {
+      // Given
+      const error = new Error('Network failure')
+      ;(get as jest.Mock).mockRejectedValue(error)
+
+      // When / Then
+      await expect(licenceApiClient.getLastMinuteCases()).rejects.toThrow('Network failure')
     })
   })
 })
