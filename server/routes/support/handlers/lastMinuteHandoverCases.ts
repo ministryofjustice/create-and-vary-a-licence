@@ -4,7 +4,6 @@ import { format } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import { convertToTitleCase, escapeCsv } from '../../../utils/utils'
 
-
 export default class LastMinuteHandoverCasesRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
