@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { format } from 'date-fns'
 
 import LicenceService from '../../../services/licenceService'
-import { escapeCsv } from '../../../utils/utils'
+import { convertToTitleCase, escapeCsv } from '../../../utils/utils'
 
 export default class LastMinuteHandoverCasesRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -19,7 +19,7 @@ export default class LastMinuteHandoverCasesRoutes {
 
     const header = [
       'Probation Region',
-      'Prison Code',
+      'Prison Name',
       'Release Date',
       'Licence Status',
       'Probation Practitioner',
@@ -31,7 +31,7 @@ export default class LastMinuteHandoverCasesRoutes {
     const csv = lastMinuteCases
       .map(lastMinuteCases => [
         lastMinuteCases.probationRegion,
-        lastMinuteCases.prisonCode,
+        lastMinuteCases.prisonName,
         lastMinuteCases.releaseDate,
         lastMinuteCases.status,
         lastMinuteCases.probationPractitioner,
@@ -45,7 +45,7 @@ export default class LastMinuteHandoverCasesRoutes {
     res.type('text/csv')
     res.setHeader(
       `Content-disposition`,
-      `attachment; filename=tag-report-cases-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`,
+      `attachment; filename=upcoming-releases-with-incomplete-licences-report-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`,
     )
     res.send(`${header.join(',')}\n${csv}`)
   }
@@ -58,9 +58,10 @@ export default class LastMinuteHandoverCasesRoutes {
         crn: lastMinuteCase.crn,
         prisonerNumber: lastMinuteCase.prisonerNumber,
         prisonCode: lastMinuteCase.prisonCode,
+        prisonName: escapeCsv(lastMinuteCase.prisonName),
         releaseDate: lastMinuteCase.releaseDate,
         probationPractitioner: lastMinuteCase.probationPractitioner,
-        prisonerName: escapeCsv(lastMinuteCase.prisonerName),
+        prisonerName: convertToTitleCase(escapeCsv(lastMinuteCase.prisonerName)),
         probationRegion: escapeCsv(lastMinuteCase.probationRegion),
         status: lastMinuteCase.status,
       }

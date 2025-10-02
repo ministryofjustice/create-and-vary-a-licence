@@ -4,86 +4,96 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set pageTitle = applicationName + " - Tag a source Report" %}
-{% set pageId = "last-minute-handover-cases-page" %}
+{% set pageTitle = applicationName + " - Upcoming Releases with Incomplete Licences" %}
+{% set pageId = "upcoming-releases-with-incomplete-licences" %}
 {% set backLinkHref = "/support" %}
 {% set noJsBackLink = true %}
 
 {% set cases = [] %}
 
+{% macro offenderName(prisonerName, prisonNumber, index) %}
+    <div class="caseload-offender-name">
+        <a href="/support/offender/{{ prisonNumber }}/detail" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">
+            {{ prisonerName }}</a>
+        <div class="govuk-hint govuk-!-font-size-16">Prison number: {{ prisonNumber }}</div>
+    </div>
+{% endmacro %}
+
 {% for lastMinuteCase in lastMinuteCases %}
     {% set cases = (cases.push([
         {
             attributes: {
-            id: 'probation-region-' + loop.index,
-            "data-sort-value": lastMinuteCase.probationRegion
-        },
+                id: 'probation-region-' + loop.index,
+                "data-sort-value": lastMinuteCase.probationRegion
+            },
             text: lastMinuteCase.probationRegion
         },
         {
             attributes: {
-            id: 'prion-code-' + loop.index,
-            "data-sort-value": lastMinuteCase.prisonCode
-        },
-            text: lastMinuteCase.prisonCode
+                id: 'prion-name-' + loop.index,
+                "data-sort-value": lastMinuteCase.prisonName
+            },
+            html:  lastMinuteCase.prisonName
         },
         {
             attributes: {
-            id: 'release-date-' + loop.index,
-            "data-sort-value": lastMinuteCase.releaseDate
+                id: 'prion-code-' + loop.index,
+                "data-sort-value": lastMinuteCase.prisonCode
+            },
+            html:  lastMinuteCase.prisonCode
         },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": lastMinuteCase.releaseDate
+            },
+            classes: "min-width-400",
             text: lastMinuteCase.releaseDate
         },
         {
             attributes: {
-            id: 'status-' + loop.index,
-            "data-sort-value": lastMinuteCase.status
-        },
+                id: 'status-' + loop.index,
+                "data-sort-value": lastMinuteCase.status
+            },
             text: lastMinuteCase.status
         },
         {
             attributes: {
-            id: 'probation-practitioner-' + loop.index,
-            "data-sort-value": lastMinuteCase.probationPractitioner
-        },
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": lastMinuteCase.probationPractitioner
+            },
             text: lastMinuteCase.probationPractitioner
         },
         {
             attributes: {
-            id: 'prisoner-number' + loop.index,
-            "data-sort-value": lastMinuteCase.prisonerNumber
-        },
-            html: lastMinuteCase.prisonerNumber
-        },
-        {
-            attributes: {
-            id: 'crn-' + loop.index,
-            "data-sort-value": lastMinuteCase.crn
-        },
+                id: 'crn-' + loop.index,
+                "data-sort-value": lastMinuteCase.crn
+            },
             html: lastMinuteCase.crn
         },
         {
             attributes: {
-            id: 'prisoner-name-' + loop.index,
-            "data-sort-value": lastMinuteCase.prisonerName
-        },
-            classes: "min-width-300",
-            text: lastMinuteCase.prisonerName
+                id: 'prisonerName-' + loop.index,
+                "data-sort-value": lastMinuteCase.prisonerName
+            },
+            classes: "max-width max-width-220",
+            html: offenderName(lastMinuteCase.prisonerName, lastMinuteCase.prisonerNumber, loop.index)
         }
     ]), cases) %}
 {% endfor %}
 
 {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">Tag a Source Report</h1>
-                <div class="govuk-button-group">
-                {{ govukButton({
-                    text: "Download CSV",
-                    href: "/support/last-minute-handover-cases/download-csv",
-                    classes: "govuk-button--secondary"
-                }) }}
-                </div>
+        <div class="govuk-grid-column-four-quarters">
+            <h1 class="govuk-heading-xl">Upcoming Releases with Incomplete Licences</h1>
+            <h2 class="govuk-heading-s">There are {{ lastMinuteCases.length }} upcoming releases with incomplete licences in next 7 days</h2>
+            <div class="govuk-button-group">
+                        {{ govukButton({
+                            text: "Download CSV",
+                            href: "/support/last-minute-handover-cases/download-csv",
+                            classes: "govuk-button--secondary"
+                        }) }}
+            </div>
         </div>
     </div>
     {% if lastMinuteCases.length > 0 %}
@@ -101,10 +111,16 @@
                     }
                 },
                 {
-                    text: "Prison code",
+                    text: "Prison",
                     attributes: {
                         "aria-sort": "none"
                      }
+                },
+                {
+                    text: "Prison Code",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
                 },
                 {
                     text: "Release date",
@@ -120,12 +136,6 @@
                 },
                 {
                     text: "Probation practitioner",
-                    attributes: {
-                        "aria-sort": "none"
-                    }
-                },
-                {
-                    text: "Prison number",
                     attributes: {
                         "aria-sort": "none"
                     }
@@ -149,7 +159,7 @@
     {% else %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                <h2 class="govuk-heading-s">There are no last minute cases.</h2>
+                <h2 class="govuk-heading-s">There are no upcoming releases with incomplete licences</h2>
             </div>
         </div>
     {% endif %}

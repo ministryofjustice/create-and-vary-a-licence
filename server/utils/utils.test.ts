@@ -27,6 +27,7 @@ import {
   isVariation,
   isHdcLicence,
   lowercaseFirstLetter,
+  escapeCsv,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -602,5 +603,73 @@ describe('  lowercaseFirstLetter', () => {
 
   it('should handle single character message', () => {
     expect(lowercaseFirstLetter('X')).toBe('x')
+  })
+})
+
+describe('escapeCsv', () => {
+  it('returns empty string if value is null', () => {
+    // Given
+    const value: string = null
+
+    // When
+    const result = escapeCsv(value)
+
+    // Then
+    expect(result).toBe('')
+  })
+
+  it('returns empty string if value is undefined', () => {
+    // Given
+    const value: string = undefined
+
+    // When
+    const result = escapeCsv(value)
+
+    // Then
+    expect(result).toBe('')
+  })
+
+  it('returns the same string if no special characters are present', () => {
+    // Given
+    const value = 'hello'
+
+    // When
+    const result = escapeCsv(value)
+
+    // Then
+    expect(result).toBe('hello')
+  })
+
+  it('escapes quotes by doubling them', () => {
+    // Given
+    const value = 'he said "hi"'
+
+    // When
+    const result = escapeCsv(value)
+
+    // Then
+    expect(result).toBe('"he said ""hi"""')
+  })
+
+  it('wraps value in quotes if it contains a comma', () => {
+    // Given
+    const value = 'hello,world'
+
+    // When
+    const result = escapeCsv(value)
+
+    // Then
+    expect(result).toBe('"hello,world"')
+  })
+
+  it('wraps value in quotes if it contains a newline', () => {
+    // Given
+    const value = 'hello\nworld'
+
+    // When
+    const result = escapeCsv(value)
+
+    // Then
+    expect(result).toBe('"hello\nworld"')
   })
 })
