@@ -4,8 +4,8 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set pageTitle = applicationName + " - PRRD cases by Prison" %}
-{% set pageId = "prrd-case-by-prison-page" %}
+{% set pageTitle = applicationName + " - Tag a source Report" %}
+{% set pageId = "last-minute-handover-cases-page" %}
 {% set backLinkHref = "/support" %}
 {% set noJsBackLink = true %}
 
@@ -15,24 +15,10 @@
     {% set cases = (cases.push([
         {
             attributes: {
-            id: 'crn-' + loop.index,
-            "data-sort-value": lastMinuteCase.crn
+            id: 'probation-region-' + loop.index,
+            "data-sort-value": lastMinuteCase.probationRegion
         },
-            html: lastMinuteCase.crn
-        },
-        {
-            attributes: {
-            id: 'prisoner-number' + loop.index,
-            "data-sort-value": lastMinuteCase.prisonerNumber
-        },
-            html: lastMinuteCase.prisonerNumber
-        },
-        {
-            attributes: {
-            id: 'release-date-' + loop.index,
-            "data-sort-value": lastMinuteCase.releaseDate
-        },
-            text: lastMinuteCase.releaseDate
+            text: lastMinuteCase.probationRegion
         },
         {
             attributes: {
@@ -43,6 +29,20 @@
         },
         {
             attributes: {
+            id: 'release-date-' + loop.index,
+            "data-sort-value": lastMinuteCase.releaseDate
+        },
+            text: lastMinuteCase.releaseDate
+        },
+        {
+            attributes: {
+            id: 'status-' + loop.index,
+            "data-sort-value": lastMinuteCase.status
+        },
+            text: lastMinuteCase.status
+        },
+        {
+            attributes: {
             id: 'probation-practitioner-' + loop.index,
             "data-sort-value": lastMinuteCase.probationPractitioner
         },
@@ -50,10 +50,17 @@
         },
         {
             attributes: {
-            id: 'probation-region-' + loop.index,
-            "data-sort-value": lastMinuteCase.probationRegion
+            id: 'prisoner-number' + loop.index,
+            "data-sort-value": lastMinuteCase.prisonerNumber
         },
-            text: lastMinuteCase.probationRegion
+            html: lastMinuteCase.prisonerNumber
+        },
+        {
+            attributes: {
+            id: 'crn-' + loop.index,
+            "data-sort-value": lastMinuteCase.crn
+        },
+            html: lastMinuteCase.crn
         },
         {
             attributes: {
@@ -62,13 +69,6 @@
         },
             classes: "min-width-300",
             text: lastMinuteCase.prisonerName
-        },
-        {
-            attributes: {
-            id: 'status-' + loop.index,
-            "data-sort-value": lastMinuteCase.status
-        },
-            text: lastMinuteCase.status
         }
     ]), cases) %}
 {% endfor %}
@@ -77,8 +77,6 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-xl">Tag a Source Report</h1>
-            <form method="POST" action="/support/prrd-cases/by-prison">
-              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <div class="govuk-button-group">
                 {{ govukButton({
                     text: "Download CSV",
@@ -86,8 +84,6 @@
                     classes: "govuk-button--secondary"
                 }) }}
                 </div>
-            </form>  
-           
         </div>
     </div>
     {% if lastMinuteCases.length > 0 %}
@@ -99,16 +95,16 @@
             captionClasses: "govuk-visually-hidden",
             head: [
                 {
-                    text: "CRN",
+                    text: "Probation region",
                     attributes: {
                         "aria-sort": "none"
                     }
                 },
                 {
-                    text: "Prison number",
+                    text: "Prison code",
                     attributes: {
                         "aria-sort": "none"
-                    }
+                     }
                 },
                 {
                     text: "Release date",
@@ -117,7 +113,7 @@
                     }
                 },
                 {
-                    text: "Prison code",
+                    text: "Licence status",
                     attributes: {
                         "aria-sort": "none"
                     }
@@ -129,19 +125,19 @@
                     }
                 },
                 {
-                    text: "Probation region",
+                    text: "Prison number",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "CRN",
                     attributes: {
                         "aria-sort": "none"
                     }
                 },
                 {
                     text: "Prisoner name",
-                    attributes: {
-                        "aria-sort": "none"
-                    }
-                },
-                {
-                    text: "Licence status",
                     attributes: {
                         "aria-sort": "none"
                     }

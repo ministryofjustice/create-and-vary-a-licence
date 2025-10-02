@@ -18,26 +18,26 @@ export default class LastMinuteHandoverCasesRoutes {
     const lastMinuteCases = await this.getLastMinuteCases()
 
     const header = [
-      'CRN',
-      'Prison Number',
-      'Release Date',
-      'Prison Code',
-      'Probation Practitioner',
       'Probation Region',
-      'Prisoner Name',
+      'Prison Code',
+      'Release Date',
       'Licence Status',
+      'Probation Practitioner',
+      'Prison Number',
+      'CRN',
+      'Prisoner Name',
     ]
 
     const csv = lastMinuteCases
       .map(lastMinuteCases => [
-        lastMinuteCases.crn,
-        lastMinuteCases.prisonerNumber,
-        lastMinuteCases.releaseDate,
-        lastMinuteCases.prisonCode,
-        lastMinuteCases.probationPractitioner,
         lastMinuteCases.probationRegion,
-        lastMinuteCases.prisonerName,
+        lastMinuteCases.prisonCode,
+        lastMinuteCases.releaseDate,
         lastMinuteCases.status,
+        lastMinuteCases.probationPractitioner,
+        lastMinuteCases.prisonerNumber,
+        lastMinuteCases.crn,
+        lastMinuteCases.prisonerName,
       ])
       .map(row => row.join(','))
       .join('\n')
