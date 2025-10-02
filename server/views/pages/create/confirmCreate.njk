@@ -4,119 +4,88 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "moj/components/badge/macro.njk" import mojBadge %}
 
 {% set pageTitle = applicationName + " - Create a licence - Are you sure?" %}
 {% set pageId = "confirm-create-page" %}
 {% set backLinkHref = backLink %}
 
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full-from-desktop">
-            <h1 class="govuk-heading-l">Are you sure you want to create this licence?</h1>
-        </div>
-    </div>
-
+    <h1 class="govuk-heading-l">Are you sure you want to create this licence?</h1>
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        {% if licence.isEligibleForEarlyRelease %}
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full-from-desktop">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                {% if licence.isEligibleForEarlyRelease %}
                     {{ govukWarningText({
                         html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
                         iconFallbackText: "Warning"
                     }) }}
+                {% endif %}
 
-                    {{ govukSummaryList({
-                        rows: [
-                            {
-                                key: {
-                                    text: "Name"
-                                },
-                                value: {
-                                    text: licence.forename + " " + licence.surname
-                                }
-                            },
-                            {
-                                key: {
-                                    text: "CRN"
-                                },
-                                value: {
-                                    text: licence.crn
-                                }
-                            },
-                            {
-                                key: {
-                                    text: "Release date"
-                                },
-                                value: {
-                                    text: licence.licenceStartDate | datetimeToDate
-                                }
-                            }
-                        ]
+                {% set nomisBadge %}
+                    {{ mojBadge({
+                        text: "NOMIS",
+                        classes: "moj-badge--black"
                     }) }}
-                </div>
-            </div>
-
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <div class="govuk-button-group">
-                        {{ govukButton({
-                            text: 'Continue and create licence',
-                            type: 'submit',
-                            name: 'answer',
-                            value: 'Yes',
-                            preventDoubleClick: true
-                        }) }}
-
-                        {{ govukButton({
-                            text: 'Return to case list',
-                            href: backLink,
-                            classes: "govuk-button--secondary"
-                        }) }}
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full-from-desktop">
-                    {{ govukRadios({
-                        classes: "govuk-radios--inline",
-                        idPrefix: "answer",
-                        name: "answer",
-                        fieldset: {
-                            legend: {
-                                text: "Are you sure you want to create this licence?",
-                                isPageHeading: false,
-                                classes: "govuk-visually-hidden"
+                {% endset %}
+                {{ govukSummaryList({
+                    rows: [
+                        {
+                            key: {
+                                text: "Name"
+                            },
+                            value: {
+                                text: licence.forename + " " + licence.surname
                             }
                         },
-                        errorMessage: validationErrors | findError('answer'),
-                        items: [
-                            {
-                                value: "Yes",
-                                text: "Yes"
+                        {
+                            key: {
+                                text: "CRN"
                             },
-                            {
-                                value: "No",
-                                text: "No"
+                            value: {
+                                text: licence.crn
                             }
-                        ]
+                        },
+                        {
+                            key: {
+                                text: "Release date"
+                            },
+                            value: {
+                                text: licence.licenceStartDate | datetimeToDateWithDay
+                            },
+                            actions: {
+                                items: [
+                                    {
+                                        href: "#",
+                                        html: nomisBadge
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }) }}
+            </div>
+        </div>
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: 'Continue and create licence',
+                        type: 'submit',
+                        name: 'answer',
+                        value: 'Yes',
+                        preventDoubleClick: true
+                    }) }}
+
+                    {{ govukButton({
+                        text: 'Return to case list',
+                        href: backLink,
+                        classes: "govuk-button--secondary"
                     }) }}
                 </div>
             </div>
-
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <div class="govuk-button-group">
-                        {{ govukButton({
-                            text: 'Continue',
-                            type: "submit",
-                            attributes: { 'data-qa': 'continue' },
-                            preventDoubleClick: true
-                        }) }}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+        </div>
     </form>
 {% endblock %}
