@@ -56,6 +56,7 @@ import type {
   TimeServedCaseload,
   LicencePermissionsRequest,
   LicencePermissionsResponse,
+  LastMinuteHandoverCaseResponse,
 } from '../@types/licenceApiClientTypes'
 import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
@@ -701,6 +702,12 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({
       path: `/offender/nomisid/${nomisId}/is-91-status`,
     })) as Promise<boolean>
+  }
+
+  async getLastMinuteCases(): Promise<LastMinuteHandoverCaseResponse[]> {
+    return (await this.get({
+      path: `/offender/support/report/last-minute-handover-cases`,
+    })) as Promise<LastMinuteHandoverCaseResponse[]>
   }
 
   async searchForOffenderOnPrisonCaseAdminCaseload(
