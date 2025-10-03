@@ -25,7 +25,7 @@ context('Postcode lookup', () => {
       caseloadPage = comDetailsPage.clickReturnToCaseload()
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-      const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+      const appointmentPersonPage = confirmCreatePage.clickContinue()
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.deleteAddressLink().should('exist')
@@ -42,7 +42,7 @@ context('Postcode lookup', () => {
       caseloadPage = comDetailsPage.clickReturnToCaseload()
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-      const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+      const appointmentPersonPage = confirmCreatePage.clickContinue()
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('not.exist')
       appointmentPlacePage.deleteAddressLink().should('not.exist')
@@ -59,7 +59,7 @@ context('Postcode lookup', () => {
       caseloadPage = comDetailsPage.clickReturnToCaseload()
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-      const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+      const appointmentPersonPage = confirmCreatePage.clickContinue()
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.deleteAddressLink().should('exist')

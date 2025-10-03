@@ -27,6 +27,7 @@ context('Create an HDC licence', () => {
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubAddAdditionalCondition')
     cy.task('stubFeComponents')
+    cy.task('stubPostLicence')
     cy.signIn()
   })
 
@@ -34,7 +35,7 @@ context('Create an HDC licence', () => {
     cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
     const confirmCreatePage = new ConfirmCreatePage()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPersonPage = confirmCreatePage.clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
