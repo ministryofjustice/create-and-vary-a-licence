@@ -24,6 +24,7 @@ context('Create a licence', () => {
     cy.task('stubAddAdditionalCondition')
     cy.task('stubDeleteAdditionalConditionsByCode')
     cy.task('stubFeComponents')
+    cy.task('stubPostLicence')
     cy.signIn()
   })
 
@@ -32,7 +33,7 @@ context('Create a licence', () => {
     cy.visit('/licence/recall/create/nomisId/G4169UO/confirm')
     const confirmCreatePage = new ConfirmCreatePage()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPersonPage = confirmCreatePage.clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()

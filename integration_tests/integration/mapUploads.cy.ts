@@ -22,6 +22,7 @@ context('Create a licence', () => {
     cy.task('stubAddAdditionalCondition')
     cy.task('stubFeComponents')
     cy.task('stubPostExclusionZone')
+    cy.task('stubPostLicence')
     cy.signIn()
   })
 
@@ -30,7 +31,7 @@ context('Create a licence', () => {
     const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPersonPage = confirmCreatePage.clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -86,7 +87,7 @@ context('Create a licence', () => {
     const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPersonPage = confirmCreatePage.clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -175,7 +176,7 @@ context('Create a licence', () => {
     const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPersonPage = confirmCreatePage.clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -292,7 +293,7 @@ context('Create a licence', () => {
     const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
-    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPersonPage = confirmCreatePage.clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
