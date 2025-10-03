@@ -14,6 +14,7 @@ context('Postcode lookup', () => {
       cy.task('stubGetLicencePolicyConditions')
       cy.task('stubGetActivePolicyConditions')
       cy.task('stubFeComponents')
+      cy.task('stubPostLicence')
       cy.signIn()
     })
 
