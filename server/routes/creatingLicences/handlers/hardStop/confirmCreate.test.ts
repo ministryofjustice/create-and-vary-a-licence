@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { Session } from 'express-session'
 
 import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
@@ -75,8 +74,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   })
 
   describe('POST', () => {
-    it('should create hardstop licence and should redirect if answer is YES', async () => {
-      req.body.answer = 'Yes'
+    it('should create hardstop licence and should redirect', async () => {
       licenceService.createLicence.mockResolvedValue({ licenceId: 1, kind: 'HARD_STOP' } as LicenceSummary)
       await handler.POST(req, res)
       expect(licenceService.createLicence).toHaveBeenCalledWith(
@@ -86,21 +84,6 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-name')
-    })
-
-    it('should not create licence and should redirect when answer is NO', async () => {
-      req.body.answer = 'No'
-      await handler.POST(req, res)
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
-    })
-
-    it('should not create licence and should redirect when answer is NO when no session', async () => {
-      req.body.answer = 'No'
-      req.session = {} as Session
-      await handler.POST(req, res)
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
     })
   })
 })

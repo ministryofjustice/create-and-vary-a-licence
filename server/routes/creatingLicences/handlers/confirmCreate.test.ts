@@ -135,8 +135,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   })
 
   describe('POST', () => {
-    it('should create licence and should redirect if answer is YES', async () => {
-      req.body.answer = 'Yes'
+    it('should create licence and should redirect', async () => {
       licenceService.createLicence.mockResolvedValue({ licenceId: 1 } as LicenceSummary)
       await handler.POST(req, res)
       expect(licenceService.createLicence).toHaveBeenCalledWith(
@@ -146,13 +145,6 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-name')
-    })
-
-    it('should not create licence and should redirect when answer is NO', async () => {
-      req.body.answer = 'No'
-      await handler.POST(req, res)
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
     })
 
     it('should redirect to access-denied if called during the hard stop period', async () => {
@@ -171,7 +163,6 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         },
       } as PrisonerWithCvlFields)
 
-      req.body.answer = 'Yes'
       await handler.POST(req, res)
       expect(licenceService.createLicence).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
