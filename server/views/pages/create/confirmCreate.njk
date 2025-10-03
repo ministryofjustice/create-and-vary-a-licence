@@ -76,7 +76,10 @@
                         type: 'submit',
                         name: 'answer',
                         value: 'Yes',
-                        preventDoubleClick: true
+                        preventDoubleClick: true,
+                        attributes: {
+                            'data-qa': 'continue'
+                        }
                     }) }}
 
                     {{ govukButton({

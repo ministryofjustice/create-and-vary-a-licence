@@ -4,8 +4,6 @@ import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 
 import { Services } from '../../../../services'
-
-import YesOrNoQuestion from '../../types/yesOrNo'
 import ConfirmCreateRoutes from './confirmCreate'
 import preLicenceCreationMiddleware from '../../../../middleware/preLicenceCreationMiddleware'
 
@@ -45,7 +43,7 @@ export default function Index({
   {
     const controller = new ConfirmCreateRoutes(probationService, licenceService, prisonerService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)
-    post('/create/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
+    post('/create/nomisId/:nomisId/confirm', controller.POST)
   }
   return router
 }
