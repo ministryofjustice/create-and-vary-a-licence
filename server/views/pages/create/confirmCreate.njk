@@ -9,6 +9,13 @@
 {% set pageTitle = applicationName + " - Create a licence - Are you sure?" %}
 {% set pageId = "confirm-create-page" %}
 {% set backLinkHref = backLink %}
+{% set recallStatusHtml %}
+    <span class="urgent-highlight">Fixed-term recall</span>
+    <span class="urgent-highlight urgent-highlight-message">
+        Check their previous licence conditions.<br>You should do this using
+        <a class="govuk-link--no-visited-state" href="{{ epf2Url }}">EPF 2</a>.
+    </span>
+{% endset %}
 
 {% block content %}
     <h1 class="govuk-heading-l">Are you sure you want to create this person's licence?</h1>
@@ -29,41 +36,59 @@
                         classes: "moj-badge--black"
                     }) }}
                 {% endset %}
-                {{ govukSummaryList({
-                    rows: [
-                        {
-                            key: {
-                                text: "Name"
-                            },
-                            value: {
-                                text: licence.forename + " " + licence.surname
-                            }
+
+                {% set summaryRows = [] %}
+                {% set summaryRows = (summaryRows.push(
+                    {
+                        key: {
+                            text: "Name"
                         },
-                        {
-                            key: {
-                                text: "CRN"
-                            },
-                            value: {
-                                text: licence.crn
-                            }
+                        value: {
+                            text: licence.forename + " " + licence.surname
+                        }
+                    },
+                    {
+                        key: {
+                            text: "CRN"
                         },
+                        value: {
+                            text: licence.crn
+                        }
+                    }
+                ), summaryRows) %}
+
+                {% if licence.kind == 'PRRD' %}
+                    {% set summaryRows = (summaryRows.push(
                         {
                             key: {
-                                text: "Release date"
+                                text: "Status"
                             },
                             value: {
-                                text: licence.licenceStartDate | datetimeToDateWithDay
-                            },
-                            actions: {
-                                items: [
-                                    {
-                                        href: "#",
-                                        html: nomisBadge
-                                    }
-                                ]
+                                html: recallStatusHtml
                             }
                         }
-                    ]
+                    ), summaryRows) %}
+                {% endif %}
+
+                {% set summaryRows = (summaryRows.push(
+                    {
+                        key: {
+                            text: "Release date"
+                        },
+                        value: {
+                            text: licence.licenceStartDate | datetimeToDateWithDay
+                        },
+                        actions: {
+                            items: [{
+                                href: "#",
+                                html: nomisBadge
+                            }]
+                        }
+                    }
+                ), summaryRows) %}
+
+                {{ govukSummaryList({
+                    rows: summaryRows
                 }) }}
             </div>
         </div>

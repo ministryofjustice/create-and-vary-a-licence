@@ -35,6 +35,7 @@ export default class ConfirmCreateRoutes {
         forename: convertToTitleCase(nomisRecord.prisoner.firstName),
         surname: convertToTitleCase(nomisRecord.prisoner.lastName),
         isEligibleForEarlyRelease: nomisRecord.cvl.isEligibleForEarlyRelease,
+        kind: nomisRecord.cvl.licenceKind,
       },
       backLink,
     })

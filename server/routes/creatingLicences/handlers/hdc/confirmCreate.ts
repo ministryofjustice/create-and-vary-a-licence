@@ -59,6 +59,7 @@ export default class ConfirmCreateRoutes {
         dateOfBirth: moment(nomisRecord.prisoner.dateOfBirth).format('DD/MM/YYYY'),
         forename: convertToTitleCase(nomisRecord.prisoner.firstName),
         surname: convertToTitleCase(nomisRecord.prisoner.lastName),
+        kind: nomisRecord.cvl.licenceKind,
       },
       backLink,
     })
