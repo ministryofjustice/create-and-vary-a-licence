@@ -224,7 +224,7 @@ export default class VaryApproverCaseloadService {
     return {
       ...aCase,
       releaseDate: format(parseCvlDate(aCase.releaseDate), 'dd MMM yyyy'),
-      variationRequestDate: format(parseCvlDate(aCase.variationRequestDate), 'dd MMMM yyyy'),
+      variationRequestDate: format(parseCvlDate(aCase.variationRequestDate), 'dd MMM yyyy'),
     }
   }
 }

@@ -25,7 +25,7 @@ generic-service:
     LICENCES_URL: "http://create-and-vary-a-licence"
     DPS_URL: "https://digital.prison.service.justice.gov.uk"
 
-    ACO_CASELOAD_BACKEND_ENABLED: "false"
+    ACO_CASELOAD_BACKEND_ENABLED: "true"
 
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components.hmpps.service.justice.gov.uk"

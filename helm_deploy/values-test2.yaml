@@ -30,7 +30,7 @@ generic-service:
     LICENCE_WATERMARK: 'true'
     DPS_URL: 'https://digital-dev.prison.service.justice.gov.uk'
 
-    ACO_CASELOAD_BACKEND_ENABLED: "false"
+    ACO_CASELOAD_BACKEND_ENABLED: "true"
 
     # To enable common front-end components
     COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
