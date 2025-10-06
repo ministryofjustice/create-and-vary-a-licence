@@ -5,6 +5,7 @@ import ConfirmCreateRoutes from './confirmCreate'
 import ProbationService from '../../../../services/probationService'
 import { CvlPrisoner, LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
 import logger from '../../../../../logger'
+import { LicenceKind } from '../../../../enumeration'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
@@ -57,6 +58,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
         isInHardStopPeriod: false,
         isEligibleForEarlyRelease: true,
         licenceStartDate: '19/11/2022',
+        licenceKind: LicenceKind.PRRD,
       },
     } as PrisonerWithCvlFields)
   })
@@ -82,6 +84,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
           forename: 'Test',
           surname: 'Person',
           isEligibleForEarlyRelease: true,
+          kind: LicenceKind.PRRD,
         },
         backLink: req.session.returnToCase,
       })
@@ -105,6 +108,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
           forename: 'Test',
           surname: 'Person',
           isEligibleForEarlyRelease: true,
+          kind: LicenceKind.PRRD,
         },
         backLink: '/licence/create/caseload',
       })
@@ -123,6 +127,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
           isInHardStopPeriod: true,
           isEligibleForEarlyRelease: true,
           licenceStartDate: '19/11/2022',
+          licenceKind: LicenceKind.PRRD,
         },
       } as PrisonerWithCvlFields)
 
@@ -160,6 +165,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
           isInHardStopPeriod: true,
           isEligibleForEarlyRelease: true,
           licenceStartDate: '19/11/2022',
+          licenceKind: LicenceKind.PRRD,
         },
       } as PrisonerWithCvlFields)
 

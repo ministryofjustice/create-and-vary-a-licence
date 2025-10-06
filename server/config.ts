@@ -35,6 +35,7 @@ export default {
   gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   dpsUrl: get('DPS_URL', 'http://localhost:3000', requiredInProduction),
   serviceNowUrl: get('SERVICE_NOW_URL', 'http://localhost:3000', requiredInProduction),
+  epf2Url: get('EPF2_URL', 'http://localhost:3000', requiredInProduction),
   serviceName: process.env.SERVICE_NAME || 'create-and-vary-a-licence',
   phaseName: process.env.SYSTEM_PHASE || 'BETA',
   branchName: get('GIT_BRANCH', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
