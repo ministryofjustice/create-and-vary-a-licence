@@ -10,6 +10,8 @@ import { parseIsoDate } from '../../utils/utils'
 import { LicenceApiClient } from '../../data'
 
 jest.mock('../probationService')
+jest.mock('../licenceService')
+jest.mock('../../data')
 
 describe('Caseload Service', () => {
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
@@ -25,15 +27,15 @@ describe('Caseload Service', () => {
   } as User
 
   beforeEach(() => {
-    licenceService.searchPrisonersByNomsIds = jest.fn().mockResolvedValue([])
-    licenceService.getLicencesForVariationApproval = jest.fn().mockResolvedValue([])
+    licenceService.searchPrisonersByNomsIds.mockResolvedValue([])
+    licenceService.getLicencesForVariationApproval.mockResolvedValue([])
   })
 
   afterEach(() => {
     jest.resetAllMocks()
   })
 
-  it('builds the vary approver caseload', async () => {
+  it('builds the vary approver caseload in the frontend', async () => {
     licenceService.getLicencesForVariationApproval.mockResolvedValue([
       {
         kind: 'VARIATION',
@@ -130,5 +132,32 @@ describe('Caseload Service', () => {
     const result = await serviceUnderTest.getVaryApproverCaseload(user, 'XXX', false)
 
     expect(result).toEqual([])
+  })
+
+  it('builds the vary approver caseload', async () => {
+    licenceApiClient.getVaryApproverCaseload.mockResolvedValue([
+      {
+        licenceId: 1,
+        name: 'An Offender',
+        crnNumber: 'X12348',
+        licenceType: 'AP',
+        variationRequestDate: '30/10/2022',
+        releaseDate: '01/11/2022',
+        probationPractitioner: 'An ProbationOfficer',
+      },
+    ])
+
+    const result = await serviceUnderTest.getVaryApproverCaseload(user, undefined, true)
+
+    expect(result).toMatchObject([
+      {
+        licenceId: 1,
+        licenceType: 'AP',
+        name: 'An Offender',
+        probationPractitioner: 'An ProbationOfficer',
+        releaseDate: '01 Nov 2022',
+        variationRequestDate: '30 Oct 2022',
+      },
+    ])
   })
 })
