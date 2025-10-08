@@ -292,24 +292,6 @@ describe('Licence API client tests', () => {
     })
   })
 
-  it('Search prisoners by nomis ids', async () => {
-    await licenceApiClient.searchPrisonersByNomsIds(['A1234AA'], { username: 'joebloggs' } as User)
-    expect(post).toHaveBeenCalledWith(
-      {
-        path: '/prisoner-search/prisoner-numbers',
-        data: {
-          prisonerNumbers: ['A1234AA'],
-        },
-      },
-      { username: 'joebloggs' },
-    )
-  })
-
-  it('Search prisoners by nomis ids is not called with no prison numbers', async () => {
-    await licenceApiClient.searchPrisonersByNomsIds([], { username: 'joebloggs' } as User)
-    expect(post).not.toHaveBeenCalled()
-  })
-
   it('should update responsible COM for an offender', async () => {
     await licenceApiClient.updateResponsibleCom('X1234', {
       staffIdentifier: 2000,

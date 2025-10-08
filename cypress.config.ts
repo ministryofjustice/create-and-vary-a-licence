@@ -139,15 +139,11 @@ export default defineConfig({
         stubGetProbationers: delius.stubGetProbationers,
         stubGetStaffDetails: delius.stubGetStaffDetails,
         stubGetStaffDetailsByStaffCode: delius.stubGetStaffDetailsByStaffCode,
-        stubGetStaffDetailsByList: delius.stubGetStaffDetailsByList,
         stubAssignRole: delius.stubAssignRole,
         stubGetPduHeads: delius.stubGetPduHeads,
         stubGetResponsibleCommunityManager: delius.stubGetResponsibleCommunityManager,
         stubGetResponsibleCommunityManagers: delius.stubGetResponsibleCommunityManagers,
         stubDeliusPing: delius.stubPing,
-
-        searchPrisonersByNomisIds: licence.searchPrisonersByNomisIds,
-        searchPssPrisonersByNomisIds: licence.searchPssPrisonersByNomisIds,
         searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
         stubPrisonerSearchApiPing: prisonerSearch.stubPing,
 

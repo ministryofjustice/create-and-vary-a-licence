@@ -13,7 +13,7 @@ export default class VaryApproverRegionCaseloadRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { region, mode } = req.query
+    const { region } = req.query
 
     let caseload: CaseWithNomisId[] = []
     if (region) {
@@ -23,7 +23,6 @@ export default class VaryApproverRegionCaseloadRoutes {
           probationAreaCode: region as string,
         },
         null,
-        mode !== 'old',
       )
       const crns = cases.map(aCase => aCase.crnNumber)
       const deliusRecords = await this.probationService.getProbationers(crns)

@@ -4,7 +4,7 @@ import VaryApproveListRoutes from './varyApproveList'
 import VaryApproverCaseloadService from '../../../services/lists/varyApproverCaseloadService'
 import LicenceType from '../../../enumeration/licenceType'
 
-const caseloadService = new VaryApproverCaseloadService(null, null, null) as jest.Mocked<VaryApproverCaseloadService>
+const caseloadService = new VaryApproverCaseloadService(null) as jest.Mocked<VaryApproverCaseloadService>
 jest.mock('../../../services/lists/varyApproverCaseloadService')
 
 describe('Route Handlers - Variation approval list', () => {
@@ -46,7 +46,7 @@ describe('Route Handlers - Variation approval list', () => {
   describe('GET', () => {
     it('should render list of variations for approval', async () => {
       await handler.GET(req, res)
-      expect(caseloadService.getVaryApproverCaseload).toHaveBeenCalledWith(res.locals.user, undefined, false)
+      expect(caseloadService.getVaryApproverCaseload).toHaveBeenCalledWith(res.locals.user, undefined)
       expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
         caseload: [
           {

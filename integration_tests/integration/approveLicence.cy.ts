@@ -24,7 +24,6 @@ context('Approve a licence', () => {
     cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
     cy.task('stubGetApprovalCaseload')
     cy.task('stubUpdateLicenceStatus', 1)
-    cy.task('stubGetStaffDetailsByList')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetPrisons')
     cy.task('stubGetLicencePolicyConditions')

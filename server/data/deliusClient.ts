@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
-import { DeliusManager, DeliusPDUHead, DeliusRecord, DeliusStaff, DeliusStaffName } from '../@types/deliusClientTypes'
+import { DeliusManager, DeliusPDUHead, DeliusRecord, DeliusStaff } from '../@types/deliusClientTypes'
 import type { TokenStore } from './tokenStore'
 import { components } from '../@types/deliusApiImport'
 
@@ -15,10 +15,6 @@ export default class DeliusClient extends RestClient {
 
   async getStaffDetailByStaffCode(username: string): Promise<DeliusStaff> {
     return (await this.get({ path: `/staff/bycode/${username}` })) as Promise<DeliusStaff>
-  }
-
-  async getStaffDetailsByUsernameList(usernames: string[]): Promise<DeliusStaffName[]> {
-    return (await this.post({ path: `/staff`, data: usernames })) as Promise<DeliusStaffName[]>
   }
 
   async assignDeliusRole(deliusUsername: string): Promise<void> {

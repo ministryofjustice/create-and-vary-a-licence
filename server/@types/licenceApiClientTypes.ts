@@ -55,7 +55,6 @@ export type ProbationSearchRequest = components['schemas']['ProbationUserSearchR
 export type ProbationSearchResult = components['schemas']['ProbationSearchResult']
 export type FoundProbationRecord = components['schemas']['FoundProbationRecord']
 export type ComReviewCount = components['schemas']['ComReviewCount']
-export type CaseloadItem = components['schemas']['CaseloadItem']
 export type CvlPrisoner = components['schemas']['Prisoner']
 export type CvlFields = components['schemas']['CvlFields']
 export type PrisonerWithCvlFields = components['schemas']['PrisonerWithCvlFields']

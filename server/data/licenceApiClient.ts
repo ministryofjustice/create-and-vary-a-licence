@@ -18,7 +18,6 @@ import type {
   BespokeConditionsRequest,
   CaCase,
   CaCaseloadSearch,
-  CaseloadItem,
   ComCase,
   ContactNumberRequest,
   CreateLicenceRequest,
@@ -565,19 +564,6 @@ export default class LicenceApiClient extends RestClient {
       { path: `/prisoner-search/nomisid/${nomsId}` },
       { username: user.username },
     )) as Promise<PrisonerWithCvlFields>
-  }
-
-  async searchPrisonersByNomsIds(prisonerNumbers: string[], user?: User): Promise<CaseloadItem[]> {
-    if (prisonerNumbers.length < 1) {
-      return []
-    }
-    return (await this.post(
-      {
-        path: '/prisoner-search/prisoner-numbers',
-        data: { prisonerNumbers },
-      },
-      { username: user?.username },
-    )) as Promise<CaseloadItem[]>
   }
 
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {

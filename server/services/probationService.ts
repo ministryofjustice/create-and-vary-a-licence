@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import DeliusClient from '../data/deliusClient'
-import { DeliusManager, DeliusPDUHead, DeliusRecord, DeliusStaff, DeliusStaffName } from '../@types/deliusClientTypes'
+import { DeliusManager, DeliusPDUHead, DeliusRecord, DeliusStaff } from '../@types/deliusClientTypes'
 
 export default class ProbationService {
   constructor(private readonly deliusClient: DeliusClient) {}
@@ -11,13 +11,6 @@ export default class ProbationService {
 
   async getStaffDetailByStaffCode(staffCode: string): Promise<DeliusStaff> {
     return this.deliusClient.getStaffDetailByStaffCode(staffCode)
-  }
-
-  async getStaffDetailsByUsernameList(usernames: string[]): Promise<DeliusStaffName[]> {
-    if (usernames.length === 0) {
-      return []
-    }
-    return this.deliusClient.getStaffDetailsByUsernameList(usernames)
   }
 
   async assignDeliusRole(deliusUsername: string): Promise<void> {
