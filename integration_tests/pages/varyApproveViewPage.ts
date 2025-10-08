@@ -1,5 +1,6 @@
 import Page from './page'
 import VaryApproveConfirmPage from './varyApproveConfirmPage'
+import VaryApprovalSearchPage from './varyApproveSearchPage'
 import VaryReferPage from './varyReferPage'
 
 export default class VaryApproveViewPage extends Page {
@@ -20,5 +21,10 @@ export default class VaryApproveViewPage extends Page {
   clickReferVariation = (): VaryReferPage => {
     cy.get(this.referButtonId).click()
     return Page.verifyOnPage(VaryReferPage)
+  }
+
+  clickBackToVaryApproverSearch = (): VaryApprovalSearchPage => {
+    cy.get('.govuk-back-link').click()
+    return Page.verifyOnPage(VaryApprovalSearchPage)
   }
 }

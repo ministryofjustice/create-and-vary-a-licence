@@ -16,6 +16,7 @@ import {
   LicencePolicyResponse,
 } from '../../server/@types/licenceApiClientTypes'
 import LicenceKind from '../../server/enumeration/LicenceKind'
+import LicenceType from '../../server/enumeration/licenceType'
 
 const ACTIVE_POLICY_VERSION = '3.0'
 
@@ -2842,6 +2843,87 @@ export default {
               kind: 'CRD',
               prisonCode: 'BAI',
               prisonDescription: 'Belmarsh (HMP)',
+            },
+          ],
+        },
+      },
+    })
+  },
+  stubGetVaryApproverSearchResults: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/vary-approver/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          pduCasesResponse: [
+            {
+              licenceId: 1,
+              name: 'Test Person One',
+              crnNumber: 'X12345',
+              licenceType: LicenceType.AP,
+              releaseDate: '01/05/2024',
+              variationRequestDate: '03/06/2024',
+              probationPractitioner: 'Com One',
+            },
+            {
+              licenceId: 2,
+              name: 'Test Person Two',
+              crnNumber: 'X12346',
+              licenceType: LicenceType.AP,
+              releaseDate: '02/11/2022',
+              variationRequestDate: '02/05/2024',
+              probationPractitioner: 'Com Four',
+            },
+            {
+              licenceId: 3,
+              name: 'Test Person Three',
+              crnNumber: 'X12347',
+              licenceType: LicenceType.AP,
+              releaseDate: '02/11/2022',
+              variationRequestDate: '01/05/2024',
+              probationPractitioner: 'Com Four',
+            },
+          ],
+          regionCasesResponse: [
+            {
+              licenceId: 1,
+              name: 'Test Person One',
+              crnNumber: 'X12345',
+              licenceType: LicenceType.AP,
+              releaseDate: '01/05/2024',
+              variationRequestDate: '03/06/2024',
+              probationPractitioner: 'Com One',
+            },
+            {
+              licenceId: 2,
+              name: 'Test Person Two',
+              crnNumber: 'X12346',
+              licenceType: LicenceType.AP,
+              releaseDate: '02/11/2022',
+              variationRequestDate: '02/05/2024',
+              probationPractitioner: 'Com Four',
+            },
+            {
+              licenceId: 3,
+              name: 'Test Person Three',
+              crnNumber: 'X12347',
+              licenceType: LicenceType.AP,
+              releaseDate: '02/11/2022',
+              variationRequestDate: '01/05/2024',
+              probationPractitioner: 'Com Four',
+            },
+            {
+              licenceId: 4,
+              name: 'Test Person Four',
+              crnNumber: 'X12348',
+              licenceType: LicenceType.AP,
+              releaseDate: '05/11/2022',
+              variationRequestDate: '30/04/2024',
+              probationPractitioner: 'Com Three',
             },
           ],
         },
