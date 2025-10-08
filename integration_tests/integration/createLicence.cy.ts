@@ -43,6 +43,12 @@ context('Create a licence', () => {
     const comDetailsPage = caseloadPage.clickComName()
     caseloadPage = comDetailsPage.clickReturnToCaseload()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+    const releaseDateRow = confirmCreatePage.getReleaseDateStatus()
+    releaseDateRow.should('contain', 'Friday 19 July 2024')
+    releaseDateRow.should(
+      'contain',
+      'Check this date with the prison. It may change because it is on or just before a weekend or bank holiday. This may affect the initial appointment.',
+    )
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
