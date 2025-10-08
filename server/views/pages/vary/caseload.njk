@@ -129,7 +129,7 @@
     {% endif %}
 
     {% set sortOrder %}
-        {{ 'none' if hasPriorityCases else 'descending' }}
+        {{ 'none' if hasPriorityCases else 'ascending' }}
     {% endset %}
     {% if caseload.length > 0 %}
         {{ govukTable({
