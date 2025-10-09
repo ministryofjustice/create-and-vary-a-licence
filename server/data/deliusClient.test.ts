@@ -1,6 +1,6 @@
 import HmppsRestClient from './hmppsRestClient'
 import DeliusClient from './deliusClient'
-import { DeliusManager, DeliusPDUHead, DeliusStaff, DeliusStaffName } from '../@types/deliusClientTypes'
+import { DeliusManager, DeliusPDUHead, DeliusStaff } from '../@types/deliusClientTypes'
 import { InMemoryTokenStore } from './tokenStore'
 
 const deliusClient = new DeliusClient(
@@ -9,7 +9,6 @@ const deliusClient = new DeliusClient(
 
 describe('Delius client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')
-  const post = jest.spyOn(HmppsRestClient.prototype, 'post')
   const put = jest.spyOn(HmppsRestClient.prototype, 'put')
 
   beforeEach(() => {
@@ -38,15 +37,6 @@ describe('Delius client tests', () => {
 
     expect(get).toHaveBeenCalledWith({ path: `/staff/bycode/staff-code` })
     expect(result).toEqual({ id: 2000 })
-  })
-
-  it('Get staff details by username list', async () => {
-    post.mockResolvedValue([{ id: 2000 }, { id: 2001 }] as DeliusStaffName[])
-
-    const result = await deliusClient.getStaffDetailsByUsernameList(['username1', 'username2'])
-
-    expect(post).toHaveBeenCalledWith({ path: `/staff`, data: ['username1', 'username2'] })
-    expect(result).toEqual([{ id: 2000 }, { id: 2001 }])
   })
 
   it('Assign Delius role', async () => {

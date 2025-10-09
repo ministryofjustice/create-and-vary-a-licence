@@ -13,7 +13,7 @@ export default class VaryApproverPduCaseloadRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { pdu, mode } = req.query
+    const { pdu } = req.query
 
     const probationPduCodes = (pdu as string)?.split(',')
     let caseload: CaseWithNomisId[] = []
@@ -24,7 +24,6 @@ export default class VaryApproverPduCaseloadRoutes {
           probationPduCodes,
         },
         null,
-        mode !== 'old',
       )
       const crns = cases.map(aCase => aCase.crnNumber)
       const deliusRecords = await this.probationService.getProbationers(crns)

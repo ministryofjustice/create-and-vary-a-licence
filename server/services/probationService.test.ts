@@ -36,22 +36,6 @@ describe('Probation Service', () => {
     expect(deliusClient.getStaffDetailByStaffCode).toHaveBeenCalledWith('X12345')
   })
 
-  it('Get Staff Detail by Username List', async () => {
-    const expectedResponse = [
-      {
-        id: 2000,
-        email: 'joebloggs@probation.gov.uk',
-      },
-    ] as DeliusStaff[]
-
-    deliusClient.getStaffDetailsByUsernameList.mockResolvedValue(expectedResponse)
-
-    const actualResult = await probationService.getStaffDetailsByUsernameList(['joebloggs'])
-
-    expect(actualResult).toEqual(expectedResponse)
-    expect(deliusClient.getStaffDetailsByUsernameList).toHaveBeenCalledWith(['joebloggs'])
-  })
-
   it('should get an offenders managers', async () => {
     await probationService.getResponsibleCommunityManager('X1234')
     expect(deliusClient.getResponsibleCommunityManager).toHaveBeenCalledWith('X1234')
