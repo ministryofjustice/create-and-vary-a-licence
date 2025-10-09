@@ -15,7 +15,6 @@ import BespokeConditions from '../routes/manageConditions/types/bespokeCondition
 import LicenceStatus from '../enumeration/licenceStatus'
 import {
   AdditionalCondition,
-  CaseloadItem,
   ContactNumberRequest,
   Licence,
   LicenceSummary,
@@ -429,17 +428,6 @@ describe('Licence Service', () => {
     expect(result).toEqual({ licenceId: 2 })
   })
 
-  it('Get licences for variation approval', async () => {
-    const approver = { ...user, probationPduCodes: ['A'] }
-    await licenceService.getLicencesForVariationApproval(approver)
-    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith({
-      statuses: ['VARIATION_SUBMITTED'],
-      pdus: ['A'],
-      sortBy: 'conditionalReleaseDate',
-      user: approver,
-    })
-  })
-
   it('should update COM responsible for an offender', async () => {
     await licenceService.updateResponsibleCom('X1234', {
       staffIdentifier: 2000,
@@ -722,34 +710,6 @@ describe('Licence Service', () => {
     const callToGetPrisonerDetails = await licenceService.getPrisonerDetail(nomsId, user)
     expect(licenceApiClient.getPrisonerDetail).toHaveBeenCalledWith(nomsId, user)
     expect(callToGetPrisonerDetails).toEqual(prisonerDetails)
-  })
-
-  it('Search prisoners by nomis ids', async () => {
-    const prisonerDetails = {
-      prisoner: {
-        prisonerNumber: 'G4169UO',
-        firstName: 'EMAJINHANY',
-        lastName: 'ELYSASHA',
-        dateOfBirth: '1962-04-26',
-        status: 'ACTIVE IN',
-        prisonId: 'BAI',
-        sentenceStartDate: '2017-03-01',
-        releaseDate: '2024-07-19',
-        confirmedReleaseDate: '2024-07-19',
-        sentenceExpiryDate: '2028-08-31',
-        licenceExpiryDate: '2028-08-31',
-        conditionalReleaseDate: '2022-09-01',
-      },
-      licenceStartDate: '2024-07-19',
-    } as CaseloadItem
-    licenceApiClient.searchPrisonersByNomsIds.mockResolvedValue([prisonerDetails])
-    const nomsId = 'G4169UO'
-
-    const result = await licenceService.searchPrisonersByNomsIds([nomsId], user)
-
-    expect(licenceApiClient.searchPrisonersByNomsIds).toHaveBeenCalledWith([nomsId], user)
-
-    expect(result).toEqual([prisonerDetails])
   })
 
   it('Get IS-91 status', async () => {

@@ -44,7 +44,6 @@ export default class IndexPage extends Page {
     cy.task('stubSearchForAddresses')
     cy.task('stubPutLicenceAppointmentPerson')
     cy.task('stubGetResponsibleCommunityManager')
-    cy.task('stubGetStaffDetailsByList')
     cy.task('stubGetStaffCreateCaseload', {
       licenceId: 1,
       licenceStatus: 'APPROVED',
