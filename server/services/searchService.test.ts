@@ -1,5 +1,6 @@
 import LicenceApiClient from '../data/licenceApiClient'
 import SearchService from './searchService'
+import { User } from '../@types/CvlUserDetails'
 
 jest.mock('../data/licenceApiClient')
 
@@ -38,6 +39,20 @@ describe('Search Service', () => {
       expect(licenceApiClient.searchForOffenderOnApproverCaseload).toHaveBeenCalledWith({
         prisonCaseloads: ['PRI'],
         query: 'Test',
+      })
+    })
+  })
+
+  describe('Vary Approver Search', () => {
+    const user = {
+      probationPduCodes: ['PDU A', 'PDU B'],
+    } as User
+    it('calls Licence API client to search', async () => {
+      await searchService.getVaryApproverSearchResults(user, 'Test')
+      expect(licenceApiClient.searchForOffenderOnVaryApproverCaseload).toHaveBeenCalledWith({
+        probationPduCodes: ['PDU A', 'PDU B'],
+        probationAreaCode: undefined,
+        searchTerm: 'Test',
       })
     })
   })

@@ -134,6 +134,7 @@ export default defineConfig({
         stubGetPrisonApproverSearchApprovalNeededResult: licence.stubGetPrisonApproverSearchApprovalNeededResult,
         stubGetPrisonApproverSearchRecentlyApprovedResult: licence.stubGetPrisonApproverSearchRecentlyApprovedResult,
         stubGetPrisonApproverSearchResults: licence.stubGetPrisonApproverSearchResults,
+        stubGetVaryApproverSearchResults: licence.stubGetVaryApproverSearchResults,
 
         stubGetProbationer: delius.stubGetProbationer,
         stubGetProbationers: delius.stubGetProbationers,
