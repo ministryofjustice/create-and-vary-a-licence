@@ -36,6 +36,10 @@ export default class VaryApprovalSearchPage extends Page {
     return cy.get(this.variationRequestDate).eq(n)
   }
 
+  getOffenderName = () => {
+    return cy.get(this.licenceLinkId)
+  }
+
   clickOnPduCasesTab = (): VaryApprovalSearchPage => {
     cy.get('#tab_pdu-cases').click()
     return Page.verifyOnPage(VaryApprovalSearchPage)

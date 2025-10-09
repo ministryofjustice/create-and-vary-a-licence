@@ -51,4 +51,15 @@ context('ACO search a licence variation', () => {
     searchPage.getVariationRequestDate(5).contains('2 May 2024')
     searchPage.getVariationRequestDate(6).contains('3 Jun 2024')
   })
+
+  it('should not convert case of search result text when different to that of user input', () => {
+    cy.task('stubGetVaryApproverSearchResults')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const varyApproveCasesPage = indexPage.clickApproveAVariation()
+    varyApproveCasesPage.clickSearch('tEsT')
+    const searchPage = Page.verifyOnPage(VaryApprovalSearchPage)
+    searchPage.getSearchHeading().contains('Search results for tEsT')
+    searchPage.getOffenderName().contains('Test')
+    searchPage.getOffenderName().should('not.have.value', 'tEsT')
+  })
 })
