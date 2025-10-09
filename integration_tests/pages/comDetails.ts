@@ -4,6 +4,7 @@ import CaseloadPage from './caseload'
 import SearchPage from './comSearch'
 import CaSearchPage from './caSearch'
 import ApprovalSearchPage from './approvalSearch'
+import VaryApprovalSearchPage from './varyApproveSearchPage'
 
 export default class ComDetailsPage extends Page {
   constructor() {
@@ -23,6 +24,11 @@ export default class ComDetailsPage extends Page {
   clickBackToPrisonApproverSearch = (): ApprovalSearchPage => {
     cy.get('.govuk-back-link').click()
     return Page.verifyOnPage(ApprovalSearchPage)
+  }
+
+  clickBackToVaryApproverSearch = (): VaryApprovalSearchPage => {
+    cy.get('.govuk-back-link').click()
+    return Page.verifyOnPage(VaryApprovalSearchPage)
   }
 
   clickReturn = (): ViewCasesPage => {

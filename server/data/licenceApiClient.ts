@@ -53,6 +53,7 @@ import type {
   UpdateVloDiscussionRequest,
   VaryApproverCase,
   VaryApproverCaseloadSearchRequest,
+  VaryApproverCaseloadSearchResponse,
   TimeServedCaseload,
   LicencePermissionsRequest,
   LicencePermissionsResponse,
@@ -684,6 +685,15 @@ export default class LicenceApiClient extends RestClient {
       path: `/caseload/vary-approver`,
       data: varyApproverCaseloadRequest,
     })) as Promise<VaryApproverCase[]>
+  }
+
+  async searchForOffenderOnVaryApproverCaseload(
+    searchRequest: VaryApproverCaseloadSearchRequest,
+  ): Promise<VaryApproverCaseloadSearchResponse> {
+    return (await this.post({
+      path: `/caseload/vary-approver/case-search`,
+      data: searchRequest,
+    })) as Promise<VaryApproverCaseloadSearchResponse>
   }
 
   async getHdcLicenceData(licenceId: number): Promise<HdcLicenceData> {

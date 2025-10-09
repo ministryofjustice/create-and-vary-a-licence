@@ -1,14 +1,29 @@
 {% extends "layout.njk" %}
 
+{% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/licenceDescription.njk" import licenceDescription %}
 
-{% set pageTitle = applicationName + " - Prison Vary Approver - Search" %}
+{% set pageTitle = applicationName + " - Variation approvals - Search results" %}
 {% set pageId = "vary-approval-search-page" %}
 {% set backLinkHref = backLink %}
 {% set noJsBackLink = true %}
 
-{% macro displayResults(tabId, countText) %}
+{% macro offenderName(offenderName, crn, licenceId, index) %}
+    <div class="caseload-offender-name">
+        <a href="/licence/vary-approve/id/{{ licenceId }}/view" id="name-link-{{ index }}"
+           class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
+        <div class="govuk-hint govuk-!-font-size-16 search-highlight">CRN: {{ crn }}</div>
+    </div>
+{% endmacro %}
+
+{% set pduResults = [] %}
+{% set regionResults = [] %}
+
+{% macro displayResults(tableHeadings, results, tabId, countText) %}
     <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
+    {% if results.length == 0 %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <p id="vary-approval-search-empty-state-content">No licence variation requests that match '{{ queryTerm }}'. Try searching again.</p>
@@ -25,7 +40,154 @@
             </p>
         </div>
     </div>
+    {% else %}
+        <form method="GET">
+            {{ govukTable({
+                attributes: {
+                    'data-module': 'moj-sortable-table',
+                    'id': 'searchResults'
+                },
+                caption: caption,
+                captionClasses: "govuk-visually-hidden",
+                head: tableHeadings,
+                rows: results
+            }) }}
+        </form>
+    {% endif %}
 {% endmacro %}
+
+{% set searchTableHeadings = [
+    {
+        text: "Name",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Licence type",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+        {
+        text: "Probation practitioner",
+        attributes: {
+            "aria-sort": "none"
+        }
+    },
+    {
+        text: "Variation request date",
+        attributes: {
+            id: 'variation-request-date-sort',
+            "aria-sort": "ascending"
+        }
+    },
+    {
+        text: "Release date",
+        attributes: {
+            "aria-sort": "none"
+        }
+    }
+] %}
+
+{% for case in pduCases %}
+    {% set result = [
+        {
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": case.name
+            },
+            classes: "max-width max-width-220",
+            html: offenderName(case.name, case.crnNumber, case.licenceId, loop.index)
+        },
+        {
+            attributes: {
+                id: 'licence-type-' + loop.index
+            },
+            html: licenceDescription(case.licenceType)
+        },
+        {
+            attributes: {
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": case.probationPractitioner
+            },
+            classes: "max-width max-width-200",
+            html: '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary-approve/id/' + case.licenceId + '/probation-practitioner">' + case.probationPractitioner + '</a>'
+        },
+        {
+            attributes: {
+                id: 'variation-request-date-' + loop.index,
+                "data-qa": "variationRequestDate",
+                "data-sort-value": case.variationRequestDate | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            html: case.variationRequestDate | cvlDateToDateShort
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": case.releaseDate | cvlDateToDateShort
+            },
+            text: case.releaseDate | cvlDateToDateShort
+        }
+    ] %}
+
+    {% set pduResults = (pduResults.push(result), pduResults) %}
+
+{% endfor %}
+
+{% for case in regionCases %}
+    {% set result = [
+        {
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": case.name
+            },
+            classes: "max-width max-width-220",
+            html: offenderName(case.name, case.crnNumber, case.licenceId, loop.index)
+        },
+        {
+            attributes: {
+                id: 'licence-type-' + loop.index
+            },
+            html: licenceDescription(case.licenceType)
+        },
+        {
+            attributes: {
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": case.probationPractitioner
+            },
+            classes: "max-width max-width-200",
+            html: '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary-approve/id/' + case.licenceId + '/probation-practitioner">' + case.probationPractitioner + '</a>'
+        },       
+        {
+            attributes: {
+                id: 'variation-request-date-' + loop.index,
+                "data-qa": "variationRequestDate",
+                "data-sort-value": case.variationRequestDate | cvlDateToDateShort | dateToUnix
+            },
+            classes: "max-width max-width-200",
+            html: case.variationRequestDate | cvlDateToDateShort
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": case.releaseDate
+            },
+            text: case.releaseDate | cvlDateToDateShort
+        }
+    ] %}
+
+    {% set regionResults = (regionResults.push(result), regionResults) %}
+
+{% endfor %}
+
+
+{% set pduCasesCountText = "Cases in this PDU ("  + tabParameters.pduCases.resultsCount + tabParameters.pduCases.resultsCount | pluralise(" result") + ")" %}
+{% set regionCasesCountText = "All cases in this region ("  + tabParameters.regionCases.resultsCount + tabParameters.regionCases.resultsCount | pluralise(" result") + ")" %}
+
+{% set pduCases = displayResults(searchTableHeadings, pduResults, tabParameters.pduCases.tabId, pduCasesCountText) %}
+{% set regionCases = displayResults(searchTableHeadings, regionResults, tabParameters.regionCases.tabId, regionCasesCountText) %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -54,12 +216,6 @@
         </div>
     </div>
 
-    {% set pduCasesCountText = "Cases in this PDU (0 results)" %}
-    {% set regionCasesCountText = "All cases in this region (0 results)" %}
-
-    {% set pduCases = displayResults(tabParameters.pduCases.tabId, pduCasesCountText) %}
-    {% set regionCases = displayResults(tabParameters.regionCases.tabId, regionCasesCountText) %}
-
     {{ govukTabs({
         items: [
             {
@@ -79,4 +235,9 @@
         ]
     }) }}
 
+{% endblock %}
+
+
+{% block pageScripts %}
+    <script src="/assets/js/search/highlightSearchTerm.js"></script>
 {% endblock %}
