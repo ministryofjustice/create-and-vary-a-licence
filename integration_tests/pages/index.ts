@@ -37,7 +37,7 @@ export default class IndexPage extends Page {
   }
 
   clickCreateALicenceToEdit = (): CaseloadPage => {
-    cy.task('stubGetCaseloadItem')
+    cy.task('stubGetCaseloadItem', { isEligibleForEarlyRelease: false })
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
