@@ -39,7 +39,7 @@ context('Create a licence', () => {
       }),
     ] as AdditionalCondition[]
 
-    let caseloadPage = indexPage.clickCreateALicence()
+    let caseloadPage = indexPage.clickCreateALicence(true)
     const comDetailsPage = caseloadPage.clickComName()
     caseloadPage = comDetailsPage.clickReturnToCaseload()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
