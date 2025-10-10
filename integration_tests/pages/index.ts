@@ -22,8 +22,8 @@ export default class IndexPage extends Page {
     super('index-page')
   }
 
-  clickCreateALicence = (): CaseloadPage => {
-    cy.task('stubGetCaseloadItem')
+  clickCreateALicence = (isEligibleForEarlyRelease: boolean = false): CaseloadPage => {
+    cy.task('stubGetCaseloadItem', { isEligibleForEarlyRelease })
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
@@ -37,7 +37,7 @@ export default class IndexPage extends Page {
   }
 
   clickCreateALicenceToEdit = (): CaseloadPage => {
-    cy.task('stubGetCaseloadItem')
+    cy.task('stubGetCaseloadItem', { isEligibleForEarlyRelease: false })
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
