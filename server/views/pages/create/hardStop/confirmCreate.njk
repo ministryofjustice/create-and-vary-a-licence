@@ -2,6 +2,7 @@
 
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
 
@@ -15,6 +16,12 @@
             <h1 class="govuk-heading-l">
               Are you sure you want to generate a standard licence for this person?
             </h1>
+            {% if licence.isEligibleForEarlyRelease %}
+                {{ govukWarningText({
+                    html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
+                    iconFallbackText: "Warning"
+                }) }}
+            {% endif %}
             <div class="licence-conditions">
                 {{ immediateReleaseConditions(licence.licenceType) }}
             </div>
