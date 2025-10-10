@@ -1,6 +1,5 @@
 {% extends "layout.njk" %}
 
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -26,13 +25,6 @@
                         </label> 
                     </h1> 
 
-                    {% if licence.isEligibleForEarlyRelease and not licence.kind == "HDC" %}
-                        {{ govukWarningText({
-                            html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
-                            iconFallbackText: "Warning"
-                        }) }}
-                    {% endif %}
-                    
                     {% if isError %}
                         <p class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span> {{ errorMessage.text }}
