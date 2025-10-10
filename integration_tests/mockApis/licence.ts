@@ -1811,7 +1811,7 @@ export default {
       },
     }),
 
-  stubGetCaseloadItem: (options: { isEligibleForEarlyRelease: boolean }) =>
+  stubGetCaseloadItem: () =>
     stubFor({
       request: {
         method: 'GET',
@@ -1841,7 +1841,6 @@ export default {
             hardStopDate: null,
             hardStopWarningDate: null,
             isInHardStopPeriod: false,
-            isEligibleForEarlyRelease: options.isEligibleForEarlyRelease,
           },
         },
       },
