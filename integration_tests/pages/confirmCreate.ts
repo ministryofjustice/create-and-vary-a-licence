@@ -12,8 +12,4 @@ export default class ConfirmCreatePage extends Page {
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AppointmentPersonPage)
   }
-
-  getReleaseDateStatus() {
-    return cy.get('.release-date-row')
-  }
 }
