@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import VaryApproverCaseloadService from '../../../services/lists/varyApproverCaseloadService'
-import config from '../../../config'
 
 export default class VaryApproveListRoutes {
   constructor(private readonly caseloadService: VaryApproverCaseloadService) {}
@@ -10,10 +9,9 @@ export default class VaryApproveListRoutes {
     const regionCases = req.query?.view === 'region'
     const { user } = res.locals
 
-    const { getAcoCaseloadFromBackEnd } = config
     const caseload = regionCases
-      ? await this.caseloadService.getVaryApproverCaseloadByRegion(user, search, getAcoCaseloadFromBackEnd)
-      : await this.caseloadService.getVaryApproverCaseload(user, search, getAcoCaseloadFromBackEnd)
+      ? await this.caseloadService.getVaryApproverCaseloadByRegion(user, search)
+      : await this.caseloadService.getVaryApproverCaseload(user, search)
 
     res.render('pages/vary-approve/cases', { caseload, search, regionCases })
   }

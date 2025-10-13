@@ -35,7 +35,7 @@ import type {
   UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
 } from '../@types/licenceApiClientTypes'
-import { CaseloadItem, OmuContact, UpdateOffenderDetailsRequest } from '../@types/licenceApiClientTypes'
+import { OmuContact, UpdateOffenderDetailsRequest } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
@@ -269,16 +269,6 @@ export default class LicenceService {
     return this.licenceApiClient.getComReviewCount(user)
   }
 
-  async getLicencesForVariationApproval(user: User): Promise<LicenceSummary[]> {
-    const statuses = [LicenceStatus.VARIATION_SUBMITTED.valueOf()]
-    return this.licenceApiClient.matchLicences({
-      statuses,
-      pdus: user?.probationPduCodes,
-      sortBy: 'conditionalReleaseDate',
-      user,
-    })
-  }
-
   async getLicencesForVariationApprovalByRegion(user: User): Promise<LicenceSummary[]> {
     return this.licenceApiClient.submittedVariationsByProbationArea(user?.probationAreaCode, user)
   }
@@ -462,10 +452,6 @@ export default class LicenceService {
 
   async getPrisonerDetail(nomsId: string, user: User): Promise<PrisonerWithCvlFields> {
     return this.licenceApiClient.getPrisonerDetail(nomsId, user)
-  }
-
-  async searchPrisonersByNomsIds(nomsIds: string[], user: User): Promise<CaseloadItem[]> {
-    return this.licenceApiClient.searchPrisonersByNomsIds(nomsIds, user)
   }
 
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {

@@ -1,5 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
-import { addDays, addMonths, format, subDays } from 'date-fns'
+import { addDays, format, subDays } from 'date-fns'
 import { stubFor } from '../wiremock'
 import LicenceStatus from '../../server/licences/licenceStatus'
 // eslint-disable-next-line camelcase
@@ -16,6 +16,7 @@ import {
   LicencePolicyResponse,
 } from '../../server/@types/licenceApiClientTypes'
 import LicenceKind from '../../server/enumeration/LicenceKind'
+import LicenceType from '../../server/enumeration/licenceType'
 
 const ACTIVE_POLICY_VERSION = '3.0'
 
@@ -296,7 +297,6 @@ export const licenceConditions: AdditionalCondition[] = [
   },
 ]
 
-const nextMonth = format(addMonths(new Date(), 1), 'yyyy-MM-dd')
 const probationPractitionerPlaceholder = {
   staffCode: 'X1234',
   name: 'Joe Bloggs',
@@ -1811,7 +1811,7 @@ export default {
       },
     }),
 
-  stubGetCaseloadItem: () =>
+  stubGetCaseloadItem: (options: { isEligibleForEarlyRelease: boolean }) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1841,6 +1841,7 @@ export default {
             hardStopDate: null,
             hardStopWarningDate: null,
             isInHardStopPeriod: false,
+            isEligibleForEarlyRelease: options.isEligibleForEarlyRelease,
           },
         },
       },
@@ -1919,138 +1920,6 @@ export default {
         },
       },
     }),
-
-  searchPrisonersByNomisIds: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: `/licences-api/prisoner-search/prisoner-numbers`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            cvl: {
-              licenceType: 'AP',
-              hardStopDate: '03/01/2023',
-              hardStopWarningDate: '01/01/2023',
-              isInHardStopPeriod: false,
-            },
-            prisoner: {
-              prisonerNumber: 'G9786GC',
-              bookingId: '1201102',
-              bookNumber: '38518A',
-              firstName: 'TEST',
-              lastName: 'PERSON',
-              dateOfBirth: '1940-12-20',
-              gender: 'Male',
-              youthOffender: false,
-              status: 'ACTIVE IN',
-              lastMovementTypeCode: 'ADM',
-              lastMovementReasonCode: '24',
-              inOutStatus: 'IN',
-              prisonId: 'MDI',
-              prisonName: 'Moorland (HMP & YOI)',
-              cellLocation: 'RECP',
-              dateCreated: '2022-07-05 10:30:00',
-              aliases: [
-                {
-                  firstName: 'OTHER',
-                  lastName: 'NAME',
-                  dateOfBirth: '1939-11-19',
-                  gender: 'Male',
-                  ethnicity: 'Some ethnicity',
-                },
-              ],
-              alerts: [
-                {
-                  alertType: 'H',
-                  alertCode: 'HA2',
-                  active: true,
-                  expired: false,
-                },
-              ],
-              legalStatus: 'RECALL',
-              imprisonmentStatus: 'CUR_ORA',
-              imprisonmentStatusDescription: 'ORA Recalled from Curfew Conditions',
-              indeterminateSentence: false,
-              receptionDate: '2021-01-08',
-              locationDescription: 'Moorland (HMP & YOI)',
-              restrictedPatient: false,
-              conditionalReleaseDate: nextMonth,
-            },
-          },
-        ],
-      },
-    })
-  },
-
-  searchPssPrisonersByNomisIds: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: `/licences-api/prisoner-search/prisoner-numbers`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            cvl: {
-              licenceType: 'PSS',
-              hardStopDate: '03/01/2023',
-              hardStopWarningDate: '01/01/2023',
-              isInHardStopPeriod: false,
-            },
-            prisoner: {
-              prisonerNumber: 'G9786GC',
-              bookingId: '1201102',
-              bookNumber: '38518A',
-              firstName: 'TEST',
-              lastName: 'PERSON',
-              dateOfBirth: '1940-12-20',
-              gender: 'Male',
-              youthOffender: false,
-              status: 'ACTIVE IN',
-              lastMovementTypeCode: 'ADM',
-              lastMovementReasonCode: '24',
-              inOutStatus: 'IN',
-              prisonId: 'MDI',
-              prisonName: 'Moorland (HMP & YOI)',
-              cellLocation: 'RECP',
-              dateCreated: '2022-07-05 10:30:00',
-              aliases: [
-                {
-                  firstName: 'OTHER',
-                  lastName: 'NAME',
-                  dateOfBirth: '1939-11-19',
-                  gender: 'Male',
-                  ethnicity: 'Some ethnicity',
-                },
-              ],
-              alerts: [
-                {
-                  alertType: 'H',
-                  alertCode: 'HA2',
-                  active: true,
-                  expired: false,
-                },
-              ],
-              legalStatus: 'RECALL',
-              imprisonmentStatus: 'CUR_ORA',
-              imprisonmentStatusDescription: 'ORA Recalled from Curfew Conditions',
-              indeterminateSentence: false,
-              receptionDate: '2021-01-08',
-              locationDescription: 'Moorland (HMP & YOI)',
-              restrictedPatient: false,
-              conditionalReleaseDate: nextMonth,
-            },
-          },
-        ],
-      },
-    })
-  },
 
   stubGetCaseloadItemInHardStop: () =>
     stubFor({
@@ -2842,6 +2711,87 @@ export default {
               kind: 'CRD',
               prisonCode: 'BAI',
               prisonDescription: 'Belmarsh (HMP)',
+            },
+          ],
+        },
+      },
+    })
+  },
+  stubGetVaryApproverSearchResults: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/vary-approver/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          pduCasesResponse: [
+            {
+              licenceId: 1,
+              name: 'Test Person One',
+              crnNumber: 'X12345',
+              licenceType: LicenceType.AP,
+              releaseDate: '01/05/2024',
+              variationRequestDate: '03/06/2024',
+              probationPractitioner: 'Com One',
+            },
+            {
+              licenceId: 2,
+              name: 'Test Person Two',
+              crnNumber: 'X12346',
+              licenceType: LicenceType.AP,
+              releaseDate: '02/11/2022',
+              variationRequestDate: '02/05/2024',
+              probationPractitioner: 'Com Four',
+            },
+            {
+              licenceId: 3,
+              name: 'Test Person Three',
+              crnNumber: 'X12347',
+              licenceType: LicenceType.AP,
+              releaseDate: '02/11/2022',
+              variationRequestDate: '01/05/2024',
+              probationPractitioner: 'Com Four',
+            },
+          ],
+          regionCasesResponse: [
+            {
+              licenceId: 1,
+              name: 'Test Person One',
+              crnNumber: 'X12345',
+              licenceType: LicenceType.AP,
+              releaseDate: '01/05/2024',
+              variationRequestDate: '03/06/2024',
+              probationPractitioner: 'Com One',
+            },
+            {
+              licenceId: 2,
+              name: 'Test Person Two',
+              crnNumber: 'X12346',
+              licenceType: LicenceType.AP,
+              releaseDate: '02/11/2022',
+              variationRequestDate: '02/05/2024',
+              probationPractitioner: 'Com Four',
+            },
+            {
+              licenceId: 3,
+              name: 'Test Person Three',
+              crnNumber: 'X12347',
+              licenceType: LicenceType.AP,
+              releaseDate: '02/11/2022',
+              variationRequestDate: '01/05/2024',
+              probationPractitioner: 'Com Four',
+            },
+            {
+              licenceId: 4,
+              name: 'Test Person Four',
+              crnNumber: 'X12348',
+              licenceType: LicenceType.AP,
+              releaseDate: '05/11/2022',
+              variationRequestDate: '30/04/2024',
+              probationPractitioner: 'Com Three',
             },
           ],
         },

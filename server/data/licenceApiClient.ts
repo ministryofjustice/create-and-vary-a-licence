@@ -18,7 +18,6 @@ import type {
   BespokeConditionsRequest,
   CaCase,
   CaCaseloadSearch,
-  CaseloadItem,
   ComCase,
   ContactNumberRequest,
   CreateLicenceRequest,
@@ -53,6 +52,7 @@ import type {
   UpdateVloDiscussionRequest,
   VaryApproverCase,
   VaryApproverCaseloadSearchRequest,
+  VaryApproverCaseloadSearchResponse,
   TimeServedCaseload,
   LicencePermissionsRequest,
   LicencePermissionsResponse,
@@ -567,19 +567,6 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<PrisonerWithCvlFields>
   }
 
-  async searchPrisonersByNomsIds(prisonerNumbers: string[], user?: User): Promise<CaseloadItem[]> {
-    if (prisonerNumbers.length < 1) {
-      return []
-    }
-    return (await this.post(
-      {
-        path: '/prisoner-search/prisoner-numbers',
-        data: { prisonerNumbers },
-      },
-      { username: user?.username },
-    )) as Promise<CaseloadItem[]>
-  }
-
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
     await this.post({
       path: `/licence/id/${licenceId}/deactivate-licence-and-variations`,
@@ -684,6 +671,15 @@ export default class LicenceApiClient extends RestClient {
       path: `/caseload/vary-approver`,
       data: varyApproverCaseloadRequest,
     })) as Promise<VaryApproverCase[]>
+  }
+
+  async searchForOffenderOnVaryApproverCaseload(
+    searchRequest: VaryApproverCaseloadSearchRequest,
+  ): Promise<VaryApproverCaseloadSearchResponse> {
+    return (await this.post({
+      path: `/caseload/vary-approver/case-search`,
+      data: searchRequest,
+    })) as Promise<VaryApproverCaseloadSearchResponse>
   }
 
   async getHdcLicenceData(licenceId: number): Promise<HdcLicenceData> {

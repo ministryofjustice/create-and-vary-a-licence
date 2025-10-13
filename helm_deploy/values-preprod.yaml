@@ -25,15 +25,13 @@ generic-service:
     LICENCES_URL: "http://create-and-vary-a-licence"
     DPS_URL: "https://digital-preprod.prison.service.justice.gov.uk"
 
-    ACO_CASELOAD_BACKEND_ENABLED: "true"
-
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
     MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"
     HDC_INTEGRATION_MVP2_ENABLED: "false"
     HDC_LICENCE_CREATION_BLOCK: "true"
     CA_NEW_SEARCH_ENABLED: "true"
-    APPROVER_NEW_SEARCH_ENABLED: "false"
+    APPROVER_NEW_SEARCH_ENABLED: "true"
     PDU_HEAD_NEW_SEARCH_ENABLED: "false"
     SHOW_DPR_REPORTING: "false"
     RECALLS_ENABLED: "false"

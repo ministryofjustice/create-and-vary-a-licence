@@ -31,6 +31,7 @@ import {
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
+  VaryApproverCaseloadSearchRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -290,24 +291,6 @@ describe('Licence API client tests', () => {
       )
       expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
     })
-  })
-
-  it('Search prisoners by nomis ids', async () => {
-    await licenceApiClient.searchPrisonersByNomsIds(['A1234AA'], { username: 'joebloggs' } as User)
-    expect(post).toHaveBeenCalledWith(
-      {
-        path: '/prisoner-search/prisoner-numbers',
-        data: {
-          prisonerNumbers: ['A1234AA'],
-        },
-      },
-      { username: 'joebloggs' },
-    )
-  })
-
-  it('Search prisoners by nomis ids is not called with no prison numbers', async () => {
-    await licenceApiClient.searchPrisonersByNomsIds([], { username: 'joebloggs' } as User)
-    expect(post).not.toHaveBeenCalled()
   })
 
   it('should update responsible COM for an offender', async () => {
@@ -720,6 +703,33 @@ describe('Licence API client tests', () => {
 
         expect(logger.error).toHaveBeenCalledWith('Error when fetching OMU email for prisonId: ABC')
       })
+    })
+  })
+
+  describe('Vary approver caseloads: ', () => {
+    it('Should get licences in a PDU for variation approval', async () => {
+      await licenceApiClient.getVaryApproverCaseload({ probationPduCodes: ['N55PDV'] })
+      expect(post).toHaveBeenCalledWith({
+        path: '/caseload/vary-approver',
+        data: { probationPduCodes: ['N55PDV'] },
+      })
+    })
+
+    it('Should get all licences in a region for variation approval', async () => {
+      await licenceApiClient.getVaryApproverCaseload({ probationAreaCode: 'N01' })
+      expect(post).toHaveBeenCalledWith({
+        path: '/caseload/vary-approver',
+        data: { probationAreaCode: 'N01' },
+      })
+    })
+
+    it('Should search for licences', async () => {
+      const searchRequest = {
+        probationPduCodes: ['N55PDV'],
+        searchTerm: 'search term',
+      } as VaryApproverCaseloadSearchRequest
+      await licenceApiClient.searchForOffenderOnVaryApproverCaseload(searchRequest)
+      expect(post).toHaveBeenCalledWith({ path: '/caseload/vary-approver/case-search', data: searchRequest })
     })
   })
 
