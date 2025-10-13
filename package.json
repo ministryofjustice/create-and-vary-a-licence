@@ -31,7 +31,8 @@
     "rebuild": "npm run clean && npm i && npm run build",
     "precommit:secrets": "gitleaks git --pre-commit --redact --staged --verbose --config .gitleaks/config.toml",
     "precommit:lint": "node_modules/.bin/lint-staged",
-    "precommit:verify": "npm run typecheck"
+    "precommit:verify": "npm run typecheck",
+    "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
     "node": "^22",
@@ -141,7 +142,9 @@
   },
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "^0.0.3",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.1-alpha.2",
     "@ministryofjustice/hmpps-precommit-hooks": "^0.0.3",
+    "@tsconfig/node22": "22.0.2",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
