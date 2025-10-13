@@ -15,7 +15,7 @@ export default class LicenceReviewRoutes {
     const { user } = res.locals
 
     if (answer === YesOrNo.YES) {
-      return res.redirect(`/licence/vary/id/${licenceId}/confirm-vary-action?prrdWarning=true`)
+      return res.redirect(`/licence/vary/id/${licenceId}/confirm-vary-action`)
     }
 
     await this.licenceService.reviewWithoutVariation(parseInt(licenceId, 10), user)
