@@ -6,7 +6,7 @@
     "outDir": "./dist",
     "sourceMap": true,
     "noEmit": false,
-    "allowJs": false,
+    "checkJs": true,
     "strict": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
@@ -14,6 +14,6 @@
     "experimentalDecorators": true,
     "typeRoots": ["./server/@types", "./node_modules/@types"]
   },
-  "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "cypress.config.ts", "eslint.config.mjs"],
-  "include": ["**/*.ts", "**/*.mjs"]
+  "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "cypress.config.ts"],
+  "include": ["**/*.ts", ".allowed-scripts.mjs"]
 }
