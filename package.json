@@ -142,7 +142,7 @@
   },
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "^0.0.3",
-    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.1-alpha.2",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.1-alpha.3",
     "@ministryofjustice/hmpps-precommit-hooks": "^0.0.3",
     "@tsconfig/node22": "22.0.2",
     "@types/bunyan": "^1.8.11",
