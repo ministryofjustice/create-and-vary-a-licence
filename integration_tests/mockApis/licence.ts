@@ -358,6 +358,7 @@ export default {
   stubGetLicence: (options: {
     licenceKind?: LicenceKind
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+    isEligibleForEarlyRelease: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -371,6 +372,7 @@ export default {
           ...licencePlaceholder,
           licenceKind: options.licenceKind || LicenceKind.CRD,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
+          isEligibleForEarlyRelease: options.isEligibleForEarlyRelease || false,
         },
       },
     })

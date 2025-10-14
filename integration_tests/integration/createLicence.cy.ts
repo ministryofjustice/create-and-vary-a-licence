@@ -49,7 +49,7 @@ context('Create a licence', () => {
       'contain',
       'Check this date with the prison. It may change because it is on or just before a weekend or bank holiday. This may affect the initial appointment.',
     )
-
+    cy.task('stubGetLicence', { isEligibleForEarlyRelease: true })
     const appointmentPersonPage = confirmCreatePage.clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
@@ -58,13 +58,12 @@ context('Create a licence', () => {
     const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
+      appointmentTimePage.selectType('SPECIFIC_DATE_TIME').enterDate(moment(appointmentDate)).enterTime(moment())
+      appointmentTimePage
+        .getEarlyReleaseWarning()
+        .should('contain.text', 'This person is eligible for Friday or pre-bank holiday release scheme.')
+        .should('contain.text', 'It may impact their initial appointment.')
+      const additionalConditionsPage = appointmentTimePage.clickContinue().selectYes().clickContinue()
 
       const additionalConditionsInputPage = additionalConditionsPage
         .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
