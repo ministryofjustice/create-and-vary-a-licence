@@ -1,4 +1,5 @@
-import { setup, defaultClient, TelemetryClient, DistributedTracingModes, Contracts } from 'applicationinsights'
+import { setup, defaultClient, type TelemetryClient, DistributedTracingModes, Contracts } from 'applicationinsights'
+
 import type FlushOptions from 'applicationinsights/out/Library/FlushOptions'
 import type { User } from '../@types/CvlUserDetails'
 import type { ApplicationInfo } from '../applicationInfo'
@@ -14,6 +15,7 @@ export function initialiseAppInsights(applicationInfo: ApplicationInfo): Telemet
     defaultClient.context.tags['ai.cloud.role'] = applicationInfo.applicationName
     defaultClient.context.tags['ai.application.ver'] = applicationInfo.buildNumber
     defaultClient.addTelemetryProcessor(addUserDataToRequests)
+    defaultClient.addTelemetryProcessor(overrideOperationName)
     return defaultClient
   }
   return null
@@ -28,14 +30,25 @@ export function flush(options: FlushOptions, exitMessage: string): void {
 }
 
 export const addUserDataToRequests: TelemetryProcessor = (envelope, contextObjects) => {
-  const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
+  const { data } = envelope
+  const isRequest = data.baseType === Contracts.TelemetryTypeString.Request
   if (isRequest) {
     const user = contextObjects?.['http.ServerRequest']?.res?.locals?.user
     if (user) {
-      const { properties } = envelope.data.baseData
+      const { properties } = data.baseData
 
       envelope.data.baseData.properties = { ...getUserDetails(user), ...properties }
     }
+  }
+  return true
+}
+
+export const overrideOperationName: TelemetryProcessor = (envelope, contextObjects) => {
+  const { tags, data } = envelope
+  const operationNameOverride = contextObjects.correlationContext?.customProperties?.getProperty('operationName')
+  if (operationNameOverride) {
+    tags['ai.operation.name'] = operationNameOverride
+    data.baseData.name = operationNameOverride
   }
   return true
 }
@@ -56,10 +69,11 @@ const getUserDetails = (user: User) => {
   } = user
 
   if (user.nomisStaffId) {
-    return { displayName, nomisStaffId, prisonCaseload, username, activeCaseLoadId }
+    return { type: 'PRISON', displayName, nomisStaffId, prisonCaseload, username, activeCaseLoadId }
   }
   if (user.deliusStaffCode) {
     return {
+      type: 'PROBATION',
       displayName,
       deliusStaffIdentifier,
       deliusStaffCode,
