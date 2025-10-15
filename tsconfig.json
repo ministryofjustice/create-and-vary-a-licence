@@ -1,24 +1,19 @@
 {
+  "extends": "@tsconfig/node22/tsconfig.json",
   "compileOnSave": true,
   "compilerOptions": {
     "isolatedModules": true,
-    "ignoreDeprecations": "5.0",
-    "target": "ES2022",
-    "module": "commonjs",
-    "moduleResolution": "node",
     "outDir": "./dist",
     "sourceMap": true,
-    "skipLibCheck": true,
     "noEmit": false,
-    "allowJs": true,
     "checkJs": true,
+    "strict": false,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "typeRoots": ["./server/@types", "./node_modules/@types"]
   },
-  "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "coverage", "./cypress.config.ts"],
-  "include": ["**/*.ts"]
+  "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "cypress.config.ts"],
+  "include": ["**/*.ts", ".allowed-scripts.mjs"]
 }

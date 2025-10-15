@@ -85,4 +85,8 @@ export default class AppointmentTimePage extends Page {
   getRadioByValue = (type: string) => {
     return cy.get(`input[value="${type}"]`)
   }
+
+  getEarlyReleaseWarning() {
+    return cy.get('.govuk-warning-text__text')
+  }
 }
