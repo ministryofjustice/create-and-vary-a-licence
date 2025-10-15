@@ -79,8 +79,7 @@ export default class PrrdCasesByPrisonRoutes {
     const deliusRecords = await this.probationService.getResponsibleCommunityManagers(cases.map(o => o.prisonerNumber))
 
     const caseload = cases
-      // Show all cases that should be PRRD cases apart from those that already exist with a kind of CRD
-      .filter(aCase => aCase.releaseDateKind === 'PRRD' && aCase.kind !== 'CRD')
+      .filter(aCase => aCase.kind === 'PRRD')
       .map(aCase => {
         const deliusRecord = deliusRecords.find(d => d.case.nomisId === aCase.prisonerNumber)
         return {
