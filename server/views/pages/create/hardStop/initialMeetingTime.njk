@@ -30,13 +30,6 @@
                     }
                     }) %}
 
-                    {% if licence.isEligibleForEarlyRelease %}
-                        {{ govukWarningText({
-                            html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
-                            iconFallbackText: "Warning"
-                        }) }}
-                    {% endif %}
-
                     {% set dateTimeHtml %}
                         {% call govukFieldset({
                             legend: {
