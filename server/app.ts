@@ -22,6 +22,7 @@ import trimRequestBody from './middleware/trimBodyMiddleware'
 import phaseNameSetup from './middleware/phaseNameSetup'
 import getFrontendComponents from './middleware/getFeComponents'
 import { ApplicationInfo } from './applicationInfo'
+import appInsightsMiddleware from './middleware/appInsightsMiddleware'
 
 export default function createApp(services: Services, applicationInfo: ApplicationInfo): express.Application {
   const app = express()
@@ -30,6 +31,7 @@ export default function createApp(services: Services, applicationInfo: Applicati
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
+  app.use(appInsightsMiddleware())
   app.use(setUpHealthChecks(applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
