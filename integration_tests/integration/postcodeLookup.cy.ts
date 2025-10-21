@@ -136,4 +136,65 @@ context('Postcode lookup', () => {
       selectAddressPage.addPreferredAddressCheckbox().should('exist')
     })
   })
+
+  const postcodesToTest = [
+    { postcode: 'FA1 1E', shouldShowError: true, expectedError: 'Enter a valid postcode' },
+    { postcode: 'EC1A1BB', shouldShowError: false },
+    { postcode: 'abc', shouldShowError: true, expectedError: 'Postcode must be at least 5 characters' },
+    { postcode: 'NE661234LX', shouldShowError: true, expectedError: 'Postcode must be at most 8 characters' },
+    { postcode: 'NE66 1LX', shouldShowError: false },
+    { postcode: 'CF2 35AG', shouldShowError: false },
+  ]
+
+  describe('Appointment postcode validation', () => {
+    const singleCaseload = {
+      details: [
+        {
+          caseLoadId: 'LEI',
+          caseloadFunction: 'GENERAL',
+          currentlyActive: true,
+          description: 'Leeds (HMP)',
+          type: 'INST',
+        },
+      ],
+    }
+
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubPrisonSignIn')
+      cy.task('stubGetPrisonUserDetails')
+      cy.task('stubGetPrisonOmuCaseload')
+      cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
+      cy.task('stubGetCompletedLicence', {
+        statusCode: 'APPROVED',
+        typeCode: 'AP_PSS',
+        electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
+        electronicMonitoringProviderStatus: 'COMPLETE',
+      })
+      cy.task('stubGetHdcStatus')
+      cy.task('stubRecordAuditEvent')
+      cy.task('stubGetPrisons')
+      cy.task('stubFeComponents')
+      cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+      cy.task('stubGetLicenceInHardStop')
+      cy.task('stubPutLicenceAppointmentPerson')
+      cy.signIn()
+    })
+
+    postcodesToTest.forEach(({ postcode, shouldShowError, expectedError }) => {
+      it(`should ${shouldShowError ? '' : 'not '}display an error for postcode: ${postcode}`, () => {
+        const indexPage = Page.verifyOnPage(IndexPage)
+        const viewLicencePage = indexPage.clickViewAndPrintALicence().clickFutureReleasesTab().clickALicence()
+
+        const appointmentPlacePage = viewLicencePage.clickChangeAddressLink().enterPostcode(postcode)
+
+        if (shouldShowError) {
+          appointmentPlacePage.clickContinueForErrorMessage()
+          appointmentPlacePage.getPostcodeError().should('contain.text', expectedError)
+        } else {
+          appointmentPlacePage.clickContinueToReturn()
+        }
+      })
+    })
+  })
 })

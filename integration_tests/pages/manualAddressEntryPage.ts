@@ -17,31 +17,38 @@ export default class ManualAddressEntryPage extends Page {
 
   private postcodeLookupSearch = '[data-qa=postcodeLookupSearch]'
 
+  private postcodeError = '#postcode-error'
+
   constructor() {
     super('manual-address-entry-page')
   }
 
   enterFirstLine = (text: string): ManualAddressEntryPage => {
+    cy.get(this.firstLineTextInputId).clear()
     cy.get(this.firstLineTextInputId).type(text)
     return this
   }
 
   enterSecondLine = (text: string): ManualAddressEntryPage => {
+    cy.get(this.secondLineTextInputId).clear()
     cy.get(this.secondLineTextInputId).type(text)
     return this
   }
 
   enterTownOrCity = (text: string): ManualAddressEntryPage => {
+    cy.get(this.townOrCityTextInputId).clear()
     cy.get(this.townOrCityTextInputId).type(text)
     return this
   }
 
   enterCounty = (text: string): ManualAddressEntryPage => {
+    cy.get(this.countyTextInputId).clear()
     cy.get(this.countyTextInputId).type(text)
     return this
   }
 
   enterPostcode = (text: string): ManualAddressEntryPage => {
+    cy.get(this.postcodeTextInputId).clear()
     cy.get(this.postcodeTextInputId).type(text)
     return this
   }
@@ -60,8 +67,15 @@ export default class ManualAddressEntryPage extends Page {
     return Page.verifyOnPage(ViewALicencePage)
   }
 
+  clickContinueForErrorMessage = (): ManualAddressEntryPage => {
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(ManualAddressEntryPage)
+  }
+
   findAnAddressBtnClick = (): AppointmentPlacePage => {
     cy.get(this.postcodeLookupSearch).click()
     return Page.verifyOnPage(AppointmentPlacePage)
   }
+
+  getPostcodeError = () => cy.get(this.postcodeError)
 }
