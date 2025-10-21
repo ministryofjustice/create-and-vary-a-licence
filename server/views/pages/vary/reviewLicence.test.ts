@@ -36,4 +36,25 @@ describe('Caseload', () => {
       'This licence contains standard post sentence supervision requirements only by default.',
     )
   })
+
+  it('should display warning if prisoner in hard stop is being re-released after a recall', () => {
+    const $ = render({
+      licence: {
+        licenceId: 3,
+        name: 'Biydaav Griya',
+        crnNumber: 'Z882661',
+        typeCode: 'PSS',
+        releaseDate: '13 Feb 2023',
+        licenceStatus: 'ACTIVE',
+        probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        postRecallReleaseDate: '2024-12-12',
+        eligibleKind: 'PRRD',
+      },
+    })
+    const element = $('[data-qa=prrd-warning]')
+    expect(element.length).toBe(1)
+    expect(element.text()).toContain('Warning')
+    expect(element.text()).toContain('This person was released following a fixed-term recall.')
+    expect(element.text()).toContain('Check their previous licence conditions. You should do this using EPF-2.')
+  })
 })
