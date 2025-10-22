@@ -11,6 +11,8 @@ export default class VaryApproveCasesPage extends Page {
 
   private searchButtonId = '[data-qa=search-button]'
 
+  private variationRequestDate = '[data-qa=variationRequestDate]'
+
   constructor() {
     super('vary-approval-cases-page')
   }
@@ -29,5 +31,9 @@ export default class VaryApproveCasesPage extends Page {
   clickViewAllRegions = (): VaryApproveCasesPage => {
     cy.get(this.allRegionsId).click()
     return Page.verifyOnPage(VaryApproveCasesPage)
+  }
+
+  getVariationRequestDate = n => {
+    return cy.get(this.variationRequestDate).eq(n)
   }
 }

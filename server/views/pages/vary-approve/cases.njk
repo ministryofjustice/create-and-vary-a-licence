@@ -45,17 +45,18 @@
         {
             attributes: {
                 id: 'variation-request-date-' + loop.index,
-                "data-sort-value": offender.variationRequestDate
+                "data-qa": "variationRequestDate",
+                "data-sort-value": offender.variationRequestDate | cvlDateToDateShort | dateToUnix
             },
             classes: "max-width max-width-200",
-            html: offender.variationRequestDate
+            html: offender.variationRequestDate | cvlDateToDateShort
         },
         {
             attributes: {
                 id: 'release-date-' + loop.index,
                 "data-sort-value": offender.releaseDate | dateToUnix
             },
-            text: offender.releaseDate
+            text: offender.releaseDate | cvlDateToDateShort
         }
     ]), licences) %}
 {% endfor %}
@@ -152,13 +153,13 @@
                 {
                     text: "Variation request date",
                     attributes: {
-                       "aria-sort": "descending"
+                       "aria-sort": "ascending"
                     }
                 },
                 {
                     text: "Release date",
                     attributes: {
-                        "aria-sort": "ascending"
+                        "aria-sort": "none"
                     }
                 }
             ],
@@ -167,7 +168,7 @@
     {% else %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                <h2 class="govuk-heading-s">There are no licence variations which meet the search criteria.</h2>
+                <h2 id="vary-approval-empty-state-content"class="govuk-heading-s">There are no licence variations which meet the search criteria.</h2>
             </div>
         </div>
     {% endif %}
