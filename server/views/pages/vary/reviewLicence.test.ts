@@ -55,6 +55,6 @@ describe('Caseload', () => {
     expect(element.length).toBe(1)
     expect(element.text()).toContain('Warning')
     expect(element.text()).toContain('This person was released following a fixed-term recall.')
-    expect(element.text()).toContain('Check their previous licence conditions. You should do this using EPF-2.')
+    expect(element.text()).toContain('Check their previous licence conditions. You should do this using EPF 2.')
   })
 })
