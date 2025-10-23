@@ -126,7 +126,7 @@
         {
             attributes: {
                 id: 'release-date-' + loop.index,
-                "data-sort-value": case.releaseDate | cvlDateToDateShort
+                "data-sort-value": case.releaseDate | cvlDateToDateShort | dateToUnix
             },
             text: case.releaseDate | cvlDateToDateShort
         }
@@ -172,7 +172,7 @@
         {
             attributes: {
                 id: 'release-date-' + loop.index,
-                "data-sort-value": case.releaseDate
+                "data-sort-value": case.releaseDate | cvlDateToDateShort | dateToUnix
             },
             text: case.releaseDate | cvlDateToDateShort
         }
