@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% set pageTitle = applicationName + "– Vary a licence – Have you reviewed this licence?" %}
 {% set pageId = "review-licence-question-page" %}
@@ -15,6 +16,19 @@
             <h1 class="govuk-heading-l">
                 {{ "Does anything on this licence need changing?" }}
             </h1>
+            {% if licence.eligibleKind == 'PRRD' %}
+                <p class="govuk-body">
+                    {{
+                    govukWarningText({
+                        iconFallbackText: "Warning",
+                        html: "This person was released following a fixed-term recall." +
+                        "<br> Check their previous licence conditions. You should do this using " +
+                        "<a class='govuk-link' href='https://epf.linkspace.uk/planning' target='_blank' rel='noreferrer noopener'>EPF 2</a>.",
+                        attributes: { 'data-qa': 'prrd-warning' }
+                    })
+                    }}
+                </p>
+            {% endif %}
             <p class="govuk-body">
               You can vary this licence to add information such as additional licence conditions or leave it unchanged if you are happy with it.
             </p>

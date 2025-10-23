@@ -37,6 +37,15 @@ context('ACO review a licence variation', () => {
     varyApproveCasesPage.signOut().click()
   })
 
+  it('should order cases by ascending variation request date', () => {
+    cy.task('stubApproveVariation')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const varyApproveCasesPage = indexPage.clickApproveAVariation()
+    varyApproveCasesPage.getVariationRequestDate(0).contains('28 Feb 2021')
+    varyApproveCasesPage.getVariationRequestDate(1).contains('1 Mar 2021')
+    varyApproveCasesPage.signOut().click()
+  })
+
   it('ACO reject a licence variation', () => {
     cy.task('stubReferVariation')
     const indexPage = Page.verifyOnPage(IndexPage)

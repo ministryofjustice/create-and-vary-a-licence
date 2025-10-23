@@ -38,8 +38,8 @@ describe('Vary Approver Caseload Service', () => {
         licenceType: 'AP',
         name: 'An Offender',
         probationPractitioner: 'An ProbationOfficer',
-        releaseDate: '01 Nov 2022',
-        variationRequestDate: '30 Oct 2022',
+        releaseDate: '01/11/2022',
+        variationRequestDate: '30/10/2022',
       },
     ])
   })
