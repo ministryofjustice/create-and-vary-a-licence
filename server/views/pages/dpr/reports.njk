@@ -18,9 +18,16 @@
                         "description": "Active licences with release date in the last 3 months"
                     }) }}
                 </div>
+                <div class="govuk-grid-column-one-third card-group__item">
+                    {{ card({
+                        "href": "/reports/em-install-at-source",
+                        "clickable": "true",
+                        "heading": "EM Install at Source",
+                        "description": "Prisoners due for release in the next 14 days who have a licence with an Electronic Monitoring Condition"
+                    }) }}
+                </div>
             </div>
         </div>
-    </div>
 {% endblock %}
 
 {% block pageScripts %}
