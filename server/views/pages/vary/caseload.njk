@@ -24,10 +24,18 @@
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender.licenceStatus === "REVIEW_NEEDED" %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Timed out</span>' %}
+        {% set releaseMessage = 'Time-served release' if offender.hardStopKind === 'TIME_SERVED' else 'Timed out' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">' + releaseMessage + '</span>' %}
     {% else %}
         {% set releaseDate = offender.releaseDate %}
     {% endif %}
+
+    {% if offender.probationPractitioner.name %}
+        {% set practitionerHtml = '<a class="govuk-link" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
+    {% else %}
+        {% set practitionerHtml = 'Not allocated yet' %}
+    {% endif %}
+
     {% set licences = (licences.push([
         {
             attributes: {
@@ -49,7 +57,7 @@
                 "data-sort-value": offender.probationPractitioner.name
             },
             classes: "max-width max-width-200",
-            html: '<a class="govuk-link" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>'
+            html: practitionerHtml
         },
         {
             attributes: {
