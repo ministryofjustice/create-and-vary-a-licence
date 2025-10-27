@@ -39,6 +39,7 @@ generic-service:
     PDU_HEAD_NEW_SEARCH_ENABLED: "true"
     SHOW_DPR_REPORTING: "true"
     RECALLS_ENABLED: "true"
+    SHOW_WHATS_NEW_BANNER: "true"
 
   scheduledDowntime:
     enabled: true
