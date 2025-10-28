@@ -312,20 +312,36 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <table class="govuk-table">
-                <caption class="govuk-table__caption govuk-table__caption--m">Ineligibility Reasons</caption>
+                <caption class="govuk-table__caption govuk-table__caption--m">Eligibility</caption>
                 <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">Reason</th>
-                    <td class="govuk-table__cell">
-                        {% if ineligibilityReasons | length %}
-                            {% for reason in ineligibilityReasons %}
-                                <li>{{reason}}</li>
-                            {% endfor %}
-                        {% else %}
-                            None
+                    <tr class="govuk-table__row">
+                      <th scope="row" class="govuk-table__header">Licence eligibility</th>
+                      <td class="govuk-table__cell">{% if ineligibilityReasons.eligibleKind %} Eligible for {{ ineligibilityReasons.eligibleKind }} licence {% else %} Ineligible for CVL {% endif %}</td>
+                    </tr>
+                    {% if ineligibilityReasons.ineligibilityReasons | length %}
+                        {% if ineligibilityReasons.genericIneligibilityReasons.concat(ineligibilityReasons.crdIneligibilityReasons) | length %}
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">CRD ineligibility reasons</th>
+                                <td class="govuk-table__cell">
+                                    {% for reason in (ineligibilityReasons.genericIneligibilityReasons.concat(ineligibilityReasons.crdIneligibilityReasons)) %}
+                                        <li>{{reason}}</li>
+                                    {% endfor %}
+                                </td>
+                            </tr>
                         {% endif %}
-                    </td>
-                </tr>
+                        {% if ineligibilityReasons.genericIneligibilityReasons.concat(ineligibilityReasons.prrdIneligibilityReasons) | length %}
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">PRRD ineligibility reasons</th>
+                                <td class="govuk-table__cell">
+                                    {% for reason in (ineligibilityReasons.genericIneligibilityReasons.concat(ineligibilityReasons.prrdIneligibilityReasons)) %}
+                                        <li>{{reason}}</li>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% else %}
+                        <p> None </p>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
