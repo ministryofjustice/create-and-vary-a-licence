@@ -2,9 +2,11 @@
 
 {% if showCommsBanner %}
     <div class="govuk-inset-text govuk-grid-column-three-quarters">
-        <h1 class="govuk-heading-l govuk-!-margin-0 govuk-!-padding-bottom-4">Updates to additional licence conditions</h1>
-        <div>An updated <a target="_blank" href="https://www.gov.uk/government/publications/licence-conditions-policy-framework">Licence Conditions Policy Framework</a> has been published. It contains some new additional conditions. Others have changed and some removed.</div>
-        <br />
-        <div>You can now use these additional conditions in this service. If you vary a licence containing conditions that have changed, you will be asked to review the changes so the updated conditions can be used.</div>
+        <h1 class="govuk-heading-l govuk-!-margin-0 govuk-!-padding-bottom-4">What's new</h1>
+        {% if user.authSource === 'nomis' %}
+            <div>From Monday 3 November, this service can be used to produce licences for people being released following a fixed-term recall and PD1s will no longer need to be sent for these cases. If no licence has been submitted by 2 days before release, the prison can generate one. </div>
+        {% else %}
+            <div>From Monday 3 November, probation practitioners will be able to use this service to produce licences for people being released following a fixed-term recall. All licences must be submitted by 2 days before release.</div>
+        {% endif %}
     </div>
 {% endif %}
