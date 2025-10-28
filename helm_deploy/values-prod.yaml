@@ -33,7 +33,7 @@ generic-service:
     CA_NEW_SEARCH_ENABLED: "true"
     APPROVER_NEW_SEARCH_ENABLED: "true"
     PDU_HEAD_NEW_SEARCH_ENABLED: "false"
-    SHOW_DPR_REPORTING: "false"
+    SHOW_DPR_REPORTING: "true"
     RECALLS_ENABLED: "false"
 
 gotenberg:
