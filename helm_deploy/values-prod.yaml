@@ -30,7 +30,6 @@ generic-service:
     MANAGE_USERS_API_URL: "https://manage-users-api.hmpps.service.justice.gov.uk"
     HDC_INTEGRATION_MVP2_ENABLED: "false"
     HDC_LICENCE_CREATION_BLOCK: "true"
-    CA_NEW_SEARCH_ENABLED: "true"
     APPROVER_NEW_SEARCH_ENABLED: "true"
     PDU_HEAD_NEW_SEARCH_ENABLED: "true"
     RECALLS_ENABLED: "false"
