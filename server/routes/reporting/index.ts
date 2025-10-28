@@ -1,5 +1,4 @@
 import { Router, RequestHandler } from 'express'
-import config from '../../config'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import { Services } from '../../services'
 import DprReportsRoutes from './handlers/dprReports'
@@ -14,10 +13,8 @@ export default function Index({ dprService }: Services): Router {
   const dprHomeHandler = new DprHomeRoutes()
   const dprReportsHandler = new DprReportsRoutes(dprService)
 
-  if (config.dprReportingEnabled) {
-    get('/', dprHomeHandler.GET)
-    get('/:id', dprReportsHandler.GET)
-  }
+  get('/', dprHomeHandler.GET)
+  get('/:id', dprReportsHandler.GET)
 
   return router
 }

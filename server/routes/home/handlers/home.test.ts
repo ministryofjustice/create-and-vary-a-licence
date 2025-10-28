@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import config from '../../../config'
 
 import HomeRoutes from './home'
 
@@ -169,14 +168,13 @@ describe('Route Handlers - Home', () => {
         shouldShowViewOrPrintCard: false,
         shouldShowVaryApprovalCard: false,
         shouldShowSupportCard: true,
-        shouldShowDprCard: false,
+        shouldShowDprCard: true,
       })
     })
 
     describe('For dpr reporting', () => {
       it('With correct auth source', async () => {
         req = getReqWithRolesAndSource(['ROLE_NOMIS_BATCHLOAD'], 'nomis')
-        config.dprReportingEnabled = true
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
           shouldShowCreateLicenceCard: false,
@@ -192,7 +190,6 @@ describe('Route Handlers - Home', () => {
 
       it('With just support role', async () => {
         req = getReqWithRolesAndSource(['ROLE_NOMIS_BATCHLOAD'], 'nomis')
-        config.dprReportingEnabled = false
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
           shouldShowCreateLicenceCard: false,
@@ -202,13 +199,12 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: true,
-          shouldShowDprCard: false,
+          shouldShowDprCard: true,
         })
       })
 
       it('With incorrect role', async () => {
         req = getReqWithRolesAndSource(['ROLE_LICENCE_ACO'], 'nomis')
-        config.dprReportingEnabled = false
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
           shouldShowCreateLicenceCard: false,

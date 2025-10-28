@@ -38,7 +38,6 @@ generic-service:
     CA_NEW_SEARCH_ENABLED: 'true'
     APPROVER_NEW_SEARCH_ENABLED: 'false'
     PDU_HEAD_NEW_SEARCH_ENABLED: 'false'
-    SHOW_DPR_REPORTING: 'false'
     RECALLS_ENABLED: 'false'
 
   scheduledDowntime:

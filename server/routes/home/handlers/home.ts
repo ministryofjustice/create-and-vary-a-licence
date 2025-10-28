@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import AuthRole from '../../../enumeration/authRole'
 import { hasAuthSource, hasRole } from '../../../utils/utils'
-import config from '../../../config'
 
 export default class HomeRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -17,7 +16,7 @@ export default class HomeRoutes {
       shouldShowMyCaseloadCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER), // TODO: Probably remove this?
       shouldShowVaryApprovalCard: hasRole(req.user, AuthRole.ASSISTANT_CHIEF) && hasAuthSource(req.user, 'delius'),
       shouldShowSupportCard: hasRole(req.user, AuthRole.SUPPORT),
-      shouldShowDprCard: hasRole(req.user, AuthRole.SUPPORT) && config.dprReportingEnabled,
+      shouldShowDprCard: hasRole(req.user, AuthRole.SUPPORT),
     }
     res.render('pages/index', viewContext)
   }
