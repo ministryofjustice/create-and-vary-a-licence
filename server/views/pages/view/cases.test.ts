@@ -166,40 +166,6 @@ describe('View and print a licence - case list', () => {
     expect($('.govuk-tabs__list a').text()).not.toContain('Attention needed')
   })
 
-  it('should show result count while search', () => {
-    const search = 'Jo'
-    const prisonsToDisplay = ''
-    const probationView = false
-    const $ = render({
-      cases: [
-        {
-          name: 'John Smith',
-          prisonerNumber: 'A1234AB',
-          releaseDate: '01/09/2022',
-          releaseDateLabel: 'CRD',
-          tabType: 'futureReleases',
-        },
-        {
-          name: 'Joe Bloggs',
-          prisonerNumber: 'A1234AC',
-          releaseDate: '10/09/2022',
-          releaseDateLabel: 'CRD',
-          tabType: 'attentionNeeded',
-        },
-      ],
-      showAttentionNeededTab: true,
-      CaViewCasesTab,
-      statusConfig,
-      search,
-      prisonsToDisplay,
-      probationView,
-    })
-    expect($('input[id="activeTab"]').val()).toBe('future-releases')
-    expect($('.govuk-tabs__list a').text()).toContain('Releases in next 2 working days (0 results)')
-    expect($('.govuk-tabs__list a').text()).toContain('Future releases (1 result)')
-    expect($('.govuk-tabs__list a').text()).toContain('Attention needed (1 result)')
-  })
-
   it('should highlight a HDC licence with a HDC release warning label in prison view', () => {
     const search = ''
     const prisonsToDisplay = ''
