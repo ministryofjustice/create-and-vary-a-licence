@@ -1,14 +1,30 @@
 {% extends "layout.njk" %}
 {% from "partials/card.njk" import card %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 
-{% set pageTitle = applicationName + " - DPR Reports" %}
+
+{% set pageTitle = applicationName + " - Reporting" %}
 {% set pageId = "dpr-reports" %}
 {% set backLinkHref = "/" %}
 
 {% block content %}
     <div class="grid-row">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-l">DPR Reports</h1>
+            <h1 class="govuk-heading-l">Reporting</h1>
+
+            <h2 class="govuk-heading-m govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">CVL</h2>
+            <div class="govuk-grid-row card-group">
+                <div class="govuk-grid-column-one-third card-group__item">
+                    {{ card({
+                        "href": "/support/last-minute-handover-cases",
+                        "clickable": "true",
+                        "heading": "Upcoming Releases with Incomplete Licences",
+                        "description": "View & dowload data for upcoming releases with incomplete licences"
+                    }) }}
+                </div>
+            </div>
+
+            <h2 class="govuk-heading-m govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">DPR</h2>
             <div class="govuk-grid-row card-group">
                 <div class="govuk-grid-column-one-third card-group__item">
                     {{ card({
