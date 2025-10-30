@@ -77,7 +77,6 @@ export default class PrrdCasesByPrisonRoutes {
     const cases = await this.caCaseloadService.getPrisonOmuCaseload(user, [prisonCode])
 
     const deliusRecords = await this.probationService.getResponsibleCommunityManagers(cases.map(o => o.prisonerNumber))
-
     const caseload = cases
       .filter(aCase => aCase.kind === 'PRRD')
       .map(aCase => {
@@ -88,8 +87,8 @@ export default class PrrdCasesByPrisonRoutes {
           crn: deliusRecord?.case.crn,
           licenceStatus: aCase.licenceStatus,
           releaseDate: aCase.releaseDate,
-          probationPractitioner: convertToTitleCase(aCase.probationPractitioner.name),
-          probationPractitionerEmail: deliusRecord.email,
+          probationPractitioner: convertToTitleCase(aCase.probationPractitioner?.name) || 'Unallocated',
+          probationPractitionerEmail: deliusRecord?.email,
         }
       })
     return caseload

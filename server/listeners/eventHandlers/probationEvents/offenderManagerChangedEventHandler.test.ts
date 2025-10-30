@@ -54,6 +54,7 @@ describe('Offender manager changed event handler', () => {
     expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledWith('X1234')
     expect(licenceService.updateResponsibleCom).toHaveBeenCalledWith('X1234', {
       staffIdentifier: 3000,
+      staffCode: 'X12344',
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
       firstName: 'Joe',
