@@ -15,6 +15,7 @@ import type {
   ComReviewCount,
   ContactNumberRequest,
   CreateLicenceRequest,
+  EligibilityAssessment,
   LastMinuteHandoverCaseResponse,
   Licence,
   LicenceConditionChange,
@@ -458,7 +459,7 @@ export default class LicenceService {
     return this.licenceApiClient.deactivateActiveAndVariationLicences(licenceId, reason)
   }
 
-  async getIneligibilityReasons(nomsId: string): Promise<string[]> {
+  async getIneligibilityReasons(nomsId: string): Promise<EligibilityAssessment> {
     return this.licenceApiClient.getIneligibilityReasons(nomsId)
   }
 
