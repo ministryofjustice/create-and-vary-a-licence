@@ -57,6 +57,7 @@ import type {
   LicencePermissionsRequest,
   LicencePermissionsResponse,
   LastMinuteHandoverCaseResponse,
+  EligibilityAssessment,
 } from '../@types/licenceApiClientTypes'
 import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
@@ -688,10 +689,10 @@ export default class LicenceApiClient extends RestClient {
     })) as Promise<HdcLicenceData>
   }
 
-  async getIneligibilityReasons(nomisId: string): Promise<string[]> {
+  async getIneligibilityReasons(nomisId: string): Promise<EligibilityAssessment> {
     return (await this.get({
       path: `/offender/nomisid/${nomisId}/ineligibility-reasons`,
-    })) as Promise<string[]>
+    })) as Promise<EligibilityAssessment>
   }
 
   async getIS91Status(nomisId: string): Promise<boolean> {

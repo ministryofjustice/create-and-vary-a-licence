@@ -2,7 +2,12 @@ import { Request, Response } from 'express'
 import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
 import OffenderDetailRoutes from './offenderDetail'
-import type { LicenceSummary, Licence, PrisonerWithCvlFields } from '../../../@types/licenceApiClientTypes'
+import type {
+  LicenceSummary,
+  Licence,
+  PrisonerWithCvlFields,
+  EligibilityAssessment,
+} from '../../../@types/licenceApiClientTypes'
 import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
 import { DeliusManager } from '../../../@types/deliusClientTypes'
@@ -117,7 +122,7 @@ describe('Route Handlers - Offender detail', () => {
       },
     } as DeliusManager)
 
-    licenceService.getIneligibilityReasons.mockResolvedValue([])
+    licenceService.getIneligibilityReasons.mockResolvedValue({ ineligibilityReasons: [] } as EligibilityAssessment)
 
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
@@ -175,7 +180,7 @@ describe('Route Handlers - Offender detail', () => {
           region: 'Not found',
         },
         licence: licenceDatesNotFound,
-        ineligibilityReasons: [],
+        ineligibilityReasons: { ineligibilityReasons: [] },
         is91Status: 'No',
       })
     })
@@ -238,7 +243,7 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Not found',
       },
       licence: licenceDatesNotFound,
-      ineligibilityReasons: [],
+      ineligibilityReasons: { ineligibilityReasons: [] },
       is91Status: 'No',
     })
   })
@@ -311,7 +316,7 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Not found',
       },
       licence: licenceDatesNotFound,
-      ineligibilityReasons: [],
+      ineligibilityReasons: { ineligibilityReasons: [] },
       is91Status: 'No',
     })
   })
@@ -407,7 +412,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: '05 Jan 2022',
         prrd: 'Not found',
       },
-      ineligibilityReasons: [],
+      ineligibilityReasons: { ineligibilityReasons: [] },
       is91Status: 'No',
     })
   })
@@ -496,7 +501,9 @@ describe('Route Handlers - Offender detail', () => {
       probationTeamCode: 'Test',
     } as Licence)
 
-    licenceService.getIneligibilityReasons.mockResolvedValue(['Reason1', 'Reason2'])
+    licenceService.getIneligibilityReasons.mockResolvedValue({
+      ineligibilityReasons: ['Reason1', 'Reason2'],
+    } as EligibilityAssessment)
 
     licenceService.getIS91Status.mockResolvedValue(false)
 
@@ -504,7 +511,7 @@ describe('Route Handlers - Offender detail', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/support/offenderDetail',
       expect.objectContaining({
-        ineligibilityReasons: ['Reason1', 'Reason2'],
+        ineligibilityReasons: { ineligibilityReasons: ['Reason1', 'Reason2'] },
       }),
     )
   })
