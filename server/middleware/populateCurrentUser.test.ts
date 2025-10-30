@@ -285,6 +285,7 @@ describe('populateCurrentUser', () => {
     })
     expect(licenceServiceMock.updateComDetails).toHaveBeenCalledWith({
       staffIdentifier: 2000,
+      staffCode: 'ABC',
       staffUsername: 'joebloggs',
       staffEmail: 'jbloggs@probation.gov.uk',
       firstName: 'Joseph',
