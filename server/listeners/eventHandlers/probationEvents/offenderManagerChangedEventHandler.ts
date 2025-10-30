@@ -23,6 +23,7 @@ export default class OffenderManagerChangedEventHandler {
 
         await this.licenceService.updateResponsibleCom(crn, {
           staffIdentifier: newCom.id,
+          staffCode: newCom.code,
           staffUsername: newCom.username,
           staffEmail: newCom.email,
           firstName: newCom.name?.forename,
