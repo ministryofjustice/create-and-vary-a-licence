@@ -87,6 +87,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
 
             await licenceService.updateComDetails({
               staffIdentifier: probationUser?.id,
+              staffCode: probationUser?.code,
               staffUsername: user.username,
               staffEmail: probationUser?.email,
               firstName: probationUser?.name?.forename,
