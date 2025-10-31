@@ -2,7 +2,7 @@ import { Expose } from 'class-transformer'
 import { IsNotEmpty, IsIn, ValidateIf } from 'class-validator'
 import YesOrNo from '../../../enumeration/yesOrNo'
 
-const message = 'Select yes or no'
+const message = 'Choose how you will create this licence'
 
 class NomisOrCvl {
   @Expose()

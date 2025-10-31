@@ -21,7 +21,7 @@ describe('nomisOrCvl', () => {
   it('should fail validation with empty answer', async () => {
     const errors = await validateDto({ answer: '' })
     expect(errors.length).toBeGreaterThan(0)
-    expect(errors[0].constraints?.isNotEmpty).toBe('Select yes or no')
+    expect(errors[0].constraints?.isNotEmpty).toBe('Choose how you will create this licence')
   })
 
   it('should fail validation with empty reason', async () => {
