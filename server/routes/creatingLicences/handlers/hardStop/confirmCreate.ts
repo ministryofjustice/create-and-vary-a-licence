@@ -10,6 +10,7 @@ export default class ConfirmCreateRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { nomisId } = req.params
+    const { hardStopKind } = req.query
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/view/cases'
     const {
@@ -27,6 +28,7 @@ export default class ConfirmCreateRoutes {
         licenceType,
         isEligibleForEarlyRelease,
         kind: licenceKind,
+        hardStopKind,
       },
       backLink,
     })
@@ -34,16 +36,23 @@ export default class ConfirmCreateRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { nomisId } = req.params
+    const { hardStopKind } = req.query
     const { user } = res.locals
     const { answer } = req.body
     const backLink = req.session.returnToCase || '/licence/view/cases'
 
     if (answer === YesOrNo.YES) {
-      const { licenceId } = await this.licenceService.createLicence(
-        { nomsId: nomisId, type: LicenceKind.HARD_STOP },
-        user,
-      )
-      return res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-name`)
+      if (hardStopKind === 'HARD_STOP') {
+        const { licenceId } = await this.licenceService.createLicence(
+          { nomsId: nomisId, type: LicenceKind.HARD_STOP },
+          user,
+        )
+        return res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-name`)
+      }
+      if (hardStopKind === 'TIME_SERVED') {
+        await this.licenceService.createLicence({ nomsId: nomisId, type: LicenceKind.TIME_SERVED }, user)
+        return res.redirect(`/licence/view/cases`)
+      }
     }
     return res.redirect(backLink)
   }

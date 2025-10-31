@@ -6,6 +6,7 @@ import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 import { Services } from '../../../../services'
 
 import ConfirmCreateRoutes from './confirmCreate'
+import NomisOrCvl from '../../types/nomisOrCvl'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
@@ -32,7 +33,7 @@ export default function Index({ licenceService, conditionService }: Services): R
   {
     const controller = new ConfirmCreateRoutes(licenceService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)
-    post('/create/nomisId/:nomisId/confirm', controller.POST)
+    post('/create/nomisId/:nomisId/confirm', controller.POST, NomisOrCvl)
   }
   return router
 }

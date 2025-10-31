@@ -5,6 +5,7 @@ enum LicenceKind {
   HDC = 'HDC',
   HDC_VARIATION = 'HDC_VARIATION',
   PRRD = 'PRRD',
+  TIME_SERVED = 'TIME_SERVED',
 }
 
 export default LicenceKind

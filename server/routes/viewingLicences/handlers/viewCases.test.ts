@@ -80,6 +80,7 @@ describe('Route handlers - View and print case list', () => {
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isInHardStopPeriod: true,
+      hardStopKind: LicenceKind.HARD_STOP,
     },
     {
       kind: LicenceKind.CRD,
@@ -96,6 +97,7 @@ describe('Route handlers - View and print case list', () => {
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isInHardStopPeriod: true,
+      hardStopKind: LicenceKind.HARD_STOP,
     },
     {
       kind: LicenceKind.CRD,
@@ -112,6 +114,7 @@ describe('Route handlers - View and print case list', () => {
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isInHardStopPeriod: true,
+      hardStopKind: LicenceKind.HARD_STOP,
     },
     {
       kind: LicenceKind.CRD,
@@ -128,6 +131,7 @@ describe('Route handlers - View and print case list', () => {
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isInHardStopPeriod: true,
+      hardStopKind: LicenceKind.TIME_SERVED,
     },
   ] as CaCase[]
   const prisonCaseload = caCase as CaCase[]
@@ -149,6 +153,7 @@ describe('Route handlers - View and print case list', () => {
         tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
         nomisLegalStatus: 'SENTENCED',
         lastWorkedOnBy: 'Test Updater',
+        hardStopKind: LicenceKind.HARD_STOP,
       },
       {
         ...caCase,
@@ -161,6 +166,7 @@ describe('Route handlers - View and print case list', () => {
         probationPractitioner: {
           name: 'Com Three',
         },
+        hardStopKind: LicenceKind.HARD_STOP,
       },
       {
         ...caCase,
@@ -174,6 +180,7 @@ describe('Route handlers - View and print case list', () => {
         probationPractitioner: {
           name: 'Com Four',
         },
+        hardStopKind: LicenceKind.HARD_STOP,
       },
       {
         ...caCase,
@@ -186,6 +193,7 @@ describe('Route handlers - View and print case list', () => {
         probationPractitioner: {
           name: 'Com Five',
         },
+        hardStopKind: LicenceKind.HARD_STOP,
       },
     ] as CaCase[]
 
@@ -310,7 +318,7 @@ describe('Route handlers - View and print case list', () => {
           {
             licenceId: 6,
             licenceStatus: 'NOT_STARTED',
-            link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
+            link: '/licence/hard-stop/create/nomisId/A1234AB/confirm?hardStopKind=HARD_STOP',
             prisonerNumber: 'A1234AB',
             probationPractitioner: {
               name: 'Com Three',
@@ -472,7 +480,7 @@ describe('Route handlers - View and print case list', () => {
           {
             licenceId: 6,
             licenceStatus: 'NOT_STARTED',
-            link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
+            link: '/licence/hard-stop/create/nomisId/A1234AB/confirm?hardStopKind=HARD_STOP',
             prisonerNumber: 'A1234AB',
             probationPractitioner: {
               name: 'Com Three',
@@ -530,7 +538,7 @@ describe('Route handlers - View and print case list', () => {
           {
             licenceId: 6,
             licenceStatus: 'NOT_STARTED',
-            link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
+            link: '/licence/hard-stop/create/nomisId/A1234AB/confirm?hardStopKind=HARD_STOP',
             prisonerNumber: 'A1234AB',
             probationPractitioner: {
               name: 'Com Three',
@@ -617,7 +625,7 @@ describe('Route handlers - View and print case list', () => {
           {
             licenceId: 6,
             licenceStatus: 'NOT_STARTED',
-            link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
+            link: '/licence/hard-stop/create/nomisId/A1234AB/confirm?hardStopKind=HARD_STOP',
             prisonerNumber: 'A1234AB',
             probationPractitioner: {
               name: 'Com Three',
