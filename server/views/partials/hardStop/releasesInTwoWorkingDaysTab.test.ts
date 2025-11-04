@@ -3,7 +3,7 @@ import { CaViewCasesTab, LicenceKind } from '../../../enumeration'
 import statusConfig from '../../../licences/licenceStatus'
 
 const render = templateRenderer(
-  '{% from "partials/hardstop/releasesInTwoWorkingDaysTab.njk" import releasesInTwoWorkingDaysTab %}{{ releasesInTwoWorkingDaysTab(options)}}',
+  '{% from "partials/hardStop/releasesInTwoWorkingDaysTab.njk" import releasesInTwoWorkingDaysTab %}{{ releasesInTwoWorkingDaysTab(options)}}',
 )
 
 describe('Release In Two Working Days template', () => {
