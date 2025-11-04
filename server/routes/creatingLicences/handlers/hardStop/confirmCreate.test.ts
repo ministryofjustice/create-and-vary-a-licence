@@ -28,9 +28,6 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       user: {
         username: 'joebloggs',
       },
-      query: {
-        hardStopKind: 'HARD_STOP',
-      },
     } as unknown as Request
 
     res = {
@@ -49,7 +46,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   })
 
   describe('GET', () => {
-    it('should render view hard stop confirm create', async () => {
+    it('should render view', async () => {
       const prisonerDetails = {
         prisoner: {
           prisonerNumber: 'G4169UO',
@@ -71,36 +68,6 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           forename: 'Test',
           surname: 'Person',
           licenceType: 'AP',
-          hardStopKind: 'HARD_STOP',
-        },
-        backLink: req.session?.returnToCase,
-      })
-    })
-
-    it('should render view time served confirm create', async () => {
-      req.query.hardStopKind = 'TIME_SERVED'
-      const prisonerDetails = {
-        prisoner: {
-          prisonerNumber: 'G4169UO',
-          firstName: 'TEST',
-          lastName: 'PERSON',
-          confirmedReleaseDate: '2024-07-19',
-          conditionalReleaseDate: '2022-09-01',
-          dateOfBirth: '1992-12-06',
-        },
-        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, licenceStartDate: '18/07/2024' },
-      } as PrisonerWithCvlFields
-      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmCreate', {
-        licence: {
-          nomsId: 'ABC123',
-          licenceStartDate: '18/07/2024',
-          dateOfBirth: '06/12/1992',
-          forename: 'Test',
-          surname: 'Person',
-          licenceType: 'AP',
-          hardStopKind: 'TIME_SERVED',
         },
         backLink: req.session?.returnToCase,
       })
@@ -119,20 +86,6 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-name')
-    })
-
-    it('should create time served licence and should redirect if answer is YES', async () => {
-      req.query.hardStopKind = 'TIME_SERVED'
-      req.body.answer = 'Yes'
-      licenceService.createLicence.mockResolvedValue({ licenceId: 1, kind: 'TIME_SERVED' } as LicenceSummary)
-      await handler.POST(req, res)
-      expect(licenceService.createLicence).toHaveBeenCalledWith(
-        { nomsId: 'ABC123', type: 'TIME_SERVED' },
-        {
-          username: 'joebloggs',
-        },
-      )
-      expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
     })
 
     it('should not create licence and should redirect when answer is NO', async () => {

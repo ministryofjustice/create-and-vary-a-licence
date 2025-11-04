@@ -86,7 +86,7 @@ export default class ViewAndPrintCaseRoutes {
       return null
     }
     if (licence.licenceStatus === LicenceStatus.TIMED_OUT) {
-      return `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm?hardStopKind=${licence.hardStopKind}`
+      return `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
     }
     if (licence.licenceId) {
       const query =
