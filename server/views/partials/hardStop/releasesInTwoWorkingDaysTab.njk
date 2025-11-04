@@ -7,7 +7,11 @@
             <p class="govuk-body">From 2 days before release:</p>
             <ul class="govuk-list govuk-list--bullet">
                 <li>probation practitioners can no longer work on licences</li>
-                <li>you can generate a standard licence if a probation practitioner has not submitted one for approval</li>
+                {% if params.timeServedEnabled %}
+                    <li>you can generate a standard licence if a probation practitioner has not submitted one or for time-served releases.</li>
+                {% else %}
+                    <li>you can generate a standard licence if a probation practitioner has not submitted one for approval</li>
+                {% endif %}
             </ul>
         {% endif %}
        {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config, activeTab: params.activeTab}) }} 

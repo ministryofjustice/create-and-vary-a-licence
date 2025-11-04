@@ -280,6 +280,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        timeServedEnabled: false,
       })
     })
 
@@ -354,6 +355,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: true,
         search: '',
         statusConfig,
+        timeServedEnabled: false,
       })
     })
 
@@ -442,6 +444,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        timeServedEnabled: false,
       })
     })
 
@@ -516,6 +519,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        timeServedEnabled: false,
       })
     })
 
@@ -551,6 +555,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        timeServedEnabled: false,
       })
     })
 
@@ -587,6 +592,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        timeServedEnabled: false,
       })
     })
 
@@ -661,6 +667,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        timeServedEnabled: false,
       })
     })
 
@@ -749,6 +756,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        timeServedEnabled: false,
       })
     })
 
@@ -791,6 +799,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        timeServedEnabled: false,
       })
     })
   })
