@@ -1,10 +1,10 @@
 import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
-import NomisOrCvl from './nomisOrCvl'
+import CreateLicenceInNomisOrCvl from './createLicenceInNomisOrCvl'
 
-describe('nomisOrCvl', () => {
+describe('createTimeServedLicenceInNomisOrCvl', () => {
   const validateDto = async (input: { answer: string; reasonForUsingNomis?: string }) => {
-    const instance = plainToInstance(NomisOrCvl, input)
+    const instance = plainToInstance(CreateLicenceInNomisOrCvl, input)
     return validate(instance)
   }
 

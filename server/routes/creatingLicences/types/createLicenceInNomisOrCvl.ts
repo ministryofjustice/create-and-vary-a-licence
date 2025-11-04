@@ -4,7 +4,7 @@ import YesOrNo from '../../../enumeration/yesOrNo'
 
 const message = 'Choose how you will create this licence'
 
-class NomisOrCvl {
+class CreateLicenceInNomisOrCvl {
   @Expose()
   @IsNotEmpty({ message })
   @IsIn(Object.values(YesOrNo), { message })
@@ -16,4 +16,4 @@ class NomisOrCvl {
   reasonForUsingNomis: string
 }
 
-export default NomisOrCvl
+export default CreateLicenceInNomisOrCvl
