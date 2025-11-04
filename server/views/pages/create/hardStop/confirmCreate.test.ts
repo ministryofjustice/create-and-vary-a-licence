@@ -9,6 +9,7 @@ describe('Caseload', () => {
     const $ = render({
       licence: {
         licenceType: 'AP',
+        hardStopKind: 'HARD_STOP',
       },
     })
     expect($('.licence-conditions').text().toString()).toContain('standard conditions')
@@ -18,6 +19,7 @@ describe('Caseload', () => {
     const $ = render({
       licence: {
         licenceType: 'PSS',
+        hardStopKind: 'HARD_STOP',
       },
     })
     expect($('.licence-conditions').text().toString()).toContain(
