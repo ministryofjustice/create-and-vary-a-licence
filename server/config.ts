@@ -209,4 +209,5 @@ export default {
   pduHeadNewSearchEnabled: get('PDU_HEAD_NEW_SEARCH_ENABLED', 'false', requiredInProduction) === 'true',
   postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
   recallsEnabled: get('RECALLS_ENABLED', 'false', requiredInProduction) === 'true',
+  timeServedEnabled: get('TIME_SERVED_ENABLED', 'false', requiredInProduction) === 'true',
 }

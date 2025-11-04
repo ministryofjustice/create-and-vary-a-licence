@@ -3,6 +3,7 @@ import statusConfig from '../../../licences/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import { LicenceStatus, LicenceKind, CaViewCasesTab } from '../../../enumeration'
+import config from '../../../config'
 
 import { CaCase } from '../../../@types/licenceApiClientTypes'
 
@@ -29,6 +30,7 @@ export default class ViewAndPrintCaseRoutes {
     const probationView = view === 'probation'
     const { user } = res.locals
     const { caseloadsSelected = [] } = req.session
+    const { timeServedEnabled } = config
     const hasMultipleCaseloadsInNomis = user.prisonCaseload.length > 1
     const allPrisons = await this.prisonerService.getPrisons()
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
@@ -67,6 +69,7 @@ export default class ViewAndPrintCaseRoutes {
       prisonsToDisplay,
       hasMultipleCaseloadsInNomis,
       probationView,
+      timeServedEnabled,
     })
   }
 
