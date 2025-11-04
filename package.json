@@ -166,7 +166,7 @@
     "@types/redis-mock": "^0.17.3",
     "@types/superagent": "^8.1.9",
     "@types/supertest": "^6.0.3",
-    "@types/uuid": "^10.0.0",
+    "@types/uuid": "^11.0.0",
     "axe-core": "^4.10.3",
     "better-npm-audit": "^3.11.0",
     "cheerio": "^1.1.2",
