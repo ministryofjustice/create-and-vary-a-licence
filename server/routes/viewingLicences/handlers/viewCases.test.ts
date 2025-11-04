@@ -7,6 +7,7 @@ import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../enumeration
 
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import { CaCase } from '../../../@types/licenceApiClientTypes'
+import config from '../../../config'
 
 const caseloadService = new CaCaseloadService(null) as jest.Mocked<CaCaseloadService>
 jest.mock('../../../services/lists/caCaseloadService')
@@ -20,6 +21,7 @@ describe('Route handlers - View and print case list', () => {
   let res: Response
 
   beforeEach(() => {
+    config.timeServedEnabled = false
     req = {
       query: {
         search: '',
@@ -680,6 +682,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the links of cases for prison view for time served', async () => {
+      config.timeServedEnabled = true
       const timeServedCase = [
         {
           kind: LicenceKind.HARD_STOP,
@@ -735,6 +738,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        timeServedEnabled: true,
       })
     })
 
