@@ -2,7 +2,6 @@
 
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
 
@@ -10,109 +9,47 @@
 {% set pageId = "hardstop-confirm-create-page" %}
 {% set backLinkHref = backLink %}
 
-{% set nomisReasonHtml %}
-    {{ govukTextarea({
-        id: 'reasonForUsingNomis',
-        name: 'reasonForUsingNomis',
-        label: {
-            text: 'Enter a reason for using NOMIS',
-            classes: "govuk-!-font-weight-bold"
-        },
-        hint: {
-            text: 'Telling us this helps us understand how the Prison Service and the Probation Service work together on licences for people released with time served.'
-        },
-        errorMessage: validationErrors | findError('reasonForUsingNomis')
-    }) }}
-{% endset %}
-
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            {% if licence.hardStopKind === 'HARD_STOP'%}
-                <h1 class="govuk-heading-l">
-                Are you sure you want to generate a standard licence for this person?
-                </h1>
-                <div class="licence-conditions">
-                    {{ immediateReleaseConditions(licence.licenceType) }}
-                </div>
-                {% if licence.licenceType === 'AP_PSS' or licence.licenceType === 'AP' %}
-                    <p class="govuk-body">You cannot add any other additional or bespoke licence conditions.<br> <br> A community probation practitioner can do this after release.</p>
-                {% endif %}
+            <h1 class="govuk-heading-l">
+              Are you sure you want to generate a standard licence for this person?
+            </h1>
+            <div class="licence-conditions">
+                {{ immediateReleaseConditions(licence.licenceType) }}
+            </div>
+            {% if licence.licenceType === 'AP_PSS' or licence.licenceType === 'AP' %}
+                <p class="govuk-body">You cannot add any other additional or bespoke licence conditions.<br> <br> A community probation practitioner can do this after release.</p>
             {% endif %}
-
-            {% if licence.hardStopKind === 'TIME_SERVED'%}
-                <h1 class="govuk-heading-l">
-                    Do you want to create the licence on this service?
-                </h1>
-            {% endif %}
-
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-full-from-desktop">
-                        {% if licence.hardStopKind === 'HARD_STOP'%}
-                            {{ govukRadios({
-                                classes: "govuk-radios--inline",
-                                idPrefix: "answer",
-                                name: "answer",
-                                fieldset: {
-                                    legend: {
-                                        text: "Are you sure you want to create this hardstop licence?",
-                                        isPageHeading: false,
-                                        classes: "govuk-visually-hidden"
-                                    }
+                        {{ govukRadios({
+                            classes: "govuk-radios--inline",
+                            idPrefix: "answer",
+                            name: "answer",
+                            fieldset: {
+                                legend: {
+                                    text: "Are you sure you want to create this hardstop licence?",
+                                    isPageHeading: false,
+                                    classes: "govuk-visually-hidden"
+                                }
+                            },
+                            errorMessage: validationErrors | findError('answer'),
+                            items: [
+                                {
+                                    value: "Yes",
+                                    text: "Yes"
                                 },
-                                errorMessage: validationErrors | findError('answer'),
-                                items: [
-                                    {
-                                        value: "Yes",
-                                        text: "Yes"
-                                    },
-                                    {
-                                        value: "No",
-                                        text: "No"
-                                    }
-                                ]
-                            }) }}
-                        {% endif %}
-
-                        {% if licence.hardStopKind === 'TIME_SERVED' %}
-                            {{ govukRadios({
-                                classes: "govuk-radios--inline",
-                                name: "answer",
-                                fieldset: {
-
-                                    legend: {
-                                        text: "Do you want to create the licence on this service?",
-                                        isPageHeading: false,
-                                        classes: "govuk-visually-hidden"
-                                    }
-                                },
-                                items: [
-                                    {
-                                        value: "Yes",
-                                        text: "Yes, I will continue and create the licence on this service",
-                                        hint: {
-                                            text: "The licence will contain standard conditions and an additional condition telling this person not to approach or communicate with any victims of their offences."
-                                        }
-                                    },
-                                    {
-                                        value: "No",
-                                        text: "No, I will create the licence on NOMIS",
-                                        hint: {
-                                            text: "If you create a licence using NOMIS, the probation practitioner will not be able to view or vary the licence on Create and vary a licence."
-                                        },
-                                        conditional: {
-                                            html: nomisReasonHtml
-                                        }       
-                                    }
-                                ],
-                                errorMessage: validationErrors | findError('answer'),
-                                value: formResponses.answer
-                            }) }}
-                        {% endif %}
-                    </div> 
-                </div> 
+                                {
+                                    value: "No",
+                                    text: "No"
+                                }
+                            ]
+                        }) }}
+                    </div>
+                </div>
 
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
@@ -126,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-            </form>   
+            </form>
         </div>
     </div>
 {% endblock %}
