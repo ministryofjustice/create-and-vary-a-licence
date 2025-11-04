@@ -138,7 +138,7 @@
     "reflect-metadata": "^0.2.2",
     "sqs-consumer": "^12.0.0",
     "superagent": "^10.2.3",
-    "uuid": "^11.1.0"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "^0.0.3",
