@@ -27,6 +27,7 @@ import pathfinderRoutes from './manageConditions/handlers/pathfinder'
 import dprRoutes from './reporting'
 import staffRoutes from './staff'
 import hardStopStaffRoutes from './initialAppointment/handlers/hardStop/staff'
+import createTimeServedLicenceRoutes from './creatingLicences/handlers/timeServed'
 
 export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
@@ -58,6 +59,7 @@ export default function Index(services: Services): Router {
   router.use(hardStopInitialAppointmentRoutes(services))
   router.use(pathfinderRoutes(services))
   router.use(dprRoutes(services))
+  router.use(createTimeServedLicenceRoutes(services))
 
   router.get('/prisoner/:nomsId/image', prisonerController.getImage())
 

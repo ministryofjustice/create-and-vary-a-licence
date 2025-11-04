@@ -1,0 +1,90 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
+
+{% set pageTitle = applicationName + " - Create a time served licence - Do you want to create the licence on this service?" %}
+{% set pageId = "time-served-confirm-create-page" %}
+{% set backLinkHref = backLink %}
+
+{% set nomisReasonHtml %}
+    {{ govukTextarea({
+        id: 'reasonForUsingNomis',
+        name: 'reasonForUsingNomis',
+        label: {
+            text: 'Enter a reason for using NOMIS',
+            classes: "govuk-!-font-weight-bold"
+        },
+        hint: {
+            text: 'Telling us this helps us understand how the Prison Service and the Probation Service work together on licences for people released with time served.'
+        },
+        errorMessage: validationErrors | findError('reasonForUsingNomis')
+    }) }}
+{% endset %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+                Do you want to create the licence on this service?
+            </h1>
+
+            <form method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full-from-desktop">
+                        {{ govukRadios({
+                            classes: "govuk-radios--inline",
+                            name: "answer",
+                            fieldset: {
+
+                                legend: {
+                                    text: "Do you want to create the licence on this service?",
+                                    isPageHeading: false,
+                                    classes: "govuk-visually-hidden"
+                                }
+                            },
+                            items: [
+                                {
+                                    value: "Yes",
+                                    text: "Yes, I will continue and create the licence on this service",
+                                    hint: {
+                                        text: "The licence will contain standard conditions and an additional condition telling this person not to approach or communicate with any victims of their offences."
+                                    }
+                                },
+                                {
+                                    value: "No",
+                                    text: "No, I will create the licence on NOMIS",
+                                    hint: {
+                                        text: "If you create a licence using NOMIS, the probation practitioner will not be able to view or vary the licence on Create and vary a licence."
+                                    },
+                                    conditional: {
+                                        html: nomisReasonHtml
+                                    }       
+                                }
+                            ],
+                            errorMessage: validationErrors | findError('answer'),
+                            value: formResponses.answer
+                        }) }}
+                    </div> 
+                </div> 
+
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <div class="govuk-button-group">
+                            {{ govukButton({
+                                text: 'Continue',
+                                type: "submit",
+                                attributes: { 'data-qa': 'continue' },
+                                preventDoubleClick: true
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            </form>   
+        </div>
+    </div>
+{% endblock %}

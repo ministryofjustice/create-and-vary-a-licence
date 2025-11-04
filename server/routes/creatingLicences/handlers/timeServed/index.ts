@@ -6,12 +6,16 @@ import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 import { Services } from '../../../../services'
 
 import ConfirmCreateRoutes from './confirmCreate'
-import YesOrNoQuestion from '../../types/yesOrNo'
+import CreateLicenceInNomisOrCvl from '../../types/createLicenceInNomisOrCvl'
+
+import config from '../../../../config'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
 
-  const routePrefix = (path: string) => `/licence/hard-stop${path}`
+  const routePrefix = (path: string) => `/licence/time-served${path}`
+
+  const { timeServedEnabled } = config
 
   /*
    * The fetchLicence middleware will call the licenceAPI during each GET request on the create a licence journey
@@ -32,8 +36,15 @@ export default function Index({ licenceService, conditionService }: Services): R
     )
   {
     const controller = new ConfirmCreateRoutes(licenceService)
-    get('/create/nomisId/:nomisId/confirm', controller.GET)
-    post('/create/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
+
+    if (timeServedEnabled) {
+      get('/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service', controller.GET)
+      post(
+        '/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service',
+        controller.POST,
+        CreateLicenceInNomisOrCvl,
+      )
+    }
   }
   return router
 }
