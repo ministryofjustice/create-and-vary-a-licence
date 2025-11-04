@@ -44,7 +44,7 @@ export default class ViewAndPrintCaseRoutes {
 
     res.render('pages/view/cases', {
       cases: cases.map(c => {
-        const link = this.getLink(c)
+        const link = this.getLink(c, timeServedEnabled)
         const licenceStatus = this.getStatus(<LicenceStatus>c.licenceStatus)
         return {
           licenceId: c.licenceId,
@@ -77,7 +77,7 @@ export default class ViewAndPrintCaseRoutes {
     return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
   }
 
-  private getLink = (licence: CaCase): string => {
+  private getLink = (licence: CaCase, timeServedEnabled: boolean): string => {
     if (
       !this.isClickable(
         <LicenceKind>licence.kind,
@@ -89,8 +89,14 @@ export default class ViewAndPrintCaseRoutes {
       return null
     }
     if (licence.licenceStatus === LicenceStatus.TIMED_OUT) {
+      if (timeServedEnabled) {
+        if (licence.hardStopKind === 'TIME_SERVED') {
+          return `/licence/time-served/create/nomisId/${licence.prisonerNumber}/confirm`
+        }
+      }
       return `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
     }
+
     if (licence.licenceId) {
       const query =
         licence.licenceVersionOf && licence.licenceStatus === LicenceStatus.SUBMITTED
@@ -115,7 +121,6 @@ export default class ViewAndPrintCaseRoutes {
     if (tabType === 'ATTENTION_NEEDED') {
       return false
     }
-
     if (isInHardStopPeriod && this.isEditableInHardStop(kind, licenceStatus)) {
       return true
     }

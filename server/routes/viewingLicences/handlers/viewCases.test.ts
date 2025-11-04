@@ -80,6 +80,7 @@ describe('Route handlers - View and print case list', () => {
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isInHardStopPeriod: true,
+      hardStopKind: 'HARD_STOP',
     },
     {
       kind: LicenceKind.CRD,
@@ -96,6 +97,7 @@ describe('Route handlers - View and print case list', () => {
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isInHardStopPeriod: true,
+      hardStopKind: 'HARD_STOP',
     },
     {
       kind: LicenceKind.CRD,
@@ -112,6 +114,7 @@ describe('Route handlers - View and print case list', () => {
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isInHardStopPeriod: true,
+      hardStopKind: 'HARD_STOP',
     },
     {
       kind: LicenceKind.CRD,
@@ -128,6 +131,7 @@ describe('Route handlers - View and print case list', () => {
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isInHardStopPeriod: true,
+      hardStopKind: 'TIME_SERVED',
     },
   ] as CaCase[]
   const prisonCaseload = caCase as CaCase[]
@@ -149,6 +153,7 @@ describe('Route handlers - View and print case list', () => {
         tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
         nomisLegalStatus: 'SENTENCED',
         lastWorkedOnBy: 'Test Updater',
+        hardStopKind: 'HARD_STOP',
       },
       {
         ...caCase,
@@ -161,6 +166,7 @@ describe('Route handlers - View and print case list', () => {
         probationPractitioner: {
           name: 'Com Three',
         },
+        hardStopKind: 'HARD_STOP',
       },
       {
         ...caCase,
@@ -174,6 +180,7 @@ describe('Route handlers - View and print case list', () => {
         probationPractitioner: {
           name: 'Com Four',
         },
+        hardStopKind: 'HARD_STOP',
       },
       {
         ...caCase,
@@ -186,6 +193,7 @@ describe('Route handlers - View and print case list', () => {
         probationPractitioner: {
           name: 'Com Five',
         },
+        hardStopKind: 'HARD_STOP',
       },
     ] as CaCase[]
 
@@ -668,6 +676,65 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         timeServedEnabled: false,
+      })
+    })
+
+    it('should evaluate the links of cases for prison view for time served', async () => {
+      const timeServedCase = [
+        {
+          kind: LicenceKind.HARD_STOP,
+          licenceId: 1,
+          licenceStatus: LicenceStatus.TIMED_OUT,
+          isInHardStopPeriod: true,
+          releaseDate: '01/07/2022',
+          releaseDateLabel: 'Confirmed release date',
+          probationPractitioner: {
+            name: 'Other Com',
+          },
+          name: 'Bob Smith',
+          prisonerNumber: 'A1234AA',
+          tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+          nomisLegalStatus: 'SENTENCED',
+          lastWorkedOnBy: 'Test Updater',
+          hardStopKind: 'TIME_SERVED',
+        },
+      ] as CaCase[]
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue(timeServedCase)
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            lastWorkedOnBy: 'Test Updater',
+            licenceId: 1,
+            licenceStatus: 'NOT_STARTED',
+            link: '/licence/time-served/create/nomisId/A1234AA/confirm',
+            name: 'Bob Smith',
+            nomisLegalStatus: 'SENTENCED',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Other Com',
+            },
+            releaseDate: '01/07/2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.HARD_STOP,
+          },
+        ],
+        CaViewCasesTab,
+        showAttentionNeededTab: false,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: '',
+        statusConfig,
       })
     })
 
