@@ -459,6 +459,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('approverNewSearchEnabled', config.approverNewSearchEnabled)
   njkEnv.addGlobal('pduHeadNewSearchEnabled', config.pduHeadNewSearchEnabled)
   njkEnv.addGlobal('postcodeLookupEnabled', config.postcodeLookupEnabled)
+  njkEnv.addGlobal('timeServedEnabled', config.timeServedEnabled)
 
   return njkEnv
 }
