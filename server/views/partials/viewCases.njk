@@ -98,10 +98,14 @@
 
     {% for case in cases %}
         {% set caseData = [] %}
-        {% if case.probationPractitioner.staffCode or case.probationPractitioner.name%}
-            {% set comDetailsHtml = '<a class="govuk-link search-highlight" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '?activeTab=' + params.activeTab+ '">' + case.probationPractitioner.name + '</a>' %}        
+        {% if case.probationPractitioner.staffCode or case.probationPractitioner.name %}
+            {% set comDetailsHtml = '<a class="govuk-link search-highlight" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '?activeTab=' + params.activeTab+ '">' + case.probationPractitioner.name + '</a>' %}    
         {% else %}
-            {% set comDetailsHtml = 'Unallocated' %}
+            {% if case.hardStopKind === "TIME_SERVED" %}
+                {% set comDetailsHtml = 'Not allocated yet' %}
+            {% else %}
+                {% set comDetailsHtml = 'Unallocated' %}
+            {% endif %}
         {% endif %}
         {% if case.licenceVersionOf and(case.licenceStatus === 'IN_PROGRESS' or case.licenceStatus === 'SUBMITTED') %}
             {% set licenceStatusHtml = statusBadge({ status: case.licenceStatus, size: 'small' }, params.config) +
@@ -126,6 +130,8 @@
 
         {% if case.kind == 'HDC' %}
             {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+        {% elseif case.hardStopKind == "TIME_SERVED" %}
+            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
         {% else %}
             {% set releaseDate = '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</p>' %}
         {% endif %}

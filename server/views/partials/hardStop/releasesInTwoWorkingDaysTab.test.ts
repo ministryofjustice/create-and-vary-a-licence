@@ -35,7 +35,7 @@ describe('Release In Two Working Days template', () => {
   it('should show time-served message when timeServedEnabled is true', () => {
     const $ = render({ options })
     expect($('li').text()).toContain(
-      'you can generate a standard licence if a probation practitioner has not submitted one or for time-served releases.',
+      'you can generate a standard licence if a probation practitioner has not submitted one or for time-served releases',
     )
   })
 
