@@ -249,4 +249,33 @@ describe('View and print a licence - case list', () => {
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
   })
+
+  it('should highlight a Time Served licence with a Time Served release warning label and Not allocated yet com in prison view', () => {
+    const search = ''
+    const prisonsToDisplay = ''
+    const probationView = false
+    const $ = render({
+      cases: [
+        {
+          name: 'Test Person',
+          prisonerNumber: 'A1234AA',
+          releaseDate: '03/08/2022',
+          releaseDateLabel: 'CRD',
+          tabType: 'releasesInNextTwoWorkingDays',
+          hardStopKind: LicenceKind.TIME_SERVED,
+        },
+      ],
+      showAttentionNeededTab: false,
+      CaViewCasesTab,
+      statusConfig,
+      search,
+      prisonsToDisplay,
+      probationView,
+    })
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#name-1 > div > span').text()).toBe('Test Person')
+    expect($('#nomis-id-1').text()).toBe('A1234AA')
+    expect($('#release-date-1').text()).toBe('3 Aug 2022Time-served release')
+    expect($('#com-1').text()).toBe('Not allocated yet')
+  })
 })
