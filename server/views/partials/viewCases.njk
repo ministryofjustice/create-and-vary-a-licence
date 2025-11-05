@@ -105,6 +105,7 @@
                 {% set comDetailsHtml = 'Not allocated yet' %}
             {% else %}
                 {% set comDetailsHtml = 'Unallocated' %}
+            {% endif %}
         {% endif %}
         {% if case.licenceVersionOf and(case.licenceStatus === 'IN_PROGRESS' or case.licenceStatus === 'SUBMITTED') %}
             {% set licenceStatusHtml = statusBadge({ status: case.licenceStatus, size: 'small' }, params.config) +
