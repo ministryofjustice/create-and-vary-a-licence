@@ -7,6 +7,8 @@ import { Services } from '../../../../services'
 
 import ConfirmCreateRoutes from './confirmCreate'
 import CreateLicenceInNomisOrCvl from '../../types/createLicenceInNomisOrCvl'
+import hardStopCheckMiddleware from '../../../../middleware/hardStopCheckMiddleware'
+import UserType from '../../../../enumeration/userType'
 
 export default function Index({
   licenceService,
@@ -24,7 +26,13 @@ export default function Index({
    * to explicitly inject the licence data into their individual view contexts.
    */
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_CA']), fetchLicence(licenceService), handler)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_CA']),
+      fetchLicence(licenceService),
+      hardStopCheckMiddleware(UserType.PRISON),
+      handler,
+    )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
@@ -32,6 +40,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_CA']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
+      hardStopCheckMiddleware(UserType.PRISON),
       handler,
     )
   {
