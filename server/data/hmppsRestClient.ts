@@ -94,6 +94,9 @@ export default class HmppsRestClient {
       .responseType(responseType)
       .timeout(this.apiConfig.timeout)
       .then(response => {
+        if (response.text === '' || response.body === undefined) {
+          return null
+        }
         return raw ? response : response.body
       })
       .catch((error): void => {

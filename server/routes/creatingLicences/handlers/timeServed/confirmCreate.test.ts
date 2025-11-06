@@ -4,13 +4,17 @@ import { Session } from 'express-session'
 import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import { LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
+import RecordNomisTimeServedLicenceReasonService from '../../../../services/recordNomisTimeServedLicenceReasonService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
+const recordNomisTimeServedLicenceReasonService = new RecordNomisTimeServedLicenceReasonService(
+  null,
+) as jest.Mocked<RecordNomisTimeServedLicenceReasonService>
 
 jest.mock('../../../../services/licenceService')
 
 describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(licenceService)
+  const handler = new ConfirmCreateRoutes(licenceService, recordNomisTimeServedLicenceReasonService)
   let req: Request
   let res: Response
 

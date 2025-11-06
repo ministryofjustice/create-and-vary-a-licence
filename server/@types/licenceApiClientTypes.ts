@@ -83,3 +83,6 @@ export type LicencePermissionsResponse = components['schemas']['LicencePermissio
 export type TimeServedCase = components['schemas']['TimeServedCase']
 export type TimeServedCaseload = components['schemas']['TimeServedCaseload']
 export type EligibilityAssessment = components['schemas']['EligibilityAssessment']
+export type RecordNomisLicenceReasonRequest = components['schemas']['RecordNomisLicenceReasonRequest']
+export type RecordNomisLicenceReasonResponse = components['schemas']['RecordNomisLicenceReasonResponse']
+export type UpdateNomisLicenceReasonRequest = components['schemas']['UpdateNomisLicenceReasonRequest']

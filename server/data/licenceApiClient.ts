@@ -58,6 +58,9 @@ import type {
   LicencePermissionsResponse,
   LastMinuteHandoverCaseResponse,
   EligibilityAssessment,
+  RecordNomisLicenceReasonRequest,
+  UpdateNomisLicenceReasonRequest,
+  RecordNomisLicenceReasonResponse,
 } from '../@types/licenceApiClientTypes'
 import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
@@ -737,5 +740,47 @@ export default class LicenceApiClient extends RestClient {
       { path: `/licence/id/${licenceId}/permissions`, data: request },
       { username: user.username },
     )) as Promise<LicencePermissionsResponse>
+  }
+
+  async recordNomisLicenceCreationReason(request: RecordNomisLicenceReasonRequest, user: User): Promise<void> {
+    return (await this.post(
+      { path: `/time-served/nomis/licence/reason`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
+  }
+
+  async getNomisLicenceCreationReason(
+    nomisId: string,
+    bookingId: number,
+    user: User,
+  ): Promise<RecordNomisLicenceReasonResponse | null> {
+    const result = await this.get(
+      { path: `/time-served/nomis/licence/reason/${nomisId}/${bookingId}` },
+      { username: user?.username },
+    )
+    // Backend returns null when no record exists, but it may be serialized as an empty object
+    if (result === null || (typeof result === 'object' && Object.keys(result).length === 0)) {
+      return null
+    }
+    return result as RecordNomisLicenceReasonResponse
+  }
+
+  async updateNomisLicenceCreationReason(
+    request: UpdateNomisLicenceReasonRequest,
+    nomisId: string,
+    bookingId: number,
+    user: User,
+  ): Promise<void> {
+    return (await this.put(
+      { path: `/time-served/nomis/licence/reason/${nomisId}/${bookingId}`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
+  }
+
+  async deleteNomisLicenceCreationReason(nomisId: string, bookingId: number, user: User): Promise<void> {
+    return (await this.delete(
+      { path: `/time-served/nomis/licence/reason/${nomisId}/${bookingId}` },
+      { username: user?.username },
+    )) as Promise<void>
   }
 }
