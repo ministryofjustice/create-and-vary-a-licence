@@ -91,27 +91,9 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
   })
 
   describe('POST', () => {
-    const prisonerDetails = {
-      prisoner: {
-        prisonerNumber: 'A1234BC',
-        firstName: 'TEST',
-        lastName: 'PERSON',
-        dateOfBirth: '1992-12-06',
-        bookingId: '12345',
-        prisonId: 'MDI',
-      },
-      cvl: {
-        licenceType: 'AP',
-        licenceStartDate: '18/07/2024',
-      },
-    } as PrisonerWithCvlFields
-
-    beforeEach(() => {
-      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
-    })
-
     it('should create time served licence and should redirect if answer is YES', async () => {
       req.body.answer = 'Yes'
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       licenceService.createLicence.mockResolvedValue({ licenceId: 1, kind: 'HARD_STOP' } as LicenceSummary)
 
       await handler.POST(req, res)
@@ -132,6 +114,8 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
     it('should not create a licence, record reason and redirect when answer is NO', async () => {
       req.body.answer = 'No'
       req.body.reasonForUsingNomis = 'Test reason for using NOMIS'
+
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
 
       recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason.mockResolvedValue(undefined)
 
@@ -159,6 +143,8 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       req.body.answer = 'No'
       req.body.reasonForUsingNomis = 'Test reason'
       req.session = {} as Session
+
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
 
       recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason.mockResolvedValue(undefined)
 
