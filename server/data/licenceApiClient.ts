@@ -58,6 +58,7 @@ import type {
   LicencePermissionsResponse,
   LastMinuteHandoverCaseResponse,
   EligibilityAssessment,
+  RecordNomisLicenceReasonRequest,
 } from '../@types/licenceApiClientTypes'
 import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
@@ -737,5 +738,12 @@ export default class LicenceApiClient extends RestClient {
       { path: `/licence/id/${licenceId}/permissions`, data: request },
       { username: user.username },
     )) as Promise<LicencePermissionsResponse>
+  }
+
+  async recordNomisLicenceCreationReason(request: RecordNomisLicenceReasonRequest, user: User): Promise<void> {
+    return (await this.post(
+      { path: `/time-served/nomis/licence/reason`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
   }
 }
