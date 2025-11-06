@@ -27,11 +27,6 @@ class LicenceDatesAndReason {
   @Expose()
   @Type(() => SimpleDate)
   @Validate(ValidOptionalSimpleDate)
-  lsd: SimpleDate
-
-  @Expose()
-  @Type(() => SimpleDate)
-  @Validate(ValidOptionalSimpleDate)
   led: SimpleDate
 
   @Expose()

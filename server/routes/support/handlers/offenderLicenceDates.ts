@@ -73,7 +73,6 @@ export default class OffenderLicenceDatesRoutes {
       actualReleaseDate: this.simpleDateToLicenceDate(formData.ard),
       sentenceStartDate: this.simpleDateToLicenceDate(formData.ssd),
       sentenceEndDate: this.simpleDateToLicenceDate(formData.sed),
-      licenceStartDate: this.simpleDateToLicenceDate(formData.lsd),
       licenceExpiryDate: this.simpleDateToLicenceDate(formData.led),
       topupSupervisionStartDate: this.simpleDateToLicenceDate(formData.tussd),
       topupSupervisionExpiryDate: this.simpleDateToLicenceDate(formData.tused),

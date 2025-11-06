@@ -121,11 +121,6 @@
                         {% endif %}
                     </td>
                     <td class="govuk-table__cell">
-                        {{ datePicker({
-                            id: "lsd",
-                            errorMessage: validationErrors | findError('lsd'),
-                            formResponses: formResponses.lsd or licenceDates.lsd
-                        }) }}
                     </td>
                 </tr>
                 <tr class="govuk-table__row">
