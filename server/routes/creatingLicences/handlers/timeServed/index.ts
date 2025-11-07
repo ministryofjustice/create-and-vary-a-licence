@@ -7,11 +7,14 @@ import { Services } from '../../../../services'
 
 import ConfirmCreateRoutes from './confirmCreate'
 import CreateLicenceInNomisOrCvl from '../../types/createLicenceInNomisOrCvl'
-
 import hardStopCheckMiddleware from '../../../../middleware/hardStopCheckMiddleware'
 import UserType from '../../../../enumeration/userType'
 
-export default function Index({ licenceService, conditionService }: Services): Router {
+export default function Index({
+  licenceService,
+  conditionService,
+  recordNomisTimeServedLicenceReasonService,
+}: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/time-served${path}`
@@ -41,7 +44,7 @@ export default function Index({ licenceService, conditionService }: Services): R
       handler,
     )
   {
-    const controller = new ConfirmCreateRoutes(licenceService)
+    const controller = new ConfirmCreateRoutes(licenceService, recordNomisTimeServedLicenceReasonService)
 
     get('/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service', controller.GET)
     post(
