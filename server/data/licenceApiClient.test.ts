@@ -509,6 +509,7 @@ describe('Licence API client tests', () => {
 
   it('Override licence dates', async () => {
     const username = 'admin-user'
+    const updatedKind = 'PRRD'
     const dates = {
       conditionalReleaseDate: '01/01/2022',
       actualReleaseDate: '02/01/2022',
@@ -520,13 +521,13 @@ describe('Licence API client tests', () => {
       topupSupervisionExpiryDate: '07/01/2022',
     }
 
-    await licenceApiClient.overrideLicenceDates(1, { ...dates, reason: 'Test Reason' }, {
+    await licenceApiClient.overrideLicenceDates(1, { updatedKind, ...dates, reason: 'Test Reason' }, {
       username,
     } as User)
     expect(put).toHaveBeenCalledWith(
       {
         path: `/licence/id/1/override/dates`,
-        data: { ...dates, reason: 'Test Reason' },
+        data: { updatedKind, ...dates, reason: 'Test Reason' },
       },
       { username },
     )

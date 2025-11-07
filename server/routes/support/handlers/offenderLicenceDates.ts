@@ -28,13 +28,13 @@ export default class OffenderLicenceDatesRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId, nomsId } = req.params
-    const { dateChangeReason } = req.body
+    const { dateChangeReason, updatedKind } = req.body
     const updatedDates = await this.getDatesFromSimpleDates(req.body)
 
     if (updatedDates && dateChangeReason) {
       await this.licenceOverrideService.overrideDates(
         parseInt(licenceId, 10),
-        { ...updatedDates, reason: dateChangeReason },
+        { updatedKind, ...updatedDates, reason: dateChangeReason },
         user,
       )
       res.redirect(`/support/offender/${nomsId}/licences`)

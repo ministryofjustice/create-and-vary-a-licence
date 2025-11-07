@@ -3,6 +3,7 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% from "../../partials/datePicker.njk" import datePicker %}
@@ -28,10 +29,27 @@
     <hr/>
     <br/>
 
-    {% set dateChangeReasonError = ({ text: "You must enter a reason" } if dateChangeReasonError else null)%}
-
     <form method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+        <h2 class="govuk-heading-m">Licence kind</h2>
+        {{ govukSelect({
+            id: "updatedKind",
+            name: "updatedKind",
+            items: [
+                {
+                    value: "CRD",
+                    text: "CRD",
+                    selected: licence.kind == 'CRD'
+                },
+                {
+                    value: "PRRD",
+                    text: "PRRD",
+                    selected: licence.kind == 'PRRD'
+                }
+            ],
+            errorMessage : validationErrors | findError('updatedKind')
+        }) }}
 
         <table class="govuk-table">
             <caption class="govuk-table__caption govuk-table__caption--m">Licence dates</caption>
