@@ -664,6 +664,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           isInHardStopPeriod: true,
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
+          hasNomisLicence: false,
         },
         {
           kind: LicenceKind.HARD_STOP,
@@ -682,6 +683,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           isInHardStopPeriod: true,
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
+          hasNomisLicence: false,
         },
       ],
       onProbationResults: [
@@ -701,6 +703,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           isInHardStopPeriod: true,
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
+          hasNomisLicence: false,
         },
         {
           kind: LicenceKind.CRD,
@@ -719,6 +722,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           isInHardStopPeriod: true,
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
+          hasNomisLicence: false,
         },
       ],
       attentionNeededResults: [],
@@ -859,6 +863,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           isInHardStopPeriod: true,
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
+          hasNomisLicence: false,
         },
       ],
       onProbationResults: [],
@@ -943,6 +948,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           isInHardStopPeriod: true,
           prisonCode: 'MDI',
           prisonDescription: 'Moorland (HMP)',
+          hasNomisLicence: false,
         },
       ],
       onProbationResults: [],

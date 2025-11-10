@@ -22,11 +22,7 @@ export interface paths {
      */
     put: operations['updateNomisLicenceReason']
     post?: never
-    /**
-     * Deletes a NOMIS Time Served Licence reason record.
-     * @description Deletes the reason record for a given NOMIS ID and booking ID. Requires ROLE_CVL_ADMIN.
-     */
-    delete: operations['deleteNomisLicenceReason']
+    delete?: never
     options?: never
     head?: never
     patch?: never
@@ -4126,6 +4122,7 @@ export interface components {
        * @enum {string}
        */
       hardStopKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      hasNomisLicence: boolean
     }
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
     PrisonUserSearchRequest: {
@@ -4498,6 +4495,18 @@ export interface components {
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
       appointmentAddress?: string
+      /**
+       * Format: date
+       * @description The date that the licence will expire
+       * @example 13/09/2024
+       */
+      licenceExpiryDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
+       */
+      topupSupervisionExpiryDate?: string
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
       isEligibleForEarlyRelease: boolean
       /**
@@ -4558,6 +4567,12 @@ export interface components {
        */
       prisonCode?: string
       /**
+       * @description Type of hardstop licence
+       * @example TIME_SERVED
+       * @enum {string}
+       */
+      hardStopKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      /**
        * @description The case reference number (CRN) for the person on this licence
        * @example X12444
        */
@@ -4582,22 +4597,10 @@ export interface components {
       sentenceEndDate?: string
       /**
        * Format: date
-       * @description The date that the licence will expire
-       * @example 13/09/2024
-       */
-      licenceExpiryDate?: string
-      /**
-       * Format: date
        * @description The date when the post sentence supervision period starts, from prison services
        * @example 06/05/2023
        */
       topupSupervisionStartDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       * @example 06/06/2023
-       */
-      topupSupervisionExpiryDate?: string
       /**
        * @description The middle names of the person on licence
        * @example John Peter
@@ -4667,20 +4670,20 @@ export interface components {
        * @example 1.3
        */
       licenceVersion?: string
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
       standardPssConditions?: components['schemas']['StandardCondition'][]
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
        */
       bookingNo?: string
+      /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string
       /**
        * @description The criminal records office number (CRO) for the person on this licence
        * @example A/12444
@@ -6066,81 +6069,6 @@ export interface operations {
         content?: never
       }
       /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Record not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  deleteNomisLicenceReason: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        nomsId: string
-        bookingId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Reason deleted successfully */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, invalid parameters */
       400: {
         headers: {
           [name: string]: unknown

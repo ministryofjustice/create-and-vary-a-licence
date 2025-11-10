@@ -43,7 +43,7 @@ export default class ViewAndPrintCaseRoutes {
     res.render('pages/view/cases', {
       cases: cases.map(c => {
         const link = this.getLink(c)
-        const licenceStatus = this.getStatus(<LicenceStatus>c.licenceStatus)
+        const licenceStatus = this.getStatus(<LicenceStatus>c.licenceStatus, c.hasNomisLicence)
         return {
           licenceId: c.licenceId,
           licenceVersionOf: c.licenceVersionOf,
@@ -71,8 +71,12 @@ export default class ViewAndPrintCaseRoutes {
     })
   }
 
-  private getStatus = (licenceStatus: LicenceStatus) => {
-    return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
+  private getStatus = (licenceStatus: LicenceStatus, hasNomisLicence: boolean): LicenceStatus => {
+    if (licenceStatus !== LicenceStatus.TIMED_OUT) {
+      return licenceStatus
+    }
+
+    return hasNomisLicence ? LicenceStatus.NOMIS_LICENCE : LicenceStatus.NOT_STARTED
   }
 
   private getLink = (licence: CaCase): string => {
@@ -87,7 +91,9 @@ export default class ViewAndPrintCaseRoutes {
       return null
     }
     if (licence.licenceStatus === LicenceStatus.TIMED_OUT) {
-      return `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
+      return licence.hardStopKind === LicenceKind.TIME_SERVED
+        ? `/licence/time-served/create/nomisId/${licence.prisonerNumber}/do-you-want-to-create-the-licence-on-this-service`
+        : `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
     }
     if (licence.licenceId) {
       const query =
