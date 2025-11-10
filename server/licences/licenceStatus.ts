@@ -92,6 +92,11 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     description: 'Review needed',
     colour: 'red',
   },
+  NOMIS_LICENCE: {
+    label: 'NOMIS licence',
+    description: 'NOMIS licence',
+    colour: 'grey',
+  },
 }
 
 export default statusConfig
