@@ -59,6 +59,7 @@ describe('Route Handlers - Licence Status Override', () => {
         availableStatusCodes: [
           'APPROVED',
           'INACTIVE',
+          'NOMIS_LICENCE',
           'NOT_STARTED',
           'RECALLED',
           'REJECTED',
@@ -108,6 +109,7 @@ describe('Route Handlers - Licence Status Override', () => {
         availableStatusCodes: [
           'APPROVED',
           'INACTIVE',
+          'NOMIS_LICENCE',
           'NOT_STARTED',
           'RECALLED',
           'REJECTED',
@@ -144,6 +146,7 @@ describe('Route Handlers - Licence Status Override', () => {
         availableStatusCodes: [
           'APPROVED',
           'INACTIVE',
+          'NOMIS_LICENCE',
           'NOT_STARTED',
           'RECALLED',
           'REJECTED',
@@ -178,6 +181,7 @@ describe('Route Handlers - Licence Status Override', () => {
         availableStatusCodes: [
           'APPROVED',
           'INACTIVE',
+          'NOMIS_LICENCE',
           'NOT_STARTED',
           'RECALLED',
           'REJECTED',
