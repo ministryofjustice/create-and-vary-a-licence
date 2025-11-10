@@ -16,6 +16,7 @@ enum LicenceStatus {
   OOS_RECALL = 'OOS_RECALL',
   TIMED_OUT = 'TIMED_OUT',
   REVIEW_NEEDED = 'REVIEW_NEEDED',
+  NOMIS_LICENCE = 'NOMIS_LICENCE',
 }
 
 const selectableLicenceStatus = Object.values(LicenceStatus).filter(
