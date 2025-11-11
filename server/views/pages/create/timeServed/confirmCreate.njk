@@ -29,55 +29,55 @@
             </h1>
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-full-from-desktop">
-                            {{ govukRadios({
-                            name: "answer",
-                            fieldset: {
-                                legend: {
-                                    text: "Do you want to create the licence on this service?",
-                                    isPageHeading: false,
-                                    classes: "govuk-visually-hidden"
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full-from-desktop">
+                        {{ govukRadios({
+                        name: "answer",
+                        fieldset: {
+                            legend: {
+                                text: "Do you want to create the licence on this service?",
+                                isPageHeading: false,
+                                classes: "govuk-visually-hidden"
+                            }
+                        },
+                        items: [
+                            {
+                                value: "Yes",
+                                text: "Yes, I will continue and create the licence on this service",
+                                hint: {
+                                    text: "The licence will contain standard conditions and an additional condition telling this person not to approach or communicate with any victims of their offences."
                                 }
                             },
-                            items: [
-                                {
-                                    value: "Yes",
-                                    text: "Yes, I will continue and create the licence on this service",
-                                    hint: {
-                                        text: "The licence will contain standard conditions and an additional condition telling this person not to approach or communicate with any victims of their offences."
-                                    }
+                            {
+                                value: "No",
+                                text: "No, I will create the licence on NOMIS",
+                                hint: {
+                                    text: "If you create a licence using NOMIS, the probation practitioner will not be able to view or vary the licence on Create and vary a licence."
                                 },
-                                {
-                                    value: "No",
-                                    text: "No, I will create the licence on NOMIS",
-                                    hint: {
-                                        text: "If you create a licence using NOMIS, the probation practitioner will not be able to view or vary the licence on Create and vary a licence."
-                                    },
-                                    conditional: {
-                                        html: nomisReasonHtml
-                                    } if value === "No"      
-                                }
-                            ],
-                            errorMessage: validationErrors | findError('answer'),
-                            value: formResponses.answer
-                        }) }}
-                        </div>
+                                conditional: {
+                                    html: nomisReasonHtml
+                                }     
+                            }
+                        ],
+                        errorMessage: validationErrors | findError('answer'),
+                        value: formResponses.answer
+                    }) }}
                     </div>
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-two-thirds">
-                            <div class="govuk-button-group">
-                                {{ govukButton({
-                                text: 'Continue',
-                                type: "submit",
-                                attributes: { 'data-qa': 'continue' },
-                                preventDoubleClick: true
+                </div>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <div class="govuk-button-group">
+                            {{ govukButton({
+                            text: 'Continue',
+                            type: "submit",
+                            attributes: { 'data-qa': 'continue' },
+                            preventDoubleClick: true
                             }) }}
-                            </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
-    {% endblock %}
+    </div>
+{% endblock %}
     

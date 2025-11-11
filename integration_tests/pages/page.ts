@@ -22,7 +22,13 @@ export default abstract class Page {
 
   runAxe = (): void => {
     cy.injectAxe()
-    cy.checkA11y(null, { rules: this.rules })
+    // Exclude radios with aria-expanded from axe checks due to known GOV.UK conditional reveal pattern
+    cy.checkA11y(
+      {
+        exclude: [["input[type='radio'][aria-expanded]"]],
+      },
+      { rules: this.rules },
+    )
   }
 
   fallbackHeaderUserName = (): Cypress.Chainable<JQuery> => cy.get('[data-qa=header-user-name]')

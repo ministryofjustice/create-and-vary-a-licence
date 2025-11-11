@@ -1,4 +1,5 @@
-import TimeServedConfirmCreatePage from '../pages/timeServedConfirmCreate'
+import IndexPage from '../pages'
+import Page from '../pages/page'
 
 context('Create a Time Served licence', () => {
   beforeEach(() => {
@@ -20,15 +21,66 @@ context('Create a Time Served licence', () => {
     cy.task('stubFeComponents')
     cy.task('stubPostLicence')
     cy.task('stubGetPrisons')
-    cy.task('stubGetPrisonOmuCaseload')
+    cy.task('stubGetPrisonOmuCaseload', {
+      licenceId: null,
+      licenceStatus: 'TIMED_OUT',
+      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+      hardStopKind: 'TIME_SERVED',
+      hasNomisLicence: false,
+    })
+    cy.task('stubPostTimeServedLicenceInNomisReason')
     cy.signIn()
   })
 
   it('should click through the create a licence journey', () => {
-    cy.visit('/licence/time-served/create/nomisId/A1234AA/do-you-want-to-create-the-licence-on-this-service')
-    const confirmCreatePage = new TimeServedConfirmCreatePage()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    const releaseDateFlag = viewCasesList.getReleaseDateFlag()
+    releaseDateFlag.should('contain', 'Time-served release')
+    const confirmCreatePage = viewCasesList.clickATimeServedLicence()
     confirmCreatePage.selectRadio('Yes')
-    confirmCreatePage.clickContinueButton()
-    cy.url().should('eq', 'http://localhost:3007/licence/view/cases')
+    viewCasesList = confirmCreatePage.clickContinueButtonToReturn()
+    viewCasesList.getTableRows().should(rows => {
+      expect(rows).to.have.length(1)
+    })
+    viewCasesList.getRow(0).contains('Time-served release')
+    viewCasesList.getRow(0).contains('In progress')
+  })
+
+  it('should record a reason for using NOMIS to create a time served licence', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    const releaseDateFlag = viewCasesList.getReleaseDateFlag()
+    releaseDateFlag.should('contain', 'Time-served release')
+    const confirmCreatePage = viewCasesList.clickATimeServedLicence()
+    confirmCreatePage.selectRadio('No')
+    confirmCreatePage.enterNoReasonText('This is a reason for using NOMIS')
+    viewCasesList = confirmCreatePage.clickContinueButtonToReturn()
+    viewCasesList.getTableRows().should(rows => {
+      expect(rows).to.have.length(1)
+    })
+    viewCasesList.getRow(0).contains('Time-served release')
+    viewCasesList.getRow(0).contains('NOMIS licence')
+  })
+
+  it('should show validation error when no option is selected', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const releaseDateFlag = viewCasesList.getReleaseDateFlag()
+    releaseDateFlag.should('contain', 'Time-served release')
+    const confirmCreatePage = viewCasesList.clickATimeServedLicence()
+    confirmCreatePage.clickContinueButtonToError()
+    confirmCreatePage.getErrorMessage().should('contain.text', 'Choose how you will create this licence')
+  })
+
+  it('should show validation error when no option is selected and a reason is not entered', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const releaseDateFlag = viewCasesList.getReleaseDateFlag()
+    releaseDateFlag.should('contain', 'Time-served release')
+    const confirmCreatePage = viewCasesList.clickATimeServedLicence()
+    confirmCreatePage.selectRadio('No')
+    confirmCreatePage.clickContinueButtonToError()
+    confirmCreatePage.getErrorMessage().should('contain.text', 'You must add a reason for using NOMIS')
   })
 })
