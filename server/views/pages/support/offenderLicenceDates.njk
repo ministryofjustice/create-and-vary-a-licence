@@ -32,7 +32,7 @@
     <form method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-        <h2 class="govuk-heading-m">Licence kind</h2>
+        <h2 class="govuk-heading-m">Eligible licence kind</h2>
         {{ govukSelect({
             id: "updatedKind",
             name: "updatedKind",
@@ -40,12 +40,12 @@
                 {
                     value: "CRD",
                     text: "CRD",
-                    selected: licence.kind == 'CRD'
+                    selected: (licence.kind == 'CRD' or licence.eligibleKind == 'CRD')
                 },
                 {
                     value: "PRRD",
                     text: "PRRD",
-                    selected: licence.kind == 'PRRD'
+                    selected: (licence.kind == 'PRRD' or licence.eligibleKind == 'PRRD')
                 }
             ],
             errorMessage : validationErrors | findError('updatedKind')
