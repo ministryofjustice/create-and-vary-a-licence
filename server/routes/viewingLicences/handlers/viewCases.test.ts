@@ -793,5 +793,81 @@ describe('Route handlers - View and print case list', () => {
         statusConfig,
       })
     })
+
+    it('should evaluate the links of cases for prison view in timeServed', async () => {
+      probationCaseLoad[1] = { ...probationCaseLoad[1], hardStopKind: LicenceKind.TIME_SERVED, hasNomisLicence: true }
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue(probationCaseLoad)
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            lastWorkedOnBy: 'Test Updater',
+            licenceId: 5,
+            licenceStatus: 'ACTIVE',
+            link: '/licence/view/id/5/show',
+            name: 'Bob Smith',
+            nomisLegalStatus: 'SENTENCED',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Other Com',
+            },
+            releaseDate: '01/07/2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
+          },
+          {
+            licenceId: 6,
+            licenceStatus: 'NOMIS_LICENCE',
+            link: '/licence/time-served/create/nomisId/A1234AB/do-you-want-to-create-the-licence-on-this-service',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Com Three',
+            },
+            releaseDate: '01/06/2022',
+            releaseDateLabel: 'Confirmed release date',
+            hardStopKind: LicenceKind.TIME_SERVED,
+          },
+          {
+            licenceId: 7,
+            licenceStatus: 'IN_PROGRESS',
+            link: '/licence/hard-stop/id/7/check-your-answers',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Com Four',
+            },
+            releaseDate: '01/05/2022',
+            releaseDateLabel: 'Confirmed release date',
+            kind: LicenceKind.HARD_STOP,
+          },
+          {
+            licenceId: 8,
+            licenceStatus: 'VARIATION_APPROVED',
+            link: null,
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Com Five',
+            },
+            releaseDate: '01/05/2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+        ],
+        CaViewCasesTab,
+        showAttentionNeededTab: false,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: '',
+        statusConfig,
+      })
+    })
   })
 })

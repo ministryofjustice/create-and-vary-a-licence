@@ -22,11 +22,7 @@ export interface paths {
      */
     put: operations['updateNomisLicenceReason']
     post?: never
-    /**
-     * Deletes a NOMIS Time Served Licence reason record.
-     * @description Deletes the reason record for a given NOMIS ID and booking ID. Requires ROLE_CVL_ADMIN.
-     */
-    delete: operations['deleteNomisLicenceReason']
+    delete?: never
     options?: never
     head?: never
     patch?: never
@@ -4126,6 +4122,7 @@ export interface components {
        * @enum {string}
        */
       hardStopKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      hasNomisLicence: boolean
     }
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
     PrisonUserSearchRequest: {
@@ -4462,6 +4459,20 @@ export interface components {
        */
       appointmentAddress?: string
       /**
+       * Format: date
+       * @description The date that the licence will expire
+       * @example 13/09/2024
+       */
+      licenceExpiryDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
+       */
+      topupSupervisionExpiryDate?: string
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
+      /**
        * @description The probation area code where this licence is supervised from
        * @example N01
        */
@@ -4514,8 +4525,14 @@ export interface components {
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean
       /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
+       * @description Type of hardstop licence
+       * @example TIME_SERVED
+       * @enum {string}
+       */
+      hardStopKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
        */
       comEmail?: string
       /**
@@ -4535,21 +4552,11 @@ export interface components {
        */
       dateCreated?: string
       /**
-       * @description The first name of the person on licence
-       * @example Michael
-       */
-      forename?: string
-      /**
-       * @description The family name of the person on licence
-       * @example Smith
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
        */
       surname?: string
-      /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number
       /**
        * @description The middle names of the person on licence
        * @example John Peter
@@ -4626,25 +4633,24 @@ export interface components {
        * @description The date when the post sentence supervision period starts, from prison services
        * @example 06/05/2023
        */
-      topupSupervisionStartDate?: string
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      licenceVersion?: string
       /** @description The list of standard post sentence supervision conditions on this licence */
       standardPssConditions?: components['schemas']['StandardCondition'][]
-      /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /**
        * @description The team description
        * @example Cardiff South
        */
       probationTeamDescription?: string
       /**
-       * @description The probation area description
-       * @example Wales
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string
+      /**
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
        */
       probationAreaDescription?: string
       /**
@@ -6066,81 +6072,6 @@ export interface operations {
         content?: never
       }
       /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Record not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  deleteNomisLicenceReason: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        nomsId: string
-        bookingId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Reason deleted successfully */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, invalid parameters */
       400: {
         headers: {
           [name: string]: unknown
