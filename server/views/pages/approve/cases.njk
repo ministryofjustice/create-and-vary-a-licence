@@ -107,43 +107,23 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
             <div class="moj-search govuk-!-margin-bottom-8">
-                {% if approverNewSearchEnabled %}
-                    <form method="GET" action="/search/approver-search">
-                        <input type="hidden" id="activeTab" value="{{ activeTab }}">
-                        <div class="govuk-form-group">
-                            <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-                                Find a case
-                            </label>
-                            <div id="search-hint" class="govuk-hint moj-search__hint">
-                                Search by name, prison number or probation practitioner
-                            </div>
-                            <input class="govuk-input moj-search__input" id="search" name="queryTerm"
-                                   aria-describedby="search-hint" value="{{ search }}">
+                <form method="GET" action="/search/approver-search">
+                    <input type="hidden" id="activeTab" value="{{ activeTab }}">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+                            Find a case
+                        </label>
+                        <div id="search-hint" class="govuk-hint moj-search__hint">
+                            Search by name, prison number or probation practitioner
                         </div>
-                        <button class="govuk-button moj-search__button " data-module="govuk-button"
-                                data-qa="search-button">
-                            Search
-                        </button>
-                    </form>
-                {% else %}
-                    <form method="GET">
-                        <input type="hidden" name="approval"
-                               value="{% if approvalNeededView %}needed{% else %}recently{% endif %}">
-                        <div class="govuk-form-group">
-                            <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-                                Find a case
-                            </label>
-                            <div id="search-hint" class="govuk-hint moj-search__hint approval-cases-search">
-                                Search by name, prison number or probation practitioner
-                            </div>
-                            <input class="govuk-input moj-search__input" id="search" name="search"
-                                   aria-describedby="search-hint">
-                        </div>
-                        <button class="govuk-button moj-search__button " data-module="govuk-button">
-                            Search
-                        </button>
-                    </form>
-                {% endif %}
+                        <input class="govuk-input moj-search__input" id="search" name="queryTerm"
+                                aria-describedby="search-hint" value="{{ search }}">
+                    </div>
+                    <button class="govuk-button moj-search__button " data-module="govuk-button"
+                            data-qa="search-button">
+                        Search
+                    </button>
+                </form>
             </div>
         </div>
     </div>
