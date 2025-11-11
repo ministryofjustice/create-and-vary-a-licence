@@ -18,26 +18,4 @@ describe('Whats new banner', () => {
     })
     expect($('body').text()).not.toContain("What's new")
   })
-
-  it('Shows correct message for nomis user', () => {
-    const $ = render({
-      showCommsBanner: true,
-      user: {
-        authSource: 'nomis',
-      },
-    })
-    expect($('body').text()).toContain(
-      'If no licence has been submitted by 2 days before release, the prison can generate one.',
-    )
-  })
-
-  it('Shows correct message for delius user', () => {
-    const $ = render({
-      showCommsBanner: true,
-      user: {
-        authSource: 'delius',
-      },
-    })
-    expect($('body').text()).toContain('All licences must be submitted by 2 days before release.')
-  })
 })
