@@ -1,15 +1,12 @@
 {% extends "layout.njk" %}
-
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
-
 {% set pageTitle = applicationName + " - Create a time served licence - Do you want to create the licence on this service?" %}
 {% set pageId = "time-served-confirm-create-page" %}
 {% set backLinkHref = backLink %}
-
 {% set nomisReasonHtml %}
     {{ govukTextarea({
         id: 'reasonForUsingNomis',
@@ -24,23 +21,19 @@
         errorMessage: validationErrors | findError('reasonForUsingNomis')
     }) }}
 {% endset %}
-
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l">
                 Do you want to create the licence on this service?
             </h1>
-
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-full-from-desktop">
-                        {{ govukRadios({
-                            classes: "govuk-radios--inline",
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full-from-desktop">
+                            {{ govukRadios({
                             name: "answer",
                             fieldset: {
-
                                 legend: {
                                     text: "Do you want to create the licence on this service?",
                                     isPageHeading: false,
@@ -63,28 +56,28 @@
                                     },
                                     conditional: {
                                         html: nomisReasonHtml
-                                    }       
+                                    } if value === "No"      
                                 }
                             ],
                             errorMessage: validationErrors | findError('answer'),
                             value: formResponses.answer
                         }) }}
-                    </div> 
-                </div> 
-
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <div class="govuk-button-group">
-                            {{ govukButton({
+                        </div>
+                    </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                            <div class="govuk-button-group">
+                                {{ govukButton({
                                 text: 'Continue',
                                 type: "submit",
                                 attributes: { 'data-qa': 'continue' },
                                 preventDoubleClick: true
                             }) }}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>   
+                </form>
+            </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}
+    
