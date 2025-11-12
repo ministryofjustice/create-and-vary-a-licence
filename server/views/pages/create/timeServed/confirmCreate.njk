@@ -18,6 +18,7 @@
         hint: {
             text: 'Telling us this helps us understand how the Prison Service and the Probation Service work together on licences for people released with time served.'
         },
+        value: existingNomisLicenceCreationReason.reason if existingNomisLicenceCreationReason !== null else formResponses.reasonForUsingNomis,
         errorMessage: validationErrors | findError('reasonForUsingNomis')
     }) }}
 {% endset %}
@@ -43,6 +44,7 @@
                         items: [
                             {
                                 value: "Yes",
+                                id: "create-on-service",
                                 text: "Yes, I will continue and create the licence on this service",
                                 hint: {
                                     text: "The licence will contain standard conditions and an additional condition telling this person not to approach or communicate with any victims of their offences."
@@ -50,6 +52,7 @@
                             },
                             {
                                 value: "No",
+                                id: "create-on-nomis",
                                 text: "No, I will create the licence on NOMIS",
                                 hint: {
                                     text: "If you create a licence using NOMIS, the probation practitioner will not be able to view or vary the licence on Create and vary a licence."
@@ -60,7 +63,7 @@
                             }
                         ],
                         errorMessage: validationErrors | findError('answer'),
-                        value: formResponses.answer
+                        value:  "No" if existingNomisLicenceCreationReason !== null else formResponses.answer
                     }) }}
                     </div>
                 </div>

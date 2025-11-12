@@ -4,7 +4,11 @@ import { Session } from 'express-session'
 import LicenceService from '../../../../services/licenceService'
 import RecordNomisTimeServedLicenceReasonService from '../../../../services/recordNomisTimeServedLicenceReasonService'
 import ConfirmCreateRoutes from './confirmCreate'
-import { LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
+import {
+  LicenceSummary,
+  PrisonerWithCvlFields,
+  RecordNomisLicenceReasonResponse,
+} from '../../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const recordNomisTimeServedLicenceReasonService = new RecordNomisTimeServedLicenceReasonService(
@@ -38,6 +42,13 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       licenceKind: 'HARD_STOP',
     },
   } as PrisonerWithCvlFields
+
+  const existingNomisLicenceCreationReason = {
+    nomsId: 'A1234BC',
+    bookingId: 12345,
+    reason: 'A reason for using NOMIS',
+    prisonCode: 'MDI',
+  } as RecordNomisLicenceReasonResponse
 
   beforeEach(() => {
     req = {
@@ -73,6 +84,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
   describe('GET', () => {
     it('should render view confirm create', async () => {
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      recordNomisTimeServedLicenceReasonService.getExistingNomisLicenceCreationReason.mockResolvedValue(null)
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/timeServed/confirmCreate', {
         licence: {
@@ -86,6 +98,29 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
           kind: 'HARD_STOP',
         },
         backLink: req.session?.returnToCase,
+        existingNomisLicenceCreationReason: null,
+      })
+    })
+
+    it('should render view confirm create with existing reason', async () => {
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      recordNomisTimeServedLicenceReasonService.getExistingNomisLicenceCreationReason.mockResolvedValue(
+        existingNomisLicenceCreationReason,
+      )
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/timeServed/confirmCreate', {
+        licence: {
+          nomsId: 'ABC123',
+          licenceStartDate: '18/07/2024',
+          dateOfBirth: '06/12/1992',
+          forename: 'Test',
+          surname: 'Person',
+          licenceType: 'AP',
+          isEligibleForEarlyRelease: undefined,
+          kind: 'HARD_STOP',
+        },
+        backLink: req.session?.returnToCase,
+        existingNomisLicenceCreationReason,
       })
     })
   })
@@ -111,12 +146,12 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       expect(recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason).not.toHaveBeenCalled()
     })
 
-    it('should not create a licence, record reason and redirect when answer is NO', async () => {
+    it('should not create a licence, record reason and redirect when answer is NO and there is no existing reason', async () => {
       req.body.answer = 'No'
       req.body.reasonForUsingNomis = 'Test reason for using NOMIS'
 
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
-
+      recordNomisTimeServedLicenceReasonService.getExistingNomisLicenceCreationReason.mockResolvedValue(null)
       recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason.mockResolvedValue(undefined)
 
       await handler.POST(req, res)
@@ -139,13 +174,42 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
     })
 
+    it('should not create a licence, update reason and redirect when answer is NO and there is an existing reason', async () => {
+      req.body.answer = 'No'
+      req.body.reasonForUsingNomis = 'Another reason for using NOMIS'
+
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      recordNomisTimeServedLicenceReasonService.getExistingNomisLicenceCreationReason.mockResolvedValue(
+        existingNomisLicenceCreationReason,
+      )
+      recordNomisTimeServedLicenceReasonService.updateNomisLicenceCreationReason.mockResolvedValue(undefined)
+
+      await handler.POST(req, res)
+
+      expect(licenceService.getPrisonerDetail).toHaveBeenCalledWith('ABC123', {
+        username: 'joebloggs',
+      })
+      expect(licenceService.createLicence).not.toHaveBeenCalled()
+      expect(recordNomisTimeServedLicenceReasonService.updateNomisLicenceCreationReason).toHaveBeenCalledWith(
+        'ABC123',
+        12345,
+        {
+          reason: 'Another reason for using NOMIS',
+        },
+        {
+          username: 'joebloggs',
+        },
+      )
+      expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
+    })
+
     it('should not create licence and should redirect when answer is NO when no session', async () => {
       req.body.answer = 'No'
       req.body.reasonForUsingNomis = 'Test reason'
       req.session = {} as Session
 
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
-
+      recordNomisTimeServedLicenceReasonService.getExistingNomisLicenceCreationReason.mockResolvedValue(null)
       recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason.mockResolvedValue(undefined)
 
       await handler.POST(req, res)

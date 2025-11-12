@@ -5,7 +5,10 @@ import LicenceService from '../../../../services/licenceService'
 import LicenceKind from '../../../../enumeration/LicenceKind'
 import { convertToTitleCase } from '../../../../utils/utils'
 import RecordNomisTimeServedLicenceReasonService from '../../../../services/recordNomisTimeServedLicenceReasonService'
-import { RecordNomisLicenceReasonRequest } from '../../../../@types/licenceApiClientTypes'
+import {
+  RecordNomisLicenceReasonRequest,
+  UpdateNomisLicenceReasonRequest,
+} from '../../../../@types/licenceApiClientTypes'
 
 export default class ConfirmCreateRoutes {
   constructor(
@@ -19,8 +22,15 @@ export default class ConfirmCreateRoutes {
     const backLink = req.session?.returnToCase || '/licence/view/cases'
     const {
       cvl: { licenceType, isEligibleForEarlyRelease, licenceStartDate, licenceKind },
-      prisoner: { dateOfBirth, firstName, lastName },
+      prisoner: { dateOfBirth, firstName, lastName, bookingId },
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
+
+    const existingNomisLicenceCreationReason =
+      await this.recordNomisTimeServedLicenceReasonService.getExistingNomisLicenceCreationReason(
+        nomisId,
+        parseInt(bookingId, 10),
+        user,
+      )
 
     return res.render('pages/create/timeServed/confirmCreate', {
       licence: {
@@ -34,6 +44,7 @@ export default class ConfirmCreateRoutes {
         kind: licenceKind,
       },
       backLink,
+      existingNomisLicenceCreationReason,
     })
   }
 
@@ -53,6 +64,24 @@ export default class ConfirmCreateRoutes {
     }
 
     if (answer === YesOrNo.NO) {
+      const hasExistingNomisLicenceCreationReason =
+        (await this.recordNomisTimeServedLicenceReasonService.getExistingNomisLicenceCreationReason(
+          nomisId,
+          parseInt(bookingId, 10),
+          user,
+        )) !== null
+
+      if (hasExistingNomisLicenceCreationReason) {
+        await this.recordNomisTimeServedLicenceReasonService.updateNomisLicenceCreationReason(
+          nomisId,
+          parseInt(bookingId, 10),
+          {
+            reason: reasonForUsingNomis,
+          } as UpdateNomisLicenceReasonRequest,
+          user,
+        )
+        return res.redirect(backLink)
+      }
       await this.recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason(
         {
           nomsId: nomisId,

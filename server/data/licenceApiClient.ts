@@ -59,6 +59,8 @@ import type {
   LastMinuteHandoverCaseResponse,
   EligibilityAssessment,
   RecordNomisLicenceReasonRequest,
+  UpdateNomisLicenceReasonRequest,
+  RecordNomisLicenceReasonResponse,
 } from '../@types/licenceApiClientTypes'
 import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
@@ -742,7 +744,37 @@ export default class LicenceApiClient extends RestClient {
 
   async recordNomisLicenceCreationReason(request: RecordNomisLicenceReasonRequest, user: User): Promise<void> {
     return (await this.post(
-      { path: `/time-served/nomis/licence/reason`, data: request },
+      { path: `/time-served/external-records`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
+  }
+
+  async getExistingNomisLicenceCreationReason(
+    nomisId: string,
+    bookingId: number,
+    user: User,
+  ): Promise<RecordNomisLicenceReasonResponse | null> {
+    const response = (await this.get(
+      { path: `/time-served/external-records/${nomisId}/${bookingId}` },
+      { username: user?.username },
+    )) as RecordNomisLicenceReasonResponse
+
+    // Return null if the response is an empty object
+    if (response && Object.keys(response).length === 0) {
+      return null
+    }
+
+    return response
+  }
+
+  async updateNomisLicenceCreationReason(
+    nomisId: string,
+    bookingId: number,
+    request: UpdateNomisLicenceReasonRequest,
+    user: User,
+  ): Promise<void> {
+    return (await this.put(
+      { path: `/time-served/external-records/${nomisId}/${bookingId}`, data: request },
       { username: user?.username },
     )) as Promise<void>
   }

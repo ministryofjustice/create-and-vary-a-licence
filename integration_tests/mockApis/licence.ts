@@ -1935,6 +1935,7 @@ export default {
         jsonBody: {
           prisoner: {
             prisonerNumber: 'G9786GC',
+            bookingId: '123456',
             firstName: 'Test',
             lastName: 'Person',
             dateOfBirth: '1940-12-20',
@@ -2832,7 +2833,51 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/licences-api/time-served/nomis/licence/reason`,
+        urlPattern: `/licences-api/time-served/external-records`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+  stubGetTimeServedLicenceInNomisReasonSet: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/time-served/external-records/.*/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          nomsId: 'G9786GC',
+          bookingId: 123456,
+          reason: 'This is a reason for using NOMIS',
+          prisonCode: 'MDI',
+        },
+      },
+    })
+  },
+  stubGetTimeServedLicenceInNomisReasonNotSet: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/time-served/external-records/.*/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+  stubUpdateTimeServedLicenceInNomisReason: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licences-api/time-served/external-records/.*/(\\d*)`,
       },
       response: {
         status: 200,

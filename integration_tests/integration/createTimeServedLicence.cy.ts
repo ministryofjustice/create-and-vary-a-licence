@@ -29,6 +29,7 @@ context('Create a Time Served licence', () => {
       hasNomisLicence: false,
     })
     cy.task('stubPostTimeServedLicenceInNomisReason')
+    cy.task('stubGetTimeServedLicenceInNomisReasonNotSet')
     cy.signIn()
   })
 
@@ -55,6 +56,29 @@ context('Create a Time Served licence', () => {
     const confirmCreatePage = viewCasesList.clickATimeServedLicence()
     confirmCreatePage.selectRadio('No')
     confirmCreatePage.enterNoReasonText('This is a reason for using NOMIS')
+    viewCasesList = confirmCreatePage.clickContinueButtonToReturn()
+    viewCasesList.getTableRows().should(rows => {
+      expect(rows).to.have.length(1)
+    })
+    viewCasesList.getRow(0).contains('Time-served release')
+    viewCasesList.getRow(0).contains('NOMIS licence')
+  })
+
+  it('should prepopulate a reason for using NOMIS to create a time served licence if one already exists and then allow user to update', () => {
+    cy.task('stubGetTimeServedLicenceInNomisReasonSet')
+    cy.task('stubUpdateTimeServedLicenceInNomisReason')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    const releaseDateFlag = viewCasesList.getReleaseDateFlag()
+    releaseDateFlag.should('contain', 'Time-served release')
+    let confirmCreatePage = viewCasesList.clickATimeServedLicence()
+    confirmCreatePage.selectRadio('No')
+    confirmCreatePage.enterNoReasonText('This is a reason for using NOMIS')
+    confirmCreatePage.clickContinueButtonToReturn()
+    confirmCreatePage = viewCasesList.clickATimeServedLicence()
+    confirmCreatePage.getRadioCreateOnNomisSelection().should('have.value', 'No')
+    confirmCreatePage.getNoReasonText().should('have.value', 'This is a reason for using NOMIS')
+    confirmCreatePage.enterNoReasonText('This is an updated reason for using NOMIS')
     viewCasesList = confirmCreatePage.clickContinueButtonToReturn()
     viewCasesList.getTableRows().should(rows => {
       expect(rows).to.have.length(1)
