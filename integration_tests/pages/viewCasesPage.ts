@@ -3,6 +3,7 @@ import ViewALicencePage from './viewALicence'
 import CaSearchPage from './caSearch'
 import ComDetailsPage from './comDetails'
 import ChangeLocationPage from './changeLocationPage'
+import TimeServedConfirmCreatePage from './timeServedConfirmCreate'
 
 export default class ViewCasesPage extends Page {
   private viewLicenceLinkId = '#name-button-1'
@@ -33,6 +34,11 @@ export default class ViewCasesPage extends Page {
     return Page.verifyOnPage(ViewALicencePage)
   }
 
+  clickATimeServedLicence = (): TimeServedConfirmCreatePage => {
+    cy.get(this.viewLicenceLinkId).click()
+    return Page.verifyOnPage(TimeServedConfirmCreatePage)
+  }
+
   clickComDetails = (): ComDetailsPage => {
     cy.contains('td a', 'John Smith').click()
     return Page.verifyOnPage(ComDetailsPage)
@@ -57,6 +63,10 @@ export default class ViewCasesPage extends Page {
 
   getRow = n => {
     return cy.get('tbody  tr').eq(n)
+  }
+
+  getReleaseDateFlag = () => {
+    return cy.get('.urgent-highlight-message')
   }
 
   clickLinkWithDataQa = id => {

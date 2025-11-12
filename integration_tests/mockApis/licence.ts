@@ -2022,7 +2022,21 @@ export default {
     })
   },
 
-  stubGetPrisonOmuCaseload: (): SuperAgentRequest => {
+  stubGetPrisonOmuCaseload: (
+    options: {
+      licenceId?: number
+      licenceStatus?: string
+      tabType?: string
+      hardStopKind?: string
+      hasNomisLicence?: boolean
+    } = {
+      licenceId: 1,
+      licenceStatus: 'APPROVED',
+      tabType: 'FUTURE_RELEASES',
+      hardStopKind: null,
+      hasNomisLicence: false,
+    },
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -2034,7 +2048,7 @@ export default {
         jsonBody: [
           {
             kind: 'CRD',
-            licenceId: 1,
+            licenceId: options.licenceId,
             name: 'Another Person',
             prisonerNumber: 'AB1234E',
             probationPractitioner: {
@@ -2043,11 +2057,15 @@ export default {
             },
             releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
-            licenceStatus: 'APPROVED',
-            tabType: 'FUTURE_RELEASES',
+            licenceStatus: options.licenceStatus,
+            tabType: options.tabType,
             nomisLegalStatus: 'SENTENCED',
             lastWorkedOnBy: 'X Y',
             isInHardStopPeriod: true,
+            prisonCode: 'MDI',
+            prisonDescription: 'Moorland (HMP & YOI)',
+            hardStopKind: options.hardStopKind,
+            hasNomisLicence: options.hasNomisLicence,
           },
         ],
       },
@@ -2807,6 +2825,19 @@ export default {
             },
           ],
         },
+      },
+    })
+  },
+  stubPostTimeServedLicenceInNomisReason: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/time-served/nomis/licence/reason`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     })
   },
