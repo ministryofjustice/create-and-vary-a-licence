@@ -41,21 +41,17 @@ describe('View Vary Approver case list', () => {
   it('should display empty state correctly', () => {
     const $ = render({
       caseload: [],
-      search: '',
       regionCases: false,
     })
     expect($('.govuk-heading-xl').text()).toBe('Select a person to approve their licence variation')
     expect($('#myCases').text()).toContain('Cases in this PDU')
     expect($('#allRegions').text()).toContain('All cases in this region')
-    expect($('#vary-approval-empty-state-content').text()).toContain(
-      `There are no licence variations which meet the search criteria.`,
-    )
+    expect($('#vary-approval-empty-state-content').text()).toContain(`No licence variations to approve.`)
   })
 
   it('should display pdu cases in a table with links to the licence and COM details page', () => {
     const $ = render({
       caseload: pduCases,
-      search: '',
       regionCases: false,
     })
     expect($('.govuk-heading-xl').text()).toBe('Select a person to approve their licence variation')
@@ -78,7 +74,6 @@ describe('View Vary Approver case list', () => {
   it('should display all region cases in a table with links to the licence and COM details page', () => {
     const $ = render({
       caseload: allRegionCases,
-      search: '',
       regionCases: true,
     })
     expect($('.govuk-heading-xl').text()).toBe('Select a person to approve their licence variation')
