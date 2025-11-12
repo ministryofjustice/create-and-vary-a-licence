@@ -24,6 +24,7 @@ describe('Licence Override Service', () => {
   })
 
   it('Updates licence dates', () => {
+    const updatedKind = 'CRD'
     const dates = {
       conditionalReleaseDate: '01/01/2022',
       actualReleaseDate: '02/01/2022',
@@ -36,8 +37,8 @@ describe('Licence Override Service', () => {
     }
     const reason = 'reason to update dates'
 
-    overrideStatus.overrideDates(1, { ...dates, reason }, user)
-    expect(licenceApiClient.overrideLicenceDates).toHaveBeenCalledWith(1, { ...dates, reason }, user)
+    overrideStatus.overrideDates(1, { updatedKind, ...dates, reason }, user)
+    expect(licenceApiClient.overrideLicenceDates).toHaveBeenCalledWith(1, { updatedKind, ...dates, reason }, user)
   })
 
   it('Updates licence type', () => {
