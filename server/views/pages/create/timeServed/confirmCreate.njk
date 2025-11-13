@@ -18,7 +18,7 @@
         hint: {
             text: 'Telling us this helps us understand how the Prison Service and the Probation Service work together on licences for people released with time served.'
         },
-        value: existingNomisLicenceCreationReason.reason if existingNomisLicenceCreationReason !== null else formResponses.reasonForUsingNomis,
+        value: formResponses.reasonForUsingNomis or existingTimeServedExternalRecord.reason,
         errorMessage: validationErrors | findError('reasonForUsingNomis')
     }) }}
 {% endset %}
@@ -63,7 +63,7 @@
                             }
                         ],
                         errorMessage: validationErrors | findError('answer'),
-                        value:  "No" if existingNomisLicenceCreationReason !== null else formResponses.answer
+                        value:  formResponses.answer or (existingTimeServedExternalRecord.reason and 'No')
                     }) }}
                     </div>
                 </div>

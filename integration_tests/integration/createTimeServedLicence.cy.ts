@@ -28,8 +28,8 @@ context('Create a Time Served licence', () => {
       hardStopKind: 'TIME_SERVED',
       hasNomisLicence: false,
     })
-    cy.task('stubPostTimeServedLicenceInNomisReason')
-    cy.task('stubGetTimeServedLicenceInNomisReasonNotSet')
+    cy.task('stubUpdateTimeServedExternalRecord')
+    cy.task('stubGetTimeServedExternalRecordReasonNotSet')
     cy.signIn()
   })
 
@@ -65,8 +65,7 @@ context('Create a Time Served licence', () => {
   })
 
   it('should prepopulate a reason for using NOMIS to create a time served licence if one already exists and then allow user to update', () => {
-    cy.task('stubGetTimeServedLicenceInNomisReasonSet')
-    cy.task('stubUpdateTimeServedLicenceInNomisReason')
+    cy.task('stubGetTimeServedExternalRecordReasonSet')
     const indexPage = Page.verifyOnPage(IndexPage)
     let viewCasesList = indexPage.clickViewAndPrintALicence()
     const releaseDateFlag = viewCasesList.getReleaseDateFlag()

@@ -13,6 +13,7 @@ import {
   BespokeConditionsRequest,
   CaCaseloadSearch,
   ContactNumberRequest,
+  ExternalTimeServedRecordRequest,
   LastMinuteHandoverCaseResponse,
   Licence,
   LicenceCreationResponse,
@@ -899,48 +900,30 @@ describe('Licence API client tests', () => {
   })
 
   describe('NOMIS licence creation: ', () => {
-    it('should record reason for creating licence in NOMIS', async () => {
-      const user = { username: 'joebloggs' } as User
+    const user = { username: 'joebloggs' } as User
+    const nomisId = 'A1234BC'
+    const bookingId = 12345
+    const reason = 'Test reason for using NOMIS'
+
+    it('should update reason for creating licence in NOMIS', async () => {
       const request = {
-        nomsId: 'A1234BC',
-        bookingId: 12345,
-        reason: 'Test reason for using NOMIS',
+        reason,
         prisonCode: 'MDI',
-      }
+      } as ExternalTimeServedRecordRequest
 
-      await licenceApiClient.recordNomisLicenceCreationReason(request, user)
+      await licenceApiClient.updateTimeServedExternalRecord(nomisId, bookingId, request, user)
 
-      expect(post).toHaveBeenCalledWith(
-        { path: '/time-served/external-records', data: request },
+      expect(put).toHaveBeenCalledWith(
+        { path: `/time-served/external-records/${nomisId}/${bookingId}`, data: request },
         { username: 'joebloggs' },
       )
     })
 
     it('should get reason for creating licence in NOMIS', async () => {
-      const user = { username: 'joebloggs' } as User
-      const nomisId = 'A1234BC'
-      const bookingId = 12345
-
-      await licenceApiClient.getExistingNomisLicenceCreationReason(nomisId, bookingId, user)
+      await licenceApiClient.getTimeServedExternalRecord(nomisId, bookingId, user)
 
       expect(get).toHaveBeenCalledWith(
         { path: `/time-served/external-records/${nomisId}/${bookingId}` },
-        { username: 'joebloggs' },
-      )
-    })
-
-    it('should update reason for creating licence in NOMIS', async () => {
-      const user = { username: 'joebloggs' } as User
-      const nomisId = 'A1234BC'
-      const bookingId = 12345
-      const request = {
-        reason: 'Test reason for using NOMIS',
-      }
-
-      await licenceApiClient.updateNomisLicenceCreationReason(nomisId, bookingId, request, user)
-
-      expect(put).toHaveBeenCalledWith(
-        { path: `/time-served/external-records/${nomisId}/${bookingId}`, data: request },
         { username: 'joebloggs' },
       )
     })

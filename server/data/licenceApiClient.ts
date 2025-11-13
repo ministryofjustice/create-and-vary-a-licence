@@ -58,9 +58,8 @@ import type {
   LicencePermissionsResponse,
   LastMinuteHandoverCaseResponse,
   EligibilityAssessment,
-  RecordNomisLicenceReasonRequest,
-  UpdateNomisLicenceReasonRequest,
-  RecordNomisLicenceReasonResponse,
+  ExternalTimeServedRecordRequest,
+  TimeServedExternalRecordsResponse,
 } from '../@types/licenceApiClientTypes'
 import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
@@ -742,40 +741,30 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<LicencePermissionsResponse>
   }
 
-  async recordNomisLicenceCreationReason(request: RecordNomisLicenceReasonRequest, user: User): Promise<void> {
-    return (await this.post(
-      { path: `/time-served/external-records`, data: request },
-      { username: user?.username },
-    )) as Promise<void>
-  }
-
-  async getExistingNomisLicenceCreationReason(
+  async updateTimeServedExternalRecord(
     nomisId: string,
     bookingId: number,
-    user: User,
-  ): Promise<RecordNomisLicenceReasonResponse | null> {
-    const response = (await this.get(
-      { path: `/time-served/external-records/${nomisId}/${bookingId}` },
-      { username: user?.username },
-    )) as RecordNomisLicenceReasonResponse
-
-    // Return null if the response is an empty object
-    if (response && Object.keys(response).length === 0) {
-      return null
-    }
-
-    return response
-  }
-
-  async updateNomisLicenceCreationReason(
-    nomisId: string,
-    bookingId: number,
-    request: UpdateNomisLicenceReasonRequest,
+    request: ExternalTimeServedRecordRequest,
     user: User,
   ): Promise<void> {
     return (await this.put(
       { path: `/time-served/external-records/${nomisId}/${bookingId}`, data: request },
       { username: user?.username },
     )) as Promise<void>
+  }
+
+  async getTimeServedExternalRecord(
+    nomisId: string,
+    bookingId: number,
+    user: User,
+  ): Promise<TimeServedExternalRecordsResponse | null> {
+    try {
+      return (await this.get(
+        { path: `/time-served/external-records/${nomisId}/${bookingId}` },
+        { username: user?.username },
+      )) as TimeServedExternalRecordsResponse
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
   }
 }

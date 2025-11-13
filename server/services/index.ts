@@ -18,7 +18,7 @@ import ComCaseloadService from './lists/comCaseloadService'
 import HdcService from './hdcService'
 import DprService from './dprService'
 import AddressService from './addressService'
-import RecordNomisTimeServedLicenceReasonService from './recordNomisTimeServedLicenceReasonService'
+import TimeServedExternalRecordService from './timeServedExternalRecordService'
 
 const {
   manageUsersApiClient,
@@ -49,7 +49,7 @@ const feComponentsService = new FeComponentsService(feComponentsClient)
 const hdcService = new HdcService(licenceApiClient)
 const dprService = new DprService(licenceApiClient)
 const addressService = new AddressService(licenceApiClient)
-const recordNomisTimeServedLicenceReasonService = new RecordNomisTimeServedLicenceReasonService(licenceApiClient)
+const timeServedExternalRecordService = new TimeServedExternalRecordService(licenceApiClient)
 
 export const services = {
   userService,
@@ -72,7 +72,7 @@ export const services = {
   hdcService,
   dprService,
   addressService,
-  recordNomisTimeServedLicenceReasonService,
+  timeServedExternalRecordService,
 }
 
 export type Services = typeof services

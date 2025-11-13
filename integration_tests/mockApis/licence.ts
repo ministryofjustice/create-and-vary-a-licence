@@ -2829,11 +2829,11 @@ export default {
       },
     })
   },
-  stubPostTimeServedLicenceInNomisReason: (): SuperAgentRequest => {
+  stubUpdateTimeServedExternalRecord: (): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'POST',
-        urlPattern: `/licences-api/time-served/external-records`,
+        method: 'PUT',
+        urlPattern: `/licences-api/time-served/external-records/.*/(\\d*)`,
       },
       response: {
         status: 200,
@@ -2842,7 +2842,7 @@ export default {
       },
     })
   },
-  stubGetTimeServedLicenceInNomisReasonSet: (): SuperAgentRequest => {
+  stubGetTimeServedExternalRecordReasonSet: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -2856,11 +2856,13 @@ export default {
           bookingId: 123456,
           reason: 'This is a reason for using NOMIS',
           prisonCode: 'MDI',
+          dateCreated: '2024-06-01T10:00:00',
+          dateUpdated: '2024-06-02T11:00:00',
         },
       },
     })
   },
-  stubGetTimeServedLicenceInNomisReasonNotSet: (): SuperAgentRequest => {
+  stubGetTimeServedExternalRecordReasonNotSet: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -2869,20 +2871,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
-      },
-    })
-  },
-  stubUpdateTimeServedLicenceInNomisReason: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'PUT',
-        urlPattern: `/licences-api/time-served/external-records/.*/(\\d*)`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
+        jsonBody: null,
       },
     })
   },

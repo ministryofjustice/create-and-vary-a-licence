@@ -4,16 +4,13 @@ import YesOrNo from '../../../../enumeration/yesOrNo'
 import LicenceService from '../../../../services/licenceService'
 import LicenceKind from '../../../../enumeration/LicenceKind'
 import { convertToTitleCase } from '../../../../utils/utils'
-import RecordNomisTimeServedLicenceReasonService from '../../../../services/recordNomisTimeServedLicenceReasonService'
-import {
-  RecordNomisLicenceReasonRequest,
-  UpdateNomisLicenceReasonRequest,
-} from '../../../../@types/licenceApiClientTypes'
+import { ExternalTimeServedRecordRequest } from '../../../../@types/licenceApiClientTypes'
+import TimeServedExternalRecordService from '../../../../services/timeServedExternalRecordService'
 
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly recordNomisTimeServedLicenceReasonService: RecordNomisTimeServedLicenceReasonService,
+    private readonly timeServedExternalRecordService: TimeServedExternalRecordService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -25,12 +22,11 @@ export default class ConfirmCreateRoutes {
       prisoner: { dateOfBirth, firstName, lastName, bookingId },
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
-    const existingNomisLicenceCreationReason =
-      await this.recordNomisTimeServedLicenceReasonService.getExistingNomisLicenceCreationReason(
-        nomisId,
-        parseInt(bookingId, 10),
-        user,
-      )
+    const existingTimeServedExternalRecord = await this.timeServedExternalRecordService.getTimeServedExternalRecord(
+      nomisId,
+      parseInt(bookingId, 10),
+      user,
+    )
 
     return res.render('pages/create/timeServed/confirmCreate', {
       licence: {
@@ -44,7 +40,7 @@ export default class ConfirmCreateRoutes {
         kind: licenceKind,
       },
       backLink,
-      existingNomisLicenceCreationReason,
+      existingTimeServedExternalRecord,
     })
   }
 
@@ -64,31 +60,13 @@ export default class ConfirmCreateRoutes {
     }
 
     if (answer === YesOrNo.NO) {
-      const hasExistingNomisLicenceCreationReason =
-        (await this.recordNomisTimeServedLicenceReasonService.getExistingNomisLicenceCreationReason(
-          nomisId,
-          parseInt(bookingId, 10),
-          user,
-        )) !== null
-
-      if (hasExistingNomisLicenceCreationReason) {
-        await this.recordNomisTimeServedLicenceReasonService.updateNomisLicenceCreationReason(
-          nomisId,
-          parseInt(bookingId, 10),
-          {
-            reason: reasonForUsingNomis,
-          } as UpdateNomisLicenceReasonRequest,
-          user,
-        )
-        return res.redirect(backLink)
-      }
-      await this.recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason(
+      await this.timeServedExternalRecordService.updateTimeServedExternalRecord(
+        nomisId,
+        parseInt(bookingId, 10),
         {
-          nomsId: nomisId,
-          bookingId: parseInt(bookingId, 10),
           reason: reasonForUsingNomis,
           prisonCode: prisonId,
-        } as RecordNomisLicenceReasonRequest,
+        } as ExternalTimeServedRecordRequest,
         user,
       )
     }

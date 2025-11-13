@@ -135,10 +135,9 @@ export default defineConfig({
         stubGetPrisonApproverSearchRecentlyApprovedResult: licence.stubGetPrisonApproverSearchRecentlyApprovedResult,
         stubGetPrisonApproverSearchResults: licence.stubGetPrisonApproverSearchResults,
         stubGetVaryApproverSearchResults: licence.stubGetVaryApproverSearchResults,
-        stubPostTimeServedLicenceInNomisReason: licence.stubPostTimeServedLicenceInNomisReason,
-        stubGetTimeServedLicenceInNomisReasonSet: licence.stubGetTimeServedLicenceInNomisReasonSet,
-        stubGetTimeServedLicenceInNomisReasonNotSet: licence.stubGetTimeServedLicenceInNomisReasonNotSet,
-        stubUpdateTimeServedLicenceInNomisReason: licence.stubUpdateTimeServedLicenceInNomisReason,
+        stubUpdateTimeServedExternalRecord: licence.stubUpdateTimeServedExternalRecord,
+        stubGetTimeServedExternalRecordReasonSet: licence.stubGetTimeServedExternalRecordReasonSet,
+        stubGetTimeServedExternalRecordReasonNotSet: licence.stubGetTimeServedExternalRecordReasonNotSet,
 
         stubGetProbationer: delius.stubGetProbationer,
         stubGetProbationers: delius.stubGetProbationers,
