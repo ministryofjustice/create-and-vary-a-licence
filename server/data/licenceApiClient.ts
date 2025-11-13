@@ -758,13 +758,9 @@ export default class LicenceApiClient extends RestClient {
     bookingId: number,
     user: User,
   ): Promise<TimeServedExternalRecordsResponse | null> {
-    try {
-      return (await this.get(
-        { path: `/time-served/external-records/${nomisId}/${bookingId}` },
-        { username: user?.username },
-      )) as TimeServedExternalRecordsResponse
-    } catch (error) {
-      return error.status >= 400 && error.status < 500 ? null : error
-    }
+    return (await this.get(
+      { path: `/time-served/external-records/${nomisId}/${bookingId}`, return404: true },
+      { username: user?.username },
+    )) as Promise<TimeServedExternalRecordsResponse | null>
   }
 }
