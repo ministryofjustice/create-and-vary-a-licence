@@ -3,10 +3,5 @@
 {% if showCommsBanner %}
     <div class="govuk-inset-text govuk-grid-column-three-quarters">
         <h2 class="govuk-heading-l govuk-!-margin-0 govuk-!-padding-bottom-4">What's new</h2>
-        {% if user.authSource === 'nomis' %}
-            <div>From Monday 3 November, this service can be used to produce licences for people being released following a fixed-term recall and PD1s will no longer need to be sent for these cases. If no licence has been submitted by 2 days before release, the prison can generate one. </div>
-        {% else %}
-            <div>From Monday 3 November, probation practitioners will be able to use this service to produce licences for people being released following a fixed-term recall. All licences must be submitted by 2 days before release.</div>
-        {% endif %}
     </div>
 {% endif %}
