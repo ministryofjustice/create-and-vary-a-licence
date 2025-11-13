@@ -24,6 +24,12 @@ describe('Route handlers - View and print case list', () => {
       query: {
         search: '',
       },
+      flash: jest.fn((key?: string) => {
+        if (key === 'hasSelectedNomisForTimeServedLicenceCreation') {
+          return ['false']
+        }
+        return []
+      }) as unknown as Request['flash'],
       session: { caseloadsSelected: [] },
     } as unknown as Request
 
@@ -280,6 +286,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
     })
 
@@ -354,6 +361,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: true,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
     })
 
@@ -442,6 +450,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
     })
 
@@ -516,6 +525,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
     })
 
@@ -551,6 +561,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
     })
 
@@ -587,6 +598,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
     })
 
@@ -661,6 +673,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
     })
 
@@ -749,6 +762,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
     })
 
@@ -791,6 +805,7 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
     })
 
@@ -867,7 +882,29 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: '',
         statusConfig,
+        hasSelectedNomisForTimeServedLicenceCreation: false,
       })
+    })
+
+    it('should read flash message for alerting whether a user has selected NOMIS to create a time served licence', async () => {
+      req = {
+        query: {
+          search: '',
+        },
+        flash: jest.fn((key?: string) => {
+          if (key === 'hasSelectedNomisForTimeServedLicenceCreation') {
+            return ['true']
+          }
+          return []
+        }) as unknown as Request['flash'],
+        session: { caseloadsSelected: [] },
+      } as unknown as Request
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue(prisonCaseload)
+      res.locals.prisonCaseload = ['MDI']
+
+      await handler.GET(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('hasSelectedNomisForTimeServedLicenceCreation')
     })
   })
 })

@@ -39,6 +39,8 @@ export default class ViewAndPrintCaseRoutes {
       view === 'prison'
         ? await this.caseloadService.getPrisonOmuCaseload(user, prisonCaseloadToDisplay, searchString)
         : await this.caseloadService.getProbationOmuCaseload(user, prisonCaseloadToDisplay, searchString)
+    const hasSelectedNomisForTimeServedLicenceCreation =
+      req.flash('hasSelectedNomisForTimeServedLicenceCreation')[0] === 'true'
 
     res.render('pages/view/cases', {
       cases: cases.map(c => {
@@ -68,6 +70,7 @@ export default class ViewAndPrintCaseRoutes {
       prisonsToDisplay,
       hasMultipleCaseloadsInNomis,
       probationView,
+      hasSelectedNomisForTimeServedLicenceCreation,
     })
   }
 

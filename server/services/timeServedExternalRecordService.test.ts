@@ -70,5 +70,13 @@ describe('TimeServedExternalRecordService', () => {
       await expect(() => service.getTimeServedExternalRecord(nomisId, bookingId, user)).rejects.toThrow('some error')
       expect(licenceApiClient.getTimeServedExternalRecord).toHaveBeenCalled()
     })
+
+    it('should return null when 404 error is thrown by licenceApiClient', async () => {
+      licenceApiClient.getTimeServedExternalRecord.mockResolvedValue(null)
+      const result = await service.getTimeServedExternalRecord(nomisId, bookingId, user)
+      expect(licenceApiClient.getTimeServedExternalRecord).toHaveBeenCalledWith(nomisId, bookingId, user)
+      expect(licenceApiClient.getTimeServedExternalRecord).toHaveBeenCalledTimes(1)
+      expect(result).toBeNull()
+    })
   })
 })

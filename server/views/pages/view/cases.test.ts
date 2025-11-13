@@ -278,4 +278,34 @@ describe('View and print a licence - case list', () => {
     expect($('#release-date-1').text()).toBe('3 Aug 2022Time-served release')
     expect($('#com-1').text()).toBe('Not allocated yet')
   })
+
+  it('should alert that a user has selected to create a time served licence in NOMIS', () => {
+    const search = ''
+    const prisonsToDisplay = ''
+    const probationView = false
+    const $ = render({
+      cases: [
+        {
+          name: 'Test Person',
+          prisonerNumber: 'A1234AA',
+          releaseDate: '03/08/2022',
+          releaseDateLabel: 'CRD',
+          tabType: 'releasesInNextTwoWorkingDays',
+          hardStopKind: LicenceKind.TIME_SERVED,
+        },
+      ],
+      showAttentionNeededTab: false,
+      CaViewCasesTab,
+      statusConfig,
+      search,
+      prisonsToDisplay,
+      probationView,
+      hasSelectedNomisForTimeServedLicenceCreation: true,
+    })
+
+    expect($('.moj-alert--success').length).toBe(1)
+    expect($('.moj-alert__content').text()).toContain(
+      'Confirmed. Go to NOMIS to create this licence or change your selection by choosing this person from the case list',
+    )
+  })
 })
