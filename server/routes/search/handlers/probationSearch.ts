@@ -3,7 +3,6 @@ import moment from 'moment/moment'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 import { FoundProbationRecord, ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
-import config from '../../../config'
 
 export default class ProbationSearch {
   constructor(private readonly searchService: SearchService) {}
@@ -12,7 +11,6 @@ export default class ProbationSearch {
     const queryTerm = req.query?.queryTerm as string
     const { deliusStaffIdentifier } = res.locals.user
     const previousCaseloadPage = req.query?.previousPage as string
-    const { recallsEnabled } = config
 
     let searchResponse: ProbationSearchResult
 
@@ -55,7 +53,6 @@ export default class ProbationSearch {
       backLink,
       previousCaseloadPage,
       tabParameters,
-      recallsEnabled,
       hasPriorityCases,
     })
   }

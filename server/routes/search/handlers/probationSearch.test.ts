@@ -3,7 +3,6 @@ import { FoundProbationRecord, ProbationSearchResult } from '../../../@types/lic
 import ProbationSearchRoutes from './probationSearch'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
-import config from '../../../config'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
@@ -98,7 +97,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        recallsEnabled: config.recallsEnabled,
         hasPriorityCases: false,
       })
     })
@@ -119,7 +117,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        recallsEnabled: config.recallsEnabled,
         hasPriorityCases: false,
       })
     })
@@ -140,7 +137,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        recallsEnabled: config.recallsEnabled,
         hasPriorityCases: false,
       })
     })
@@ -167,7 +163,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        recallsEnabled: config.recallsEnabled,
         hasPriorityCases: false,
       })
     })
@@ -195,7 +190,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        recallsEnabled: config.recallsEnabled,
         hasPriorityCases: false,
       })
     })
@@ -281,7 +275,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters: { ...tabParameters, activeTab: '#people-on-probation' },
         statusConfig,
         previousCaseloadPage,
-        recallsEnabled: config.recallsEnabled,
         hasPriorityCases: true,
       })
     })
