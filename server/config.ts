@@ -206,6 +206,5 @@ export default {
   hdcIntegrationMvp2Enabled: get('HDC_INTEGRATION_MVP2_ENABLED', 'false', requiredInProduction) === 'true',
   hdcLicenceCreationBlockEnabled: get('HDC_LICENCE_CREATION_BLOCK', 'false', requiredInProduction) === 'true',
   postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
-  recallsEnabled: get('RECALLS_ENABLED', 'false', requiredInProduction) === 'true',
   timeServedEnabled: get('TIME_SERVED_ENABLED', 'false', requiredInProduction) === 'true',
 }

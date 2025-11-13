@@ -329,11 +329,7 @@
 {% set onProbationCountText = "People on probation (" + tabParameters.probation.resultsCount + tabParameters.probation.resultsCount | pluralise(" result") + ")" %}
 {% set attentionNeededCountText = "Attention needed (" + tabParameters.attentionNeeded.resultsCount + tabParameters.attentionNeeded.resultsCount | pluralise(" result") + ")" %}
 
-{% if recallsEnabled %}
-    {%  set recallsMessage = "have not breached a top-up supervision order" %}
-{% else %}
-    {%  set recallsMessage = "have not been recalled or breached a top up supervision order" %}
-{% endif %}
+{%  set recallsMessage = "have not breached a top-up supervision order" %}
 
 {% set peopleInPrison = displayResults(inPrisonSearchTableHeadings, peopleInPrisonResults, tabParameters.prison.tabId, inPrisonCountText, true, recallsMesage) %}
 {% set peopleOnProbation = displayResults(onProbationSearchTableHeadings, peopleOnProbationResults, tabParameters.probation.tabId, onProbationCountText, false, recallsMesage) %}

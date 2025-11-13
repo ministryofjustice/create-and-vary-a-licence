@@ -5,7 +5,6 @@ import SearchService from '../../../services/searchService'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { CaCase } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
-import config from '../../../config'
 import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../enumeration'
 import { User } from '../../../@types/CvlUserDetails'
 
@@ -385,7 +384,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         },
       ],
       changeLocationHref: '/licence/view/change-location?queryTerm=test',
-      recallsEnabled: config.recallsEnabled,
       isSearchPageView: true,
     })
   })
@@ -664,7 +662,6 @@ describe('Route Handlers - Search - Ca Search', () => {
         { agencyId: 'LEI', description: 'Leeds (HMP)' },
       ],
       changeLocationHref: '/licence/view/change-location?queryTerm=test',
-      recallsEnabled: config.recallsEnabled,
       isSearchPageView: true,
     })
   })
@@ -867,7 +864,6 @@ describe('Route Handlers - Search - Ca Search', () => {
       hasSelectedMultiplePrisonCaseloads: false,
       prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
       changeLocationHref: '/licence/view/change-location?queryTerm=test',
-      recallsEnabled: config.recallsEnabled,
       isSearchPageView: true,
     })
   })
@@ -953,7 +949,6 @@ describe('Route Handlers - Search - Ca Search', () => {
       hasSelectedMultiplePrisonCaseloads: false,
       prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
       changeLocationHref: '/licence/view/change-location?queryTerm=test',
-      recallsEnabled: config.recallsEnabled,
       isSearchPageView: true,
     })
   })
@@ -1039,7 +1034,6 @@ describe('Route Handlers - Search - Ca Search', () => {
       hasSelectedMultiplePrisonCaseloads: false,
       prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
       changeLocationHref: '/licence/view/change-location?queryTerm=test',
-      recallsEnabled: config.recallsEnabled,
       isSearchPageView: true,
     })
   })
@@ -1079,7 +1073,6 @@ describe('Route Handlers - Search - Ca Search', () => {
       hasSelectedMultiplePrisonCaseloads: false,
       prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
       changeLocationHref: '/licence/view/change-location',
-      recallsEnabled: config.recallsEnabled,
       isSearchPageView: true,
     })
   })
