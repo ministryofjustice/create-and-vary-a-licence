@@ -13,6 +13,7 @@ import {
   BespokeConditionsRequest,
   CaCaseloadSearch,
   ContactNumberRequest,
+  ExternalTimeServedRecordRequest,
   LastMinuteHandoverCaseResponse,
   Licence,
   LicenceCreationResponse,
@@ -899,23 +900,32 @@ describe('Licence API client tests', () => {
   })
 
   describe('NOMIS licence creation: ', () => {
-    describe('record NOMIS licence creation reason', () => {
-      it('should record reason for creating licence in NOMIS', async () => {
-        const user = { username: 'joebloggs' } as User
-        const request = {
-          nomsId: 'A1234BC',
-          bookingId: 12345,
-          reason: 'Test reason for using NOMIS',
-          prisonCode: 'MDI',
-        }
+    const user = { username: 'joebloggs' } as User
+    const nomisId = 'A1234BC'
+    const bookingId = 12345
+    const reason = 'Test reason for using NOMIS'
 
-        await licenceApiClient.recordNomisLicenceCreationReason(request, user)
+    it('should update reason for creating licence in NOMIS', async () => {
+      const request = {
+        reason,
+        prisonCode: 'MDI',
+      } as ExternalTimeServedRecordRequest
 
-        expect(post).toHaveBeenCalledWith(
-          { path: '/time-served/nomis/licence/reason', data: request },
-          { username: 'joebloggs' },
-        )
-      })
+      await licenceApiClient.updateTimeServedExternalRecord(nomisId, bookingId, request, user)
+
+      expect(put).toHaveBeenCalledWith(
+        { path: `/time-served/external-records/${nomisId}/${bookingId}`, data: request },
+        { username: 'joebloggs' },
+      )
+    })
+
+    it('should get reason for creating licence in NOMIS', async () => {
+      await licenceApiClient.getTimeServedExternalRecord(nomisId, bookingId, user)
+
+      expect(get).toHaveBeenCalledWith(
+        { path: `/time-served/external-records/${nomisId}/${bookingId}` },
+        { username: 'joebloggs' },
+      )
     })
   })
 })

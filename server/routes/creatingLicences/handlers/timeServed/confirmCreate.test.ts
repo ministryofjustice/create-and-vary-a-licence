@@ -2,20 +2,24 @@ import { Request, Response } from 'express'
 import { Session } from 'express-session'
 
 import LicenceService from '../../../../services/licenceService'
-import RecordNomisTimeServedLicenceReasonService from '../../../../services/recordNomisTimeServedLicenceReasonService'
 import ConfirmCreateRoutes from './confirmCreate'
-import { LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
+import {
+  LicenceSummary,
+  PrisonerWithCvlFields,
+  TimeServedExternalRecordsResponse,
+} from '../../../../@types/licenceApiClientTypes'
+import TimeServedExternalRecordService from '../../../../services/timeServedExternalRecordService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const recordNomisTimeServedLicenceReasonService = new RecordNomisTimeServedLicenceReasonService(
+const timeServedExternalRecordService = new TimeServedExternalRecordService(
   null,
-) as jest.Mocked<RecordNomisTimeServedLicenceReasonService>
+) as jest.Mocked<TimeServedExternalRecordService>
 
 jest.mock('../../../../services/licenceService')
-jest.mock('../../../../services/recordNomisTimeServedLicenceReasonService')
+jest.mock('../../../../services/timeServedExternalRecordService')
 
 describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(licenceService, recordNomisTimeServedLicenceReasonService)
+  const handler = new ConfirmCreateRoutes(licenceService, timeServedExternalRecordService)
   let req: Request
   let res: Response
 
@@ -38,6 +42,15 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       licenceKind: 'HARD_STOP',
     },
   } as PrisonerWithCvlFields
+
+  const existingTimeServedExternalRecord = {
+    nomsId: 'A1234BC',
+    bookingId: 12345,
+    reason: 'A reason for using NOMIS',
+    prisonCode: 'MDI',
+    dateCreated: '2024-07-01T10:00:00Z',
+    dateLastUpdated: '2024-07-01T10:00:00Z',
+  } as TimeServedExternalRecordsResponse
 
   beforeEach(() => {
     req = {
@@ -73,6 +86,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
   describe('GET', () => {
     it('should render view confirm create', async () => {
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      timeServedExternalRecordService.getTimeServedExternalRecord.mockResolvedValue(null)
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/timeServed/confirmCreate', {
         licence: {
@@ -86,6 +100,27 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
           kind: 'HARD_STOP',
         },
         backLink: req.session?.returnToCase,
+        existingTimeServedExternalRecord: null,
+      })
+    })
+
+    it('should render view confirm create with existing reason', async () => {
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      timeServedExternalRecordService.getTimeServedExternalRecord.mockResolvedValue(existingTimeServedExternalRecord)
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/timeServed/confirmCreate', {
+        licence: {
+          nomsId: 'ABC123',
+          licenceStartDate: '18/07/2024',
+          dateOfBirth: '06/12/1992',
+          forename: 'Test',
+          surname: 'Person',
+          licenceType: 'AP',
+          isEligibleForEarlyRelease: undefined,
+          kind: 'HARD_STOP',
+        },
+        backLink: req.session?.returnToCase,
+        existingTimeServedExternalRecord,
       })
     })
   })
@@ -108,16 +143,16 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
         },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
-      expect(recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason).not.toHaveBeenCalled()
+      expect(timeServedExternalRecordService.updateTimeServedExternalRecord).not.toHaveBeenCalled()
     })
 
-    it('should not create a licence, record reason and redirect when answer is NO', async () => {
+    it('should not create a licence, record reason and redirect when answer is NO and there is no existing reason', async () => {
       req.body.answer = 'No'
       req.body.reasonForUsingNomis = 'Test reason for using NOMIS'
 
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
-
-      recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason.mockResolvedValue(undefined)
+      timeServedExternalRecordService.getTimeServedExternalRecord.mockResolvedValue(null)
+      timeServedExternalRecordService.updateTimeServedExternalRecord.mockResolvedValue(undefined)
 
       await handler.POST(req, res)
 
@@ -125,11 +160,39 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
         username: 'joebloggs',
       })
       expect(licenceService.createLicence).not.toHaveBeenCalled()
-      expect(recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason).toHaveBeenCalledWith(
+      expect(timeServedExternalRecordService.updateTimeServedExternalRecord).toHaveBeenCalledWith(
+        'ABC123',
+        12345,
         {
-          nomsId: 'ABC123',
-          bookingId: 12345,
           reason: 'Test reason for using NOMIS',
+          prisonCode: 'MDI',
+        },
+        {
+          username: 'joebloggs',
+        },
+      )
+      expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
+    })
+
+    it('should not create a licence, update reason and redirect when answer is NO and there is an existing reason', async () => {
+      req.body.answer = 'No'
+      req.body.reasonForUsingNomis = 'Another reason for using NOMIS'
+
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      timeServedExternalRecordService.getTimeServedExternalRecord.mockResolvedValue(existingTimeServedExternalRecord)
+      timeServedExternalRecordService.updateTimeServedExternalRecord.mockResolvedValue(undefined)
+
+      await handler.POST(req, res)
+
+      expect(licenceService.getPrisonerDetail).toHaveBeenCalledWith('ABC123', {
+        username: 'joebloggs',
+      })
+      expect(licenceService.createLicence).not.toHaveBeenCalled()
+      expect(timeServedExternalRecordService.updateTimeServedExternalRecord).toHaveBeenCalledWith(
+        'ABC123',
+        12345,
+        {
+          reason: 'Another reason for using NOMIS',
           prisonCode: 'MDI',
         },
         {
@@ -145,8 +208,8 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       req.session = {} as Session
 
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
-
-      recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason.mockResolvedValue(undefined)
+      timeServedExternalRecordService.getTimeServedExternalRecord.mockResolvedValue(null)
+      timeServedExternalRecordService.updateTimeServedExternalRecord.mockResolvedValue(undefined)
 
       await handler.POST(req, res)
 
@@ -154,10 +217,10 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
         username: 'joebloggs',
       })
       expect(licenceService.createLicence).not.toHaveBeenCalled()
-      expect(recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason).toHaveBeenCalledWith(
+      expect(timeServedExternalRecordService.updateTimeServedExternalRecord).toHaveBeenCalledWith(
+        'ABC123',
+        12345,
         {
-          nomsId: 'ABC123',
-          bookingId: 12345,
           reason: 'Test reason',
           prisonCode: 'MDI',
         },

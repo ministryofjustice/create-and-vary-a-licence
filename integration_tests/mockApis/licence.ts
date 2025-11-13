@@ -1935,6 +1935,7 @@ export default {
         jsonBody: {
           prisoner: {
             prisonerNumber: 'G9786GC',
+            bookingId: '123456',
             firstName: 'Test',
             lastName: 'Person',
             dateOfBirth: '1940-12-20',
@@ -2022,7 +2023,21 @@ export default {
     })
   },
 
-  stubGetPrisonOmuCaseload: (): SuperAgentRequest => {
+  stubGetPrisonOmuCaseload: (
+    options: {
+      licenceId?: number
+      licenceStatus?: string
+      tabType?: string
+      hardStopKind?: string
+      hasNomisLicence?: boolean
+    } = {
+      licenceId: 1,
+      licenceStatus: 'APPROVED',
+      tabType: 'FUTURE_RELEASES',
+      hardStopKind: null,
+      hasNomisLicence: false,
+    },
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -2034,7 +2049,7 @@ export default {
         jsonBody: [
           {
             kind: 'CRD',
-            licenceId: 1,
+            licenceId: options.licenceId,
             name: 'Another Person',
             prisonerNumber: 'AB1234E',
             probationPractitioner: {
@@ -2043,11 +2058,15 @@ export default {
             },
             releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
-            licenceStatus: 'APPROVED',
-            tabType: 'FUTURE_RELEASES',
+            licenceStatus: options.licenceStatus,
+            tabType: options.tabType,
             nomisLegalStatus: 'SENTENCED',
             lastWorkedOnBy: 'X Y',
             isInHardStopPeriod: true,
+            prisonCode: 'MDI',
+            prisonDescription: 'Moorland (HMP & YOI)',
+            hardStopKind: options.hardStopKind,
+            hasNomisLicence: options.hasNomisLicence,
           },
         ],
       },
@@ -2807,6 +2826,52 @@ export default {
             },
           ],
         },
+      },
+    })
+  },
+  stubUpdateTimeServedExternalRecord: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licences-api/time-served/external-records/.*/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+  stubGetTimeServedExternalRecordReasonSet: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/time-served/external-records/.*/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          nomsId: 'G9786GC',
+          bookingId: 123456,
+          reason: 'This is a reason for using NOMIS',
+          prisonCode: 'MDI',
+          dateCreated: '2024-06-01T10:00:00',
+          dateUpdated: '2024-06-02T11:00:00',
+        },
+      },
+    })
+  },
+  stubGetTimeServedExternalRecordReasonNotSet: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/time-served/external-records/.*/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: null,
       },
     })
   },
