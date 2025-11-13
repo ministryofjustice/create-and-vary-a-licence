@@ -4,13 +4,13 @@ import YesOrNo from '../../../../enumeration/yesOrNo'
 import LicenceService from '../../../../services/licenceService'
 import LicenceKind from '../../../../enumeration/LicenceKind'
 import { convertToTitleCase } from '../../../../utils/utils'
-import RecordNomisTimeServedLicenceReasonService from '../../../../services/recordNomisTimeServedLicenceReasonService'
-import { RecordNomisLicenceReasonRequest } from '../../../../@types/licenceApiClientTypes'
+import { ExternalTimeServedRecordRequest } from '../../../../@types/licenceApiClientTypes'
+import TimeServedExternalRecordService from '../../../../services/timeServedExternalRecordService'
 
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly recordNomisTimeServedLicenceReasonService: RecordNomisTimeServedLicenceReasonService,
+    private readonly timeServedExternalRecordService: TimeServedExternalRecordService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -19,8 +19,14 @@ export default class ConfirmCreateRoutes {
     const backLink = req.session?.returnToCase || '/licence/view/cases'
     const {
       cvl: { licenceType, isEligibleForEarlyRelease, licenceStartDate, licenceKind },
-      prisoner: { dateOfBirth, firstName, lastName },
+      prisoner: { dateOfBirth, firstName, lastName, bookingId },
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
+
+    const existingTimeServedExternalRecord = await this.timeServedExternalRecordService.getTimeServedExternalRecord(
+      nomisId,
+      parseInt(bookingId, 10),
+      user,
+    )
 
     return res.render('pages/create/timeServed/confirmCreate', {
       licence: {
@@ -34,6 +40,7 @@ export default class ConfirmCreateRoutes {
         kind: licenceKind,
       },
       backLink,
+      existingTimeServedExternalRecord,
     })
   }
 
@@ -53,13 +60,13 @@ export default class ConfirmCreateRoutes {
     }
 
     if (answer === YesOrNo.NO) {
-      await this.recordNomisTimeServedLicenceReasonService.recordNomisLicenceCreationReason(
+      await this.timeServedExternalRecordService.updateTimeServedExternalRecord(
+        nomisId,
+        parseInt(bookingId, 10),
         {
-          nomsId: nomisId,
-          bookingId: parseInt(bookingId, 10),
           reason: reasonForUsingNomis,
           prisonCode: prisonId,
-        } as RecordNomisLicenceReasonRequest,
+        } as ExternalTimeServedRecordRequest,
         user,
       )
     }

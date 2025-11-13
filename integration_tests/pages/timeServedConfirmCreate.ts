@@ -44,7 +44,16 @@ export default class TimeServedConfirmCreatePage extends Page {
   }
 
   enterNoReasonText = (text: string): TimeServedConfirmCreatePage => {
+    cy.get('#reasonForUsingNomis').clear()
     cy.get('#reasonForUsingNomis').type(text)
     return this
+  }
+
+  getNoReasonText = () => {
+    return cy.get('#reasonForUsingNomis')
+  }
+
+  getRadioCreateOnNomisSelection = () => {
+    return cy.get('#create-on-nomis')
   }
 }
