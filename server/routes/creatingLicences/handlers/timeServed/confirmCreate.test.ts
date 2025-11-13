@@ -66,6 +66,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       user: {
         username: 'joebloggs',
       },
+      flash: jest.fn(),
     } as unknown as Request
 
     res = {
