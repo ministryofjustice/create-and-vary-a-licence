@@ -55,8 +55,11 @@ export default class ConfirmCreateRoutes {
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
     if (answer === YesOrNo.YES) {
-      await this.licenceService.createLicence({ nomsId: nomisId, type: LicenceKind.HARD_STOP }, user)
-      return res.redirect(`/licence/view/cases`)
+      const { licenceId } = await this.licenceService.createLicence(
+        { nomsId: nomisId, type: LicenceKind.HARD_STOP },
+        user,
+      )
+      return res.redirect(`/licence/time-served/create/id/${licenceId}/initial-meeting-name`)
     }
 
     if (answer === YesOrNo.NO) {
