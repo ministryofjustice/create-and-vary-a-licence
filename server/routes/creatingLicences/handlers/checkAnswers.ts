@@ -102,7 +102,15 @@ export default class CheckAnswersRoutes {
   flattenValidationErrors = (errors: ValidationError[], parentProperty = ''): FieldValidationError[] =>
     errors.flatMap(error => {
       const propertyPath = parentProperty ? `${parentProperty}-${error.property}` : error.property
-      const current = error.constraints ? [{ field: propertyPath, message: Object.values(error.constraints)[0] }] : []
+      let current: FieldValidationError[] = []
+      if (error.constraints) {
+        const constraintKeys = Object.keys(error.constraints)
+        const lastConstraintKey = constraintKeys[constraintKeys.length - 1]
+        const message = error.constraints[lastConstraintKey]
+        const summaryMessage = error.contexts?.[lastConstraintKey]?.summaryMessageBuilder?.(message) || message
+
+        current = error.constraints ? [{ field: propertyPath, message, summaryMessage }] : []
+      }
       const children = error.children ? this.flattenValidationErrors(error.children, propertyPath) : []
       return [...current, ...children]
     })
