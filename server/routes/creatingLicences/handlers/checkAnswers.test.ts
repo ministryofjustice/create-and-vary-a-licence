@@ -308,18 +308,32 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalPssConditions: [],
       } as Licence
 
+      const appointmentPersonTypeMessage = "Select 'Change' to go back and add who to meet"
+      const appointmentAddressMessage = "Select 'Change' to go back and add appointment address"
+      const appointmentTelephoneMessage = "Select 'Change' to go back and add appointment telephone number"
+      const appointmentTimeMessage = "Select 'Change' to go back and add appointment date and time"
+
       await handler.POST(req, res)
 
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
         JSON.stringify([
-          { field: 'appointmentPersonType', message: "Select 'Change' to go back and add who to meet" },
-          { field: 'appointmentAddress', message: "Select 'Change' to go back and add appointment address" },
+          {
+            field: 'appointmentPersonType',
+            message: appointmentPersonTypeMessage,
+            summaryMessage: appointmentPersonTypeMessage,
+          },
+          {
+            field: 'appointmentAddress',
+            message: appointmentAddressMessage,
+            summaryMessage: appointmentAddressMessage,
+          },
           {
             field: 'appointmentTelephoneNumber',
-            message: "Select 'Change' to go back and add appointment telephone number",
+            message: appointmentTelephoneMessage,
+            summaryMessage: appointmentTelephoneMessage,
           },
-          { field: 'appointmentTimeType', message: "Select 'Change' to go back and add appointment date and time" },
+          { field: 'appointmentTimeType', message: appointmentTimeMessage, summaryMessage: appointmentTimeMessage },
         ]),
       )
       expect(res.redirect).toHaveBeenCalledWith('/previous-page')
@@ -349,12 +363,13 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         appointmentPersonType: 'SPECIFIC_PERSON',
         appointmentPerson: '',
       } as Licence
+      const message = "Select 'Change' to go back and add who to meet"
 
       await handler.POST(req, res)
 
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        JSON.stringify([{ field: 'appointmentPerson', message: "Select 'Change' to go back and add who to meet" }]),
+        JSON.stringify([{ field: 'appointmentPerson', message, summaryMessage: message }]),
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
@@ -395,27 +410,30 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
   describe('flattenValidationErrors', () => {
     it('should return a flat array for single-level errors', () => {
+      const message1 = 'Field1 is required'
+      const message2 = 'Field2 must not be empty'
       const errors: ValidationError[] = [
         {
           property: 'field1',
-          constraints: { isDefined: 'Field1 is required' },
+          constraints: { isDefined: message1 },
           children: [],
         } as ValidationError,
         {
           property: 'field2',
-          constraints: { isNotEmpty: 'Field2 must not be empty' },
+          constraints: { isNotEmpty: message2 },
           children: [],
         } as ValidationError,
       ]
 
       const result = handler.flattenValidationErrors(errors)
       expect(result).toEqual([
-        { field: 'field1', message: 'Field1 is required' },
-        { field: 'field2', message: 'Field2 must not be empty' },
+        { field: 'field1', message: message1, summaryMessage: message1 },
+        { field: 'field2', message: message2, summaryMessage: message2 },
       ])
     })
 
     it('should handle nested errors and build property path', () => {
+      const message = 'Child is required'
       const errors: ValidationError[] = [
         {
           property: 'parent',
@@ -423,7 +441,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           children: [
             {
               property: 'child',
-              constraints: { isDefined: 'Child is required' },
+              constraints: { isDefined: message },
               children: [],
             } as ValidationError,
           ],
@@ -431,10 +449,11 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       ]
 
       const result = handler.flattenValidationErrors(errors)
-      expect(result).toEqual([{ field: 'parent-child', message: 'Child is required' }])
+      expect(result).toEqual([{ field: 'parent-child', message, summaryMessage: message }])
     })
 
     it('should handle deeply nested errors', () => {
+      const message = 'Level3 is required'
       const errors: ValidationError[] = [
         {
           property: 'level1',
@@ -446,7 +465,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
               children: [
                 {
                   property: 'level3',
-                  constraints: { isDefined: 'Level3 is required' },
+                  constraints: { isDefined: message },
                   children: [],
                 } as ValidationError,
               ],
@@ -456,7 +475,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       ]
 
       const result = handler.flattenValidationErrors(errors)
-      expect(result).toEqual([{ field: 'level1-level2-level3', message: 'Level3 is required' }])
+      expect(result).toEqual([{ field: 'level1-level2-level3', message, summaryMessage: message }])
     })
 
     it('should return an empty array if there are no errors', () => {
