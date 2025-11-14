@@ -23,6 +23,7 @@ import PrisonerController from './prisonerController'
 import searchRoutes from './search'
 import initialAppointmentRoutes from './initialAppointment'
 import hardStopInitialAppointmentRoutes from './initialAppointment/handlers/hardStop'
+import timeServedInitialAppointmentRoutes from './initialAppointment/handlers/timeServed'
 import pathfinderRoutes from './manageConditions/handlers/pathfinder'
 import dprRoutes from './reporting'
 import staffRoutes from './staff'
@@ -57,6 +58,7 @@ export default function Index(services: Services): Router {
   router.use(staffRoutes(services))
   router.use(hardStopStaffRoutes(services))
   router.use(hardStopInitialAppointmentRoutes(services))
+  router.use(timeServedInitialAppointmentRoutes(services))
   router.use(pathfinderRoutes(services))
   router.use(dprRoutes(services))
   router.use(createTimeServedLicenceRoutes(services))
