@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 import type { TimeServedProbationConfirmContactRequest } from '../../../@types/licenceApiClientTypes'
-import CreateTimeServedProbationConfirmContact from './createTimeServedProbationConfirmContact'
+import { CreateTimeServedProbationConfirmContact } from './createTimeServedProbationConfirmContact'
 
 type ContactStatus = TimeServedProbationConfirmContactRequest['contactStatus']
 type CommunicationMethod = TimeServedProbationConfirmContactRequest['communicationMethods'][number]
