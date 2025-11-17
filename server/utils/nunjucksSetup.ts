@@ -109,7 +109,7 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('errorSummaryList', (array = []) => {
     return array.map((error: FieldValidationError) => ({
-      text: error.summaryMessage,
+      text: error.summaryMessage || error.message,
       href: `#${error.field}`,
     }))
   })
