@@ -10,7 +10,7 @@ import TimeServedService from '../../../../services/timeServedService'
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly timeServedExternalRecordService: TimeServedService,
+    private readonly timeServedService: TimeServedService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -22,7 +22,7 @@ export default class ConfirmCreateRoutes {
       prisoner: { dateOfBirth, firstName, lastName, bookingId },
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
-    const existingTimeServedExternalRecord = await this.timeServedExternalRecordService.getTimeServedExternalRecord(
+    const existingTimeServedExternalRecord = await this.timeServedService.getTimeServedExternalRecord(
       nomisId,
       parseInt(bookingId, 10),
       user,
@@ -60,7 +60,7 @@ export default class ConfirmCreateRoutes {
     }
 
     if (answer === YesOrNo.NO) {
-      await this.timeServedExternalRecordService.updateTimeServedExternalRecord(
+      await this.timeServedService.updateTimeServedExternalRecord(
         nomisId,
         parseInt(bookingId, 10),
         {

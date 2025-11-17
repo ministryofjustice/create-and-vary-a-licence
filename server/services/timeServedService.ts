@@ -31,6 +31,6 @@ export default class TimeServedService {
     request: TimeServedProbationConfirmContactRequest,
     user: User,
   ): Promise<void> {
-    this.licenceApiClient.addTimeServedProbationConfirmContact(licenceId, request, user)
+    await this.licenceApiClient.addTimeServedProbationConfirmContact(licenceId, request, user)
   }
 }
