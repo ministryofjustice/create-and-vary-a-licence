@@ -77,45 +77,47 @@
                     </div>
                     <div class="govuk-form-group">
                         {{ govukCheckboxes({
-                            idPrefix: "communicationMethods",
-                            name: "communicationMethods",
-                            fieldset: {
-                                legend: {
-                                    text: "Choose a form of communication",
-                                    classes: "govuk-fieldset__legend--m"
+                                idPrefix: "communicationMethods",
+                                name: "communicationMethods",
+                                fieldset: {
+                                    legend: {
+                                        text: "Choose a form of communication",
+                                        isPageHeading: true,
+                                        classes: "govuk-fieldset__legend--m"
+                                    }
                                 },
                                 hint: {
                                     text: "Telling us this helps us understand how the Prison Service and the Probation Service work together on licences for people released with time served."
-                                }
-                            },
-                            items: [
-                                { value: "EMAIL", text: "Email", attributes: { "data-qa": "method-email" }, checked: "EMAIL" in communicationMethods },
-                                { value: "TEAMS", text: "Microsoft Teams", attributes: { "data-qa": "method-teams" }, checked: "TEAMS" in communicationMethods },
-                                { value: "PHONE", text: "Phone", attributes: { "data-qa": "method-phone" }, checked: "PHONE" in communicationMethods },
-
-                                {
-                                    value: "OTHER",
-                                    text: "Other",
-                                    attributes: { "data-qa": "method-other" },
-                                    checked: "OTHER" in communicationMethods,
-                                    conditional: {
-                                    html: govukInput({
-                                        id: "otherCommunicationDetail",
-                                        name: "otherCommunicationDetail",
-                                        label: {
-                                            text: "Enter form of communication",
-                                            classes: "govuk-!-font-weight-bold"
-                                        },
-                                        classes: "govuk-input",
-                                        attributes: { "data-qa": "other-detail" },
-                                        value: formResponses.otherCommunicationDetail,
-                                        errorMessage: validationErrors | findError('otherCommunicationDetail')
-                                    })
-                                }
-                                }
-                            ],
-                            errorMessage: validationErrors | findError('communicationMethods')
-                        }) }}
+                                },
+                                items: [
+                                    { value: "EMAIL", text: "Email", attributes: { "data-qa": "method-email" }, checked: "EMAIL" in communicationMethods },
+                                    { value: "TEAMS", text: "Microsoft Teams", attributes: { "data-qa": "method-teams" }, checked: "TEAMS" in communicationMethods },
+                                    { value: "PHONE", text: "Phone", attributes: { "data-qa": "method-phone" }, checked: "PHONE" in communicationMethods },
+                                    {
+                                        value: "OTHER",
+                                        text: "Other",
+                                        attributes: { "data-qa": "method-other" },
+                                        checked: "OTHER" in communicationMethods,
+                                        conditional: {
+                                        html: govukInput(
+                                            {
+                                                id: "otherCommunicationDetail",
+                                                name: "otherCommunicationDetail",
+                                                label: {
+                                                    text: "Enter form of communication",
+                                                    classes: "govuk-!-font-weight-bold"
+                                                },
+                                                classes: "govuk-input",
+                                                attributes: { "data-qa": "other-detail" },
+                                                value: formResponses.otherCommunicationDetail,
+                                                errorMessage: validationErrors | findError('otherCommunicationDetail')
+                                            })
+                                        }
+                                    }
+                                ],
+                                errorMessage: validationErrors | findError('communicationMethods')
+                            })
+                        }}
                     </div>
                     <div class="govuk-button-group">
                         {{ govukButton({
