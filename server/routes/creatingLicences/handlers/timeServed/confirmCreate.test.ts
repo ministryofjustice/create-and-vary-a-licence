@@ -6,17 +6,15 @@ import ConfirmCreateRoutes from './confirmCreate'
 import {
   LicenceSummary,
   PrisonerWithCvlFields,
-  TimeServedExternalRecordsResponse,
+  ExternalTimeServedRecordResponse,
 } from '../../../../@types/licenceApiClientTypes'
-import TimeServedExternalRecordService from '../../../../services/timeServedExternalRecordService'
+import TimeServedService from '../../../../services/timeServedService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const timeServedExternalRecordService = new TimeServedExternalRecordService(
-  null,
-) as jest.Mocked<TimeServedExternalRecordService>
+const timeServedExternalRecordService = new TimeServedService(null) as jest.Mocked<TimeServedService>
 
 jest.mock('../../../../services/licenceService')
-jest.mock('../../../../services/timeServedExternalRecordService')
+jest.mock('../../../../services/timeServedService')
 
 describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
   const handler = new ConfirmCreateRoutes(licenceService, timeServedExternalRecordService)
@@ -50,7 +48,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
     prisonCode: 'MDI',
     dateCreated: '2024-07-01T10:00:00Z',
     dateLastUpdated: '2024-07-01T10:00:00Z',
-  } as TimeServedExternalRecordsResponse
+  } as ExternalTimeServedRecordResponse
 
   beforeEach(() => {
     req = {

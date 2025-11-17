@@ -5,12 +5,12 @@ import LicenceService from '../../../../services/licenceService'
 import LicenceKind from '../../../../enumeration/LicenceKind'
 import { convertToTitleCase } from '../../../../utils/utils'
 import { ExternalTimeServedRecordRequest } from '../../../../@types/licenceApiClientTypes'
-import TimeServedExternalRecordService from '../../../../services/timeServedExternalRecordService'
+import TimeServedService from '../../../../services/timeServedService'
 
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly timeServedExternalRecordService: TimeServedExternalRecordService,
+    private readonly timeServedExternalRecordService: TimeServedService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

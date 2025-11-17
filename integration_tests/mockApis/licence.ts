@@ -682,6 +682,7 @@ export default {
       },
     })
   },
+
   stubGetCompletedLicence: (options: {
     statusCode: string
     typeCode: 'AP_PSS' | 'AP' | 'PSS'
@@ -2859,6 +2860,19 @@ export default {
           dateCreated: '2024-06-01T10:00:00',
           dateUpdated: '2024-06-02T11:00:00',
         },
+      },
+    })
+  },
+  stubAddTimeServedProbationConfirmContact: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licences-api/licences/time-served/.*/confirm/probation-contact`,
+      },
+      response: {
+        status: 204,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        body: '',
       },
     })
   },
