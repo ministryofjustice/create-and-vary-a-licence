@@ -120,11 +120,7 @@
 
 {% set peopleInPrisonResults = [] %}
 {% set peopleOnProbationResults = [] %}
-{%  if recallsEnabled %}
-    {%  set recallsMessage = "have not breached a post-sentence supervision order" %}
-{% else %}
-    {%  set recallsMessage = "have not been recalled or breached a post sentence supervision order" %}
-{% endif %}
+{%  set recallsMessage = "have not breached a post-sentence supervision order" %}
 
 {% for offender in peopleInPrison %}
     {% if offender.comName %}

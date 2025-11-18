@@ -6,7 +6,6 @@ import { CaCase, PrisonCaseAdminSearchResult } from '../../../@types/licenceApiC
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { CaViewCasesTab } from '../../../enumeration'
-import config from '../../../config'
 import { getFirstMaxValueKey } from '../../../utils/utils'
 
 export default class CaSearch {
@@ -75,7 +74,6 @@ export default class CaSearch {
     const allPrisons = await this.prisonerService.getPrisons()
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
 
-    const { recallsEnabled } = config
     return res.render('pages/search/caSearch/caSearch', {
       queryTerm,
       backLink,
@@ -112,7 +110,6 @@ export default class CaSearch {
       hasSelectedMultiplePrisonCaseloads,
       prisonsToDisplay,
       changeLocationHref,
-      recallsEnabled,
       isSearchPageView: true,
     })
   }
