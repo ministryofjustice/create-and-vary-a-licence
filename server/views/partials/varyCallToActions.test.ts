@@ -94,7 +94,7 @@ describe('View Partials - Vary Call To Actions', () => {
       expect($(`a[data-qa="${dataQa}"], button[data-qa="${dataQa}"]`).text().trim()).toBe(text)
     })
 
-    it('renders warning text and buttons for REVIEW with TIME_SERVED licence', () => {
+    it('renders warning text and buttons for REVIEW with a TIME_SERVED licence', () => {
       // Given
       const licence = createLicence({ id: 1, kind: 'TIME_SERVED' })
 
@@ -109,7 +109,7 @@ describe('View Partials - Vary Call To Actions', () => {
       expect($('a:contains("Return to case list")').attr('href')).toBe('/licence/vary/caseload')
     })
 
-    it('renders warning text and buttons for REVIEW with STANDARD licence', () => {
+    it('renders warning text and buttons for REVIEW with a STANDARD licence', () => {
       // Given
       const licence = createLicence({ id: 1, kind: 'STANDARD' })
 
