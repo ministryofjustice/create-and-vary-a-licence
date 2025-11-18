@@ -59,7 +59,8 @@ import type {
   LastMinuteHandoverCaseResponse,
   EligibilityAssessment,
   ExternalTimeServedRecordRequest,
-  TimeServedExternalRecordsResponse,
+  ExternalTimeServedRecordResponse,
+  TimeServedProbationConfirmContactRequest,
 } from '../@types/licenceApiClientTypes'
 import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
@@ -757,14 +758,25 @@ export default class LicenceApiClient extends RestClient {
     nomisId: string,
     bookingId: number,
     user: User,
-  ): Promise<TimeServedExternalRecordsResponse | null> {
+  ): Promise<ExternalTimeServedRecordResponse | null> {
     try {
       return (await this.get(
         { path: `/time-served/external-records/${nomisId}/${bookingId}` },
         { username: user?.username },
-      )) as TimeServedExternalRecordsResponse
+      )) as ExternalTimeServedRecordResponse
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
     }
+  }
+
+  async addTimeServedProbationConfirmContact(
+    licenceId: number,
+    request: TimeServedProbationConfirmContactRequest,
+    user: User,
+  ): Promise<void> {
+    return (await this.put(
+      { path: `/licences/time-served/${licenceId}/confirm/probation-contact`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
   }
 }

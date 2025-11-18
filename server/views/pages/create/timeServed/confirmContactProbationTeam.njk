@@ -1,0 +1,136 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "moj/components/interruption-card/macro.njk" import interruptionCard -%}
+{% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
+
+{% set pageTitle = applicationName + " - Create and vary a licence – You must contact the probation team" %}
+{% set pageId = "time-served-contact-probation-page" %}
+{% set backLinkHref = backLink %}
+{% set communicationMethods = formResponses.communicationMethods or [] %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <div class="moj-interruption-card">
+                        <div class="moj-interruption-card__content">
+                            <h1 class="govuk-heading-l moj-interruption-card__heading">
+                                You must contact the probation team
+                            </h1>
+
+                            <div class="govuk-body-l moj-interruption-card__body">
+                                <p>We cannot notify the probation team about this licence automatically.</p>
+                                <p>You must contact them to tell them:</p>
+                                <ul class="govuk-list govuk-list--bullet">
+                                    <li>that you have created a standard licence for this person</li>
+                                    <li>they must review this licence after release</li>
+                                    <li>the date and time of the initial appointment</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="govuk-!-margin-top-6">
+                <form method="POST">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                    <!-- Radios -->
+                    <div class="govuk-form-group">
+                        {{ govukRadios({
+                            idPrefix: "contactStatus",
+                            name: "contactStatus",
+                            fieldset: {
+                                legend: {
+                                    text: "Confirm if you have contacted the probation team",
+                                    classes: "govuk-fieldset__legend--m"
+                                }
+                            },
+                            items: [
+                                {
+                                    value: "ALREADY_CONTACTED",
+                                    text: "I have already contacted the probation team",
+                                    attributes: { "data-qa": "already-contacted" }
+                                },
+                                {
+                                    value: "WILL_CONTACT_SOON",
+                                    text: "I will contact the probation team soon",
+                                    attributes: { "data-qa": "will-contact-soon" }
+                                },
+                                {
+                                    value: "CANNOT_CONTACT",
+                                    text: "I cannot contact the probation team but will try again",
+                                    attributes: { "data-qa": "cannot-contact" }
+                                }
+                            ],
+                            errorMessage: validationErrors | findError('contactStatus'),
+                            value: formResponses.contactStatus
+                        }) }}
+                    </div>
+                    <div class="govuk-form-group">
+                        {{ govukCheckboxes({
+                                idPrefix: "communicationMethods",
+                                name: "communicationMethods",
+                                fieldset: {
+                                    legend: {
+                                        text: "Choose a form of communication",
+                                        isPageHeading: true,
+                                        classes: "govuk-fieldset__legend--m"
+                                    }
+                                },
+                                hint: {
+                                    text: "Telling us this helps us understand how the Prison Service and the Probation Service work together on licences for people released with time served."
+                                },
+                                items: [
+                                    { value: "EMAIL", text: "Email", attributes: { "data-qa": "method-email" }, checked: "EMAIL" in communicationMethods },
+                                    { value: "TEAMS", text: "Microsoft Teams", attributes: { "data-qa": "method-teams" }, checked: "TEAMS" in communicationMethods },
+                                    { value: "PHONE", text: "Phone", attributes: { "data-qa": "method-phone" }, checked: "PHONE" in communicationMethods },
+                                    {
+                                        value: "OTHER",
+                                        text: "Other",
+                                        attributes: { "data-qa": "method-other" },
+                                        checked: "OTHER" in communicationMethods,
+                                        conditional: {
+                                        html: govukInput(
+                                            {
+                                                id: "otherCommunicationDetail",
+                                                name: "otherCommunicationDetail",
+                                                label: {
+                                                    text: "Enter form of communication",
+                                                    classes: "govuk-!-font-weight-bold"
+                                                },
+                                                classes: "govuk-input",
+                                                attributes: { "data-qa": "other-detail" },
+                                                value: formResponses.otherCommunicationDetail,
+                                                errorMessage: validationErrors | findError('otherCommunicationDetail')
+                                            })
+                                        }
+                                    }
+                                ],
+                                errorMessage: validationErrors | findError('communicationMethods')
+                            })
+                        }}
+                    </div>
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            text: 'Continue',
+                            type: "submit",
+                            attributes: { 'data-qa': 'continue' },
+                            preventDoubleClick: true
+                        }) }}
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

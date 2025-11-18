@@ -7,8 +7,10 @@ import { Services } from '../../../../services'
 
 import ConfirmCreateRoutes from './confirmCreate'
 import CreateLicenceInNomisOrCvl from '../../types/createLicenceInNomisOrCvl'
+import ContactProbationTeamRoutes from './contactProbationTeamRoutes'
+import { CreateTimeServedProbationConfirmContact } from '../../types/createTimeServedProbationConfirmContact'
 
-export default function Index({ licenceService, conditionService, timeServedExternalRecordService }: Services): Router {
+export default function Index({ licenceService, conditionService, timeServedService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/time-served${path}`
@@ -31,7 +33,7 @@ export default function Index({ licenceService, conditionService, timeServedExte
       handler,
     )
   {
-    const controller = new ConfirmCreateRoutes(licenceService, timeServedExternalRecordService)
+    const controller = new ConfirmCreateRoutes(licenceService, timeServedService)
 
     get('/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service', controller.GET)
     post(
@@ -39,6 +41,11 @@ export default function Index({ licenceService, conditionService, timeServedExte
       controller.POST,
       CreateLicenceInNomisOrCvl,
     )
+  }
+  {
+    const controller = new ContactProbationTeamRoutes(timeServedService)
+    get('/create/id/:licenceId/contact-probation-team', controller.GET)
+    post('/create/id/:licenceId/contact-probation-team', controller.POST, CreateTimeServedProbationConfirmContact)
   }
   return router
 }

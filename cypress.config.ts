@@ -137,6 +137,7 @@ export default defineConfig({
         stubGetVaryApproverSearchResults: licence.stubGetVaryApproverSearchResults,
         stubUpdateTimeServedExternalRecord: licence.stubUpdateTimeServedExternalRecord,
         stubGetTimeServedExternalRecordReasonSet: licence.stubGetTimeServedExternalRecordReasonSet,
+        stubAddTimeServedProbationConfirmContact: licence.stubAddTimeServedProbationConfirmContact,
         stubGetTimeServedExternalRecordReasonNotSet: licence.stubGetTimeServedExternalRecordReasonNotSet,
 
         stubGetProbationer: delius.stubGetProbationer,
