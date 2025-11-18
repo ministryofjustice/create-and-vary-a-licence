@@ -10,6 +10,7 @@
 {% from "partials/hardStop/releasesInTwoWorkingDaysTab.njk" import releasesInTwoWorkingDaysTab %}
 {% from "partials/hardStop/futureReleasesTab.njk" import futureReleasesTab %}
 {% from "partials/hardStop/attentionNeededTab.njk" import attentionNeededTab, attentionNeededTabHeadingWithCount %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
 
 {% set pageTitle = applicationName + " - view an approved licence" %}
@@ -106,6 +107,14 @@
 {% endif %}
 
 {% block content %}
+    {% if hasSelectedNomisForTimeServedLicenceCreation %}
+        {{ mojAlert({
+            variant: "success",
+            title: "Confirmation",
+            dismissible: false,
+            html: 'Confirmed. Go to NOMIS to create this licence or change your selection by choosing this person from the case list'
+        }) }}
+    {% endif %} 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-xl">Select a person to view or print their licences and supervision orders</h1>

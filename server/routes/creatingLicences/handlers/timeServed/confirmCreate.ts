@@ -72,6 +72,7 @@ export default class ConfirmCreateRoutes {
         } as ExternalTimeServedRecordRequest,
         user,
       )
+      req.flash('hasSelectedNomisForTimeServedLicenceCreation', 'true')
     }
     return res.redirect(backLink)
   }

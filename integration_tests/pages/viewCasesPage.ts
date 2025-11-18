@@ -76,4 +76,8 @@ export default class ViewCasesPage extends Page {
   checkIfFutureReleasesTabIsActive = () => {
     return cy.get('#tab_future-releases').should('have.attr', 'aria-selected', 'true')
   }
+
+  getAlertMessage = () => {
+    return cy.get('.moj-alert--success .moj-alert__content')
+  }
 }

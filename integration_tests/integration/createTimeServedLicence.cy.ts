@@ -57,6 +57,12 @@ context('Create a Time Served licence', () => {
     confirmCreatePage.selectRadio('No')
     confirmCreatePage.enterNoReasonText('This is a reason for using NOMIS')
     viewCasesList = confirmCreatePage.clickContinueButtonToReturn()
+    viewCasesList
+      .getAlertMessage()
+      .should(
+        'contain.text',
+        'Confirmed. Go to NOMIS to create this licence or change your selection by choosing this person from the case list',
+      )
     viewCasesList.getTableRows().should(rows => {
       expect(rows).to.have.length(1)
     })
@@ -74,11 +80,23 @@ context('Create a Time Served licence', () => {
     confirmCreatePage.selectRadio('No')
     confirmCreatePage.enterNoReasonText('This is a reason for using NOMIS')
     confirmCreatePage.clickContinueButtonToReturn()
+    viewCasesList
+      .getAlertMessage()
+      .should(
+        'contain.text',
+        'Confirmed. Go to NOMIS to create this licence or change your selection by choosing this person from the case list',
+      )
     confirmCreatePage = viewCasesList.clickATimeServedLicence()
     confirmCreatePage.getRadioCreateOnNomisSelection().should('have.value', 'No')
     confirmCreatePage.getNoReasonText().should('have.value', 'This is a reason for using NOMIS')
     confirmCreatePage.enterNoReasonText('This is an updated reason for using NOMIS')
     viewCasesList = confirmCreatePage.clickContinueButtonToReturn()
+    viewCasesList
+      .getAlertMessage()
+      .should(
+        'contain.text',
+        'Confirmed. Go to NOMIS to create this licence or change your selection by choosing this person from the case list',
+      )
     viewCasesList.getTableRows().should(rows => {
       expect(rows).to.have.length(1)
     })
