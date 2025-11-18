@@ -58,6 +58,32 @@ describe('Nunjucks Filters', () => {
       expect($('a:nth-child(2)').text()).toBe('message2')
       expect($('a:nth-child(2)').attr('href')).toBe('#field2')
     })
+
+    it('should use message for error message if summaryMessage not defined', () => {
+      const template = `
+        {% set errorSummaryList = errors | errorSummaryList %}
+        {% for error in errorSummaryList %}
+            <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
+        {% endfor %}
+      `
+      const $ = renderTemplate(template, {
+        errors: [
+          {
+            field: 'field1',
+            message: 'message1',
+          },
+          {
+            field: 'field2',
+            message: 'message2',
+          },
+        ],
+      })
+
+      expect($('a:nth-child(1)').text()).toBe('message1')
+      expect($('a:nth-child(1)').attr('href')).toBe('#field1')
+      expect($('a:nth-child(2)').text()).toBe('message2')
+      expect($('a:nth-child(2)').attr('href')).toBe('#field2')
+    })
   })
 
   describe('findError', () => {
