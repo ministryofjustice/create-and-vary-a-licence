@@ -104,7 +104,7 @@ context('Time Served – Contact Probation Team', () => {
     cy.url().should('include', '/licence/hard-stop/id/1/confirmation')
   })
 
-  it('submits successfully with OTHER + detail only', () => {
+  it('submits successfully with OTHER and detail only', () => {
     // Given
     cy.task('stubAddTimeServedProbationConfirmContact')
     const page = visitPage(2)
