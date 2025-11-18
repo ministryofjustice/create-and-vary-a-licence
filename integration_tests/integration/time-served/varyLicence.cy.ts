@@ -23,6 +23,6 @@ context('Vary a licence time served', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const varyCasesPage = indexPage.clickVaryALicence()
     const timelinePage = varyCasesPage.selectCase()
-    timelinePage.checkThatPageHaveTimeServedMessage()
+    timelinePage.checkThatPageHasTimeServedReviewNeededMessage()
   })
 })
