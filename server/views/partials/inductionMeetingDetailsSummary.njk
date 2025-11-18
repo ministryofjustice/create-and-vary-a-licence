@@ -33,7 +33,7 @@
                             href: baseURL + "/initial-meeting-name" + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "name",
-                            attributes: { "data-qa": "person-change-link" }
+                            attributes: { "id": "appointmentPersonType", "data-qa": "person-change-link" }
                         }
                     ]
                 } if isEditable
@@ -48,7 +48,7 @@
                             href: baseURL + "/" + addressPath + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "address",
-                            attributes: { "data-qa": "address-change-link" }
+                            attributes: { "id": "appointmentAddress", "data-qa": "address-change-link" }
                         }
                     ]
                 } if isEditable
@@ -93,7 +93,7 @@
                             href: baseURL + "/initial-meeting-time" + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "date",
-                            attributes: { "data-qa": "date-change-link" }
+                            attributes: { "id": "appointmentTimeType", "data-qa": "date-change-link" }
                         }
                     ]
                 } if isEditable
