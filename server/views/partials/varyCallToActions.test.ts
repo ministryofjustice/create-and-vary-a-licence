@@ -5,7 +5,7 @@ describe('View Partials - Vary Call To Actions', () => {
     it('renders "Vary licence" button and heading when shouldShowVaryButton=true and showTitle=true', () => {
       // Given
       const callToActions = { shouldShowVaryButton: true }
-      const licence = licenceFactory({ id: 123 })
+      const licence = createLicence({ id: 123 })
       const showTitle = true
 
       // When
@@ -21,7 +21,7 @@ describe('View Partials - Vary Call To Actions', () => {
     it('renders button without heading when showTitle=false', () => {
       // Given
       const callToActions = { shouldShowVaryButton: true }
-      const licence = licenceFactory({ id: 123 })
+      const licence = createLicence({ id: 123 })
       const showTitle = false
 
       // When
@@ -35,7 +35,7 @@ describe('View Partials - Vary Call To Actions', () => {
     it('renders nothing when shouldShowVaryButton=false', () => {
       // Given
       const callToActions = { shouldShowVaryButton: false }
-      const licence = licenceFactory({ id: 123 })
+      const licence = createLicence({ id: 123 })
       const showTitle = true
 
       // When
@@ -51,7 +51,7 @@ describe('View Partials - Vary Call To Actions', () => {
     it('renders Edit and Discard buttons when shouldShowEditAndDiscardButton=true', () => {
       // Given
       const callToActions = { shouldShowEditAndDiscardButton: true }
-      const licence = licenceFactory({ id: 456 })
+      const licence = createLicence({ id: 456 })
 
       // When
       const $ = renderSubmittedCta({ callToActions, licence, csrfToken: 'token' })
@@ -64,7 +64,7 @@ describe('View Partials - Vary Call To Actions', () => {
     it('renders nothing when shouldShowEditAndDiscardButton=false', () => {
       // Given
       const callToActions = { shouldShowEditAndDiscardButton: false }
-      const licence = licenceFactory({ id: 456 })
+      const licence = createLicence({ id: 456 })
 
       // When
       const $ = renderSubmittedCta({ callToActions, licence, csrfToken: 'token' })
@@ -85,7 +85,7 @@ describe('View Partials - Vary Call To Actions', () => {
 
     it.each(actionCases)('renders primary button for %s action', (action, text, dataQa) => {
       // Given
-      const licence = licenceFactory()
+      const licence = createLicence()
 
       // When
       const $ = renderTimelineCta({ callToAction: action, licence, csrfToken: 'token' })
@@ -96,7 +96,7 @@ describe('View Partials - Vary Call To Actions', () => {
 
     it('renders warning text and buttons for REVIEW with TIME_SERVED licence', () => {
       // Given
-      const licence = licenceFactory({ id: 1, kind: 'TIME_SERVED' })
+      const licence = createLicence({ id: 1, kind: 'TIME_SERVED' })
 
       // When
       const $ = renderTimelineCta({ callToAction: 'REVIEW', licence, csrfToken: 'token' })
@@ -111,7 +111,7 @@ describe('View Partials - Vary Call To Actions', () => {
 
     it('renders warning text and buttons for REVIEW with STANDARD licence', () => {
       // Given
-      const licence = licenceFactory({ id: 1, kind: 'STANDARD' })
+      const licence = createLicence({ id: 1, kind: 'STANDARD' })
 
       // When
       const $ = renderTimelineCta({ callToAction: 'REVIEW', licence, csrfToken: 'token' })
@@ -135,7 +135,7 @@ describe('View Partials - Vary Call To Actions', () => {
     '{% from "partials/varyCallToActions.njk" import timelineCta %}{{ timelineCta(callToAction, licence, csrfToken)}}',
   )
 
-  const licenceFactory = (overrides = {}) => ({
+  const createLicence = (overrides = {}) => ({
     id: 1,
     kind: 'STANDARD',
     ...overrides,
