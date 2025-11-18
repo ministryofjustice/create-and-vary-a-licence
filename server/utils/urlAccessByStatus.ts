@@ -35,6 +35,7 @@ const allowedPaths = [
       '/licence/create/id/(\\d)*/no-address-found.*',
       '/licence/create/id/(\\d)*/select-address.*',
       '/licence/create/id/(\\d)*/manual-address-entry.*',
+      '/licence/time-served/create/id/(\\d)*/contact-probation-team',
     ],
     disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
