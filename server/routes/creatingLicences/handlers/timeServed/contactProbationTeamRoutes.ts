@@ -35,6 +35,7 @@ export default class ContactProbationTeamRoutes {
     )
 
     logger.info('ContactProbationTeamRoutes POST completed')
+    // TODO this may need updating at a later stage but this ticket is not yet written
     return res.redirect(`/licence/hard-stop/id/${licenceId}/confirmation`)
   }
 }
