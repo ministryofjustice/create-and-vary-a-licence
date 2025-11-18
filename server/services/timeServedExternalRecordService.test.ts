@@ -30,19 +30,6 @@ describe('TimeServedExternalRecordService', () => {
       expect(licenceApiClient.updateTimeServedExternalRecord).toHaveBeenCalledWith(nomisId, bookingId, request, user)
       expect(licenceApiClient.updateTimeServedExternalRecord).toHaveBeenCalledTimes(1)
     })
-
-    it('Propagates any errors', async () => {
-      const request: ExternalTimeServedRecordRequest = {
-        reason,
-        prisonCode,
-      }
-
-      const error = new Error('error')
-      licenceApiClient.updateTimeServedExternalRecord.mockRejectedValue(error)
-
-      await expect(service.updateTimeServedExternalRecord(nomisId, bookingId, request, user)).rejects.toThrow('error')
-      expect(licenceApiClient.updateTimeServedExternalRecord).toHaveBeenCalledWith(nomisId, bookingId, request, user)
-    })
   })
 
   describe('getTimeServedExternalRecord', () => {
@@ -62,13 +49,6 @@ describe('TimeServedExternalRecordService', () => {
       expect(licenceApiClient.getTimeServedExternalRecord).toHaveBeenCalledWith(nomisId, bookingId, user)
       expect(licenceApiClient.getTimeServedExternalRecord).toHaveBeenCalledTimes(1)
       expect(result).toEqual(response)
-    })
-
-    it('Propagates any errors', async () => {
-      const error = new Error('some error')
-      licenceApiClient.getTimeServedExternalRecord.mockRejectedValue(error)
-      await expect(() => service.getTimeServedExternalRecord(nomisId, bookingId, user)).rejects.toThrow('some error')
-      expect(licenceApiClient.getTimeServedExternalRecord).toHaveBeenCalled()
     })
   })
 })

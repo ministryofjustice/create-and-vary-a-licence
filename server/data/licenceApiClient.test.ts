@@ -924,7 +924,7 @@ describe('Licence API client tests', () => {
       await licenceApiClient.getTimeServedExternalRecord(nomisId, bookingId, user)
 
       expect(get).toHaveBeenCalledWith(
-        { path: `/time-served/external-records/${nomisId}/${bookingId}` },
+        { path: `/time-served/external-records/${nomisId}/${bookingId}`, return404: true },
         { username: 'joebloggs' },
       )
     })
