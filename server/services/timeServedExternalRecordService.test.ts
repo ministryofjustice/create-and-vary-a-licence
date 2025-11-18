@@ -1,13 +1,13 @@
 import { User } from '../@types/CvlUserDetails'
-import TimeServedExternalRecordService from './timeServedExternalRecordService'
+import TimeServedService from './timeServedService'
 import LicenceApiClient from '../data/licenceApiClient'
-import { ExternalTimeServedRecordRequest, TimeServedExternalRecordsResponse } from '../@types/licenceApiClientTypes'
+import { ExternalTimeServedRecordRequest, ExternalTimeServedRecordResponse } from '../@types/licenceApiClientTypes'
 
 jest.mock('../data/licenceApiClient')
 
 describe('TimeServedExternalRecordService', () => {
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
-  const service = new TimeServedExternalRecordService(licenceApiClient)
+  const service = new TimeServedService(licenceApiClient)
 
   const user = { username: 'joebloggs' } as User
   const nomisId = 'A1234BC'
@@ -34,7 +34,7 @@ describe('TimeServedExternalRecordService', () => {
 
   describe('getTimeServedExternalRecord', () => {
     it('should call licenceApiClient with correct parameters', async () => {
-      const response: TimeServedExternalRecordsResponse = {
+      const response: ExternalTimeServedRecordResponse = {
         nomsId: nomisId,
         bookingId,
         reason,

@@ -23,6 +23,7 @@ import {
   PrisonUserSearchRequest,
   ReferVariationRequest,
   StatusUpdateRequest,
+  TimeServedProbationConfirmContactRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
@@ -924,6 +925,31 @@ describe('Licence API client tests', () => {
 
       expect(get).toHaveBeenCalledWith(
         { path: `/time-served/external-records/${nomisId}/${bookingId}`, return404: true },
+        { username: 'joebloggs' },
+      )
+    })
+  })
+
+  describe('Time Served probation confirm contact:', () => {
+    const user = { username: 'joebloggs' } as User
+    const licenceId = 123
+
+    it('should add probation confirm contact details for time served', async () => {
+      // Given
+      const request = {
+        contactStatus: 'WILL_CONTACT_SOON',
+        communicationMethods: ['EMAIL'],
+      } as TimeServedProbationConfirmContactRequest
+
+      // When
+      await licenceApiClient.addTimeServedProbationConfirmContact(licenceId, request, user)
+
+      // Then
+      expect(put).toHaveBeenCalledWith(
+        {
+          path: `/licences/time-served/${licenceId}/confirm/probation-contact`,
+          data: request,
+        },
         { username: 'joebloggs' },
       )
     })

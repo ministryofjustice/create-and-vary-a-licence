@@ -1,8 +1,12 @@
 import { User } from '../@types/CvlUserDetails'
-import { ExternalTimeServedRecordRequest, TimeServedExternalRecordsResponse } from '../@types/licenceApiClientTypes'
+import {
+  ExternalTimeServedRecordRequest,
+  ExternalTimeServedRecordResponse,
+  type TimeServedProbationConfirmContactRequest,
+} from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 
-export default class TimeServedExternalRecordService {
+export default class TimeServedService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
   async updateTimeServedExternalRecord(
@@ -18,7 +22,15 @@ export default class TimeServedExternalRecordService {
     nomisId: string,
     bookingId: number,
     user: User,
-  ): Promise<TimeServedExternalRecordsResponse | null> {
+  ): Promise<ExternalTimeServedRecordResponse | null> {
     return this.licenceApiClient.getTimeServedExternalRecord(nomisId, bookingId, user)
+  }
+
+  async addTimeServedProbationConfirmContact(
+    licenceId: number,
+    request: TimeServedProbationConfirmContactRequest,
+    user: User,
+  ): Promise<void> {
+    await this.licenceApiClient.addTimeServedProbationConfirmContact(licenceId, request, user)
   }
 }
