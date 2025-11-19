@@ -693,12 +693,13 @@ export default {
     isInHardStopPeriod: boolean
     homeDetentionCurfewActualDate: string | null
     homeDetentionCurfewEndDate: string | null
-    kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
+    kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'TIME_SERVED'
     conditions: AdditionalCondition[]
     electronicMonitoringProvider?: ElectronicMonitoringProvider
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
     appointmentTelephoneNumber: string | null
     appointmentAlternativeTelephoneNumber: string | null
+    isReviewNeeded?: boolean | false
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -727,6 +728,7 @@ export default {
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate,
           homeDetentionCurfewEndDate: options.homeDetentionCurfewEndDate,
           additionalLicenceConditions: options.conditions || licenceConditions,
+          isReviewNeeded: options.isReviewNeeded,
           bespokeConditions: [
             {
               id: 133,
