@@ -1974,7 +1974,34 @@ export default {
     })
   },
 
-  stubGetApprovalCaseload: (): SuperAgentRequest => {
+  stubGetApprovalCaseload: (
+    overrides: Partial<
+      typeof licencePlaceholder & {
+        licenceId?: number
+        submittedByFullName?: string
+        urgentApproval?: boolean
+        approvedBy?: string | null
+        approvedOn?: string | null
+        probationPractitioner?: typeof probationPractitionerPlaceholder
+        statusCode?: string
+        kind?: string
+      }
+    > = {},
+  ): SuperAgentRequest => {
+    const defaultResponse = {
+      licenceId: licencePlaceholder.id,
+      name: `${licencePlaceholder.forename} ${licencePlaceholder.surname}`,
+      prisonerNumber: licencePlaceholder.nomsId,
+      submittedByFullName: 'Test Submitter',
+      releaseDate: licencePlaceholder.actualReleaseDate,
+      urgentApproval: false,
+      approvedBy: null,
+      approvedOn: null,
+      probationPractitioner: probationPractitionerPlaceholder,
+      statusCode: licencePlaceholder.statusCode,
+      kind: licencePlaceholder.kind,
+    }
+
     return stubFor({
       request: {
         method: 'POST',
@@ -1985,15 +2012,8 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            licenceId: licencePlaceholder.id,
-            name: `${licencePlaceholder.forename} ${licencePlaceholder.surname}`,
-            prisonerNumber: licencePlaceholder.nomsId,
-            submittedByFullName: 'Test Submitter',
-            releaseDate: licencePlaceholder.actualReleaseDate,
-            urgentApproval: false,
-            approvedBy: null,
-            approvedOn: null,
-            probationPractitioner: probationPractitionerPlaceholder,
+            ...defaultResponse,
+            ...overrides,
           },
         ],
       },
