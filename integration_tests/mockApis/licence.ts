@@ -54,6 +54,7 @@ const licencePlaceholder: Licence = {
   topupSupervisionExpiryDate: '26/06/2060',
   hardStopDate: '29/04/2021',
   hardStopWarningDate: '29/04/2021',
+  responsibleComFullName: 'John Smith',
   comUsername: 'jsmith',
   comStaffId: 12345,
   comEmail: 'john.smith@nps.gov.uk',
@@ -358,6 +359,7 @@ export default {
   stubGetLicence: (options: {
     licenceKind?: LicenceKind
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+    responsibleComFullName?: string
     isEligibleForEarlyRelease: boolean
   }): SuperAgentRequest => {
     return stubFor({
@@ -372,6 +374,7 @@ export default {
           ...licencePlaceholder,
           licenceKind: options.licenceKind || LicenceKind.CRD,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
+          responsibleComFullName: options.responsibleComFullName || null,
           isEligibleForEarlyRelease: options.isEligibleForEarlyRelease || false,
         },
       },
