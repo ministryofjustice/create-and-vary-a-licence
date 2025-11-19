@@ -1,4 +1,5 @@
 import IndexPage from '../pages'
+import AppointmentPlacePage from '../pages/appointmentPlace'
 import Page from '../pages/page'
 
 context('Create a Time Served licence', () => {
@@ -17,6 +18,7 @@ context('Create a Time Served licence', () => {
         },
       ],
     })
+    cy.task('stubGetStaffPreferredAddresses')
     cy.task('stubGetCaseloadItemInHardStop')
     cy.task('stubFeComponents')
     cy.task('stubPostLicence')
@@ -34,18 +36,30 @@ context('Create a Time Served licence', () => {
   })
 
   it('should click through the create a licence journey', () => {
+    cy.task('stubGetLicence', {})
     const indexPage = Page.verifyOnPage(IndexPage)
-    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
     const releaseDateFlag = viewCasesList.getReleaseDateFlag()
     releaseDateFlag.should('contain', 'Time-served release')
     const confirmCreatePage = viewCasesList.clickATimeServedLicence()
     confirmCreatePage.selectRadio('Yes')
-    viewCasesList = confirmCreatePage.clickContinueButtonToReturn()
-    viewCasesList.getTableRows().should(rows => {
-      expect(rows).to.have.length(1)
-    })
-    viewCasesList.getRow(0).contains('Time-served release')
-    viewCasesList.getRow(0).contains('In progress')
+    const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
+    appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+    Page.verifyOnPage(AppointmentPlacePage)
+  })
+
+  it('should show allocated com option when present on initial appointment page', () => {
+    cy.task('stubGetLicence', { responsibleComFullName: 'John Smith' })
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const releaseDateFlag = viewCasesList.getReleaseDateFlag()
+    releaseDateFlag.should('contain', 'Time-served release')
+    const confirmCreatePage = viewCasesList.clickATimeServedLicence()
+    confirmCreatePage.selectRadio('Yes')
+    const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2).clickContinue()
+    Page.verifyOnPage(AppointmentPlacePage)
   })
 
   it('should record a reason for using NOMIS to create a time served licence', () => {

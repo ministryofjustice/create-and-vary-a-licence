@@ -141,7 +141,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
           username: 'joebloggs',
         },
       )
-      expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/id/1/initial-meeting-name')
       expect(timeServedExternalRecordService.updateTimeServedExternalRecord).not.toHaveBeenCalled()
     })
 

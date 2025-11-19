@@ -1,5 +1,6 @@
 import Page from './page'
 import ViewCasesPage from './viewCasesPage'
+import AppointmentPersonPage from './appointmentPerson'
 
 export default class TimeServedConfirmCreatePage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -28,6 +29,11 @@ export default class TimeServedConfirmCreatePage extends Page {
     }
     cy.get(`input[value="${value}"]`).click()
     return this
+  }
+
+  clickContinue = (): AppointmentPersonPage => {
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(AppointmentPersonPage)
   }
 
   clickContinueButtonToReturn = (): ViewCasesPage => {

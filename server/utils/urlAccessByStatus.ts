@@ -13,6 +13,7 @@ const allowedPaths = [
       '/licence/hard-stop/id/(\\d)*/check-your-answers.*',
       '/licence/hard-stop/create/.*',
       '/licence/hard-stop/edit/.*',
+      '/licence/time-served/create/.*',
       '/licence/create/.*',
       '/licence/view/.*',
     ],
