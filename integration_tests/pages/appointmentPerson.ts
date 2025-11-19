@@ -11,6 +11,11 @@ export default class AppointmentPersonPage extends Page {
     super('appointment-person-page')
   }
 
+  selectAppointmentPersonType = (type: number): AppointmentPersonPage => {
+    cy.get(`#appointmentPersonType-${type}`).click()
+    return this
+  }
+
   enterPerson = (text: string): AppointmentPersonPage => {
     cy.get(this.personTextInputId).type(text)
     return this

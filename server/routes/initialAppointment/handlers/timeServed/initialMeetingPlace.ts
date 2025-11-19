@@ -15,8 +15,6 @@ export default class InitialMeetingPlaceRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
-    const { licenceId } = req.params
-    const basePath = `/licence/time-served/create/id/${licenceId}`
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
     let preferredAddresses: AddressResponse[] = []
@@ -27,7 +25,7 @@ export default class InitialMeetingPlaceRoutes {
       preferredAddresses,
       formAddress,
       continueOrSaveLabel: 'Continue',
-      manualAddressEntryUrl: `${basePath}/manual-address-entry`,
+      manualAddressEntryUrl: '/licence/view/cases',
     })
   }
 }

@@ -71,7 +71,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           preferredAddresses: [],
           formAddress,
           continueOrSaveLabel: 'Continue',
-          manualAddressEntryUrl: '/licence/time-served/create/id/1/manual-address-entry',
+          manualAddressEntryUrl: '/licence/view/cases',
         })
       })
     })
