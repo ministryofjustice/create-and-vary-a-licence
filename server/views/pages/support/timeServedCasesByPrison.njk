@@ -50,7 +50,14 @@
             classes: "max-width max-width-200",
             text: offender.isTimeServedCaseByNonCrdsRule
         },
-         {
+        {
+            attributes: {
+                id: 'time-served-ignore-ard-' + loop.index
+            },
+            classes: "max-width max-width-200",
+            text: offender.isTimeServedCaseByIgnoreArdRule
+        },
+        {
             attributes: {
                 id: 'ssd-' + loop.index,
                 "data-sort-value": offender.sentenceStartDate | cvlDateToDateShort | dateToUnix
@@ -174,7 +181,7 @@
     </div>
     {% set detail %}
       <div class="govuk-body">
-        <p>There are 3 different ways of detecting whether a case is time served:
+        <p>There are 4 different ways of detecting whether a case is time served:
             <ul>
               <li class="govuk-!-padding-bottom-3">CRDS prisons:
                 <ul> 
@@ -198,7 +205,12 @@
                     <li><code>confirmedReleaseDate</code> is today AND</li>
                     <li> (<code>conditionalReleaseDateOverrideDate</code> (if present) OR <code>conditionalReleaseDate</code> is today)</li>
                 </ul>   
-              </li>      
+              </li>
+              <li class="govuk-!-padding-bottom-3">Ignoring ARD: 
+                <ul> 
+                    <li><code>sentenceStartDate</code> is the same as (<code>conditionalReleaseDateOverrideDate</code> (if present) OR <code>conditionalReleaseDate</code></li>
+                </ul>   
+              </li>        
             </ul>
         <p>
       </div>
@@ -228,6 +240,9 @@
                 },
                 {
                     text: "Non-CRDS Rule"
+                },
+                {
+                    text: "Ignore ARD Rule"
                 },
                 {
                     text: "Sentence Start Date",
