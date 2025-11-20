@@ -1,6 +1,7 @@
 import IndexPage from '../pages'
 import AppointmentPlacePage from '../pages/appointmentPlace'
 import Page from '../pages/page'
+import LicenceKind from '../../server/enumeration/LicenceKind'
 
 context('Create a Time Served licence', () => {
   beforeEach(() => {
@@ -36,7 +37,7 @@ context('Create a Time Served licence', () => {
   })
 
   it('should click through the create a licence journey', () => {
-    cy.task('stubGetLicence', {})
+    cy.task('stubGetLicence', { licenceKind: LicenceKind.TIME_SERVED })
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     const releaseDateFlag = viewCasesList.getReleaseDateFlag()
@@ -50,7 +51,7 @@ context('Create a Time Served licence', () => {
   })
 
   it('should show allocated com option when present on initial appointment page', () => {
-    cy.task('stubGetLicence', { responsibleComFullName: 'John Smith' })
+    cy.task('stubGetLicence', { licenceKind: LicenceKind.TIME_SERVED, responsibleComFullName: 'John Smith' })
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     const releaseDateFlag = viewCasesList.getReleaseDateFlag()
