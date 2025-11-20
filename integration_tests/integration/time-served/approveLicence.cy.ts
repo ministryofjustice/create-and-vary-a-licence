@@ -7,12 +7,6 @@ context('Approve a licence - time served', () => {
     cy.task('stubPrisonSignIn')
     cy.task('stubGetPrisonUserDetails')
     cy.task('stubGetPrisons')
-    cy.task('stubGetCompletedLicence', {
-      statusCode: 'SUBMITTED',
-      kind: 'TIME_SERVED',
-      isReviewNeeded: true,
-      typeCode: 'AP',
-    })
     cy.task('stubGetPrisonUserCaseloads', {
       details: [
         {
@@ -24,11 +18,9 @@ context('Approve a licence - time served', () => {
         },
       ],
     })
-    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'IN_PROGRESS' })
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubUpdateLicenceStatus', 1)
+    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED' })
     cy.task('stubFeComponents')
+    cy.signIn()
   })
 
   afterEach(() => {
@@ -36,8 +28,15 @@ context('Approve a licence - time served', () => {
   })
 
   it('when time served licence then correct approval messages should be shown', () => {
-    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED' })
-    cy.signIn()
+    cy.task('stubRecordAuditEvent')
+    cy.task('stubGetStaffDetails')
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'SUBMITTED',
+      kind: 'TIME_SERVED',
+      isReviewNeeded: true,
+      typeCode: 'AP',
+    })
+    cy.task('stubUpdateLicenceStatus', 1)
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
@@ -47,9 +46,27 @@ context('Approve a licence - time served', () => {
     confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()
   })
 
+  it('when time served licence and no probation practitioner then com details say not allocated', () => {
+    cy.task('stubRecordAuditEvent')
+    cy.task('stubGetStaffDetails')
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'SUBMITTED',
+      kind: 'TIME_SERVED',
+      isReviewNeeded: true,
+      typeCode: 'AP',
+      comUsername: null,
+    })
+    cy.task('stubUpdateLicenceStatus', 1)
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage.clickProbationPractitionerDetails()
+    approvalViewPage.checkProbationPractitionerDetailsNotAllocated()
+  })
+
   it('when time served approval case has not been allocated a probationPractitioner then show "Not allocated yet"', () => {
     cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', probationPractitioner: null })
-    cy.signIn()
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
@@ -59,7 +76,6 @@ context('Approve a licence - time served', () => {
   it('when time served recently approved cases page has not been allocated a probationPractitioner then show "Not allocated yet"', () => {
     cy.task('stubGetApprovalCaseload', {})
     cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: null, kind: 'TIME_SERVED' })
-    cy.signIn()
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()

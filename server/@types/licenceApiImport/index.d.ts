@@ -4531,6 +4531,11 @@ export interface components {
        */
       crn?: string
       /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string
+      /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
@@ -4554,11 +4559,6 @@ export interface components {
        * @example 06/05/2023
        */
       topupSupervisionStartDate?: string
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string
       /**
        * @description The middle names of the person on licence
        * @example John Peter

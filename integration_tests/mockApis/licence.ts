@@ -700,6 +700,7 @@ export default {
     appointmentTelephoneNumber: string | null
     appointmentAlternativeTelephoneNumber: string | null
     isReviewNeeded?: boolean | false
+    comUsername?: string
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -711,6 +712,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
+          comUsername: options.comUsername === null ? null : licencePlaceholder.comUsername,
           kind: options.kind,
           statusCode: options.statusCode, // Overrides licencePlaceHolder status
           typeCode: options.typeCode, // Overrides licence status code
@@ -1980,7 +1982,6 @@ export default {
   stubGetApprovalCaseload: (
     overrides: Partial<
       typeof licencePlaceholder & {
-        nomisId?: string
         licenceId?: number
         submittedByFullName?: string
         urgentApproval?: boolean
@@ -1993,7 +1994,6 @@ export default {
     > = {},
   ): SuperAgentRequest => {
     const defaultResponse = {
-      nomisId: licencePlaceholder.nomsId,
       licenceId: licencePlaceholder.id,
       name: `${licencePlaceholder.forename} ${licencePlaceholder.surname}`,
       prisonerNumber: licencePlaceholder.nomsId,

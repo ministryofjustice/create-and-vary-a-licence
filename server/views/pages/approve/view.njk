@@ -81,14 +81,14 @@
                 {% endif %}
 
 
-                {% if licence.kind === 'HARD_STOP' %}
+                {% if licence.kind == 'HARD_STOP' or licence.kind == 'TIME_SERVED' %}
                     {% set items = (items.push(
                         {
                             heading: {
                                 text: "Licence conditions"
                             },
                             content: {
-                                    html: approverImmediateReleaseConditions({ submittedByFullName: licence.submittedByFullName, prison: licence.prisonDescription, typeCode: licence.typeCode })       
+                                    html: approverImmediateReleaseConditions(licence)       
                             },
                             expanded: true
                         }
@@ -157,6 +157,13 @@
                 </a>
                 <br><br>
             </p>
+            {% set practitionerHtml %}
+                {% if staffDetails %}
+                    {{ ProbationPractitionerDetails(staffDetails) }}
+                {% else %}
+                    <p>Not allocated yet</p>
+                {% endif %}
+            {% endset %}
             {{ govukAccordion({
                 id: "view-more-information",
                 rememberExpanded: false,
@@ -173,7 +180,7 @@
                             text: "Community probation practitioner details"
                         },
                         content: {
-                            html: ProbationPractitionerDetails(staffDetails)
+                            html: practitionerHtml
                         }
                     }
                 ]
