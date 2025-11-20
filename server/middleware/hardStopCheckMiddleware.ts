@@ -6,7 +6,7 @@ import logger from '../../logger'
 export default function hardStopCheckMiddleware(userType: UserType): RequestHandler {
   return async (req, res, next) => {
     const { licence } = res.locals
-    // Prison should be able to access initial appointment update pages in hard stop, and probation should only be able to access
+    // Prison should only be able to access initial appointment update pages in hard stop, and probation should only be able to access
     // outside of hard stop
 
     if (!isInHardStopPeriod(licence) && userType === UserType.PRISON) {
