@@ -7,6 +7,12 @@ context('Approve a licence - time served', () => {
     cy.task('stubPrisonSignIn')
     cy.task('stubGetPrisonUserDetails')
     cy.task('stubGetPrisons')
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'SUBMITTED',
+      kind: 'TIME_SERVED',
+      isReviewNeeded: true,
+      typeCode: 'AP',
+    })
     cy.task('stubGetPrisonUserCaseloads', {
       details: [
         {
@@ -19,17 +25,10 @@ context('Approve a licence - time served', () => {
       ],
     })
     cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'IN_PROGRESS' })
-    cy.task('stubGetCompletedLicence', {
-      statusCode: 'SUBMITTED',
-      kind: 'TIME_SERVED',
-      isReviewNeeded: true,
-      typeCode: 'AP',
-    })
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetStaffDetails')
     cy.task('stubUpdateLicenceStatus', 1)
     cy.task('stubFeComponents')
-    cy.signIn()
   })
 
   afterEach(() => {
@@ -37,11 +36,23 @@ context('Approve a licence - time served', () => {
   })
 
   it('when time served licence then correct approval messages should be shown', () => {
+    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED' })
+    cy.signIn()
+
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
     const confirmApprovePage = approvalViewPage.clickApprove()
     confirmApprovePage.checkThatPageHasTimeServedSubTextMessage()
     confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()
+  })
+
+  it('when time served case has not been allocated a probationPractitioner then show "Not allocated yet"', () => {
+    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', probationPractitioner: null })
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.hasNotAllocatedYetTextForProbationPractitioner(1)
   })
 })

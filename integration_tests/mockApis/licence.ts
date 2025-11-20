@@ -1980,6 +1980,7 @@ export default {
   stubGetApprovalCaseload: (
     overrides: Partial<
       typeof licencePlaceholder & {
+        nomisId?: string
         licenceId?: number
         submittedByFullName?: string
         urgentApproval?: boolean
@@ -1992,6 +1993,7 @@ export default {
     > = {},
   ): SuperAgentRequest => {
     const defaultResponse = {
+      nomisId: licencePlaceholder.nomsId,
       licenceId: licencePlaceholder.id,
       name: `${licencePlaceholder.forename} ${licencePlaceholder.surname}`,
       prisonerNumber: licencePlaceholder.nomsId,

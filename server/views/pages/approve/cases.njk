@@ -2,6 +2,7 @@
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/getProbationPractitionerLink.njk" import getProbationPractitionerLink %}
 
 {% set pageTitle = applicationName + " - approval cases" %}
 {% set pageId = "approval-cases-page" %}
@@ -29,6 +30,9 @@
         {% set linkTarget = '_blank' %}
     {% endif %}
 
+    {% set isTimeServed = (case.kind == "TIME_SERVED") %}
+    {% set ppLink = getProbationPractitionerLink(case.probationPractitioner.name, case.licenceId, isTimeServed) %}
+
     {% set caseData = [
         {
             attributes: {
@@ -47,9 +51,9 @@
         {
             attributes: {
                 id: 'com-' + loop.index,
-                "data-sort-value": case.probationPractitioner
+                "data-sort-value": case.probationPractitioner.name
             },
-            html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner.name + '</a>'
+            html: ppLink
         },
         {
             attributes: {

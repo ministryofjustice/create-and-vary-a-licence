@@ -8,19 +8,6 @@ context('Approve a licence', () => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
     cy.task('stubGetPrisonUserDetails')
-
-    cy.task('stubGetPrisonUserCaseloads', {
-      details: [
-        {
-          caseLoadId: 'LEI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: true,
-          description: 'Leeds (HMP)',
-          type: 'INST',
-        },
-      ],
-    })
-
     cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
     cy.task('stubGetApprovalCaseload')
     cy.task('stubUpdateLicenceStatus', 1)
@@ -41,6 +28,10 @@ context('Approve a licence', () => {
         currentlyActive: true,
         description: 'Leeds (HMP)',
         type: 'INST',
+        probationPractitioner: {
+          staffCode: 'P9876',
+          name: 'Alice Brown',
+        },
       },
     ],
   }
@@ -267,6 +258,25 @@ context('Approve a licence', () => {
     approvalCasesPage.clickRecentlyApprovedLink()
     approvalCasesPage.checkColumnSortIcon('Approved on', 'descending')
     approvalCasesPage.checkColumnSortIcon('Release date', 'none')
+    approvalCasesPage.signOut().click()
+  })
+
+  it('should show correct probation practitioner on approval cases page', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.hasProbationPractitioner(1, 'Joe Bloggs')
+    approvalCasesPage.signOut().click()
+  })
+
+  it('should show Not allocated when probation practitioner not found on approval cases page', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetApprovalCaseload', { probationPractitioner: null })
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.hasProbationPractitioner(1, 'Not allocated')
     approvalCasesPage.signOut().click()
   })
 })

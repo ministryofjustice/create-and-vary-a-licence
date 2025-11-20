@@ -54,4 +54,13 @@ export default class ApprovalCasesPage extends Page {
   getTableRows = () => {
     return cy.get('tbody tr')
   }
+
+  hasNotAllocatedYetTextForProbationPractitioner(index: number) {
+    return this.hasProbationPractitioner(index, 'Not allocated yet')
+  }
+
+  hasProbationPractitioner(index: number, name: string) {
+    cy.get(`#com-${index}`).contains(name)
+    return this
+  }
 }
