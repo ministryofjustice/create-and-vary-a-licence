@@ -33,17 +33,19 @@ export default class ApprovalViewRoutes {
       const hdcLicenceData =
         licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
 
-      const comDetails = await this.probationService.getStaffDetailByUsername(comUsername)
+      const comDetails = comUsername ? await this.probationService.getStaffDetailByUsername(comUsername) : null
 
       const returnPath = encodeURIComponent(`/licence/approve/id/${licence.id}/view`)
 
       res.render('pages/approve/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions as AdditionalCondition[], 'code'),
-        staffDetails: {
-          name: nameToString(comDetails.name),
-          telephone: comDetails?.telephoneNumber,
-          email: comDetails?.email,
-        },
+        staffDetails: comDetails
+          ? {
+              name: nameToString(comDetails.name),
+              telephone: comDetails?.telephoneNumber,
+              email: comDetails?.email,
+            }
+          : null,
         returnPath,
         hdcLicenceData,
       })
