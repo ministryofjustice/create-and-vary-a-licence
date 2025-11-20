@@ -80,7 +80,6 @@ describe('Caseload Service', () => {
             conditionalReleaseDateOverride: '02/02/2024',
             confirmedReleaseDate: '03/02/2024',
             sentenceStartDate: '04/02/2024',
-            isTimeServedCaseByIgnoreArdRule: false,
           },
         ],
       }
