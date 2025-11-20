@@ -31,7 +31,7 @@
     {% endif %}
 
     {% set isTimeServed = (case.kind == "TIME_SERVED") %}
-    {% set ppLink = getProbationPractitionerLink(case.probationPractitioner.name, case.licenceId, isTimeServed) %}
+    {% set probationPractitionerLink = getProbationPractitionerLink(case.probationPractitioner.name, case.licenceId, isTimeServed) %}
 
     {% set caseData = [
         {
@@ -53,7 +53,7 @@
                 id: 'com-' + loop.index,
                 "data-sort-value": case.probationPractitioner.name
             },
-            html: ppLink
+            html: probationPractitionerLink
         },
         {
             attributes: {
