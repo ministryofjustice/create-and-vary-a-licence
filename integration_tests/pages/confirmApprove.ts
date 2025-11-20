@@ -12,4 +12,16 @@ export default class ConfirmApprovePage extends Page {
     cy.get(this.returnToListButtonId).click()
     return Page.verifyOnPage(ApprovalCasesPage)
   }
+
+  checkThatPageHasTimeServedSubTextMessage = (): ConfirmApprovePage => {
+    cy.get('[data-qa=approval-title-panel]').contains('Check a case administrator has contacted the probation team')
+    return this
+  }
+
+  checkThatPageHasTimeServedEmailTextMessage = (): ConfirmApprovePage => {
+    cy.get('[data-qa=email-message-text]').contains(
+      'Check a case administrator has notified the probation team that this licence has been generated. We do not have their contact details to do this automatically.',
+    )
+    return this
+  }
 }
