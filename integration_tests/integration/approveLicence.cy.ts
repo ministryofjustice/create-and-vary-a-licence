@@ -35,6 +35,7 @@ context('Approve a licence', () => {
       },
     ],
   }
+
   const multipleCaseloads = {
     details: [
       {
@@ -270,12 +271,36 @@ context('Approve a licence', () => {
     approvalCasesPage.signOut().click()
   })
 
+  it('should show correct probation practitioner on recently approved cases page', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetApprovalCaseload', {})
+    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: { name: 'Joe Bloggs' } })
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.clickRecentlyApprovedLink()
+    approvalCasesPage.hasProbationPractitioner(1, 'Joe Bloggs')
+    approvalCasesPage.signOut().click()
+  })
+
   it('should show Not allocated when probation practitioner not found on approval cases page', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.task('stubGetApprovalCaseload', { probationPractitioner: null })
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.hasProbationPractitioner(1, 'Not allocated')
+    approvalCasesPage.signOut().click()
+  })
+
+  it('should show Not allocated when probation practitioner not found on recently approved cases page', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetApprovalCaseload', {})
+    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: null })
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.clickRecentlyApprovedLink()
     approvalCasesPage.hasProbationPractitioner(1, 'Not allocated')
     approvalCasesPage.signOut().click()
   })

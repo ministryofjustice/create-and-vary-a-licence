@@ -47,12 +47,23 @@ context('Approve a licence - time served', () => {
     confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()
   })
 
-  it('when time served case has not been allocated a probationPractitioner then show "Not allocated yet"', () => {
+  it('when time served approval case has not been allocated a probationPractitioner then show "Not allocated yet"', () => {
     cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', probationPractitioner: null })
     cy.signIn()
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.hasNotAllocatedYetTextForProbationPractitioner(1)
+  })
+
+  it('when time served recently approved cases page has not been allocated a probationPractitioner then show "Not allocated yet"', () => {
+    cy.task('stubGetApprovalCaseload', {})
+    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: null, kind: 'TIME_SERVED' })
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.clickRecentlyApprovedLink()
     approvalCasesPage.hasNotAllocatedYetTextForProbationPractitioner(1)
   })
 })

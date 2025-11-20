@@ -2025,7 +2025,12 @@ export default {
     })
   },
 
-  stubGetRecentlyApproved: (): SuperAgentRequest => {
+  stubGetRecentlyApproved: (
+    overrides: Partial<{
+      probationPractitioner?: typeof probationPractitionerPlaceholder
+      kind?: string
+    }> = {},
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -2044,7 +2049,8 @@ export default {
             urgentApproval: false,
             approvedBy: 'Test Approver',
             approvedOn: '03/07/2024 12:30:00',
-            probationPractitioner: probationPractitionerPlaceholder,
+            probationPractitioner: overrides.probationPractitioner,
+            kind: overrides.kind ?? 'CRD',
           },
         ],
       },
