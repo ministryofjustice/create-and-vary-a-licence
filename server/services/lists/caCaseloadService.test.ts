@@ -75,6 +75,7 @@ describe('Caseload Service', () => {
             isTimeServedCaseByAllPrisonRule: true,
             isTimeServedCaseByCrdsRule: true,
             isTimeServedCaseByNonCrdsRule: true,
+            isTimeServedCaseByIgnoreArdRule: true,
             conditionalReleaseDate: '01/02/2024',
             conditionalReleaseDateOverride: '02/02/2024',
             confirmedReleaseDate: '03/02/2024',
