@@ -372,7 +372,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
-          licenceKind: options.licenceKind || LicenceKind.CRD,
+          kind: options.licenceKind || LicenceKind.CRD,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
           responsibleComFullName: options.responsibleComFullName || null,
           isEligibleForEarlyRelease: options.isEligibleForEarlyRelease || false,
