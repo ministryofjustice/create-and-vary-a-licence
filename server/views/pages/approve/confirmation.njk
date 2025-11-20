@@ -8,22 +8,44 @@
 {% set hideLicenceBanner = true %}
 
 {% block content %}
+
+    {% set isTimeServed = (licence.kind == "TIME_SERVED") %}
+
+    {% set timeServedBannerMessage %}
+        {% if isTimeServed %}
+            Check a case administrator has contacted the probation team
+        {% endif %}
+    {% endset %}
+
+    {% set emailMessage %}
+        {% if isTimeServed %}
+            Check a case administrator has notified the probation team that this licence has been generated.
+            We do not have their contact details to do this automatically.
+        {% elseif isComEmailAvailable %}
+            We will email the probation practitioner automatically to tell them this licence has been approved.
+        {% else %}
+            A case administrator still needs to notify the probation team that this licence has been approved.
+            We do not have their contact details to do this automatically.
+        {% endif %}
+    {% endset %}
+
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-thirds">
-            {{ govukPanel({
-                titleText: titleText
-            }) }}
+            <div data-qa="approval-title-panel">
+                {{ govukPanel({
+                    titleText: titleText,
+                    html: timeServedBannerMessage
+                }) }}
+            </div>
 
             <h2 class="govuk-heading-m">What happens next</h2>
-            <p class="govuk-body">
+            <p class="govuk-body govuk-!-margin-bottom-6">
                 {{ confirmationMessage }}
-                {% if isComEmailAvailable %}
-                    <br>
-                    <br>We will email the probation practitioner automatically to tell them this licence has been approved.
-                {% else %}
-                    <br>
-                    <br>A case administrator still needs to notify the probation team that this licence has been approved. We do not have their contact details to do this automatically.
-                {% endif %}
+            </p>
+
+            <p class="govuk-body govuk-!-margin-bottom-6" data-qa="email-message-text">
+                {{ emailMessage }}
             </p>
 
             <h2 class="govuk-heading-m">If changes are made</h2>
@@ -37,7 +59,7 @@
                     </p>
                 {% else %}
                 <p class="govuk-body">
-                        Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details. 
+                        Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details.
                         Other changes must be made after release. Probation practitioners can continue to work on licences for people being released early after the 2-day point.
                 </p>
                 {% endif %}
@@ -51,7 +73,7 @@
                     </p>
                 {% else %}
                 <p class="govuk-body">
-                        Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details. 
+                        Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details.
                         Other changes must be made after release. Probation practitioners can continue to work on licences for people being released early after the 2-day point.
                 </p>
                 {% endif %}
