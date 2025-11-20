@@ -4364,12 +4364,6 @@ export interface components {
        * @example Smith
        */
       surname?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       * @example 24/08/2022 09:30:33
-       */
-      dateLastUpdated?: string
       kind: string
       /**
        * @description The prison identifier for the person on this licence
@@ -4622,6 +4616,12 @@ export interface components {
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
       standardPssConditions?: components['schemas']['StandardCondition'][]
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
+       */
+      dateLastUpdated?: string
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
