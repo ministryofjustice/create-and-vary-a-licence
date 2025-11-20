@@ -24,6 +24,7 @@ context('Approve a licence - time served', () => {
       kind: 'TIME_SERVED',
       isReviewNeeded: true,
       typeCode: 'AP',
+      comUsername: null,
     })
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetStaffDetails')
@@ -40,6 +41,7 @@ context('Approve a licence - time served', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage.checkProbationPractitionerDetailsNotAllocated()
     const confirmApprovePage = approvalViewPage.clickApprove()
     confirmApprovePage.checkThatPageHasTimeServedSubTextMessage()
     confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()

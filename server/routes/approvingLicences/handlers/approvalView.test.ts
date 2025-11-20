@@ -119,6 +119,7 @@ describe('Route - view and approve a licence', () => {
             additionalLicenceConditions: [],
             additionalPssConditions: [],
             bespokeConditions: [],
+            comUsername: 'joebloggs',
           },
         },
       } as unknown as Response
@@ -139,6 +140,36 @@ describe('Route - view and approve a licence', () => {
       expect(deliusStaff.getStaffDetailByUsername).toHaveBeenCalled()
     })
 
+    it('should handle no COM allocated yet', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username, displayName },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.SUBMITTED,
+            surname: 'Bobson',
+            forename: 'Bob',
+            appointmentTime: '12/12/2022 14:16',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            bespokeConditions: [],
+            comUsername: null,
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
+        additionalConditions: [],
+        staffDetails: null,
+        returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
+        hdcLicenceData: null,
+      })
+    })
+
     it('should pass through HDC licence data for HDC licences', async () => {
       res = {
         render: jest.fn(),
@@ -155,6 +186,7 @@ describe('Route - view and approve a licence', () => {
             additionalLicenceConditions: [],
             additionalPssConditions: [],
             bespokeConditions: [],
+            comUsername: 'joebloggs',
           },
         },
       } as unknown as Response
