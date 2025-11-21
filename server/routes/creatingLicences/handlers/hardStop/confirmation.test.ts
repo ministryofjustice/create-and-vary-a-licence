@@ -35,7 +35,7 @@ describe('Route Handlers - Confirmation', () => {
         res.locals.licence.typeCode = 'AP'
 
         await handler.GET(reqWithEmptySession, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmation', {
+        expect(res.render).toHaveBeenCalledWith('pages/create/prisonCreated/hardStop/confirmation', {
           titleText: 'Licence conditions for Test Person sent',
           backLink: '/licence/view/cases',
         })
