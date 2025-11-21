@@ -4364,12 +4364,6 @@ export interface components {
        * @example Smith
        */
       surname?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       * @example 24/08/2022 09:30:33
-       */
-      dateLastUpdated?: string
       kind: string
       /**
        * @description The prison identifier for the person on this licence
@@ -4537,6 +4531,11 @@ export interface components {
        */
       crn?: string
       /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string
+      /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
@@ -4560,11 +4559,6 @@ export interface components {
        * @example 06/05/2023
        */
       topupSupervisionStartDate?: string
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string
       /**
        * @description The middle names of the person on licence
        * @example John Peter
@@ -4622,6 +4616,12 @@ export interface components {
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
       standardPssConditions?: components['schemas']['StandardCondition'][]
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
+       */
+      dateLastUpdated?: string
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333

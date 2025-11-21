@@ -10,6 +10,8 @@ export default class ApprovalCasesPage extends Page {
 
   private recentlyApprovedTab = '[data-qa=recently-approved-link]'
 
+  private approvalNeededTab = '[data-qa=approval-needed-link]'
+
   private searchTextInput = '#search'
 
   private searchButtonId = '[data-qa=search-button]'
@@ -43,6 +45,11 @@ export default class ApprovalCasesPage extends Page {
     return Page.verifyOnPage(ApprovalCasesPage)
   }
 
+  clickApprovalNeededTab = (): ApprovalCasesPage => {
+    cy.get(this.approvalNeededTab).click()
+    return Page.verifyOnPage(ApprovalCasesPage)
+  }
+
   getCaseloadNames = () => {
     return cy.get('[data-qa=caseload-names]')
   }
@@ -53,5 +60,14 @@ export default class ApprovalCasesPage extends Page {
 
   getTableRows = () => {
     return cy.get('tbody tr')
+  }
+
+  hasNotAllocatedYetTextForProbationPractitioner(index: number) {
+    return this.hasProbationPractitioner(index, 'Not allocated yet')
+  }
+
+  hasProbationPractitioner(index: number, name: string) {
+    cy.get(`#com-${index}`).contains(name)
+    return this
   }
 }

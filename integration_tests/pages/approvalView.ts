@@ -62,8 +62,11 @@ export default class ApprovalViewPage extends Page {
     return cy.get(id)
   }
 
-  checkProbationPractitionerDetailsNotAllocated = (): void => {
+  clickProbationPractitionerDetails = (): void => {
     cy.contains('button', /Community probation practitioner details/i).click()
+  }
+
+  checkProbationPractitionerDetailsNotAllocated = (): void => {
     cy.contains('Not allocated yet')
   }
 }
