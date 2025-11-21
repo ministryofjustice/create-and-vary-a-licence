@@ -1,7 +1,7 @@
 import { LicencePolicyResponse } from '../../../server/@types/licenceApiClientTypes'
 
 const policy: LicencePolicyResponse = {
-  version: '3.0',
+  version: '4.0',
   standardConditions: {
     AP: [
       {
@@ -900,6 +900,14 @@ const policy: LicencePolicyResponse = {
         code: '1e9a66c6-f083-4c29-b209-b625252afbe5',
         category: 'Freedom of movement',
         text: 'Notify your supervising officer of any travel outside of your home county, including on public transport, prior to any such journey taking place unless otherwise specified by your supervising officer.',
+        requiresInput: false,
+        skippable: false,
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
+        code: 'd523d711-9975-4a9a-a37e-a17bd611140f',
+        category: 'Freedom of movement',
+        text: 'DRIVING PROHIBITION PLACEHOLDER',
         requiresInput: false,
         skippable: false,
         requiresElectronicMonitoringResponse: false,
