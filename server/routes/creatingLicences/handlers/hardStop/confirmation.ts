@@ -23,6 +23,6 @@ export default class ConfirmationRoutes {
       }
     }
 
-    res.render('pages/create/hardStop/confirmation', { titleText, confirmationMessage, backLink })
+    res.render('pages/create/prisonCreated/hardStop/confirmation', { titleText, confirmationMessage, backLink })
   }
 }
