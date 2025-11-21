@@ -8,6 +8,8 @@ import policyV2_0 from './polices/v2-0'
 import policyV2_1 from './polices/v2-1'
 // eslint-disable-next-line camelcase
 import policyV3_0 from './polices/v3-0'
+// eslint-disable-next-line camelcase
+import policyV4_0 from './polices/v4-0'
 import LicenceCreationType from '../../server/enumeration/licenceCreationType'
 import {
   AdditionalCondition,
@@ -1484,6 +1486,10 @@ export default {
       case '3.0':
         // eslint-disable-next-line camelcase
         policy = policyV3_0
+        break
+      case '4.0':
+        // eslint-disable-next-line camelcase
+        policy = policyV4_0
         break
       default:
         // eslint-disable-next-line camelcase
