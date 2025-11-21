@@ -47,7 +47,7 @@ context('Approve a licence - time served', () => {
     confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()
   })
 
-  it('when probation practitioner has not been allocated then show ay not allocated yet', () => {
+  it('when probation practitioner has not been allocated then show "not allocated yet"', () => {
     cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', probationPractitioner: null })
     cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: null, kind: 'TIME_SERVED' })
 
@@ -78,10 +78,5 @@ context('Approve a licence - time served', () => {
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
     approvalViewPage.clickProbationPractitionerDetails()
     approvalViewPage.checkProbationPractitionerDetailsNotAllocated()
-
-    // Verify not allocated yet on confirm approve page
-    const confirmApprovePage = approvalViewPage.clickApprove()
-    confirmApprovePage.checkThatPageHasTimeServedSubTextMessage()
-    confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()
   })
 })
