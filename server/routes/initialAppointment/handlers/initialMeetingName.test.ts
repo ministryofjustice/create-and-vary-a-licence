@@ -45,7 +45,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     describe('GET', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPerson')
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingName')
       })
     })
 
@@ -75,7 +75,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     describe('GET', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPerson')
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingName')
       })
     })
 
