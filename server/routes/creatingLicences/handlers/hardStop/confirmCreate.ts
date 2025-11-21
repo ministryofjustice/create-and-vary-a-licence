@@ -17,7 +17,7 @@ export default class ConfirmCreateRoutes {
       prisoner: { dateOfBirth, firstName, lastName },
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
-    return res.render('pages/create/hardStop/confirmCreate', {
+    return res.render('pages/create/prisonCreated/hardStop/confirmCreate', {
       licence: {
         nomsId: nomisId,
         licenceStartDate,

@@ -31,10 +31,10 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
       } as unknown as Response
     })
     describe('GET', () => {
-      it('should render the manual address postcode lookup form in create flow', async () => {
+      it('should render the manual address postcode lookup form in create initial appointment flow', async () => {
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/manualAddressPostcodeLookupForm', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/manualAddressPostcodeLookupForm', {
           postcodeLookupUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place`,
         })
       })
@@ -43,7 +43,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
         req.query.fromReview = 'true'
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/manualAddressPostcodeLookupForm', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/manualAddressPostcodeLookupForm', {
           postcodeLookupUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place?fromReview=true`,
         })
       })

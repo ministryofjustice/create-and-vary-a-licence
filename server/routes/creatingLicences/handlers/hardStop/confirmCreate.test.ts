@@ -60,7 +60,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       } as PrisonerWithCvlFields
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmCreate', {
+      expect(res.render).toHaveBeenCalledWith('pages/create/prisonCreated/hardStop/confirmCreate', {
         licence: {
           nomsId: 'ABC123',
           licenceStartDate: '18/07/2024',

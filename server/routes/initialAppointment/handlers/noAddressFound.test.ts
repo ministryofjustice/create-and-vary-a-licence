@@ -33,7 +33,7 @@ describe('Route Handlers - Create a licence - No address found', () => {
       it('should render the no address page found page in create flow', async () => {
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/noAddressFound', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/noAddressFound', {
           searchQuery: req.query.searchQuery,
           postcodeLookupSearchUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place`,
           manualAddressEntryUrl: `/licence/create/id/${req.params.licenceId}/manual-address-entry`,
@@ -44,7 +44,7 @@ describe('Route Handlers - Create a licence - No address found', () => {
         req.query.fromReview = 'true'
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/noAddressFound', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/noAddressFound', {
           searchQuery: req.query.searchQuery,
           postcodeLookupSearchUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place?fromReview=true`,
           manualAddressEntryUrl: `/licence/create/id/${req.params.licenceId}/manual-address-entry?fromReview=true`,

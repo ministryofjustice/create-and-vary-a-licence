@@ -22,7 +22,7 @@ export default class InitialMeetingNameRoutes {
       SPECIFIC_PERSON: 'Someone else',
     }
 
-    res.render('pages/create/hardStop/initialMeetingPerson', {
+    res.render('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
       appointmentPersonType,
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
     })

@@ -26,7 +26,7 @@ export default class InitialMeetingPlaceRoutes {
     if (config.postcodeLookupEnabled) {
       preferredAddresses = await this.addressService.getPreferredAddresses(res.locals.user)
     }
-    return res.render('pages/create/initialMeetingPlace', {
+    return res.render('pages/initialAppointment/initialMeetingPlace', {
       preferredAddresses,
       formAddress,
       manualAddressEntryUrl: `${basePath}/manual-address-entry${fromReviewParam}`,

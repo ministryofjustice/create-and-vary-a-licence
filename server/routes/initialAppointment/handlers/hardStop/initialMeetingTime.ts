@@ -17,7 +17,7 @@ export default class InitialMeetingTimeRoutes {
     const formDate = DateTime.toDateTime(licence.appointmentTime)
     const appointmentTimeType: Record<string, string> = AppointmentTimeType
 
-    return res.render('pages/create/hardStop/initialMeetingTime', {
+    return res.render('pages/initialAppointment/prisonCreated/initialMeetingTime', {
       formDate,
       appointmentTimeType,
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',

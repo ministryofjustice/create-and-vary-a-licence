@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 
-const render = templateRenderer(fs.readFileSync('server/views/pages/create/noAddressFound.njk').toString())
+const render = templateRenderer(fs.readFileSync('server/views/pages/initialAppointment/noAddressFound.njk').toString())
 
 describe('noAddressFound', () => {
   afterEach(() => {

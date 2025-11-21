@@ -42,7 +42,7 @@ describe('ContactProbationTeamRoutes', () => {
       await handler.GET(req, res)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith('pages/create/timeServed/confirmContactProbationTeam', {
+      expect(res.render).toHaveBeenCalledWith('pages/create/prisonCreated/timeServed/confirmContactProbationTeam', {
         licence: res.locals.licence,
         backLink: req.session?.returnToCase || '/licence/view/cases',
       })

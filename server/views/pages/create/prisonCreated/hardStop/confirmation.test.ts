@@ -1,8 +1,10 @@
 import fs from 'fs'
 
-import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
+import { templateRenderer } from '../../../../../utils/__testutils/templateTestUtils'
 
-const render = templateRenderer(fs.readFileSync('server/views/pages/create/hardStop/confirmation.njk').toString())
+const render = templateRenderer(
+  fs.readFileSync('server/views/pages/create/prisonCreated/hardStop/confirmation.njk').toString(),
+)
 
 describe('Hardstop Confirmation', () => {
   it('should show correct message when com email is absent', () => {
