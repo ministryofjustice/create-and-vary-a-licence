@@ -21,6 +21,7 @@ context('Approve a licence - time served', () => {
     cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED' })
     cy.task('stubFeComponents')
     cy.signIn()
+    Page.verifyOnPage(IndexPage)
   })
 
   afterEach(() => {
@@ -46,7 +47,10 @@ context('Approve a licence - time served', () => {
     confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()
   })
 
-  it('when time served licence and no probation practitioner then com details say not allocated', () => {
+  it('when probation practitioner has not been allocated then show ay not allocated yet', () => {
+    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', probationPractitioner: null })
+    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: null, kind: 'TIME_SERVED' })
+
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetCompletedLicence', {
@@ -59,27 +63,25 @@ context('Approve a licence - time served', () => {
     cy.task('stubUpdateLicenceStatus', 1)
 
     const indexPage = Page.verifyOnPage(IndexPage)
+
     const approvalCasesPage = indexPage.clickApproveALicence()
+
+    // Verify not allocated on recently approved cases page
+    approvalCasesPage.clickRecentlyApprovedLink()
+    approvalCasesPage.hasNotAllocatedYetTextForProbationPractitioner(1)
+
+    // Verify not allocated yet on approval cases page
+    approvalCasesPage.clickApprovalNeededTab()
+    approvalCasesPage.hasNotAllocatedYetTextForProbationPractitioner(1)
+
+    // Verify not allocated yet on approval view page
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
     approvalViewPage.clickProbationPractitionerDetails()
     approvalViewPage.checkProbationPractitionerDetailsNotAllocated()
-  })
 
-  it('when time served approval case has not been allocated a probationPractitioner then show "Not allocated yet"', () => {
-    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', probationPractitioner: null })
-
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const approvalCasesPage = indexPage.clickApproveALicence()
-    approvalCasesPage.hasNotAllocatedYetTextForProbationPractitioner(1)
-  })
-
-  it('when time served recently approved cases page has not been allocated a probationPractitioner then show "Not allocated yet"', () => {
-    cy.task('stubGetApprovalCaseload', {})
-    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: null, kind: 'TIME_SERVED' })
-
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const approvalCasesPage = indexPage.clickApproveALicence()
-    approvalCasesPage.clickRecentlyApprovedLink()
-    approvalCasesPage.hasNotAllocatedYetTextForProbationPractitioner(1)
+    // Verify not allocated yet on confirm approve page
+    const confirmApprovePage = approvalViewPage.clickApprove()
+    confirmApprovePage.checkThatPageHasTimeServedSubTextMessage()
+    confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()
   })
 })

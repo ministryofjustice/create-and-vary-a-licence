@@ -10,6 +10,8 @@ export default class ApprovalCasesPage extends Page {
 
   private recentlyApprovedTab = '[data-qa=recently-approved-link]'
 
+  private approvalNeededTab = '[data-qa=approval-needed-link]'
+
   private searchTextInput = '#search'
 
   private searchButtonId = '[data-qa=search-button]'
@@ -40,6 +42,11 @@ export default class ApprovalCasesPage extends Page {
 
   clickRecentlyApprovedLink = (): ApprovalCasesPage => {
     cy.get(this.recentlyApprovedTab).click()
+    return Page.verifyOnPage(ApprovalCasesPage)
+  }
+
+  clickApprovalNeededTab = (): ApprovalCasesPage => {
+    cy.get(this.approvalNeededTab).click()
     return Page.verifyOnPage(ApprovalCasesPage)
   }
 
