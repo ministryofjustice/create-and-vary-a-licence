@@ -78,7 +78,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       it('should render view', async () => {
         addressService.getPreferredAddresses.mockResolvedValue([])
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
           preferredAddresses: [],
@@ -88,7 +88,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       it('should render view with fromReviewParam', async () => {
         req.query.fromReview = 'true'
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
           preferredAddresses: [],
@@ -99,7 +99,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         config.postcodeLookupEnabled = true
         addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
           preferredAddresses,
@@ -206,7 +206,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     describe('GET', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
           preferredAddresses: [],
@@ -216,7 +216,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       it('should render view with fromReviewParam', async () => {
         req.query.fromReview = 'true'
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPlace', {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
           preferredAddresses: [],

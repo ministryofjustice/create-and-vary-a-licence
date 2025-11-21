@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 
-const render = templateRenderer(fs.readFileSync('server/views/pages/create/selectAddress.njk').toString())
+const render = templateRenderer(fs.readFileSync('server/views/pages/initialAppointment/selectAddress.njk').toString())
 
 describe('selectAddress', () => {
   afterEach(() => {

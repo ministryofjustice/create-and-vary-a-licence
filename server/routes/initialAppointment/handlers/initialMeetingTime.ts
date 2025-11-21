@@ -17,7 +17,7 @@ export default class InitialMeetingTimeRoutes {
     const formDate = DateTime.toDateTime(licence.appointmentTime)
     const appointmentTimeType: Record<string, string> = AppointmentTimeType
 
-    return res.render('pages/create/initialMeetingTime', {
+    return res.render('pages/initialAppointment/initialMeetingTime', {
       formDate,
       appointmentTimeType,
       skipUrl: this.getNextPage(licence.id.toString(), licence.typeCode, req),

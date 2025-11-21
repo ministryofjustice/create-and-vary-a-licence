@@ -49,8 +49,8 @@
         </div>
     </div>
     {% if postcodeLookupEnabled %}
-        {% include "pages/create/postcodeLookupForm.njk" %}
+        {% include "pages/initialAppointment/postcodeLookupForm.njk" %}
     {% else %}
-        {% include "pages/create/manualAddressForm.njk" %}
+        {% include "pages/initialAppointment/manualAddressForm.njk" %}
     {% endif %}
 {% endblock %}

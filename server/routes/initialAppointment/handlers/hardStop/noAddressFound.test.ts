@@ -34,7 +34,7 @@ describe('Route Handlers - Create a licence - No address found', () => {
 
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/noAddressFound', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/noAddressFound', {
           searchQuery: req.query.searchQuery,
           postcodeLookupSearchUrl: `/licence/hard-stop/create/id/${req.params.licenceId}/initial-meeting-place`,
           manualAddressEntryUrl: `/licence/hard-stop/create/id/${req.params.licenceId}/manual-address-entry`,
@@ -46,7 +46,7 @@ describe('Route Handlers - Create a licence - No address found', () => {
 
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/noAddressFound', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/noAddressFound', {
           searchQuery: req.query.searchQuery,
           postcodeLookupSearchUrl: `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
           manualAddressEntryUrl: `/licence/hard-stop/edit/id/${req.params.licenceId}/manual-address-entry`,

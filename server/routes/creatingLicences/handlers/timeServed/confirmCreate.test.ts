@@ -87,7 +87,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       timeServedExternalRecordService.getTimeServedExternalRecord.mockResolvedValue(null)
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/timeServed/confirmCreate', {
+      expect(res.render).toHaveBeenCalledWith('pages/create/prisonCreated/timeServed/confirmCreate', {
         licence: {
           nomsId: 'ABC123',
           licenceStartDate: '18/07/2024',
@@ -107,7 +107,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       timeServedExternalRecordService.getTimeServedExternalRecord.mockResolvedValue(existingTimeServedExternalRecord)
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/timeServed/confirmCreate', {
+      expect(res.render).toHaveBeenCalledWith('pages/create/prisonCreated/timeServed/confirmCreate', {
         licence: {
           nomsId: 'ABC123',
           licenceStartDate: '18/07/2024',

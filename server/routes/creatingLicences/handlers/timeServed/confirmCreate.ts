@@ -28,7 +28,7 @@ export default class ConfirmCreateRoutes {
       user,
     )
 
-    return res.render('pages/create/timeServed/confirmCreate', {
+    return res.render('pages/create/prisonCreated/timeServed/confirmCreate', {
       licence: {
         nomsId: nomisId,
         licenceStartDate,

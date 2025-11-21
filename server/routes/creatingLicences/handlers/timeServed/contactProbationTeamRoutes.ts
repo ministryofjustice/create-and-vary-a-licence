@@ -10,7 +10,7 @@ export default class ContactProbationTeamRoutes {
     const { licence } = res.locals
     const backLink = req.session?.returnToCase || '/licence/view/cases'
 
-    return res.render('pages/create/timeServed/confirmContactProbationTeam', {
+    return res.render('pages/create/prisonCreated/timeServed/confirmContactProbationTeam', {
       licence,
       backLink,
     })

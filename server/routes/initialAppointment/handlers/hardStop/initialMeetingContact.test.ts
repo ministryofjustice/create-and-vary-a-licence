@@ -53,7 +53,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
     describe('GET', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingContact', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingContact', {
           continueOrSaveLabel: 'Continue',
         })
       })
@@ -61,7 +61,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       it('should render view with Save Label', async () => {
         handler = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingContact', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingContact', {
           continueOrSaveLabel: 'Save',
         })
       })

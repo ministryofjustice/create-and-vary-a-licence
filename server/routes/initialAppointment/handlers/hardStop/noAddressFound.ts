@@ -10,7 +10,7 @@ export default class NoAddressFoundRoutes {
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/hard-stop/${action}/id/${licenceId}`
 
-    return res.render('pages/create/hardStop/noAddressFound', {
+    return res.render('pages/initialAppointment/prisonCreated/noAddressFound', {
       searchQuery,
       postcodeLookupSearchUrl: `${basePath}/initial-meeting-place`,
       manualAddressEntryUrl: `${basePath}/manual-address-entry`,

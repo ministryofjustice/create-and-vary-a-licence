@@ -35,10 +35,13 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
 
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/manualAddressPostcodeLookupForm', {
-          continueOrSaveLabel: 'Continue',
-          postcodeLookupUrl: `/licence/hard-stop/create/id/${req.params.licenceId}/initial-meeting-place`,
-        })
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm',
+          {
+            continueOrSaveLabel: 'Continue',
+            postcodeLookupUrl: `/licence/hard-stop/create/id/${req.params.licenceId}/initial-meeting-place`,
+          },
+        )
       })
 
       it('should render the manual address postcode lookup form with "Save" button in edit flow', async () => {
@@ -46,10 +49,13 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
 
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/manualAddressPostcodeLookupForm', {
-          continueOrSaveLabel: 'Save',
-          postcodeLookupUrl: `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
-        })
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm',
+          {
+            continueOrSaveLabel: 'Save',
+            postcodeLookupUrl: `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
+          },
+        )
       })
     })
 

@@ -15,7 +15,7 @@ export default class ManualAddressPostcodeLookupRoutes {
     const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
     const fromReview = req.query?.fromReview
     const fromReviewParam = fromReview ? '?fromReview=true' : ''
-    res.render('pages/create/manualAddressPostcodeLookupForm', {
+    res.render('pages/initialAppointment/manualAddressPostcodeLookupForm', {
       postcodeLookupUrl: `${basePath}/initial-meeting-place${fromReviewParam}`,
     })
   }

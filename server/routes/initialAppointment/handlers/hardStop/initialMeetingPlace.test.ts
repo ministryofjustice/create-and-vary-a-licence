@@ -82,7 +82,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     describe('GET', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPlace', {
           action: 'create',
           preferredAddresses: [],
           formAddress,
@@ -94,7 +94,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       it('should render view with save Label and manual address entry URL', async () => {
         handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPlace', {
           action: 'edit',
           preferredAddresses: [],
           formAddress,
@@ -108,7 +108,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         config.postcodeLookupEnabled = true
         addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPlace', {
           action: 'edit',
           preferredAddresses,
           formAddress,

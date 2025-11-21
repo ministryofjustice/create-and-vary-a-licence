@@ -13,7 +13,7 @@ export default class ManualAddressPostcodeLookupRoutes {
     const { licenceId } = req.params
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/hard-stop/${action}/id/${licenceId}`
-    res.render('pages/create/hardStop/manualAddressPostcodeLookupForm', {
+    res.render('pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm', {
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
       postcodeLookupUrl: `${basePath}/initial-meeting-place`,
     })

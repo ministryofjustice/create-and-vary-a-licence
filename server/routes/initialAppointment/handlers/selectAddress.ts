@@ -24,7 +24,7 @@ export default class SelectAddressRoutes {
       return
     }
 
-    res.render('pages/create/selectAddress', {
+    res.render('pages/initialAppointment/selectAddress', {
       addresses,
       licenceId,
       searchQuery,

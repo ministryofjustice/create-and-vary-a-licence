@@ -54,7 +54,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       it('should render view', async () => {
         req.query = { edit: 'telNumber' }
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingContact', { edit: 'telNumber' })
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingContact', { edit: 'telNumber' })
       })
     })
 
@@ -89,7 +89,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       it('should render view', async () => {
         req.query = { edit: 'telNumber' }
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingContact', { edit: 'telNumber' })
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingContact', { edit: 'telNumber' })
       })
     })
 

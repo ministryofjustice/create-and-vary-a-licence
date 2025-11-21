@@ -67,7 +67,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     describe('GET', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPlace', {
           preferredAddresses: [],
           formAddress,
           continueOrSaveLabel: 'Continue',

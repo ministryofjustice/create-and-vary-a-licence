@@ -24,7 +24,7 @@ export default class SelectAddressRoutes {
       return
     }
 
-    res.render('pages/create/hardStop/selectAddress', {
+    res.render('pages/initialAppointment/prisonCreated/selectAddress', {
       addresses,
       licenceId,
       searchQuery,

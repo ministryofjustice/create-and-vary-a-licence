@@ -60,7 +60,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
 
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/selectAddress', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/selectAddress', {
           addresses: mockAddresses,
           licenceId: req.params.licenceId,
           searchQuery,
@@ -77,7 +77,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
 
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/selectAddress', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/selectAddress', {
           addresses: mockAddresses,
           licenceId: req.params.licenceId,
           searchQuery,

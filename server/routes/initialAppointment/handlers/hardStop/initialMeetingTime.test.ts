@@ -63,7 +63,7 @@ describe('Route - create licence - initial meeting date and time', () => {
     describe('GET', () => {
       it('should render initial meeting time view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingTime', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingTime', {
           formDate,
           appointmentTimeType,
           continueOrSaveLabel: 'Continue',
@@ -73,7 +73,7 @@ describe('Route - create licence - initial meeting date and time', () => {
       it('should render initial meeting time view with Save Label', async () => {
         handler = new InitialMeetingTimeRoutes(licenceService, PathType.EDIT)
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingTime', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingTime', {
           formDate,
           appointmentTimeType,
           continueOrSaveLabel: 'Save',

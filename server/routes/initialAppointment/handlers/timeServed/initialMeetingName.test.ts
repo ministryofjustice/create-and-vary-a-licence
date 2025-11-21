@@ -55,7 +55,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           SPECIFIC_PERSON: 'Someone else',
         }
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPerson', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
           appointmentPersonType,
           continueOrSaveLabel: 'Continue',
           isProbationPractionerAllocated: true,
@@ -68,7 +68,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           SPECIFIC_PERSON: 'Someone else',
         }
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPerson', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
           appointmentPersonType: appointmentPersonTypeWithOutPP,
           continueOrSaveLabel: 'Continue',
           isProbationPractionerAllocated: false,
