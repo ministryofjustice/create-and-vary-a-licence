@@ -25,4 +25,12 @@ describe('Hardstop Confirmation', () => {
     )
     expect($('.govuk-panel__body').length).toEqual(0)
   })
+
+  it('should not show com email message for time served licences', () => {
+    const $ = render({
+      licence: { comEmail: 'some@email.com', kind: 'TIME_SERVED' },
+    })
+    expect($('#sent-to').length).toEqual(0)
+    expect($('.govuk-panel__body').length).toEqual(0)
+  })
 })
