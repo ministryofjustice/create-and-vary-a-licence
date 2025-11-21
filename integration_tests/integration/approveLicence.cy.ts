@@ -289,7 +289,7 @@ context('Approve a licence', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
-    approvalCasesPage.hasProbationPractitioner(1, 'Not allocated')
+    approvalCasesPage.hasProbationPractitioner(1, 'Unallocated')
     approvalCasesPage.signOut().click()
   })
 
@@ -301,7 +301,7 @@ context('Approve a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     approvalCasesPage.clickRecentlyApprovedLink()
-    approvalCasesPage.hasProbationPractitioner(1, 'Not allocated')
+    approvalCasesPage.hasProbationPractitioner(1, 'Unallocated')
     approvalCasesPage.signOut().click()
   })
 })

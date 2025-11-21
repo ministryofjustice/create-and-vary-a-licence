@@ -39,7 +39,7 @@ describe('View Partials - Probation Practitioner Link', () => {
     const $ = renderLink({ name, licenceId, isTimeServed })
 
     // Then
-    expect($.text().trim()).toBe('Not allocated')
+    expect($.text().trim()).toBe('Unallocated')
   })
 
   it('escapes names correctly', () => {
