@@ -913,6 +913,13 @@ const policy: LicencePolicyResponse = {
         requiresElectronicMonitoringResponse: false,
       },
       {
+        category: 'Freedom of movement',
+        code: 'be16ee0b-a916-43ef-9319-b42a1dd418a3',
+        requiresInput: false,
+        text: 'DRINKING ESTABLISHMENT PLACEHOLDER',
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
         code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
