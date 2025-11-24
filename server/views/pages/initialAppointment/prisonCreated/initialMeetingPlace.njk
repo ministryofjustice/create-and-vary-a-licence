@@ -1,0 +1,56 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Create a licence - Where is the initial appointment?" %}
+{% set pageId = "appointment-place-page" %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-name" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Where is the initial appointment?</h1>
+            {% if preferredAddresses.length > 0 %}
+                <h1 class="govuk-heading-s">Use a saved address</h1>
+                {% set preferredAddressesOptions = [] %}
+                {% for address in preferredAddresses %}
+                {% set deleteUrl = "/staff/hard-stop/delete/id/" + licence.id + "/address/preferred/" + address.reference + "?pathType="+ action %}
+                {% set addressHtml = (address | formatAddressTitleCase(true) | safe) + 
+                    '&nbsp;&nbsp;<a href="' + deleteUrl + '" class="govuk-link govuk-link--no-visited-state" data-qa="delete-address-' + loop.index + '">Delete</a>' %}
+                    {% set preferredAddressesOptions = (preferredAddressesOptions.push({
+                        html: addressHtml,
+                        value: address | dump,
+                        attributes: {
+                            "data-qa": "address-" + loop.index
+                        }
+                    }), preferredAddressesOptions) %}
+                {% endfor %}
+                <form method="POST">
+                    <input type="hidden" name="actionType" value="useSavedAddress" />
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                    {{ govukRadios({
+                        idPrefix: "radio-option",
+                        id: "preferredAddress",
+                        name: "preferredAddress",
+                        errorMessage: validationErrors | findError('preferredAddress'),
+                        attributes: {
+                                "data-qa": "multiple-address"
+                        },
+                        items: preferredAddressesOptions
+                    }) }}
+                    <button class="govuk-button" data-module="govuk-button" data-qa="useThisAddress">
+                        Use this address
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    {% if postcodeLookupEnabled %}
+        {% include "pages/initialAppointment/prisonCreated/postcodeLookupForm.njk" %}
+    {% else %}
+        {% include "pages/initialAppointment/prisonCreated/manualAddressForm.njk" %}
+    {% endif %}
+{% endblock %}

@@ -11,7 +11,7 @@ export default class InitialMeetingContactRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { edit } = req.query
-    return res.render('pages/create/initialMeetingContact', {
+    return res.render('pages/initialAppointment/initialMeetingContact', {
       edit,
     })
   }
