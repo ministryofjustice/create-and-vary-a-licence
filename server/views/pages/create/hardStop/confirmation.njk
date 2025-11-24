@@ -17,13 +17,15 @@
             <h2 class="govuk-heading-m">What happens next</h2>
             <p>We have sent the licence for approval. This is usually done by the prison governor.</p>
 
-            <p class="govuk-body" id="sent-to">
-               {% if licence.comEmail %}
-                    Once the licence has been approved, we will automatically email the probation team to tell them.
-               {% else %}
-                    Once this licence has been approved, <strong>you will need to notify the probation team</strong>. We do not have their contact details to do this automatically.
-               {% endif %}        
-            </p>
+            {% if licence.kind != 'TIME_SERVED' %}
+                <p class="govuk-body" id="sent-to">
+                {% if licence.comEmail %}
+                        Once the licence has been approved, we will automatically email the probation team to tell them.
+                {% else %}
+                        Once this licence has been approved, <strong>you will need to notify the probation team</strong>. We do not have their contact details to do this automatically.
+                {% endif %}
+                </p>
+            {% endif %}
        
 
             <h2 class="govuk-heading-m">If you need to make any changes</h2>
