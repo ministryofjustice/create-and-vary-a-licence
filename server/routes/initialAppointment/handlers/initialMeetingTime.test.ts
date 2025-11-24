@@ -63,7 +63,7 @@ describe('Route - create licence - initial meeting date and time', () => {
       it('should render initial meeting time view', async () => {
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingTime', {
           formDate,
           appointmentTimeType,
           skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
@@ -75,7 +75,7 @@ describe('Route - create licence - initial meeting date and time', () => {
         res.locals.licence = { ...res.locals.licence, appointmentTime: null, appointmentTimeType: null }
 
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingTime', {
           formDate: undefined,
           appointmentTimeType,
           skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
@@ -138,7 +138,7 @@ describe('Route - create licence - initial meeting date and time', () => {
     describe('GET', () => {
       it('should render initial meeting time view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingTime', {
           formDate,
           appointmentTimeType,
           skipUrl: '/licence/view/id/1/show',

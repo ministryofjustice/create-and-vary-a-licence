@@ -1,14 +1,13 @@
 import { Request, Response } from 'express'
-import AddressService from '../../../services/addressService'
+import PathType from '../../../../../enumeration/pathType'
+import AddressService from '../../../../../services/addressService'
 import ManualAddressPostcodeLookupRoutes from './manualAddressPostcodeLookup'
-import UserType from '../../../enumeration/userType'
 
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
 describe('Route Handlers - Create a licence - Manual address entry', () => {
   let req: Request
   let res: Response
-  const handler = new ManualAddressPostcodeLookupRoutes(addressService, UserType.PROBATION)
 
   describe('Hardstop licence prison user journey', () => {
     beforeEach(() => {
@@ -31,21 +30,32 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
       } as unknown as Response
     })
     describe('GET', () => {
-      it('should render the manual address postcode lookup form in create initial appointment flow', async () => {
+      it('should render the manual address postcode lookup form with "Continue" button in create flow', async () => {
+        const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.CREATE)
+
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/manualAddressPostcodeLookupForm', {
-          postcodeLookupUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place`,
-        })
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm',
+          {
+            continueOrSaveLabel: 'Continue',
+            postcodeLookupUrl: `/licence/hard-stop/create/id/${req.params.licenceId}/initial-meeting-place`,
+          },
+        )
       })
 
-      it('should render the manual address postcode lookup form in edit flow', async () => {
-        req.query.fromReview = 'true'
+      it('should render the manual address postcode lookup form with "Save" button in edit flow', async () => {
+        const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.EDIT)
+
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/manualAddressPostcodeLookupForm', {
-          postcodeLookupUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place?fromReview=true`,
-        })
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm',
+          {
+            continueOrSaveLabel: 'Save',
+            postcodeLookupUrl: `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
+          },
+        )
       })
     })
 
@@ -68,6 +78,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
       })
 
       it('should call addAppointmentAddress with correct data and redirect to initial meeting contact in create flow', async () => {
+        const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.CREATE)
         await handler.POST(req, res)
 
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
@@ -79,27 +90,11 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           },
           user,
         )
-        expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/${licenceId}/initial-meeting-contact`)
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-contact`)
       })
 
       it('should call addAppointmentAddress and redirect to check-your-answers in edit flow', async () => {
-        req.query.fromReview = 'true'
-        await handler.POST(req, res)
-
-        expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
-          licenceId,
-          {
-            ...req.body,
-            isPreferredAddress: false,
-            source: 'MANUAL',
-          },
-          user,
-        )
-        expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/${licenceId}/check-your-answers`)
-      })
-
-      it('should redirect to show route for prison view', async () => {
-        const handler = new ManualAddressPostcodeLookupRoutes(addressService, UserType.PRISON)
+        const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.EDIT)
         req.body.isPreferredAddress = 'true'
         await handler.POST(req, res)
 
@@ -112,7 +107,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           },
           user,
         )
-        expect(res.redirect).toHaveBeenCalledWith(`/licence/view/id/${licenceId}/show`)
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
       })
     })
   })

@@ -55,7 +55,7 @@ describe('Route Handlers - Create Licence - Select an address', () => {
         const mockResponse = [{ firstLine: '123 Fake Street' }] as AddressSearchResponse[]
         addressService.searchForAddresses.mockResolvedValue(mockResponse)
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/selectAddress', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/selectAddress', {
           addresses: mockResponse,
           licenceId: req.params.licenceId,
           searchQuery: '123 Fake Street',
