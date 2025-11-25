@@ -920,6 +920,13 @@ const policy: LicencePolicyResponse = {
         requiresElectronicMonitoringResponse: false,
       },
       {
+        category: 'Freedom of movement',
+        code: '344a87e0-677a-49be-9adc-1f1891b1bd50',
+        requiresInput: false,
+        text: 'FOREIGN TRAVEL RESTRICTION PLACEHOLDER',
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
         code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
