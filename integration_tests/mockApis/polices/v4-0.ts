@@ -927,6 +927,13 @@ const policy: LicencePolicyResponse = {
         requiresElectronicMonitoringResponse: false,
       },
       {
+        category: 'Freedom of movement',
+        code: '005d70e4-a247-4f82-b8b3-6d294a0f5051',
+        requiresInput: false,
+        text: 'RESTRICTION ZONES PLACEHOLDER',
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
         code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
