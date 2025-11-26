@@ -35,7 +35,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
         },
         licence: {
           id: 1,
-          responsibleComFullName: 'Simon Webster',
+          responsibleComFullName: 'FirstName SecondName',
           statusCode: 'SUBMITTED',
         },
       },
@@ -56,7 +56,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
         appointmentPersonType: {
           DUTY_OFFICER: 'Duty Officer',
-          RESPONSIBLE_COM: 'Simon Webster, this person’s probation practitioner',
+          RESPONSIBLE_COM: 'FirstName SecondName, this person’s probation practitioner',
           SPECIFIC_PERSON: 'Someone else',
         },
         continueOrSaveLabel: 'Continue',
