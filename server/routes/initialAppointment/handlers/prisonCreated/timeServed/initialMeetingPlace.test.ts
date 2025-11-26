@@ -130,36 +130,18 @@ describe('InitialMeetingPlaceRoutes', () => {
 
       // Then
       expect(addressService.getPreferredAddresses).toHaveBeenCalledWith(user)
+
       expect(res.render).toHaveBeenCalledWith(
         'pages/initialAppointment/prisonCreated/initialMeetingPlace',
-        expect.objectContaining({ preferredAddresses }),
+        expect.objectContaining({
+          action: 'edit',
+          preferredAddresses,
+          formAddress,
+          continueOrSaveLabel: 'Save',
+          manualAddressEntryUrl: '/licence/time-served/edit/id/1/manual-address-entry',
+        }),
       )
     })
-  })
-
-  it('Given postcode lookup enabled and fromReview param present, When GET is called in EDIT flow, Then it should render the meeting place page with preferred addresses', async () => {
-    // Given
-    const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
-
-    config.postcodeLookupEnabled = true
-
-    req.query = { fromReview: 'true' }
-    addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
-
-    // When
-    await handler.GET(req as Request, res as Response)
-
-    // Then
-    expect(res.render).toHaveBeenCalledWith(
-      'pages/initialAppointment/prisonCreated/initialMeetingPlace',
-      expect.objectContaining({
-        action: 'edit',
-        preferredAddresses,
-        formAddress,
-        continueOrSaveLabel: 'Save',
-        manualAddressEntryUrl: '/licence/time-served/edit/id/1/manual-address-entry',
-      }),
-    )
   })
 
   describe('POST', () => {
