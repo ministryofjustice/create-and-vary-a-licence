@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import config from '../../../config'
 import statusConfig from '../../../licences/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
@@ -41,6 +42,7 @@ export default class ViewAndPrintCaseRoutes {
         : await this.caseloadService.getProbationOmuCaseload(user, prisonCaseloadToDisplay, searchString)
     const hasSelectedNomisForTimeServedLicenceCreation =
       req.flash('hasSelectedNomisForTimeServedLicenceCreation')[0] === 'true'
+    const { timeServedEnabled, timeServedEnabledPrisons } = config
 
     res.render('pages/view/cases', {
       cases: cases.map(c => {
@@ -71,6 +73,8 @@ export default class ViewAndPrintCaseRoutes {
       hasMultipleCaseloadsInNomis,
       probationView,
       hasSelectedNomisForTimeServedLicenceCreation,
+      isTimeServedEnabled:
+        timeServedEnabled && timeServedEnabledPrisons.some(prison => prisonCaseloadToDisplay.includes(prison)),
     })
   }
 

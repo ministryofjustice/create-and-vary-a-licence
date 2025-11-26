@@ -4,6 +4,7 @@ import statusConfig from '../../../licences/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../enumeration'
+import config from '../../../config'
 
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import { CaCase } from '../../../@types/licenceApiClientTypes'
@@ -30,7 +31,7 @@ describe('Route handlers - View and print case list', () => {
         }
         return []
       }) as unknown as Request['flash'],
-      session: { caseloadsSelected: [] },
+      session: { caseloadsSelected: ['BAI'] },
     } as unknown as Request
 
     res = {
@@ -287,6 +288,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -362,6 +364,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -451,6 +454,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -526,6 +530,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -562,6 +567,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -599,6 +605,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -674,6 +681,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -763,6 +771,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -806,6 +815,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -883,6 +893,7 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
+        isTimeServedEnabled: false,
       })
     })
 
@@ -905,6 +916,24 @@ describe('Route handlers - View and print case list', () => {
       await handler.GET(req, res)
 
       expect(req.flash).toHaveBeenCalledWith('hasSelectedNomisForTimeServedLicenceCreation')
+    })
+
+    it('should return isTimeServedEnabled as true when time served feature is enabled and prisonCaseloadToDisplay includes any of timeServedEnabledPrisons', async () => {
+      config.timeServedEnabledPrisons = ['BAI', 'MDI']
+      config.timeServedEnabled = true
+
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue(prisonCaseload)
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/view/cases',
+        expect.objectContaining({
+          isTimeServedEnabled: true,
+        }),
+      )
     })
   })
 })
