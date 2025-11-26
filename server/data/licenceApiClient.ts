@@ -382,15 +382,6 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<LicenceSummary>
   }
 
-  async submittedVariationsByProbationArea(probationAreaCode: string, user: User) {
-    return (await this.get(
-      {
-        path: `/licence/variations/submitted/area/${probationAreaCode}`,
-      },
-      { username: user?.username },
-    )) as LicenceSummary[]
-  }
-
   async updateSpoDiscussion(licenceId: string, request: UpdateSpoDiscussionRequest, user: User): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/spo-discussion`, data: request }, { username: user?.username })
   }

@@ -270,10 +270,6 @@ export default class LicenceService {
     return this.licenceApiClient.getComReviewCount(user)
   }
 
-  async getLicencesForVariationApprovalByRegion(user: User): Promise<LicenceSummary[]> {
-    return this.licenceApiClient.submittedVariationsByProbationArea(user?.probationAreaCode, user)
-  }
-
   async updateResponsibleCom(crn: string, newCom: UpdateComRequest): Promise<void> {
     return this.licenceApiClient.updateResponsibleCom(crn, newCom)
   }
