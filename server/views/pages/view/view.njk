@@ -3,8 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
-{% from "partials/hardStop/inductionMeetingDetailsSummary.njk" import hardStopInductionMeetingDetails %}
-{% from "partials/timeServed/inductionMeetingDetailsSummary.njk" import timeServedInductionMeetingDetails %}
+{% from "partials/prisonCreated/inductionMeetingDetailsSummary.njk" import prisonCreatedInductionMeetingDetails %}
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
@@ -61,10 +60,9 @@
                     }) }}
                 {% endif %}
 
-                {% if licence.kind === 'TIME_SERVED' %}
-                    {{ timeServedInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser) }}
-                {% elseif licence.kind === 'HARD_STOP' %}
-                    {{ hardStopInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser) }}
+                {% set prisonKinds = ['TIME_SERVED', 'HARD_STOP'] %}
+                {% if prisonKinds.includes(licence.kind) %}
+                    {{ prisonCreatedInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser) }}
                 {% else %}
                     {{ inductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
                 {% endif %}

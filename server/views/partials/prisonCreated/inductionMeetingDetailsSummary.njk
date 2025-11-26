@@ -2,9 +2,16 @@
 {% from "pages/selectedAppointmentPerson.njk" import selectedAppointmentPerson %}
 {% from "partials/getFormattedAddress.njk" import getFormattedAddress %}
 
-{% macro timeServedInductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
+{% macro prisonCreatedInductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
-    {% set routepath = "/licence/time-served/edit/id/" + licence.id %}
+
+    {% set pathMap = {
+        'TIME_SERVED': '/licence/time-served/edit/id/',
+        'HARD_STOP': '/licence/hard-stop/edit/id/'
+    } %}
+
+    {% set routepath = pathMap[licence.kind] + licence.id %}
+
 
     {% set addressPath = '/manual-address-entry' if (licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL') else '/initial-meeting-place' %}
 
