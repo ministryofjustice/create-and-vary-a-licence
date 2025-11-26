@@ -12,26 +12,17 @@ describe('Route Handlers - Create a licence - Select an address', () => {
   describe('TimeServed licence select address for prison user journey', () => {
     beforeEach(() => {
       req = {
-        params: {
-          licenceId: 123,
-        },
+        params: { licenceId: 123 },
         body: {},
-        query: {
-          searchQuery: '12345',
-        },
+        query: { searchQuery: '12345' },
       } as unknown as Request
 
       res = {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: {
-            username: 'joebloggs',
-          },
-          licence: {
-            id: req.params.licenceId,
-            responsibleComFullName: 'Simon Webster',
-          },
+          user: { username: 'joebloggs' },
+          licence: { id: req.params.licenceId, responsibleComFullName: 'TestFirst TestSecond' },
         },
       } as unknown as Response
 
@@ -47,11 +38,14 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       })
 
       it('should redirect to no-address-found if no addresses are returned', async () => {
+        // Given
         addressService.searchForAddresses = jest.fn().mockResolvedValue([])
         const handler = new SelectAddressRoutes(addressService, PathType.CREATE)
 
+        // When
         await handler.GET(req, res)
 
+        // Then
         expect(addressService.searchForAddresses).toHaveBeenCalledWith(searchQuery, res.locals.user, 'probation')
         expect(res.redirect).toHaveBeenCalledWith(
           `/licence/time-served/create/id/${req.params.licenceId}/no-address-found?searchQuery=SW1A%201AA`,
@@ -59,12 +53,15 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       })
 
       it('should render selectAddress page with addresses in create flow', async () => {
-        const mockAddresses = [{ line1: '10 Downing Street' }]
-        const handler = new SelectAddressRoutes(addressService, PathType.CREATE)
+        // Given
+        const mockAddresses = [{ line1: '10 Downing Street', postcode: 'TS1T 1TS' }]
         addressService.searchForAddresses = jest.fn().mockResolvedValue(mockAddresses)
+        const handler = new SelectAddressRoutes(addressService, PathType.CREATE)
 
+        // When
         await handler.GET(req, res)
 
+        // Then
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/selectAddress', {
           addresses: mockAddresses,
           licenceId: req.params.licenceId,
@@ -76,12 +73,15 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       })
 
       it('should render selectAddress page with addresses in edit flow', async () => {
-        const mockAddresses = [{ line1: '10 Downing Street' }]
-        const handler = new SelectAddressRoutes(addressService, PathType.EDIT)
+        // Given
+        const mockAddresses = [{ line1: '10 Downing Street', postcode: 'TS1T 1TS' }]
         addressService.searchForAddresses = jest.fn().mockResolvedValue(mockAddresses)
+        const handler = new SelectAddressRoutes(addressService, PathType.EDIT)
 
+        // When
         await handler.GET(req, res)
 
+        // Then
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/selectAddress', {
           addresses: mockAddresses,
           licenceId: req.params.licenceId,
@@ -100,7 +100,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
         secondLine: '',
         townOrCity: 'London',
         county: '',
-        postcode: 'SW1A 2AA',
+        postcode: 'TS1T 1TS',
         isPreferredAddress: '',
       }
 
@@ -109,9 +109,13 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       })
 
       it('should parse selectedAddress and call addAppointmentAddress in create flow', async () => {
+        // Given
         const handler = new SelectAddressRoutes(addressService, PathType.CREATE)
+
+        // When
         await handler.POST(req, res)
 
+        // Then
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
           req.params.licenceId,
           {
@@ -128,10 +132,14 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       })
 
       it('should parse selectedAddress and call addAppointmentAddress in edit flow', async () => {
-        const handler = new SelectAddressRoutes(addressService, PathType.EDIT)
+        // Given
         req.body.isPreferredAddress = 'true'
+        const handler = new SelectAddressRoutes(addressService, PathType.EDIT)
+
+        // When
         await handler.POST(req, res)
 
+        // Then
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
           req.params.licenceId,
           {
@@ -142,7 +150,9 @@ describe('Route Handlers - Create a licence - Select an address', () => {
           res.locals.user,
         )
 
-        expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/edit/id/123/contact-probation-team`)
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/licence/time-served/edit/id/${req.params.licenceId}/contact-probation-team`,
+        )
       })
     })
   })
