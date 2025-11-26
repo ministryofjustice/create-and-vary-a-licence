@@ -7,7 +7,7 @@ import { AddAddressRequest, AddressResponse, Licence } from '../../../../../@typ
 import AddressService from '../../../../../services/addressService'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
-import { getEditPath } from './index'
+import { getTimeServedEditPath } from './index'
 import { User } from '../../../../../@types/CvlUserDetails'
 
 export default class InitialMeetingPlaceRoutes {
@@ -76,7 +76,7 @@ export default class InitialMeetingPlaceRoutes {
 
   private getRedirectPath(licence: Licence): string {
     if (this.path === PathType.EDIT) {
-      return getEditPath(this.path, licence)
+      return getTimeServedEditPath(this.path, licence)
     }
     return `/licence/time-served/create/id/${licence.id}/initial-meeting-contact`
   }

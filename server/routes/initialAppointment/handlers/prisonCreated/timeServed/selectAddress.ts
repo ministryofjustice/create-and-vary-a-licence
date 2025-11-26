@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import AddressService from '../../../../../services/addressService'
 import { AddAddressRequest } from '../../../../../@types/licenceApiClientTypes'
 import PathType from '../../../../../enumeration/pathType'
-import { getEditPath } from './index'
+import { getTimeServedEditPath } from './index'
 
 export default class SelectAddressRoutes {
   constructor(
@@ -56,7 +56,7 @@ export default class SelectAddressRoutes {
     await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
 
     if (this.path === PathType.EDIT) {
-      return res.redirect(getEditPath(this.path, licence))
+      return res.redirect(getTimeServedEditPath(this.path, licence))
     }
     return res.redirect(`/licence/time-served/create/id/${licenceId}/initial-meeting-contact`)
   }

@@ -5,7 +5,7 @@ import UserType from '../../../../../enumeration/userType'
 import AppointmentTimeType from '../../../../../enumeration/appointmentTimeType'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import PathType from '../../../../../enumeration/pathType'
-import { getEditPath } from './index'
+import { getTimeServedEditPath } from './index'
 
 export default class InitialMeetingTimeRoutes {
   constructor(
@@ -32,7 +32,7 @@ export default class InitialMeetingTimeRoutes {
 
     flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
     if (PathType.EDIT === this.path) {
-      return res.redirect(getEditPath(this.path, licence))
+      return res.redirect(getTimeServedEditPath(this.path, licence))
     }
     return res.redirect(`/licence/time-served/id/${licenceId}/check-your-answers`)
   }

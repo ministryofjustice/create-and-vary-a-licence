@@ -27,7 +27,7 @@ import TelephoneNumbers from '../../../types/telephoneNumbers'
 import { getTimeServerContactProbation } from '../../../../creatingLicences/handlers/prisonCreated/timeServed/contactProbationTeamRoutes'
 import { Licence } from '../../../../../@types/licenceApiClientTypes'
 
-export const getEditPath = (pathType: PathType, licence: Licence): string => {
+export const getTimeServedEditPath = (pathType: PathType, licence: Licence): string => {
   if (licence.statusCode === 'IN_PROGRESS') {
     return `/licence/time-served/id/${licence.id}/check-your-answers`
   }
