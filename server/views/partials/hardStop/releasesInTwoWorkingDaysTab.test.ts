@@ -30,17 +30,17 @@ describe('Release In Two Working Days template', () => {
     config: statusConfig,
     count: 1,
     activeTab: 'releases-in-two-working-days',
-    timeServedEnabled: true,
+    isTimeServedEnabled: true,
   }
-  it('should show time-served message when timeServedEnabled is true', () => {
+  it('should show time-served message when isTimeServedEnabled is true', () => {
     const $ = render({ options })
     expect($('li').text()).toContain(
       'you can generate a standard licence if a probation practitioner has not submitted one or for time-served releases',
     )
   })
 
-  it('should show standard message when timeServedEnabled is false', () => {
-    const $ = render({ options: { ...options, timeServedEnabled: false } })
+  it('should show standard message when isTimeServedEnabled is false', () => {
+    const $ = render({ options: { ...options, isTimeServedEnabled: false } })
     expect($('li').text()).toContain(
       'you can generate a standard licence if a probation practitioner has not submitted one for approval',
     )
