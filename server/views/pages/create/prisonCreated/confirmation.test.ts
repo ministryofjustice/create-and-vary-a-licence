@@ -4,7 +4,7 @@ import { templateRenderer } from '../../../../utils/__testutils/templateTestUtil
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/create/prisonCreated/confirmation.njk').toString())
 
-describe('Hardstop Confirmation', () => {
+describe('Prison created Confirmation', () => {
   it('should show correct message when com email is absent', () => {
     const $ = render({
       licence: { comEmail: undefined },
