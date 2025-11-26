@@ -12,9 +12,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
   describe('TimeServed licence prison user journey', () => {
     beforeEach(() => {
       req = {
-        params: {
-          licenceId: 1,
-        },
+        params: { licenceId: 1 },
         body: {},
         query: {},
       } as unknown as Request
@@ -23,21 +21,21 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: {
-            username: 'joebloggs',
-          },
-          licence: {
-            id: 123,
-          },
+          user: { username: 'joebloggs' },
+          licence: { id: 123 },
         },
       } as unknown as Response
     })
+
     describe('GET', () => {
       it('should render the manual address postcode lookup form with "Continue" button in create flow', async () => {
+        // Given
         const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.CREATE)
 
+        // When
         await handler.GET(req, res)
 
+        // Then
         expect(res.render).toHaveBeenCalledWith(
           'pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm',
           {
@@ -48,10 +46,13 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
       })
 
       it('should render the manual address postcode lookup form with "Save" button in edit flow', async () => {
+        // Given
         const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.EDIT)
 
+        // When
         await handler.GET(req, res)
 
+        // Then
         expect(res.render).toHaveBeenCalledWith(
           'pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm',
           {
@@ -76,14 +77,18 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           postcode: 'TE5 7ST',
           isPreferredAddress: '',
         }
-
         addressService.addAppointmentAddress = jest.fn()
+        res.locals.licence = { id: licenceId }
       })
 
       it('should call addAppointmentAddress with correct data and redirect to initial meeting contact in create flow', async () => {
+        // Given
         const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.CREATE)
+
+        // When
         await handler.POST(req, res)
 
+        // Then
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
           licenceId,
           {
@@ -93,14 +98,19 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           },
           user,
         )
+
         expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/create/id/${licenceId}/initial-meeting-contact`)
       })
 
-      it('should call addAppointmentAddress and redirect to check-your-answers in edit flow', async () => {
+      it('should call addAppointmentAddress and redirect correctly in edit flow', async () => {
+        // Given
         const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.EDIT)
         req.body.isPreferredAddress = 'true'
+
+        // When
         await handler.POST(req, res)
 
+        // Then
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
           licenceId,
           {
@@ -110,6 +120,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           },
           user,
         )
+
         expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/edit/id/${licenceId}/contact-probation-team`)
       })
     })
