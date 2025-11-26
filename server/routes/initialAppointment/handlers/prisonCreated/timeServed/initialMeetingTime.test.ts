@@ -45,6 +45,7 @@ describe('Route - create licence - initial meeting date and time', () => {
         },
         licence: {
           id: 1,
+          statusCode: 'SUBMITTED',
           appointmentTime: '21/10/2022 14:15',
           appointmentTimeType: 'SPECIFIC_DATE_TIME',
           conditionalReleaseDate: '14/05/2022',
@@ -62,7 +63,13 @@ describe('Route - create licence - initial meeting date and time', () => {
 
     describe('GET', () => {
       it('should render initial meeting time view', async () => {
+        // Given
+        handler = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)
+
+        // When
         await handler.GET(req, res)
+
+        // Then
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingTime', {
           formDate,
           appointmentTimeType,
@@ -70,9 +77,14 @@ describe('Route - create licence - initial meeting date and time', () => {
         })
       })
 
-      it('should render initial meeting time view with Save Label', async () => {
+      it('should render initial meeting time view with Save label when editing', async () => {
+        // Given
         handler = new InitialMeetingTimeRoutes(licenceService, PathType.EDIT)
+
+        // When
         await handler.GET(req, res)
+
+        // Then
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingTime', {
           formDate,
           appointmentTimeType,
@@ -82,16 +94,39 @@ describe('Route - create licence - initial meeting date and time', () => {
     })
 
     describe('POST', () => {
-      it('should redirect to the next page', async () => {
+      it('should redirect to next page when PathType is CREATE', async () => {
+        // Given
         handler = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)
+
+        // When
         await handler.POST(req, res)
+
+        // Then
         expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
       })
 
-      it('should call to generate a flash message', async () => {
+      it('should generate flash message on save', async () => {
+        // Given
+        handler = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)
+
+        // When
         await handler.POST(req, res)
+
+        // Then
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
+      })
+
+      it('should redirect to edit path when PathType is EDIT', async () => {
+        // Given
+        handler = new InitialMeetingTimeRoutes(licenceService, PathType.EDIT)
+        res.locals.licence.statusCode = 'SUBMITTED'
+
+        // When
+        await handler.POST(req, res)
+
+        // Then
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/${PathType.EDIT}/id/1/contact-probation-team`)
       })
     })
   })
