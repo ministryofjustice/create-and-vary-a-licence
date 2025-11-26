@@ -1,7 +1,7 @@
 import { LicencePolicyResponse } from '../../../server/@types/licenceApiClientTypes'
 
 const policy: LicencePolicyResponse = {
-  version: '3.0',
+  version: '4.0',
   standardConditions: {
     AP: [
       {
@@ -902,6 +902,35 @@ const policy: LicencePolicyResponse = {
         text: 'Notify your supervising officer of any travel outside of your home county, including on public transport, prior to any such journey taking place unless otherwise specified by your supervising officer.',
         requiresInput: false,
         skippable: false,
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
+        code: 'd523d711-9975-4a9a-a37e-a17bd611140f',
+        category: 'Freedom of movement',
+        text: 'DRIVING PROHIBITION PLACEHOLDER',
+        requiresInput: false,
+        skippable: false,
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
+        category: 'Freedom of movement',
+        code: 'be16ee0b-a916-43ef-9319-b42a1dd418a3',
+        requiresInput: false,
+        text: 'DRINKING ESTABLISHMENT PLACEHOLDER',
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
+        category: 'Freedom of movement',
+        code: '344a87e0-677a-49be-9adc-1f1891b1bd50',
+        requiresInput: false,
+        text: 'FOREIGN TRAVEL RESTRICTION PLACEHOLDER',
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
+        category: 'Freedom of movement',
+        code: '005d70e4-a247-4f82-b8b3-6d294a0f5051',
+        requiresInput: false,
+        text: 'RESTRICTION ZONES PLACEHOLDER',
         requiresElectronicMonitoringResponse: false,
       },
       {
