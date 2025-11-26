@@ -1,24 +1,25 @@
 import { Request, Response } from 'express'
-
 import InitialMeetingPlaceRoutes from './initialMeetingPlace'
 import LicenceService from '../../../../../services/licenceService'
-import Address from '../../../types/address'
+import AddressService from '../../../../../services/addressService'
 import PathType from '../../../../../enumeration/pathType'
 import config from '../../../../../config'
-import AddressService from '../../../../../services/addressService'
-import { AddressResponse } from '../../../../../@types/licenceApiClientTypes'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
+import { AddressResponse, Licence } from '../../../../../@types/licenceApiClientTypes'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
-describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
+describe('InitialMeetingPlaceRoutes', () => {
   let req: Request
   let res: Response
-  let formAddress: Address
+  let formAddress: Record<string, string>
+  let licence: Licence
+  let user: { username: string }
+
   const preferredAddresses: AddressResponse[] = [
     {
       uprn: '123456789',
@@ -39,14 +40,22 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       addressTown: 'Smith Street',
       addressCounty: 'Stockport',
       addressPostcode: 'SP1 3DN',
-    } as unknown as Address
+    }
+
+    licence = {
+      id: 1,
+      appointmentAddress: 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
+      conditionalReleaseDate: '14/05/2022',
+      isEligibleForEarlyRelease: true,
+    } as Licence
+
+    user = {
+      username: 'joebloggs',
+    }
 
     req = {
-      params: {
-        licenceId: 1,
-      },
+      params: { licenceId: 1 },
       body: formAddress,
-      query: {},
     } as unknown as Request
 
     res = {
@@ -56,18 +65,13 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         user: {
           username: 'joebloggs',
         },
-        licence: {
-          id: 1,
-          appointmentAddress: 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
-          conditionalReleaseDate: '14/05/2022',
-          isEligibleForEarlyRelease: true,
-        },
+        licence,
       },
     } as unknown as Response
+
     config.postcodeLookupEnabled = false
 
     licenceService.updateAppointmentAddress = jest.fn()
-    licenceService.recordAuditEvent = jest.fn()
     addressService.getPreferredAddresses = jest.fn()
     addressService.addAppointmentAddress = jest.fn()
   })
@@ -77,165 +81,157 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     config.postcodeLookupEnabled = false
   })
 
-  describe('Time Served licence prison user journey', () => {
-    describe('GET', () => {
-      it('should render view', async () => {
-        const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
-        await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPlace', {
-          action: 'create',
+  describe('GET', () => {
+    it('Given PathType.CREATE, When GET called, Then should render create view', async () => {
+      // Given
+      const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
+
+      // When
+      await handler.GET(req as Request, res as Response)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPlace', {
+        action: 'create',
+        preferredAddresses: [],
+        formAddress,
+        continueOrSaveLabel: 'Continue',
+        manualAddressEntryUrl: '/licence/time-served/create/id/1/manual-address-entry',
+      })
+    })
+
+    it('Given PathType.EDIT, When GET called, Then should render edit view', async () => {
+      // Given
+      const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
+
+      // When
+      await handler.GET(req as Request, res as Response)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/initialAppointment/prisonCreated/initialMeetingPlace',
+        expect.objectContaining({
+          action: 'edit',
           preferredAddresses: [],
           formAddress,
-          continueOrSaveLabel: 'Continue',
-          manualAddressEntryUrl: '/licence/time-served/create/id/1/manual-address-entry',
-        })
-      })
+          continueOrSaveLabel: 'Save',
+          manualAddressEntryUrl: '/licence/time-served/edit/id/1/manual-address-entry',
+        }),
+      )
+    })
 
-      it('should render view with save Label and manual address entry URL', async () => {
-        const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
-        await handler.GET(req, res)
+    it('Given postcode lookup enabled, When GET called, Then should fetch preferred addresses', async () => {
+      // Given
+      config.postcodeLookupEnabled = true
+      addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
+      const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
 
-        expect(res.render).toHaveBeenCalledWith(
-          'pages/initialAppointment/prisonCreated/initialMeetingPlace',
-          expect.objectContaining({
-            action: 'edit',
-            preferredAddresses: [],
-            formAddress,
-            continueOrSaveLabel: 'Save',
-            manualAddressEntryUrl: '/licence/time-served/edit/id/1/manual-address-entry',
-          }),
-        )
-      })
+      // When
+      await handler.GET(req as Request, res as Response)
 
-      it('should render view with fromReviewParam and preferredAddresses when postcode lookup is enabled', async () => {
-        const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
-        config.postcodeLookupEnabled = true
-        addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
-        await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith(
-          'pages/initialAppointment/prisonCreated/initialMeetingPlace',
-          expect.objectContaining({
-            action: 'edit',
-            preferredAddresses,
-            formAddress,
-            continueOrSaveLabel: 'Save',
-            manualAddressEntryUrl: '/licence/time-served/edit/id/1/manual-address-entry',
-          }),
-        )
-      })
-      describe('POST', () => {
-        it('should redirect to the initial meeting contact page', async () => {
-          const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
-          await handler.POST(req, res)
-          expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, {
-            username: 'joebloggs',
-          })
-          expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/id/1/initial-meeting-contact')
-        })
+      // Then
+      expect(addressService.getPreferredAddresses).toHaveBeenCalledWith(user)
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/initialAppointment/prisonCreated/initialMeetingPlace',
+        expect.objectContaining({ preferredAddresses }),
+      )
+    })
+  })
 
-        it('should redirect to the check your answers page page', async () => {
-          const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
-          req = {
-            params: {
-              licenceId: 1,
-            },
-            body: formAddress,
-            query: {},
-          } as unknown as Request
-          await handler.POST(req, res)
-          expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, {
-            username: 'joebloggs',
-          })
-          expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/edit/id/1/contact-probation-team')
-        })
+  it('Given postcode lookup enabled and fromReview param present, When GET is called in EDIT flow, Then it should render the meeting place page with preferred addresses', async () => {
+    // Given
+    const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
 
-        it('should call to generate a flash message', async () => {
-          const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
-          await handler.POST(req, res)
-          expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
-        })
+    config.postcodeLookupEnabled = true
 
-        it('should not call updateAppointmentAddress', async () => {
-          const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
-          config.postcodeLookupEnabled = true
-          await handler.POST(req, res)
-          expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
-          expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalledWith()
-        })
+    req.query = { fromReview: 'true' }
+    addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
 
-        it('should redirect to /select-address in create flow if postcode lookup is enabled and searchQuery is provided', async () => {
-          const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
-          config.postcodeLookupEnabled = true
-          req = {
-            params: {
-              licenceId: 123,
-            },
-            body: {
-              searchQuery: 'SW1A 1AA',
-            },
-          } as unknown as Request
+    // When
+    await handler.GET(req as Request, res as Response)
 
-          await handler.POST(req, res)
+    // Then
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/initialAppointment/prisonCreated/initialMeetingPlace',
+      expect.objectContaining({
+        action: 'edit',
+        preferredAddresses,
+        formAddress,
+        continueOrSaveLabel: 'Save',
+        manualAddressEntryUrl: '/licence/time-served/edit/id/1/manual-address-entry',
+      }),
+    )
+  })
 
-          expect(res.redirect).toHaveBeenCalledWith(
-            '/licence/time-served/create/id/123/select-address?searchQuery=SW1A%201AA',
-          )
-          expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
-          expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
-        })
+  describe('POST', () => {
+    it('Given PathType.CREATE, When POST called, Then should update address and redirect', async () => {
+      // Given
+      const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
 
-        it('should redirect to /select-address in edit flow if postcode lookup is enabled and searchQuery is provided', async () => {
-          const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
-          config.postcodeLookupEnabled = true
-          req = {
-            params: {
-              licenceId: 123,
-            },
-            body: {
-              searchQuery: 'SW1A 1AA',
-            },
-          } as unknown as Request
+      // When
+      await handler.POST(req as Request, res as Response)
 
-          await handler.POST(req, res)
+      // Then
+      expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, user)
+      expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, licence, UserType.PRISON)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/id/1/initial-meeting-contact')
+    })
 
-          expect(res.redirect).toHaveBeenCalledWith(
-            '/licence/time-served/edit/id/123/select-address?searchQuery=SW1A%201AA',
-          )
-          expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
-          expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
-        })
+    it('Given PathType.EDIT and licence status IN_PROGRESS, When POST called, Then should redirect to check-your-answers', async () => {
+      // Given
+      licence.statusCode = 'IN_PROGRESS'
+      const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
 
-        it('should parse preferredAddress and call addAppointmentAddress with correct arguments', async () => {
-          const preferredAddress = {
-            uprn: '987654',
-            firstLine: '1 Test Road',
-            secondLine: 'Suite 2',
-            townOrCity: 'Testville',
-            county: 'Testshire',
-            postcode: 'TE5 7ST',
-            source: 'test-source',
-          }
-          req = {
-            ...req,
-            body: { preferredAddress: JSON.stringify(preferredAddress) },
-            query: {},
-          } as unknown as Request
-          config.postcodeLookupEnabled = true
-          const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
+      // When
+      await handler.POST(req as Request, res as Response)
 
-          await handler.POST(req, res)
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
+      expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, req.body, user)
+    })
 
-          expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
-            res.locals.licence,
-            {
-              ...preferredAddress,
-              isPreferredAddress: false,
-            },
-            res.locals.user,
-          )
-          expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/edit/id/1/contact-probation-team`)
-        })
-      })
+    it('Given postcode lookup enabled and searchQuery provided, When POST called, Then should redirect to select-address', async () => {
+      // Given
+      config.postcodeLookupEnabled = true
+      req.body = { searchQuery: 'SW1A 1AA' }
+      const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
+
+      // When
+      await handler.POST(req as Request, res as Response)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith(
+        '/licence/time-served/create/id/1/select-address?searchQuery=SW1A%201AA',
+      )
+      expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
+      expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
+    })
+
+    it('Given postcode lookup enabled and preferredAddress provided, When POST called, Then should call addAppointmentAddress', async () => {
+      // Given
+      config.postcodeLookupEnabled = true
+      const preferredAddress = {
+        uprn: '987654',
+        firstLine: '1 Test Road',
+        secondLine: 'Suite 2',
+        townOrCity: 'Testville',
+        county: 'Testshire',
+        postcode: 'TE5 7ST',
+        source: 'test-source',
+      }
+      req.body = { preferredAddress: JSON.stringify(preferredAddress) }
+      const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
+
+      // When
+      await handler.POST(req as Request, res as Response)
+
+      // Then
+      expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
+        licence,
+        { ...preferredAddress, isPreferredAddress: false },
+        user,
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/edit/id/1/contact-probation-team')
+      expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
     })
   })
 })

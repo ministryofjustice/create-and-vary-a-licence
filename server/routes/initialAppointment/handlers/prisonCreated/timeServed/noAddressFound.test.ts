@@ -6,7 +6,7 @@ describe('Route Handlers - Create a licence - No address found', () => {
   let req: Request
   let res: Response
 
-  describe('Hardstop licence No address found for prison user journey', () => {
+  describe('TimeServed licence No address found for prison user journey', () => {
     beforeEach(() => {
       req = {
         params: {

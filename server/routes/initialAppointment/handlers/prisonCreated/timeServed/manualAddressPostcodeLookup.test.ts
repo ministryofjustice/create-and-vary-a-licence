@@ -9,7 +9,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
   let req: Request
   let res: Response
 
-  describe('Hardstop licence prison user journey', () => {
+  describe('TimeServed licence prison user journey', () => {
     beforeEach(() => {
       req = {
         params: {

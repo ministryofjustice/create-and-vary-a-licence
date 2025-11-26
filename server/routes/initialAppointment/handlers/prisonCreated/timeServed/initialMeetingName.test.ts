@@ -4,14 +4,14 @@ import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../../../services/licenceService'
 import { AppointmentPersonRequest } from '../../../../../@types/licenceApiClientTypes'
 import PathType from '../../../../../enumeration/pathType'
-import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
+import flashInitialApptUpdatedFlashMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
-describe('Route Handlers - Create Licence - Initial Meeting Name - Probation users', () => {
+describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
   let req: Request
   let res: Response
   const contactPerson = {
@@ -21,9 +21,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
 
   beforeEach(() => {
     req = {
-      params: {
-        licenceId: '1',
-      },
+      params: { licenceId: '1' },
       body: contactPerson,
       query: {},
     } as unknown as Request
@@ -38,75 +36,116 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         licence: {
           id: 1,
           responsibleComFullName: 'Simon Webster',
+          statusCode: 'SUBMITTED',
         },
       },
     } as unknown as Response
+
     licenceService.updateAppointmentPerson = jest.fn()
-    licenceService.recordAuditEvent = jest.fn()
   })
 
-  describe('Prison user(CA) time served journey', () => {
-    let handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+  describe('GET', () => {
+    it('should render view with probation practitioner allocated', async () => {
+      // Given
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
 
-    describe('GET', () => {
-      it('should render view', async () => {
-        const appointmentPersonType = {
-          DUTY_OFFICER: 'Duty Officer',
-          RESPONSIBLE_COM: `${res?.locals?.licence?.responsibleComFullName}, this person’s probation practitioner`,
-          SPECIFIC_PERSON: 'Someone else',
-        }
-        await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
-          appointmentPersonType,
-          continueOrSaveLabel: 'Continue',
-          isProbationPractionerAllocated: true,
-        })
+      // When
+      await handler.GET(req, res)
 
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
-        res.locals.licence.responsibleComFullName = null
-        const appointmentPersonTypeWithOutPP = {
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
+        appointmentPersonType: {
           DUTY_OFFICER: 'Duty Officer',
+          RESPONSIBLE_COM: 'Simon Webster, this person’s probation practitioner',
           SPECIFIC_PERSON: 'Someone else',
-        }
-        await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
-          appointmentPersonType: appointmentPersonTypeWithOutPP,
-          continueOrSaveLabel: 'Continue',
-          isProbationPractionerAllocated: false,
-        })
+        },
+        continueOrSaveLabel: 'Continue',
+        isProbationPractionerAllocated: true,
       })
     })
 
-    describe('POST', () => {
-      it('should redirect to the meeting place page', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
-        await handler.POST(req, res)
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
-          username: 'joebloggs',
-        })
-        expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/id/1/initial-meeting-place')
-      })
+    it('should render view without probation practitioner allocated', async () => {
+      // Given
+      res.locals.licence.responsibleComFullName = null
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
 
-      it('should redirect to the check your answers page', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
-        req = {
-          params: {
-            licenceId: '1',
-          },
-          body: contactPerson,
-          query: {},
-        } as unknown as Request
-        await handler.POST(req, res)
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
-          username: 'joebloggs',
-        })
-        expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/edit/id/1/contact-probation-team')
-      })
+      // When
+      await handler.GET(req, res)
 
-      it('should call to generate a flash message', async () => {
-        await handler.POST(req, res)
-        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
+        appointmentPersonType: {
+          DUTY_OFFICER: 'Duty Officer',
+          SPECIFIC_PERSON: 'Someone else',
+        },
+        continueOrSaveLabel: 'Continue',
+        isProbationPractionerAllocated: false,
       })
+    })
+
+    it('should show Save label when path is EDIT', async () => {
+      // Given
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+
+      // When
+      await handler.GET(req, res)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/initialAppointment/prisonCreated/initialMeetingPerson',
+        expect.objectContaining({
+          continueOrSaveLabel: 'Save',
+        }),
+      )
+    })
+  })
+
+  describe('POST', () => {
+    it('should redirect to the meeting place page for CREATE', async () => {
+      // Given
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+
+      // When
+      await handler.POST(req, res)
+
+      // Then
+      expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, { username: 'joebloggs' })
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/id/1/initial-meeting-place')
+    })
+
+    it('should redirect to check-your-answers when EDIT + IN_PROGRESS', async () => {
+      // Given
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+      res.locals.licence.statusCode = 'IN_PROGRESS'
+
+      // When
+      await handler.POST(req, res)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
+    })
+
+    it('should redirect to contact probation team when EDIT + not IN_PROGRESS', async () => {
+      // Given
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+      res.locals.licence.statusCode = 'SUBMITTED'
+
+      // When
+      await handler.POST(req, res)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/edit/id/1/contact-probation-team')
+    })
+
+    it('should call flash message generator', async () => {
+      // Given
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+
+      // When
+      await handler.POST(req, res)
+
+      // Then
+      expect(flashInitialApptUpdatedFlashMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
     })
   })
 })

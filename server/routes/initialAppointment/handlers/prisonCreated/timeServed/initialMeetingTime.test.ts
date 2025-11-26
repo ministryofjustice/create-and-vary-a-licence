@@ -57,7 +57,7 @@ describe('Route - create licence - initial meeting date and time', () => {
     licenceService.recordAuditEvent = jest.fn()
   })
 
-  describe('Hardstop licence prison user journey', () => {
+  describe('TimeServed licence prison user journey', () => {
     let handler = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)
 
     describe('GET', () => {
