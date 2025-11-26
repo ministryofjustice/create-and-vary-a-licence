@@ -6,6 +6,9 @@ import { LicenceStatus, LicenceKind, CaViewCasesTab } from '../../../enumeration
 
 import { CaCase } from '../../../@types/licenceApiClientTypes'
 
+const TIMED_OUT_KINDS = [LicenceKind.HARD_STOP, LicenceKind.TIME_SERVED]
+const EDITABLE_TIMED_OUT_STATUSES = [LicenceStatus.IN_PROGRESS, LicenceStatus.TIMED_OUT]
+
 export default class ViewAndPrintCaseRoutes {
   constructor(
     private readonly caseloadService: CaCaseloadService,
@@ -83,31 +86,27 @@ export default class ViewAndPrintCaseRoutes {
   }
 
   private getLink = (licence: CaCase): string => {
-    if (
-      !this.isClickable(
-        <LicenceKind>licence.kind,
-        <LicenceStatus>licence.licenceStatus,
-        licence.isInHardStopPeriod,
-        licence.tabType,
-      )
-    ) {
+    const licenceStatus = <LicenceStatus>licence.licenceStatus
+
+    if (!this.isClickable(<LicenceKind>licence.kind, licenceStatus, licence.isInHardStopPeriod, licence.tabType)) {
       return null
     }
-    if (licence.licenceStatus === LicenceStatus.TIMED_OUT) {
+    if (licenceStatus === LicenceStatus.TIMED_OUT) {
       return licence.hardStopKind === LicenceKind.TIME_SERVED
         ? `/licence/time-served/create/nomisId/${licence.prisonerNumber}/do-you-want-to-create-the-licence-on-this-service`
         : `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
     }
     if (licence.licenceId) {
       const query =
-        licence.licenceVersionOf && licence.licenceStatus === LicenceStatus.SUBMITTED
+        licence.licenceVersionOf && licenceStatus === LicenceStatus.SUBMITTED
           ? `?lastApprovedVersion=${licence.licenceVersionOf}`
           : ''
 
-      return licence.isInHardStopPeriod &&
-        this.isEditableInHardStop(<LicenceKind>licence.kind, <LicenceStatus>licence.licenceStatus)
-        ? `/licence/hard-stop/id/${licence.licenceId}/check-your-answers${query}`
-        : `/licence/view/id/${licence.licenceId}/show${query}`
+      if (licence.isInHardStopPeriod && this.isEditableTimedOutStatus(licenceStatus)) {
+        const timedOutKind = licence.kind === LicenceKind.TIME_SERVED ? 'time-served' : 'hard-stop'
+        return `/licence/${timedOutKind}/id/${licence.licenceId}/check-your-answers${query}`
+      }
+      return `/licence/view/id/${licence.licenceId}/show${query}`
     }
 
     return null
@@ -129,9 +128,11 @@ export default class ViewAndPrintCaseRoutes {
     return !this.nonViewableStatuses.includes(licenceStatus)
   }
 
-  private isEditableInHardStop = (kind: LicenceKind, licenceStatus: LicenceStatus) => {
-    const inProgressHardStop = kind === LicenceKind.HARD_STOP && licenceStatus === LicenceStatus.IN_PROGRESS
-    const notStarted = licenceStatus === LicenceStatus.TIMED_OUT
-    return inProgressHardStop || notStarted
+  private isEditableInHardStop = (kind: LicenceKind, status: LicenceStatus): boolean => {
+    return this.isTimedOutKinds(kind) && this.isEditableTimedOutStatus(status)
   }
+
+  private isEditableTimedOutStatus = (status: LicenceStatus): boolean => EDITABLE_TIMED_OUT_STATUSES.includes(status)
+
+  private isTimedOutKinds = (kind: LicenceKind): boolean => TIMED_OUT_KINDS.includes(kind)
 }

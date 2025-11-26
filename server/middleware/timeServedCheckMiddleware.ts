@@ -14,7 +14,7 @@ export default function timeServedCheckMiddleware(userType: UserType): RequestHa
       return res.redirect('/access-denied')
     }
     if (licence.kind === LicenceKind.TIME_SERVED && userType === UserType.PROBATION) {
-      logger.error('Access denied to probation user due to time served middleware')
+      logger.error('**Access denied to probation user due to time served middleware')
       return res.redirect('/access-denied')
     }
 

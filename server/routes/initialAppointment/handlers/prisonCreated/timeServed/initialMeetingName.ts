@@ -3,6 +3,7 @@ import LicenceService from '../../../../../services/licenceService'
 import PathType from '../../../../../enumeration/pathType'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
+import { getEditPath } from './index'
 
 export default class InitialMeetingNameRoutes {
   constructor(
@@ -24,7 +25,7 @@ export default class InitialMeetingNameRoutes {
 
     res.render('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
       appointmentPersonType,
-      continueOrSaveLabel: 'Continue',
+      continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
       isProbationPractionerAllocated,
     })
   }
@@ -35,6 +36,9 @@ export default class InitialMeetingNameRoutes {
     await this.licenceService.updateAppointmentPerson(licenceId, req.body, user)
     flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
 
-    res.redirect(`/licence/time-served/create/id/${licenceId}/initial-meeting-place`)
+    if (PathType.EDIT === this.path) {
+      return res.redirect(getEditPath(this.path, licence))
+    }
+    return res.redirect(`/licence/time-served/create/id/${licence.id}/initial-meeting-place`)
   }
 }

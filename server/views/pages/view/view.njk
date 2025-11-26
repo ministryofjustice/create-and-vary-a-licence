@@ -4,6 +4,7 @@
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
 {% from "partials/hardStop/inductionMeetingDetailsSummary.njk" import hardStopInductionMeetingDetails %}
+{% from "partials/timeServed/inductionMeetingDetailsSummary.njk" import timeServedInductionMeetingDetails %}
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
@@ -60,7 +61,9 @@
                     }) }}
                 {% endif %}
 
-                {% if licence.kind === 'HARD_STOP' %}
+                {% if licence.kind === 'TIME_SERVED' %}
+                    {{ timeServedInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser) }}
+                {% elseif licence.kind === 'HARD_STOP' %}
                     {{ hardStopInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser) }}
                 {% else %}
                     {{ inductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
@@ -96,7 +99,8 @@
                     <h2 class="govuk-heading-m margin-top-85 govuk-!-margin-bottom-4">View and print licence</h2>
                 {% endif %}
                 <div class="govuk-button-group govuk-!-margin-top-8">
-                    {% if licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP' %}
+                    {% if licence.statusCode == 'IN_PROGRESS'
+                        and (licence.kind in ['HARD_STOP', 'TIME_SERVED']) %}
                         {{ govukButton({
                             text: "Send for approval",
                             classes: "govuk-button--primary govuk-!-margin-right-1",

@@ -9,6 +9,7 @@ import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTy
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
 import HdcService from '../../../services/hdcService'
+import { LicenceKind } from '../../../enumeration'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(
@@ -93,6 +94,9 @@ export default class ViewAndPrintLicenceRoutes {
 
     await this.licenceService.submitLicence(licenceId, user)
 
+    if (licence.kind === LicenceKind.TIME_SERVED) {
+      return res.redirect(`/licence/time-served/create/id/${licenceId}/contact-probation-team`)
+    }
     return res.redirect(`/licence/hard-stop/id/${licenceId}/confirmation`)
   }
 

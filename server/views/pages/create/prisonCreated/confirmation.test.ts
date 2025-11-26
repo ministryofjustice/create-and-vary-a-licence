@@ -1,10 +1,8 @@
 import fs from 'fs'
 
-import { templateRenderer } from '../../../../../utils/__testutils/templateTestUtils'
+import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 
-const render = templateRenderer(
-  fs.readFileSync('server/views/pages/create/prisonCreated/hardStop/confirmation.njk').toString(),
-)
+const render = templateRenderer(fs.readFileSync('server/views/pages/create/prisonCreated/confirmation.njk').toString())
 
 describe('Hardstop Confirmation', () => {
   it('should show correct message when com email is absent', () => {
@@ -14,8 +12,9 @@ describe('Hardstop Confirmation', () => {
     expect($('#sent-to').text().toString()).toContain(
       'Once this licence has been approved, you will need to notify the probation team. We do not have their contact details to do this automatically.',
     )
-    expect($('.govuk-panel__body').length).toEqual(1)
-    expect($('.govuk-panel__body').text().toString()).toContain('You still need to contact the probation team')
+    const panelBody = $('.govuk-panel__body')
+    expect(panelBody.length).toEqual(1)
+    expect(panelBody.text().toString()).toContain('You still need to contact the probation team')
   })
 
   it('should show correct message when com email is present', () => {

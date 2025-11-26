@@ -36,6 +36,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           username: 'joebloggs',
         },
         licence: {
+          id: 1,
           responsibleComFullName: 'Simon Webster',
         },
       },
@@ -84,6 +85,22 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           username: 'joebloggs',
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/id/1/initial-meeting-place')
+      })
+
+      it('should redirect to the check your answers page', async () => {
+        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+        req = {
+          params: {
+            licenceId: '1',
+          },
+          body: contactPerson,
+          query: {},
+        } as unknown as Request
+        await handler.POST(req, res)
+        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
+          username: 'joebloggs',
+        })
+        expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/edit/id/1/contact-probation-team')
       })
 
       it('should call to generate a flash message', async () => {
