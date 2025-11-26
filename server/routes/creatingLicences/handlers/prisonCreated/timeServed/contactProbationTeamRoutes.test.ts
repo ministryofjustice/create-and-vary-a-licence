@@ -47,6 +47,21 @@ describe('ContactProbationTeamRoutes', () => {
         backLink: req.session?.returnToCase || '/licence/view/cases',
       })
     })
+
+    it('should use default backLink if session.returnToCase is undefined', async () => {
+      // Given
+      req.session = undefined
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
+
+      // When
+      await handler.GET(req, res)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/create/prisonCreated/timeServed/confirmContactProbationTeam', {
+        licence: res.locals.licence,
+        backLink: '/licence/view/cases',
+      })
+    })
   })
 
   describe('GET edit', () => {
@@ -118,7 +133,6 @@ describe('ContactProbationTeamRoutes', () => {
 
     it('should log start and completion of POST', async () => {
       // Given
-
       const loggerInfoSpy = jest.spyOn(logger, 'info')
       req.body = {
         contactStatus: 'CANNOT_CONTACT',
@@ -136,13 +150,13 @@ describe('ContactProbationTeamRoutes', () => {
   })
 
   describe('POST Edit path', () => {
-    it('should call addTimeServedProbationConfirmContact and redirect when OTHER not included', async () => {
+    it('should call addTimeServedProbationConfirmContact and redirect to check-your-answers', async () => {
       // Given
       req.body = {
         contactStatus: 'ALREADY_CONTACTED',
         communicationMethods: ['EMAIL'],
       }
-      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.EDIT)
 
       // When
       await handler.POST(req, res)
@@ -157,7 +171,7 @@ describe('ContactProbationTeamRoutes', () => {
         } as TimeServedProbationConfirmContactRequest,
         res.locals.user,
       )
-      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/123/confirmation')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/123/check-your-answers')
     })
 
     it('should include otherCommunicationDetail if communicationMethods includes OTHER', async () => {
@@ -167,7 +181,7 @@ describe('ContactProbationTeamRoutes', () => {
         communicationMethods: ['OTHER'],
         otherCommunicationDetail: 'Letter',
       }
-      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.EDIT)
 
       // When
       await handler.POST(req, res)
@@ -183,18 +197,17 @@ describe('ContactProbationTeamRoutes', () => {
         res.locals.user,
       )
 
-      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/123/confirmation')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/123/check-your-answers')
     })
 
     it('should log start and completion of POST', async () => {
       // Given
-      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
-
       const loggerInfoSpy = jest.spyOn(logger, 'info')
       req.body = {
         contactStatus: 'CANNOT_CONTACT',
         communicationMethods: ['PHONE'],
       }
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.EDIT)
 
       // When
       await handler.POST(req, res)
