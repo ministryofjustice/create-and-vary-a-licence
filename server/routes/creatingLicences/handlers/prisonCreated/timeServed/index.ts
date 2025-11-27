@@ -9,6 +9,7 @@ import ConfirmCreateRoutes from './confirmCreate'
 import CreateLicenceInNomisOrCvl from '../../../types/createLicenceInNomisOrCvl'
 import ContactProbationTeamRoutes from './contactProbationTeamRoutes'
 import { CreateTimeServedProbationConfirmContact } from '../../../types/createTimeServedProbationConfirmContact'
+import PathType from '../../../../../enumeration/pathType'
 
 export default function Index({ licenceService, conditionService, timeServedService }: Services): Router {
   const router = Router()
@@ -34,7 +35,6 @@ export default function Index({ licenceService, conditionService, timeServedServ
     )
   {
     const controller = new ConfirmCreateRoutes(licenceService, timeServedService)
-
     get('/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service', controller.GET)
     post(
       '/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service',
@@ -43,9 +43,14 @@ export default function Index({ licenceService, conditionService, timeServedServ
     )
   }
   {
-    const controller = new ContactProbationTeamRoutes(timeServedService)
+    const controller = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
     get('/create/id/:licenceId/contact-probation-team', controller.GET)
     post('/create/id/:licenceId/contact-probation-team', controller.POST, CreateTimeServedProbationConfirmContact)
+  }
+  {
+    const controller = new ContactProbationTeamRoutes(timeServedService, PathType.EDIT)
+    get('/edit/id/:licenceId/contact-probation-team', controller.GET)
+    post('/edit/id/:licenceId/contact-probation-team', controller.POST, CreateTimeServedProbationConfirmContact)
   }
   return router
 }

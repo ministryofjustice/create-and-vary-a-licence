@@ -136,7 +136,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
         username: 'joebloggs',
       })
       expect(licenceService.createLicence).toHaveBeenCalledWith(
-        { nomsId: 'ABC123', type: 'HARD_STOP' },
+        { nomsId: 'ABC123', type: 'TIME_SERVED' },
         {
           username: 'joebloggs',
         },

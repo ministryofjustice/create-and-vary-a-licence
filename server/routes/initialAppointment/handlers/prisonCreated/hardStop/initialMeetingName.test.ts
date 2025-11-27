@@ -74,7 +74,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
       })
     })
 
-    /** To be added */
     describe('POST', () => {
       it('should redirect to the meeting time page', async () => {
         handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)

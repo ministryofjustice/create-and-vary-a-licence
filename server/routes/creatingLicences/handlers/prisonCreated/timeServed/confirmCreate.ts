@@ -56,7 +56,7 @@ export default class ConfirmCreateRoutes {
 
     if (answer === YesOrNo.YES) {
       const { licenceId } = await this.licenceService.createLicence(
-        { nomsId: nomisId, type: LicenceKind.HARD_STOP },
+        { nomsId: nomisId, type: LicenceKind.TIME_SERVED },
         user,
       )
       return res.redirect(`/licence/time-served/create/id/${licenceId}/initial-meeting-name`)
