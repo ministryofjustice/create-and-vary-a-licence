@@ -1,335 +1,123 @@
 import getUrlAccessByStatus from './urlAccessByStatus'
 
 const username = 'USER1'
-let path = ''
+const licenceId = 1
 
-describe('URL access checks for licence statuses', () => {
-  describe('URL access checks for IN_PROGRESS', () => {
-    it('should allow access to licence creation', () => {
-      path = '/licence/create/id/1/initial-meeting-name'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
+const allowedPathsByStatus = {
+  IN_PROGRESS: [
+    '/licence/hard-stop/id/1/check-your-answers',
+    '/licence/hard-stop/create/foo',
+    '/licence/hard-stop/edit/foo',
+    '/licence/time-served/id/1/check-your-answers',
+    '/licence/time-served/create/foo',
+    '/licence/time-served/edit/foo',
+    '/licence/create/foo',
+    '/licence/view/foo',
+  ],
+  SUBMITTED: [
+    '/licence/hard-stop/edit/foo',
+    '/licence/hard-stop/id/1/confirmation',
+    '/licence/hard-stop/id/1/check-your-answers',
+    '/licence/create/id/1/check-your-answers',
+    '/licence/create/id/1/edit',
+    '/licence/create/id/1/confirmation',
+    '/licence/create/id/1/initial-meeting',
+    '/licence/view/id/1/foo',
+    '/licence/approve/id/1/foo',
+    '/licence/create/id/1/licence-created-by-prison',
+    '/licence/create/id/1/no-address-found',
+    '/licence/create/id/1/select-address',
+    '/licence/create/id/1/manual-address-entry',
+    '/licence/time-served/create/id/1/contact-probation-team',
+    '/licence/time-served/id/1/confirmation',
+    '/licence/time-served/edit/foo',
+    '/licence/time-served/id/1/check-your-answers',
+  ],
+  APPROVED: [
+    '/licence/hard-stop/edit/foo',
+    '/licence/hard-stop/id/1/check-your-answers',
+    '/licence/create/id/1/check-your-answers',
+    '/licence/create/id/1/edit',
+    '/licence/create/id/1/initial-meeting',
+    '/licence/approve/id/1/confirm-approved',
+    '/licence/view/id/1/foo',
+    '/licence/approve/id/1/probation-practitioner',
+    '/licence/create/id/1/licence-created-by-prison',
+    '/licence/create/id/1/licence-changes-not-approved-in-time',
+    '/licence/create/id/1/no-address-found',
+    '/licence/create/id/1/select-address',
+    '/licence/create/id/1/manual-address-entry',
+    '/licence/time-served/id/1/confirmation',
+    '/licence/time-served/edit/foo',
+    '/licence/time-served/id/1/check-your-answers',
+  ],
+  REJECTED: [
+    '/licence/create/id/1/check-your-answers',
+    '/licence/create/id/1/edit',
+    '/licence/approve/id/1/confirm-rejected',
+    '/licence/view/id/1/foo',
+  ],
+  ACTIVE: [
+    '/licence/create/id/1/check-your-answers',
+    '/licence/create/id/1/licence-created-by-prison',
+    '/licence/view/id/1/foo',
+    '/licence/vary/id/1/foo',
+    '/licence/vary-approve/id/1/approve',
+    '/licence/approve/id/1/probation-practitioner',
+  ],
+  INACTIVE: ['/licence/create/id/1/check-your-answers', '/licence/view/id/1/foo', '/licence/vary/id/1/foo'],
+  RECALLED: ['/licence/create/id/1/check-your-answers', '/licence/view/id/1/foo'],
+  VARIATION_IN_PROGRESS: ['/licence/create/foo', '/licence/vary/foo'],
+  VARIATION_SUBMITTED: ['/licence/vary/foo', '/licence/vary-approve/foo'],
+  VARIATION_APPROVED: ['/licence/vary/foo', '/licence/vary-approve/foo'],
+  VARIATION_REJECTED: ['/licence/vary/foo', '/licence/vary-approve/foo'],
+  TIMED_OUT: ['/licence/create/nomisId/123/prison-will-create-this-licence'],
+}
 
-    it('should allow access to licence viewing', () => {
-      path = '/licence/view/id/1/show'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
+const disallowedPathsByStatus: Record<string, readonly string[]> = {
+  IN_PROGRESS: ['/licence/view/id/1/pdf-print'],
+  SUBMITTED: ['/licence/view/id/1/pdf-print'],
+  REJECTED: ['/licence/view/id/1/pdf-print'],
+  RECALLED: ['/licence/view/id/1/pdf-print'],
+  VARIATION_IN_PROGRESS: ['/licence/view/id/1/pdf-print'],
+  VARIATION_SUBMITTED: ['/licence/view/id/1/pdf-print'],
+  VARIATION_REJECTED: ['/licence/view/id/1/pdf-print'],
+}
 
-    it('should deny access to licence approval flow', () => {
-      path = '/licence/approve/id/1/view'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(false)
-    })
+describe('URL access checks by licence status', () => {
+  ;(Object.keys(allowedPathsByStatus) as Array<keyof typeof allowedPathsByStatus>).forEach(status => {
+    describe(`${status} paths`, () => {
+      const allowedPaths = allowedPathsByStatus[status]
+      if (allowedPaths && allowedPaths.length > 0) {
+        describe('Allowed paths', () => {
+          allowedPaths.forEach(path => {
+            it(`should allow ${path}`, () => {
+              // Given
+              const testPath = path
+              // When
+              const result = getUrlAccessByStatus(testPath, licenceId, status, username)
+              // Then
+              expect(result).toBe(true)
+            })
+          })
+        })
+      }
 
-    it('should deny access to pdf print', () => {
-      path = '/licence/view/id/1/pdf-print'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(false)
-    })
-
-    it('should allow access to standard licence creation', () => {
-      path = '/licence/hard-stop/create/id/1/initial-meeting-name'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to edit standard licence', () => {
-      path = '/licence/hard-stop/edit/id/1/initial-meeting-name'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to check your answers', () => {
-      path = '/licence/hard-stop/id/1/check-your-answers'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to no address found', () => {
-      path = '/licence/create/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to view no address found', () => {
-      path = '/licence/view/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to hardstop flow no address found', () => {
-      path = '/licence/hard-stop/create/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to hardstop flow select address', () => {
-      path = '/licence/hard-stop/create/id/1/select-address'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to hardstop flow manual address entry', () => {
-      path = '/licence/hard-stop/create/id/1/manual-address-entry'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to hardstop flow edit no address found', () => {
-      path = '/licence/hard-stop/edit/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to hardstop flow edit select address', () => {
-      path = '/licence/hard-stop/edit/id/1/select-address'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-
-    it('should allow access to hardstop flow edit manual address entry', () => {
-      path = '/licence/hard-stop/edit/id/1/manual-address-entry'
-      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
-    })
-  })
-
-  describe('URL access checks for SUBMITTED', () => {
-    it('should allow access to check your answers', () => {
-      path = '/licence/create/id/1/check-your-answers'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to confirmation page after submitting', () => {
-      path = '/licence/create/id/123/confirmation'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to approval flow', () => {
-      path = '/licence/approve/id/1/view'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to editing initial appointment information', () => {
-      path = '/licence/create/id/1/initial-meeting-name'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should deny access to pdf print', () => {
-      path = '/licence/view/id/1/pdf-print'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(false)
-    })
-
-    it('should allow access to standard licence edit', () => {
-      path = '/licence/hard-stop/edit/id/1/initial-meeting-name'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to standard licence confirm', () => {
-      path = '/licence/hard-stop/id/1/confirmation'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to check your answers', () => {
-      path = '/licence/hard-stop/id/1/check-your-answers'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to licence-created-by-prison page', () => {
-      path = '/licence/create/id/1/licence-created-by-prison'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to create no address found', () => {
-      path = '/licence/create/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to view no address found', () => {
-      path = '/licence/view/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to view select address', () => {
-      path = '/licence/view/id/1/select-address'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should allow access to view manual address entry', () => {
-      path = '/licence/view/id/1/manual-address-entry'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-
-    it('should not allow access to hardstop create flow no address found', () => {
-      path = '/licence/hard-stop/create/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(false)
-    })
-
-    it('should allow access to hardstop edit flow no address found', () => {
-      path = '/licence/hard-stop/edit/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
-    })
-  })
-
-  describe('URL access checks for APPROVED', () => {
-    it('should allow access to check your answers', () => {
-      path = '/licence/create/id/1/check-your-answers'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should allow access to editing initial appointment information', () => {
-      path = '/licence/create/id/1/initial-meeting-name'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should deny access to other creation forms', () => {
-      path = '/licence/create/id/1//additional-licence-conditions-question'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(false)
-    })
-
-    it('should allow access to approval confirmation', () => {
-      path = '/licence/approve/id/1/confirm-approved'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should allow access to licence viewing', () => {
-      path = '/licence/view/id/1/show'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should allow access to pdf print', () => {
-      path = '/licence/view/id/1/pdf-print'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should deny access to approval flow', () => {
-      path = '/licence/approve/id/1/view'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(false)
-    })
-
-    it('should allow access to standard licence edit', () => {
-      path = '/licence/hard-stop/edit/id/1/initial-meeting-name'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should allow access to standard licence check your answers', () => {
-      path = '/licence/hard-stop/id/1/check-your-answers'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should allow access to licence-created-by-prison page', () => {
-      path = '/licence/create/id/1/licence-created-by-prison'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should allow access to create no address found', () => {
-      path = '/licence/create/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should allow access to view no address found', () => {
-      path = '/licence/view/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should allow access to view select address', () => {
-      path = '/licence/view/id/1/select-address'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should allow access to view manual address entry', () => {
-      path = '/licence/view/id/1/manual-address-entry'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-
-    it('should not allow access to hardstop create flow no address found', () => {
-      path = '/licence/hard-stop/create/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(false)
-    })
-
-    it('should allow access to hardstop edit flow no address found', () => {
-      path = '/licence/hard-stop/edit/id/1/no-address-found'
-      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
-    })
-  })
-
-  describe('URL access checks for REJECTED', () => {
-    it('should allow access to check your answers', () => {
-      path = '/licence/create/id/1/check-your-answers'
-      expect(getUrlAccessByStatus(path, 1, 'REJECTED', username)).toEqual(true)
-    })
-
-    it('should allow access to licence viewing', () => {
-      path = '/licence/view/id/1/show'
-      expect(getUrlAccessByStatus(path, 1, 'REJECTED', username)).toEqual(true)
-    })
-
-    it('should deny access to approval flow', () => {
-      path = '/licence/approve/id/1/view'
-      expect(getUrlAccessByStatus(path, 1, 'REJECTED', username)).toEqual(false)
-    })
-
-    it('should allow access to rejection confirmation', () => {
-      path = '/licence/approve/id/1/confirm-rejected'
-      expect(getUrlAccessByStatus(path, 1, 'REJECTED', username)).toEqual(true)
-    })
-
-    it('should deny access to pdf print', () => {
-      path = '/licence/view/id/1/pdf-print'
-      expect(getUrlAccessByStatus(path, 1, 'REJECTED', username)).toEqual(false)
-    })
-  })
-
-  describe('URL access checks for ACTIVE', () => {
-    it('should allow access to check your answers', () => {
-      path = '/licence/create/id/1/check-your-answers'
-      expect(getUrlAccessByStatus(path, 1, 'ACTIVE', username)).toEqual(true)
-    })
-
-    it('should allow access to licence viewing', () => {
-      path = '/licence/view/id/1/show'
-      expect(getUrlAccessByStatus(path, 1, 'ACTIVE', username)).toEqual(true)
-    })
-
-    it('should allow access to pdf print', () => {
-      path = '/licence/view/id/1/pdf-print'
-      expect(getUrlAccessByStatus(path, 1, 'ACTIVE', username)).toEqual(true)
-    })
-
-    it('should deny access to approval flow', () => {
-      path = '/licence/approve/id/1/view'
-      expect(getUrlAccessByStatus(path, 1, 'ACTIVE', username)).toEqual(false)
-    })
-
-    it('should allow access to view probation practitioner details', () => {
-      path = '/licence/approve/id/1/probation-practitioner'
-      expect(getUrlAccessByStatus(path, 1, 'ACTIVE', username)).toEqual(true)
-    })
-  })
-
-  describe('URL access checks for INACTIVE', () => {
-    it('should allow access to check your answers', () => {
-      path = '/licence/create/id/1/check-your-answers'
-      expect(getUrlAccessByStatus(path, 1, 'INACTIVE', username)).toEqual(true)
-    })
-
-    it('should allow access to licence viewing', () => {
-      path = '/licence/view/id/1/show'
-      expect(getUrlAccessByStatus(path, 1, 'INACTIVE', username)).toEqual(true)
-    })
-
-    it('should allow access to pdf print', () => {
-      path = '/licence/view/id/1/pdf-print'
-      expect(getUrlAccessByStatus(path, 1, 'INACTIVE', username)).toEqual(true)
-    })
-
-    it('should deny access to approval flow', () => {
-      path = '/licence/approve/id/1/view'
-      expect(getUrlAccessByStatus(path, 1, 'INACTIVE', username)).toEqual(false)
-    })
-  })
-
-  describe('URL access checks for RECALLED', () => {
-    it('should allow access to check your answers', () => {
-      path = '/licence/create/id/1/check-your-answers'
-      expect(getUrlAccessByStatus(path, 1, 'RECALLED', username)).toEqual(true)
-    })
-
-    it('should allow access to licence viewing', () => {
-      path = '/licence/view/id/1/show'
-      expect(getUrlAccessByStatus(path, 1, 'RECALLED', username)).toEqual(true)
-    })
-
-    it('should deny access to approval flow', () => {
-      path = '/licence/approve/id/1/view'
-      expect(getUrlAccessByStatus(path, 1, 'RECALLED', username)).toEqual(false)
+      const disallowedPaths = disallowedPathsByStatus[status] || []
+      if (disallowedPaths.length > 0) {
+        describe('Disallowed paths', () => {
+          disallowedPaths.forEach(path => {
+            it(`should deny ${path}`, () => {
+              // Given
+              const testPath = path
+              // When
+              const result = getUrlAccessByStatus(testPath, licenceId, status, username)
+              // Then
+              expect(result).toBe(false)
+            })
+          })
+        })
+      }
     })
   })
 })
