@@ -207,4 +207,7 @@ export default {
   hdcLicenceCreationBlockEnabled: get('HDC_LICENCE_CREATION_BLOCK', 'false', requiredInProduction) === 'true',
   postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
   timeServedEnabled: get('TIME_SERVED_ENABLED', 'false', requiredInProduction) === 'true',
+  timeServedEnabledPrisons: get('TIME_SERVED_ENABLED_PRISONS', '', requiredInProduction)
+    .split(',')
+    .map(p => p.trim()),
 }
