@@ -208,9 +208,7 @@ export default {
   postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
   timeServed: {
     enabled: get('TIME_SERVED_ENABLED', 'false', requiredInProduction) === 'true',
-    prisons: get('TIME_SERVED_ENABLED_PRISONS', '', requiredInProduction)
-      .split(',')
-      .map(p => p.trim()),
+    prisons: (get('TIME_SERVED_ENABLED_PRISONS', '', requiredInProduction) as string).split(',').map(p => p.trim()),
     surveyUrl: get('TIME_SERVED_SURVEY_URL', 'https://www.smartsurvey.co.uk/s/B35S18/', requiredInProduction),
     serviceNowUrl: get(
       'TIME_SERVED_SERVICE_NOW_URL',
