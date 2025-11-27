@@ -208,7 +208,7 @@ describe('InitialMeetingPlaceRoutes', () => {
 
       // Then
       expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
-        licence,
+        licence.id,
         { ...preferredAddress, isPreferredAddress: false },
         user,
       )
