@@ -17,6 +17,7 @@ export default class LicenceReviewRoutes {
     if (answer === YesOrNo.YES) {
       return res.redirect(`/licence/vary/id/${licenceId}/confirm-vary-action`)
     }
+    req.flash('showTimeServedImproveServiceBanner', 'true')
 
     await this.licenceService.reviewWithoutVariation(parseInt(licenceId, 10), user)
 

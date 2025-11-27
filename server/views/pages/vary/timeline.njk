@@ -10,11 +10,9 @@
 {% set backLinkHref = "/licence/vary/caseload" %}
 
 {% block content %}
-{% if showImproveServiceBanner %}
+{% if showTimeServedImproveServiceBanner %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {{ licence.kind }}
-            {{ licence.statusCode }}
             {{ improveService(timeServedSurveyUrl, timeServedServiceNowUrl) }}
         </div>
     </div>
