@@ -1,12 +1,11 @@
 import { Request, Response } from 'express'
-import LicenceType from '../../../../../enumeration/licenceType'
+import LicenceType from '../../../../enumeration/licenceType'
 
 export default class ConfirmationRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
 
     let titleText
-    let confirmationMessage
     const backLink = '/licence/view/cases'
     switch (licence.typeCode) {
       case LicenceType.AP_PSS:
@@ -23,6 +22,6 @@ export default class ConfirmationRoutes {
       }
     }
 
-    res.render('pages/create/prisonCreated/hardStop/confirmation', { titleText, confirmationMessage, backLink })
+    res.render('pages/create/prisonCreated/confirmation', { titleText, backLink })
   }
 }

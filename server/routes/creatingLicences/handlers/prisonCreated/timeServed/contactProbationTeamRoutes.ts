@@ -2,9 +2,17 @@ import { Request, Response } from 'express'
 import TimeServedService from '../../../../../services/timeServedService'
 import { type TimeServedProbationConfirmContactRequest } from '../../../../../@types/licenceApiClientTypes'
 import logger from '../../../../../../logger'
+import PathType from '../../../../../enumeration/pathType'
+
+export const getTimeServerContactProbation = (pathType: PathType, licenceId: string) => {
+  return `/licence/time-served/${pathType}/id/${licenceId}/contact-probation-team`
+}
 
 export default class ContactProbationTeamRoutes {
-  constructor(private readonly timeServedService: TimeServedService) {}
+  constructor(
+    private readonly timeServedService: TimeServedService,
+    private readonly path: PathType,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
@@ -35,7 +43,13 @@ export default class ContactProbationTeamRoutes {
     )
 
     logger.info('ContactProbationTeamRoutes POST completed')
-    // TODO this may need updating at a later stage but this ticket is not yet written
-    return res.redirect(`/licence/hard-stop/id/${licenceId}/confirmation`)
+    res.redirect(this.getRedirectPath(licenceId))
+  }
+
+  private getRedirectPath(licenceId: string): string {
+    if (PathType.EDIT === this.path) {
+      return `/licence/time-served/id/${licenceId}/check-your-answers`
+    }
+    return `/licence/time-served/id/${licenceId}/confirmation`
   }
 }

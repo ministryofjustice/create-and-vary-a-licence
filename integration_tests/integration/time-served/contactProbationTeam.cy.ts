@@ -29,6 +29,7 @@ context('Time Served – Contact Probation Team', () => {
       statusCode: 'SUBMITTED',
       licenceStatus: 'TIMED_OUT',
       hardStopKind: 'TIME_SERVED',
+      kind: 'TIME_SERVED',
     })
     cy.task('stubUpdateTimeServedExternalRecord')
     cy.task('stubGetTimeServedExternalRecordReasonNotSet')
@@ -83,7 +84,7 @@ context('Time Served – Contact Probation Team', () => {
     page.continue()
 
     // Then
-    cy.url().should('include', '/licence/hard-stop/id/1/confirmation')
+    cy.url().should('include', '/licence/time-served/id/1/confirmation')
   })
 
   it('submits successfully with ALREADY_CONTACTED and all communication methods', () => {
@@ -101,7 +102,7 @@ context('Time Served – Contact Probation Team', () => {
     page.continue()
 
     // Then
-    cy.url().should('include', '/licence/hard-stop/id/1/confirmation')
+    cy.url().should('include', '/licence/time-served/id/1/confirmation')
   })
 
   it('submits successfully with OTHER and detail only', () => {
@@ -116,6 +117,6 @@ context('Time Served – Contact Probation Team', () => {
     page.continue()
 
     // Then
-    cy.url().should('include', '/licence/hard-stop/id/2/confirmation')
+    cy.url().should('include', '/licence/time-served/id/2/confirmation')
   })
 })

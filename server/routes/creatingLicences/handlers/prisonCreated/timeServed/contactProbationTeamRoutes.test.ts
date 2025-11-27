@@ -3,6 +3,7 @@ import TimeServedService from '../../../../../services/timeServedService'
 import ContactProbationTeamRoutes from './contactProbationTeamRoutes'
 import { type TimeServedProbationConfirmContactRequest } from '../../../../../@types/licenceApiClientTypes'
 import logger from '../../../../../../logger'
+import PathType from '../../../../../enumeration/pathType'
 
 jest.mock('../../../../../services/timeServedService')
 jest.mock('../../../../../../logger')
@@ -11,11 +12,9 @@ describe('ContactProbationTeamRoutes', () => {
   let req: Request
   let res: Response
   let timeServedService: jest.Mocked<TimeServedService>
-  let handler: ContactProbationTeamRoutes
 
   beforeEach(() => {
     timeServedService = new TimeServedService(null) as jest.Mocked<TimeServedService>
-    handler = new ContactProbationTeamRoutes(timeServedService)
 
     req = {
       body: {},
@@ -34,9 +33,41 @@ describe('ContactProbationTeamRoutes', () => {
     jest.resetAllMocks()
   })
 
-  describe('GET', () => {
+  describe('GET create', () => {
     it('should render the confirm contact probation team page with licence and backLink', async () => {
       // Given
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
+
+      // When
+      await handler.GET(req, res)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/create/prisonCreated/timeServed/confirmContactProbationTeam', {
+        licence: res.locals.licence,
+        backLink: req.session?.returnToCase || '/licence/view/cases',
+      })
+    })
+
+    it('should use default backLink if session.returnToCase is undefined', async () => {
+      // Given
+      req.session = undefined
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
+
+      // When
+      await handler.GET(req, res)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/create/prisonCreated/timeServed/confirmContactProbationTeam', {
+        licence: res.locals.licence,
+        backLink: '/licence/view/cases',
+      })
+    })
+  })
+
+  describe('GET edit', () => {
+    it('should render the confirm contact probation team page with licence and backLink', async () => {
+      // Given
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.EDIT)
 
       // When
       await handler.GET(req, res)
@@ -49,13 +80,14 @@ describe('ContactProbationTeamRoutes', () => {
     })
   })
 
-  describe('POST', () => {
+  describe('POST Create path', () => {
     it('should call addTimeServedProbationConfirmContact and redirect when OTHER not included', async () => {
       // Given
       req.body = {
         contactStatus: 'ALREADY_CONTACTED',
         communicationMethods: ['EMAIL'],
       }
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
 
       // When
       await handler.POST(req, res)
@@ -70,7 +102,7 @@ describe('ContactProbationTeamRoutes', () => {
         } as TimeServedProbationConfirmContactRequest,
         res.locals.user,
       )
-      expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/123/confirmation')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/123/confirmation')
     })
 
     it('should include otherCommunicationDetail if communicationMethods includes OTHER', async () => {
@@ -80,6 +112,7 @@ describe('ContactProbationTeamRoutes', () => {
         communicationMethods: ['OTHER'],
         otherCommunicationDetail: 'Letter',
       }
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
 
       // When
       await handler.POST(req, res)
@@ -94,7 +127,8 @@ describe('ContactProbationTeamRoutes', () => {
         } as TimeServedProbationConfirmContactRequest,
         res.locals.user,
       )
-      expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/123/confirmation')
+
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/123/confirmation')
     })
 
     it('should log start and completion of POST', async () => {
@@ -104,6 +138,76 @@ describe('ContactProbationTeamRoutes', () => {
         contactStatus: 'CANNOT_CONTACT',
         communicationMethods: ['PHONE'],
       }
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
+
+      // When
+      await handler.POST(req, res)
+
+      // Then
+      expect(loggerInfoSpy).toHaveBeenNthCalledWith(1, 'ContactProbationTeamRoutes POST started')
+      expect(loggerInfoSpy).toHaveBeenNthCalledWith(2, 'ContactProbationTeamRoutes POST completed')
+    })
+  })
+
+  describe('POST Edit path', () => {
+    it('should call addTimeServedProbationConfirmContact and redirect to check-your-answers', async () => {
+      // Given
+      req.body = {
+        contactStatus: 'ALREADY_CONTACTED',
+        communicationMethods: ['EMAIL'],
+      }
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.EDIT)
+
+      // When
+      await handler.POST(req, res)
+
+      // Then
+      expect(timeServedService.addTimeServedProbationConfirmContact).toHaveBeenCalledWith(
+        123,
+        {
+          contactStatus: 'ALREADY_CONTACTED',
+          communicationMethods: ['EMAIL'],
+          otherCommunicationDetail: undefined,
+        } as TimeServedProbationConfirmContactRequest,
+        res.locals.user,
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/123/check-your-answers')
+    })
+
+    it('should include otherCommunicationDetail if communicationMethods includes OTHER', async () => {
+      // Given
+      req.body = {
+        contactStatus: 'WILL_CONTACT_SOON',
+        communicationMethods: ['OTHER'],
+        otherCommunicationDetail: 'Letter',
+      }
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.EDIT)
+
+      // When
+      await handler.POST(req, res)
+
+      // Then
+      expect(timeServedService.addTimeServedProbationConfirmContact).toHaveBeenCalledWith(
+        123,
+        {
+          contactStatus: 'WILL_CONTACT_SOON',
+          communicationMethods: ['OTHER'],
+          otherCommunicationDetail: 'Letter',
+        } as TimeServedProbationConfirmContactRequest,
+        res.locals.user,
+      )
+
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/123/check-your-answers')
+    })
+
+    it('should log start and completion of POST', async () => {
+      // Given
+      const loggerInfoSpy = jest.spyOn(logger, 'info')
+      req.body = {
+        contactStatus: 'CANNOT_CONTACT',
+        communicationMethods: ['PHONE'],
+      }
+      const handler = new ContactProbationTeamRoutes(timeServedService, PathType.EDIT)
 
       // When
       await handler.POST(req, res)
