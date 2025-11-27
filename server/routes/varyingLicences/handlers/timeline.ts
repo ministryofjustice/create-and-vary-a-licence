@@ -60,6 +60,11 @@ export default class TimelineRoutes {
     return res.render(`pages/vary/timeline`, {
       timelineEvents,
       callToAction: this.getCtaType(licence),
+      showImproveServiceBanner:
+        config.timeServed.enabled &&
+        config.timeServed.prisons.includes(licence.prisonCode) &&
+        licence.kind === LicenceKind.TIME_SERVED &&
+        licence.statusCode === ACTIVE,
     })
   }
 

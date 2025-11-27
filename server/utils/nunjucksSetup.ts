@@ -457,7 +457,9 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('hdcIntegrationMvp2Enabled', config.hdcIntegrationMvp2Enabled)
   njkEnv.addGlobal('hdcLicenceCreationBlockEnabled', config.hdcLicenceCreationBlockEnabled)
   njkEnv.addGlobal('postcodeLookupEnabled', config.postcodeLookupEnabled)
-  njkEnv.addGlobal('timeServedEnabled', config.timeServedEnabled)
+  njkEnv.addGlobal('timeServedEnabled', config.timeServed.enabled)
+  njkEnv.addGlobal('timeServedSurveyUrl', config.timeServed.surveyUrl)
+  njkEnv.addGlobal('timeServedServiceNowUrl', config.timeServed.serviceNowUrl)
 
   return njkEnv
 }
