@@ -60,6 +60,9 @@ const allowedPaths = [
       '/licence/create/id/(\\d)*/no-address-found.*',
       '/licence/create/id/(\\d)*/select-address.*',
       '/licence/create/id/(\\d)*/manual-address-entry.*',
+      '/licence/time-served/id/(\\d)*/confirmation.*',
+      '/licence/time-served/edit/.*',
+      '/licence/time-served/id/(\\d)*/check-your-answers.*',
     ],
   },
   {
