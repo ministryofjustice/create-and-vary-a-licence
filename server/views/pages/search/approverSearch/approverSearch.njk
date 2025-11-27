@@ -169,7 +169,7 @@
     {
         attributes: {
             id: 'probation-practitioner-' + loop.index,
-            "data-sort-value": case.probationPractitioner
+            "data-sort-value": case.probationPractitioner.name
         },
         html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" data-qa="comLink" class="govuk-link search-highlight">' + case.probationPractitioner.name + '</a>'
     },
@@ -177,7 +177,7 @@
         attributes: {
             id: 'submitted-by-' + loop.index,
             "data-sort-value": case.submittedByFullName
-            },
+        },
         text: case.submittedByFullName
     },
     {
@@ -231,7 +231,7 @@
     {
         attributes: {
             id: 'probation-practitioner-' + loop.index,
-            "data-sort-value": case.probationPractitioner
+            "data-sort-value": case.probationPractitioner.name
         },
         html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link search-highlight">' + case.probationPractitioner.name + '</a>'
     },
@@ -298,7 +298,7 @@
                         Find a case
                     </label>
                     <div id="search-hint" class="govuk-hint moj-search__hint approver-caseload-search">
-                    Search by name, prison number or probation practitioner
+                        Search by name, prison number or probation practitioner
                     </div>
                     <input class="govuk-input moj-search__input" id="search" name="queryTerm" value="{{ queryTerm }}" aria-describedby="search-hint">
                 </div>
@@ -311,7 +311,7 @@
 
     {% if hasMultipleCaseloadsInNomis %}
         <div class="govuk-!-padding-top-7 govuk-!-padding-bottom-9">
-            <p  data-qa="change-caseload">
+            <p data-qa="change-caseload">
                 Showing:
                 <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
                     {{prisonsToDisplay | extractAttr('description') | join(', ')}} 

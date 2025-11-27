@@ -145,6 +145,7 @@ describe('View Prison Approver Search Results', () => {
     expect($('#name-1 > a').attr('href').trim()).toBe('/licence/approve/id/1/view')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#probation-practitioner-1').text()).toBe('Test Com 1')
+    expect($('#probation-practitioner-1').attr('data-sort-value')).toBe('Test Com 1')
     expect($('#probation-practitioner-1 > .govuk-link').attr('href').trim()).toBe(
       '/licence/approve/id/1/probation-practitioner',
     )
@@ -159,6 +160,7 @@ describe('View Prison Approver Search Results', () => {
 
     expect($('#nomis-id-2').text()).toBe('A1234AB')
     expect($('#probation-practitioner-2').text()).toBe('Test Com 2')
+    expect($('#probation-practitioner-2').attr('data-sort-value')).toBe('Test Com 2')
     expect($('#probation-practitioner-2 > .govuk-link').attr('href').trim()).toBe(
       '/licence/approve/id/2/probation-practitioner',
     )
@@ -196,6 +198,7 @@ describe('View Prison Approver Search Results', () => {
     expect($('#name-1 > a').attr('href').trim()).toBe('/licence/view/id/5/pdf-print')
     expect($('#nomis-id-1').text()).toBe('A1234AE')
     expect($('#probation-practitioner-1').text()).toBe('Test Com 1')
+    expect($('#probation-practitioner-1').attr('data-sort-value')).toBe('Test Com 1')
     expect($('#probation-practitioner-1 > .govuk-link').attr('href').trim()).toBe(
       '/licence/approve/id/5/probation-practitioner',
     )
@@ -208,6 +211,7 @@ describe('View Prison Approver Search Results', () => {
     expect($('#name-2 > a').text()).toBe('Test Person 6')
     expect($('#nomis-id-2').text()).toBe('A1234AF')
     expect($('#probation-practitioner-2').text()).toBe('Test Com 2')
+    expect($('#probation-practitioner-2').attr('data-sort-value')).toBe('Test Com 2')
     expect($('#probation-practitioner-2 > .govuk-link').attr('href').trim()).toBe(
       '/licence/approve/id/6/probation-practitioner',
     )
