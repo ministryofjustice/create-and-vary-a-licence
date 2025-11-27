@@ -176,7 +176,6 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'REVIEW_NEEDED',
-          hardStopKind: 'TIME_SERVED',
           probationPractitioner: null,
           kind: 'TIME_SERVED',
         },

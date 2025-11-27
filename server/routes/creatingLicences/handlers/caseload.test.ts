@@ -5,7 +5,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
-import { ComCase } from '../../../@types/licenceApiClientTypes'
+import { ComCreateCase } from '../../../@types/licenceApiClientTypes'
 import { parseIsoDate } from '../../../utils/utils'
 
 const comCaseloadService = new ComCaseloadService(null, null) as jest.Mocked<ComCaseloadService>
@@ -35,7 +35,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           staffIdentifier: 2000,
         },
       },
-    ] as unknown as ComCase[])
+    ] as unknown as ComCreateCase[])
 
     comCaseloadService.getTeamCreateCaseload.mockResolvedValue([
       {
@@ -92,7 +92,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         hardStopWarningDate: '10/10/2022',
         kind: LicenceKind.CRD,
       },
-    ] as unknown as ComCase[])
+    ] as unknown as ComCreateCase[])
   })
 
   afterEach(() => {
@@ -280,7 +280,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           createLink: '/licence/create/id/2/check-your-answers',
           isClickable: true,
         },
-      ] as unknown as ComCase[])
+      ] as unknown as ComCreateCase[])
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
