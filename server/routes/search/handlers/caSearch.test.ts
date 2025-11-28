@@ -953,7 +953,7 @@ describe('Route Handlers - Search - Ca Search', () => {
     })
   })
 
-  it('should allow modifying inprogress hardstop licence during hardstop', async () => {
+  it('should allow modifying in-progress hardstop licence during hardstop', async () => {
     searchResponse = {
       inPrisonResults: [
         {
@@ -1034,6 +1034,55 @@ describe('Route Handlers - Search - Ca Search', () => {
       hasSelectedMultiplePrisonCaseloads: false,
       prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
       changeLocationHref: '/licence/view/change-location?queryTerm=test',
+      isSearchPageView: true,
+    })
+  })
+
+  it('trims the search query', async () => {
+    const queryTerm = '   test query   '
+    searchResponse = {
+      inPrisonResults: [],
+      onProbationResults: [],
+      attentionNeededResults: [],
+    }
+
+    searchService.getCaSearchResults.mockResolvedValue(searchResponse)
+    req.query = { queryTerm }
+
+    const trimmedQueryTerm = queryTerm.trim()
+
+    await handler.GET(req, res)
+
+    expect(searchService.getCaSearchResults).toHaveBeenCalledWith(trimmedQueryTerm, ['MDI'])
+    expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
+      queryTerm: trimmedQueryTerm,
+      backLink: '/licence/view/cases',
+      statusConfig,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prison: {
+          resultsCount: 0,
+          tabHeading: 'People in prison',
+          tabId: 'tab-heading-prison',
+        },
+        probation: {
+          resultsCount: 0,
+          tabHeading: 'People on probation',
+          tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
+      },
+      inPrisonResults: [],
+      onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasMultipleCaseloadsInNomis: false,
+      hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
+      changeLocationHref: `/licence/view/change-location?queryTerm=${trimmedQueryTerm}`,
       isSearchPageView: true,
     })
   })

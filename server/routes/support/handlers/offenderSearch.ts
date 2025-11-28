@@ -13,8 +13,19 @@ export default class OffenderSearchRoutes {
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { firstName, lastName, nomisId, crn } = req.query as Record<string, string>
+    const {
+      firstName: firstNameInput,
+      lastName: lastNameInput,
+      nomisId: nomisIdInput,
+      crn: crnInput,
+    } = req.query as Record<string, string>
     const { user } = res.locals
+
+    const firstName = firstNameInput?.trim()
+    const lastName = lastNameInput?.trim()
+    const nomisId = nomisIdInput?.trim()
+    const crn = crnInput?.trim()
+
     const searchValues = { firstName, lastName, nomisId, crn }
 
     if (Object.values(searchValues).every(x => !x || x === '')) {

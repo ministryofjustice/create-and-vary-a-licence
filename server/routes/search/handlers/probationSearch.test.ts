@@ -11,6 +11,7 @@ jest.mock('../../../services/searchService')
 
 describe('Route Handlers - Search - Probation Search', () => {
   const handler = new ProbationSearchRoutes(searchService)
+  const deliusStaffIdentifier = 3000
   let req: Request
   let res: Response
 
@@ -21,7 +22,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         crn: 'A123456',
         nomisId: 'A1234BC',
         comName: 'Test Staff',
-        comStaffCode: '3000',
+        comStaffCode: deliusStaffIdentifier.toString(),
         teamName: 'Test Team',
         releaseDate: '2023-08-16',
         licenceId: 1,
@@ -40,7 +41,7 @@ describe('Route Handlers - Search - Probation Search', () => {
       crn: 'A123456',
       nomisId: 'A1234BC',
       comName: 'Test Staff',
-      comStaffCode: '3000',
+      comStaffCode: deliusStaffIdentifier.toString(),
       teamName: 'Test Team',
       releaseDate: '2023-08-16',
       licenceId: 1,
@@ -69,7 +70,7 @@ describe('Route Handlers - Search - Probation Search', () => {
     res = {
       locals: {
         user: {
-          deliusStaffIdentifier: 3000,
+          deliusStaffIdentifier,
         },
       },
       render: jest.fn(),
@@ -86,10 +87,10 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('Test', 3000)
+      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('Test', deliusStaffIdentifier)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier: 3000,
+        deliusStaffIdentifier,
         queryTerm: 'Test',
         peopleInPrison,
         peopleOnProbation: [],
@@ -106,10 +107,10 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('A123456', 3000)
+      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('A123456', deliusStaffIdentifier)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier: 3000,
+        deliusStaffIdentifier,
         queryTerm: 'A123456',
         peopleInPrison,
         peopleOnProbation,
@@ -126,13 +127,35 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('staff', 3000)
+      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('staff', deliusStaffIdentifier)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier: 3000,
+        deliusStaffIdentifier,
         queryTerm: 'staff',
         peopleInPrison,
         peopleOnProbation,
+        backLink: '/licence/create/caseload',
+        tabParameters,
+        statusConfig,
+        previousCaseloadPage,
+        hasPriorityCases: false,
+      })
+    })
+
+    it('trims white space from the query', async () => {
+      const queryTerm = '   test   '
+      const trimmedQueryTerm = queryTerm.trim()
+      req.query = { queryTerm, previousPage: 'create' }
+
+      await handler.GET(req, res)
+
+      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith(queryTerm.trim(), deliusStaffIdentifier)
+
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
+        deliusStaffIdentifier,
+        queryTerm: trimmedQueryTerm,
+        peopleInPrison,
+        peopleOnProbation: [],
         backLink: '/licence/create/caseload',
         tabParameters,
         statusConfig,
@@ -155,7 +178,7 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(searchService.getProbationSearchResults).not.toHaveBeenCalled()
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier: 3000,
+        deliusStaffIdentifier,
         queryTerm: '',
         peopleInPrison: [],
         peopleOnProbation: [],
@@ -182,7 +205,7 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(searchService.getProbationSearchResults).not.toHaveBeenCalled()
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier: 3000,
+        deliusStaffIdentifier,
         queryTerm: '',
         peopleInPrison: [],
         peopleOnProbation: [],
@@ -201,7 +224,7 @@ describe('Route Handlers - Search - Probation Search', () => {
           crn: 'A123456',
           nomisId: 'A1234BC',
           comName: 'Test Staff',
-          comStaffCode: '3000',
+          comStaffCode: deliusStaffIdentifier.toString(),
           teamName: 'Test Team',
           releaseDate: '13/09/2028',
           licenceId: 1,
@@ -219,7 +242,7 @@ describe('Route Handlers - Search - Probation Search', () => {
           crn: 'A123457',
           nomisId: 'A1234BD',
           comName: 'Test Staff',
-          comStaffCode: '3000',
+          comStaffCode: deliusStaffIdentifier.toString(),
           teamName: 'Test Team',
           releaseDate: '25/05/2027',
           licenceId: 1,
@@ -237,7 +260,7 @@ describe('Route Handlers - Search - Probation Search', () => {
           crn: 'A123458',
           nomisId: 'A1234BE',
           comName: 'Test Staff',
-          comStaffCode: '3000',
+          comStaffCode: deliusStaffIdentifier.toString(),
           teamName: 'Test Team',
           releaseDate: '11/09/2032',
           licenceId: 1,
@@ -267,7 +290,7 @@ describe('Route Handlers - Search - Probation Search', () => {
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier: 3000,
+        deliusStaffIdentifier,
         queryTerm: 'Test',
         peopleInPrison: [],
         peopleOnProbation: expectedSortedResults,
