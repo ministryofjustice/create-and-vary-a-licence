@@ -39,7 +39,7 @@
     {% if case.probationPractitioner %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% if case.kind === 'TIME_SERVED' %}
+        {% if case.kind === "TIME_SERVED" or case.hardStopKind === "TIME_SERVED"%}
             {% set comDetailsHtml = 'Not allocated yet' %}
         {% else %}
             {% set comDetailsHtml = 'Unallocated' %}
@@ -127,7 +127,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
             <div class="moj-search govuk-!-margin-bottom-8">
-                <form method="GET", action="/search/ca-search">
+                <form method="GET" action="/search/ca-search">
                 <input type="hidden" id="activeTab" value="{{ activeTab }}">
                     <div class="govuk-form-group">
                         <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">Find a case</label>

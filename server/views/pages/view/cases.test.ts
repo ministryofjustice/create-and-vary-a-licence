@@ -38,8 +38,7 @@ describe('View and print a licence - case list', () => {
           releaseDate: '01/09/2022',
           releaseDateLabel: 'CRD',
           tabType: 'releasesInNextTwoWorkingDays',
-          probationPractitioner: null,
-          kind: 'TIME_SERVED',
+          kind: LicenceKind.TIME_SERVED,
         },
       ],
       showAttentionNeededTab: false,
@@ -86,6 +85,17 @@ describe('View and print a licence - case list', () => {
           releaseDate: '01/09/2022',
           releaseDateLabel: 'CRD',
           tabType: '',
+          probationPractitioner: {
+            name: 'Probation Practitioner2',
+          },
+        },
+        {
+          name: 'Test Smith',
+          prisonerNumber: 'A1234AN',
+          releaseDate: '01/09/2022',
+          releaseDateLabel: 'CRD',
+          tabType: 'releasesInNextTwoWorkingDays',
+          kind: LicenceKind.TIME_SERVED,
         },
       ],
       showAttentionNeededTab: false,
@@ -95,13 +105,22 @@ describe('View and print a licence - case list', () => {
       prisonsToDisplay,
       probationView,
     })
-    expect($('tbody .govuk-table__row').length).toBe(2)
+    expect($('tbody .govuk-table__row').length).toBe(3)
+
     expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('3 Aug 2022')
+    expect($('#com-1').text()).toBe('Unallocated')
+
     expect($('#name-2 > div > span').text()).toBe('John Smith')
     expect($('#nomis-id-2').text()).toBe('A1234AB')
     expect($('#release-date-2').text()).toBe('1 Sep 2022')
+    expect($('#com-2').text()).toBe('Probation Practitioner2')
+
+    expect($('#name-3 > div > span').text()).toBe('Test Smith')
+    expect($('#nomis-id-3').text()).toBe('A1234AN')
+    expect($('#release-date-3').text()).toBe('1 Sep 2022')
+    expect($('#com-3').text()).toBe('Not allocated yet')
   })
 
   it('should load people in prison tab with three sub tabs', () => {
@@ -283,6 +302,7 @@ describe('View and print a licence - case list', () => {
           releaseDate: '03/08/2022',
           releaseDateLabel: 'CRD',
           tabType: 'releasesInNextTwoWorkingDays',
+          kind: LicenceKind.TIME_SERVED,
           hardStopKind: LicenceKind.TIME_SERVED,
         },
       ],
