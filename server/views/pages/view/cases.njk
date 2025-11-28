@@ -39,7 +39,11 @@
     {% if case.probationPractitioner %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% set comDetailsHtml = 'Unallocated' %}
+        {% if case.kind === 'TIME_SERVED' %}
+            {% set comDetailsHtml = 'Not allocated yet' %}
+        {% else %}
+            {% set comDetailsHtml = 'Unallocated' %}
+        {% endif %}
     {% endif %}
 
     {% if case.licenceVersionOf and(case.licenceStatus === 'IN_PROGRESS' or case.licenceStatus === 'SUBMITTED') %}
@@ -144,7 +148,7 @@
                     <a class="moj-sub-navigation__link" data-qa="prison-view-link"  {% if not probationView %}aria-current="page"{% endif %} href="?view=prison">People in prison</a>
                 </li>
                 <li class="moj-sub-navigation__item">
-                    <a class="moj-sub-navigation__link"  data-qa="probation-view-link"{% if probationView %}aria-current="page"{% endif %} href="?view=probation">People on probation</a>
+                    <a class="moj-sub-navigation__link"  data-qa="probation-view-link" {% if probationView %}aria-current="page"{% endif %} href="?view=probation">People on probation</a>
                 </li>
             </ul>
         </nav>
