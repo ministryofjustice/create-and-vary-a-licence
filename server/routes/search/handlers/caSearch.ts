@@ -42,7 +42,7 @@ export default class CaSearch {
         attentionNeededResults: [],
       }
     } else {
-      results = await this.searchService.getCaSearchResults(queryTerm.trim(), prisonCaseloadToDisplay)
+      results = await this.searchService.getCaSearchResults(queryTerm, prisonCaseloadToDisplay)
     }
 
     const { inPrisonResults, onProbationResults, attentionNeededResults } = results

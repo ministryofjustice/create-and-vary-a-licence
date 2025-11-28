@@ -28,7 +28,7 @@ export default class ApproverSearch {
         recentlyApprovedResponse: [],
       }
     } else {
-      results = await this.searchService.getPrisonApproverSearchResults(queryTerm.trim(), prisonCaseloadToDisplay)
+      results = await this.searchService.getPrisonApproverSearchResults(queryTerm, prisonCaseloadToDisplay)
     }
 
     const { approvalNeededResponse, recentlyApprovedResponse } = results

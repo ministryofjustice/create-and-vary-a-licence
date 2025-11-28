@@ -24,7 +24,7 @@ export default class ProbationSearch {
         onProbationCount: 0,
       }
     } else {
-      searchResponse = await this.searchService.getProbationSearchResults(queryTerm.trim(), deliusStaffIdentifier)
+      searchResponse = await this.searchService.getProbationSearchResults(queryTerm, deliusStaffIdentifier)
       peopleInPrison = searchResponse.results.filter(r => r.isOnProbation === false).sort(this.sortReleaseDateAscending)
       peopleOnProbation = searchResponse.results
         .filter(r => r.isOnProbation === true)

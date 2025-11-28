@@ -18,7 +18,7 @@ export default class VaryApproverSearch {
         regionCasesResponse: [],
       }
     } else {
-      results = await this.searchService.getVaryApproverSearchResults(user, queryTerm.trim())
+      results = await this.searchService.getVaryApproverSearchResults(user, queryTerm)
     }
 
     const { pduCasesResponse, regionCasesResponse } = results
