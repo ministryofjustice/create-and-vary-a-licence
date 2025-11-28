@@ -101,7 +101,7 @@
         {% if case.probationPractitioner.staffCode or case.probationPractitioner.name %}
             {% set comDetailsHtml = '<a class="govuk-link search-highlight" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '?activeTab=' + params.activeTab+ '">' + case.probationPractitioner.name + '</a>' %}    
         {% else %}
-            {% if case.kind === "TIME_SERVED" or case.hardStopKind === "TIME_SERVED" %}
+            {% if case.kind == "TIME_SERVED" or case.hardStopKind == "TIME_SERVED" %}
                 {% set comDetailsHtml = 'Not allocated yet' %}
             {% else %}
                 {% set comDetailsHtml = 'Unallocated' %}
