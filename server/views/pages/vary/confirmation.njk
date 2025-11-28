@@ -15,14 +15,15 @@
             }) }}
 
             <h2 class="govuk-heading-m">What happens next</h2>
-            <p>
-                We have sent the variation request to the head of PDU for approval.
+            <p id="message">
+                We have sent the variation request to the head of the Probation Delivery Unit (PDU) for approval.
             </p>
             <p>
                 They will contact you if they need more information.
             </p>
+            <h2 class="govuk-heading-m">After the licence is approved</h2>
             <p>
-                You will get an email when the variation is approved and you will be able to print 	and issue the licence or post sentence supervision order.          
+                You will get an email when the variation is approved and you will be able to print and issue the licence or post sentence supervision order.          
             </p>
 
             <div class="govuk-button-group">
@@ -33,6 +34,25 @@
                     attributes: { 'data-qa': 'return-to-case-list' }
                 }) }}
             </div>
+            {% if isTimeServedVariation %}
+                <hr class="help-improve-service-divider">
+                <h2 id="improve-service-header" class="improve-service-header govuk-heading-m govuk-!-margin-top-6">
+                    Help improve this service
+                </h2>
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                    Licences for people released with time served are new to this service. 
+                </p>
+                <p class="govuk-body">
+                    Your feedback will help make it better.
+                </p>
+                <p class="govuk-body">
+                    To give feedback you can:
+                </p>
+                <ul class="govuk-list govuk-list--bullet improve-service-link-list">
+                    <li><a href="https://www.smartsurvey.co.uk/s/B35S18" target="_blank" id="survey-link" class="govuk-link--no-visited-state">complete a short survey</a></li>
+                    <li><a href="{{timeServedServiceNowUrl}}" target="_blank" id="service-now-link" class="govuk-link--no-visited-state">report a technical problem on Technology Portal</a></li>
+                </ul>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
