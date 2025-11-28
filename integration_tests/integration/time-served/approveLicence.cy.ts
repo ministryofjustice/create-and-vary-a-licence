@@ -36,12 +36,14 @@ context('Approve a licence - time served', () => {
       kind: 'TIME_SERVED',
       isReviewNeeded: true,
       typeCode: 'AP',
+      comUsername: 'MOIC_PRISON_USER',
     })
     cy.task('stubUpdateLicenceStatus', 1)
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage.checkCorrectContactMessage()
     const confirmApprovePage = approvalViewPage.clickApprove()
     confirmApprovePage.checkThatPageHasTimeServedSubTextMessage()
     confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()

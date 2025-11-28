@@ -189,8 +189,8 @@
 
         <div class="govuk-grid-row">
             <h2 class="govuk-heading-l govuk-!-padding-top-8">Approve this licence</h2>
-            {% if licence.kind === "HARD_STOP" %}
-                <p>Contact {{ licence.submittedByFullName }} if you need more information about something.<br>They will only be able to change the initial appointment.</p>
+            {% if  licence.kind == 'HARD_STOP' or licence.kind == 'TIME_SERVED' %}
+                <p data-qa="prison-created-contact-message">Contact {{ licence.submittedByFullName }} if you need more information about something.<br>They will only be able to change the initial appointment.</p>
             {% else %}    
                 <p>Contact the probation practitioner if you need to make changes to the licence before approving.</p>
             {% endif %}

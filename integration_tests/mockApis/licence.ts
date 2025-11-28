@@ -733,6 +733,7 @@ export default {
           homeDetentionCurfewEndDate: options.homeDetentionCurfewEndDate,
           additionalLicenceConditions: options.conditions || licenceConditions,
           isReviewNeeded: options.isReviewNeeded,
+          submittedByFullName: 'John Smith',
           bespokeConditions: [
             {
               id: 133,
