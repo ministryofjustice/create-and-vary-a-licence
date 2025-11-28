@@ -56,10 +56,17 @@ export default class TimelineRoutes {
     const { user, licence } = res.locals
 
     const timelineEvents = await this.timelineService.getTimelineEvents(licence, user)
+    const showTimeServedImproveServiceBanner = req.flash('showTimeServedImproveServiceBanner')?.[0] === 'true'
 
     return res.render(`pages/vary/timeline`, {
       timelineEvents,
       callToAction: this.getCtaType(licence),
+      showTimeServedImproveServiceBanner:
+        showTimeServedImproveServiceBanner &&
+        config.timeServed.enabled &&
+        config.timeServed.prisons.includes(licence.prisonCode) &&
+        licence.kind === LicenceKind.TIME_SERVED &&
+        licence.statusCode === ACTIVE,
     })
   }
 

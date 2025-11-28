@@ -45,7 +45,7 @@ export default class ViewAndPrintCaseRoutes {
         : await this.caseloadService.getProbationOmuCaseload(user, prisonCaseloadToDisplay, searchString)
     const hasSelectedNomisForTimeServedLicenceCreation =
       req.flash('hasSelectedNomisForTimeServedLicenceCreation')[0] === 'true'
-    const { timeServedEnabled, timeServedEnabledPrisons } = config
+    const { enabled: timeServedEnabled, prisons: timeServedEnabledPrisons } = config.timeServed
 
     res.render('pages/view/cases', {
       cases: cases.map(c => {
