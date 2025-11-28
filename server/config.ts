@@ -208,12 +208,13 @@ export default {
   postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
   timeServed: {
     enabled: get('TIME_SERVED_ENABLED', 'false', requiredInProduction) === 'true',
-    prisons: (get('TIME_SERVED_ENABLED_PRISONS', '', requiredInProduction) as string).split(',').map(p => p.trim()),
-    surveyUrl: get('TIME_SERVED_SURVEY_URL', 'https://www.smartsurvey.co.uk/s/B35S18/', requiredInProduction),
+    prisons: get('TIME_SERVED_ENABLED_PRISONS', '')
+      .split(',')
+      .map(p => p.trim()),
+    surveyUrl: get('TIME_SERVED_SURVEY_URL', 'https://www.smartsurvey.co.uk/s/B35S18/'),
     serviceNowUrl: get(
       'TIME_SERVED_SERVICE_NOW_URL',
       'https://mojprod.service-now.com/moj_sp?id=sc_cat_item&table=sc_cat_item&sys_id=e389e8931b8bc65025dc6351f54bcb82&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=e389e8931b8bc65025dc6351f54bcb82',
-      requiredInProduction,
     ),
   },
 }
