@@ -1,7 +1,7 @@
 import { addDays, format } from 'date-fns'
 import LicenceService from '../licenceService'
 import { User } from '../../@types/CvlUserDetails'
-import { ComCase } from '../../@types/licenceApiClientTypes'
+import { ComCreateCase, ComVaryCase } from '../../@types/licenceApiClientTypes'
 import ComCaseloadService from './comCaseloadService'
 import { convertDateFormat } from '../../utils/utils'
 import { LicenceApiClient } from '../../data'
@@ -66,7 +66,7 @@ describe('COM Caseload Service', () => {
         },
         isReviewNeeded: false,
       },
-    ] as ComCase[]
+    ] as ComCreateCase[]
 
     licenceApiClient.getStaffCreateCaseload.mockResolvedValue(comCaseload)
 
@@ -100,7 +100,7 @@ describe('COM Caseload Service', () => {
         },
         isReviewNeeded: false,
       },
-    ] as ComCase[]
+    ] as ComCreateCase[]
 
     licenceApiClient.getTeamCreateCaseload.mockResolvedValue(comCaseload)
 
@@ -122,7 +122,7 @@ describe('COM Caseload Service', () => {
         },
         isReviewNeeded: false,
       },
-    ] as ComCase[]
+    ] as ComVaryCase[]
 
     licenceApiClient.getStaffVaryCaseload.mockResolvedValue(comCaseload)
 
@@ -156,7 +156,7 @@ describe('COM Caseload Service', () => {
         },
         isReviewNeeded: false,
       },
-    ] as ComCase[]
+    ] as ComVaryCase[]
 
     licenceApiClient.getTeamVaryCaseload.mockResolvedValue(comCaseload)
 

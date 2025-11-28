@@ -18,7 +18,8 @@ import type {
   BespokeConditionsRequest,
   CaCase,
   CaCaseloadSearch,
-  ComCase,
+  ComCreateCase,
+  ComVaryCase,
   ContactNumberRequest,
   CreateLicenceRequest,
   HdcLicenceData,
@@ -642,30 +643,30 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<CaCase[]>
   }
 
-  async getStaffCreateCaseload(deliusStaffIdentifier: number): Promise<ComCase[]> {
+  async getStaffCreateCaseload(deliusStaffIdentifier: number): Promise<ComCreateCase[]> {
     return (await this.get({
       path: `/caseload/com/staff/${deliusStaffIdentifier}/create-case-load`,
-    })) as Promise<ComCase[]>
+    })) as Promise<ComCreateCase[]>
   }
 
-  async getTeamCreateCaseload(teamCaseloadRequest: TeamCaseloadRequest): Promise<ComCase[]> {
+  async getTeamCreateCaseload(teamCaseloadRequest: TeamCaseloadRequest): Promise<ComCreateCase[]> {
     return (await this.post({
       path: `/caseload/com/team/create-case-load`,
       data: teamCaseloadRequest,
-    })) as Promise<ComCase[]>
+    })) as Promise<ComCreateCase[]>
   }
 
-  async getStaffVaryCaseload(deliusStaffIdentifier: number): Promise<ComCase[]> {
+  async getStaffVaryCaseload(deliusStaffIdentifier: number): Promise<ComVaryCase[]> {
     return (await this.get({
       path: `/caseload/com/staff/${deliusStaffIdentifier}/vary-case-load`,
-    })) as Promise<ComCase[]>
+    })) as Promise<ComVaryCase[]>
   }
 
-  async getTeamVaryCaseload(teamCaseloadRequest: TeamCaseloadRequest): Promise<ComCase[]> {
+  async getTeamVaryCaseload(teamCaseloadRequest: TeamCaseloadRequest): Promise<ComVaryCase[]> {
     return (await this.post({
       path: `/caseload/com/team/vary-case-load`,
       data: teamCaseloadRequest,
-    })) as Promise<ComCase[]>
+    })) as Promise<ComVaryCase[]>
   }
 
   async getVaryApproverCaseload(
