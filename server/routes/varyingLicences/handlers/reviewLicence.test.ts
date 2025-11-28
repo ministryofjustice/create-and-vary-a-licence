@@ -17,6 +17,7 @@ describe('Review Hard Stop licence handler', () => {
         licenceId: 1,
       },
       body: {},
+      flash: jest.fn(),
     } as unknown as Request
     res = {
       licence: {
@@ -40,6 +41,7 @@ describe('Review Hard Stop licence handler', () => {
       req.body.answer = YesOrNo.YES
       handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/confirm-vary-action')
+      expect(req.flash).not.toHaveBeenCalled()
       expect(licenceService.reviewWithoutVariation).not.toHaveBeenCalled()
     })
 
@@ -47,6 +49,7 @@ describe('Review Hard Stop licence handler', () => {
       req.body.answer = YesOrNo.NO
       await handler.POST(req, res)
       expect(licenceService.reviewWithoutVariation).toHaveBeenCalledWith(1, { username: 'bob' })
+      expect(req.flash).toHaveBeenCalledTimes(1)
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/timeline')
     })
   })

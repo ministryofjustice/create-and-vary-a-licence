@@ -919,8 +919,8 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should return isTimeServedEnabled as true when time served feature is enabled and prisonCaseloadToDisplay includes any of timeServedEnabledPrisons', async () => {
-      config.timeServedEnabledPrisons = ['BAI', 'MDI']
-      config.timeServedEnabled = true
+      config.timeServed.prisons = ['BAI', 'MDI']
+      config.timeServed.enabled = true
 
       caseloadService.getPrisonOmuCaseload.mockResolvedValue(prisonCaseload)
       res.locals.user.prisonCaseload = ['BAI']

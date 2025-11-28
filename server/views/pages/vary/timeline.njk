@@ -3,12 +3,20 @@
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "partials/varyCallToActions.njk" import timelineCta %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "partials/improveService.njk" import improveService %}
 
 {% set pageTitle = applicationName + " - Vary a licence - licence history" %}
 {% set pageId = "view-timeline-page" %}
 {% set backLinkHref = "/licence/vary/caseload" %}
 
 {% block content %}
+{% if showTimeServedImproveServiceBanner %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {{ improveService(timeServedSurveyUrl, timeServedServiceNowUrl) }}
+        </div>
+    </div>
+{% endif %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-l">Current licence and licence history</h1>
