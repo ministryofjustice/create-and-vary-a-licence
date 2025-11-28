@@ -47,6 +47,7 @@ context('Approve a licence - time served', () => {
     const confirmApprovePage = approvalViewPage.clickApprove()
     confirmApprovePage.checkThatPageHasTimeServedSubTextMessage()
     confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()
+    confirmApprovePage.checkThatPageHasTimeServedLicenceChangeMessageMessage()
   })
 
   it('when probation practitioner has not been allocated then show "not allocated yet"', () => {
