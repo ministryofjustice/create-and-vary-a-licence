@@ -69,4 +69,13 @@ export default class ApprovalViewPage extends Page {
   checkProbationPractitionerDetailsNotAllocated = (): void => {
     cy.contains('Not allocated yet')
   }
+
+  checkCorrectContactMessage = (): void => {
+    cy.get('[data-qa=prison-created-contact-message]').contains(
+      'Contact John Smith if you need more information about something.',
+    )
+    cy.get('[data-qa=prison-created-contact-message]').contains(
+      'They will only be able to change the initial appointment.',
+    )
+  }
 }
