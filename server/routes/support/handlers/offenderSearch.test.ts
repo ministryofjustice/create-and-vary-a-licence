@@ -89,5 +89,35 @@ describe('Route Handlers - Offender search', () => {
         },
       })
     })
+
+    it('Should trim search query', async () => {
+      const firstName = '  Test '
+      const lastName = ' Person  '
+      const nomisId = ' ABC123   '
+
+      req.query = {
+        firstName,
+        lastName,
+        nomisId,
+      }
+
+      prisonerService.searchPrisoners.mockResolvedValue([])
+      probationService.getProbationers.mockResolvedValue([])
+
+      await handler.GET(req, res)
+
+      expect(prisonerService.searchPrisoners).toHaveBeenCalledWith(
+        { firstName: firstName.trim(), lastName: lastName.trim(), prisonerIdentifier: nomisId.trim() },
+        res.locals.user,
+      )
+      expect(res.render).toHaveBeenCalledWith('pages/support/offenderSearch', {
+        searchResults: [],
+        searchValues: {
+          firstName: 'Test',
+          lastName: 'Person',
+          nomisId: 'ABC123',
+        },
+      })
+    })
   })
 })

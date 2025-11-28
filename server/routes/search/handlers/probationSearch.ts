@@ -8,7 +8,8 @@ export default class ProbationSearch {
   constructor(private readonly searchService: SearchService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const queryTerm = req.query?.queryTerm as string
+    const enteredQueryTerm = req.query?.queryTerm as string
+    const queryTerm = enteredQueryTerm.trim() || ''
     const { deliusStaffIdentifier } = res.locals.user
     const previousCaseloadPage = req.query?.previousPage as string
 
@@ -23,7 +24,7 @@ export default class ProbationSearch {
         onProbationCount: 0,
       }
     } else {
-      searchResponse = await this.searchService.getProbationSearchResults(queryTerm, deliusStaffIdentifier)
+      searchResponse = await this.searchService.getProbationSearchResults(queryTerm.trim(), deliusStaffIdentifier)
       peopleInPrison = searchResponse.results.filter(r => r.isOnProbation === false).sort(this.sortReleaseDateAscending)
       peopleOnProbation = searchResponse.results
         .filter(r => r.isOnProbation === true)

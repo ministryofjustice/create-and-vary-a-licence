@@ -6,7 +6,8 @@ export default class VaryApproverSearch {
   constructor(private readonly searchService: SearchService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const queryTerm = req.query?.queryTerm as string
+    const enteredQueryTerm = req.query?.queryTerm as string
+    const queryTerm = enteredQueryTerm.trim() || ''
     const { user } = res.locals
 
     let results: VaryApproverCaseloadSearchResponse
@@ -17,7 +18,7 @@ export default class VaryApproverSearch {
         regionCasesResponse: [],
       }
     } else {
-      results = await this.searchService.getVaryApproverSearchResults(user, queryTerm)
+      results = await this.searchService.getVaryApproverSearchResults(user, queryTerm.trim())
     }
 
     const { pduCasesResponse, regionCasesResponse } = results
