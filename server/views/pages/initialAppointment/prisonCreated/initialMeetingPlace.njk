@@ -14,7 +14,7 @@
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l">Where is the initial appointment?</h1>
             {% if preferredAddresses.length > 0 %}
-                <h1 class="govuk-heading-s">Use a saved address</h1>
+                <h1 class="govuk-heading-s" data-qa="use-saved-address">Use a saved address</h1>
                 {% set preferredAddressesOptions = [] %}
                 {% for address in preferredAddresses %}
                 {% set deleteUrl = "/staff/hard-stop/delete/id/" + licence.id + "/address/preferred/" + address.reference + "?pathType="+ action %}
