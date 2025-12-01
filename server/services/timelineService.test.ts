@@ -242,5 +242,46 @@ describe('Timeline Service', () => {
         user,
       )
     })
+
+    it('will handle Time served dates reviewed without variation', async () => {
+      const standardLicence = {
+        id: 2,
+        kind: 'TIME_SERVED',
+        statusCode: LicenceStatus.ACTIVE,
+        createdByFullName: 'OTHER USER',
+        dateLastUpdated: '12/11/2022 10:00:00',
+        prisonDescription: 'Moorland (hmp)',
+        dateCreated: '10/11/2022 11:00:00',
+      } as Licence
+
+      licenceApiClient.matchLicenceEvents.mockResolvedValue([
+        {
+          id: 1,
+          licenceId: 2,
+          eventType: LicenceEventType.REVIEWED_WITHOUT_VARIATION,
+          username: 'TEST_USER',
+          forenames: 'Test',
+          surname: 'User',
+          eventTime: undefined,
+          eventDescription: `Licence reviewed without being varied for Jack Walker`,
+        },
+      ])
+
+      const timelineEvents = await timelineService.getTimelineEvents(standardLicence, user)
+
+      expect(timelineEvents).toEqual(
+        expect.arrayContaining([
+          {
+            createdAt: undefined,
+            createdBy: 'Test User',
+            eventType: 'REVIEWED_WITHOUT_VARIATION',
+            lastUpdate: undefined,
+            licenceId: 2,
+            statusCode: 'ACTIVE',
+            title: 'Licence reviewed without being varied',
+          },
+        ]),
+      )
+    })
   })
 })
