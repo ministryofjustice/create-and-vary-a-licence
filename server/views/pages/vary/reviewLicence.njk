@@ -11,6 +11,14 @@
 {% set printLink = '/licence/view/id/' + licence.id + '/pdf-print' %}
 
 {% block content %}
+
+    {% set isTimeServed = (licence.kind == "TIME_SERVED") %}
+    {% if isTimeServed %}
+        {% set noLableText = 'No - leave unchanged and return to licence history' %}
+    {% else %}
+        {% set noLableText = 'No - return to licence history' %}
+    {% endif %}
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l">
@@ -29,11 +37,16 @@
                     }}
                 </p>
             {% endif %}
-            <p class="govuk-body">
+            {% if not isTimeServed %}
+            <p class="govuk-body" data-qa="additional-message">
               You can vary this licence to add information such as additional licence conditions or leave it unchanged if you are happy with it.
             </p>
+            {% endif %}
         </div>
     </div>
+
+
+
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
@@ -59,7 +72,7 @@
                         },
                         {
                             value: "No",
-                            text: "No - return to licence history"
+                            text: noLableText
                         }
                     ]
                 }) }}
