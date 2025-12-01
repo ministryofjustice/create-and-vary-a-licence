@@ -52,8 +52,10 @@ export default class TimelineService {
   }
 
   private async convertLicencesToTimelineEvents(licences: Licence[], user: User): Promise<TimelineEvent[]> {
-    const hardstopLicence = licences.find(l => l.kind === LicenceKind.HARD_STOP)
-    const reviewTimelineEvents = hardstopLicence ? await this.getReviewEvents(hardstopLicence, user) : []
+    const prisonCreatedLicence = licences.find(
+      l => l.kind === LicenceKind.HARD_STOP || l.kind === LicenceKind.TIME_SERVED,
+    )
+    const reviewTimelineEvents = prisonCreatedLicence ? await this.getReviewEvents(prisonCreatedLicence, user) : []
 
     return licences
       .map(licence => TimelineService.getTimelineEvent(licence))
