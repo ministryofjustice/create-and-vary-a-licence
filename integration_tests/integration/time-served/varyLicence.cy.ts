@@ -7,6 +7,7 @@ context('Vary a licence - time served', () => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
+    cy.task('stubMatchLicenceEvents')
     cy.task('stubGetStaffVaryCaseload', {
       licenceId: 1,
       licenceStatus: LicenceStatus.ACTIVE,
