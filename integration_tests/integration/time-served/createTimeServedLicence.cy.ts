@@ -1,7 +1,7 @@
-import IndexPage from '../pages'
-import AppointmentPlacePage from '../pages/appointmentPlace'
-import Page from '../pages/page'
-import LicenceKind from '../../server/enumeration/LicenceKind'
+import IndexPage from '../../pages'
+import AppointmentPlacePage from '../../pages/appointmentPlace'
+import Page from '../../pages/page'
+import LicenceKind from '../../../server/enumeration/LicenceKind'
 
 context('Create a Time Served licence', () => {
   beforeEach(() => {
@@ -138,5 +138,20 @@ context('Create a Time Served licence', () => {
     confirmCreatePage.selectRadio('No')
     confirmCreatePage.clickContinueButtonToError()
     confirmCreatePage.getErrorMessage().should('contain.text', 'You must add a reason for using NOMIS')
+  })
+
+  it('When submitted licence then correct time served release flag given', () => {
+    cy.task('stubGetPrisonOmuCaseload', {
+      licenceId: null,
+      licenceStatus: 'SUBMITTED',
+      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+      hardStopKind: 'TIME_SERVED',
+      hasNomisLicence: false,
+    })
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    const releaseDateFlag = viewCasesList.getReleaseDateFlag()
+    releaseDateFlag.should('contain', 'Time-served release')
   })
 })
