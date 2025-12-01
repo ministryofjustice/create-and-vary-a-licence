@@ -24,7 +24,6 @@ export default class PrisonWillCreateThisLicenceRoutes {
       this.licenceService.getPrisonerDetail(nomisId, user),
       this.probationService.getProbationer(nomisId),
     ])
-    console.log('hardStopKind', hardStopKind)
 
     const backLink = req.session.returnToCase || '/licence/create/caseload'
     const omuEmailResponse = await this.licenceService.getOmuEmail(prisonId, user)
