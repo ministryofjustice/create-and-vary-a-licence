@@ -84,7 +84,7 @@ export default function Index({
   const reviewLicenceHandler = new ReviewLicenceRoutes(licenceService)
   const reasonForVariationHandler = new ReasonForVariationRoutes(licenceService)
   const variationSummaryHandler = new VariationSummaryRoutes(licenceService, probationService)
-  const confirmationHandler = new ConfirmationRoutes()
+  const confirmationHandler = new ConfirmationRoutes(licenceService)
   const policyChangesNoticeHandler = new PolicyChangesNoticeRoutes(licenceService)
   const policyChangesCallbackHandler = new PolicyChangesCallbackRoutes()
   const policyChangeHandler = new PolicyChangeRoutes(licenceService, conditionService)

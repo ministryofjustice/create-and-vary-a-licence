@@ -24,4 +24,11 @@ export default class ConfirmApprovePage extends Page {
     )
     return this
   }
+
+  checkThatPageHasTimeServedLicenceChangeMessageMessage = (): ConfirmApprovePage => {
+    cy.get('[data-qa=licence-change-message]').contains(
+      'Only the initial appointment can be changed. You will not need to approve the licence again',
+    )
+    return this
+  }
 }
