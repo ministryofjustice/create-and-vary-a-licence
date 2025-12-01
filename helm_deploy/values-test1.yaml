@@ -36,6 +36,9 @@ generic-service:
     HDC_INTEGRATION_MVP2_ENABLED: 'false'
     HDC_LICENCE_CREATION_BLOCK: 'true'
 
+    TIME_SERVED_ENABLED: "true"
+    TIME_SERVED_ENABLED_PRISONS: "MDI, BAI, BNI"
+
   scheduledDowntime:
     enabled: true
     businessHoursOnly: true
