@@ -9,7 +9,7 @@ export default class ProbationSearch {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const enteredQueryTerm = req.query?.queryTerm as string
-    const queryTerm = enteredQueryTerm.trim() || ''
+    const queryTerm = enteredQueryTerm?.trim() || ''
     const { deliusStaffIdentifier } = res.locals.user
     const previousCaseloadPage = req.query?.previousPage as string
 
