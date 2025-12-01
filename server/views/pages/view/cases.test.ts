@@ -62,7 +62,7 @@ describe('View and print a licence - case list', () => {
 
     expect($('#name-3 > div > span').text()).toBe('Test Smith')
     expect($('#nomis-id-3').text()).toBe('A1234AN')
-    expect($('#release-date-3').text()).toBe('CRD: 1 Sep 2022')
+    expect($('#release-date-3').text()).toBe('1 Sep 2022Time-served release')
     expect($('#com-3').text()).toBe('Not allocated yet')
   })
 
