@@ -16,7 +16,7 @@ export default class PrisonWillCreateThisLicenceRoutes {
 
     const [
       {
-        cvl: { licenceType, licenceStartDate },
+        cvl: { licenceType, licenceStartDate, hardStopKind },
         prisoner: { prisonId, dateOfBirth, firstName, lastName },
       },
       deliusRecord,
@@ -26,7 +26,8 @@ export default class PrisonWillCreateThisLicenceRoutes {
     ])
 
     const backLink = req.session.returnToCase || '/licence/create/caseload'
-    const { email } = await this.licenceService.getOmuEmail(prisonId, user)
+    const omuEmailResponse = await this.licenceService.getOmuEmail(prisonId, user)
+    const email = omuEmailResponse?.email || null
 
     return res.render('pages/create/prisonWillCreateThisLicence', {
       licence: {
@@ -35,6 +36,7 @@ export default class PrisonWillCreateThisLicenceRoutes {
         dateOfBirth: moment(dateOfBirth).format('DD/MM/YYYY'),
         forename: convertToTitleCase(firstName),
         surname: convertToTitleCase(lastName),
+        hardStopKind,
       },
       omuEmail: email,
       backLink,

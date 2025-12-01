@@ -16,9 +16,11 @@
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l">Licence has been created by prison</h1>
 
-            <p class="govuk-body">
-                A licence for this person has been created by the prison because you did not get one approved in time for their final release checks.
-            </p>
+            {% if licence.hardStopKind == 'TIME_SERVED' %}
+                <p class="govuk-body">A licence for this person has been created by the prison because they are being released immediately following sentencing having served time on remand.</p>
+            {% else %}
+                <p class="govuk-body">A licence for this person has been created by the prison because none was submitted in time for their final release checks.</p>
+            {% endif %}
             <p class="govuk-body">
                 Once this person is released, you will need to review this licence and make any changes you require.
             </p>
