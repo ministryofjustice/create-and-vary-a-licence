@@ -76,7 +76,7 @@
                     }) }}
                 {% endif %}
 
-                {% if licence.kind === 'HARD_STOP' %}
+                {% if prisonKinds.includes(licence.kind) %}
                     <h2 class="govuk-heading-m">Licence conditions</h2>
                     {{ immediateReleaseConditions(licence.typeCode) }}
                 {% else %}
