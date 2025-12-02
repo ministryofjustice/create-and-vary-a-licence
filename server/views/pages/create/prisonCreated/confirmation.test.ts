@@ -7,7 +7,7 @@ const render = templateRenderer(fs.readFileSync('server/views/pages/create/priso
 describe('Prison created Confirmation', () => {
   it('should show correct message when com email is absent', () => {
     const $ = render({
-      licence: { comEmail: undefined },
+      licence: { comEmail: undefined, kind: 'CRD' },
     })
     expect($('#sent-to').text().toString()).toContain(
       'Once this licence has been approved, you will need to notify the probation team. We do not have their contact details to do this automatically.',
@@ -32,6 +32,34 @@ describe('Prison created Confirmation', () => {
       licence: { comEmail: 'some@email.com', kind: 'TIME_SERVED' },
     })
     expect($('#sent-to').length).toEqual(0)
+    expect($('.govuk-panel__body').length).toEqual(0)
+  })
+
+  it('should not show com email message for hard stop licences with com email', () => {
+    const $ = render({
+      licence: { comEmail: 'some@email.com', kind: 'HARD_STOP' },
+    })
+    expect($('.govuk-panel__body').length).toEqual(0)
+  })
+
+  it('should not show com email message for hard stop licences without com email', () => {
+    const $ = render({
+      licence: { comEmail: undefined, kind: 'HARD_STOP' },
+    })
+    expect($('.govuk-panel__body').length).toEqual(0)
+  })
+
+  it('should not show com email message for time served licences with com email', () => {
+    const $ = render({
+      licence: { comEmail: 'some@email.com', kind: 'TIME_SERVED' },
+    })
+    expect($('.govuk-panel__body').length).toEqual(0)
+  })
+
+  it('should not show com email message for time served licences without com email', () => {
+    const $ = render({
+      licence: { comEmail: undefined, kind: 'TIME_SERVED' },
+    })
     expect($('.govuk-panel__body').length).toEqual(0)
   })
 })

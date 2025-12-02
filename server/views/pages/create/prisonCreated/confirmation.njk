@@ -12,9 +12,9 @@
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
               titleText: titleText,
-              html: "You still need to contact the probation team" if not licence.comEmail
+              html: "You still need to contact the probation team" if not licence.comEmail and licence.kind not in ['TIME_SERVED', 'HARD_STOP']
             }) }}
-            <h2 class="govuk-heading-m">What happens next</h2>
+            <h2 class="govuk-heading-m">What happens next1</h2>
             <p>We have sent the licence for approval. This is usually done by the prison governor.</p>
 
             {% if licence.kind != 'TIME_SERVED' %}
