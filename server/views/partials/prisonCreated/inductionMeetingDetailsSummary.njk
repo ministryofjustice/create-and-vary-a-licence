@@ -110,7 +110,7 @@
                 actions: {
                     items: [
                         {
-                            href: routepath + ("/initial-meeting-time" if (licence.licenceAppointmentAddress and not licence.licenceAppointmentAddress.source == 'MANUAL') else "manual-address-entry"),
+                            href: routepath + "/initial-meeting-time",
                             text: "Change",
                             visuallyHiddenText: "date",
                             attributes: { "data-qa": "date-change-link" }
