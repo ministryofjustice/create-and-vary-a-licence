@@ -51,7 +51,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
       it('should render view', async () => {
         const appointmentPersonType = {
           DUTY_OFFICER: 'Duty officer',
-          RESPONSIBLE_COM: `${res?.locals?.licence?.responsibleComFullName}, this person’s probation practitioner`,
+          RESPONSIBLE_COM: `${res?.locals?.licence?.responsibleComFullName}, this person’s community probation practitioner`,
           SPECIFIC_PERSON: 'Someone else',
         }
         await handler.GET(req, res)
