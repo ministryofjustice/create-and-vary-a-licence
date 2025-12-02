@@ -50,7 +50,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     describe('GET', () => {
       it('should render view', async () => {
         const appointmentPersonType = {
-          DUTY_OFFICER: 'Duty Officer',
+          DUTY_OFFICER: 'Duty officer',
           RESPONSIBLE_COM: `${res?.locals?.licence?.responsibleComFullName}, this person’s probation practitioner`,
           SPECIFIC_PERSON: 'Someone else',
         }
@@ -63,7 +63,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
         res.locals.licence.responsibleComFullName = null
         const appointmentPersonTypeWithOutPP = {
-          DUTY_OFFICER: 'Duty Officer',
+          DUTY_OFFICER: 'Duty officer',
           SPECIFIC_PERSON: 'Someone else',
         }
         await handler.GET(req, res)

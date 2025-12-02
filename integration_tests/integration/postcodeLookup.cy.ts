@@ -27,7 +27,7 @@ context('Postcode lookup', () => {
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
-      const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+      const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.deleteAddressLink().should('exist')
       const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
@@ -44,7 +44,7 @@ context('Postcode lookup', () => {
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
-      const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+      const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('not.exist')
       appointmentPlacePage.deleteAddressLink().should('not.exist')
       const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
@@ -61,7 +61,7 @@ context('Postcode lookup', () => {
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
-      const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+      const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.deleteAddressLink().should('exist')
       appointmentPlacePage.useThisAddressBtnClick()

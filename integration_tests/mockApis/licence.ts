@@ -44,7 +44,7 @@ const licencePlaceholder: Licence = {
   forename: 'Test',
   surname: 'Person',
   dateOfBirth: '12/02/1980',
-  appointmentPerson: 'Duty Officer',
+  appointmentPerson: 'Duty officer',
   conditionalReleaseDate: '13/03/2021',
   actualReleaseDate: '01/04/2021',
   earliestReleaseDate: '01/04/2021',
@@ -719,7 +719,7 @@ export default {
           statusCode: options.statusCode, // Overrides licencePlaceHolder status
           typeCode: options.typeCode, // Overrides licence status code
           appointmentPersonType: 'SPECIFIC_PERSON',
-          appointmentPerson: 'Duty Officer',
+          appointmentPerson: 'Duty officer',
           appointmentAddress: 'Some address, Some town',
           appointmentTelephoneNumber: options.appointmentTelephoneNumber,
           appointmentAlternativeTelephoneNumber: options.appointmentAlternativeTelephoneNumber,
