@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceReviewRoutes from './reviewLicence'
 import LicenceService from '../../../services/licenceService'
 import YesOrNo from '../../../enumeration/yesOrNo'
+import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 
 jest.mock('../../../services/licenceService')
 
@@ -23,7 +24,7 @@ describe('Review Hard Stop licence handler', () => {
       licence: {
         id: 1,
       },
-      locals: { user: { username: 'bob' } },
+      locals: { user: { username: 'bob' }, licence: { id: 1, nomsId: 'A1234BC' } },
       render: jest.fn(),
       redirect: jest.fn(),
     } as unknown as Response
@@ -37,10 +38,11 @@ describe('Review Hard Stop licence handler', () => {
   })
 
   describe('POST', () => {
-    it('redirects to confirmVaryAction if the answer is yes and does not call to set the review date', () => {
+    it('redirects to spoDiscussion if the answer is yes and does not call to set the review date', async () => {
       req.body.answer = YesOrNo.YES
-      handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/confirm-vary-action')
+      licenceService.getOrCreateLicenceVariation.mockResolvedValue({ licenceId: 2 } as LicenceSummary)
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/2/spo-discussion')
       expect(req.flash).not.toHaveBeenCalled()
       expect(licenceService.reviewWithoutVariation).not.toHaveBeenCalled()
     })

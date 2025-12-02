@@ -64,17 +64,20 @@ describe('Route Handlers - Vary Licence - Confirm vary', () => {
     })
 
     it('should create licence variation when answer is yes', async () => {
-      licenceService.createVariation.mockResolvedValue({ licenceId: 2 } as LicenceSummary)
+      licenceService.getOrCreateLicenceVariation.mockResolvedValue({ licenceId: 2 } as LicenceSummary)
 
       req.body = { answer: 'Yes' }
       await handler.POST(req, res)
 
-      expect(licenceService.createVariation).toHaveBeenCalledWith('1', { username: 'joebloggs' })
+      expect(licenceService.getOrCreateLicenceVariation).toHaveBeenCalledWith('150612', '1', {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/2/spo-discussion')
     })
 
     it('should not create a new licence variation when a variation already exists', async () => {
       licenceService.getIncompleteLicenceVariations.mockResolvedValue([{ licenceId: 48 }] as LicenceSummary[])
+      licenceService.getOrCreateLicenceVariation.mockResolvedValue({ licenceId: 48 } as LicenceSummary)
 
       req.body = { answer: 'Yes' }
       await handler.POST(req, res)
