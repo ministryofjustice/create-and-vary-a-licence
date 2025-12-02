@@ -23,7 +23,7 @@
 {% set prisonKinds = ['TIME_SERVED', 'HARD_STOP'] %}
 
 {% set inProgressHardStopOrTimeServedLicence = prisonKinds.includes(licence.kind) and licence.statusCode == 'IN_PROGRESS' %}
-{% set pageTitle = applicationName + " - " + "Check licence details1" if inProgressHardStopOrTimeServedLicence else (actionWord + " a licence") %}
+{% set pageTitle = applicationName + " - " + "Check licence details" if inProgressHardStopOrTimeServedLicence else (actionWord + " a licence") %}
 {% set pageId = "print-view-page" %}
 {% set backLinkHref = "/licence/view/cases" %}
 
@@ -40,7 +40,7 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 {% if inProgressHardStopOrTimeServedLicence %}
-                  <h1 class="govuk-heading-l">Check licence details1</h1>
+                  <h1 class="govuk-heading-l">Check licence details</h1>
                 {% elseif licence.typeCode === 'AP' %}
                   <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ licence.forename }} {{ licence.surname }}</h1>
                 {% elseif licence.typeCode === 'AP_PSS' %}
@@ -61,7 +61,6 @@
                     }) }}
                 {% endif %}
 
-                
                 {% if prisonKinds.includes(licence.kind) %}
                     {{ prisonCreatedInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser) }}
                 {% else %}
