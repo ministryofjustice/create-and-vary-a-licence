@@ -7,7 +7,8 @@ export default class PrisonWillCreateThisLicenceRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     const backLink = req.session.returnToCase || '/licence/create/caseload'
-    const { email } = await this.licenceService.getOmuEmail(licence.prisonCode, user)
+    const omuEmailResponse = await this.licenceService.getOmuEmail(licence.prisonCode, user)
+    const email = omuEmailResponse?.email || null
 
     return res.render('pages/create/licenceCreatedByPrison', {
       licence,

@@ -58,7 +58,13 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           licenceExpiryDate: '2028-08-31',
           conditionalReleaseDate: '2022-11-21',
         },
-        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, licenceStartDate: '19/11/2022' },
+        cvl: {
+          licenceType: 'AP',
+          hardStopDate: null,
+          hardStopWarningDate: null,
+          licenceStartDate: '19/11/2022',
+          hardStopKind: 'HARD_STOP',
+        },
       } as PrisonerWithCvlFields)
       probationService.getProbationer.mockResolvedValue({
         crn: 'X1234',
@@ -81,6 +87,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           dateOfBirth: '10/11/1960',
           forename: 'Test',
           surname: 'Person',
+          hardStopKind: 'HARD_STOP',
         },
         omuEmail: 'moorland@prison.gov.uk',
         backLink: req.session.returnToCase,
@@ -104,9 +111,51 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           dateOfBirth: '10/11/1960',
           forename: 'Test',
           surname: 'Person',
+          hardStopKind: 'HARD_STOP',
         },
         omuEmail: 'moorland@prison.gov.uk',
         backLink: '/licence/create/caseload',
+        licenceType: 'AP',
+      })
+    })
+
+    it('should render view with hardStopKind TIME_SERVED', async () => {
+      licenceService.getPrisonerDetail.mockResolvedValueOnce({
+        prisoner: {
+          prisonerNumber: 'G4169UO',
+          firstName: 'Test',
+          lastName: 'Person',
+          dateOfBirth: '1960-11-10',
+          status: 'ACTIVE IN',
+          prisonId: 'BAI',
+          sentenceStartDate: '2017-03-01',
+          releaseDate: '2024-07-19',
+          confirmedReleaseDate: '2022-11-20',
+          sentenceExpiryDate: '2028-08-31',
+          licenceExpiryDate: '2028-08-31',
+          conditionalReleaseDate: '2022-11-21',
+        },
+        cvl: {
+          licenceType: 'AP',
+          hardStopDate: null,
+          hardStopWarningDate: null,
+          licenceStartDate: '19/11/2022',
+          hardStopKind: 'TIME_SERVED',
+        },
+      } as PrisonerWithCvlFields)
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/prisonWillCreateThisLicence', {
+        licence: {
+          licenceStartDate: '19/11/2022',
+          crn: 'X1234',
+          dateOfBirth: '10/11/1960',
+          forename: 'Test',
+          surname: 'Person',
+          hardStopKind: 'TIME_SERVED',
+        },
+        omuEmail: 'moorland@prison.gov.uk',
+        backLink: req.session.returnToCase,
         licenceType: 'AP',
       })
     })
