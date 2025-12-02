@@ -53,7 +53,7 @@ describe('View Initial appointment details - approve licence', () => {
         appointmentPersonType: 'DUTY_OFFICER',
       },
     })
-    expect($2('#initial-appointment-details > div:nth-child(1) > dd').text().trim()).toBe('Duty Officer')
+    expect($2('#initial-appointment-details > div:nth-child(1) > dd').text().trim()).toBe('Duty officer')
     const $3 = render({
       options: {
         ...licence,

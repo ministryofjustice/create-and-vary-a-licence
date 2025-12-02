@@ -46,7 +46,7 @@ context('Create a Time Served licence', () => {
     confirmCreatePage.selectRadio('Yes')
     const appointmentPersonPage = confirmCreatePage.clickContinue()
     appointmentPersonPage.selectAppointmentPersonType(2)
-    appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
+    appointmentPersonPage.enterPerson('Test officer').clickContinue()
     Page.verifyOnPage(AppointmentPlacePage)
   })
 
