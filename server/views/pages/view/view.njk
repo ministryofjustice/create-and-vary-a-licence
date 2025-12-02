@@ -21,8 +21,8 @@
   {% set isPrintable = false %}
 {% endif %}
 
-{% set inProgressHardStopLicence = licence.kind === 'HARD_STOP' and licence.statusCode == 'IN_PROGRESS' %}
-{% set pageTitle = applicationName + " - " + "Check licence details" if inProgressHardStopLicence else (actionWord + " a licence") %}
+{% set inProgressHardStopOrTimeServedLicence = (licence.kind === 'HARD_STOP' or licence.kind === 'TIME_SERVED') and licence.statusCode == 'IN_PROGRESS' %}
+{% set pageTitle = applicationName + " - " + "Check licence details" if inProgressHardStopOrTimeServedLicence else (actionWord + " a licence") %}
 {% set pageId = "print-view-page" %}
 {% set backLinkHref = "/licence/view/cases" %}
 
@@ -38,7 +38,7 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">  
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                {% if inProgressHardStopLicence %}
+                {% if inProgressHardStopOrTimeServedLicence %}
                   <h1 class="govuk-heading-l">Check licence details</h1>
                 {% elseif licence.typeCode === 'AP' %}
                   <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ licence.forename }} {{ licence.surname }}</h1>
@@ -76,7 +76,7 @@
                     }) }}
                 {% endif %}
 
-                {% if licence.kind === 'HARD_STOP' %}
+                {% if prisonKinds.includes(licence.kind) %}
                     <h2 class="govuk-heading-m">Licence conditions</h2>
                     {{ immediateReleaseConditions(licence.typeCode) }}
                 {% else %}

@@ -12,10 +12,11 @@ export default class LicenceReviewRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { answer } = req.body
-    const { user } = res.locals
+    const { user, licence } = res.locals
 
     if (answer === YesOrNo.YES) {
-      return res.redirect(`/licence/vary/id/${licenceId}/confirm-vary-action`)
+      const newLicence = await this.licenceService.getOrCreateLicenceVariation(licence.nomsId, licenceId, user)
+      return res.redirect(`/licence/vary/id/${newLicence.licenceId}/spo-discussion`)
     }
     req.flash('showTimeServedImproveServiceBanner', 'true')
 

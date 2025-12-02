@@ -417,4 +417,12 @@ describe('View and print - single standard licence view', () => {
 
     expect($('h1').text()).toContain('Check licence details')
   })
+
+  it('Title chanegs fot time served in progress licence', () => {
+    const $ = render({
+      licence: { ...licence, statusCode: 'IN_PROGRESS', kind: 'TIME_SERVED', typeCode: 'PSS' },
+    })
+
+    expect($('h1').text()).toContain('Check licence details')
+  })
 })

@@ -17,7 +17,7 @@ export default class InitialMeetingNameRoutes {
       RESPONSIBLE_COM: `${licence?.responsibleComFullName}, this person’s probation practitioner`,
     }
     const appointmentPersonType = {
-      DUTY_OFFICER: 'Duty Officer',
+      DUTY_OFFICER: 'Duty officer',
       ...(isProbationPractionerAllocated && probationPractionerOption),
       SPECIFIC_PERSON: 'Someone else',
     }

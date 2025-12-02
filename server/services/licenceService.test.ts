@@ -735,4 +735,56 @@ describe('Licence Service', () => {
       expect(licenceApiClient.getLicencePermissions).toHaveBeenCalled()
     })
   })
+
+  describe('Get or create licence variation', () => {
+    it('should get existing incomplete variation if one exists', async () => {
+      const nomisId = 'A1234AA'
+      const licenceId = '1'
+      const existingVariation = {
+        licenceId: 2,
+        nomisId,
+        licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+      } as LicenceSummary
+
+      licenceApiClient.matchLicences.mockResolvedValue([existingVariation])
+      const result = await licenceService.getOrCreateLicenceVariation(nomisId, licenceId, user)
+
+      expect(result).toEqual(existingVariation)
+      expect(licenceApiClient.matchLicences).toHaveBeenCalledWith({
+        statuses: [
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_REJECTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
+        nomisIds: [nomisId],
+      })
+    })
+
+    it('should create a new variation if no incomplete variations exist', async () => {
+      const nomisId = 'A1234AA'
+      const licenceId = '1'
+      const newVariation = {
+        licenceId: 2,
+        nomisId,
+        licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+      } as LicenceSummary
+
+      licenceApiClient.matchLicences.mockResolvedValue([])
+      licenceApiClient.createVariation.mockResolvedValue(newVariation)
+      const result = await licenceService.getOrCreateLicenceVariation(nomisId, licenceId, user)
+
+      expect(result).toEqual(newVariation)
+      expect(licenceApiClient.matchLicences).toHaveBeenCalledWith({
+        statuses: [
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_REJECTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
+        nomisIds: [nomisId],
+      })
+      expect(licenceApiClient.createVariation).toHaveBeenCalledWith(licenceId, user)
+    })
+  })
 })
