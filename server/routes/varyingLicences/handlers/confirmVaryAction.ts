@@ -1,8 +1,6 @@
 import { Request, Response } from 'express'
-import _ from 'lodash'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
-import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 
 export default class ConfirmVaryActionRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -23,14 +21,7 @@ export default class ConfirmVaryActionRoutes {
       return res.redirect(`/licence/vary/id/${licenceId}/view-active`)
     }
 
-    let newLicence: LicenceSummary
-    const licenceVariations = await this.licenceService.getIncompleteLicenceVariations(licence.nomsId)
-    if (licenceVariations?.length > 0) {
-      newLicence = _.head(licenceVariations)
-    } else {
-      newLicence = await this.licenceService.createVariation(licenceId, user)
-    }
-
+    const newLicence = await this.licenceService.getOrCreateLicenceVariation(licence.nomsId, licenceId, user)
     return res.redirect(`/licence/vary/id/${newLicence.licenceId}/spo-discussion`)
   }
 }

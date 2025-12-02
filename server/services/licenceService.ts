@@ -493,4 +493,15 @@ export default class LicenceService {
     )
     return permissions.view
   }
+
+  async getOrCreateLicenceVariation(nomsId: string, licenceId: string, user: User): Promise<LicenceSummary> {
+    let newLicence: LicenceSummary
+    const licenceVariations = await this.getIncompleteLicenceVariations(nomsId)
+    if (licenceVariations?.length > 0) {
+      newLicence = _.head(licenceVariations)
+    } else {
+      newLicence = await this.createVariation(licenceId, user)
+    }
+    return newLicence
+  }
 }
