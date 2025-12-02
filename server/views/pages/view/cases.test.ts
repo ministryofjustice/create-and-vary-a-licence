@@ -346,7 +346,7 @@ describe('View and print a licence - case list', () => {
 
     expect($('.moj-alert--success').length).toBe(1)
     expect($('.moj-alert__content').text()).toContain(
-      'Confirmed. Go to NOMIS to create this licence or change your selection by choosing this person from the case list',
+      'Confirmed. Go to NOMIS to create this licence or change your selection by choosing this person from the case list.',
     )
   })
 })
