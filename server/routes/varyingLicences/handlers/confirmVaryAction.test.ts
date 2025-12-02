@@ -76,7 +76,6 @@ describe('Route Handlers - Vary Licence - Confirm vary', () => {
     })
 
     it('should not create a new licence variation when a variation already exists', async () => {
-      licenceService.getIncompleteLicenceVariations.mockResolvedValue([{ licenceId: 48 }] as LicenceSummary[])
       licenceService.getOrCreateLicenceVariation.mockResolvedValue({ licenceId: 48 } as LicenceSummary)
 
       req.body = { answer: 'Yes' }

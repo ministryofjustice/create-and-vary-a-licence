@@ -11,7 +11,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l">
-                {{ "Are you sure you want to vary this post sentence supervision order?" if licence.isInPssPeriod else "Are you sure you want to vary this licence22?" }}
+                {{ "Are you sure you want to vary this post sentence supervision order?" if licence.isInPssPeriod else "Are you sure you want to vary this licence?" }}
             </h1>
             {% if licence.isInPssPeriod %}
                 <div class="govuk-hint">
@@ -33,7 +33,7 @@
                             id: 'answer'
                         },
                         legend: {
-                            text: "Are you sure you want to vary this licence223?",
+                            text: "Are you sure you want to vary this licence?",
                             classes: "govuk-visually-hidden"
                         }
                     },
