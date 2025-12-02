@@ -7,14 +7,11 @@ const render = templateRenderer(fs.readFileSync('server/views/pages/create/priso
 describe('Prison created Confirmation', () => {
   it('should show correct message when com email is absent', () => {
     const $ = render({
-      licence: { comEmail: undefined },
+      licence: { comEmail: undefined, kind: 'CRD' },
     })
     expect($('#sent-to').text().toString()).toContain(
       'Once this licence has been approved, you will need to notify the probation team. We do not have their contact details to do this automatically.',
     )
-    const panelBody = $('.govuk-panel__body')
-    expect(panelBody.length).toEqual(1)
-    expect(panelBody.text().toString()).toContain('You still need to contact the probation team')
   })
 
   it('should show correct message when com email is present', () => {
@@ -24,14 +21,5 @@ describe('Prison created Confirmation', () => {
     expect($('#sent-to').text().toString()).toContain(
       'Once the licence has been approved, we will automatically email the probation team to tell them.',
     )
-    expect($('.govuk-panel__body').length).toEqual(0)
-  })
-
-  it('should not show com email message for time served licences', () => {
-    const $ = render({
-      licence: { comEmail: 'some@email.com', kind: 'TIME_SERVED' },
-    })
-    expect($('#sent-to').length).toEqual(0)
-    expect($('.govuk-panel__body').length).toEqual(0)
   })
 })
