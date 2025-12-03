@@ -121,7 +121,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           user,
         )
 
-        expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/edit/id/${licenceId}/contact-probation-team`)
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/id/123/check-your-answers`)
       })
     })
   })

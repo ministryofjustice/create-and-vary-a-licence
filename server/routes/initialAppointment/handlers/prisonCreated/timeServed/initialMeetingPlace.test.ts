@@ -212,7 +212,7 @@ describe('InitialMeetingPlaceRoutes', () => {
         { ...preferredAddress, isPreferredAddress: false },
         user,
       )
-      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/edit/id/1/contact-probation-team')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
       expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
     })
   })

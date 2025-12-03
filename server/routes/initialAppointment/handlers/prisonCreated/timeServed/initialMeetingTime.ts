@@ -32,7 +32,7 @@ export default class InitialMeetingTimeRoutes {
 
     flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
     if (PathType.EDIT === this.path) {
-      return res.redirect(getTimeServedEditPath(this.path, licence))
+      return res.redirect(getTimeServedEditPath(licence))
     }
     return res.redirect(`/licence/time-served/id/${licenceId}/check-your-answers`)
   }
