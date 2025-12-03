@@ -113,7 +113,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
       })
 
-      it('should redirect to contact probation team for EDIT flow when not in progress', async () => {
+      it('should redirect to check your answers for EDIT flow when not in progress', async () => {
         // Given
         const handler = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)
         res.locals.licence.statusCode = 'SUBMITTED'
@@ -122,7 +122,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         await handler.POST(req, res)
 
         // Then
-        expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/edit/id/1/contact-probation-team')
+        expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
       })
 
       it('should call flash message generator', async () => {

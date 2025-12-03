@@ -24,14 +24,10 @@ import ViewAndPrintLicenceRoutes from '../../../../viewingLicences/handlers/view
 import ConfirmationRoutes from '../../../../creatingLicences/handlers/prisonCreated/confirmation'
 import InitialMeetingContactRoutes from './initialMeetingContact'
 import TelephoneNumbers from '../../../types/telephoneNumbers'
-import { getTimeServerContactProbation } from '../../../../creatingLicences/handlers/prisonCreated/timeServed/contactProbationTeamRoutes'
 import { Licence } from '../../../../../@types/licenceApiClientTypes'
 
-export const getTimeServedEditPath = (pathType: PathType, licence: Licence): string => {
-  if (licence.statusCode === 'IN_PROGRESS') {
-    return `/licence/time-served/id/${licence.id}/check-your-answers`
-  }
-  return getTimeServerContactProbation(pathType, licence.id)
+export const getTimeServedEditPath = (licence: Licence): string => {
+  return `/licence/time-served/id/${licence.id}/check-your-answers`
 }
 
 export default function Index({ licenceService, conditionService, hdcService, addressService }: Services): Router {
