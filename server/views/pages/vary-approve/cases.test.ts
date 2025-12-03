@@ -103,4 +103,26 @@ describe('View Vary Approver case list', () => {
     expect($('#variation-request-date-2').text()).toBe('1 Aug 2024')
     expect($('#release-date-2').text()).toBe('2 Nov 2022')
   })
+
+  it('should display probation practitioner as Unallocated', () => {
+    const unallocatedComCase = [
+      {
+        licenceId: 3,
+        name: 'Test Person Three',
+        crnNumber: 'X12347',
+        licenceType: LicenceType.AP,
+        releaseDate: '15/09/2023',
+        variationRequestDate: '20/06/2024',
+        probationPractitioner: '',
+      },
+    ]
+    const $ = render({
+      caseload: unallocatedComCase,
+      search: '',
+      regionCases: false,
+    })
+
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
+  })
 })
