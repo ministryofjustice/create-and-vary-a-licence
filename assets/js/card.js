@@ -1,11 +1,18 @@
 window.onload = function () {
   // Loops through dom and finds all elements with card--clickable class
   document.querySelectorAll('.card--clickable').forEach(card => {
-    // Check if card has a link within it
-    if (card.querySelector('a') !== null) {
-      // Clicks the link within the heading to navigate to desired page
-      card.addEventListener('click', () => {
-        card.querySelector('a').click()
+    const link = card.querySelector('a')
+    if (link !== null) {
+      link.addEventListener('click', e => {
+        if (e.target.classList.contains('disable-link')) {
+          e.preventDefault()
+        }
+
+        e.stopPropagation()
+      })
+      card.addEventListener('click', e => {
+        e.stopPropagation()
+        link.click()
       })
     }
   })
