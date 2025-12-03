@@ -66,18 +66,11 @@
                     </p>
                 {% endif %}
             {% else %}
-                {% if isTimeServed %}
-                    <p class="govuk-body" data-qa="licence-change-message">
-                        Only the initial appointment can be changed. You will not need to approve the licence again.
-                    </p>
-                {% else %}
-                    <p class="govuk-body" data-qa="licence-change-message">
-                        Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details.
-                        Other changes must be made after release. Probation practitioners can continue to work on licences for people being released early after the 2-day point.
-                    </p>
-                {% endif %}
+                <p class="govuk-body" data-qa="licence-change-message">
+                    Probation practitioners can make changes up to 2 days before release. 
+                    After this, they can only ask the prison to change initial appointment details. Other changes must be made after release.
+                </p>
             {% endif %}
-
 
             <p class="govuk-body">
                 {{ govukButton({
