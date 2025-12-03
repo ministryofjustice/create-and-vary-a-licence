@@ -14,10 +14,10 @@ export default class InitialMeetingNameRoutes {
     const { licence } = res.locals
     const isProbationPractionerAllocated = !!licence?.responsibleComFullName
     const probationPractionerOption = {
-      RESPONSIBLE_COM: `${licence?.responsibleComFullName}, this person’s probation practitioner`,
+      RESPONSIBLE_COM: `${licence?.responsibleComFullName}, this person’s community probation practitioner`,
     }
     const appointmentPersonType = {
-      DUTY_OFFICER: 'Duty Officer',
+      DUTY_OFFICER: 'Duty officer',
       ...(isProbationPractionerAllocated && probationPractionerOption),
       SPECIFIC_PERSON: 'Someone else',
     }

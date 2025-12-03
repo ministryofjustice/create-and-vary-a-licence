@@ -425,4 +425,36 @@ describe('View and print - single standard licence view', () => {
 
     expect($('h1').text()).toContain('Check licence details')
   })
+
+  it('should render Return to case list as secondary button for printable licences', () => {
+    const $ = render({
+      licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'PSS' },
+    })
+
+    expect($('[data-qa="return-to-view-list"]').hasClass('govuk-button--secondary')).toBe(true)
+  })
+
+  it('should render Return to case list as secondary button for in-progress hard stop licences', () => {
+    const $ = render({
+      licence: { ...licence, statusCode: 'IN_PROGRESS', kind: 'HARD_STOP', typeCode: 'PSS' },
+    })
+
+    expect($('[data-qa="return-to-view-list"]').hasClass('govuk-button--secondary')).toBe(true)
+  })
+
+  it('should render Return to case list as secondary button for in-progress time served licences', () => {
+    const $ = render({
+      licence: { ...licence, statusCode: 'IN_PROGRESS', kind: 'TIME_SERVED', typeCode: 'PSS' },
+    })
+
+    expect($('[data-qa="return-to-view-list"]').hasClass('govuk-button--secondary')).toBe(true)
+  })
+
+  it('should not render Return to case list as secondary button for non-printable licences', () => {
+    const $ = render({
+      licence: { ...licence, statusCode: 'SUBMITTED' },
+    })
+
+    expect($('[data-qa="return-to-view-list"]').hasClass('govuk-button--secondary')).toBe(false)
+  })
 })

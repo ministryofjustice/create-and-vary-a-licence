@@ -55,8 +55,8 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
         appointmentPersonType: {
-          DUTY_OFFICER: 'Duty Officer',
-          RESPONSIBLE_COM: 'FirstName SecondName, this person’s probation practitioner',
+          DUTY_OFFICER: 'Duty officer',
+          RESPONSIBLE_COM: 'FirstName SecondName, this person’s community probation practitioner',
           SPECIFIC_PERSON: 'Someone else',
         },
         continueOrSaveLabel: 'Continue',
@@ -75,7 +75,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
         appointmentPersonType: {
-          DUTY_OFFICER: 'Duty Officer',
+          DUTY_OFFICER: 'Duty officer',
           SPECIFIC_PERSON: 'Someone else',
         },
         continueOrSaveLabel: 'Continue',
