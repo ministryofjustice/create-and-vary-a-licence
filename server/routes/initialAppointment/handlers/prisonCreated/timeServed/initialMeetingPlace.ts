@@ -76,7 +76,7 @@ export default class InitialMeetingPlaceRoutes {
 
   private getRedirectPath(licence: Licence): string {
     if (this.path === PathType.EDIT) {
-      return getTimeServedEditPath(this.path, licence)
+      return getTimeServedEditPath(licence)
     }
     return `/licence/time-served/create/id/${licence.id}/initial-meeting-contact`
   }

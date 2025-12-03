@@ -4,8 +4,8 @@ import { type TimeServedProbationConfirmContactRequest } from '../../../../../@t
 import logger from '../../../../../../logger'
 import PathType from '../../../../../enumeration/pathType'
 
-export const getTimeServerContactProbation = (pathType: PathType, licenceId: string) => {
-  return `/licence/time-served/${pathType}/id/${licenceId}/contact-probation-team`
+export const getTimeServerContactProbation = (licenceId: string) => {
+  return `/licence/time-served/create/id/${licenceId}/contact-probation-team`
 }
 
 export default class ContactProbationTeamRoutes {

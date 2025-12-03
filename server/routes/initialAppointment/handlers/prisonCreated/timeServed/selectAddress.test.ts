@@ -150,9 +150,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
           res.locals.user,
         )
 
-        expect(res.redirect).toHaveBeenCalledWith(
-          `/licence/time-served/edit/id/${req.params.licenceId}/contact-probation-team`,
-        )
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/id/123/check-your-answers`)
       })
     })
   })
