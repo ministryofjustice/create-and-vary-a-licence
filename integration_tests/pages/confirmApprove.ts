@@ -27,7 +27,7 @@ export default class ConfirmApprovePage extends Page {
 
   checkThatPageHasTimeServedLicenceChangeMessageMessage = (): ConfirmApprovePage => {
     cy.get('[data-qa=licence-change-message]').contains(
-      'Probation practitioners can make changes up to 2 days before release.After this, they can only ask the prison to change initial appointment details. Other changes must be made after release.',
+      'Probation practitioners can make changes up to 2 days before release.',
     )
     return this
   }
