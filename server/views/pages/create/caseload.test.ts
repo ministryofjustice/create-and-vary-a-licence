@@ -59,10 +59,18 @@ describe('Create a Licence Views - Caseload', () => {
           isClickable: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
+        {
+          kind: LicenceKind.TIME_SERVED,
+          name: 'Zohn Smith',
+          crnNumber: 'X123456',
+          releaseDate: '01 September 2022',
+          isClickable: true,
+          licenceStatus: LicenceStatus.NOT_STARTED,
+        },
       ],
     })
 
-    expect($('tbody .govuk-table__row').length).toBe(2)
+    expect($('tbody .govuk-table__row').length).toBe(3)
     expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
     expect($('#probation-practitioner-1').text()).toBe('Joe Bloggs')
     expect($('#probation-practitioner-1 > a').attr('href')).toBe(
@@ -72,6 +80,10 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#name-2 > .caseload-offender-name > a').text()).toBe('John Smith')
     expect($('#release-date-2').text()).toBe('01 September 2022')
     expect($('#probation-practitioner-2').text()).toBe('Unallocated')
+
+    expect($('#name-3 > .caseload-offender-name > a').text()).toBe('Zohn Smith')
+    expect($('#release-date-3').text()).toBe('01 September 2022Time-served release')
+    expect($('#probation-practitioner-3').text()).toBe('Not allocated yet')
   })
 
   it('should display the caseload with a case outside the pilot area', () => {
