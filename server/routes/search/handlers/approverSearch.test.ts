@@ -564,4 +564,77 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
       recentlyApprovedCases: [],
     })
   })
+
+  it('trims white space from the query before calling API', async () => {
+    const searchResponse = {
+      approvalNeededResponse: [
+        {
+          licenceId: 1,
+          name: 'Test Person 1',
+          prisonerNumber: 'A1234AA',
+          probationPractitioner: {
+            name: 'Com Four',
+          },
+          submittedByFullName: 'Submitted Person',
+          releaseDate: '01/05/2024',
+          urgentApproval: false,
+          approvedBy: null,
+          approvedOn: null,
+          kind: 'CRD',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
+        },
+      ] as ApprovalCase[],
+      recentlyApprovedResponse: [] as ApprovalCase[],
+    }
+    searchService.getPrisonApproverSearchResults.mockResolvedValue(searchResponse)
+    const queryTerm = '  abc   '
+    req.query.queryTerm = queryTerm
+    const trimmedQueryTerm = queryTerm.trim()
+
+    await handler.GET(req, res)
+
+    expect(searchService.getPrisonApproverSearchResults).toHaveBeenCalledWith(req.query.queryTerm.trim(), ['MDI'])
+
+    expect(res.render).toHaveBeenCalledWith('pages/search/approverSearch/approverSearch', {
+      queryTerm: trimmedQueryTerm,
+      backLink: '/licence/approve/cases',
+      tabParameters: {
+        activeTab: '#approval-needed',
+        approvalNeeded: {
+          resultsCount: 1,
+          tabHeading: 'Approval needed',
+          tabId: 'tab-heading-approval-needed',
+        },
+        recentlyApproved: {
+          resultsCount: 0,
+          tabHeading: 'Recently approved',
+          tabId: 'tab-heading-recently-approved',
+        },
+      },
+      hasMultipleCaseloadsInNomis: false,
+      hasSelectedMultiplePrisonCaseloads: false,
+      prisonsToDisplay: [{ agencyId: 'MDI', description: 'Moorland (HMP)' }],
+      changeLocationHref: `/licence/approve/change-location?queryTerm=${trimmedQueryTerm}`,
+      approvalNeededCases: [
+        {
+          licenceId: 1,
+          name: 'Test Person 1',
+          prisonerNumber: 'A1234AA',
+          probationPractitioner: {
+            name: 'Com Four',
+          },
+          submittedByFullName: 'Submitted Person',
+          releaseDate: '01/05/2024',
+          urgentApproval: false,
+          approvedBy: null,
+          approvedOn: null,
+          kind: 'CRD',
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
+        },
+      ],
+      recentlyApprovedCases: [],
+    })
+  })
 })
