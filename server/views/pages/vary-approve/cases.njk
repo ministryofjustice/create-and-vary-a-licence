@@ -19,6 +19,11 @@
 {% set licences = [] %}
 
 {% for offender in caseload %}
+    {% if offender.probationPractitioner %}
+        {% set probationHtml = '<a class="govuk-link" href="/licence/vary-approve/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner + '</a>' %}
+    {% else %}
+        {% set probationHtml = 'Not allocated yet' %}
+    {% endif %}
     {% set licences = (licences.push([
         {
             attributes: {
@@ -40,7 +45,7 @@
                 "data-sort-value": offender.probationPractitioner
             },
             classes: "max-width max-width-200",
-            html: '<a class="govuk-link" href="/licence/vary-approve/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner + '</a>'
+            html: probationHtml
         },
         {
             attributes: {
