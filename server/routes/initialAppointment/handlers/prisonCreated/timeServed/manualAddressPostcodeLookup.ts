@@ -39,7 +39,7 @@ export default class ManualAddressPostcodeLookupRoutes {
     await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
 
     if (this.path === PathType.EDIT) {
-      return res.redirect(getTimeServedEditPath(this.path, licence))
+      return res.redirect(getTimeServedEditPath(licence))
     }
     return res.redirect(`/licence/time-served/create/id/${licenceId}/initial-meeting-contact`)
   }

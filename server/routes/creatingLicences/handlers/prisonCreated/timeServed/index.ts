@@ -47,10 +47,5 @@ export default function Index({ licenceService, conditionService, timeServedServ
     get('/create/id/:licenceId/contact-probation-team', controller.GET)
     post('/create/id/:licenceId/contact-probation-team', controller.POST, CreateTimeServedProbationConfirmContact)
   }
-  {
-    const controller = new ContactProbationTeamRoutes(timeServedService, PathType.EDIT)
-    get('/edit/id/:licenceId/contact-probation-team', controller.GET)
-    post('/edit/id/:licenceId/contact-probation-team', controller.POST, CreateTimeServedProbationConfirmContact)
-  }
   return router
 }
