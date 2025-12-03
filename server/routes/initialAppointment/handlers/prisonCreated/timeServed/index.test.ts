@@ -1,4 +1,3 @@
-import PathType from '../../../../../enumeration/pathType'
 import { getTimeServedEditPath } from './index'
 import { Licence } from '../../../../../@types/licenceApiClientTypes'
 import { getTimeServerContactProbation } from '../../../../creatingLicences/handlers/prisonCreated/timeServed/contactProbationTeamRoutes'
@@ -13,13 +12,13 @@ describe('Time served path helpers', () => {
       } as Licence
 
       // When
-      const result = getTimeServedEditPath(PathType.EDIT, licence)
+      const result = getTimeServedEditPath(licence)
 
       // Then
       expect(result).toBe(`/licence/time-served/id/${licence.id}/check-your-answers`)
     })
 
-    it('should return contact-probation-team path when licence status is not IN_PROGRESS', () => {
+    it('should return check-your-answers path when licence status is not IN_PROGRESS', () => {
       // Given
       const licence: Licence = {
         id: '456',
@@ -27,10 +26,10 @@ describe('Time served path helpers', () => {
       } as Licence
 
       // When
-      const result = getTimeServedEditPath(PathType.EDIT, licence)
+      const result = getTimeServedEditPath(licence)
 
       // Then
-      expect(result).toBe(`/licence/time-served/${PathType.EDIT}/id/${licence.id}/contact-probation-team`)
+      expect(result).toBe(`/licence/time-served/id/${licence.id}/check-your-answers`)
     })
   })
 
@@ -40,10 +39,10 @@ describe('Time served path helpers', () => {
       const licenceId = '789'
 
       // When
-      const result = getTimeServerContactProbation(PathType.CREATE, licenceId)
+      const result = getTimeServerContactProbation(licenceId)
 
       // Then
-      expect(result).toBe(`/licence/time-served/${PathType.CREATE}/id/${licenceId}/contact-probation-team`)
+      expect(result).toBe(`/licence/time-served/create/id/${licenceId}/contact-probation-team`)
     })
   })
 })

@@ -126,7 +126,7 @@ describe('Route - create licence - initial meeting date and time', () => {
         await handler.POST(req, res)
 
         // Then
-        expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/${PathType.EDIT}/id/1/contact-probation-team`)
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/id/1/check-your-answers`)
       })
     })
   })
