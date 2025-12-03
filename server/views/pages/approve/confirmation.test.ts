@@ -4,6 +4,23 @@ import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 const render = templateRenderer(fs.readFileSync('server/views/pages/approve/confirmation.njk').toString())
 
 describe('Approval confirmation page', () => {
+  describe('Standard licence change message', () => {
+    it('should display standard change message for standard licences', () => {
+      const $ = render({
+        licence: { kind: 'CRD' },
+        titleText: 'Licence approved',
+        confirmationMessage: 'The licence has been approved',
+        isComEmailAvailable: true,
+        hdcIntegrationMvp2Enabled: false,
+        applicationName: 'Create and vary a licence',
+      })
+
+      expect($('[data-qa="licence-change-message"]').text()).toContain(
+        'Probation practitioners can make changes up to 2 days before release',
+      )
+    })
+  })
+
   describe('TIME_SERVED licence', () => {
     it('should display time served banner message', () => {
       const $ = render({
