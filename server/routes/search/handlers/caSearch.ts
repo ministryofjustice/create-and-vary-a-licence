@@ -26,7 +26,8 @@ export default class CaSearch {
   ]
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const queryTerm = req.query?.queryTerm as string
+    const enteredQueryTerm = req.query?.queryTerm as string
+    const queryTerm = enteredQueryTerm?.trim() || ''
     const { hasMultipleCaseloadsInNomis, prisonCaseloadToDisplay, hasSelectedMultiplePrisonCaseloads } = res.locals.user
 
     const changeLocationHref =
