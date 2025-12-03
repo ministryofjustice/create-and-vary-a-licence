@@ -2,6 +2,7 @@ import fs from 'fs'
 import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../../enumeration'
 import statusConfig from '../../../../licences/licenceStatus'
+import licenceKind from '../../../../enumeration/LicenceKind'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/search/caSearch/caSearch.njk').toString())
 
@@ -34,6 +35,22 @@ const inPrisonResults = [
     probationPractitioner: {
       name: '',
     },
+    releaseDate: '01/08/2025',
+    releaseDateLabel: 'CRD',
+    licenceStatus: LicenceStatus.SUBMITTED,
+    tabType: CaViewCasesTab.FUTURE_RELEASES,
+    nomisLegalStatus: 'SENTENCED',
+    lastWorkedOnBy: 'Test Updater',
+    isInHardStopPeriod: false,
+    prisonCode: 'MDI',
+    prisonDescription: 'Moorland (HMP)',
+    link: '/test2',
+  },
+  {
+    kind: LicenceKind.TIME_SERVED,
+    licenceId: 3,
+    name: 'Test Person 2',
+    prisonerNumber: 'A1234AB',
     releaseDate: '01/08/2025',
     releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.SUBMITTED,
@@ -87,6 +104,25 @@ const onProbationResults = [
     prisonDescription: 'Moorland (HMP)',
     link: '/test1',
   },
+  {
+    kind: LicenceKind.TIME_SERVED,
+    licenceId: 3,
+    name: 'Test Person 2',
+    prisonerNumber: 'A1234AB',
+    probationPractitioner: {
+      name: '',
+    },
+    releaseDate: '01/08/2025',
+    releaseDateLabel: 'CRD',
+    licenceStatus: LicenceStatus.ACTIVE,
+    tabType: CaViewCasesTab.FUTURE_RELEASES,
+    nomisLegalStatus: 'SENTENCED',
+    lastWorkedOnBy: 'Test Updater',
+    isInHardStopPeriod: false,
+    prisonCode: 'MDI',
+    prisonDescription: 'Moorland (HMP)',
+    link: '/test1',
+  },
 ]
 
 const attentionNeededResults = [
@@ -99,6 +135,21 @@ const attentionNeededResults = [
       name: 'Test Com 1',
       staffCode: 'A12345',
     },
+    releaseDate: '01/11/2022',
+    releaseDateLabel: 'CRD',
+    licenceStatus: 'SUBMITTED',
+    tabType: CaViewCasesTab.ATTENTION_NEEDED,
+    nomisLegalStatus: 'RECALL',
+    lastWorkedOnBy: 'Test Updater',
+    isInHardStopPeriod: true,
+    prisonCode: 'MDI',
+    prisonDescription: 'Moorland (HMP)',
+  },
+  {
+    kind: licenceKind.TIME_SERVED,
+    licenceId: 2,
+    name: 'Test Person 1',
+    prisonerNumber: 'A1234AA',
     releaseDate: '01/11/2022',
     releaseDateLabel: 'CRD',
     licenceStatus: 'SUBMITTED',
@@ -186,7 +237,7 @@ describe('View CA Search Results', () => {
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People in prison (2 results)')
     expect($('#tab-heading-prison').text()).toContain('People in prison (2 results)')
-    expect($('tbody .govuk-table__row').length).toBe(2)
+    expect($('tbody .govuk-table__row').length).toBe(3)
 
     expect($('#name-1 > .search-offender-name > a').text()).toBe('Test Person 1')
     expect($('#name-1 > .search-offender-name > a').attr('href').trim()).toBe('/test1')
@@ -208,6 +259,13 @@ describe('View CA Search Results', () => {
     expect($('#release-date-2').text()).toBe('CRD: 1 Aug 2025')
     expect($('#licence-last-worked-on-by-2').text()).toBe('Test Updater')
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('Submitted')
+
+    expect($('#name-3 > .search-offender-name > a').text()).toBe('Test Person 2')
+    expect($('#nomis-id-3').text()).toBe('A1234AB')
+    expect($('#probation-practitioner-3').text()).toBe('Unallocated')
+    expect($('#release-date-3').text()).toBe('CRD: 1 Aug 2025')
+    expect($('#licence-last-worked-on-by-3').text()).toBe('Test Updater')
+    expect($('#licence-status-3 > .status-badge').text().trim()).toBe('Submitted')
   })
 
   it('should display the results in a table with links to the licence and COM details page for the people on probation tab', () => {
@@ -242,7 +300,7 @@ describe('View CA Search Results', () => {
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People on probation (2 results)')
     expect($('#tab-heading-probation').text()).toContain('People on probation (2 results)')
-    expect($('tbody .govuk-table__row').length).toBe(2)
+    expect($('tbody .govuk-table__row').length).toBe(3)
 
     expect($('#name-1 > .search-offender-name > a').text()).toBe('Test Person 1')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
@@ -262,6 +320,13 @@ describe('View CA Search Results', () => {
     expect($('#release-date-2').text()).toBe('CRD: 1 Aug 2025')
     expect($('#licence-last-worked-on-by-2').text()).toBe('Test Updater')
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('Active')
+
+    expect($('#name-3 > .search-offender-name > a').text()).toBe('Test Person 2')
+    expect($('#nomis-id-3').text()).toBe('A1234AB')
+    expect($('#probation-practitioner-3').text()).toBe('Unallocated')
+    expect($('#release-date-3').text()).toBe('CRD: 1 Aug 2025')
+    expect($('#licence-last-worked-on-by-3').text()).toBe('Test Updater')
+    expect($('#licence-status-3 > .status-badge').text().trim()).toBe('Active')
   })
 
   it('should display the results in a table without links to the licence and with links to the assigned COM details page for the attention needed tab', () => {
@@ -296,7 +361,7 @@ describe('View CA Search Results', () => {
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('Attention needed (1 result)')
     expect($('div #attention-needed').text()).toContain('Attention needed')
-    expect($('div #attention-needed > .govuk-table > .govuk-table__body > .govuk-table__row').length).toBe(1)
+    expect($('div #attention-needed > .govuk-table > .govuk-table__body > .govuk-table__row').length).toBe(2)
     expect($('#nomis-legal-status-1').text()).toBe('Recall')
     expect($('#name-1').text()).toContain('Test Person 1')
     expect($('#name-1 > .caseload-offender-name > a').attr('href')).toBe(undefined)
@@ -364,7 +429,7 @@ describe('View CA Search Results', () => {
     expect($('thead').text()).toContain('Location')
     expect($('#location-1').text()).toBe('Moorland (HMP)')
     expect($('#location-2').text()).toBe('Moorland (HMP)')
-    expect($('#location-3').text()).toBe('Wormwood Scrubs (HMP)')
+    expect($('#location-3').text()).toBe('Moorland (HMP)')
   })
 
   it('should display the location column with data on the attention needed tab when the user has selected multiple prison caseloads', () => {
@@ -420,10 +485,11 @@ describe('View CA Search Results', () => {
     expect($('#ca-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('Attention needed (2 results)')
     expect($('div #attention-needed').text()).toContain('Attention needed')
-    expect($('div #attention-needed > .govuk-table > .govuk-table__body > .govuk-table__row').length).toBe(2)
+    expect($('div #attention-needed > .govuk-table > .govuk-table__body > .govuk-table__row').length).toBe(3)
     expect($('thead').text()).toContain('Location')
     expect($('#location-1').text()).toBe('Moorland (HMP)')
-    expect($('#location-2').text()).toBe('Wormwood Scrubs (HMP)')
+    expect($('#location-2').text()).toBe('Moorland (HMP)')
+    expect($('#location-3').text()).toBe('Wormwood Scrubs (HMP)')
   })
 
   it('should hide attention needed tab when no attention needed cases are present', () => {

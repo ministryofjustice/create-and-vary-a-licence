@@ -175,7 +175,11 @@
     {% if offender.probationPractitioner.staffCode and offender.probationPractitioner.name%}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
     {% else %}
-        {% set comDetailsHtml = 'Unallocated' %}
+        {% if case.kind == "TIME_SERVED" or case.hardStopKind == "TIME_SERVED"%}
+            {% set comDetailsHtml = 'Not allocated yet' %}
+        {% else %}
+            {% set comDetailsHtml = 'Unallocated' %}
+        {% endif %}
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
@@ -252,7 +256,11 @@
     {% if offender.probationPractitioner.staffCode or case.probationPractitioner.name%}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
     {% else %}
-        {% set comDetailsHtml = 'Unallocated' %}
+        {% if case.kind == "TIME_SERVED" or case.hardStopKind == "TIME_SERVED"%}
+            {% set comDetailsHtml = 'Not allocated yet' %}
+        {% else %}
+            {% set comDetailsHtml = 'Unallocated' %}
+        {% endif %}
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
