@@ -34,7 +34,6 @@ generic-service:
     MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
     HDC_INTEGRATION_MVP2_ENABLED: "true"
     HDC_LICENCE_CREATION_BLOCK: "false"
-    TIME_SERVED_ENABLED: "true"
     TIME_SERVED_ENABLED_PRISONS: "MDI, BAI, BNI"
 
   scheduledDowntime:
