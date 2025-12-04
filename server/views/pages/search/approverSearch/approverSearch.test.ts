@@ -41,6 +41,19 @@ const approvalNeededCases = [
     prisonCode: 'WSI',
     prisonDescription: 'Wormwood Scrubs (HMP)',
   },
+  {
+    licenceId: 3,
+    name: 'Test Person 3',
+    prisonerNumber: 'A1234AB',
+    submittedByFullName: 'Submitted Person',
+    releaseDate: '01/05/2024',
+    urgentApproval: false,
+    approvedBy: null,
+    approvedOn: null,
+    kind: 'TIME_SERVED',
+    prisonCode: 'WSI',
+    prisonDescription: 'Wormwood Scrubs (HMP)',
+  },
 ] as ApprovalCase[]
 
 const recentlyApprovedCases = [
@@ -75,6 +88,19 @@ const recentlyApprovedCases = [
     approvedBy: 'An Approver',
     approvedOn: '12/04/2023 00:00:00',
     kind: 'CRD',
+    prisonCode: 'MDI',
+    prisonDescription: 'Moorland (HMP)',
+  },
+  {
+    licenceId: 7,
+    name: 'Test Person 7',
+    prisonerNumber: 'A1234AF',
+    submittedByFullName: 'Submitted Person',
+    releaseDate: '12/04/2024',
+    urgentApproval: false,
+    approvedBy: 'An Approver',
+    approvedOn: '12/04/2023 00:00:00',
+    kind: 'TIME_SERVED',
     prisonCode: 'MDI',
     prisonDescription: 'Moorland (HMP)',
   },
@@ -139,7 +165,7 @@ describe('View Prison Approver Search Results', () => {
     expect($('#approval-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('Approval needed (2 results)')
     expect($('#tab-heading-approval-needed').text()).toContain('Approval needed (2 results)')
-    expect($('tbody .govuk-table__row').length).toBe(2)
+    expect($('tbody .govuk-table__row').length).toBe(3)
 
     expect($('#name-1 > a').text()).toBe('Test Person 1')
     expect($('#name-1 > a').attr('href').trim()).toBe('/licence/approve/id/1/view')
@@ -166,6 +192,13 @@ describe('View Prison Approver Search Results', () => {
     )
     expect($('#submitted-by-2').text()).toBe('Submitted Person')
     expect($('#release-date-2').text()).toBe('1 May 2024')
+
+    expect($('#name-3 > a').text()).toBe('Test Person 3')
+    expect($('#name-3 > a').attr('href').trim()).toBe('/licence/approve/id/3/view')
+
+    expect($('#nomis-id-3').text()).toBe('A1234AB')
+    expect($('#probation-practitioner-3').text()).toBe('Not allocated yet')
+    expect($('#release-date-3').text()).toBe('01/05/2024Time-served release')
   })
 
   it('should display the results in a table with links to the licence and COM details page for the recently approved tab', () => {
@@ -192,7 +225,7 @@ describe('View Prison Approver Search Results', () => {
     expect($('#approval-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('Recently approved (2 results)')
     expect($('#tab-heading-recently-approved').text()).toContain('Recently approved (2 results)')
-    expect($('tbody .govuk-table__row').length).toBe(2)
+    expect($('tbody .govuk-table__row').length).toBe(3)
 
     expect($('#name-1 > a').text()).toBe('Test Person 5')
     expect($('#name-1 > a').attr('href').trim()).toBe('/licence/view/id/5/pdf-print')
@@ -218,6 +251,10 @@ describe('View Prison Approver Search Results', () => {
     expect($('#release-date-2').text()).toBe('12 Apr 2024')
     expect($('#approved-by-1').text()).toBe('An Approver')
     expect($('#approved-on-1').text()).toBe('10 Apr 2023')
+
+    expect($('#nomis-id-3').text()).toBe('A1234AF')
+    expect($('#probation-practitioner-3').text()).toBe('Not allocated yet')
+    expect($('#release-date-3').text()).toBe('12/04/2024Time-served release')
   })
 
   it('should display urgent approval required warning label when needed', () => {
