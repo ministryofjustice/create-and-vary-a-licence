@@ -131,7 +131,7 @@ export default class CaSearch {
       return null
     }
     if (licence.licenceStatus === LicenceStatus.TIMED_OUT) {
-      if (licence.kind === LicenceKind.TIME_SERVED || licence.hardStopKind === LicenceKind.TIME_SERVED) {
+      if (licence.hardStopKind === LicenceKind.TIME_SERVED) {
         return `/licence/time-served/create/nomisId/${licence.prisonerNumber}/do-you-want-to-create-the-licence-on-this-service`
       }
       return `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`

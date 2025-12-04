@@ -1153,22 +1153,6 @@ describe('Route Handlers - Search - Ca Search', () => {
     })
   })
 
-  it('should return time-served creation link for TIMED_OUT licence with TIME_SERVED kind', async () => {
-    // Given
-    const timeServedCase = createCase({
-      kind: LicenceKind.TIME_SERVED,
-      licenceStatus: LicenceStatus.TIMED_OUT,
-      prisonerNumber: 'A1234TS',
-      isInHardStopPeriod: true,
-    })
-
-    // When
-    const link = handler.getLink(timeServedCase)
-
-    // Then
-    expect(link).toBe('/licence/time-served/create/nomisId/A1234TS/do-you-want-to-create-the-licence-on-this-service')
-  })
-
   it('should return time-served creation link for TIMED_OUT licence with hardStopKind TIME_SERVED', async () => {
     // Given
     const timeServedCase = createCase({
