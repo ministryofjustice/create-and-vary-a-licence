@@ -119,7 +119,7 @@ export default class CaSearch {
     return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
   }
 
-  private getLink = (licence: CaCase): string => {
+  getLink = (licence: CaCase): string => {
     if (
       !this.isClickable(
         <LicenceKind>licence.kind,
@@ -131,6 +131,9 @@ export default class CaSearch {
       return null
     }
     if (licence.licenceStatus === LicenceStatus.TIMED_OUT) {
+      if (licence.hardStopKind === LicenceKind.TIME_SERVED) {
+        return `/licence/time-served/create/nomisId/${licence.prisonerNumber}/do-you-want-to-create-the-licence-on-this-service`
+      }
       return `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
     }
     if (licence.licenceId) {
@@ -139,10 +142,15 @@ export default class CaSearch {
           ? `?lastApprovedVersion=${licence.licenceVersionOf}`
           : ''
 
-      return licence.isInHardStopPeriod &&
-        this.isEditableInHardStop(<LicenceKind>licence.kind, <LicenceStatus>licence.licenceStatus)
-        ? `/licence/hard-stop/id/${licence.licenceId}/check-your-answers${query}`
-        : `/licence/view/id/${licence.licenceId}/show${query}`
+      if (licence.isInHardStopPeriod) {
+        if (this.isEditableInHardStop(<LicenceKind>licence.kind, <LicenceStatus>licence.licenceStatus)) {
+          return `/licence/hard-stop/id/${licence.licenceId}/check-your-answers${query}`
+        }
+        if (this.isEditableInTimeServed(<LicenceKind>licence.kind, <LicenceStatus>licence.licenceStatus)) {
+          return `/licence/time-served/id/${licence.licenceId}/check-your-answers${query}`
+        }
+      }
+      return `/licence/view/id/${licence.licenceId}/show${query}`
     }
 
     return null
@@ -157,7 +165,10 @@ export default class CaSearch {
     if (tabType === 'ATTENTION_NEEDED') {
       return false
     }
-    if (isInHardStopPeriod && this.isEditableInHardStop(kind, licenceStatus)) {
+    if (
+      isInHardStopPeriod &&
+      (this.isEditableInHardStop(kind, licenceStatus) || this.isEditableInTimeServed(kind, licenceStatus))
+    ) {
       return true
     }
     return !this.nonViewableStatuses.includes(licenceStatus)
@@ -167,5 +178,11 @@ export default class CaSearch {
     const inProgressHardStop = kind === LicenceKind.HARD_STOP && licenceStatus === LicenceStatus.IN_PROGRESS
     const notStarted = licenceStatus === LicenceStatus.TIMED_OUT
     return inProgressHardStop || notStarted
+  }
+
+  private isEditableInTimeServed = (kind: LicenceKind, licenceStatus: LicenceStatus) => {
+    const inProgressTimeServed = kind === LicenceKind.TIME_SERVED && licenceStatus === LicenceStatus.IN_PROGRESS
+    const notStarted = licenceStatus === LicenceStatus.TIMED_OUT
+    return inProgressTimeServed || notStarted
   }
 }

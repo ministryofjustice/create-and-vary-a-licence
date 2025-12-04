@@ -204,10 +204,14 @@ describe('Route Handlers - Search - Ca Search', () => {
   }
 
   it('should render cases and evaluate links when user has a caseload in a single prison', async () => {
+    // Given
     searchService.getCaSearchResults.mockResolvedValue(searchResponse)
     req.query = { queryTerm: 'test' }
+
+    // When
     await handler.GET(req, res)
 
+    // Then
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
       queryTerm: 'test',
       backLink: '/licence/view/cases',
@@ -389,6 +393,7 @@ describe('Route Handlers - Search - Ca Search', () => {
   })
 
   it('should render cases and evaluate links when user has selected multiple caseloads', async () => {
+    // Given
     res.locals.user = {
       hasMultipleCaseloadsInNomis: true,
       prisonCaseloadToDisplay: ['MDI', 'LEI'],
@@ -443,8 +448,11 @@ describe('Route Handlers - Search - Ca Search', () => {
     }
     searchService.getCaSearchResults.mockResolvedValue(searchResponse)
     req.query = { queryTerm: 'test' }
+
+    // When
     await handler.GET(req, res)
 
+    // Then
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
       queryTerm: 'test',
       backLink: '/licence/view/cases',
@@ -667,6 +675,7 @@ describe('Route Handlers - Search - Ca Search', () => {
   })
 
   it('should allow creation of hardstop licence during hardstop and should override the TIMED_OUT status to NOT_STARTED', async () => {
+    // Given
     searchResponse = {
       inPrisonResults: [
         {
@@ -752,8 +761,11 @@ describe('Route Handlers - Search - Ca Search', () => {
 
     searchService.getCaSearchResults.mockResolvedValue(searchResponse)
     req.query = { queryTerm: 'test' }
+
+    // When
     await handler.GET(req, res)
 
+    // Then
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
       queryTerm: 'test',
       backLink: '/licence/view/cases',
@@ -869,6 +881,7 @@ describe('Route Handlers - Search - Ca Search', () => {
   })
 
   it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
+    // Given
     searchResponse = {
       inPrisonResults: [
         {
@@ -897,8 +910,11 @@ describe('Route Handlers - Search - Ca Search', () => {
 
     searchService.getCaSearchResults.mockResolvedValue(searchResponse)
     req.query = { queryTerm: 'test' }
+
+    // When
     await handler.GET(req, res)
 
+    // Then
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
       queryTerm: 'test',
       backLink: '/licence/view/cases',
@@ -954,6 +970,7 @@ describe('Route Handlers - Search - Ca Search', () => {
   })
 
   it('should allow modifying in-progress hardstop licence during hardstop', async () => {
+    // Given
     searchResponse = {
       inPrisonResults: [
         {
@@ -982,8 +999,11 @@ describe('Route Handlers - Search - Ca Search', () => {
 
     searchService.getCaSearchResults.mockResolvedValue(searchResponse)
     req.query = { queryTerm: 'test' }
+
+    // When
     await handler.GET(req, res)
 
+    // Then
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
       queryTerm: 'test',
       backLink: '/licence/view/cases',
@@ -1039,6 +1059,7 @@ describe('Route Handlers - Search - Ca Search', () => {
   })
 
   it('trims the search query', async () => {
+    // Given
     const queryTerm = '   test query   '
     searchResponse = {
       inPrisonResults: [],
@@ -1051,8 +1072,10 @@ describe('Route Handlers - Search - Ca Search', () => {
 
     const trimmedQueryTerm = queryTerm.trim()
 
+    // When
     await handler.GET(req, res)
 
+    // Then
     expect(searchService.getCaSearchResults).toHaveBeenCalledWith(trimmedQueryTerm, ['MDI'])
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
       queryTerm: trimmedQueryTerm,
@@ -1088,9 +1111,13 @@ describe('Route Handlers - Search - Ca Search', () => {
   })
 
   it('does not call the search service for a blank query', async () => {
+    // Given
     req.query.queryTerm = ''
+
+    // When
     await handler.GET(req, res)
 
+    // Then
     expect(searchService.getCaSearchResults).not.toHaveBeenCalled()
 
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
@@ -1125,4 +1152,60 @@ describe('Route Handlers - Search - Ca Search', () => {
       isSearchPageView: true,
     })
   })
+
+  it('should return time-served creation link for TIMED_OUT licence with hardStopKind TIME_SERVED', async () => {
+    // Given
+    const timeServedCase = createCase({
+      kind: LicenceKind.CRD,
+      hardStopKind: LicenceKind.TIME_SERVED,
+      licenceStatus: LicenceStatus.TIMED_OUT,
+      prisonerNumber: 'A1234TS',
+      isInHardStopPeriod: true,
+    })
+
+    // When
+    const link = handler.getLink(timeServedCase)
+
+    // Then
+    expect(link).toBe('/licence/time-served/create/nomisId/A1234TS/do-you-want-to-create-the-licence-on-this-service')
+  })
+
+  it('should return time-served check-your-answers link for in-progress TIME_SERVED licence in hard stop period', async () => {
+    // Given
+    const timeServedCase = createCase({
+      kind: LicenceKind.TIME_SERVED,
+      licenceId: 10,
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      isInHardStopPeriod: true,
+    })
+
+    // When
+    const link = handler.getLink(timeServedCase)
+
+    // Then
+    expect(link).toBe('/licence/time-served/id/10/check-your-answers')
+  })
+
+  const createCase = (overrides = {}): CaCase => {
+    return {
+      kind: LicenceKind.CRD,
+      licenceId: 1,
+      name: 'Test Person 1',
+      prisonerNumber: 'A1234AA',
+      probationPractitioner: {
+        name: 'Test Com 1',
+      },
+      releaseDate: '01/07/2025',
+      releaseDateLabel: 'Confirmed release date',
+      licenceStatus: LicenceStatus.APPROVED,
+      tabType: 'FUTURE_RELEASES',
+      nomisLegalStatus: 'SENTENCED',
+      lastWorkedOnBy: 'Test Updater',
+      isInHardStopPeriod: false,
+      hasNomisLicence: false,
+      prisonCode: 'MDI',
+      prisonDescription: 'Moorland (HMP)',
+      ...overrides,
+    } as CaCase
+  }
 })
