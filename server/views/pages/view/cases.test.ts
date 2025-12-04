@@ -36,7 +36,7 @@ describe('View and print a licence - case list', () => {
           name: 'Test Smith',
           prisonerNumber: 'A1234AN',
           releaseDate: '01/09/2022',
-          releaseDateLabel: 'CRD',
+          releaseDateLabel: 'Confirmed release date',
           tabType: 'releasesInNextTwoWorkingDays',
           kind: LicenceKind.TIME_SERVED,
         },
@@ -62,7 +62,7 @@ describe('View and print a licence - case list', () => {
 
     expect($('#name-3 > div > span').text()).toBe('Test Smith')
     expect($('#nomis-id-3').text()).toBe('A1234AN')
-    expect($('#release-date-3').text()).toBe('1 Sep 2022Time-served release')
+    expect($('#release-date-3').text()).toBe('Confirmed release date: 1 Sep 2022Time-served release')
     expect($('#com-3').text()).toBe('Not allocated yet')
   })
 
@@ -316,7 +316,7 @@ describe('View and print a licence - case list', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
-    expect($('#release-date-1').text()).toBe('3 Aug 2022Time-served release')
+    expect($('#release-date-1').text()).toBe('CRD: 3 Aug 2022Time-served release')
     expect($('#com-1').text()).toBe('Not allocated yet')
   })
 
