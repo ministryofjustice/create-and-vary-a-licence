@@ -158,4 +158,76 @@ describe('View Vary Approver Search Results', () => {
     expect($('#variation-request-date-2').text()).toBe('1 Aug 2024')
     expect($('#release-date-2').text()).toBe('2 Nov 2022')
   })
+
+  it('should display probation practitioner as Not allocated yet when not assigned in pdu cases', () => {
+    const unallocatedComCase = [
+      {
+        licenceId: 3,
+        name: 'Test Person Three',
+        crnNumber: 'X12347',
+        licenceType: LicenceType.AP,
+        releaseDate: '15/12/2023',
+        variationRequestDate: '20/12/2023',
+        probationPractitioner: '',
+      },
+    ]
+    const $ = render({
+      queryTerm: 'Test',
+      backLink: '/licence/vary-approve/list',
+      tabParameters: {
+        activeTab: '#pdu-cases',
+        pduCases: {
+          tabId: 'tab-heading-pdu-cases',
+          tabHeading: 'Cases in this PDU',
+          resultsCount: 1,
+        },
+        regionCases: {
+          tabId: 'tab-heading-region-cases',
+          tabHeading: 'All cases in this region',
+          resultsCount: 0,
+        },
+      },
+      pduCases: unallocatedComCase,
+      regionCases: [],
+    })
+
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
+  })
+
+  it('should display probation practitioner as Not allocated yet when not assigned in region cases', () => {
+    const unallocatedComCase = [
+      {
+        licenceId: 3,
+        name: 'Test Person Three',
+        crnNumber: 'X12347',
+        licenceType: LicenceType.AP,
+        releaseDate: '15/09/2023',
+        variationRequestDate: '20/06/2024',
+        probationPractitioner: '',
+      },
+    ]
+    const $ = render({
+      queryTerm: 'Test',
+      backLink: '/licence/vary-approve/list',
+      tabParameters: {
+        activeTab: '#region-cases',
+        pduCases: {
+          tabId: 'tab-heading-pdu-cases',
+          tabHeading: 'Cases in this PDU',
+          resultsCount: 0,
+        },
+        regionCases: {
+          tabId: 'tab-heading-region-cases',
+          tabHeading: 'All cases in this region',
+          resultsCount: 1,
+        },
+      },
+      pduCases: [],
+      regionCases: unallocatedComCase,
+    })
+
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
+  })
 })
