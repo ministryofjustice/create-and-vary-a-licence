@@ -18,15 +18,13 @@
     </div>
 {% endmacro %}
 
-{% macro probationHtml(case) %}
-  {% if case.probationPractitioner %}
-    <a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary-approve/id/{{ case.licenceId }}/probation-practitioner">
-        {{ case.probationPractitioner }}
-    </a>
-  {% else %}
+{%- macro probationHtml(case) -%}
+  {%- if case.probationPractitioner -%}
+    <a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary-approve/id/{{ case.licenceId }}/probation-practitioner">{{ case.probationPractitioner }}</a>
+  {%- else -%}
     Not allocated yet
-  {% endif %}
-{% endmacro %}
+  {%- endif -%}
+{%- endmacro -%}
 
 {% set pduResults = [] %}
 {% set regionResults = [] %}

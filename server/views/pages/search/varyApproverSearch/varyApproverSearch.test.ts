@@ -191,7 +191,7 @@ describe('View Vary Approver Search Results', () => {
       regionCases: [],
     })
 
-    expect($('#probation-practitioner-1').text()).toContain('Not allocated yet')
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
   })
 
@@ -227,7 +227,7 @@ describe('View Vary Approver Search Results', () => {
       regionCases: unallocatedComCase,
     })
 
-    expect($('#probation-practitioner-1').text()).toContain('Not allocated yet')
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
   })
 })
