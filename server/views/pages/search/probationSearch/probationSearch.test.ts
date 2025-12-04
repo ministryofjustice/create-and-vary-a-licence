@@ -533,4 +533,148 @@ describe('View Probation Search Results', () => {
     expect($('#release-date-1').text()).toBe('HDCAD: 20 Dec 2025HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
+
+  it('renders release date for time-served when people in prison', () => {
+    // Given
+    const offenders = [
+      {
+        kind: 'TIME_SERVED',
+        releaseDate: '01/07/2025',
+        releaseDateLabel: 'CRD',
+      },
+    ].map((o, idx) => ({
+      name: `Offender ${idx}`,
+      crn: 'CRN',
+      comName: 'Bob',
+      comStaffCode: '123',
+      teamName: 'AAA',
+      licenceType: 'AP',
+      licenceId: 1,
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      isOnProbation: false,
+      ...o,
+    }))
+
+    // Given
+    const $ = render({
+      statusConfig,
+      peopleInPrison: offenders,
+      peopleOnProbation: [],
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+    })
+
+    // Then
+    expect($('#release-date-1').text()).toBe('01/07/2025Time-served release')
+  })
+
+  it('renders release date for time-served when people people on probation', () => {
+    // Given
+    const offenders = [
+      {
+        kind: 'TIME_SERVED',
+        releaseDate: '01/07/2025',
+        releaseDateLabel: 'CRD',
+      },
+    ].map((o, idx) => ({
+      name: `Offender ${idx}`,
+      crn: 'CRN',
+      comName: 'Bob',
+      comStaffCode: '123',
+      teamName: 'AAA',
+      licenceType: 'AP',
+      licenceId: 1,
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      isOnProbation: false,
+      ...o,
+    }))
+
+    // Given
+    const $ = render({
+      statusConfig,
+      peopleInPrison: [],
+      peopleOnProbation: offenders,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+    })
+
+    // Then
+    expect($('#release-date-1').text()).toBe('01/07/2025Time-served release')
+  })
+
+  it('renders Not allocated yet for time-served when no com given with people in prison', () => {
+    // Given
+    const offenders = [
+      {
+        kind: 'TIME_SERVED',
+        releaseDate: '01/07/2025',
+        releaseDateLabel: 'CRD',
+      },
+    ].map((o, idx) => ({
+      name: `Offender ${idx}`,
+      crn: 'CRN',
+      teamName: 'AAA',
+      licenceType: 'AP',
+      licenceId: 1,
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      isOnProbation: false,
+      ...o,
+    }))
+
+    // Given
+    const $ = render({
+      statusConfig,
+      peopleInPrison: offenders,
+      peopleOnProbation: [],
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+    })
+
+    // Then
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+  })
+
+  it('renders Not allocated yet for time-served when no com given with people on probation', () => {
+    // Given
+    const offenders = [
+      {
+        kind: 'TIME_SERVED',
+        releaseDate: '01/07/2025',
+        releaseDateLabel: 'CRD',
+      },
+    ].map((o, idx) => ({
+      name: `Offender ${idx}`,
+      crn: 'CRN',
+      teamName: 'AAA',
+      licenceType: 'AP',
+      licenceId: 1,
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      isOnProbation: false,
+      ...o,
+    }))
+
+    // Given
+    const $ = render({
+      statusConfig,
+      peopleInPrison: [],
+      peopleOnProbation: offenders,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+    })
+
+    // Then
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+  })
 })

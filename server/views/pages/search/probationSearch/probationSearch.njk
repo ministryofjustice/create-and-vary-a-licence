@@ -126,7 +126,11 @@
     {% if offender.comName %}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
     {% else %}
-        {% set comDetailsHtml = 'Unallocated' %}
+        {% if offender.kind == "TIME_SERVED" or offender.hardStopKind == "TIME_SERVED"%}
+            {% set comDetailsHtml = 'Not allocated yet' %}
+        {% else %}
+            {% set comDetailsHtml = 'Unallocated' %}
+        {% endif %}
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
@@ -134,6 +138,8 @@
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
+    {% elseif offender.hardStopKind == "TIME_SERVED" or offender.kind == "TIME_SERVED"  %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
     {% else %}
         {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
     {% endif %}
@@ -192,7 +198,11 @@
     {% if offender.comName %}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.comName + '</a>' %}
     {% else %}
-        {% set comDetailsHtml = 'Unallocated' %}
+        {% if offender.kind == "TIME_SERVED" or offender.hardStopKind == "TIME_SERVED"%}
+            {% set comDetailsHtml = 'Not allocated yet' %}
+        {% else %}
+            {% set comDetailsHtml = 'Unallocated' %}
+        {% endif %}
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
@@ -200,6 +210,8 @@
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
+    {% elseif offender.hardStopKind == "TIME_SERVED" or offender.kind == "TIME_SERVED"  %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
     {% else %}
         {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
     {% endif %}
