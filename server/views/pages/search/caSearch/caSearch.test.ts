@@ -51,6 +51,7 @@ const inPrisonResults = [
     name: 'Test Person 2',
     prisonerNumber: 'A1234AB',
     releaseDate: '01/08/2025',
+    releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.SUBMITTED,
     tabType: CaViewCasesTab.FUTURE_RELEASES,
     nomisLegalStatus: 'SENTENCED',
@@ -243,7 +244,7 @@ describe('View CA Search Results', () => {
     expect($('#name-3 > .search-offender-name > a').text()).toBe('Test Person 2')
     expect($('#nomis-id-3').text()).toBe('A1234AB')
     expect($('#probation-practitioner-3').text()).toBe('Not allocated yet')
-    expect($('#release-date-3').text()).toBe('1 Aug 2025Time-served release')
+    expect($('#release-date-3').text()).toBe('CRD: 1 Aug 2025Time-served release')
     expect($('#licence-last-worked-on-by-3').text()).toBe('Test Updater')
     expect($('#licence-status-3 > .status-badge').text().trim()).toBe('Submitted')
   })
