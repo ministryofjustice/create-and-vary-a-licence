@@ -383,7 +383,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('createOffenderLink', (licence: FoundProbationRecord): string => {
-    const isTimedOutLicence = licence?.licenceStatus === 'TIMED_OUT'
+    const isTimedOutLicence = licence?.licenceStatus === 'TIMED_OUT' || licence?.hardStopKind === 'TIME_SERVED'
     const isPrisonCreated = licence?.kind === 'HARD_STOP' || licence?.kind === 'TIME_SERVED'
 
     if (isTimedOutLicence && licence.versionOf) {
