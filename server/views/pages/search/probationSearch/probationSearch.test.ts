@@ -58,6 +58,89 @@ describe('View Probation Search Results', () => {
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
   })
 
+  it('should display Not allocated yet when com is not given', () => {
+    const $ = render({
+      statusConfig,
+      peopleOnProbation: [
+        {
+          name: 'Test Person',
+          crn: 'A123456',
+          nomisId: 'A1234BC',
+          teamName: 'Test Team',
+          releaseDate: '16/08/2023',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          isOnProbation: false,
+          releaseDateLabel: 'CRD',
+        },
+      ],
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'Test',
+    })
+    expect($('#probation-practitioner-1').text().trim()).toBe('Not allocated yet')
+  })
+
+  it('should display prison name link if on isOnProbation', () => {
+    const $ = render({
+      statusConfig,
+      peopleOnProbation: [
+        {
+          name: 'Test Person',
+          crn: 'A123456',
+          nomisId: 'A1234BC',
+          teamName: 'Test Team',
+          releaseDate: '16/08/2023',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          isOnProbation: true,
+          releaseDateLabel: 'CRD',
+        },
+      ],
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'Test',
+    })
+    expect($('#name-button-1').attr('href').trim()).toBe('/licence/vary/id/1/timeline')
+  })
+
+  it('should display prison name link if on time served', () => {
+    const $ = render({
+      statusConfig,
+      peopleOnProbation: [
+        {
+          name: 'Test Person',
+          crn: 'A123456',
+          nomisId: 'A1234BC',
+          teamName: 'Test Team',
+          releaseDate: '16/08/2023',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          isOnProbation: false,
+          kind: 'TIME_SERVED',
+        },
+      ],
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'Test',
+    })
+    expect($('#name-button-1').attr('href').trim()).toBe(
+      '/licence/create/nomisId/A1234BC/prison-will-create-this-licence',
+    )
+  })
+
   it('should display the results in a table with links to create a licence and COM details page when a licence is not available', () => {
     const $ = render({
       statusConfig,
