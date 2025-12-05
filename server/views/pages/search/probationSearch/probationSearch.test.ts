@@ -112,7 +112,7 @@ describe('View Probation Search Results', () => {
     expect($('#name-button-1').attr('href').trim()).toBe('/licence/vary/id/1/timeline')
   })
 
-  it('should display prison createdlink if on time served', () => {
+  it('should display prison created link if on time served', () => {
     const $ = render({
       statusConfig,
       peopleOnProbation: [
