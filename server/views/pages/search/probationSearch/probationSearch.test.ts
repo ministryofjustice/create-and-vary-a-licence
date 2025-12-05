@@ -112,7 +112,7 @@ describe('View Probation Search Results', () => {
     expect($('#name-button-1').attr('href').trim()).toBe('/licence/vary/id/1/timeline')
   })
 
-  it('should display prison name link if on time served', () => {
+  it('should display prison createdlink if on time served', () => {
     const $ = render({
       statusConfig,
       peopleOnProbation: [
@@ -127,6 +127,36 @@ describe('View Probation Search Results', () => {
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
           kind: 'TIME_SERVED',
+        },
+      ],
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'Test',
+    })
+    expect($('#name-button-1').attr('href').trim()).toBe(
+      '/licence/create/nomisId/A1234BC/prison-will-create-this-licence',
+    )
+  })
+
+  it('should display prison created link when case is not started and hard stop kind is TIME_SERVED', () => {
+    const $ = render({
+      statusConfig,
+      peopleOnProbation: [
+        {
+          name: 'Test Person',
+          crn: 'A123456',
+          nomisId: 'A1234BC',
+          teamName: 'Test Team',
+          releaseDate: '16/08/2023',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          isOnProbation: false,
+          hardStopKind: 'TIME_SERVED',
+          kind: null,
         },
       ],
       tabParameters: {
