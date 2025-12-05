@@ -139,7 +139,7 @@
     {% elseif offender | shouldShowHardStopWarning %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
     {% elseif offender.hardStopKind == "TIME_SERVED" or offender.kind == "TIME_SERVED"  %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
     {% else %}
         {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
     {% endif %}
@@ -207,7 +207,7 @@
     {% elseif offender | shouldShowHardStopWarning %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
     {% elseif offender.hardStopKind == "TIME_SERVED" or offender.kind == "TIME_SERVED"  %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
     {% else %}
         {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
     {% endif %}
