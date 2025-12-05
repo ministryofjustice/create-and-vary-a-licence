@@ -383,18 +383,18 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('createOffenderLink', (licence: FoundProbationRecord): string => {
-    const isTimedOutLicence = licence?.licenceStatus === 'TIMED_OUT'
-    const isHardStopLicence = licence?.kind === 'HARD_STOP'
+    const isTimedOutLicence = licence?.licenceStatus === 'TIMED_OUT' || licence?.hardStopKind === 'TIME_SERVED'
+    const isPrisonCreated = licence?.kind === 'HARD_STOP' || licence?.kind === 'TIME_SERVED'
 
     if (isTimedOutLicence && licence.versionOf) {
       return `/licence/create/id/${licence.licenceId}/licence-changes-not-approved-in-time`
     }
 
-    if (isTimedOutLicence || (isHardStopLicence && licence.licenceStatus === LicenceStatus.IN_PROGRESS)) {
+    if (isTimedOutLicence || (isPrisonCreated && licence.licenceStatus === LicenceStatus.IN_PROGRESS)) {
       return `/licence/create/nomisId/${licence.nomisId}/prison-will-create-this-licence`
     }
 
-    if (isHardStopLicence) {
+    if (isPrisonCreated) {
       return `/licence/create/id/${licence.licenceId}/licence-created-by-prison`
     }
 
