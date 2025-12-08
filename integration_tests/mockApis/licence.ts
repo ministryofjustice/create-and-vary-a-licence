@@ -2069,13 +2069,13 @@ export default {
       licenceId?: number
       licenceStatus?: string
       tabType?: string
-      hardStopKind?: string
+      kind?: string
       hasNomisLicence?: boolean
     } = {
       licenceId: 1,
       licenceStatus: 'APPROVED',
       tabType: 'FUTURE_RELEASES',
-      hardStopKind: null,
+      kind: null,
       hasNomisLicence: false,
     },
   ): SuperAgentRequest => {
@@ -2089,7 +2089,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            kind: 'CRD',
+            kind: options.kind,
             licenceId: options.licenceId,
             name: 'Another Person',
             prisonerNumber: 'AB1234E',
@@ -2106,7 +2106,6 @@ export default {
             isInHardStopPeriod: true,
             prisonCode: 'MDI',
             prisonDescription: 'Moorland (HMP & YOI)',
-            hardStopKind: options.hardStopKind,
             hasNomisLicence: options.hasNomisLicence,
           },
         ],

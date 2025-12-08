@@ -820,7 +820,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the links of cases for prison view in timeServed', async () => {
-      probationCaseLoad[1] = { ...probationCaseLoad[1], hardStopKind: LicenceKind.TIME_SERVED, hasNomisLicence: true }
+      probationCaseLoad[1] = { ...probationCaseLoad[1], kind: LicenceKind.TIME_SERVED, hasNomisLicence: true }
       caseloadService.getPrisonOmuCaseload.mockResolvedValue(probationCaseLoad)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
@@ -854,7 +854,7 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01/06/2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStopKind: LicenceKind.TIME_SERVED,
+            kind: LicenceKind.TIME_SERVED,
           },
           {
             licenceId: 7,

@@ -15,7 +15,7 @@ export default class TimeServedConfirmCreatePage extends Page {
         licenceId: 1,
         licenceStatus: 'IN_PROGRESS',
         tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-        hardStopKind: 'TIME_SERVED',
+        kind: 'TIME_SERVED',
         hasNomisLicence: false,
       })
     } else {
@@ -23,7 +23,7 @@ export default class TimeServedConfirmCreatePage extends Page {
         licenceId: null,
         licenceStatus: 'TIMED_OUT',
         tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-        hardStopKind: 'TIME_SERVED',
+        kind: 'TIME_SERVED',
         hasNomisLicence: true,
       })
     }

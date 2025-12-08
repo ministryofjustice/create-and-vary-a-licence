@@ -28,7 +28,7 @@ context('Create a Time Served licence', () => {
       licenceId: null,
       licenceStatus: 'TIMED_OUT',
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-      hardStopKind: 'TIME_SERVED',
+      kind: 'TIME_SERVED',
       hasNomisLicence: false,
     })
     cy.task('stubUpdateTimeServedExternalRecord')
@@ -37,13 +37,13 @@ context('Create a Time Served licence', () => {
   })
 
   it('should click through the create a licence journey', () => {
-    cy.task('stubGetLicence', { licenceKind: LicenceKind.TIME_SERVED })
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     const releaseDateFlag = viewCasesList.getReleaseDateFlag()
     releaseDateFlag.should('contain', 'Time-served release')
     const confirmCreatePage = viewCasesList.clickATimeServedLicence()
     confirmCreatePage.selectRadio('Yes')
+    cy.task('stubGetLicence', { licenceKind: LicenceKind.TIME_SERVED })
     const appointmentPersonPage = confirmCreatePage.clickContinue()
     appointmentPersonPage.selectAppointmentPersonType(2)
     appointmentPersonPage.enterPerson('Test officer').clickContinue()
@@ -51,13 +51,13 @@ context('Create a Time Served licence', () => {
   })
 
   it('should show allocated com option when present on initial appointment page', () => {
-    cy.task('stubGetLicence', { licenceKind: LicenceKind.TIME_SERVED, responsibleComFullName: 'John Smith' })
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     const releaseDateFlag = viewCasesList.getReleaseDateFlag()
     releaseDateFlag.should('contain', 'Time-served release')
     const confirmCreatePage = viewCasesList.clickATimeServedLicence()
     confirmCreatePage.selectRadio('Yes')
+    cy.task('stubGetLicence', { licenceKind: LicenceKind.TIME_SERVED, responsibleComFullName: 'John Smith' })
     const appointmentPersonPage = confirmCreatePage.clickContinue()
     appointmentPersonPage.selectAppointmentPersonType(2).clickContinue()
     Page.verifyOnPage(AppointmentPlacePage)
@@ -145,7 +145,7 @@ context('Create a Time Served licence', () => {
       licenceId: null,
       licenceStatus: 'SUBMITTED',
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-      hardStopKind: 'TIME_SERVED',
+      kind: 'TIME_SERVED',
       hasNomisLicence: false,
     })
 

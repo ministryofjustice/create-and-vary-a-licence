@@ -74,20 +74,22 @@ export default class PrrdCasesByPrisonRoutes {
   }
 
   private async getCases(user: Express.LocalsUser, prisonCode: string) {
-    const cases = await this.caCaseloadService.getPrisonOmuCaseload(user, [prisonCode])
+    const caCases = await this.caCaseloadService.getPrisonOmuCaseload(user, [prisonCode])
 
-    const deliusRecords = await this.probationService.getResponsibleCommunityManagers(cases.map(o => o.prisonerNumber))
-    const caseload = cases
-      .filter(aCase => aCase.kind === 'PRRD')
-      .map(aCase => {
-        const deliusRecord = deliusRecords.find(d => d.case.nomisId === aCase.prisonerNumber)
+    const deliusRecords = await this.probationService.getResponsibleCommunityManagers(
+      caCases.map(o => o.prisonerNumber),
+    )
+    const caseload = caCases
+      .filter(caCase => caCase.kind === 'PRRD')
+      .map(caCase => {
+        const deliusRecord = deliusRecords.find(d => d.case.nomisId === caCase.prisonerNumber)
         return {
-          name: aCase.name,
-          prisonNumber: aCase.prisonerNumber,
+          name: caCase.name,
+          prisonNumber: caCase.prisonerNumber,
           crn: deliusRecord?.case.crn,
-          licenceStatus: aCase.licenceStatus,
-          releaseDate: aCase.releaseDate,
-          probationPractitioner: convertToTitleCase(aCase.probationPractitioner?.name) || 'Unallocated',
+          licenceStatus: caCase.licenceStatus,
+          releaseDate: caCase.releaseDate,
+          probationPractitioner: convertToTitleCase(caCase.probationPractitioner?.name) || 'Unallocated',
           probationPractitionerEmail: deliusRecord?.email,
         }
       })
