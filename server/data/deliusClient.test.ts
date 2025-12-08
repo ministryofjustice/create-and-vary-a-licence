@@ -59,7 +59,7 @@ describe('Delius client tests', () => {
 
     const result = await deliusClient.getResponsibleCommunityManager('crn')
 
-    expect(get).toHaveBeenCalledWith({ path: `/probation-case/crn/responsible-community-manager` })
+    expect(get).toHaveBeenCalledWith({ path: `/probation-case/crn/responsible-community-manager`, return404: true })
     expect(result).toEqual({ id: 2000 })
   })
 
