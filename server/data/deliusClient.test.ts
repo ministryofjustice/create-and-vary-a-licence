@@ -59,7 +59,19 @@ describe('Delius client tests', () => {
 
     const result = await deliusClient.getResponsibleCommunityManager('crn')
 
-    expect(get).toHaveBeenCalledWith({ path: `/probation-case/crn/responsible-community-manager` })
+    expect(get).toHaveBeenCalledWith({ path: `/probation-case/crn/responsible-community-manager`, return404: true })
     expect(result).toEqual({ id: 2000 })
+  })
+
+  it('handle 404 when getting responsible community manager', async () => {
+    get.mockResolvedValue(null)
+
+    const result = await deliusClient.getResponsibleCommunityManager('crn-not-found')
+
+    expect(get).toHaveBeenCalledWith({
+      path: `/probation-case/crn-not-found/responsible-community-manager`,
+      return404: true,
+    })
+    expect(result).toBeNull()
   })
 })
