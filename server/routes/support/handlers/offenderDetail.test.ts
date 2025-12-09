@@ -533,6 +533,9 @@ describe('Route Handlers - Offender detail', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/support/offenderDetail',
       expect.objectContaining({
+        prisonerDetail: expect.objectContaining({
+          crn: '',
+        }),
         probationPractitioner: {
           name: 'Not allocated',
           staffCode: '',
