@@ -3746,7 +3746,7 @@ export interface components {
        */
       releaseDate?: string
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: string
+      probationPractitioner?: components['schemas']['ProbationPractitioner']
     }
     /** @description Response object which describes a result from a vary approver caseload search */
     VaryApproverCaseloadSearchResponse: {
