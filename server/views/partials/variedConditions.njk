@@ -17,14 +17,12 @@
         {% set rows = [] %}
         {% for condition in conditions %}
             {% set valueHtml %}
-                {% if condition.uploadSummaries.length %}
-                    {% for summary in condition.uploadSummaries %}
-                        {{ summary.text | striptags(true) | escape }}
-                        {{ includeExclusionZoneImage(summary) }}
-                    {% endfor %}
+                {% for summary in condition.uploadSummaries %}
+                    {{ summary.text | striptags(true) | escape }}
+                    {{ includeExclusionZoneImage(summary) }}
                 {% else %}
                     {{ condition.condition | striptags(true) | escape | nl2br }}
-                {% endif %}
+                {% endfor %}
             {% endset %}
 
             {% set rows = (rows.push({
