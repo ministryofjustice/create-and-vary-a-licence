@@ -112,6 +112,8 @@
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Caseload</th>
                     {% if probationPractitioner.staffCode | length %}
                         <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-practitioner/{{ probationPractitioner.staffCode }}/caseload">link</a></td>
+                    {% else %}
+                        {{ probationPractitioner.staffCode | default('', true) }}
                     {% endif %}
                 </tr>
                 </tbody>
