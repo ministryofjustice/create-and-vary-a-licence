@@ -534,7 +534,7 @@ describe('Route Handlers - Offender detail', () => {
       'pages/support/offenderDetail',
       expect.objectContaining({
         probationPractitioner: {
-          name: '',
+          name: 'Not allocated',
           staffCode: '',
           email: '',
           telephone: '',

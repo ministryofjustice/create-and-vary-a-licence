@@ -89,7 +89,7 @@ export default class OffenderDetailRoutes {
         recall: prisonerDetail.recall ? 'Yes' : 'No',
       },
       probationPractitioner: {
-        name: probationPractitioner ? nameToString(probationPractitioner.name) : '',
+        name: probationPractitioner ? nameToString(probationPractitioner.name) : 'Not allocated',
         staffCode: probationPractitioner?.code ?? '',
         email: probationPractitioner?.email ?? '',
         telephone: probationPractitioner?.telephoneNumber ?? '',
