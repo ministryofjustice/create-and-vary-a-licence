@@ -34,7 +34,10 @@ describe('Route Handlers - Variation approval list', () => {
         licenceType: LicenceType.AP,
         releaseDate: '01 May 2022',
         variationRequestDate: '01 May 2022',
-        probationPractitioner: 'Com Four',
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'Com Four',
+        },
       },
     ])
   })
@@ -56,7 +59,10 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
         ],
         regionCases: false,
@@ -78,7 +84,10 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
         ],
         regionCases: false,
@@ -100,7 +109,10 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
         ],
         regionCases: false,
@@ -122,7 +134,10 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
         ],
         regionCases: false,

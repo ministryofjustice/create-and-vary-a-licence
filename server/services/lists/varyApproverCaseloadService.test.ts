@@ -26,7 +26,10 @@ describe('Vary Approver Caseload Service', () => {
         licenceType: 'AP',
         variationRequestDate: '30/10/2022',
         releaseDate: '01/11/2022',
-        probationPractitioner: 'An ProbationOfficer',
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'An ProbationOfficer',
+        },
       },
     ])
 
@@ -37,7 +40,10 @@ describe('Vary Approver Caseload Service', () => {
         licenceId: 1,
         licenceType: 'AP',
         name: 'An Offender',
-        probationPractitioner: 'An ProbationOfficer',
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'An ProbationOfficer',
+        },
         releaseDate: '01/11/2022',
         variationRequestDate: '30/10/2022',
       },

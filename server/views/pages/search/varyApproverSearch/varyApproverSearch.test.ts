@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 import LicenceType from '../../../../enumeration/licenceType'
+import { VaryApproverCase } from '../../../../@types/licenceApiClientTypes'
 
 const render = templateRenderer(
   fs.readFileSync('server/views/pages/search/varyApproverSearch/varyApproverSearch.njk').toString(),
@@ -14,7 +15,10 @@ const pduCases = [
     licenceType: LicenceType.AP,
     releaseDate: '01/05/2024',
     variationRequestDate: '03/06/2024',
-    probationPractitioner: 'Com One',
+    probationPractitioner: {
+      staffCode: 'X1231',
+      name: 'Com One',
+    },
   },
 ]
 
@@ -26,7 +30,10 @@ const regionCases = [
     licenceType: LicenceType.AP,
     releaseDate: '01/05/2024',
     variationRequestDate: '03/06/2024',
-    probationPractitioner: 'Com One',
+    probationPractitioner: {
+      staffCode: 'X1231',
+      name: 'Com One',
+    },
   },
   {
     licenceId: 2,
@@ -35,7 +42,10 @@ const regionCases = [
     licenceType: LicenceType.AP,
     releaseDate: '02/11/2022',
     variationRequestDate: '01/08/2024',
-    probationPractitioner: 'Com Four',
+    probationPractitioner: {
+      staffCode: 'X1234',
+      name: 'Com Four',
+    },
   },
 ]
 
@@ -204,9 +214,9 @@ describe('View Vary Approver Search Results', () => {
         licenceType: LicenceType.AP,
         releaseDate: '15/09/2023',
         variationRequestDate: '20/06/2024',
-        probationPractitioner: '',
+        probationPractitioner: null,
       },
-    ]
+    ] as VaryApproverCase[]
     const $ = render({
       queryTerm: 'Test',
       backLink: '/licence/vary-approve/list',

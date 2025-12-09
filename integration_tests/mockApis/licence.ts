@@ -2298,7 +2298,10 @@ export default {
             licenceType: 'AP',
             releaseDate: '23/03/2022',
             variationRequestDate: '01/03/2021',
-            probationPractitioner: 'jsmith',
+            probationPractitioner: {
+              staffCode: 'X1231',
+              name: 'Com One',
+            },
           },
           {
             licenceId: 2,
@@ -2308,7 +2311,10 @@ export default {
             licenceType: 'AP',
             releaseDate: '23/03/2022',
             variationRequestDate: '28/02/2021',
-            probationPractitioner: 'jsmith',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
         ],
       },
@@ -2806,7 +2812,10 @@ export default {
               licenceType: LicenceType.AP,
               releaseDate: '01/05/2024',
               variationRequestDate: '03/06/2024',
-              probationPractitioner: 'Com One',
+              probationPractitioner: {
+                staffCode: 'X1231',
+                name: 'Com One',
+              },
             },
             {
               licenceId: 2,
@@ -2815,7 +2824,10 @@ export default {
               licenceType: LicenceType.AP,
               releaseDate: '02/11/2022',
               variationRequestDate: '02/05/2024',
-              probationPractitioner: 'Com Four',
+              probationPractitioner: {
+                staffCode: 'X1234',
+                name: 'Com Four',
+              },
             },
             {
               licenceId: 3,
@@ -2824,7 +2836,10 @@ export default {
               licenceType: LicenceType.AP,
               releaseDate: '02/11/2022',
               variationRequestDate: '01/05/2024',
-              probationPractitioner: 'Com Four',
+              probationPractitioner: {
+                staffCode: 'X1234',
+                name: 'Com Four',
+              },
             },
           ],
           regionCasesResponse: [
@@ -2835,7 +2850,10 @@ export default {
               licenceType: LicenceType.AP,
               releaseDate: '01/05/2024',
               variationRequestDate: '03/06/2024',
-              probationPractitioner: 'Com One',
+              probationPractitioner: {
+                staffCode: 'X1231',
+                name: 'Com One',
+              },
             },
             {
               licenceId: 2,
@@ -2844,7 +2862,10 @@ export default {
               licenceType: LicenceType.AP,
               releaseDate: '02/11/2022',
               variationRequestDate: '02/05/2024',
-              probationPractitioner: 'Com Four',
+              probationPractitioner: {
+                staffCode: 'X1234',
+                name: 'Com Four',
+              },
             },
             {
               licenceId: 3,
@@ -2853,7 +2874,10 @@ export default {
               licenceType: LicenceType.AP,
               releaseDate: '02/11/2022',
               variationRequestDate: '01/05/2024',
-              probationPractitioner: 'Com Four',
+              probationPractitioner: {
+                staffCode: 'X1234',
+                name: 'Com Four',
+              },
             },
             {
               licenceId: 4,
@@ -2862,7 +2886,10 @@ export default {
               licenceType: LicenceType.AP,
               releaseDate: '05/11/2022',
               variationRequestDate: '30/04/2024',
-              probationPractitioner: 'Com Three',
+              probationPractitioner: {
+                staffCode: 'X1233',
+                name: 'Com Three',
+              },
             },
           ],
         },
