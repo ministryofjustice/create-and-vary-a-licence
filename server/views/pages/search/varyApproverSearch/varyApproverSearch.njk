@@ -19,8 +19,8 @@
 {% endmacro %}
 
 {%- macro probationHtml(case) -%}
-  {%- if case.probationPractitioner -%}
-    <a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary-approve/id/{{ case.licenceId }}/probation-practitioner">{{ case.probationPractitioner }}</a>
+  {%- if case.probationPractitioner.name -%}
+    <a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary-approve/id/{{ case.licenceId }}/probation-practitioner">{{ case.probationPractitioner.name }}</a>
   {%- else -%}
     Not allocated yet
   {%- endif -%}
@@ -117,7 +117,7 @@
         {
             attributes: {
                 id: 'probation-practitioner-' + loop.index,
-                "data-sort-value": case.probationPractitioner
+                "data-sort-value": case.probationPractitioner.name
             },
             classes: "max-width max-width-200",
             html: probationHtml(case) | safe
@@ -163,7 +163,7 @@
         {
             attributes: {
                 id: 'probation-practitioner-' + loop.index,
-                "data-sort-value": case.probationPractitioner
+                "data-sort-value": case.probationPractitioner.name
             },
             classes: "max-width max-width-200",
             html: probationHtml(case) | safe
