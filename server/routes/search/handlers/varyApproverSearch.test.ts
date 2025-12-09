@@ -41,7 +41,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
         licenceType: LicenceType.AP,
         releaseDate: '01/05/2024',
         variationRequestDate: '03/06/2024',
-        probationPractitioner: 'Com One',
+        probationPractitioner: {
+          staffCode: 'X1231',
+          name: 'Com One',
+        },
       },
       {
         licenceId: 2,
@@ -50,7 +53,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
         licenceType: LicenceType.AP,
         releaseDate: '02/11/2022',
         variationRequestDate: '02/05/2024',
-        probationPractitioner: 'Com Four',
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'Com Four',
+        },
       },
     ] as VaryApproverCase[],
     regionCasesResponse: [
@@ -61,7 +67,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
         licenceType: LicenceType.AP,
         releaseDate: '01/05/2024',
         variationRequestDate: '03/06/2024',
-        probationPractitioner: 'Com One',
+        probationPractitioner: {
+          staffCode: 'X1231',
+          name: 'Com One',
+        },
       },
       {
         licenceId: 2,
@@ -70,7 +79,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
         licenceType: LicenceType.AP,
         releaseDate: '02/11/2022',
         variationRequestDate: '02/05/2024',
-        probationPractitioner: 'Com Four',
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'Com Four',
+        },
       },
       {
         licenceId: 3,
@@ -79,7 +91,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
         licenceType: LicenceType.AP,
         releaseDate: '01/05/2023',
         variationRequestDate: '01/08/2023',
-        probationPractitioner: 'Com Four',
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'Com Four',
+        },
       },
     ] as VaryApproverCase[],
   }
@@ -141,7 +156,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2024',
             variationRequestDate: '03/06/2024',
-            probationPractitioner: 'Com One',
+            probationPractitioner: {
+              staffCode: 'X1231',
+              name: 'Com One',
+            },
           },
           {
             licenceId: 2,
@@ -150,7 +168,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '02/11/2022',
             variationRequestDate: '02/05/2024',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
         ],
         regionCases: [
@@ -161,7 +182,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2024',
             variationRequestDate: '03/06/2024',
-            probationPractitioner: 'Com One',
+            probationPractitioner: {
+              staffCode: 'X1231',
+              name: 'Com One',
+            },
           },
           {
             licenceId: 2,
@@ -170,7 +194,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '02/11/2022',
             variationRequestDate: '02/05/2024',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
           {
             licenceId: 3,
@@ -179,7 +206,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2023',
             variationRequestDate: '01/08/2023',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
         ],
       })
@@ -195,7 +225,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2024',
             variationRequestDate: '03/06/2024',
-            probationPractitioner: 'Com One',
+            probationPractitioner: {
+              staffCode: 'X1231',
+              name: 'Com One',
+            },
           },
         ] as VaryApproverCase[],
         regionCasesResponse: [
@@ -206,7 +239,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2024',
             variationRequestDate: '03/06/2024',
-            probationPractitioner: 'Com One',
+            probationPractitioner: {
+              staffCode: 'X1231',
+              name: 'Com One',
+            },
           },
         ] as VaryApproverCase[],
       })
@@ -238,7 +274,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2024',
             variationRequestDate: '03/06/2024',
-            probationPractitioner: 'Com One',
+            probationPractitioner: {
+              staffCode: 'X1231',
+              name: 'Com One',
+            },
           },
         ],
         regionCases: [
@@ -249,7 +288,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2024',
             variationRequestDate: '03/06/2024',
-            probationPractitioner: 'Com One',
+            probationPractitioner: {
+              staffCode: 'X1231',
+              name: 'Com One',
+            },
           },
         ],
       })
@@ -289,7 +331,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2024',
             variationRequestDate: '03/06/2024',
-            probationPractitioner: 'Com One',
+            probationPractitioner: {
+              staffCode: 'X1231',
+              name: 'Com One',
+            },
           },
           {
             licenceId: 2,
@@ -298,7 +343,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '02/11/2022',
             variationRequestDate: '02/05/2024',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
         ],
         regionCases: [
@@ -309,7 +357,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2024',
             variationRequestDate: '03/06/2024',
-            probationPractitioner: 'Com One',
+            probationPractitioner: {
+              staffCode: 'X1231',
+              name: 'Com One',
+            },
           },
           {
             licenceId: 2,
@@ -318,7 +369,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '02/11/2022',
             variationRequestDate: '02/05/2024',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
           {
             licenceId: 3,
@@ -327,7 +381,10 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
             licenceType: LicenceType.AP,
             releaseDate: '01/05/2023',
             variationRequestDate: '01/08/2023',
-            probationPractitioner: 'Com Four',
+            probationPractitioner: {
+              staffCode: 'X1234',
+              name: 'Com Four',
+            },
           },
         ],
       })
