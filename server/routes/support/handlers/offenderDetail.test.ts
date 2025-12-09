@@ -515,4 +515,37 @@ describe('Route Handlers - Offender detail', () => {
       }),
     )
   })
+
+  it('should render all offender information if probationPractitioner is null', async () => {
+    licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetail)
+
+    prisonerService.getHdcStatuses.mockResolvedValue([
+      {
+        bookingId: '1',
+        approvalStatus: 'PENDING',
+        checksPassed: true,
+      } as HdcStatus,
+    ])
+
+    licenceService.getIS91Status.mockResolvedValue(false)
+    probationService.getResponsibleCommunityManager.mockResolvedValue(null)
+    await handler.GET(req, res)
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/support/offenderDetail',
+      expect.objectContaining({
+        probationPractitioner: {
+          name: '',
+          staffCode: '',
+          email: '',
+          telephone: '',
+          team: '',
+          teamCode: '',
+          ldu: '',
+          lau: '',
+          pdu: '',
+          region: '',
+        },
+      }),
+    )
+  })
 })
