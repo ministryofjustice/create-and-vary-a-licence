@@ -1,13 +1,35 @@
 {% from "customComponents/summaryCard/macro.njk" import summaryCard %}
 
 {% macro variedConditions(conditionComparison) %}
+    {% macro includeExclusionZoneImage(uploadSummary) %}
+        <div id="exclusion-zone">
+            <div class="upload-thumbnail">
+                <img src="data:image/jpeg;base64, {{ uploadSummary.thumbnailImage }}"
+                     alt="Exclusion zone map"/>
+            </div>
+            <div class="upload-detail govuk-!-padding-bottom-3">
+                {{ uploadSummary.description }}
+            </div>
+        </div>
+    {% endmacro %}
+
     {% macro buildConditionsSummaryCard(title, conditions) %}
         {% set rows = [] %}
         {% for condition in conditions %}
-            {% set valueText = condition.condition | striptags(true) | escape | nl2br  %}
+            {% set valueHtml %}
+                {% if condition.uploadSummaries.length %}
+                    {% for summary in condition.uploadSummaries %}
+                        {{ summary.text | striptags(true) | escape }}
+                        {{ includeExclusionZoneImage(summary) }}
+                    {% endfor %}
+                {% else %}
+                    {{ condition.condition | striptags(true) | escape | nl2br }}
+                {% endif %}
+            {% endset %}
+
             {% set rows = (rows.push({
                 key: {  text: condition.category },
-                value: { html: valueText }
+                value: { html: valueHtml }
             }), rows) %}
         {% endfor %}
 

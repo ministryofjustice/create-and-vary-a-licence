@@ -3,10 +3,29 @@ import { AdditionalCondition, BespokeCondition, Licence } from '../@types/licenc
 import ConditionType from '../enumeration/conditionType'
 import { groupingBy } from './utils'
 
-type Condition = {
+type ImageUploadSummary = {
+  text: string
+  description: string
+  thumbnailImage: string
+}
+
+type ConditionAndImageUploads = AdditionalCondition & {
+  expandedText: string
+  uploadSummaries: ImageUploadSummary[]
+}
+
+type VariedAdditionalCondition = {
+  category: string
+  condition: string
+  uploadSummaries: ImageUploadSummary[]
+}
+
+type VariedBespokeCondition = {
   category: string
   condition: string
 }
+
+type Condition = VariedAdditionalCondition | VariedBespokeCondition
 
 export type VariedConditions = {
   licenceConditionsAdded: Condition[]
@@ -44,6 +63,17 @@ const compareLicenceConditions = (originalLicence: Licence, variation: Licence):
   return _.merge(combinedLicenceConditions, variedAdditionalPssConditions)
 }
 
+const createConditionAndUploads = (additionalCondition: AdditionalCondition) => {
+  if (additionalCondition.uploadSummary.length !== 0) {
+    return {
+      text: additionalCondition.text,
+      description: additionalCondition.uploadSummary[0].description,
+      thumbnailImage: additionalCondition.uploadSummary[0].thumbnailImage,
+    }
+  }
+  return undefined
+}
+
 const compareAdditionalConditionSet = (
   originalConditionSet: AdditionalCondition[],
   variedConditionSet: AdditionalCondition[],
@@ -51,20 +81,34 @@ const compareAdditionalConditionSet = (
 ): VariedConditions => {
   const variedConditionsBuilder = new VariedConditionsBuilder(conditionType)
 
-  const originalConditions = groupingBy(originalConditionSet, 'code').map(([first, ...rest]) => {
-    const texts = [first.expandedText, ...rest.map(r => r.expandedText)]
-    return { ...first, expandedText: texts.join('\n\n') }
-  })
+  const originalConditions: ConditionAndImageUploads[] = groupingBy(originalConditionSet, 'code').map(
+    ([first, ...rest]) => {
+      const texts = [first.expandedText, ...rest.map(r => r.expandedText)]
+      return {
+        ...first,
+        expandedText: texts.join('\n\n'),
+        ...(first.uploadSummary.length !== 0 && {
+          uploadSummaries: [createConditionAndUploads(first), ...rest.map(createConditionAndUploads)],
+        }),
+      }
+    },
+  )
 
   const variedConditions = groupingBy(variedConditionSet, 'code').map(([first, ...rest]) => {
     const texts = [first.expandedText, ...rest.map(r => r.expandedText)]
-    return { ...first, expandedText: texts.join('\n\n') }
+    return {
+      ...first,
+      expandedText: texts.join('\n\n'),
+      ...(first.uploadSummary.length !== 0 && {
+        uploadSummaries: [createConditionAndUploads(first), ...rest.map(createConditionAndUploads)],
+      }),
+    }
   })
 
-  const sortedOriginalConditions = sortConditionSet(Object.values(originalConditions))
+  const sortedOriginalConditions: ConditionAndImageUploads[] = sortConditionSet(Object.values(originalConditions))
   const sortedVariedConditions = sortConditionSet(Object.values(variedConditions))
 
-  let originalCondition = sortedOriginalConditions.shift()
+  let originalCondition: ConditionAndImageUploads = sortedOriginalConditions.shift()
   let variedCondition = sortedVariedConditions.shift()
 
   while (originalCondition !== undefined || variedCondition !== undefined) {
@@ -72,12 +116,14 @@ const compareAdditionalConditionSet = (
       variedConditionsBuilder.recordConditionRemoved({
         category: originalCondition.category,
         condition: originalCondition.expandedText,
+        uploadSummaries: originalCondition.uploadSummaries,
       })
       originalCondition = sortedOriginalConditions.shift()
     } else if (originalCondition?.code > variedCondition?.code || originalCondition === undefined) {
       variedConditionsBuilder.recordConditionAdded({
         category: variedCondition.category,
         condition: variedCondition.expandedText,
+        uploadSummaries: variedCondition.uploadSummaries,
       })
       variedCondition = sortedVariedConditions.shift()
     } else {
@@ -85,6 +131,7 @@ const compareAdditionalConditionSet = (
         variedConditionsBuilder.recordConditionAmended({
           category: variedCondition.category,
           condition: variedCondition.expandedText,
+          uploadSummaries: variedCondition.uploadSummaries,
         })
       }
 
@@ -136,7 +183,7 @@ const compareBespokeConditionSet = (
   return variedConditionsBuilder.buildVariedConditions()
 }
 
-const sortConditionSet = (conditionSet: AdditionalCondition[]) => {
+const sortConditionSet = (conditionSet: ConditionAndImageUploads[]) => {
   return conditionSet.sort((a, b) => {
     if (a.code > b.code) {
       return 1
@@ -157,36 +204,36 @@ const sortBespokeConditionSet = (conditionSet: BespokeCondition[]) => {
 class VariedConditionsBuilder {
   constructor(private readonly conditionType: ConditionType) {}
 
-  private conditonsAdded: Condition[] = []
+  private conditionsAdded: Condition[] = []
 
-  private conditonsRemoved: Condition[] = []
+  private conditionsRemoved: Condition[] = []
 
-  private conditonsAmended: Condition[] = []
+  private conditionsAmended: Condition[] = []
 
   recordConditionAdded = (condition: Condition) => {
-    this.conditonsAdded.push(condition)
+    this.conditionsAdded.push(condition)
   }
 
   recordConditionRemoved = (condition: Condition) => {
-    this.conditonsRemoved.push(condition)
+    this.conditionsRemoved.push(condition)
   }
 
   recordConditionAmended = (condition: Condition) => {
-    this.conditonsAmended.push(condition)
+    this.conditionsAmended.push(condition)
   }
 
   buildVariedConditions = (): VariedConditions => {
     if (this.conditionType === 'AP' || this.conditionType === 'Bespoke') {
       return {
-        licenceConditionsAdded: this.conditonsAdded,
-        licenceConditionsRemoved: this.conditonsRemoved,
-        licenceConditionsAmended: this.conditonsAmended,
+        licenceConditionsAdded: this.conditionsAdded,
+        licenceConditionsRemoved: this.conditionsRemoved,
+        licenceConditionsAmended: this.conditionsAmended,
       } as VariedConditions
     }
     return {
-      pssConditionsAdded: this.conditonsAdded,
-      pssConditionsRemoved: this.conditonsRemoved,
-      pssConditionsAmended: this.conditonsAmended,
+      pssConditionsAdded: this.conditionsAdded,
+      pssConditionsRemoved: this.conditionsRemoved,
+      pssConditionsAmended: this.conditionsAmended,
     } as VariedConditions
   }
 }
