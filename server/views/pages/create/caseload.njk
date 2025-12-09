@@ -28,7 +28,7 @@
     {% if offender.probationPractitioner %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% if offender.kind == "TIME_SERVED" or offender.hardStopKind == "TIME_SERVED"%}
+        {% if offender.kind == "TIME_SERVED" %}
             {% set comDetailsHtml = 'Not allocated yet' %}
         {% else %}
             {% set comDetailsHtml = 'Unallocated' %}
@@ -40,7 +40,7 @@
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
-    {% elseif offender.hardStopKind == "TIME_SERVED" or offender.kind == "TIME_SERVED"  %}
+    {% elseif offender.kind == "TIME_SERVED"  %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
     {% else %}
         {% set releaseDate = offender.releaseDate %}
