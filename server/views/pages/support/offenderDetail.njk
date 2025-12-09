@@ -43,7 +43,7 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">CRN</th>
-                        <td class="govuk-table__cell">{{ prisonerDetail.crn }}</td>
+                        <td class="govuk-table__cell">{{ prisonerDetail.crn | default('')}}</td>
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">Location</th>
