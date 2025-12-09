@@ -48,24 +48,23 @@ export default class ViewAndPrintCaseRoutes {
     const { enabled: timeServedEnabled, prisons: timeServedEnabledPrisons } = config.timeServed
 
     res.render('pages/view/cases', {
-      cases: cases.map(c => {
-        const link = this.getLink(c)
-        const licenceStatus = this.getStatus(<LicenceStatus>c.licenceStatus, c.hasNomisLicence)
+      cases: cases.map(caCase => {
+        const link = this.getLink(caCase)
+        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus, caCase.hasNomisLicence)
         return {
-          licenceId: c.licenceId,
-          licenceVersionOf: c.licenceVersionOf,
-          name: c.name,
-          prisonerNumber: c.prisonerNumber,
-          probationPractitioner: c.probationPractitioner,
-          releaseDate: c.releaseDate,
-          releaseDateLabel: c.releaseDateLabel,
-          tabType: CaViewCasesTab[c.tabType],
-          nomisLegalStatus: c.nomisLegalStatus,
-          lastWorkedOnBy: c.lastWorkedOnBy,
+          licenceId: caCase.licenceId,
+          licenceVersionOf: caCase.licenceVersionOf,
+          name: caCase.name,
+          prisonerNumber: caCase.prisonerNumber,
+          probationPractitioner: caCase.probationPractitioner,
+          releaseDate: caCase.releaseDate,
+          releaseDateLabel: caCase.releaseDateLabel,
+          tabType: CaViewCasesTab[caCase.tabType],
+          nomisLegalStatus: caCase.nomisLegalStatus,
+          lastWorkedOnBy: caCase.lastWorkedOnBy,
           link,
           licenceStatus,
-          kind: c.kind,
-          hardStopKind: c.hardStopKind,
+          kind: caCase.kind,
         }
       }),
       CaViewCasesTab,
@@ -89,28 +88,28 @@ export default class ViewAndPrintCaseRoutes {
     return hasNomisLicence ? LicenceStatus.NOMIS_LICENCE : LicenceStatus.NOT_STARTED
   }
 
-  private getLink = (licence: CaCase): string => {
-    const licenceStatus = <LicenceStatus>licence.licenceStatus
+  private getLink = (caCase: CaCase): string => {
+    const licenceStatus = <LicenceStatus>caCase.licenceStatus
 
-    if (!this.isClickable(<LicenceKind>licence.kind, licenceStatus, licence.isInHardStopPeriod, licence.tabType)) {
+    if (!this.isClickable(<LicenceKind>caCase.kind, licenceStatus, caCase.isInHardStopPeriod, caCase.tabType)) {
       return null
     }
     if (licenceStatus === LicenceStatus.TIMED_OUT) {
-      return licence.hardStopKind === LicenceKind.TIME_SERVED
-        ? `/licence/time-served/create/nomisId/${licence.prisonerNumber}/do-you-want-to-create-the-licence-on-this-service`
-        : `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
+      return caCase.kind === LicenceKind.TIME_SERVED
+        ? `/licence/time-served/create/nomisId/${caCase.prisonerNumber}/do-you-want-to-create-the-licence-on-this-service`
+        : `/licence/hard-stop/create/nomisId/${caCase.prisonerNumber}/confirm`
     }
-    if (licence.licenceId) {
+    if (caCase.licenceId) {
       const query =
-        licence.licenceVersionOf && licenceStatus === LicenceStatus.SUBMITTED
-          ? `?lastApprovedVersion=${licence.licenceVersionOf}`
+        caCase.licenceVersionOf && licenceStatus === LicenceStatus.SUBMITTED
+          ? `?lastApprovedVersion=${caCase.licenceVersionOf}`
           : ''
 
-      if (licence.isInHardStopPeriod && this.isEditableTimedOutStatus(licenceStatus)) {
-        const timedOutKind = licence.kind === LicenceKind.TIME_SERVED ? 'time-served' : 'hard-stop'
-        return `/licence/${timedOutKind}/id/${licence.licenceId}/check-your-answers${query}`
+      if (caCase.isInHardStopPeriod && this.isEditableTimedOutStatus(licenceStatus)) {
+        const timedOutKind = caCase.kind === LicenceKind.TIME_SERVED ? 'time-served' : 'hard-stop'
+        return `/licence/${timedOutKind}/id/${caCase.licenceId}/check-your-answers${query}`
       }
-      return `/licence/view/id/${licence.licenceId}/show${query}`
+      return `/licence/view/id/${caCase.licenceId}/show${query}`
     }
 
     return null

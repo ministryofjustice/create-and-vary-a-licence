@@ -1156,8 +1156,7 @@ describe('Route Handlers - Search - Ca Search', () => {
   it('should return time-served creation link for TIMED_OUT licence with hardStopKind TIME_SERVED', async () => {
     // Given
     const timeServedCase = createCase({
-      kind: LicenceKind.CRD,
-      hardStopKind: LicenceKind.TIME_SERVED,
+      kind: LicenceKind.TIME_SERVED,
       licenceStatus: LicenceStatus.TIMED_OUT,
       prisonerNumber: 'A1234TS',
       isInHardStopPeriod: true,

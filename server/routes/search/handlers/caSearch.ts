@@ -80,29 +80,29 @@ export default class CaSearch {
       backLink,
       statusConfig,
       tabParameters,
-      inPrisonResults: inPrisonResults.map(res => {
-        const link = this.getLink(res)
-        const licenceStatus = this.getStatus(<LicenceStatus>res.licenceStatus)
+      inPrisonResults: inPrisonResults.map(caCase => {
+        const link = this.getLink(caCase)
+        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus)
         return {
-          ...res,
+          ...caCase,
           link,
           licenceStatus,
         }
       }),
-      onProbationResults: onProbationResults.map(res => {
-        const link = this.getLink(res)
-        const licenceStatus = this.getStatus(<LicenceStatus>res.licenceStatus)
+      onProbationResults: onProbationResults.map(caCase => {
+        const link = this.getLink(caCase)
+        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus)
         return {
-          ...res,
+          ...caCase,
           link,
           licenceStatus,
         }
       }),
-      attentionNeededResults: attentionNeededResults.map(res => {
+      attentionNeededResults: attentionNeededResults.map(caCase => {
         return {
-          ...res,
-          nomisLegalStatus: res.nomisLegalStatus,
-          tabType: CaViewCasesTab[res.tabType],
+          ...caCase,
+          nomisLegalStatus: caCase.nomisLegalStatus,
+          tabType: CaViewCasesTab[caCase.tabType],
         }
       }),
       CaViewCasesTab,
@@ -119,38 +119,38 @@ export default class CaSearch {
     return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
   }
 
-  getLink = (licence: CaCase): string => {
+  getLink = (caCase: CaCase): string => {
     if (
       !this.isClickable(
-        <LicenceKind>licence.kind,
-        <LicenceStatus>licence.licenceStatus,
-        licence.isInHardStopPeriod,
-        licence.tabType,
+        <LicenceKind>caCase.kind,
+        <LicenceStatus>caCase.licenceStatus,
+        caCase.isInHardStopPeriod,
+        caCase.tabType,
       )
     ) {
       return null
     }
-    if (licence.licenceStatus === LicenceStatus.TIMED_OUT) {
-      if (licence.hardStopKind === LicenceKind.TIME_SERVED) {
-        return `/licence/time-served/create/nomisId/${licence.prisonerNumber}/do-you-want-to-create-the-licence-on-this-service`
+    if (caCase.licenceStatus === LicenceStatus.TIMED_OUT) {
+      if (caCase.kind === LicenceKind.TIME_SERVED) {
+        return `/licence/time-served/create/nomisId/${caCase.prisonerNumber}/do-you-want-to-create-the-licence-on-this-service`
       }
-      return `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
+      return `/licence/hard-stop/create/nomisId/${caCase.prisonerNumber}/confirm`
     }
-    if (licence.licenceId) {
+    if (caCase.licenceId) {
       const query =
-        licence.licenceVersionOf && licence.licenceStatus === LicenceStatus.SUBMITTED
-          ? `?lastApprovedVersion=${licence.licenceVersionOf}`
+        caCase.licenceVersionOf && caCase.licenceStatus === LicenceStatus.SUBMITTED
+          ? `?lastApprovedVersion=${caCase.licenceVersionOf}`
           : ''
 
-      if (licence.isInHardStopPeriod) {
-        if (this.isEditableInHardStop(<LicenceKind>licence.kind, <LicenceStatus>licence.licenceStatus)) {
-          return `/licence/hard-stop/id/${licence.licenceId}/check-your-answers${query}`
+      if (caCase.isInHardStopPeriod) {
+        if (this.isEditableInHardStop(<LicenceKind>caCase.kind, <LicenceStatus>caCase.licenceStatus)) {
+          return `/licence/hard-stop/id/${caCase.licenceId}/check-your-answers${query}`
         }
-        if (this.isEditableInTimeServed(<LicenceKind>licence.kind, <LicenceStatus>licence.licenceStatus)) {
-          return `/licence/time-served/id/${licence.licenceId}/check-your-answers${query}`
+        if (this.isEditableInTimeServed(<LicenceKind>caCase.kind, <LicenceStatus>caCase.licenceStatus)) {
+          return `/licence/time-served/id/${caCase.licenceId}/check-your-answers${query}`
         }
       }
-      return `/licence/view/id/${licence.licenceId}/show${query}`
+      return `/licence/view/id/${caCase.licenceId}/show${query}`
     }
 
     return null

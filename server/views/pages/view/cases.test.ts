@@ -332,7 +332,7 @@ describe('View and print a licence - case list', () => {
           releaseDate: '03/08/2022',
           releaseDateLabel: 'CRD',
           tabType: 'releasesInNextTwoWorkingDays',
-          hardStopKind: LicenceKind.TIME_SERVED,
+          kind: LicenceKind.TIME_SERVED,
         },
       ],
       showAttentionNeededTab: false,
