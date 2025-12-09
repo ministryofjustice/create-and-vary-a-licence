@@ -36,6 +36,7 @@ export default class DeliusClient extends RestClient {
   async getResponsibleCommunityManager(crnOrNomisId: string): Promise<DeliusManager> {
     return (await this.get({
       path: `/probation-case/${crnOrNomisId}/responsible-community-manager`,
+      return404: true,
     })) as Promise<DeliusManager>
   }
 
