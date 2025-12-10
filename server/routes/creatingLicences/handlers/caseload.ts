@@ -37,7 +37,7 @@ export default class CaseloadRoutes {
       req.session.returnToCase = '/licence/create/caseload'
     }
 
-    const caseload = (
+    const comCaseload = (
       teamView
         ? await this.comCaseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
         : await this.comCaseloadService.getStaffCreateCaseload(user)
@@ -60,7 +60,7 @@ export default class CaseloadRoutes {
     })
 
     res.render('pages/create/caseload', {
-      caseload,
+      caseload: comCaseload,
       statusConfig,
       teamView,
       teamName,
