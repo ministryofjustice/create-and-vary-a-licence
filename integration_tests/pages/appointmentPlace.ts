@@ -37,7 +37,12 @@ export default class AppointmentPlacePage extends Page {
     return cy.get(this.deleteAddress)
   }
 
-  useThisAddressBtnClick = (): AppointmentContactPage => {
+  useThisAddressBtnClick = (): AppointmentPlacePage => {
+    cy.get(this.useThisAddressBtn).click()
+    return this
+  }
+
+  clickUseThisAddressAndNavigate = (): AppointmentContactPage => {
     cy.get(this.useThisAddressBtn).click()
     return Page.verifyOnPage(AppointmentContactPage)
   }

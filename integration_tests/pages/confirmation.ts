@@ -1,6 +1,7 @@
 import Page from './page'
 import CaseloadPage from './caseload'
 import ViewCasesPage from './viewCasesPage'
+import { LicenceKind, LicenceStatus } from '../../server/enumeration'
 
 export default class ConfirmationPage extends Page {
   private returnButtonId = '[data-qa=return-to-caselist]'
@@ -19,9 +20,9 @@ export default class ConfirmationPage extends Page {
 
   clickReturnToCaCaseload = (isUnallocatedCom?: boolean): ViewCasesPage => {
     cy.task('stubGetPrisonOmuCaseload', {
-      licenceStatus: 'SUBMITTED',
+      licenceStatus: LicenceStatus.SUBMITTED,
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-      hardStopKind: 'TIME_SERVED',
+      kind: LicenceKind.TIME_SERVED,
       hasNomisLicence: false,
       isUnallocatedCom: isUnallocatedCom || false,
     })

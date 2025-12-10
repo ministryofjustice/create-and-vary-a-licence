@@ -1,6 +1,7 @@
 import IndexPage from '../../pages'
 import Page from '../../pages/page'
 import LicenceKind from '../../../server/enumeration/LicenceKind'
+import { LicenceStatus } from '../../../server/enumeration'
 
 context('Create a Time Served licence', () => {
   beforeEach(() => {
@@ -25,9 +26,9 @@ context('Create a Time Served licence', () => {
     cy.task('stubGetPrisons')
     cy.task('stubGetPrisonOmuCaseload', {
       licenceId: null,
-      licenceStatus: 'TIMED_OUT',
+      licenceStatus: LicenceStatus.TIMED_OUT,
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-      kind: 'TIME_SERVED',
+      kind: LicenceKind.TIME_SERVED,
       hasNomisLicence: false,
     })
     cy.task('stubUpdateTimeServedExternalRecord')
@@ -54,7 +55,7 @@ context('Create a Time Served licence', () => {
       appointmentPersonPage.selectAppointmentPersonType(2)
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
       appointmentPlacePage.selectSavedAddressByIndex(1)
-      const appointmentContactPage = appointmentPlacePage.useThisAddressBtnClick()
+      const appointmentContactPage = appointmentPlacePage.clickUseThisAddressAndNavigate()
       const appointmentTimePage = appointmentContactPage.clickContinue()
       const checkAnswersPage = appointmentTimePage
         .selectTypeInHardStop('IMMEDIATE_UPON_RELEASE')
@@ -98,7 +99,7 @@ context('Create a Time Served licence', () => {
       appointmentPersonPage.selectAppointmentPersonType(2)
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
       appointmentPlacePage.selectSavedAddressByIndex(1)
-      const appointmentContactPage = appointmentPlacePage.useThisAddressBtnClick()
+      const appointmentContactPage = appointmentPlacePage.clickUseThisAddressAndNavigate()
       const appointmentTimePage = appointmentContactPage.clickContinue()
       const checkAnswersPage = appointmentTimePage
         .selectTypeInHardStop('IMMEDIATE_UPON_RELEASE')
