@@ -74,15 +74,15 @@
                 <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Name</th>
-                    <td class="govuk-table__cell">{{ probationPractitioner.name }}</td>
+                    <td class="govuk-table__cell">{{ probationPractitioner.name | default('') }}</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Email</th>
-                    <td class="govuk-table__cell">{{ probationPractitioner.email }}</td>
+                    <td class="govuk-table__cell">{{ probationPractitioner.email | default('') }}</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Telephone</th>
-                    <td class="govuk-table__cell">{{ probationPractitioner.telephone }}</td>
+                    <td class="govuk-table__cell">{{ probationPractitioner.telephone | default('') }}</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Team</th>
@@ -94,19 +94,19 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">LDU</th>
-                    <td class="govuk-table__cell">{{ probationPractitioner.ldu }}</td>
+                    <td class="govuk-table__cell">{{ probationPractitioner.ldu | default('') }}</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">LAU</th>
-                    <td class="govuk-table__cell">{{ probationPractitioner.lau }}</td>
+                    <td class="govuk-table__cell">{{ probationPractitioner.lau | default('') }}</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">PDU</th>
-                    <td class="govuk-table__cell">{{ probationPractitioner.pdu }}</td>
+                    <td class="govuk-table__cell">{{ probationPractitioner.pdu | default('') }}</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Region</th>
-                    <td class="govuk-table__cell">{{ probationPractitioner.region }}</td>
+                    <td class="govuk-table__cell">{{ probationPractitioner.region | default('') }}</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Caseload</th>

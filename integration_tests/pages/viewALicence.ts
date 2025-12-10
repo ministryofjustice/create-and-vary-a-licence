@@ -6,8 +6,11 @@ import PrintLicenceHtmlPage from './printLicenceHtmlPage'
 import CaSearchPage from './caSearch'
 import ManualAddressEntryPage from './manualAddressEntryPage'
 import ViewCasesPage from './viewCasesPage'
+import TimeServedContactProbationPage from './timeServedContactProbationPage'
 
 export default class ViewALicencePage extends Page {
+  private approveStandardLicenceBtn = '[data-qa=approve-standard-licence]'
+
   constructor() {
     super('print-view-page')
   }
@@ -105,5 +108,11 @@ export default class ViewALicencePage extends Page {
   clickBackToViewCases = (): ViewCasesPage => {
     cy.get('.govuk-back-link').click()
     return Page.verifyOnPage(ViewCasesPage)
+  }
+
+  clickSendForStandardApproval = (): TimeServedContactProbationPage => {
+    cy.task('stubSubmitStatus')
+    cy.get(this.approveStandardLicenceBtn).click()
+    return Page.verifyOnPage(TimeServedContactProbationPage)
   }
 }

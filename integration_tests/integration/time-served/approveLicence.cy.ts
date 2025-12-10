@@ -18,7 +18,7 @@ context('Approve a licence - time served', () => {
         },
       ],
     })
-    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED' })
+    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', urgentApproval: true })
     cy.task('stubFeComponents')
     cy.signIn()
     Page.verifyOnPage(IndexPage)
@@ -28,7 +28,7 @@ context('Approve a licence - time served', () => {
     cy.get('[data-qa=signOut]').click()
   })
 
-  it('when time served licence then correct approval messages should be shown', () => {
+  it('approve a time served licence', () => {
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetCompletedLicence', {
@@ -42,6 +42,7 @@ context('Approve a licence - time served', () => {
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.getUrgentHighlightMessage().should('contain', 'Urgent approval required forupcoming release')
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
     approvalViewPage.checkCorrectContactMessage()
     const confirmApprovePage = approvalViewPage.clickApprove()

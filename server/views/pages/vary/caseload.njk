@@ -24,7 +24,7 @@
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender.licenceStatus === "REVIEW_NEEDED" %}
-        {% set releaseMessage = 'Time-served release' if offender.kind === 'TIME_SERVED' else 'Timed out' %}
+        {% set releaseMessage = 'Time-served release' if offender.kind === 'TIME_SERVED' else 'Timed out1' %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">' + releaseMessage + '</span>' %}
     {% else %}
         {% set releaseDate = offender.releaseDate %}
@@ -83,6 +83,8 @@
             <h1 class="govuk-heading-xl">Select a person to vary licences and supervision orders</h1>
         </div>
     </div>
+
+    {{ caseload | dump }}
 
     <div class="govuk-grid-row">
         <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">

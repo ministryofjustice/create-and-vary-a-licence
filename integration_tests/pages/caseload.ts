@@ -10,6 +10,8 @@ import HardStopLicencePage from './hardStopLicencePage'
 export default class CaseloadPage extends Page {
   private createLicenceButtonId = '#name-button-1'
 
+  private licenceStatusId = '#licence-status-'
+
   private searchTextInput = '#search'
 
   private searchButtonId = '[data-qa=search-button]'
@@ -61,4 +63,6 @@ export default class CaseloadPage extends Page {
     cy.get(this.searchButtonId).click()
     return Page.verifyOnPage(SearchPage)
   }
+
+  getLicenceStatusByIndex = (index: number) => cy.get(this.licenceStatusId + index)
 }

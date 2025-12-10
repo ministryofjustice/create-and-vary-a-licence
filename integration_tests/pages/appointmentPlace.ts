@@ -1,3 +1,4 @@
+import AppointmentContactPage from './appointmentContact'
 import Page from './page'
 import SelectAddressPage from './selectAddress'
 
@@ -36,10 +37,12 @@ export default class AppointmentPlacePage extends Page {
     return cy.get(this.deleteAddress)
   }
 
-  useThisAddressBtnClick = (): AppointmentPlacePage => {
+  useThisAddressBtnClick = (): AppointmentContactPage => {
     cy.get(this.useThisAddressBtn).click()
-    return this
+    return Page.verifyOnPage(AppointmentContactPage)
   }
+
+  selectSavedAddressByIndex = (index: number) => cy.get(`[data-qa="address-${index}"]`).click()
 
   errorListSummary = () => {
     return cy.get(this.errorList)

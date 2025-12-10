@@ -123,6 +123,7 @@ export default defineConfig({
         stubGetProbationOmuCaseload: licence.stubGetProbationOmuCaseload,
         stubGetStaffCreateCaseload: licence.stubGetStaffCreateCaseload,
         stubGetStaffVaryCaseload: licence.stubGetStaffVaryCaseload,
+        stubReviewWithOutVariation: licence.stubReviewWithOutVariation,
         stubGetStaffCreateCaseloadForHardStop: licence.stubGetStaffCreateCaseloadForHardStop,
         stubDeleteAdditionalConditionById: licence.stubDeleteAdditionalConditionById,
         stubDeleteAdditionalConditionsByCode: licence.stubDeleteAdditionalConditionsByCode,
