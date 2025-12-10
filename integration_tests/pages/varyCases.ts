@@ -8,6 +8,8 @@ export default class VaryCasesPage extends Page {
 
   private licenceStatusId = '#licence-status-'
 
+  private probationPractitionerId = '#probation-practitioner-'
+
   public myCount = '#my-count'
 
   public teamCount = '#team-count'
@@ -28,4 +30,6 @@ export default class VaryCasesPage extends Page {
   getUrgentHighlightMessage = () => cy.get(this.urgentHighlightMessageClass)
 
   getLicenceStatusByIndex = (index: number) => cy.get(this.licenceStatusId + index)
+
+  getProbationPractitioner = (index: number) => cy.get(this.probationPractitionerId + index)
 }

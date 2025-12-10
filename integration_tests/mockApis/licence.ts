@@ -2217,6 +2217,7 @@ export default {
     licenceCreationType: string
     isReviewNeeded?: boolean
     kind?: string
+    isUnallocatedCom?: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -2235,7 +2236,7 @@ export default {
             licenceId: options.licenceId,
             licenceStatus: options.licenceStatus,
             licenceType: 'PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
+            probationPractitioner: options.isUnallocatedCom ? null : { staffCode: 'X12345', name: 'John Smith' },
             hardStopDate: '03/01/2023',
             hardStopWarningDate: '01/01/2023',
             licenceCreationType: options.licenceCreationType,
