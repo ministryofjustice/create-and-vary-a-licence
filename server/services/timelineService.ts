@@ -12,7 +12,6 @@ export default class TimelineService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
   private async getReviewEvents(licence: Licence, user: User): Promise<TimelineEvent[]> {
-    console.log('licence', licence)
     const conversationEventTypes = [LicenceEventType.REVIEWED_WITHOUT_VARIATION.valueOf()]
     const events = await this.licenceApiClient.matchLicenceEvents(
       `${licence.id}`,

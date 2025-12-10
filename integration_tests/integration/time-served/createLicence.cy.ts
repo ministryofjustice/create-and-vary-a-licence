@@ -27,7 +27,7 @@ context('Create a Time Served licence', () => {
       licenceId: null,
       licenceStatus: 'TIMED_OUT',
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-      hardStopKind: 'TIME_SERVED',
+      kind: 'TIME_SERVED',
       hasNomisLicence: false,
     })
     cy.task('stubUpdateTimeServedExternalRecord')
@@ -77,7 +77,7 @@ context('Create a Time Served licence', () => {
         licenceId: null,
         licenceStatus: 'TIMED_OUT',
         tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-        hardStopKind: 'TIME_SERVED',
+        kind: 'TIME_SERVED',
         hasNomisLicence: false,
         isUnallocatedCom: true,
       })

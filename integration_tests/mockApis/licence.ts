@@ -2964,20 +2964,6 @@ export default {
       },
     })
   },
-  // stubReviewWithOutVariation: (): SuperAgentRequest => {
-  //   return stubFor({
-  //     request: {
-  //       method: 'POST',
-  //       urlPattern: `/licence/id/(\\d)*/review-with-no-variation-required`,
-  //     },
-  //     response: {
-  //       status: 200,
-  //       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-  //       jsonBody: {},
-  //     },
-  //   })
-  // },
-
   stubReviewWithOutVariation: () => {
     return stubFor({
       request: {

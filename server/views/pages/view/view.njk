@@ -28,7 +28,6 @@
 {% set backLinkHref = "/licence/view/cases" %}
 
 {% block content %}
-    {{ licence | dump }}
     {% if initialApptUpdatedMessage | length > 0%}
         {{ mojBanner({
             type: 'success',
