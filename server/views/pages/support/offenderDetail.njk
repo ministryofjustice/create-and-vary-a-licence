@@ -88,6 +88,8 @@
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Team</th>
                     {% if probationPractitioner.team | length %}
                         <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-teams/{{probationPractitioner.teamCode}}/caseload">{{ probationPractitioner.team }}</a></td>
+                    {% else %}
+                        {{ probationPractitioner.team }}
                     {% endif %}
                 </tr>
                 <tr class="govuk-table__row">
@@ -110,6 +112,8 @@
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Caseload</th>
                     {% if probationPractitioner.staffCode | length %}
                         <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-practitioner/{{ probationPractitioner.staffCode }}/caseload">link</a></td>
+                    {% else %}
+                        {{ probationPractitioner.staffCode }}
                     {% endif %}
                 </tr>
                 </tbody>
