@@ -318,4 +318,32 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#release-date-1').text()).toBe('20 December 2025HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
+
+  it('should highlight a TIME_SERVED case with a Time-served release warning label', () => {
+    // Given
+    const caseloadData = [
+      {
+        name: 'Test Person',
+        crnNumber: 'A123456',
+        prisonerNumber: 'ABC123',
+        releaseDate: '20 December 2025',
+        isClickable: true,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        createLink: '/licence/create/nomisId/ABC123/confirm',
+        kind: LicenceKind.TIME_SERVED,
+      },
+    ]
+
+    // When
+    const $ = render({
+      statusConfig,
+      caseload: caseloadData,
+    })
+
+    // Then
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#release-date-1').text()).toBe('20 December 2025Time-served release')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('Time-served release')
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+  })
 })
