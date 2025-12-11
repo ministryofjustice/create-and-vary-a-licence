@@ -74,10 +74,10 @@ describe('Caseload', () => {
     })
 
     const label = $(`label[for="radio-option"]`)
-    expect(label.text()).toContain('Yes - vary this licence now')
+    expect(label.text()).toContain('Yes – vary this licence now')
 
     const label2 = $(`label[for="radio-option-2"]`)
-    expect(label2.text()).toContain('No - leave unchanged and return to licence history')
+    expect(label2.text()).toContain('No – leave unchanged and return to licence history')
 
     const message = $('[data-qa="additional-message"]')
     expect(message.length).toBe(0)
