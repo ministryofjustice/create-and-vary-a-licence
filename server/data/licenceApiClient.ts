@@ -38,7 +38,7 @@ import type {
   PrisonerWithCvlFields,
   PrisonUserSearchRequest,
   ProbationSearchRequest,
-  ProbationSearchResult,
+  ComSearchResponse,
   ReferVariationRequest,
   StatusUpdateRequest,
   TeamCaseloadRequest,
@@ -534,11 +534,11 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async searchForOffenderOnStaffCaseload(searchRequest: ProbationSearchRequest): Promise<ProbationSearchResult> {
+  async searchForOffenderOnStaffCaseload(searchRequest: ProbationSearchRequest): Promise<ComSearchResponse> {
     return (await this.post({
-      path: `/com/case-search`,
+      path: `/caseload/com/case-search`,
       data: searchRequest,
-    })) as Promise<ProbationSearchResult>
+    })) as Promise<ComSearchResponse>
   }
 
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {

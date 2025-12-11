@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { FoundProbationRecord, ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
+import { FoundComCase, ComSearchResponse } from '../../../@types/licenceApiClientTypes'
 import ProbationSearchRoutes from './probationSearch'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
@@ -50,7 +50,7 @@ describe('Route Handlers - Search - Probation Search', () => {
       isOnProbation: false,
     },
   ]
-  const peopleOnProbation: FoundProbationRecord[] = []
+  const peopleOnProbation: FoundComCase[] = []
 
   let previousCaseloadPage = 'create'
 
@@ -63,7 +63,7 @@ describe('Route Handlers - Search - Probation Search', () => {
   }
 
   beforeEach(() => {
-    searchService.getProbationSearchResults.mockResolvedValue(searchResponse as ProbationSearchResult)
+    searchService.getComSearchResponses.mockResolvedValue(searchResponse as ComSearchResponse)
 
     req = {} as Request
 
@@ -87,7 +87,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('Test', deliusStaffIdentifier)
+      expect(searchService.getComSearchResponses).toHaveBeenCalledWith('Test', deliusStaffIdentifier)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier,
@@ -107,7 +107,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('A123456', deliusStaffIdentifier)
+      expect(searchService.getComSearchResponses).toHaveBeenCalledWith('A123456', deliusStaffIdentifier)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier,
@@ -127,7 +127,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('staff', deliusStaffIdentifier)
+      expect(searchService.getComSearchResponses).toHaveBeenCalledWith('staff', deliusStaffIdentifier)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier,
@@ -149,7 +149,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith(queryTerm.trim(), deliusStaffIdentifier)
+      expect(searchService.getComSearchResponses).toHaveBeenCalledWith(queryTerm.trim(), deliusStaffIdentifier)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier,
@@ -175,7 +175,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getProbationSearchResults).not.toHaveBeenCalled()
+      expect(searchService.getComSearchResponses).not.toHaveBeenCalled()
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier,
@@ -202,7 +202,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getProbationSearchResults).not.toHaveBeenCalled()
+      expect(searchService.getComSearchResponses).not.toHaveBeenCalled()
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier,
@@ -218,7 +218,7 @@ describe('Route Handlers - Search - Probation Search', () => {
     })
 
     it('should sort by review needed and then release date descending of the probation tab', async () => {
-      const peopleOnProbation: FoundProbationRecord[] = [
+      const peopleOnProbation: FoundComCase[] = [
         {
           name: 'Test Person1',
           crn: 'A123456',
@@ -282,7 +282,7 @@ describe('Route Handlers - Search - Probation Search', () => {
       }
 
       const expectedSortedResults = [peopleOnProbation[1], peopleOnProbation[2], peopleOnProbation[0]]
-      searchService.getProbationSearchResults.mockResolvedValue(searchResponse as ProbationSearchResult)
+      searchService.getComSearchResponses.mockResolvedValue(searchResponse as ComSearchResponse)
 
       req.query = { queryTerm: 'Test', previousPage: 'vary' }
       previousCaseloadPage = 'vary'

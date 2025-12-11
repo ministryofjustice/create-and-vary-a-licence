@@ -17,7 +17,7 @@ context('Search for a person', () => {
   })
 
   it('should click through search journey', () => {
-    cy.task('stubGetProbationSearchResults')
+    cy.task('stubGetComSearchResponses')
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicenceToEdit()

@@ -2,7 +2,7 @@ import {
   VaryApproverCaseloadSearchResponse,
   ApproverSearchResponse,
   PrisonCaseAdminSearchResult,
-  ProbationSearchResult,
+  ComSearchResponse,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { User } from '../@types/CvlUserDetails'
@@ -10,7 +10,7 @@ import { User } from '../@types/CvlUserDetails'
 export default class SearchService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
-  async getProbationSearchResults(queryTerm: string, deliusStaffIdentifier: number): Promise<ProbationSearchResult> {
+  async getComSearchResponses(queryTerm: string, deliusStaffIdentifier: number): Promise<ComSearchResponse> {
     return this.licenceApiClient.searchForOffenderOnStaffCaseload({
       query: queryTerm,
       staffIdentifier: deliusStaffIdentifier,
