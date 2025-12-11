@@ -1,6 +1,7 @@
 import Page from '../pages/page'
 import IndexPage from '../pages'
 import ViewALicencePage from '../pages/viewALicence'
+import { LicenceKind, LicenceStatus } from '../../server/enumeration'
 
 context('Postcode lookup', () => {
   describe('Postcode Lookup - COM', () => {
@@ -29,6 +30,7 @@ context('Postcode lookup', () => {
       const appointmentPersonPage = confirmCreatePage.clickContinue()
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('exist')
+      appointmentPlacePage.getAddressNotSavedMessage().should('not.exist')
       appointmentPlacePage.deleteAddressLink().should('exist')
       const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
       selectAddressPage.selectAddress()
@@ -45,7 +47,8 @@ context('Postcode lookup', () => {
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-      appointmentPlacePage.useSavedAddressField().should('not.exist')
+      appointmentPlacePage.useSavedAddressField().should('exist')
+      appointmentPlacePage.getAddressNotSavedMessage().should('exist')
       appointmentPlacePage.deleteAddressLink().should('not.exist')
       const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
       selectAddressPage.selectAddress()
@@ -63,6 +66,7 @@ context('Postcode lookup', () => {
       const appointmentPersonPage = confirmCreatePage.clickContinue()
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('exist')
+      appointmentPlacePage.getAddressNotSavedMessage().should('not.exist')
       appointmentPlacePage.deleteAddressLink().should('exist')
       appointmentPlacePage.useThisAddressBtnClick()
       appointmentPlacePage.errorListSummary().should('exist').and('contain.text', 'Select an address')
@@ -106,14 +110,39 @@ context('Postcode lookup', () => {
       cy.task('stubGetBankHolidays', dates)
       cy.task('stubGetStaffPreferredAddresses')
       cy.task('stubFeComponents')
+      cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+      cy.task('stubPutLicenceAppointmentPerson')
+      cy.signIn()
+    })
+
+    it('should display the postcode lookup search page without a preferred address', () => {
+      cy.task('stubGetPrisonOmuCaseload', {
+        licenceId: null,
+        licenceStatus: LicenceStatus.TIMED_OUT,
+        tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+        kind: LicenceKind.TIME_SERVED,
+        hasNomisLicence: false,
+      })
+      cy.task('stubRecordAuditEvent')
+      cy.task('stubGetLicence', { licenceKind: LicenceKind.TIME_SERVED })
+      cy.task('stubSubmitStatus')
+      cy.task('stubAddTimeServedProbationConfirmContact')
+      cy.task('stubGetStaffNoPreferredAddresses')
+      cy.task('stubGetCaseloadItemInHardStop')
+      cy.task('stubPostLicence')
+      const indexPage = Page.verifyOnPage(IndexPage)
+      const viewCasesList = indexPage.clickViewAndPrintALicence()
+      const confirmCreatePage = viewCasesList.clickATimeServedLicence()
+      confirmCreatePage.selectRadio('Yes')
+      const appointmentPersonPage = confirmCreatePage.clickContinue()
+      appointmentPersonPage.selectAppointmentPersonType(2)
+      const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
+      appointmentPlacePage.getAddressNotSavedMessage().should('exist')
     })
 
     it('should display the postcode lookup search page with a preferred address available in the hard-stop window', () => {
-      cy.task('stubGetPrisonUserCaseloads', singleCaseload)
       cy.task('stubGetLicenceInHardStop')
       cy.task('stubSearchForAddresses')
-      cy.task('stubPutLicenceAppointmentPerson')
-      cy.signIn()
 
       const indexPage = Page.verifyOnPage(IndexPage)
       const viewCasesList = indexPage.clickViewAndPrintALicence()
@@ -131,6 +160,7 @@ context('Postcode lookup', () => {
 
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.deleteAddressLink().should('exist')
+      appointmentPlacePage.getAddressNotSavedMessage().should('not.exist')
       const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
       selectAddressPage.selectAddress()
       selectAddressPage.addPreferredAddressCheckbox().should('exist')
