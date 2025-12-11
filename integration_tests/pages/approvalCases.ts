@@ -16,6 +16,8 @@ export default class ApprovalCasesPage extends Page {
 
   private searchButtonId = '[data-qa=search-button]'
 
+  private urgentHighlightMessageClass = '.urgent-highlight-message'
+
   constructor() {
     super('approval-cases-page')
   }
@@ -70,4 +72,6 @@ export default class ApprovalCasesPage extends Page {
     cy.get(`#com-${index}`).contains(name)
     return this
   }
+
+  getUrgentHighlightMessage = () => cy.get(this.urgentHighlightMessageClass)
 }

@@ -703,6 +703,7 @@ export default {
     appointmentAlternativeTelephoneNumber: string | null
     isReviewNeeded?: boolean | false
     comUsername?: string
+    isReviewed?: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -784,6 +785,7 @@ export default {
           ],
           electronicMonitoringProvider: options.electronicMonitoringProvider,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
+          reviewDate: options.isReviewed ? format(new Date(), 'dd/MM/yyyy hh:mm a') : null,
         },
       },
     })
@@ -2071,6 +2073,7 @@ export default {
       tabType?: string
       kind?: string
       hasNomisLicence?: boolean
+      isUnallocatedCom?: boolean
     } = {
       licenceId: 1,
       licenceStatus: 'APPROVED',
@@ -2093,10 +2096,12 @@ export default {
             licenceId: options.licenceId,
             name: 'Another Person',
             prisonerNumber: 'AB1234E',
-            probationPractitioner: {
-              name: 'John Smith',
-              staffCode: 'X1234',
-            },
+            probationPractitioner: options.isUnallocatedCom
+              ? null
+              : {
+                  name: 'John Smith',
+                  staffCode: 'X1234',
+                },
             releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
             licenceStatus: options.licenceStatus,
@@ -2210,6 +2215,9 @@ export default {
     licenceId: number
     licenceStatus: string
     licenceCreationType: string
+    isReviewNeeded?: boolean
+    kind?: string
+    isUnallocatedCom?: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -2228,10 +2236,12 @@ export default {
             licenceId: options.licenceId,
             licenceStatus: options.licenceStatus,
             licenceType: 'PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
+            probationPractitioner: options.isUnallocatedCom ? null : { staffCode: 'X12345', name: 'John Smith' },
             hardStopDate: '03/01/2023',
             hardStopWarningDate: '01/01/2023',
             licenceCreationType: options.licenceCreationType,
+            isReviewNeeded: options.isReviewNeeded || false,
+            kind: options.kind || 'CRD',
           },
         ],
       },
@@ -2952,6 +2962,19 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: null,
+      },
+    })
+  },
+  stubReviewWithOutVariation: () => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/licence/id/(\\d)*/review-with-no-variation-required`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     })
   },

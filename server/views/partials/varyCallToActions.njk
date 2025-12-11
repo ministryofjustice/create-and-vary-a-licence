@@ -121,7 +121,8 @@
                     {{ govukButton ({
                         text: "Review licence",
                         classes: "govuk-button--primary govuk-!-margin-right-1",
-                        href: '/licence/vary/id/' + licence.id + '/have-you-reviewed-this-licence'
+                        href: '/licence/vary/id/' + licence.id + '/have-you-reviewed-this-licence',
+                        attributes: { 'data-qa': 'review-licence' }
                     }) }}
                     {{ govukButton ({
                         text: "Return to case list",

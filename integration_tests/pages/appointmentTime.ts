@@ -39,6 +39,9 @@ export default class AppointmentTimePage extends Page {
       typeCode: 'AP_PSS',
       appointmentTimeType: value,
       isInHardStopPeriod: true,
+      kind: 'TIME_SERVED',
+      appointmentTelephoneNumber: '01234567890',
+      appointmentAlternativeTelephoneNumber: '09876543210',
     })
     cy.get(`input[value="${value}"]`).click()
     return this

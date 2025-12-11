@@ -14,6 +14,8 @@ export default class ViewCasesPage extends Page {
 
   private searchButtonId = '[data-qa=search-button]'
 
+  private licenceStatusId = '#licence-status-1'
+
   constructor() {
     super('view-cases-page')
   }
@@ -79,5 +81,11 @@ export default class ViewCasesPage extends Page {
 
   getAlertMessage = () => {
     return cy.get('.moj-alert--success .moj-alert__content')
+  }
+
+  getProbationPractitioner = (index: number) => cy.get(`#com-${index}`)
+
+  getLicenceStatusByIndex = (index: number) => {
+    return cy.get(`#licence-status-${index}`)
   }
 }

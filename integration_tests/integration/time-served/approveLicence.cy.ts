@@ -18,7 +18,7 @@ context('Approve a licence - time served', () => {
         },
       ],
     })
-    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED' })
+    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', urgentApproval: true })
     cy.task('stubFeComponents')
     cy.signIn()
     Page.verifyOnPage(IndexPage)
@@ -28,7 +28,7 @@ context('Approve a licence - time served', () => {
     cy.get('[data-qa=signOut]').click()
   })
 
-  it('when time served licence then correct approval messages should be shown', () => {
+  it('approve a time served licence with com', () => {
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetCompletedLicence', {
@@ -42,6 +42,7 @@ context('Approve a licence - time served', () => {
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.getUrgentHighlightMessage().should('contain', 'Urgent approval required forupcoming release')
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
     approvalViewPage.checkCorrectContactMessage()
     const confirmApprovePage = approvalViewPage.clickApprove()
@@ -50,8 +51,13 @@ context('Approve a licence - time served', () => {
     confirmApprovePage.checkThatPageHasTimeServedLicenceChangeMessageMessage()
   })
 
-  it('when probation practitioner has not been allocated then show "not allocated yet"', () => {
-    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', probationPractitioner: null })
+  it('approve a time served licence with no com allocated', () => {
+    cy.task('stubGetApprovalCaseload', {
+      kind: 'TIME_SERVED',
+      statusCode: 'SUBMITTED',
+      probationPractitioner: null,
+      urgentApproval: true,
+    })
     cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: null, kind: 'TIME_SERVED' })
 
     cy.task('stubRecordAuditEvent')
@@ -81,5 +87,11 @@ context('Approve a licence - time served', () => {
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
     approvalViewPage.clickProbationPractitionerDetails()
     approvalViewPage.checkProbationPractitionerDetailsNotAllocated()
+
+    // Approve timeserved licence with no com allocated
+    const confirmApprovePage = approvalViewPage.clickApprove()
+    confirmApprovePage.checkThatPageHasTimeServedSubTextMessage()
+    confirmApprovePage.checkThatPageHasTimeServedEmailTextMessage()
+    confirmApprovePage.checkThatPageHasTimeServedLicenceChangeMessageMessage()
   })
 })
