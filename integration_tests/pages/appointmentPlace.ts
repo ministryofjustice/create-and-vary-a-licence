@@ -9,6 +9,8 @@ export default class AppointmentPlacePage extends Page {
 
   private useSavedAddress = '[data-qa=use-saved-address]'
 
+  private addressNotSaved = '[data-qa=address-not-saved]'
+
   private deleteAddress = '[data-qa^="delete-address-"]'
 
   private useThisAddressBtn = '[data-qa="useThisAddress"]'
@@ -32,6 +34,8 @@ export default class AppointmentPlacePage extends Page {
   useSavedAddressField = () => {
     return cy.get(this.useSavedAddress)
   }
+
+  getAddressNotSavedMessage = () => cy.get(this.addressNotSaved)
 
   deleteAddressLink = () => {
     return cy.get(this.deleteAddress)
