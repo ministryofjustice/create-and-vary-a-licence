@@ -14,7 +14,7 @@ describe('Search Service', () => {
 
   describe('Probation Search', () => {
     it('calls Licence API client to search', async () => {
-      await searchService.getProbationSearchResults('Test', 3000)
+      await searchService.getComSearchResponses('Test', 3000)
       expect(licenceApiClient.searchForOffenderOnStaffCaseload).toHaveBeenCalledWith({
         query: 'Test',
         staffIdentifier: 3000,

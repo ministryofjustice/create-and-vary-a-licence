@@ -20,12 +20,7 @@ import {
   formatAddressTitleCase,
   formatAddressLine,
 } from './utils'
-import {
-  AdditionalCondition,
-  AdditionalConditionData,
-  Licence,
-  FoundProbationRecord,
-} from '../@types/licenceApiClientTypes'
+import { AdditionalCondition, AdditionalConditionData, Licence, FoundComCase } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/initialAppointment/types/address'
@@ -382,30 +377,30 @@ export function registerNunjucks(app?: express.Express): Environment {
     return word[0].toUpperCase() + word.substring(1).toLowerCase()
   })
 
-  njkEnv.addFilter('createOffenderLink', (licence: FoundProbationRecord): string => {
-    const isTimedOutLicence = licence?.licenceStatus === 'TIMED_OUT' || licence?.hardStopKind === 'TIME_SERVED'
-    const isPrisonCreated = licence?.kind === 'HARD_STOP' || licence?.kind === 'TIME_SERVED'
+  njkEnv.addFilter('createOffenderLink', (foundComCase: FoundComCase): string => {
+    const isTimedOutLicence = foundComCase?.licenceStatus === 'TIMED_OUT' || foundComCase?.kind === 'TIME_SERVED'
+    const isPrisonCreated = foundComCase?.kind === 'HARD_STOP' || foundComCase?.kind === 'TIME_SERVED'
 
-    if (isTimedOutLicence && licence.versionOf) {
-      return `/licence/create/id/${licence.licenceId}/licence-changes-not-approved-in-time`
+    if (isTimedOutLicence && foundComCase.versionOf) {
+      return `/licence/create/id/${foundComCase.licenceId}/licence-changes-not-approved-in-time`
     }
 
-    if (isTimedOutLicence || (isPrisonCreated && licence.licenceStatus === LicenceStatus.IN_PROGRESS)) {
-      return `/licence/create/nomisId/${licence.nomisId}/prison-will-create-this-licence`
+    if (isTimedOutLicence || (isPrisonCreated && foundComCase.licenceStatus === LicenceStatus.IN_PROGRESS)) {
+      return `/licence/create/nomisId/${foundComCase.nomisId}/prison-will-create-this-licence`
     }
 
     if (isPrisonCreated) {
-      return `/licence/create/id/${licence.licenceId}/licence-created-by-prison`
+      return `/licence/create/id/${foundComCase.licenceId}/licence-created-by-prison`
     }
 
-    if (!licence.licenceId) {
-      return `/licence/create/nomisId/${licence.nomisId}/confirm`
+    if (!foundComCase.licenceId) {
+      return `/licence/create/nomisId/${foundComCase.nomisId}/confirm`
     }
 
-    return `/licence/create/id/${licence.licenceId}/check-your-answers`
+    return `/licence/create/id/${foundComCase.licenceId}/check-your-answers`
   })
 
-  njkEnv.addFilter('getlicenceStatusForSearchResults', (licence: FoundProbationRecord): LicenceStatus => {
+  njkEnv.addFilter('getlicenceStatusForSearchResults', (licence: FoundComCase): LicenceStatus => {
     if (licence.isReviewNeeded) {
       return LicenceStatus.REVIEW_NEEDED
     }

@@ -155,8 +155,7 @@ describe('View Probation Search Results', () => {
           licenceType: 'AP',
           licenceStatus: LicenceStatus.NOT_STARTED,
           isOnProbation: false,
-          hardStopKind: 'TIME_SERVED',
-          kind: null,
+          kind: 'TIME_SERVED',
         },
       ],
       tabParameters: {
@@ -789,5 +788,28 @@ describe('View Probation Search Results', () => {
 
     // Then
     expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+  })
+
+  it('should correctly show tab counts result counts', () => {
+    // Given
+    const peopleInPrison = [{ name: 'Person 1' }]
+    const peopleOnProbation = [{ name: 'Person 1' }, { name: 'Person 2' }]
+
+    // When
+    const $ = render({
+      statusConfig,
+      peopleInPrison,
+      peopleOnProbation,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'Test',
+    })
+
+    // Then
+    expect($('.govuk-tabs__list a').text()).toContain('People in prison (1 result)')
+    expect($('.govuk-tabs__list a').text()).toContain('People on probation (2 results)')
   })
 })

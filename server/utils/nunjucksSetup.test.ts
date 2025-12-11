@@ -1,5 +1,5 @@
 import { format, addDays, subDays, addMonths } from 'date-fns'
-import { FoundProbationRecord, Licence } from '../@types/licenceApiClientTypes'
+import { FoundComCase, Licence } from '../@types/licenceApiClientTypes'
 import { renderTemplate } from './__testutils/templateTestUtils'
 import { registerNunjucks } from './nunjucksSetup'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -361,7 +361,7 @@ describe('Nunjucks Filters', () => {
         registerNunjucks().getFilter('getlicenceStatusForSearchResults')({
           isReviewNeeded: true,
           licenceStatus: LicenceStatus.ACTIVE,
-        } as FoundProbationRecord),
+        } as FoundComCase),
       ).toEqual(LicenceStatus.REVIEW_NEEDED)
     })
 
@@ -371,7 +371,7 @@ describe('Nunjucks Filters', () => {
           isReviewNeeded: false,
           kind: LicenceKind.HARD_STOP,
           licenceStatus: LicenceStatus.SUBMITTED,
-        } as FoundProbationRecord),
+        } as FoundComCase),
       ).toEqual(LicenceStatus.TIMED_OUT)
     })
 
@@ -381,7 +381,7 @@ describe('Nunjucks Filters', () => {
           isReviewNeeded: false,
           kind: LicenceKind.CRD,
           licenceStatus: LicenceStatus.SUBMITTED,
-        } as FoundProbationRecord),
+        } as FoundComCase),
       ).toEqual(LicenceStatus.SUBMITTED)
     })
   })
@@ -404,7 +404,7 @@ describe('Nunjucks Filters', () => {
           licenceStatus: LicenceStatus.TIMED_OUT,
           kind: LicenceKind.CRD,
           versionOf: 1,
-        } as FoundProbationRecord),
+        } as FoundComCase),
       ).toEqual('/licence/create/id/2/licence-changes-not-approved-in-time')
     })
 
@@ -415,7 +415,7 @@ describe('Nunjucks Filters', () => {
           licenceStatus: LicenceStatus.TIMED_OUT,
           kind: LicenceKind.CRD,
           nomisId: 'A1234BC',
-        } as FoundProbationRecord),
+        } as FoundComCase),
       ).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
 
       expect(
@@ -424,7 +424,7 @@ describe('Nunjucks Filters', () => {
           licenceStatus: LicenceStatus.IN_PROGRESS,
           kind: LicenceKind.HARD_STOP,
           nomisId: 'A1234BC',
-        } as FoundProbationRecord),
+        } as FoundComCase),
       ).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
     })
 
@@ -435,7 +435,7 @@ describe('Nunjucks Filters', () => {
           licenceStatus: LicenceStatus.ACTIVE,
           kind: LicenceKind.HARD_STOP,
           nomisId: 'A1234BC',
-        } as FoundProbationRecord),
+        } as FoundComCase),
       ).toEqual('/licence/create/id/2/licence-created-by-prison')
     })
 
@@ -446,7 +446,7 @@ describe('Nunjucks Filters', () => {
           licenceStatus: LicenceStatus.NOT_STARTED,
           kind: LicenceKind.CRD,
           nomisId: 'A1234BC',
-        } as FoundProbationRecord),
+        } as FoundComCase),
       ).toEqual('/licence/create/nomisId/A1234BC/confirm')
     })
 
@@ -457,7 +457,7 @@ describe('Nunjucks Filters', () => {
           licenceStatus: LicenceStatus.SUBMITTED,
           kind: LicenceKind.CRD,
           nomisId: 'A1234BC',
-        } as FoundProbationRecord),
+        } as FoundComCase),
       ).toEqual('/licence/create/id/2/check-your-answers')
     })
   })

@@ -1545,7 +1545,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/licences-api/com/case-search`,
+        urlPattern: `/licences-api/caseload/com/case-search`,
       },
       response: {
         status: 200,
@@ -1565,6 +1565,7 @@ export default {
               licenceStatus: LicenceStatus.IN_PROGRESS,
               isOnProbation: false,
               releaseDateLabel: 'CRD',
+              kind: 'CRD',
             },
           ],
           inPrisonCount: 1,
@@ -1622,7 +1623,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/licences-api/com/case-search`,
+        urlPattern: `/licences-api/caseload/com/case-search`,
       },
       response: {
         status: 200,
