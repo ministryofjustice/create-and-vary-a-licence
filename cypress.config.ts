@@ -102,7 +102,7 @@ export default defineConfig({
         stubGetHardStopLicence: licence.stubGetHardStopLicence,
         stubGetOmuEmail: licence.stubGetOmuEmail,
         stubGetHardStopAndTimedOutLicences: licence.stubGetHardStopAndTimedOutLicences,
-        stubGetProbationSearchResults: licence.stubSearchForOffenderOnStaffCaseload,
+        stubGetComSearchResponses: licence.stubSearchForOffenderOnStaffCaseload,
         stubGetProbationSearchMultipleResults: licence.stubSearchForOffendersOnStaffCaseloadMultipleResults,
         stubLicencesPing: licence.stubPing,
         stubGetComReviewCount: licence.stubGetComReviewCount,

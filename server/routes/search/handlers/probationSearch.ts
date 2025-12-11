@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import moment from 'moment/moment'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
-import { FoundProbationRecord, ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
+import { FoundComCase, ComSearchResponse } from '../../../@types/licenceApiClientTypes'
 
 export default class ProbationSearch {
   constructor(private readonly searchService: SearchService) {}
@@ -13,10 +13,10 @@ export default class ProbationSearch {
     const { deliusStaffIdentifier } = res.locals.user
     const previousCaseloadPage = req.query?.previousPage as string
 
-    let searchResponse: ProbationSearchResult
+    let searchResponse: ComSearchResponse
 
-    let peopleInPrison: FoundProbationRecord[] = []
-    let peopleOnProbation: FoundProbationRecord[] = []
+    let peopleInPrison: FoundComCase[] = []
+    let peopleOnProbation: FoundComCase[] = []
     if (queryTerm.length === 0) {
       searchResponse = {
         results: [],
@@ -24,7 +24,7 @@ export default class ProbationSearch {
         onProbationCount: 0,
       }
     } else {
-      searchResponse = await this.searchService.getProbationSearchResults(queryTerm, deliusStaffIdentifier)
+      searchResponse = await this.searchService.getComSearchResponses(queryTerm, deliusStaffIdentifier)
       peopleInPrison = searchResponse.results.filter(r => r.isOnProbation === false).sort(this.sortReleaseDateAscending)
       peopleOnProbation = searchResponse.results
         .filter(r => r.isOnProbation === true)
@@ -62,16 +62,16 @@ export default class ProbationSearch {
     return previousPage === 'create' ? '/licence/create/caseload' : '/licence/vary/caseload'
   }
 
-  private sortReleaseDateDescending(a: FoundProbationRecord, b: FoundProbationRecord) {
+  private sortReleaseDateDescending(a: FoundComCase, b: FoundComCase) {
     return sortByReviewNeededDateAndName(a, b, true)
   }
 
-  private sortReleaseDateAscending(a: FoundProbationRecord, b: FoundProbationRecord) {
+  private sortReleaseDateAscending(a: FoundComCase, b: FoundComCase) {
     return sortByReviewNeededDateAndName(a, b, false)
   }
 }
 
-function sortByReviewNeededDateAndName(a: FoundProbationRecord, b: FoundProbationRecord, descending: boolean) {
+function sortByReviewNeededDateAndName(a: FoundComCase, b: FoundComCase, descending: boolean) {
   const releaseDate1 = moment(a.releaseDate, 'DD/MM/YYYY').unix()
   const releaseDate2 = moment(b.releaseDate, 'DD/MM/YYYY').unix()
 
