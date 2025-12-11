@@ -43,9 +43,11 @@
         <div class="govuk-grid-column-two-thirds">
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                <h1 class="govuk-heading-l">
-                    Select address
-                </h1>
+                {% if addresses.length == 1 %}
+                    <h1 class="govuk-heading-l">Confirm address</h1>
+                {% else %}
+                    <h1 class="govuk-heading-l">Select address</h1>
+                {% endif %}
                 <p class="govuk-body">
                     {{ addressCountLabel }} found for <strong>{{ searchQuery }}</strong>. <a class="govuk-link govuk-link--no-visited-state" href="{{ postcodeLookupSearchUrl }}">Search again</a>
                 </p>
