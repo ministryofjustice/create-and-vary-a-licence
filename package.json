@@ -21,7 +21,7 @@
     "record-build-info": "node ./bin/record-build-info",
     "lint": "eslint . --cache --max-warnings 0",
     "typecheck": "tsc",
-    "test": "jest --maxWorkers=2",
+    "test": "jest --maxWorkers=2 --collectCoverage=true",
     "test:ci": "jest --maxWorkers=2 --collectCoverage=true --testPathPatterns=/server/.*",
     "integrationTest": "jest --runInBand --testPathPatterns=/integration_tests/.*",
     "security_audit": "better-npm-audit audit",
