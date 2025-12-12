@@ -2,7 +2,7 @@
 
 {% macro variedConditions(conditionComparison) %}
     {% macro includeExclusionZoneImage(uploadSummary) %}
-        <div id="exclusion-zone">
+        <div id="exclusion-zone" class="govuk-!-margin-top-4">
             <div class="upload-thumbnail">
                 <img src="data:image/jpeg;base64, {{ uploadSummary.thumbnailImage }}"
                      alt="Exclusion zone map"/>
