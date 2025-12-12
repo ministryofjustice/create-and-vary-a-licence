@@ -10,23 +10,6 @@ export default class TimeServedConfirmCreatePage extends Page {
   }
 
   selectRadio = (value?: string): TimeServedConfirmCreatePage => {
-    if (value === 'Yes') {
-      cy.task('stubGetPrisonOmuCaseload', {
-        licenceId: 1,
-        licenceStatus: 'IN_PROGRESS',
-        tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-        kind: 'TIME_SERVED',
-        hasNomisLicence: false,
-      })
-    } else {
-      cy.task('stubGetPrisonOmuCaseload', {
-        licenceId: null,
-        licenceStatus: 'TIMED_OUT',
-        tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-        kind: 'TIME_SERVED',
-        hasNomisLicence: true,
-      })
-    }
     cy.get(`input[value="${value}"]`).click()
     return this
   }
