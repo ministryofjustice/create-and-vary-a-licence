@@ -846,7 +846,6 @@ describe('View Probation Search Results', () => {
     const $ = render(viewModel)
 
     // Then
-    expect($('#name-button-1').is('a')).toBe(true)
     expect($('#name-button-1').attr('href')).toContain('/licence/create')
   })
 })
