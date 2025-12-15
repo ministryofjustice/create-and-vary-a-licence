@@ -141,7 +141,7 @@ describe('View Probation Search Results', () => {
     )
   })
 
-  it('should display prison created link when case is not started and hard stop kind is TIME_SERVED', () => {
+  it('should display prison will create link when case is Timed Out', () => {
     const $ = render({
       statusConfig,
       peopleOnProbation: [
@@ -153,7 +153,7 @@ describe('View Probation Search Results', () => {
           releaseDate: '16/08/2023',
           licenceId: 1,
           licenceType: 'AP',
-          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceStatus: LicenceStatus.TIMED_OUT,
           isOnProbation: false,
           kind: 'TIME_SERVED',
         },
@@ -811,5 +811,41 @@ describe('View Probation Search Results', () => {
     // Then
     expect($('.govuk-tabs__list a').text()).toContain('People in prison (1 result)')
     expect($('.govuk-tabs__list a').text()).toContain('People on probation (2 results)')
+  })
+
+  it('should render offender name link when licence is TIMED_OUT and comName is missing, kind is not Time served or on prisoner is not on probation', () => {
+    // Given
+    const peopleOnProbation = [{}]
+
+    const viewModel = {
+      statusConfig,
+      peopleInPrison: [
+        {
+          name: 'Timed Out Person',
+          crn: 'A123456',
+          nomisId: 'A1234BC',
+          teamName: 'Test Team',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.TIMED_OUT,
+          isOnProbation: false,
+          releaseDate: '16/08/2023',
+          releaseDateLabel: 'CRD',
+        },
+      ],
+      peopleOnProbation,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'Test',
+    }
+
+    // When
+    const $ = render(viewModel)
+
+    // Then
+    expect($('#name-button-1').attr('href')).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
   })
 })

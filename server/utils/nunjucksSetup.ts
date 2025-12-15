@@ -378,7 +378,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('createOffenderLink', (foundComCase: FoundComCase): string => {
-    const isTimedOutLicence = foundComCase?.licenceStatus === 'TIMED_OUT' || foundComCase?.kind === 'TIME_SERVED'
+    const isTimedOutLicence = foundComCase?.licenceStatus === 'TIMED_OUT'
     const isPrisonCreated = foundComCase?.kind === 'HARD_STOP' || foundComCase?.kind === 'TIME_SERVED'
 
     if (isTimedOutLicence && foundComCase.versionOf) {

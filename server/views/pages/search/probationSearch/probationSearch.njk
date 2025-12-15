@@ -19,7 +19,7 @@
         {% else %}
             {% set link = offender | createOffenderLink  %}
         {% endif %}
-        {% if offender.comName or offender.kind == "TIME_SERVED" or offender.isOnProbation%}
+        {% if offender.comName or offender.licenceStatus === 'TIMED_OUT' or  offender.kind == "TIME_SERVED" or offender.isOnProbation %}
             <a id="name-button-{{ index }}" href="{{ link }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offender.name }}</a>
         {% else %}
             <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offender.name }}</span>
