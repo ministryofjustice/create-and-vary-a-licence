@@ -846,6 +846,6 @@ describe('View Probation Search Results', () => {
     const $ = render(viewModel)
 
     // Then
-    expect($('#name-button-1').attr('href')).toContain('/licence/create')
+    expect($('#name-button-1').attr('href')).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
   })
 })
