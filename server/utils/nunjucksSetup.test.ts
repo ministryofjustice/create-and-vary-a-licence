@@ -397,68 +397,132 @@ describe('Nunjucks Filters', () => {
   })
 
   describe('createOffenderLink', () => {
-    it('should return licence-changes-not-approved-in-time page', () => {
-      expect(
-        registerNunjucks().getFilter('createOffenderLink')({
-          licenceId: 2,
-          licenceStatus: LicenceStatus.TIMED_OUT,
-          kind: LicenceKind.CRD,
-          versionOf: 1,
-        } as FoundComCase),
-      ).toEqual('/licence/create/id/2/licence-changes-not-approved-in-time')
+    it('returns licence-changes-not-approved-in-time when TIMED_OUT and versionOf exists', () => {
+      // Given
+      const foundComCase = {
+        licenceId: 1,
+        licenceStatus: LicenceStatus.TIMED_OUT,
+        kind: LicenceKind.CRD,
+        versionOf: 99,
+      } as FoundComCase
+
+      // When
+      const result = registerNunjucks().getFilter('createOffenderLink')(foundComCase)
+
+      // Then
+      expect(result).toBe('/licence/create/id/1/licence-changes-not-approved-in-time')
     })
 
-    it('should return prison-will-create-this-licence page', () => {
-      expect(
-        registerNunjucks().getFilter('createOffenderLink')({
-          licenceId: 2,
-          licenceStatus: LicenceStatus.TIMED_OUT,
-          kind: LicenceKind.CRD,
-          nomisId: 'A1234BC',
-        } as FoundComCase),
-      ).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
+    it('returns prison-will-create-this-licence when TIMED_OUT and versionOf does NOT exist', () => {
+      // Given
+      const foundComCase = {
+        licenceId: 1,
+        licenceStatus: LicenceStatus.TIMED_OUT,
+        kind: LicenceKind.CRD,
+        nomisId: 'A1234BC',
+      } as FoundComCase
 
-      expect(
-        registerNunjucks().getFilter('createOffenderLink')({
-          licenceId: 2,
-          licenceStatus: LicenceStatus.IN_PROGRESS,
-          kind: LicenceKind.HARD_STOP,
-          nomisId: 'A1234BC',
-        } as FoundComCase),
-      ).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
+      // When
+      const result = registerNunjucks().getFilter('createOffenderLink')(foundComCase)
+
+      // Then
+      expect(result).toBe('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
     })
 
-    it('should return licence-created-by-prison page', () => {
-      expect(
-        registerNunjucks().getFilter('createOffenderLink')({
-          licenceId: 2,
-          licenceStatus: LicenceStatus.ACTIVE,
-          kind: LicenceKind.HARD_STOP,
-          nomisId: 'A1234BC',
-        } as FoundComCase),
-      ).toEqual('/licence/create/id/2/licence-created-by-prison')
+    it('returns prison-will-create-this-licence when HARD_STOP and IN_PROGRESS', () => {
+      // Given
+      const foundComCase = {
+        licenceId: 2,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        kind: LicenceKind.HARD_STOP,
+        nomisId: 'A1234BC',
+      } as FoundComCase
+
+      // When
+      const result = registerNunjucks().getFilter('createOffenderLink')(foundComCase)
+
+      // Then
+      expect(result).toBe('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
     })
 
-    it('should return cnfirm create licence page', () => {
-      expect(
-        registerNunjucks().getFilter('createOffenderLink')({
-          licenceId: null,
-          licenceStatus: LicenceStatus.NOT_STARTED,
-          kind: LicenceKind.CRD,
-          nomisId: 'A1234BC',
-        } as FoundComCase),
-      ).toEqual('/licence/create/nomisId/A1234BC/confirm')
+    it('returns prison-will-create-this-licence when TIME_SERVED and IN_PROGRESS', () => {
+      // Given
+      const foundComCase = {
+        licenceId: 3,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        kind: LicenceKind.TIME_SERVED,
+        nomisId: 'B2345CD',
+      } as FoundComCase
+
+      // When
+      const result = registerNunjucks().getFilter('createOffenderLink')(foundComCase)
+
+      // Then
+      expect(result).toBe('/licence/create/nomisId/B2345CD/prison-will-create-this-licence')
     })
 
-    it('should return check-your-answers page', () => {
-      expect(
-        registerNunjucks().getFilter('createOffenderLink')({
-          licenceId: 2,
-          licenceStatus: LicenceStatus.SUBMITTED,
-          kind: LicenceKind.CRD,
-          nomisId: 'A1234BC',
-        } as FoundComCase),
-      ).toEqual('/licence/create/id/2/check-your-answers')
+    it('returns licence-created-by-prison when HARD_STOP and NOT IN_PROGRESS', () => {
+      // Given
+      const foundComCase = {
+        licenceId: 4,
+        licenceStatus: LicenceStatus.ACTIVE,
+        kind: LicenceKind.HARD_STOP,
+        nomisId: 'C3456DE',
+      } as FoundComCase
+
+      // When
+      const result = registerNunjucks().getFilter('createOffenderLink')(foundComCase)
+
+      // Then
+      expect(result).toBe('/licence/create/id/4/licence-created-by-prison')
+    })
+
+    it('returns licence-created-by-prison when TIME_SERVED and NOT IN_PROGRESS', () => {
+      // Given
+      const foundComCase = {
+        licenceId: 5,
+        licenceStatus: LicenceStatus.SUBMITTED,
+        kind: LicenceKind.TIME_SERVED,
+        nomisId: 'D4567EF',
+      } as FoundComCase
+
+      // When
+      const result = registerNunjucks().getFilter('createOffenderLink')(foundComCase)
+
+      // Then
+      expect(result).toBe('/licence/create/id/5/licence-created-by-prison')
+    })
+
+    it('returns confirm page when licenceId is missing', () => {
+      // Given
+      const foundComCase = {
+        licenceId: null,
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        kind: LicenceKind.CRD,
+        nomisId: 'E5678FG',
+      } as FoundComCase
+
+      // When
+      const result = registerNunjucks().getFilter('createOffenderLink')(foundComCase)
+
+      // Then
+      expect(result).toBe('/licence/create/nomisId/E5678FG/confirm')
+    })
+
+    it('returns check-your-answers page when none of the special cases apply', () => {
+      // Given
+      const foundComCase = {
+        licenceId: 6,
+        licenceStatus: LicenceStatus.SUBMITTED,
+        kind: LicenceKind.CRD,
+        nomisId: 'F6789GH',
+      } as FoundComCase
+
+      // When
+      const result = registerNunjucks().getFilter('createOffenderLink')(foundComCase)
+
+      // Then
+      expect(result).toBe('/licence/create/id/6/check-your-answers')
     })
   })
 
