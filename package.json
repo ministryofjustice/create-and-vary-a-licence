@@ -92,17 +92,13 @@
   },
   "lint-staged": {
     "*.{ts,js,css,mjs}": [
-      "prettier --write",
       "eslint --fix"
-    ],
-    "*.json": [
-      "prettier --write"
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.946.0",
+    "@aws-sdk/client-sqs": "^3.952.0",
     "@ministryofjustice/frontend": "3.7.2",
-    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "4.6.4",
+    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "4.21.0",
     "@ministryofjustice/hmpps-monitoring": "^1.0.0",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
@@ -119,7 +115,7 @@
     "express": "^5.2.1",
     "express-session": "^1.18.2",
     "filesize": "^11.0.13",
-    "govuk-frontend": "5.11.1",
+    "govuk-frontend": "5.13.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.1",
     "jquery": "^3.7.1",
@@ -138,13 +134,13 @@
     "reflect-metadata": "^0.2.2",
     "sqs-consumer": "^12.0.0",
     "superagent": "^10.2.3",
-    "uuid": "^11.1.0"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@ministryofjustice/eslint-config-hmpps": "^1.0.1",
+    "@ministryofjustice/eslint-config-hmpps": "^1.0.2",
     "@ministryofjustice/hmpps-npm-script-allowlist": "^0.0.3",
     "@ministryofjustice/hmpps-precommit-hooks": "^1.0.2",
-    "@tsconfig/node24": "24.0.1",
+    "@tsconfig/node24": "24.0.3",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
@@ -166,12 +162,11 @@
     "@types/redis-mock": "^0.17.3",
     "@types/superagent": "^8.1.9",
     "@types/supertest": "^6.0.3",
-    "@types/uuid": "^10.0.0",
     "axe-core": "^4.11.0",
     "better-npm-audit": "^3.11.0",
     "cheerio": "^1.1.2",
     "concurrently": "^9.2.1",
-    "cypress": "^14.5.4",
+    "cypress": "^15.7.1",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
     "dotenv": "^17.2.3",
@@ -185,10 +180,9 @@
     "nock": "^14.0.10",
     "nodemon": "^3.1.11",
     "openapi-typescript": "^7.10.1",
-    "pdf-parse": "^1.1.4",
-    "prettier": "^3.7.4",
+    "pdf-parse": "^2.4.5",
     "redis-mock": "^0.56.3",
-    "sass": "^1.94.2",
+    "sass": "^1.97.0",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.6",
     "typescript": "^5.9.3"
