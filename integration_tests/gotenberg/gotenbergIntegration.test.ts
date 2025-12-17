@@ -1,6 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import pdfParse from 'pdf-parse'
+import { PDFParse } from 'pdf-parse'
 
 import GotenbergClient from '../../server/data/gotenbergClient'
 
@@ -12,8 +10,9 @@ describe('Gotenberg API integration', () => {
   describe('Render a PDF file from HTML', () => {
     it('should render a PDF', async () => {
       const pdf = await client.renderPdfFromHtml(htmlString)
-      const pdfText = await pdfParse(pdf)
-      expect(pdfText.text).toContain('A document')
+      const parser = new PDFParse(pdf)
+      const result = await parser.getText()
+      expect(result.text).toContain('A document')
     })
   })
 })
