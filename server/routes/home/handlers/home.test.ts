@@ -173,7 +173,7 @@ describe('Route Handlers - Home', () => {
     })
 
     describe('For dpr reporting', () => {
-      it('With correct auth source', async () => {
+      it('With correct admin role', async () => {
         req = getReqWithRolesAndSource(['ROLE_NOMIS_BATCHLOAD'], 'nomis')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
@@ -188,8 +188,8 @@ describe('Route Handlers - Home', () => {
         })
       })
 
-      it('With just support role', async () => {
-        req = getReqWithRolesAndSource(['ROLE_NOMIS_BATCHLOAD'], 'nomis')
+      it('With correct reports role', async () => {
+        req = getReqWithRolesAndSource(['ROLE_CVL_REPORTS'], 'nomis')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
           shouldShowCreateLicenceCard: false,
@@ -198,7 +198,7 @@ describe('Route Handlers - Home', () => {
           shouldShowMyCaseloadCard: false,
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
-          shouldShowSupportCard: true,
+          shouldShowSupportCard: false,
           shouldShowDprCard: true,
         })
       })
