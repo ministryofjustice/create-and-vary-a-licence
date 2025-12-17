@@ -29,9 +29,6 @@
     "int-test-ui": "cypress open --e2e --browser chrome",
     "clean": "rm -rf dist build node_modules stylesheets coverage",
     "rebuild": "npm run clean && npm i && npm run build",
-    "precommit:secrets": "gitleaks git --pre-commit --redact --staged --verbose --config .gitleaks/config.toml",
-    "precommit:lint": "node_modules/.bin/lint-staged",
-    "precommit:verify": "npm run typecheck",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
@@ -139,7 +136,7 @@
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "^1.0.2",
     "@ministryofjustice/hmpps-npm-script-allowlist": "^0.0.3",
-    "@ministryofjustice/hmpps-precommit-hooks": "^1.0.2",
+    "@ministryofjustice/hmpps-precommit-hooks": "2.0.0-beta.1",
     "@tsconfig/node24": "24.0.3",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
