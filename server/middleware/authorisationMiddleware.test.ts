@@ -62,4 +62,10 @@ describe('authorisationMiddleware', () => {
     const authorisationResponse = authorisationMiddleware(req, res, next)
     expect(authorisationResponse).toEqual(next())
   })
+
+  it('should return next when user has the REPORTS role', () => {
+    const res = createResWithToken({ authorities: ['ROLE_CVL_REPORTS'] })
+    const authorisationResponse = authorisationMiddleware(req, res, next)
+    expect(authorisationResponse).toEqual(next())
+  })
 })
