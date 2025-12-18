@@ -77,6 +77,17 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         },
       })
     })
+
+    it('should redirect to additional PSS conditions list page if the additional condition is not found on the licence', async () => {
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions')
+    })
+
+    it('should redirect to additional conditions list page with fromReviewFlag if the additional condition is not found on the licence', async () => {
+      req.query.fromReview = 'true'
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions?fromReview=true')
+    })
   })
 
   describe('POST', () => {
