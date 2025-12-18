@@ -30,6 +30,7 @@ describe('View and print a licence - case list', () => {
           tabType: 'releasesInNextTwoWorkingDays',
           probationPractitioner: {
             name: 'Probation Practitioner2',
+            allocated: true,
           },
         },
         {
@@ -87,6 +88,7 @@ describe('View and print a licence - case list', () => {
           tabType: '',
           probationPractitioner: {
             name: 'Probation Practitioner2',
+            allocated: true,
           },
         },
         {

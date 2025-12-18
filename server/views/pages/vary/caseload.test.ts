@@ -15,7 +15,7 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
         },
       ],
       statusConfig: {
@@ -33,6 +33,7 @@ describe('Caseload', () => {
     })
     expect($('.status-badge').text().toString()).toContain('Active')
     expect($('.urgent-highlight-message').text().toString()).toEqual('')
+    expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
   it('should display badge', () => {
@@ -45,7 +46,7 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'VARIATION_IN_PROGRESS',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
         },
       ],
       statusConfig: {
@@ -63,6 +64,7 @@ describe('Caseload', () => {
     })
     expect($('.status-badge').text().toString()).toContain('Variation in progress')
     expect($('.urgent-highlight-message').text().toString()).toEqual('')
+    expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
   it('should display Review needed badge', () => {
@@ -75,7 +77,7 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'REVIEW_NEEDED',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
         },
       ],
       statusConfig: {
@@ -98,6 +100,7 @@ describe('Caseload', () => {
     })
     expect($('.status-badge').text().toString()).toContain('Review needed')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Timed out')
+    expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
   it('should highlight a HDC licence with a HDC release warning label', () => {
@@ -110,7 +113,7 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: 'HDC',
         },
       ],
@@ -131,6 +134,7 @@ describe('Caseload', () => {
     expect($('.status-badge').text().toString()).toContain('Active')
     expect($('#release-date-1').text()).toBe('13 Feb 2023HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
   it('should highlight a HDC variation with a HDC release warning label', () => {
@@ -143,7 +147,7 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: 'HDC_VARIATION',
         },
       ],
@@ -164,6 +168,7 @@ describe('Caseload', () => {
     expect($('.status-badge').text().toString()).toContain('Active')
     expect($('#release-date-1').text()).toBe('13 Feb 2023HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
   it('should highlight Not allocated yet label if licence has no probation practitioner and highlight a Time-served release warning label when licence is time-served', () => {

@@ -16,6 +16,7 @@ const pduCases = [
     probationPractitioner: {
       staffCode: 'X1231',
       name: 'Com One',
+      allocated: true,
     },
   },
 ]
@@ -31,6 +32,7 @@ const allRegionCases = [
     probationPractitioner: {
       staffCode: 'X1231',
       name: 'Com One',
+      allocated: true,
     },
   },
   {
@@ -43,6 +45,7 @@ const allRegionCases = [
     probationPractitioner: {
       staffCode: 'X1234',
       name: 'Com Four',
+      allocated: true,
     },
   },
 ]

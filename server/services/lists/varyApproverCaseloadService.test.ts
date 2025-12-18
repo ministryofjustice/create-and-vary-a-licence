@@ -29,6 +29,7 @@ describe('Vary Approver Caseload Service', () => {
         probationPractitioner: {
           staffCode: 'X1234',
           name: 'An ProbationOfficer',
+          allocated: true,
         },
       },
     ])
@@ -43,6 +44,7 @@ describe('Vary Approver Caseload Service', () => {
         probationPractitioner: {
           staffCode: 'X1234',
           name: 'An ProbationOfficer',
+          allocated: true,
         },
         releaseDate: '01/11/2022',
         variationRequestDate: '30/10/2022',

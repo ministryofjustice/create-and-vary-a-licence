@@ -48,6 +48,7 @@ describe('Create a Licence Views - Caseload', () => {
           probationPractitioner: {
             name: 'Joe Bloggs',
             staffCode: 'X12345',
+            allocated: true,
           },
           isClickable: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
@@ -96,7 +97,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '03 August 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
@@ -107,7 +109,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '01 September 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: false,
           licenceStatus: LicenceStatus.NOT_IN_PILOT,
@@ -138,7 +141,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '03 August 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
@@ -149,7 +153,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '01 September 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: false,
           licenceStatus: LicenceStatus.OOS_RECALL,
@@ -180,7 +185,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '03 August 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
@@ -191,7 +197,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '01 September 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: false,
           licenceStatus: LicenceStatus.OOS_BOTUS,
@@ -223,7 +230,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '03 August 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
@@ -236,7 +244,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '01 September 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: true,
           licenceId: 1,
@@ -276,7 +285,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '20 December 2025',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: true,
           licenceStatus: LicenceStatus.IN_PROGRESS,
@@ -303,7 +313,8 @@ describe('Create a Licence Views - Caseload', () => {
           releaseDate: '20 December 2025',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'ABC123',
+            allocated: true,
           },
           isClickable: true,
           licenceStatus: LicenceStatus.IN_PROGRESS,

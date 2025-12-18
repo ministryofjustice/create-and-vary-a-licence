@@ -29,6 +29,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         name: 'Bob Smith',
         probationPractitioner: {
           name: 'Test Com',
+          allocated: true,
         },
         isReviewNeeded: false,
       },
@@ -42,6 +43,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         crnNumber: 'X12346',
         probationPractitioner: {
           name: 'Test Com',
+          allocated: true,
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: true,
@@ -59,6 +61,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         crnNumber: 'X12345',
         probationPractitioner: {
           name: 'Test Com',
+          allocated: true,
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: false,
@@ -73,6 +76,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         crnNumber: 'X12346',
         probationPractitioner: {
           name: 'Another Com',
+          allocated: true,
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: false,
@@ -87,6 +91,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         crnNumber: 'X12346',
         probationPractitioner: {
           name: 'Test Com',
+          allocated: true,
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: true,
@@ -147,6 +152,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
@@ -161,6 +167,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
@@ -193,6 +200,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
@@ -207,6 +215,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
@@ -221,6 +230,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Another Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
@@ -250,6 +260,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           crnNumber: 'X12345',
           probationPractitioner: {
             name: 'Test Com',
+            allocated: true,
           },
           isReviewNeeded: false,
           kind: LicenceKind.CRD,
@@ -274,6 +285,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             isReviewNeeded: false,
             kind: LicenceKind.CRD,
@@ -308,6 +320,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
@@ -342,6 +355,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
@@ -356,6 +370,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
@@ -390,6 +405,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
@@ -419,6 +435,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
+            allocated: true,
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
@@ -433,6 +450,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
+            allocated: true,
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
@@ -447,6 +465,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
+            allocated: true,
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
@@ -461,6 +480,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
+            allocated: true,
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
@@ -475,6 +495,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
+            allocated: true,
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
@@ -489,6 +510,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
+            allocated: true,
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
@@ -503,6 +525,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
+            allocated: true,
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
@@ -517,6 +540,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
+            allocated: true,
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
@@ -530,7 +554,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceType: 'AP',
           releaseDate: '05 Dec 2023',
           licenceStatus: 'REVIEW_NEEDED',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
         },
@@ -541,7 +565,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceType: 'AP',
           releaseDate: '20 Oct 2024',
           licenceStatus: 'REVIEW_NEEDED',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
         },
@@ -552,7 +576,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceType: 'AP',
           releaseDate: '21 Oct 2024',
           licenceStatus: 'REVIEW_NEEDED',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
         },
@@ -563,7 +587,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceType: 'AP',
           releaseDate: '16 Jul 2024',
           licenceStatus: 'IN_PROGRESS',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
         },
@@ -574,7 +598,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceType: 'AP',
           releaseDate: '17 Jul 2024',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
         },
@@ -585,7 +609,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceType: 'AP',
           releaseDate: '23 Jul 2024',
           licenceStatus: 'INACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
         },
@@ -596,7 +620,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceType: 'AP',
           releaseDate: '30 Nov 2024',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
         },
@@ -607,7 +631,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceType: 'AP',
           releaseDate: '05 Dec 2024',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
         },
@@ -636,6 +660,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
@@ -650,6 +675,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
@@ -694,6 +720,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
@@ -708,6 +735,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
@@ -722,6 +750,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Another Com',
+              allocated: true,
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,

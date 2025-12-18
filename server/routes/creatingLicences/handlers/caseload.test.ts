@@ -32,7 +32,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         kind: LicenceKind.CRD,
         probationPractitioner: {
           name: 'Joe Bloggs',
-          staffIdentifier: 2000,
+          staffCode: 'X6789',
+          allocated: true,
         },
       },
     ] as unknown as ComCreateCase[])
@@ -51,7 +52,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         kind: LicenceKind.CRD,
         probationPractitioner: {
           name: 'Test Com',
-          staffIdentifier: 3000,
+          staffCode: 'X12345',
+          allocated: true,
         },
         isClickable: true,
         createLink: '/licence/create/id/1/check-your-answers',
@@ -147,7 +149,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Joe Bloggs',
-              staffIdentifier: 2000,
+              staffCode: 'X6789',
+              allocated: true,
             },
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/1/check-your-answers',
@@ -182,7 +185,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Test Com',
-              staffIdentifier: 3000,
+              staffCode: 'X12345',
+              allocated: true,
             },
             isClickable: true,
             createLink: '/licence/create/id/1/check-your-answers',
@@ -276,6 +280,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           kind: LicenceKind.CRD,
           probationPractitioner: {
             name: 'Joe Bloggs',
+            staffCode: 'X12345',
+            allocated: true,
           },
           createLink: '/licence/create/id/2/check-your-answers',
           isClickable: true,
@@ -298,6 +304,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Joe Bloggs',
+              staffCode: 'X12345',
+              allocated: true,
             },
             isClickable: true,
             createLink: '/licence/create/id/2/check-your-answers',

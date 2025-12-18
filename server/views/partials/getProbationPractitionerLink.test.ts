@@ -3,12 +3,13 @@ import { templateRenderer } from '../../utils/__testutils/templateTestUtils'
 describe('View Partials - Probation Practitioner Link', () => {
   it('renders link with name when name is provided', () => {
     // Given
+    const allocated = true
     const name = 'Joe Bloggs'
     const licenceId = 123
     const isTimeServed = false
 
     // When
-    const $ = renderLink({ name, licenceId, isTimeServed })
+    const $ = renderLink({ allocated, name, licenceId, isTimeServed })
 
     // Then
     const link = $('a.govuk-link')
@@ -18,12 +19,13 @@ describe('View Partials - Probation Practitioner Link', () => {
 
   it('renders "Not allocated yet" when no name and isTimeServed=true', () => {
     // Given
+    const allocated = false
     const name: string = null
     const licenceId = 999
     const isTimeServed = true
 
     // When
-    const $ = renderLink({ name, licenceId, isTimeServed })
+    const $ = renderLink({ allocated, name, licenceId, isTimeServed })
 
     // Then
     expect($.text().trim()).toBe('Not allocated yet')
@@ -31,12 +33,13 @@ describe('View Partials - Probation Practitioner Link', () => {
 
   it('renders "Not allocated" when no name and isTimeServed=false', () => {
     // Given
+    const allocated = false
     const name: string = null
     const licenceId = 999
     const isTimeServed = false
 
     // When
-    const $ = renderLink({ name, licenceId, isTimeServed })
+    const $ = renderLink({ allocated, name, licenceId, isTimeServed })
 
     // Then
     expect($.text().trim()).toBe('Unallocated')
@@ -44,11 +47,12 @@ describe('View Partials - Probation Practitioner Link', () => {
 
   it('escapes names correctly', () => {
     // Given
+    const allocated = true
     const name = '<b>Bad stuff</b>'
     const licenceId = 321
 
     // When
-    const $ = renderLink({ name, licenceId, isTimeServed: false })
+    const $ = renderLink({ allocated, name, licenceId, isTimeServed: false })
 
     // Then
     const link = $('a.govuk-link')
@@ -57,6 +61,6 @@ describe('View Partials - Probation Practitioner Link', () => {
 
   const renderLink = templateRenderer(
     `{% from "partials/getProbationPractitionerLink.njk" import getProbationPractitionerLink %}
-     {{ getProbationPractitionerLink(name, licenceId, isTimeServed) }}`,
+     {{ getProbationPractitionerLink(allocated, name, licenceId, isTimeServed) }}`,
   )
 })

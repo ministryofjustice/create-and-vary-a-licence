@@ -26,7 +26,6 @@ describe('viewCases template', () => {
     // Given
     const options = createComponentModel({
       kind: LicenceKind.TIME_SERVED,
-      probationPractitioner: { name: '', staffCode: '' },
     })
 
     // When
@@ -56,7 +55,7 @@ describe('viewCases template', () => {
     // Given
     const options = createComponentModel({
       kind: LicenceKind.CRD,
-      probationPractitioner: { name: 'Jane COM', staffCode: 'JCOM1' },
+      probationPractitioner: { name: 'Jane COM', staffCode: 'JCOM1', allocated: true } as ProbationPractitioner,
     })
 
     // When
@@ -73,7 +72,7 @@ describe('viewCases template', () => {
     // Given
     const options = createComponentModel({
       kind: LicenceKind.TIME_SERVED,
-      probationPractitioner: { name: '', staffCode: '' },
+      probationPractitioner: null,
     })
 
     // When
@@ -87,7 +86,7 @@ describe('viewCases template', () => {
     // Given
     const options = createComponentModel({
       kind: LicenceKind.CRD,
-      probationPractitioner: { name: '', staffCode: '' },
+      probationPractitioner: null,
     })
 
     // When
@@ -103,7 +102,7 @@ describe('viewCases template', () => {
     kind,
     name = 'Test Person',
     prisonerNumber = 'A1234AA',
-    probationPractitioner = { name: 'Test COM', staffCode: 'T123' },
+    probationPractitioner = { name: 'Test COM', staffCode: 'T123', allocated: true } as ProbationPractitioner,
   }: {
     kind: LicenceKind
     name?: string

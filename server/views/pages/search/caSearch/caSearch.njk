@@ -172,7 +172,7 @@
 {% endif %}
 
 {% for offender in inPrisonResults %}
-    {% if offender.probationPractitioner.staffCode and offender.probationPractitioner.name%}
+    {% if offender.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
     {% else %}
         {% if offender.kind == "TIME_SERVED" %}
@@ -255,7 +255,7 @@
 {% endfor %}
 
 {% for offender in onProbationResults %}
-    {% if offender.probationPractitioner.staffCode or case.probationPractitioner.name%}
+    {% if offender.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
     {% else %}
         {% if offender.kind == "TIME_SERVED" %}

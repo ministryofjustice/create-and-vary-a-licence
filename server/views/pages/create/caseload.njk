@@ -25,7 +25,7 @@
 
 {% for offender in caseload %}
 
-    {% if offender.probationPractitioner %}
+    {% if offender.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% if offender.kind == "TIME_SERVED" %}

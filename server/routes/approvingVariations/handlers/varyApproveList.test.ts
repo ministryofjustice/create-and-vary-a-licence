@@ -37,6 +37,7 @@ describe('Route Handlers - Variation approval list', () => {
         probationPractitioner: {
           staffCode: 'X1234',
           name: 'Com Four',
+          allocated: true,
         },
       },
     ])
@@ -62,6 +63,7 @@ describe('Route Handlers - Variation approval list', () => {
             probationPractitioner: {
               staffCode: 'X1234',
               name: 'Com Four',
+              allocated: true,
             },
           },
         ],
@@ -87,6 +89,7 @@ describe('Route Handlers - Variation approval list', () => {
             probationPractitioner: {
               staffCode: 'X1234',
               name: 'Com Four',
+              allocated: true,
             },
           },
         ],
@@ -112,6 +115,7 @@ describe('Route Handlers - Variation approval list', () => {
             probationPractitioner: {
               staffCode: 'X1234',
               name: 'Com Four',
+              allocated: true,
             },
           },
         ],
@@ -137,6 +141,7 @@ describe('Route Handlers - Variation approval list', () => {
             probationPractitioner: {
               staffCode: 'X1234',
               name: 'Com Four',
+              allocated: true,
             },
           },
         ],

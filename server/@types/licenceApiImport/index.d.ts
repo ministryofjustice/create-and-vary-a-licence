@@ -3599,6 +3599,8 @@ export interface components {
        * @example Joe Bloggs
        */
       name: string
+      /** @description Is a probation practitioner allocated? */
+      allocated: boolean
     }
     /** @description Describes a Time Served case */
     TimeServedCase: {
