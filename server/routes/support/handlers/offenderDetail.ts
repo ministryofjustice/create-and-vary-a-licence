@@ -51,6 +51,7 @@ export default class OffenderDetailRoutes {
     const hdced = this.formatNomisDate(prisonerDetail.homeDetentionCurfewEligibilityDate)
     const hdcad = this.formatNomisDate(prisonerDetail.homeDetentionCurfewActualDate)
     const hdcEndDate = this.formatNomisDate(prisonerDetail.homeDetentionCurfewEndDate)
+    const sentenceStartDate = this.formatNomisDate(prisonerDetail.sentenceStartDate)
     const sentenceExpiryDate = this.formatNomisDate(prisonerDetail.sentenceExpiryDate)
     const licenceExpiryDate = this.formatNomisDate(prisonerDetail.licenceExpiryDate)
     const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
@@ -74,6 +75,7 @@ export default class OffenderDetailRoutes {
         hdced,
         hdcad,
         hdcEndDate,
+        sentenceStartDate,
         sentenceExpiryDate,
         licenceExpiryDate,
         paroleEligibilityDate,
