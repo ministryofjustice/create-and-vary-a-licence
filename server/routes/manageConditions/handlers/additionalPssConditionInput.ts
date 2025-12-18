@@ -12,10 +12,17 @@ export default class AdditionalPssConditionInputRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
+    const { licenceId } = req.params
     const { conditionId } = req.params
     const additionalCondition = licence.additionalPssConditions.find(
       (condition: AdditionalCondition) => condition.id === +conditionId,
     )
+
+    if (!additionalCondition) {
+      return res.redirect(
+        `/licence/create/id/${licenceId}/additional-pss-conditions${req.query?.fromReview ? '?fromReview=true' : ''}`,
+      )
+    }
 
     const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code, licence.version)
     return res.render('pages/manageConditions/additionalPssConditionInput', { additionalCondition, config })
