@@ -142,45 +142,6 @@ context('Event handlers', () => {
     })
   })
 
-  describe('Probation events', () => {
-    it('should listen to the offender manager changed event and call endpoint to update responsible COM', () => {
-      cy.task('stubGetResponsibleCommunityManager')
-      cy.task('stubGetStaffDetails')
-      cy.task('stubAssignRole')
-      cy.task('stubUpdateResponsibleCom')
-      cy.task('stubUpdateProbationTeam')
-
-      cy.task(
-        'sendProbationEvent',
-        `{
-          "Message": "{\\"crn\\":\\"X2345\\"}",
-          "MessageAttributes": {
-            "eventType": {
-              "Type": "String",
-              "Value": "OFFENDER_MANAGER_CHANGED"
-            }
-          }
-         }`,
-      )
-
-      cy.task('verifyEndpointCalled', {
-        verb: 'PUT',
-        path: '/delius-api/users/JSMITH/roles',
-        times: 1,
-      })
-      cy.task('verifyEndpointCalled', {
-        verb: 'PUT',
-        path: '/licences-api/offender/crn/X2345/responsible-com',
-        times: 1,
-      })
-      cy.task('verifyEndpointCalled', {
-        verb: 'PUT',
-        path: '/licences-api/offender/crn/X2345/probation-team',
-        times: 1,
-      })
-    })
-  })
-
   describe('Prison events', () => {
     it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to update sentence dates', () => {
       cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })

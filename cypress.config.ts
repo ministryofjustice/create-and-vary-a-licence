@@ -51,7 +51,6 @@ export default defineConfig({
         stubFeComponentsFail: feComponent.stubFeComponentsFail,
         stubFeComponentsPing: feComponent.stubFeComponentsPing,
         stubUpdateResponsibleCom: licence.stubUpdateResponsibleCom,
-        stubUpdateProbationTeam: licence.stubUpdateProbationTeam,
         stubUpdatePrisonUserDetails: licence.stubUpdatePrisonUserDetails,
         stubGetLicence: licence.stubGetLicence,
         stubGetHdcLicence: licence.stubGetHdcLicence,
@@ -145,7 +144,6 @@ export default defineConfig({
         stubGetProbationers: delius.stubGetProbationers,
         stubGetStaffDetails: delius.stubGetStaffDetails,
         stubGetStaffDetailsByStaffCode: delius.stubGetStaffDetailsByStaffCode,
-        stubAssignRole: delius.stubAssignRole,
         stubGetPduHeads: delius.stubGetPduHeads,
         stubGetResponsibleCommunityManager: delius.stubGetResponsibleCommunityManager,
         stubGetResponsibleCommunityManagers: delius.stubGetResponsibleCommunityManagers,
@@ -172,7 +170,6 @@ export default defineConfig({
 
         sendDomainEvent: events.sendDomainEvent,
         sendPrisonEvent: events.sendPrisonEvent,
-        sendProbationEvent: events.sendProbationEvent,
         purgeQueues: events.purgeQueues,
         getNextWorkingDay: (dates: string[]): Moment => {
           const appointmentDate = moment().add(1, 'year').add(1, 'week').day(7)
