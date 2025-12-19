@@ -49,6 +49,14 @@ gotenberg:
     DISABLE_UNOCONV: 1
     DEFAULT_WAIT_TIMEOUT: 30
 
+  namespace_secrets:
+    create-and-vary-a-licence-prison-events-sqs-instance-output:
+      SQS_PRISON_EVENTS_QUEUE_URL: 'sqs_id'
+    create-and-vary-a-licence-probation-events-sqs-instance-output:
+      SQS_PROBATION_EVENTS_QUEUE_URL: 'sqs_id'
+    create-and-vary-a-licence-domain-events-sqs-instance-output:
+      SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
+
   scheduledDowntime:
     enabled: true
     businessHoursOnly: true

@@ -5,7 +5,7 @@ generic-service:
   replicaCount: 4
 
   ingress:
-    hosts: 
+    hosts:
      - create-and-vary-a-licence.hmpps.service.justice.gov.uk
     contextColour: green
 
@@ -30,6 +30,14 @@ generic-service:
     MANAGE_USERS_API_URL: "https://manage-users-api.hmpps.service.justice.gov.uk"
     HDC_INTEGRATION_MVP2_ENABLED: "false"
     HDC_LICENCE_CREATION_BLOCK: "true"
+
+  namespace_secrets:
+    create-and-vary-a-licence-prison-events-sqs-instance-output:
+      SQS_PRISON_EVENTS_QUEUE_URL: 'sqs_id'
+    create-and-vary-a-licence-probation-events-sqs-instance-output:
+      SQS_PROBATION_EVENTS_QUEUE_URL: 'sqs_id'
+    create-and-vary-a-licence-domain-events-sqs-instance-output:
+      SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
 
 gotenberg:
   replicaCount: 2
