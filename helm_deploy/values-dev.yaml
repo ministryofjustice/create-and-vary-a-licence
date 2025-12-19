@@ -3,7 +3,7 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    hosts: 
+    hosts:
      - create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk
     contextColour: green
 
@@ -35,6 +35,10 @@ generic-service:
     HDC_INTEGRATION_MVP2_ENABLED: "true"
     HDC_LICENCE_CREATION_BLOCK: "false"
     TIME_SERVED_ENABLED_PRISONS: "MDI, BAI, BNI"
+
+  namespace_secrets:
+    create-and-vary-a-licence-domain-events-sqs-instance-output:
+      SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
 
   scheduledDowntime:
     enabled: true
