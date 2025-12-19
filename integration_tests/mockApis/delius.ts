@@ -149,20 +149,6 @@ export default {
     })
   },
 
-  stubAssignRole: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'PUT',
-        urlPattern: `/delius-api/users/(.)*/roles`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
-      },
-    })
-  },
-
   stubGetPduHeads: (): SuperAgentRequest => {
     return stubFor({
       request: {

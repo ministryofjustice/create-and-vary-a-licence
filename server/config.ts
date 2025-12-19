@@ -60,13 +60,6 @@ export default {
         requiredInProduction,
       ),
     },
-    probationEvents: {
-      queueUrl: get(
-        'SQS_PROBATION_EVENTS_QUEUE_URL',
-        'http://sqs.eu-west-2.localhost.localstack.cloud:4566/000000000000/create_and_vary_a_licence_probation_events_queue',
-        requiredInProduction,
-      ),
-    },
     domainEvents: {
       queueUrl: get(
         'SQS_DOMAIN_EVENTS_QUEUE_URL',

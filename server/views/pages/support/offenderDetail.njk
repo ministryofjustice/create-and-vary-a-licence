@@ -201,6 +201,10 @@
                         <td class="govuk-table__cell">{{ prisonerDetail.hdcStatus }}</td>
                     </tr>
                     <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">SSD</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.sentenceStartDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">SED</th>
                         <td class="govuk-table__cell">{{ prisonerDetail.sentenceExpiryDate }}</td>
                     </tr>
@@ -351,7 +355,7 @@
         </div>
     </div>
 
-    
+
     <div class="govuk-button-group">
         {{ govukButton({
             text: "Return to search",
