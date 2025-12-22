@@ -37,6 +37,14 @@ generic-service:
     HDC_LICENCE_CREATION_BLOCK: 'true'
     TIME_SERVED_ENABLED_PRISONS: "MDI, BAI, BNI, LEI"
 
+  namespace_secrets:
+    create-and-vary-a-licence-prison-events-sqs-instance-output:
+      SQS_PRISON_EVENTS_QUEUE_URL: 'sqs_id'
+    create-and-vary-a-licence-probation-events-sqs-instance-output:
+      SQS_PROBATION_EVENTS_QUEUE_URL: 'sqs_id'
+    create-and-vary-a-licence-domain-events-sqs-instance-output:
+      SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
+
   scheduledDowntime:
     enabled: true
     businessHoursOnly: true

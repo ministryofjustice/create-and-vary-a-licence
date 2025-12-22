@@ -65,12 +65,6 @@ generic-service:
     elasticache-redis:
       REDIS_HOST: 'primary_endpoint_address'
       REDIS_AUTH_TOKEN: 'auth_token'
-    create-and-vary-a-licence-prison-events-sqs-instance-output:
-      SQS_PRISON_EVENTS_QUEUE_URL: 'sqs_id'
-    create-and-vary-a-licence-probation-events-sqs-instance-output:
-      SQS_PROBATION_EVENTS_QUEUE_URL: 'sqs_id'
-    create-and-vary-a-licence-domain-events-sqs-instance-output:
-      SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
 
   allowlist:
     hmp-parc-1: 217.161.76.162/32
