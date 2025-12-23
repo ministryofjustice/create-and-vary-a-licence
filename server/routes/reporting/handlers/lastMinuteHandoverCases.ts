@@ -11,7 +11,10 @@ export default class LastMinuteHandoverCasesRoutes {
     const { user } = res.locals
     const lastMinuteCases = await this.getLastMinuteCases()
 
-    return res.render('pages/support/lastMinuteHandoverCases', { user, lastMinuteCases })
+    return res.render('pages/reports/lastMinuteHandoverCases', {
+      user,
+      lastMinuteCases,
+    })
   }
 
   GET_CSV = async (req: Request, res: Response): Promise<void> => {

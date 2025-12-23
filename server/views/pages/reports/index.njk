@@ -1,0 +1,62 @@
+{% extends "layout.njk" %}
+{% from "partials/card.njk" import card %}
+
+{% set pageTitle = applicationName + " - Reporting" %}
+{% set pageId = "reporting" %}
+{% set backLinkHref = "/" %}
+{% set mainClasses = "govuk-main-wrapper-tall" %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">Reporting</h1>
+    <div class="grid-row">
+      <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">CVL</h2>
+        <div class="card-group">
+          <div class="govuk-grid-column-one-third card-group__item">
+            {{ card({
+                "href": "/reports/last-minute-handover-cases",
+                "clickable": "true",
+                "heading": "Upcoming Releases with Incomplete Licences",
+                "description": "View & dowload data for upcoming releases with incomplete licences"
+            }) }}
+          </div>
+          <div class="govuk-grid-column-one-third card-group__item">
+            {{ card({
+                "href": "/reports/upcoming-releases-with-monitoring",
+                "clickable": "true",
+                "heading": "Upcoming Releases with electronic monitoring conditions",
+                "description": "View & dowload data for upcoming releases with electronic monitoring conditions"
+            }) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-row">
+      <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">DPR</h2>
+        <div class="card-group">
+          <div class="govuk-grid-column-one-third card-group__item">
+            {{ card({
+                "href": "/reports/active-licences",
+                "clickable": "true",
+                "heading": "Active licences in the last 3 months",
+                "description": "Active licences with release date in the last 3 months"
+            }) }}
+          </div>
+          <div class="govuk-grid-column-one-third card-group__item">
+            {{ card({
+                "href": "/reports/em-install-at-source",
+                "clickable": "true",
+                "heading": "EM Install at Source",
+                "description": "Prisoners due for release in the next 14 days who have a licence with an Electronic Monitoring Condition"
+            }) }}
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/assets/js/card.js"></script>
+{% endblock %}

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import DprHomeRoutes from './dprHome'
+import DprHomeRoutes from '.'
 
 describe('Route Handlers - DPR Reports', () => {
   const handler = new DprHomeRoutes()
@@ -15,7 +15,7 @@ describe('Route Handlers - DPR Reports', () => {
   describe('GET', () => {
     it('Should render the correct view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/dpr/reports', {})
+      expect(res.render).toHaveBeenCalledWith('pages/reports/index', {})
     })
   })
 })

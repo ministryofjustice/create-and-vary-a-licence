@@ -62,6 +62,7 @@ import type {
   ExternalTimeServedRecordRequest,
   ExternalTimeServedRecordResponse,
   TimeServedProbationConfirmContactRequest,
+  UpcomingReleasesWithMonitoringConditionsResponse,
 } from '../@types/licenceApiClientTypes'
 import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
@@ -707,8 +708,14 @@ export default class LicenceApiClient extends RestClient {
 
   async getLastMinuteCases(): Promise<LastMinuteHandoverCaseResponse[]> {
     return (await this.get({
-      path: `/offender/support/report/last-minute-handover-cases`,
+      path: `/cvl-report/last-minute-handover-cases`,
     })) as Promise<LastMinuteHandoverCaseResponse[]>
+  }
+
+  async getUpcomingReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
+    return (await this.get({
+      path: `/cvl-report/upcoming-releases-with-monitoring`,
+    })) as Promise<UpcomingReleasesWithMonitoringConditionsResponse[]>
   }
 
   async searchForOffenderOnPrisonCaseAdminCaseload(

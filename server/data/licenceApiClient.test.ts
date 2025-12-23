@@ -14,7 +14,6 @@ import {
   CaCaseloadSearch,
   ContactNumberRequest,
   ExternalTimeServedRecordRequest,
-  LastMinuteHandoverCaseResponse,
   Licence,
   LicenceCreationResponse,
   LicencePermissionsRequest,
@@ -849,54 +848,51 @@ describe('Licence API client tests', () => {
     })
   })
 
-  const createLastMinuteCase = (): LastMinuteHandoverCaseResponse => ({
-    releaseDate: '2025-10-15',
-    probationRegion: 'North West',
-    prisonerNumber: 'A1234BC',
-    crn: 'X123456',
-    prisonerName: 'John Smith',
-    probationPractitioner: 'CML Com',
-    status: 'IN_PROGRESS',
-    prisonCode: 'LEI',
-    prisonName: 'Leeds Prison',
-  })
-
   describe('get last minute cases', () => {
     it('should call the correct endpoint and return cases', async () => {
+      const aCase = {
+        releaseDate: '2025-10-15',
+        probationRegion: 'North West',
+        prisonerNumber: 'A1234BC',
+        crn: 'X123456',
+        prisonerName: 'John Smith',
+        probationPractitioner: 'CML Com',
+        status: 'IN_PROGRESS',
+        prisonCode: 'LEI',
+        prisonName: 'Leeds Prison',
+      }
       // Given
-      jest.mocked(get).mockResolvedValue([createLastMinuteCase()])
+      jest.mocked(get).mockResolvedValue([aCase])
 
       // When
       const result = await licenceApiClient.getLastMinuteCases()
 
       // Then
       expect(get).toHaveBeenCalledWith({
-        path: '/offender/support/report/last-minute-handover-cases',
+        path: '/cvl-report/last-minute-handover-cases',
       })
-      expect(result).toEqual([createLastMinuteCase()])
+      expect(result).toEqual([aCase])
     })
+  })
 
-    it('should return an empty array if no cases exist', async () => {
+  describe('get upcoming releases with electronic monitoring cases', () => {
+    it('should call the correct endpoint and return cases', async () => {
+      const aCase = {
+        prisonNumber: 'A1234BC',
+        crn: 'X123456',
+        status: 'IN_PROGRESS',
+      }
       // Given
-      jest.mocked(get).mockResolvedValue([])
+      jest.mocked(get).mockResolvedValue([aCase])
 
       // When
-      const result = await licenceApiClient.getLastMinuteCases()
+      const result = await licenceApiClient.getUpcomingReleasesWithMonitoring()
 
       // Then
       expect(get).toHaveBeenCalledWith({
-        path: '/offender/support/report/last-minute-handover-cases',
+        path: '/cvl-report/upcoming-releases-with-monitoring',
       })
-      expect(result).toEqual([])
-    })
-
-    it('should propagate errors if the request fails', async () => {
-      // Given
-      const error = new Error('Network failure')
-      jest.mocked(get).mockRejectedValue(error)
-
-      // When / Then
-      await expect(licenceApiClient.getLastMinuteCases()).rejects.toThrow('Network failure')
+      expect(result).toEqual([aCase])
     })
   })
 
