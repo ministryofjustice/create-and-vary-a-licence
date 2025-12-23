@@ -15,7 +15,6 @@ import {
   ContactNumberRequest,
   ExternalTimeServedRecordRequest,
   Licence,
-  LicenceCreationResponse,
   LicencePermissionsRequest,
   LicenceSummary,
   OverrideLicencePrisonerDetailsRequest,
@@ -33,6 +32,9 @@ import {
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
   VaryApproverCaseloadSearchRequest,
+  CreateLicenceResponse,
+  CreateVariationResponse,
+  EditLicenceResponse,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -68,7 +70,7 @@ describe('Licence API client tests', () => {
   })
 
   it('Create licence request', async () => {
-    post.mockResolvedValue({ licenceId: 1 } as LicenceCreationResponse)
+    post.mockResolvedValue({ licenceId: 1 } as CreateLicenceResponse)
 
     const creationRequest = { nomsId: 'A1234AA', type: 'CRD' as const }
     const result = await licenceApiClient.createLicence(creationRequest, { username: 'joebloggs' } as User)
@@ -240,7 +242,7 @@ describe('Licence API client tests', () => {
 
   describe('Match Licences', () => {
     it('Should pass parameters to sort the matched licences', async () => {
-      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as unknown as LicenceSummary])
 
       const result = await licenceApiClient.matchLicences({
         statuses: [LicenceStatus.IN_PROGRESS],
@@ -269,7 +271,7 @@ describe('Licence API client tests', () => {
     })
 
     it('Should call the endpoint without the sort query params', async () => {
-      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as unknown as LicenceSummary])
 
       const result = await licenceApiClient.matchLicences({
         statuses: [LicenceStatus.IN_PROGRESS],
@@ -371,21 +373,21 @@ describe('Licence API client tests', () => {
   })
 
   it('should edit a licence', async () => {
-    post.mockResolvedValue({ id: 1, prisonCode: 'MDI' } as Licence)
+    post.mockResolvedValue({ licenceId: 1 } as EditLicenceResponse)
 
     const result = await licenceApiClient.editLicence('1', { username: 'joebloggs' } as User)
 
     expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/edit' }, { username: 'joebloggs' })
-    expect(result).toEqual({ id: 1, prisonCode: 'MDI' })
+    expect(result).toEqual({ licenceId: 1 })
   })
 
   it('Create variation', async () => {
-    post.mockResolvedValue({ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary)
+    post.mockResolvedValue({ licenceId: 1 } as CreateVariationResponse)
 
     const result = await licenceApiClient.createVariation('1', { username: 'joebloggs' } as User)
 
     expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/create-variation' }, { username: 'joebloggs' })
-    expect(result).toEqual({ licenceId: 1, prisonCode: 'MDI' })
+    expect(result).toEqual({ licenceId: 1 })
   })
 
   it('Activate variation', async () => {

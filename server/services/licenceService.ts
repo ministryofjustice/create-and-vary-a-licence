@@ -15,11 +15,13 @@ import type {
   ComReviewCount,
   ContactNumberRequest,
   CreateLicenceRequest,
+  CreateLicenceResponse,
+  CreateVariationResponse,
+  EditLicenceResponse,
   EligibilityAssessment,
   LastMinuteHandoverCaseResponse,
   Licence,
   LicenceConditionChange,
-  LicenceCreationResponse,
   LicenceSummary,
   NotifyRequest,
   PrisonerWithCvlFields,
@@ -61,7 +63,7 @@ export default class LicenceService {
     private readonly conditionService: ConditionService,
   ) {}
 
-  async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceCreationResponse> {
+  async createLicence(licence: CreateLicenceRequest, user: User): Promise<CreateLicenceResponse> {
     return this.licenceApiClient.createLicence(licence, user)
   }
 
@@ -271,10 +273,6 @@ export default class LicenceService {
     return this.licenceApiClient.getComReviewCount(user)
   }
 
-  async getLicencesForVariationApprovalByRegion(user: User): Promise<LicenceSummary[]> {
-    return this.licenceApiClient.submittedVariationsByProbationArea(user?.probationAreaCode, user)
-  }
-
   async updateResponsibleCom(crn: string, newCom: UpdateComRequest): Promise<void> {
     return this.licenceApiClient.updateResponsibleCom(crn, newCom)
   }
@@ -291,11 +289,11 @@ export default class LicenceService {
     return this.licenceApiClient.updatePrisonUserDetails(prisonUserDetails)
   }
 
-  async editApprovedLicence(licenceId: string, user: User): Promise<LicenceSummary> {
+  async editApprovedLicence(licenceId: string, user: User): Promise<EditLicenceResponse> {
     return this.licenceApiClient.editLicence(licenceId, user)
   }
 
-  async createVariation(licenceId: string, user: User): Promise<LicenceSummary> {
+  async createVariation(licenceId: string, user: User): Promise<CreateVariationResponse> {
     return this.licenceApiClient.createVariation(licenceId, user)
   }
 
@@ -499,8 +497,8 @@ export default class LicenceService {
     return permissions.view
   }
 
-  async getOrCreateLicenceVariation(nomsId: string, licenceId: string, user: User): Promise<LicenceSummary> {
-    let newLicence: LicenceSummary
+  async getOrCreateLicenceVariation(nomsId: string, licenceId: string, user: User): Promise<CreateLicenceResponse> {
+    let newLicence: CreateLicenceResponse
     const licenceVariations = await this.getIncompleteLicenceVariations(nomsId)
     if (licenceVariations?.length > 0) {
       newLicence = _.head(licenceVariations)

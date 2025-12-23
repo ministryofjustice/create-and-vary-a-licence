@@ -25,7 +25,8 @@ import type {
   HdcLicenceData,
   Licence,
   LicenceConditionChange,
-  LicenceCreationResponse,
+  CreateLicenceResponse,
+  CreateVariationResponse,
   LicenceEvent,
   LicencePolicyResponse,
   LicenceSummary,
@@ -63,8 +64,11 @@ import type {
   ExternalTimeServedRecordResponse,
   TimeServedProbationConfirmContactRequest,
   UpcomingReleasesWithMonitoringConditionsResponse,
+  EditLicenceResponse,
+  ComReviewCount,
+  UpdateComRequest,
+  UpdatePrisonUserRequest,
 } from '../@types/licenceApiClientTypes'
-import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
 import LicenceType from '../enumeration/licenceType'
@@ -113,7 +117,7 @@ export default class LicenceApiClient extends RestClient {
     }
   }
 
-  async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceCreationResponse> {
+  async createLicence(licence: CreateLicenceRequest, user: User): Promise<CreateLicenceResponse> {
     const response = (await this.post(
       {
         path: `/licence/create`,
@@ -374,23 +378,14 @@ export default class LicenceApiClient extends RestClient {
     return (await this.post(
       { path: `/licence/id/${licenceId}/edit` },
       { username: user?.username },
-    )) as Promise<LicenceSummary>
+    )) as Promise<EditLicenceResponse>
   }
 
-  async createVariation(licenceId: string, user: User): Promise<LicenceSummary> {
+  async createVariation(licenceId: string, user: User): Promise<CreateVariationResponse> {
     return (await this.post(
       { path: `/licence/id/${licenceId}/create-variation` },
       { username: user?.username },
-    )) as Promise<LicenceSummary>
-  }
-
-  async submittedVariationsByProbationArea(probationAreaCode: string, user: User) {
-    return (await this.get(
-      {
-        path: `/licence/variations/submitted/area/${probationAreaCode}`,
-      },
-      { username: user?.username },
-    )) as LicenceSummary[]
+    )) as Promise<CreateVariationResponse>
   }
 
   async updateSpoDiscussion(licenceId: string, request: UpdateSpoDiscussionRequest, user: User): Promise<void> {
