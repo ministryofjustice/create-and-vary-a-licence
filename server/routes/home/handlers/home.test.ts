@@ -26,7 +26,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: true,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
-          shouldShowDprCard: false,
+          shouldShowReportsCard: false,
         })
       })
 
@@ -41,7 +41,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
-          shouldShowDprCard: false,
+          shouldShowReportsCard: false,
         })
       })
     })
@@ -58,7 +58,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
-          shouldShowDprCard: false,
+          shouldShowReportsCard: false,
         })
       })
 
@@ -73,7 +73,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
-          shouldShowDprCard: false,
+          shouldShowReportsCard: false,
         })
       })
     })
@@ -89,7 +89,7 @@ describe('Route Handlers - Home', () => {
         shouldShowViewOrPrintCard: true,
         shouldShowVaryApprovalCard: false,
         shouldShowSupportCard: false,
-        shouldShowDprCard: false,
+        shouldShowReportsCard: false,
       })
     })
 
@@ -105,7 +105,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
-          shouldShowDprCard: false,
+          shouldShowReportsCard: false,
         })
       })
 
@@ -120,7 +120,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
-          shouldShowDprCard: false,
+          shouldShowReportsCard: false,
         })
       })
     })
@@ -137,7 +137,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: true,
           shouldShowSupportCard: false,
-          shouldShowDprCard: false,
+          shouldShowReportsCard: false,
         })
       })
 
@@ -152,7 +152,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
-          shouldShowDprCard: false,
+          shouldShowReportsCard: false,
         })
       })
     })
@@ -168,7 +168,7 @@ describe('Route Handlers - Home', () => {
         shouldShowViewOrPrintCard: false,
         shouldShowVaryApprovalCard: false,
         shouldShowSupportCard: true,
-        shouldShowDprCard: true,
+        shouldShowReportsCard: true,
       })
     })
 
@@ -184,7 +184,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: true,
-          shouldShowDprCard: true,
+          shouldShowReportsCard: true,
         })
       })
 
@@ -199,7 +199,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
-          shouldShowDprCard: true,
+          shouldShowReportsCard: true,
         })
       })
 
@@ -214,7 +214,7 @@ describe('Route Handlers - Home', () => {
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
-          shouldShowDprCard: false,
+          shouldShowReportsCard: false,
         })
       })
     })

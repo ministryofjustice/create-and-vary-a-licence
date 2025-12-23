@@ -11,14 +11,6 @@
 
 {% set cases = [] %}
 
-{% macro offenderName(prisonerName, prisonNumber, index) %}
-    <div class="caseload-offender-name">
-        <a href="/support/offender/{{ prisonNumber }}/detail" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">
-            {{ prisonerName }}</a>
-        <div class="govuk-hint govuk-!-font-size-16">Prison number: {{ prisonNumber }}</div>
-    </div>
-{% endmacro %}
-
 {% for lastMinuteCase in lastMinuteCases %}
     {% set cases = (cases.push([
         {
@@ -33,14 +25,14 @@
                 id: 'prion-name-' + loop.index,
                 "data-sort-value": lastMinuteCase.prisonName
             },
-            html:  lastMinuteCase.prisonName
+            text:  lastMinuteCase.prisonName
         },
         {
             attributes: {
                 id: 'prion-code-' + loop.index,
                 "data-sort-value": lastMinuteCase.prisonCode
             },
-            html:  lastMinuteCase.prisonCode
+            text:  lastMinuteCase.prisonCode
         },
         {
             attributes: {
@@ -69,7 +61,7 @@
                 id: 'crn-' + loop.index,
                 "data-sort-value": lastMinuteCase.crn
             },
-            html: lastMinuteCase.crn
+            text: lastMinuteCase.crn
         },
         {
             attributes: {
@@ -77,7 +69,7 @@
                 "data-sort-value": lastMinuteCase.prisonerName
             },
             classes: "max-width max-width-220",
-            html: offenderName(lastMinuteCase.prisonerName, lastMinuteCase.prisonerNumber, loop.index)
+            text: lastMinuteCase.prisonerName
         }
     ]), cases) %}
 {% endfor %}
@@ -90,7 +82,7 @@
             <div class="govuk-button-group">
                         {{ govukButton({
                             text: "Download CSV",
-                            href: "/support/last-minute-handover-cases/download-csv",
+                            href: "/reports/last-minute-handover-cases/download-csv",
                             classes: "govuk-button--secondary"
                         }) }}
             </div>

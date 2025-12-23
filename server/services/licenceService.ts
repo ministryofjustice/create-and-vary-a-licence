@@ -25,6 +25,7 @@ import type {
   PrisonerWithCvlFields,
   ReferVariationRequest,
   StatusUpdateRequest,
+  UpcomingReleasesWithMonitoringConditionsResponse,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
@@ -469,6 +470,10 @@ export default class LicenceService {
 
   async getLastMinuteCases(): Promise<LastMinuteHandoverCaseResponse[]> {
     return this.licenceApiClient.getLastMinuteCases()
+  }
+
+  async getUpcomingReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
+    return this.licenceApiClient.getUpcomingReleasesWithMonitoring()
   }
 
   async updateElectronicMonitoringProgramme(

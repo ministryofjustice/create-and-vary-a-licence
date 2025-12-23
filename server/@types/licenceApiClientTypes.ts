@@ -14,7 +14,7 @@ export type UpdateAdditionalConditionDataRequest = components['schemas']['Update
 export type AdditionalConditionData = components['schemas']['AdditionalConditionData']
 export type ContactNumberRequest = components['schemas']['ContactNumberRequest']
 export type CreateLicenceRequest = components['schemas']['CreateLicenceRequest']
-export type LicenceCreationResponse = components['schemas']['LicenceCreationResponse']
+export type LicenceCreationResponse = components['schemas']['CreateLicenceResponse']
 export type LicenceSummary = components['schemas']['LicenceSummary']
 export type Licence =
   | components['schemas']['HdcVariationLicence']
@@ -73,6 +73,9 @@ export type ElectronicMonitoringProvider = components['schemas']['ElectronicMoni
 export type PrisonUserSearchRequest = components['schemas']['PrisonUserSearchRequest']
 export type PrisonCaseAdminSearchResult = components['schemas']['PrisonCaseAdminSearchResult']
 export type LastMinuteHandoverCaseResponse = components['schemas']['LastMinuteHandoverCaseResponse']
+export type UpcomingReleasesWithMonitoringConditionsResponse =
+  components['schemas']['UpcomingReleasesWithMonitoringConditionsResponse']
+
 export type ApproverSearchRequest = components['schemas']['ApproverSearchRequest']
 export type ApproverSearchResponse = components['schemas']['ApproverSearchResponse']
 export type UpdateElectronicMonitoringProgrammeRequest =
