@@ -303,6 +303,7 @@ export const licenceConditions: AdditionalCondition[] = [
 const probationPractitionerPlaceholder = {
   staffCode: 'X1234',
   name: 'Joe Bloggs',
+  allocated: true,
 }
 
 export default {
@@ -1147,7 +1148,7 @@ export default {
             licenceId: 1,
             licenceStatus: 'TIMED_OUT',
             licenceType: 'AP_PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
+            probationPractitioner: { staffCode: 'X12345', name: 'John Smith', allocated: true },
             hardStopDate: '05/12/2023',
             hardStopWarningDate: '03/12/2023',
             licenceCreationType: LicenceCreationType.LICENCE_CHANGES_NOT_APPROVED_IN_TIME,
@@ -1175,7 +1176,7 @@ export default {
             licenceId: 1,
             licenceStatus: 'TIMED_OUT',
             licenceType: 'AP_PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
+            probationPractitioner: { staffCode: 'X12345', name: 'John Smith', allocated: true },
             hardStopDate: '05/12/2023',
             hardStopWarningDate: '03/12/2023',
             licenceCreationType: LicenceCreationType.PRISON_WILL_CREATE_THIS_LICENCE,
@@ -1203,7 +1204,7 @@ export default {
             licenceId: 2,
             licenceStatus: 'TIMED_OUT',
             licenceType: 'AP_PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
+            probationPractitioner: { staffCode: 'X12345', name: 'John Smith', allocated: true },
             hardStopDate: '05/12/2023',
             hardStopWarningDate: '03/12/2023',
             licenceCreationType: LicenceCreationType.LICENCE_CREATED_BY_PRISON,
@@ -2089,6 +2090,7 @@ export default {
               : {
                   name: 'John Smith',
                   staffCode: 'X1234',
+                  allocated: true,
                 },
             releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
@@ -2123,6 +2125,7 @@ export default {
             probationPractitioner: {
               name: 'Joe Bloggs',
               staffCode: 'X1234',
+              allocated: true,
             },
             releaseDate: '01/05/2022',
             releaseDateLabel: 'Confirmed release date',
@@ -2158,7 +2161,7 @@ export default {
             licenceId: options.licenceId,
             licenceStatus: options.licenceStatus,
             licenceType: 'PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
+            probationPractitioner: { staffCode: 'X12345', name: 'John Smith', allocated: true },
             hardStopDate: '03/01/2023',
             hardStopWarningDate: '01/01/2023',
             licenceCreationType: options.licenceCreationType,
@@ -2189,7 +2192,7 @@ export default {
             licenceId: options && options.licenceId,
             licenceStatus: 'TIMED_OUT',
             licenceType: 'AP',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
+            probationPractitioner: { staffCode: 'X12345', name: 'John Smith', allocated: true },
             hardStopDate: '03/01/2023',
             hardStopWarningDate: '01/01/2023',
             licenceCreationType: LicenceCreationType.PRISON_WILL_CREATE_THIS_LICENCE,
@@ -2224,7 +2227,9 @@ export default {
             licenceId: options.licenceId,
             licenceStatus: options.licenceStatus,
             licenceType: 'PSS',
-            probationPractitioner: options.isUnallocatedCom ? null : { staffCode: 'X12345', name: 'John Smith' },
+            probationPractitioner: options.isUnallocatedCom
+              ? null
+              : { staffCode: 'X12345', name: 'John Smith', allocated: true },
             hardStopDate: '03/01/2023',
             hardStopWarningDate: '01/01/2023',
             licenceCreationType: options.licenceCreationType,
@@ -2299,6 +2304,7 @@ export default {
             probationPractitioner: {
               staffCode: 'X1231',
               name: 'Com One',
+              allocated: true,
             },
           },
           {
@@ -2312,6 +2318,7 @@ export default {
             probationPractitioner: {
               staffCode: 'X1234',
               name: 'Com Four',
+              allocated: true,
             },
           },
         ],
@@ -2337,6 +2344,7 @@ export default {
               probationPractitioner: {
                 name: 'Test Com 1',
                 staffCode: 'A12345',
+                allocated: true,
               },
               releaseDate: '01/07/2025',
               releaseDateLabel: 'Confirmed release date',
@@ -2378,6 +2386,7 @@ export default {
                 staffCode: 'B12345',
                 staffIdentifier: 120001212,
                 staffUsername: 'tcom2',
+                allocated: true,
               },
               releaseDate: '01/05/2025',
               releaseDateLabel: 'Confirmed release date',
@@ -2416,6 +2425,7 @@ export default {
               probationPractitioner: {
                 name: 'Test Com 1',
                 staffCode: 'A12345',
+                allocated: true,
               },
               releaseDate: null,
               releaseDateLabel: 'CRD',
@@ -2435,6 +2445,7 @@ export default {
               probationPractitioner: {
                 name: 'Test Com 1',
                 staffCode: 'A12345',
+                allocated: true,
               },
               releaseDate: null,
               releaseDateLabel: 'CRD',
@@ -2454,6 +2465,7 @@ export default {
               probationPractitioner: {
                 name: 'Test Com 1',
                 staffCode: 'A12345',
+                allocated: true,
               },
               releaseDate: null,
               releaseDateLabel: 'CRD',
@@ -2489,6 +2501,7 @@ export default {
               probationPractitioner: {
                 name: 'Test Com 1',
                 staffCode: 'A12345',
+                allocated: true,
               },
               releaseDate: '01/07/2025',
               releaseDateLabel: 'Confirmed release date',
@@ -2508,6 +2521,7 @@ export default {
               probationPractitioner: {
                 name: 'Test Com 1',
                 staffCode: 'A12345',
+                allocated: true,
               },
               releaseDate: '01/08/2025',
               releaseDateLabel: 'Confirmed release date',
@@ -2527,6 +2541,7 @@ export default {
               probationPractitioner: {
                 name: 'Test Com 2',
                 staffCode: 'B12345',
+                allocated: true,
               },
               releaseDate: '02/08/2025',
               releaseDateLabel: 'Confirmed release date',
@@ -2551,6 +2566,7 @@ export default {
                 staffCode: 'B12345',
                 staffIdentifier: 120001212,
                 staffUsername: 'tcom2',
+                allocated: true,
               },
               releaseDate: '01/05/2025',
               releaseDateLabel: 'Confirmed release date',
@@ -2573,6 +2589,7 @@ export default {
                 staffCode: 'A12345',
                 staffIdentifier: 120001111,
                 staffUsername: 'tcom1',
+                allocated: true,
               },
               releaseDate: '30/04/2025',
               releaseDateLabel: 'Confirmed release date',
@@ -2595,6 +2612,7 @@ export default {
                 staffCode: 'B12345',
                 staffIdentifier: 120001212,
                 staffUsername: 'tcom2',
+                allocated: true,
               },
               releaseDate: '29/04/2025',
               releaseDateLabel: 'Confirmed release date',
@@ -2629,6 +2647,7 @@ export default {
               prisonerNumber: 'A1234AA',
               probationPractitioner: {
                 name: 'Com Four',
+                allocated: true,
               },
               submittedByFullName: 'Submitted Person',
               releaseDate: '01/07/2025',
@@ -2664,6 +2683,7 @@ export default {
               releaseDate: '01/05/2025',
               probationPractitioner: {
                 name: 'Com Four',
+                allocated: true,
               },
               submittedByFullName: 'Submitted Person',
               urgentApproval: false,
@@ -2695,6 +2715,7 @@ export default {
               prisonerNumber: 'A1234AA',
               probationPractitioner: {
                 name: 'Com Four',
+                allocated: true,
               },
               submittedByFullName: 'Submitted Person',
               releaseDate: '01/07/2025',
@@ -2711,6 +2732,7 @@ export default {
               prisonerNumber: 'A1234AB',
               probationPractitioner: {
                 name: 'Com Three',
+                allocated: true,
               },
               submittedByFullName: 'Submitted Person',
               releaseDate: '01/08/2025',
@@ -2727,6 +2749,7 @@ export default {
               prisonerNumber: 'A1234AC',
               probationPractitioner: {
                 name: 'Com Three',
+                allocated: true,
               },
               submittedByFullName: 'Submitted Person',
               releaseDate: '02/08/2025',
@@ -2746,6 +2769,7 @@ export default {
               releaseDate: '01/05/2025',
               probationPractitioner: {
                 name: 'Com Four',
+                allocated: true,
               },
               submittedByFullName: 'Submitted Person',
               urgentApproval: false,
@@ -2762,6 +2786,7 @@ export default {
               releaseDate: '30/04/2025',
               probationPractitioner: {
                 name: 'Com Four',
+                allocated: true,
               },
               submittedByFullName: 'Submitted Person',
               urgentApproval: false,
@@ -2777,6 +2802,7 @@ export default {
               prisonerNumber: 'A1234AF',
               probationPractitioner: {
                 name: 'Com Two',
+                allocated: true,
               },
               submittedByFullName: 'Submitted Person',
               releaseDate: '29/04/2025',
@@ -2813,6 +2839,7 @@ export default {
               probationPractitioner: {
                 staffCode: 'X1231',
                 name: 'Com One',
+                allocated: true,
               },
             },
             {
@@ -2825,6 +2852,7 @@ export default {
               probationPractitioner: {
                 staffCode: 'X1234',
                 name: 'Com Four',
+                allocated: true,
               },
             },
             {
@@ -2837,6 +2865,7 @@ export default {
               probationPractitioner: {
                 staffCode: 'X1234',
                 name: 'Com Four',
+                allocated: true,
               },
             },
           ],
@@ -2851,6 +2880,7 @@ export default {
               probationPractitioner: {
                 staffCode: 'X1231',
                 name: 'Com One',
+                allocated: true,
               },
             },
             {
@@ -2863,6 +2893,7 @@ export default {
               probationPractitioner: {
                 staffCode: 'X1234',
                 name: 'Com Four',
+                allocated: true,
               },
             },
             {
@@ -2875,6 +2906,7 @@ export default {
               probationPractitioner: {
                 staffCode: 'X1234',
                 name: 'Com Four',
+                allocated: true,
               },
             },
             {
@@ -2887,6 +2919,7 @@ export default {
               probationPractitioner: {
                 staffCode: 'X1233',
                 name: 'Com Three',
+                allocated: true,
               },
             },
           ],

@@ -14,6 +14,7 @@ const inPrisonResults = [
     probationPractitioner: {
       name: 'Test Com 1',
       staffCode: 'ABC123',
+      allocated: true,
     },
     releaseDate: '01/07/2025',
     releaseDateLabel: 'Confirmed release date',
@@ -31,9 +32,7 @@ const inPrisonResults = [
     licenceId: 2,
     name: 'Test Person 2',
     prisonerNumber: 'A1234AB',
-    probationPractitioner: {
-      name: '',
-    },
+    probationPractitioner: null,
     releaseDate: '01/08/2025',
     releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.SUBMITTED,
@@ -72,6 +71,7 @@ const onProbationResults = [
     probationPractitioner: {
       name: 'Test Com 1',
       staffCode: 'ABC123',
+      allocated: true,
     },
     releaseDate: '01/07/2025',
     releaseDateLabel: 'Confirmed release date',
@@ -89,9 +89,7 @@ const onProbationResults = [
     licenceId: 2,
     name: 'Test Person 2',
     prisonerNumber: 'A1234AB',
-    probationPractitioner: {
-      name: '',
-    },
+    probationPractitioner: null,
     releaseDate: '01/08/2025',
     releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.ACTIVE,
@@ -130,6 +128,7 @@ const attentionNeededResults = [
     probationPractitioner: {
       name: 'Test Com 1',
       staffCode: 'A12345',
+      allocated: true,
     },
     releaseDate: '01/11/2022',
     releaseDateLabel: 'CRD',
@@ -385,9 +384,7 @@ describe('View CA Search Results', () => {
           licenceId: 3,
           name: 'Test Person 3',
           prisonerNumber: 'A1234AC',
-          probationPractitioner: {
-            name: '',
-          },
+          probationPractitioner: null,
           releaseDate: '01/08/2025',
           releaseDateLabel: 'CRD',
           licenceStatus: LicenceStatus.SUBMITTED,
@@ -447,6 +444,7 @@ describe('View CA Search Results', () => {
           probationPractitioner: {
             name: 'Test Com 1',
             staffCode: 'A12345',
+            allocated: true,
           },
           releaseDate: 'not found',
           releaseDateLabel: 'CRD',
@@ -538,6 +536,7 @@ describe('View CA Search Results', () => {
           probationPractitioner: {
             name: 'Test Com 1',
             staffCode: 'ABC123',
+            allocated: true,
           },
           releaseDate: '03/08/2022',
           releaseDateLabel: 'HDCAD',

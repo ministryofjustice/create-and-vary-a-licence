@@ -14,6 +14,7 @@ const approvalNeededCases = [
     probationPractitioner: {
       name: 'Test Com 1',
       staffCode: 'ABC123',
+      allocated: true,
     },
     submittedByFullName: 'Submitted Person',
     releaseDate: '01/05/2024',
@@ -31,6 +32,7 @@ const approvalNeededCases = [
     probationPractitioner: {
       name: 'Test Com 2',
       staffCode: 'ABC456',
+      allocated: true,
     },
     submittedByFullName: 'Submitted Person',
     releaseDate: '01/05/2024',
@@ -65,6 +67,7 @@ const recentlyApprovedCases = [
     probationPractitioner: {
       name: 'Test Com 1',
       staffCode: 'ABC123',
+      allocated: true,
     },
     submittedByFullName: 'Submitted Person',
     urgentApproval: false,
@@ -81,6 +84,7 @@ const recentlyApprovedCases = [
     probationPractitioner: {
       name: 'Test Com 2',
       staffCode: 'ABC456',
+      allocated: true,
     },
     submittedByFullName: 'Submitted Person',
     releaseDate: '12/04/2024',
@@ -283,6 +287,7 @@ describe('View Prison Approver Search Results', () => {
           probationPractitioner: {
             name: 'Test Com 1',
             staffCode: 'ABC123',
+            allocated: true,
           },
           submittedByFullName: 'Submitted Person',
           releaseDate: '01/05/2024',
@@ -339,6 +344,7 @@ describe('View Prison Approver Search Results', () => {
           probationPractitioner: {
             name: 'Test Com 1',
             staffCode: 'ABC123',
+            allocated: true,
           },
           submittedByFullName: 'Submitted Person',
           releaseDate: '01/05/2024',

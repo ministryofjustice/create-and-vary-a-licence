@@ -19,7 +19,7 @@
 {% set licences = [] %}
 
 {% for offender in caseload %}
-    {% if offender.probationPractitioner.name %}
+    {% if offender.probationPractitioner.allocated %}
         {% set probationHtml = '<a class="govuk-link" href="/licence/vary-approve/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set probationHtml = 'Not allocated yet' %}

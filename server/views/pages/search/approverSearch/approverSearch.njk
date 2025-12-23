@@ -143,7 +143,7 @@
 
 {% for case in approvalNeededCases %}
 
-    {% if case.probationPractitioner.name %}
+    {% if case.probationPractitioner.allocated %}
          {% set comDetailsHtml = '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" data-qa="comLink" class="govuk-link search-highlight">' + case.probationPractitioner.name + '</a>' %}
     {% else %}
         {% if case.kind == "TIME_SERVED" %}
@@ -223,7 +223,7 @@
 
 {% for case in recentlyApprovedCases %}
 
-    {% if case.probationPractitioner.name %}
+    {% if case.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" data-qa="comLink" class="govuk-link search-highlight">' + case.probationPractitioner.name + '</a>' %}
     {% else %}
         {% if case.kind == "TIME_SERVED" %}

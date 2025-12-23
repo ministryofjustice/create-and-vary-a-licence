@@ -19,7 +19,7 @@
 {% endmacro %}
 
 {%- macro probationHtml(case) -%}
-  {%- if case.probationPractitioner.name -%}
+  {%- if case.probationPractitioner.allocated -%}
     <a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary-approve/id/{{ case.licenceId }}/probation-practitioner">{{ case.probationPractitioner.name }}</a>
   {%- else -%}
     Not allocated yet

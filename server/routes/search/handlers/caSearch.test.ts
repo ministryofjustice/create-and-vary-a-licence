@@ -71,6 +71,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         prisonerNumber: 'A1234AA',
         probationPractitioner: {
           name: 'Test Com 1',
+          allocated: true,
         },
         releaseDate: '01/07/2025',
         releaseDateLabel: 'Confirmed release date',
@@ -90,6 +91,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         prisonerNumber: 'A1234AB',
         probationPractitioner: {
           name: 'Test Com 2',
+          allocated: true,
         },
         releaseDate: '01/08/2025',
         releaseDateLabel: 'Confirmed release date',
@@ -109,6 +111,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         prisonerNumber: 'A1234AC',
         probationPractitioner: {
           name: 'Test Com 3',
+          allocated: true,
         },
         releaseDate: '01/09/2025',
         releaseDateLabel: 'Confirmed release date',
@@ -128,6 +131,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         prisonerNumber: 'A1234AF',
         probationPractitioner: {
           name: 'Test Com 6',
+          allocated: true,
         },
         releaseDate: '01/04/2025',
         releaseDateLabel: 'Confirmed release date',
@@ -147,6 +151,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         prisonerNumber: 'A1234AH',
         probationPractitioner: {
           name: 'Test Com 8',
+          allocated: true,
         },
         releaseDate: '01/06/2025',
         releaseDateLabel: 'Confirmed release date',
@@ -168,6 +173,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         prisonerNumber: 'A1234AE',
         probationPractitioner: {
           name: 'Test Com 5',
+          allocated: true,
         },
         releaseDate: '01/03/2025',
         releaseDateLabel: 'Confirmed release date',
@@ -187,6 +193,7 @@ describe('Route Handlers - Search - Ca Search', () => {
         prisonerNumber: 'A1234AG',
         probationPractitioner: {
           name: 'Test Com 7',
+          allocated: true,
         },
         releaseDate: '01/05/2025',
         releaseDateLabel: 'Confirmed release date',
@@ -240,6 +247,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AA',
           probationPractitioner: {
             name: 'Test Com 1',
+            allocated: true,
           },
           releaseDate: '01/07/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -260,6 +268,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AB',
           probationPractitioner: {
             name: 'Test Com 2',
+            allocated: true,
           },
           releaseDate: '01/08/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -280,6 +289,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AC',
           probationPractitioner: {
             name: 'Test Com 3',
+            allocated: true,
           },
           releaseDate: '01/09/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -300,6 +310,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AF',
           probationPractitioner: {
             name: 'Test Com 6',
+            allocated: true,
           },
           releaseDate: '01/04/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -320,6 +331,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AH',
           probationPractitioner: {
             name: 'Test Com 8',
+            allocated: true,
           },
           releaseDate: '01/06/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -342,6 +354,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AE',
           probationPractitioner: {
             name: 'Test Com 5',
+            allocated: true,
           },
           releaseDate: '01/03/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -362,6 +375,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AG',
           probationPractitioner: {
             name: 'Test Com 7',
+            allocated: true,
           },
           releaseDate: '01/05/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -409,6 +423,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AD',
           probationPractitioner: {
             name: 'Test Com 4',
+            allocated: true,
           },
           releaseDate: '01/09/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -431,6 +446,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AI',
           probationPractitioner: {
             name: 'Test Com 9',
+            allocated: true,
           },
           releaseDate: '01/03/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -481,6 +497,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AA',
           probationPractitioner: {
             name: 'Test Com 1',
+            allocated: true,
           },
           releaseDate: '01/07/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -501,6 +518,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AB',
           probationPractitioner: {
             name: 'Test Com 2',
+            allocated: true,
           },
           releaseDate: '01/08/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -521,6 +539,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AC',
           probationPractitioner: {
             name: 'Test Com 3',
+            allocated: true,
           },
           releaseDate: '01/09/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -541,6 +560,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AF',
           probationPractitioner: {
             name: 'Test Com 6',
+            allocated: true,
           },
           releaseDate: '01/04/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -561,6 +581,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AH',
           probationPractitioner: {
             name: 'Test Com 8',
+            allocated: true,
           },
           releaseDate: '01/06/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -581,6 +602,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AD',
           probationPractitioner: {
             name: 'Test Com 4',
+            allocated: true,
           },
           releaseDate: '01/09/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -603,6 +625,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AE',
           probationPractitioner: {
             name: 'Test Com 5',
+            allocated: true,
           },
           releaseDate: '01/03/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -623,6 +646,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AG',
           probationPractitioner: {
             name: 'Test Com 7',
+            allocated: true,
           },
           releaseDate: '01/05/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -643,6 +667,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AI',
           probationPractitioner: {
             name: 'Test Com 9',
+            allocated: true,
           },
           releaseDate: '01/03/2025',
           releaseDateLabel: 'Confirmed release date',
@@ -685,6 +710,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AB',
           probationPractitioner: {
             name: 'Test Com 3',
+            allocated: true,
           },
           releaseDate: '01/06/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -704,6 +730,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AC',
           probationPractitioner: {
             name: 'Test Com 4',
+            allocated: true,
           },
           releaseDate: '01/05/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -724,6 +751,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AD',
           probationPractitioner: {
             name: 'Test Com 5',
+            allocated: true,
           },
           releaseDate: '01/05/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -743,6 +771,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AI',
           probationPractitioner: {
             name: 'Test Com 4',
+            allocated: true,
           },
           releaseDate: '01/07/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -794,6 +823,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AB',
           probationPractitioner: {
             name: 'Test Com 3',
+            allocated: true,
           },
           releaseDate: '01/06/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -814,6 +844,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AC',
           probationPractitioner: {
             name: 'Test Com 4',
+            allocated: true,
           },
           releaseDate: '01/05/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -835,6 +866,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AD',
           probationPractitioner: {
             name: 'Test Com 5',
+            allocated: true,
           },
           releaseDate: '01/05/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -855,6 +887,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AI',
           probationPractitioner: {
             name: 'Test Com 4',
+            allocated: true,
           },
           releaseDate: '01/07/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -891,6 +924,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AB',
           probationPractitioner: {
             name: 'Test Com 3',
+            allocated: true,
           },
           releaseDate: '01/06/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -943,6 +977,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AB',
           probationPractitioner: {
             name: 'Test Com 3',
+            allocated: true,
           },
           releaseDate: '01/06/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -980,6 +1015,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AC',
           probationPractitioner: {
             name: 'Test Com 4',
+            allocated: true,
           },
           releaseDate: '01/05/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -1032,6 +1068,7 @@ describe('Route Handlers - Search - Ca Search', () => {
           prisonerNumber: 'A1234AC',
           probationPractitioner: {
             name: 'Test Com 4',
+            allocated: true,
           },
           releaseDate: '01/05/2022',
           releaseDateLabel: 'Confirmed release date',
@@ -1193,6 +1230,7 @@ describe('Route Handlers - Search - Ca Search', () => {
       prisonerNumber: 'A1234AA',
       probationPractitioner: {
         name: 'Test Com 1',
+        allocated: true,
       },
       releaseDate: '01/07/2025',
       releaseDateLabel: 'Confirmed release date',

@@ -10,6 +10,7 @@ describe('Caseload Service', () => {
   const probationPractitioner = {
     name: 'Joe Bloggs',
     staffCode: 'X1234',
+    allocated: true,
   }
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const serviceUnderTest = new CaCaseloadService(licenceApiClient)
@@ -69,7 +70,7 @@ describe('Caseload Service', () => {
             nomisLegalStatus: 'SENTENCED',
             prisonCode: 'MDI',
             prisonerNumber: 'A1234AA',
-            probationPractitioner: { name: 'Probation User' },
+            probationPractitioner: { name: 'Probation User', allocated: true },
             releaseDate: '12/12/2024',
             isTimeServedCase: true,
             isTimeServedCaseByAllPrisonRule: true,

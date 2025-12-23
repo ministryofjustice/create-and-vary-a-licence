@@ -31,6 +31,7 @@ context('Approve a licence', () => {
         probationPractitioner: {
           staffCode: 'P9876',
           name: 'Alice Brown',
+          allocated: true,
         },
       },
     ],
@@ -264,7 +265,7 @@ context('Approve a licence', () => {
 
   it('should show correct probation practitioner on approval and recently approved case tab', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: { name: 'Joe Bloggs' } })
+    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: { name: 'Joe Bloggs', allocated: true } })
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()

@@ -21,6 +21,7 @@ const caseload: ApprovalCase[] = [
     releaseDate: '01/05/2022',
     probationPractitioner: {
       name: 'Com Four',
+      allocated: true,
     },
     submittedByFullName: 'John Smith',
     urgentApproval: false,
@@ -33,6 +34,7 @@ const caseload: ApprovalCase[] = [
     prisonerNumber: 'A1234AB',
     probationPractitioner: {
       name: 'Com Three',
+      allocated: true,
     },
     submittedByFullName: 'John Smith',
     releaseDate: '01/05/2022',
@@ -102,6 +104,7 @@ describe('Route Handlers - Approval - case list', () => {
               releaseDate: '01 May 2022',
               probationPractitioner: {
                 name: 'Com Four',
+                allocated: true,
               },
               submittedByFullName: 'John Smith',
               urgentApproval: false,
@@ -114,6 +117,7 @@ describe('Route Handlers - Approval - case list', () => {
               prisonerNumber: 'A1234AB',
               probationPractitioner: {
                 name: 'Com Three',
+                allocated: true,
               },
               submittedByFullName: 'John Smith',
               releaseDate: '01 May 2022',
@@ -150,6 +154,7 @@ describe('Route Handlers - Approval - case list', () => {
             releaseDate: null,
             probationPractitioner: {
               name: 'Com Four',
+              allocated: true,
             },
             submittedByFullName: 'John Smith',
             urgentApproval: false,
@@ -170,6 +175,7 @@ describe('Route Handlers - Approval - case list', () => {
               prisonerNumber: 'A1234AA',
               probationPractitioner: {
                 name: 'Com Four',
+                allocated: true,
               },
               releaseDate: 'not found',
               submittedByFullName: 'John Smith',
@@ -203,6 +209,7 @@ describe('Route Handlers - Approval - case list', () => {
               releaseDate: '01 May 2022',
               probationPractitioner: {
                 name: 'Com Four',
+                allocated: true,
               },
               submittedByFullName: 'John Smith',
               urgentApproval: false,
@@ -215,6 +222,7 @@ describe('Route Handlers - Approval - case list', () => {
               prisonerNumber: 'A1234AB',
               probationPractitioner: {
                 name: 'Com Three',
+                allocated: true,
               },
               submittedByFullName: 'John Smith',
               releaseDate: '01 May 2022',
@@ -258,6 +266,7 @@ describe('Route Handlers - Approval - case list', () => {
             releaseDate: null,
             probationPractitioner: {
               name: 'Com Four',
+              allocated: true,
             },
             submittedByFullName: 'John Smith',
             urgentApproval: false,
@@ -278,6 +287,7 @@ describe('Route Handlers - Approval - case list', () => {
               prisonerNumber: 'A1234AA',
               probationPractitioner: {
                 name: 'Com Four',
+                allocated: true,
               },
               releaseDate: 'not found',
               submittedByFullName: 'John Smith',

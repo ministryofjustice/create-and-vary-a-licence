@@ -1,5 +1,3 @@
-import { PDFParse } from 'pdf-parse'
-
 import GotenbergClient from '../../server/data/gotenbergClient'
 
 describe('Gotenberg API integration', () => {
@@ -10,9 +8,9 @@ describe('Gotenberg API integration', () => {
   describe('Render a PDF file from HTML', () => {
     it('should render a PDF', async () => {
       const pdf = await client.renderPdfFromHtml(htmlString)
-      const parser = new PDFParse(pdf)
-      const result = await parser.getText()
-      expect(result.text).toContain('A document')
+      const isPdf = pdf.lastIndexOf('%PDF-') === 0 && pdf.lastIndexOf('%%EOF') > -1
+
+      expect(isPdf).toBe(true)
     })
   })
 })

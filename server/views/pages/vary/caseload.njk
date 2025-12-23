@@ -30,7 +30,7 @@
         {% set releaseDate = offender.releaseDate %}
     {% endif %}
 
-    {% if offender.probationPractitioner.name %}
+    {% if offender.probationPractitioner.allocated %}
         {% set practitionerHtml = '<a class="govuk-link" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set practitionerHtml = 'Not allocated yet' %}

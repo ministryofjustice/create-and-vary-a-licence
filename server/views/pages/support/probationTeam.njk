@@ -22,7 +22,7 @@
 
 {% for offender in caseload %}
 
-    {% if offender.probationPractitioner %}
+    {% if offender.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link govuk-link--no-visited-state" href="/support/probation-practitioner/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set comDetailsHtml = 'Unallocated' %}

@@ -36,7 +36,7 @@
 {% set licences = [] %}
 
 {% for case in cases %}
-    {% if case.probationPractitioner %}
+    {% if case.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
     {% else %}
         {% if case.kind == "TIME_SERVED" %}
