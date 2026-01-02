@@ -29,7 +29,7 @@ import { LegalStatus, AppointmentTimeType, LicenceKind, CaViewCasesTab, LicenceS
 
 const production = process.env.NODE_ENV === 'production'
 
-export default function nunjucksSetup(app: express.Express, applicationInfo: ApplicationInfo): void {
+export default function nunjucksSetup(app: express.Express, applicationInfo: ApplicationInfo): Environment {
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
@@ -53,7 +53,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     })
   }
 
-  registerNunjucks(app)
+  return registerNunjucks(app)
 }
 
 export function registerNunjucks(app?: express.Express): Environment {

@@ -37,7 +37,9 @@ export default function createApp(services: Services, applicationInfo: Applicati
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
-  nunjucksSetup(app, applicationInfo)
+
+  const nunjucksEnvironment = nunjucksSetup(app, applicationInfo)
+
   phaseNameSetup(app, config.phaseName)
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.url)))
@@ -45,7 +47,7 @@ export default function createApp(services: Services, applicationInfo: Applicati
   app.use(authorisationMiddleware)
   app.use(setUpCsrf())
   app.get(/(.*)/, getFrontendComponents(services))
-  app.use(setupRoutes(services))
+  app.use(setupRoutes(services, nunjucksEnvironment))
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler())
 

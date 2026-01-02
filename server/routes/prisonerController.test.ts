@@ -6,12 +6,15 @@ import PrisonerService from '../services/prisonerService'
 
 import { appWithAllRoutes, user } from './__testutils/appSetup'
 
+jest.mock('../services/prisonerService')
+
 const image = {}
 
 let app: Express
-const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
+let prisonerService: jest.Mocked<PrisonerService>
 
 beforeEach(() => {
+  prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   app = appWithAllRoutes({ services: { prisonerService } })
 })
 
@@ -21,10 +24,7 @@ afterEach(() => {
 
 describe('GET /prisoners/prisonNumber/image', () => {
   it('should call getImage method correctly', () => {
-    prisonerService.getPrisonerImage = jest
-      .fn()
-      .mockImplementation()
-      .mockResolvedValue(image as Readable)
+    prisonerService.getPrisonerImage.mockResolvedValue(image as Readable)
     return request(app)
       .get('/prisoner/A12345/image')
       .expect('Content-Type', 'image/jpeg')
@@ -34,7 +34,7 @@ describe('GET /prisoners/prisonNumber/image', () => {
   })
 
   it('should return placeholder image if error retrieving photo from api', () => {
-    prisonerService.getPrisonerImage = jest.fn().mockImplementation().mockRejectedValue(new Error())
+    prisonerService.getPrisonerImage.mockRejectedValue(new Error())
     return request(app)
       .get('/prisoner/X54321/image')
       .expect('Content-Type', 'image/png')
