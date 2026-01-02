@@ -60,8 +60,8 @@ export default function Index(services: Services): Router {
   router.use(hardStopInitialAppointmentRoutes(services))
   router.use(timeServedInitialAppointmentRoutes(services))
   router.use(pathfinderRoutes(services))
-  router.use(dprRoutes(services))
   router.use(createTimeServedLicenceRoutes(services))
+  router.use(dprRoutes(services))
 
   router.get('/prisoner/:nomsId/image', prisonerController.getImage())
 

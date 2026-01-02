@@ -1,3 +1,5 @@
+import { createDprServices } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/utils/CreateDprServices'
+
 import UserService from './userService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
@@ -28,7 +30,22 @@ const {
   licenceApiClient,
   prisonRegisterApiClient,
   feComponentsClient,
+
+  // dpr components
+  reportingClient,
+  dashboardClient,
+  reportDataStore,
+  productCollectionClient,
+  missingReportClient,
 } = dataAccess()
+
+const dprServices = createDprServices({
+  reportingClient,
+  dashboardClient,
+  reportDataStore,
+  productCollectionClient,
+  missingReportClient,
+})
 
 const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
@@ -73,6 +90,7 @@ export const services = {
   dprService,
   addressService,
   timeServedService,
+  ...dprServices,
 }
 
 export type Services = typeof services

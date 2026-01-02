@@ -1,3 +1,4 @@
+import { initDprReportingClients } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/data/dprReportingClient'
 import ManageUsersApiClient from './manageUsersApiClient'
 import { createRedisClient } from './redisClient'
 
@@ -9,11 +10,15 @@ import LicenceApiClient from './licenceApiClient'
 import PrisonRegisterApiClient from './prisonRegisterApiClient'
 import { getSystemToken } from './systemToken'
 import FeComponentsClient from './feComponentsClient'
+import config from '../config'
 
 type RestClientBuilder<T> = (token: string) => T
 
 export const dataAccess = () => {
   const redisClient = createRedisClient()
+
+  const { reportingClient, dashboardClient, reportDataStore, productCollectionClient, missingReportClient } =
+    initDprReportingClients(config.apis.licenceApi, createRedisClient())
 
   const tokenStore = new RedisTokenStore(getSystemToken, redisClient)
   const manageUsersApiClient = new ManageUsersApiClient(tokenStore)
@@ -33,6 +38,13 @@ export const dataAccess = () => {
     licenceApiClient,
     prisonRegisterApiClient,
     feComponentsClient,
+
+    // dpr components
+    reportingClient,
+    dashboardClient,
+    reportDataStore,
+    productCollectionClient,
+    missingReportClient,
   }
 }
 export type DataAccess = ReturnType<typeof dataAccess>
