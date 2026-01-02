@@ -790,8 +790,6 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           licenceId: 1,
-          licenceType: 'AP',
-          licenceStatus: 'IN_PROGRESS',
         },
       },
     })
