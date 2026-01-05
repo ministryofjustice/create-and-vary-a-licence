@@ -6,9 +6,6 @@ export type DomainEventMessage = {
     prisonId: string
   }
 }
-export type ProbationEventMessage = {
-  crn: string
-}
 
 export type PrisonEventMessage = {
   addressEndDate?: string

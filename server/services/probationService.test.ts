@@ -41,11 +41,6 @@ describe('Probation Service', () => {
     expect(deliusClient.getResponsibleCommunityManager).toHaveBeenCalledWith('X1234')
   })
 
-  it('should assign a Delius role', async () => {
-    await probationService.assignDeliusRole('X1234')
-    expect(deliusClient.assignDeliusRole).toHaveBeenCalledWith('X1234')
-  })
-
   it('should get PDU heads', async () => {
     await probationService.getPduHeads('X1234')
     expect(deliusClient.getPduHeads).toHaveBeenCalledWith('X1234')

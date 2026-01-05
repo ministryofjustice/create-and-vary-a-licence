@@ -47,7 +47,6 @@ import type {
   UpdateElectronicMonitoringProgrammeRequest,
   UpdateOffenderDetailsRequest,
   UpdatePrisonInformationRequest,
-  UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
   UpdateStandardConditionDataRequest,
@@ -356,14 +355,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username },
     )) as Promise<Buffer>
-  }
-
-  async updateResponsibleCom(crn: string, updateResponsibleComRequest: UpdateComRequest): Promise<void> {
-    await this.put({ path: `/offender/crn/${crn}/responsible-com`, data: updateResponsibleComRequest })
-  }
-
-  async updateProbationTeam(crn: string, updateProbationTeamRequest: UpdateProbationTeamRequest): Promise<void> {
-    await this.put({ path: `/offender/crn/${crn}/probation-team`, data: updateProbationTeamRequest })
   }
 
   async updateComDetails(updateComRequest: UpdateComRequest): Promise<void> {

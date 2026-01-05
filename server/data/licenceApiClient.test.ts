@@ -27,7 +27,6 @@ import {
   UpdateElectronicMonitoringProgrammeRequest,
   UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
-  UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
@@ -293,50 +292,6 @@ describe('Licence API client tests', () => {
         { username: 'joebloggs' },
       )
       expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
-    })
-  })
-
-  it('should update responsible COM for an offender', async () => {
-    await licenceApiClient.updateResponsibleCom('X1234', {
-      staffIdentifier: 2000,
-      staffUsername: 'joebloggs',
-      staffEmail: 'joebloggs@probation.gov.uk',
-    } as UpdateComRequest)
-
-    expect(put).toHaveBeenCalledWith({
-      path: '/offender/crn/X1234/responsible-com',
-      data: {
-        staffIdentifier: 2000,
-        staffUsername: 'joebloggs',
-        staffEmail: 'joebloggs@probation.gov.uk',
-      },
-    })
-  })
-
-  it('should update probation team for an offender', async () => {
-    await licenceApiClient.updateProbationTeam('X1234', {
-      probationAreaCode: 'N02',
-      probationAreaDescription: 'N02 Region',
-      probationPduCode: 'PDU2',
-      probationPduDescription: 'PDU2 Description',
-      probationLauCode: 'LAU2',
-      probationLauDescription: 'LAU2 Description',
-      probationTeamCode: 'Team2',
-      probationTeamDescription: 'Team2 Description',
-    } as UpdateProbationTeamRequest)
-
-    expect(put).toHaveBeenCalledWith({
-      path: '/offender/crn/X1234/probation-team',
-      data: {
-        probationAreaCode: 'N02',
-        probationAreaDescription: 'N02 Region',
-        probationPduCode: 'PDU2',
-        probationPduDescription: 'PDU2 Description',
-        probationLauCode: 'LAU2',
-        probationLauDescription: 'LAU2 Description',
-        probationTeamCode: 'Team2',
-        probationTeamDescription: 'Team2 Description',
-      },
     })
   })
 

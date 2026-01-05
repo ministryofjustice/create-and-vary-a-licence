@@ -333,19 +333,6 @@ export default {
     })
   },
 
-  stubUpdateResponsibleCom: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'PUT',
-        urlPattern: `/licences-api/offender/crn/.*/responsible-com`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      },
-    })
-  },
-
   stubGetLicence: (options: {
     licenceKind?: LicenceKind
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'

@@ -50,7 +50,6 @@ export default defineConfig({
           ]),
         stubFeComponentsFail: feComponent.stubFeComponentsFail,
         stubFeComponentsPing: feComponent.stubFeComponentsPing,
-        stubUpdateResponsibleCom: licence.stubUpdateResponsibleCom,
         stubUpdatePrisonUserDetails: licence.stubUpdatePrisonUserDetails,
         stubGetLicence: licence.stubGetLicence,
         stubGetHdcLicence: licence.stubGetHdcLicence,

@@ -33,7 +33,6 @@ import type {
   UpdateElectronicMonitoringProgrammeRequest,
   UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
-  UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
   UpdateStandardConditionDataRequest,
@@ -271,14 +270,6 @@ export default class LicenceService {
 
   async getComReviewCount(user: User): Promise<ComReviewCount> {
     return this.licenceApiClient.getComReviewCount(user)
-  }
-
-  async updateResponsibleCom(crn: string, newCom: UpdateComRequest): Promise<void> {
-    return this.licenceApiClient.updateResponsibleCom(crn, newCom)
-  }
-
-  async updateProbationTeam(crn: string, newProbationTeam: UpdateProbationTeamRequest): Promise<void> {
-    return this.licenceApiClient.updateProbationTeam(crn, newProbationTeam)
   }
 
   async updateComDetails(comDetails: UpdateComRequest): Promise<void> {
