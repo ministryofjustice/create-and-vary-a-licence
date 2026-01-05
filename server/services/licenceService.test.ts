@@ -20,11 +20,9 @@ import {
   LicenceSummary,
   PrisonerWithCvlFields,
   StandardCondition,
-  UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
   UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
-  UpdateProbationTeamRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
@@ -428,24 +426,6 @@ describe('Licence Service', () => {
     expect(result).toEqual({ licenceId: 2 })
   })
 
-  it('should update COM responsible for an offender', async () => {
-    await licenceService.updateResponsibleCom('X1234', {
-      staffIdentifier: 2000,
-      staffUsername: 'joebloggs',
-      staffEmail: 'joebloggs@probation.gov.uk',
-      firstName: 'Joseph',
-      lastName: 'Bloggs',
-    } as UpdateComRequest)
-
-    expect(licenceApiClient.updateResponsibleCom).toHaveBeenCalledWith('X1234', {
-      staffIdentifier: 2000,
-      staffUsername: 'joebloggs',
-      staffEmail: 'joebloggs@probation.gov.uk',
-      firstName: 'Joseph',
-      lastName: 'Bloggs',
-    })
-  })
-
   it('should update prison user responsible for an offender', async () => {
     await licenceService.updatePrisonUserDetails({
       staffUsername: 'joebloggs',
@@ -459,30 +439,6 @@ describe('Licence Service', () => {
       staffEmail: 'joebloggs@probation.gov.uk',
       firstName: 'Joseph',
       lastName: 'Bloggs',
-    })
-  })
-
-  it('should update the probation team for an offender', async () => {
-    await licenceService.updateProbationTeam('X1234', {
-      probationAreaCode: 'N02',
-      probationAreaDescription: 'N02 Region',
-      probationPduCode: 'PDU2',
-      probationPduDescription: 'PDU2 Description',
-      probationLauCode: 'LAU2',
-      probationLauDescription: 'LAU2 Description',
-      probationTeamCode: 'Team2',
-      probationTeamDescription: 'Team2 Description',
-    } as UpdateProbationTeamRequest)
-
-    expect(licenceApiClient.updateProbationTeam).toHaveBeenCalledWith('X1234', {
-      probationAreaCode: 'N02',
-      probationAreaDescription: 'N02 Region',
-      probationPduCode: 'PDU2',
-      probationPduDescription: 'PDU2 Description',
-      probationLauCode: 'LAU2',
-      probationLauDescription: 'LAU2 Description',
-      probationTeamCode: 'Team2',
-      probationTeamDescription: 'Team2 Description',
     })
   })
 

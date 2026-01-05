@@ -13,10 +13,6 @@ export default class ProbationService {
     return this.deliusClient.getStaffDetailByStaffCode(staffCode)
   }
 
-  async assignDeliusRole(deliusUsername: string): Promise<void> {
-    return this.deliusClient.assignDeliusRole(deliusUsername)
-  }
-
   async getPduHeads(pduCode: string): Promise<DeliusPDUHead[]> {
     return this.deliusClient.getPduHeads(pduCode)
   }
