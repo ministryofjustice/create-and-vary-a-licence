@@ -69,10 +69,8 @@
       var totalItems = 0
 
       if (contextInstance && typeof contextInstance.getItems === 'function') {
-        // If called from a handler, we can use the instance that changed
         totalItems = contextInstance.getItems().length
       } else if (instances.length) {
-        // Otherwise, sum across all instances
         instances.forEach(function (inst) {
           if (typeof inst.getItems === 'function') {
             totalItems += inst.getItems().length
