@@ -1,5 +1,5 @@
 window.onload = () => {
-  ( () => {
+  (() => {
     const init = () => {
       const AddAnotherProto = MOJFrontend && MOJFrontend.AddAnother && MOJFrontend.AddAnother.prototype
 
@@ -25,7 +25,7 @@ window.onload = () => {
         items[items.length - 1].classList.remove('newest-fieldset')
       }
 
-      AddAnotherProto.createRemoveButton = (item) => {
+      AddAnotherProto.createRemoveButton = function (item) {
         const btn = document.createElement('button')
         btn.type = 'button'
         btn.className = 'govuk-button govuk-button--warning moj-add-another__remove-button'
@@ -33,13 +33,13 @@ window.onload = () => {
         item.appendChild(btn)
       }
 
-      AddAnotherProto.onAddButtonClick = (e) => {
+      AddAnotherProto.onAddButtonClick = function (e) {
         oldButtonClick.call(this, e)
         addBackgroundToNewFieldset()
         changeDeleteButtonTextContent(this)
       }
 
-      AddAnotherProto.onRemoveButtonClick = (e) => {
+      AddAnotherProto.onRemoveButtonClick = function (e) {
         oldRemoveClick.call(this, e)
         removeBackgroundFromFieldset()
         changeDeleteButtonTextContent(this)
@@ -47,7 +47,7 @@ window.onload = () => {
 
       const roots = document.querySelectorAll('[data-module="moj-condition-add-another"]')
 
-      roots.forEach( el => {
+      roots.forEach(el => {
         if (el && el.nodeType === 1) {
           new MOJFrontend.AddAnother(el)
         }
