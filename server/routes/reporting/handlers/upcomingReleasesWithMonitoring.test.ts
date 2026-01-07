@@ -39,7 +39,7 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       crn: 'CRN123',
       prisonNumber: 'A1234BC',
       status: 'SUBMITTED',
-      licenceStartDate: '2024-01-01',
+      licenceStartDate: '01/01/2024',
     }
 
     expect(res.render).toHaveBeenCalledWith('pages/reports/upcomingReleasesWithMonitoring', {
@@ -66,7 +66,7 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
 
     const headerLine = ['Prison Number', 'CRN', 'Licence Status', 'Licence Start Date'].join(',')
 
-    const expectedRow = ['A1234BC', 'CRN123', 'SUBMITTED', '2024-01-01'].join(',')
+    const expectedRow = ['A1234BC', 'CRN123', 'SUBMITTED', '01/01/2024'].join(',')
 
     const sentBody = (res.send as jest.Mock).mock.calls[0][0]
     expect(sentBody).toBe(`${headerLine}\n${expectedRow}`)
