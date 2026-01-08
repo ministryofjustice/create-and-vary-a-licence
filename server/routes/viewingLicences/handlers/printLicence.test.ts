@@ -196,7 +196,7 @@ describe('Route - print a licence', () => {
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
       expect(footerHtml).toMatch(/Version No:.+1.4/)
-      expect(footerHtml).toMatch(/CRO.* CRO/)
+      expect(footerHtml).toMatch(/CRO.*CRO/)
     })
 
     it('should print N/A for a null CRO on the PDF view of an AP licence', async () => {
