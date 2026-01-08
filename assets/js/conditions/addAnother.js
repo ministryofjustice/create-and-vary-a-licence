@@ -1,8 +1,7 @@
 window.onload = () => {
   (() => {
     const init = () => {
-      const AddAnotherProto = MOJFrontend && MOJFrontend.AddAnother && MOJFrontend.AddAnother.prototype
-
+      const AddAnotherProto = MOJFrontend.AddAnother.prototype
       const oldButtonClick = AddAnotherProto.onAddButtonClick
       const oldRemoveClick = AddAnotherProto.onRemoveButtonClick
 
