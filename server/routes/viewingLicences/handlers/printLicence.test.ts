@@ -196,6 +196,46 @@ describe('Route - print a licence', () => {
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
       expect(footerHtml).toMatch(/Version No:.+1.4/)
+      expect(footerHtml).toMatch(/CRO.*CRO/)
+    })
+
+    it('should print N/A for a null CRO on the PDF view of an AP licence', async () => {
+      res.locals.licence.typeCode = 'AP'
+      res.locals.licence.cro = null
+
+      const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+      const { monitoringSupplierTelephone } = config
+
+      const filename = `${res.locals.licence.nomsId}.pdf`
+      const footerHtml = handler.getPdfFooter(res.locals.licence)
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
+      prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
+
+      await handler.renderPdf(req, res)
+
+      expect(res.renderPDF).toHaveBeenCalledWith(
+        'pages/licence/AP',
+        {
+          licencesUrl,
+          imageData: '-- base64 image data --',
+          qrCode: null,
+          htmlPrint: false,
+          watermark,
+          singleItemConditions: [],
+          multipleItemConditions: [],
+          exclusionZoneMapData: [],
+          hdcLicenceData: null,
+          prisonTelephone: '0114 2345232334',
+          monitoringSupplierTelephone,
+        },
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
+      )
+
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
+      expect(footerHtml).toMatch(/Version No:.+1.4/)
+      expect(footerHtml).toMatch(/CRO.*N\/A/)
     })
 
     it('should strip the minor version number off a varied licence', async () => {
