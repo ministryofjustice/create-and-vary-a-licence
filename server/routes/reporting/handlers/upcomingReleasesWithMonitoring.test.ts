@@ -15,7 +15,7 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       crn: 'CRN123',
       prisonNumber: 'A1234BC',
       status: 'SUBMITTED',
-      licenceStartDate: '2024-01-01',
+      licenceStartDate: '01/01/2024',
     },
   ]
 
