@@ -1,44 +1,67 @@
-window.onload = function () {
-  const oldButtonClick = MOJFrontend.AddAnother.prototype.onAddButtonClick
-  const oldRemoveClick = MOJFrontend.AddAnother.prototype.onRemoveButtonClick
+window.onload = () => {
+  (() => {
+    const init = () => {
+      const AddAnotherProto = MOJFrontend.AddAnother.prototype
+      const oldButtonClick = AddAnotherProto.onAddButtonClick
+      const oldRemoveClick = AddAnotherProto.onRemoveButtonClick
 
-  MOJFrontend.AddAnother.prototype.createRemoveButton = function (item) {
-    item.append(
-      '<button type="button" class="govuk-button govuk-button--warning moj-add-another__remove-button">Remove</button>',
-    )
-  }
+      const addBackgroundToNewFieldset = () => {
+        const items = document.getElementsByClassName('govuk-fieldset moj-add-another__item')
+        if (!items || items.length === 0) return
 
-  MOJFrontend.AddAnother.prototype.onAddButtonClick = function (e) {
-    oldButtonClick.call(this, e)
-    addBackgroundToNewFieldset()
-    changeDeleteButtonTextContent()
-  }
+        if (items.length >= 2) {
+          items[items.length - 2].classList.remove('newest-fieldset')
+        }
 
-  MOJFrontend.AddAnother.prototype.onRemoveButtonClick = function (e) {
-    oldRemoveClick.call(this, e)
-    removeBackgroundFromFieldset()
-    changeDeleteButtonTextContent()
-  }
+        if (items.length > 1) {
+          items[items.length - 1].classList.add('newest-fieldset')
+        }
+      }
 
-  const addBackgroundToNewFieldset = () => {
-    const $addAnotherFieldsets = document.getElementsByClassName('govuk-fieldset moj-add-another__item')
-    $addAnotherFieldsets[$addAnotherFieldsets.length - 2].classList.remove('newest-fieldset')
-    $addAnotherFieldsets[$addAnotherFieldsets.length - 1].classList.add('newest-fieldset')
-  }
+      const removeBackgroundFromFieldset = () => {
+        const items = document.getElementsByClassName('govuk-fieldset moj-add-another__item')
+        if (!items || items.length === 0) return
+        items[items.length - 1].classList.remove('newest-fieldset')
+      }
 
-  const removeBackgroundFromFieldset = () => {
-    const $addAnotherFieldsets = document.getElementsByClassName('govuk-fieldset moj-add-another__item')
-    $addAnotherFieldsets[$addAnotherFieldsets.length - 1].classList.remove('newest-fieldset')
-  }
+      AddAnotherProto.createRemoveButton = function (item) {
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.className = 'govuk-button govuk-button--warning moj-add-another__remove-button'
+        btn.textContent = 'Remove'
+        item.appendChild(btn)
+      }
 
-  const $addAnothers = document.querySelectorAll('[data-module="moj-condition-add-another"]')
-  const addAnother = new MOJFrontend.AddAnother($addAnothers)
+      AddAnotherProto.onAddButtonClick = function (e) {
+        oldButtonClick.call(this, e)
+        addBackgroundToNewFieldset()
+        changeDeleteButtonTextContent(this)
+      }
 
-  const changeDeleteButtonTextContent = () => {
-    const buttons = document.getElementsByClassName('delete-condition-button-pluralisable')
-    if (buttons.length) {
-      const button = buttons[0]
-      button.textContent = addAnother.getItems().length > 1 ? 'Delete these conditions' : 'Delete this condition'
+      AddAnotherProto.onRemoveButtonClick = function (e) {
+        oldRemoveClick.call(this, e)
+        removeBackgroundFromFieldset()
+        changeDeleteButtonTextContent(this)
+      }
+
+      const roots = document.querySelectorAll('[data-module="moj-condition-add-another"]')
+
+      roots.forEach(el => {
+        if (el && el.nodeType === 1) {
+          new MOJFrontend.AddAnother(el)
+        }
+      })
+
+      const changeDeleteButtonTextContent = (contextInstance) => {
+        const buttons = document.getElementsByClassName('delete-condition-button-pluralisable')
+        if (!buttons || buttons.length === 0) return
+
+        const totalItems = contextInstance?.getItems().length
+        const btn = buttons[0]
+        btn.textContent = totalItems > 1 ? 'Delete these conditions' : 'Delete this condition'
+      }
     }
-  }
+
+    init()
+  })()
 }
