@@ -5,6 +5,7 @@ import statusConfig from '../../licences/licenceStatus'
 interface ProbationPractitioner {
   name: string
   staffCode: string
+  allocated: boolean
 }
 
 describe('viewCases template', () => {
