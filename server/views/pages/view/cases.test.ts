@@ -21,6 +21,11 @@ describe('View and print a licence - case list', () => {
           releaseDate: '03/08/2022',
           releaseDateLabel: 'Confirmed release date',
           tabType: 'releasesInNextTwoWorkingDays',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
         },
         {
           name: 'John Smith',
@@ -30,6 +35,7 @@ describe('View and print a licence - case list', () => {
           tabType: 'releasesInNextTwoWorkingDays',
           probationPractitioner: {
             name: 'Probation Practitioner2',
+            staffCode: 'PP2',
             allocated: true,
           },
         },
@@ -40,6 +46,11 @@ describe('View and print a licence - case list', () => {
           releaseDateLabel: 'Confirmed release date',
           tabType: 'releasesInNextTwoWorkingDays',
           kind: LicenceKind.TIME_SERVED,
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
         },
       ],
       showAttentionNeededTab: false,
@@ -54,7 +65,7 @@ describe('View and print a licence - case list', () => {
     expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('Confirmed release date: 3 Aug 2022')
-    expect($('#com-1').text()).toBe('Unallocated')
+    expect($('#com-1').text()).toBe('Not allocated')
 
     expect($('#name-2 > div > span').text()).toBe('John Smith')
     expect($('#nomis-id-2').text()).toBe('A1234AB')
@@ -64,7 +75,7 @@ describe('View and print a licence - case list', () => {
     expect($('#name-3 > div > span').text()).toBe('Test Smith')
     expect($('#nomis-id-3').text()).toBe('A1234AN')
     expect($('#release-date-3').text()).toBe('Confirmed release date: 1 Sep 2022Time-served release')
-    expect($('#com-3').text()).toBe('Not allocated yet')
+    expect($('#com-3').text()).toBe('Not allocated')
   })
 
   it('should display a probation view table containing licences to print', () => {
@@ -79,6 +90,11 @@ describe('View and print a licence - case list', () => {
           releaseDate: '03/08/2022',
           releaseDateLabel: 'Confirmed release date',
           tabType: '',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
         },
         {
           name: 'John Smith',
@@ -88,6 +104,7 @@ describe('View and print a licence - case list', () => {
           tabType: '',
           probationPractitioner: {
             name: 'Probation Practitioner2',
+            staffCode: 'PP2',
             allocated: true,
           },
         },
@@ -98,6 +115,11 @@ describe('View and print a licence - case list', () => {
           releaseDateLabel: 'CRD',
           tabType: 'releasesInNextTwoWorkingDays',
           kind: LicenceKind.TIME_SERVED,
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
         },
       ],
       showAttentionNeededTab: false,
@@ -112,7 +134,7 @@ describe('View and print a licence - case list', () => {
     expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('3 Aug 2022')
-    expect($('#com-1').text()).toBe('Unallocated')
+    expect($('#com-1').text()).toBe('Not allocated')
 
     expect($('#name-2 > div > span').text()).toBe('John Smith')
     expect($('#nomis-id-2').text()).toBe('A1234AB')
@@ -122,7 +144,7 @@ describe('View and print a licence - case list', () => {
     expect($('#name-3 > div > span').text()).toBe('Test Smith')
     expect($('#nomis-id-3').text()).toBe('A1234AN')
     expect($('#release-date-3').text()).toBe('1 Sep 2022')
-    expect($('#com-3').text()).toBe('Not allocated yet')
+    expect($('#com-3').text()).toBe('Not allocated')
   })
 
   it('should load people in prison tab with three sub tabs', () => {
@@ -292,7 +314,7 @@ describe('View and print a licence - case list', () => {
     expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
   })
 
-  it('should highlight a Time Served licence with a Time Served release warning label and Not allocated yet com in prison view', () => {
+  it('should highlight a Time Served licence with a Time Served release warning label and Not allocated com in prison view', () => {
     const search = ''
     const prisonsToDisplay = ''
     const probationView = false
@@ -306,6 +328,11 @@ describe('View and print a licence - case list', () => {
           tabType: 'releasesInNextTwoWorkingDays',
           kind: LicenceKind.TIME_SERVED,
           hardStopKind: LicenceKind.TIME_SERVED,
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
         },
       ],
       showAttentionNeededTab: false,
@@ -319,7 +346,7 @@ describe('View and print a licence - case list', () => {
     expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('CRD: 3 Aug 2022Time-served release')
-    expect($('#com-1').text()).toBe('Not allocated yet')
+    expect($('#com-1').text()).toBe('Not allocated')
   })
 
   it('should alert that a user has selected to create a time served licence in NOMIS', () => {

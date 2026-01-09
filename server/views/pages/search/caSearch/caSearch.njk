@@ -173,13 +173,9 @@
 
 {% for offender in inPrisonResults %}
     {% if offender.probationPractitioner.allocated %}
-        {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
+        {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% if offender.kind == "TIME_SERVED" %}
-            {% set comDetailsHtml = 'Not allocated yet' %}
-        {% else %}
-            {% set comDetailsHtml = 'Unallocated' %}
-        {% endif %}
+        {% set comDetailsHtml = '<span class="search-highlight">' + offender.probationPractitioner.name + '</span>' %}
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
@@ -256,13 +252,9 @@
 
 {% for offender in onProbationResults %}
     {% if offender.probationPractitioner.allocated %}
-        {% set comDetailsHtml = '<a class="govuk-link search-highlight" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}        
+        {% set comDetailsHtml = '<a class="govuk-link search-highlight" href="/licence/view/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% if offender.kind == "TIME_SERVED" %}
-            {% set comDetailsHtml = 'Not allocated yet' %}
-        {% else %}
-            {% set comDetailsHtml = 'Unallocated' %}
-        {% endif %}
+        {% set comDetailsHtml = '<span class="search-highlight">' + offender.probationPractitioner.name + '</span>' %}
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
@@ -378,7 +370,7 @@
             <p  data-qa="change-caseload">
                 Showing:
                 <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
-                    {{prisonsToDisplay | extractAttr('description') | join(', ')}} 
+                    {{prisonsToDisplay | extractAttr('description') | join(', ')}}
                 </span>
                 <a class="govuk-link govuk-!-margin-left-3" href="{{ changeLocationHref }}" data-qa="change-location-link">
                     Licences for other establishments
@@ -413,7 +405,7 @@
                     html: attentionNeeded
                 }
             }
-            ), caSearchTabs) 
+            ), caSearchTabs)
         %}
     {% endif %}
 

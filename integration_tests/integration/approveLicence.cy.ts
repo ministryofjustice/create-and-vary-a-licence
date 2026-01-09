@@ -279,19 +279,24 @@ context('Approve a licence', () => {
   })
 
   it('should show Not allocated when probation practitioner not found on approval and recently approved case tabs', () => {
+    const unallocatedProbationPractitioner = {
+      staffCode: null,
+      name: 'Not allocated',
+      allocated: false,
+    }
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-    cy.task('stubGetApprovalCaseload', { probationPractitioner: null })
-    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: null })
+    cy.task('stubGetApprovalCaseload', { probationPractitioner: unallocatedProbationPractitioner })
+    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: unallocatedProbationPractitioner })
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
 
     // Verify unallocated on approval cases page
-    approvalCasesPage.hasProbationPractitioner(1, 'Unallocated')
+    approvalCasesPage.hasProbationPractitioner(1, 'Not allocated')
 
     // Verify unallocated on recently approved cases page
     approvalCasesPage.clickRecentlyApprovedLink()
-    approvalCasesPage.hasProbationPractitioner(1, 'Unallocated')
+    approvalCasesPage.hasProbationPractitioner(1, 'Not allocated')
     approvalCasesPage.signOut().click()
   })
 })

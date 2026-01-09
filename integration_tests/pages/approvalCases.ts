@@ -65,7 +65,7 @@ export default class ApprovalCasesPage extends Page {
   }
 
   hasNotAllocatedYetTextForProbationPractitioner(index: number) {
-    return this.hasProbationPractitioner(index, 'Not allocated yet')
+    return this.hasProbationPractitioner(index, 'Not allocated')
   }
 
   hasProbationPractitioner(index: number, name: string) {

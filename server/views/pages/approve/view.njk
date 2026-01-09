@@ -73,7 +73,7 @@
                                 text: "HDC curfew details"
                             },
                             content: {
-                                    html: hdcCurfewTimes(hdcLicenceData)       
+                                    html: hdcCurfewTimes(hdcLicenceData)
                             },
                             expanded: true
                         }
@@ -88,7 +88,7 @@
                                 text: "Licence conditions"
                             },
                             content: {
-                                    html: approverImmediateReleaseConditions(licence)       
+                                    html: approverImmediateReleaseConditions(licence)
                             },
                             expanded: true
                         }
@@ -101,10 +101,10 @@
                                         text: "Additional licence conditions (" +  additionalConditions.length + ")"
                                     },
                                     content: {
-                                            html:  
-                                                    additionalLicenceConditions(licence, additionalConditions, null, [], null, true) 
+                                            html:
+                                                    additionalLicenceConditions(licence, additionalConditions, null, [], null, true)
                                                     if additionalConditions.length else
-                                                    "<p>No additional licence conditions added</p>"       
+                                                    "<p>No additional licence conditions added</p>"
                                     },
                                     expanded: true
                                 }, {
@@ -161,7 +161,7 @@
                 {% if staffDetails %}
                     {{ ProbationPractitionerDetails(staffDetails) }}
                 {% else %}
-                    <p>Not allocated yet</p>
+                    <p>Not allocated</p>
                 {% endif %}
             {% endset %}
             {{ govukAccordion({
@@ -191,7 +191,7 @@
             <h2 class="govuk-heading-l govuk-!-padding-top-8">Approve this licence</h2>
             {% if  licence.kind == 'HARD_STOP' or licence.kind == 'TIME_SERVED' %}
                 <p data-qa="prison-created-contact-message">Contact {{ licence.submittedByFullName }} if you need more information about something.<br>They will only be able to change the initial appointment.</p>
-            {% else %}    
+            {% else %}
                 <p>Contact the probation practitioner if you need to make changes to the licence before approving.</p>
             {% endif %}
         </div>
@@ -209,7 +209,7 @@
                     attributes: { 'data-qa': 'approve-licence' }
                 }) }}
 
-                
+
                 {{ govukButton({
                     text: "Return to case list",
                     classes: "govuk-button--secondary",

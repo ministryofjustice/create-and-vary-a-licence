@@ -1,11 +1,7 @@
-{% macro getProbationPractitionerLink(allocated, name, licenceId, isTimeServed=false) %}
+{% macro getProbationPractitionerLink(allocated, name, licenceId) %}
     {% if allocated %}
-        <a href="/licence/approve/id/{{ licenceId }}/probation-practitioner" class="govuk-link">
-            {{ name }}
-        </a>
-    {% elseif isTimeServed %}
-        Not allocated yet
+        <a href="/licence/approve/id/{{ licenceId }}/probation-practitioner" class="govuk-link">{{ name }}</a>
     {% else %}
-        Unallocated
+        {{ name }}
     {% endif %}
 {% endmacro %}

@@ -6,10 +6,9 @@ describe('View Partials - Probation Practitioner Link', () => {
     const allocated = true
     const name = 'Joe Bloggs'
     const licenceId = 123
-    const isTimeServed = false
 
     // When
-    const $ = renderLink({ allocated, name, licenceId, isTimeServed })
+    const $ = renderLink({ allocated, name, licenceId })
 
     // Then
     const link = $('a.govuk-link')
@@ -17,32 +16,17 @@ describe('View Partials - Probation Practitioner Link', () => {
     expect(link.attr('href')).toBe('/licence/approve/id/123/probation-practitioner')
   })
 
-  it('renders "Not allocated yet" when no name and isTimeServed=true', () => {
+  it('renders "Not allocated" when allocated=false', () => {
     // Given
     const allocated = false
-    const name: string = null
+    const name = 'Not allocated'
     const licenceId = 999
-    const isTimeServed = true
 
     // When
-    const $ = renderLink({ allocated, name, licenceId, isTimeServed })
+    const $ = renderLink({ allocated, name, licenceId })
 
     // Then
-    expect($.text().trim()).toBe('Not allocated yet')
-  })
-
-  it('renders "Not allocated" when no name and isTimeServed=false', () => {
-    // Given
-    const allocated = false
-    const name: string = null
-    const licenceId = 999
-    const isTimeServed = false
-
-    // When
-    const $ = renderLink({ allocated, name, licenceId, isTimeServed })
-
-    // Then
-    expect($.text().trim()).toBe('Unallocated')
+    expect($.text().trim()).toBe('Not allocated')
   })
 
   it('escapes names correctly', () => {
@@ -52,7 +36,7 @@ describe('View Partials - Probation Practitioner Link', () => {
     const licenceId = 321
 
     // When
-    const $ = renderLink({ allocated, name, licenceId, isTimeServed: false })
+    const $ = renderLink({ allocated, name, licenceId })
 
     // Then
     const link = $('a.govuk-link')
@@ -61,6 +45,6 @@ describe('View Partials - Probation Practitioner Link', () => {
 
   const renderLink = templateRenderer(
     `{% from "partials/getProbationPractitionerLink.njk" import getProbationPractitionerLink %}
-     {{ getProbationPractitionerLink(allocated, name, licenceId, isTimeServed) }}`,
+     {{ getProbationPractitionerLink(allocated, name, licenceId) }}`,
   )
 })

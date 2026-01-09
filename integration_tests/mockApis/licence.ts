@@ -2071,7 +2071,11 @@ export default {
             name: 'Another Person',
             prisonerNumber: 'AB1234E',
             probationPractitioner: options.isUnallocatedCom
-              ? null
+              ? {
+                  name: 'Not allocated',
+                  staffCode: null,
+                  allocated: false,
+                }
               : {
                   name: 'John Smith',
                   staffCode: 'X1234',
@@ -2213,7 +2217,11 @@ export default {
             licenceStatus: options.licenceStatus,
             licenceType: 'PSS',
             probationPractitioner: options.isUnallocatedCom
-              ? null
+              ? {
+                  name: 'Not allocated',
+                  staffCode: null,
+                  allocated: false,
+                }
               : { staffCode: 'X12345', name: 'John Smith', allocated: true },
             hardStopDate: '03/01/2023',
             hardStopWarningDate: '01/01/2023',

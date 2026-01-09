@@ -22,7 +22,7 @@
   {%- if case.probationPractitioner.allocated -%}
     <a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary-approve/id/{{ case.licenceId }}/probation-practitioner">{{ case.probationPractitioner.name }}</a>
   {%- else -%}
-    Not allocated yet
+    <span class="search-highlight">{{ case.probationPractitioner.name }}</span>
   {%- endif -%}
 {%- endmacro -%}
 
@@ -167,7 +167,7 @@
             },
             classes: "max-width max-width-200",
             html: probationHtml(case) | safe
-        },       
+        },
         {
             attributes: {
                 id: 'variation-request-date-' + loop.index,

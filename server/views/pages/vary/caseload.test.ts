@@ -171,7 +171,7 @@ describe('Caseload', () => {
     expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
-  it('should highlight Not allocated yet label if licence has no probation practitioner and highlight a Time-served release warning label when licence is time-served', () => {
+  it('should highlight Not allocated label if licence has no probation practitioner and highlight a Time-served release warning label when licence is time-served', () => {
     const $ = render({
       caseload: [
         {
@@ -181,7 +181,11 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'REVIEW_NEEDED',
-          probationPractitioner: null,
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
           kind: 'TIME_SERVED',
         },
       ],
@@ -207,6 +211,6 @@ describe('Caseload', () => {
     expect($('.status-badge').text().toString()).toContain('Review needed')
     expect($('#release-date-1').text()).toBe('13 Feb 2023Time-served release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Time-served release')
-    expect($('#probation-practitioner-1').text().toString()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-1').text().toString()).toBe('Not allocated')
   })
 })

@@ -33,7 +33,7 @@
     {% if offender.probationPractitioner.allocated %}
         {% set practitionerHtml = '<a class="govuk-link" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% set practitionerHtml = 'Not allocated yet' %}
+        {% set practitionerHtml = offender.probationPractitioner.name %}
     {% endif %}
 
     {% set licences = (licences.push([

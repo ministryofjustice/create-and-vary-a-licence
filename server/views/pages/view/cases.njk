@@ -39,11 +39,7 @@
     {% if case.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% if case.kind == "TIME_SERVED" %}
-            {% set comDetailsHtml = 'Not allocated yet' %}
-        {% else %}
-            {% set comDetailsHtml = 'Unallocated' %}
-        {% endif %}
+        {% set comDetailsHtml = case.probationPractitioner.name %}
     {% endif %}
 
     {% if case.licenceVersionOf and(case.licenceStatus === 'IN_PROGRESS' or case.licenceStatus === 'SUBMITTED') %}
@@ -93,7 +89,7 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": case.releaseDate | cvlDateToDateShort | dateToUnix
             },
-            html: releaseDateHtml 
+            html: releaseDateHtml
         },
         {
             attributes: {
@@ -118,7 +114,7 @@
             dismissible: false,
             html: 'Confirmed. Go to NOMIS to create this licence or change your selection by choosing this person from the case list.'
         }) }}
-    {% endif %} 
+    {% endif %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-xl">Select a person to view or print their licences and supervision orders</h1>
@@ -167,7 +163,7 @@
                         panel: {
                             html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig, count: releaseInTwoWorkingDaysCount, activeTab: 'releases-in-two-working-days', isTimeServedEnabled: isTimeServedEnabled })
                         }
-                    }, 
+                    },
                     {
                         label: futureReleasesLabel,
                         id: "future-releases",
@@ -175,7 +171,7 @@
                             html: futureReleasesTab({ cases: cases, tabType: CaViewCasesTab.FUTURE_RELEASES, config: statusConfig, count: futureReleasesCount, activeTab: 'future-releases' })
                         }
                     }
-                ), peopleInPrisontabs) 
+                ), peopleInPrisontabs)
             %}
 
             {% if showAttentionNeededTab %}
@@ -187,7 +183,7 @@
                             html: attentionNeededTab({ cases: cases, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: attentionNeededCount, activeTab: 'attention-needed' })
                         }
                     }
-                    ), peopleInPrisontabs) 
+                    ), peopleInPrisontabs)
                 %}
             {% endif %}
 

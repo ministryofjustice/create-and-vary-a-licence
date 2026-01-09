@@ -7,6 +7,12 @@ const render = templateRenderer(
   fs.readFileSync('server/views/pages/search/varyApproverSearch/varyApproverSearch.njk').toString(),
 )
 
+interface ProbationPractitioner {
+  name: string
+  staffCode: string
+  allocated: boolean
+}
+
 const pduCases = [
   {
     licenceId: 1,
@@ -172,7 +178,7 @@ describe('View Vary Approver Search Results', () => {
     expect($('#release-date-2').text()).toBe('2 Nov 2022')
   })
 
-  it('should display probation practitioner as Not allocated yet when not assigned in pdu cases', () => {
+  it('should display probation practitioner as Not allocated when not assigned in pdu cases', () => {
     const unallocatedComCase = [
       {
         licenceId: 3,
@@ -181,7 +187,11 @@ describe('View Vary Approver Search Results', () => {
         licenceType: LicenceType.AP,
         releaseDate: '15/12/2023',
         variationRequestDate: '20/12/2023',
-        probationPractitioner: '',
+        probationPractitioner: {
+          name: 'Not allocated',
+          staffCode: null,
+          allocated: false,
+        } as ProbationPractitioner,
       },
     ]
     const $ = render({
@@ -204,11 +214,11 @@ describe('View Vary Approver Search Results', () => {
       regionCases: [],
     })
 
-    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
   })
 
-  it('should display probation practitioner as Not allocated yet when not assigned in region cases', () => {
+  it('should display probation practitioner as Not allocated when not assigned in region cases', () => {
     const unallocatedComCase = [
       {
         licenceId: 3,
@@ -217,7 +227,11 @@ describe('View Vary Approver Search Results', () => {
         licenceType: LicenceType.AP,
         releaseDate: '15/09/2023',
         variationRequestDate: '20/06/2024',
-        probationPractitioner: null,
+        probationPractitioner: {
+          name: 'Not allocated',
+          staffCode: null,
+          allocated: false,
+        } as ProbationPractitioner,
       },
     ] as VaryApproverCase[]
     const $ = render({
@@ -240,7 +254,7 @@ describe('View Vary Approver Search Results', () => {
       regionCases: unallocatedComCase,
     })
 
-    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
   })
 })

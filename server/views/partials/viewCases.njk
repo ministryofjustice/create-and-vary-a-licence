@@ -59,7 +59,7 @@
             {% set licencesHeader = (licencesHeader.push({
                         text: "Last worked on by",
                         attributes: {
-                            "aria-sort":  "none" 
+                            "aria-sort":  "none"
                         }
                 }), licencesHeader)
             %}
@@ -99,13 +99,9 @@
     {% for case in cases %}
         {% set caseData = [] %}
         {% if case.probationPractitioner.allocated %}
-            {% set comDetailsHtml = '<a class="govuk-link search-highlight" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '?activeTab=' + params.activeTab+ '">' + case.probationPractitioner.name + '</a>' %}    
+            {% set comDetailsHtml = '<a class="govuk-link search-highlight" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '?activeTab=' + params.activeTab+ '">' + case.probationPractitioner.name + '</a>' %}
         {% else %}
-            {% if case.kind == "TIME_SERVED" %}
-                {% set comDetailsHtml = 'Not allocated yet' %}
-            {% else %}
-                {% set comDetailsHtml = 'Unallocated' %}
-            {% endif %}
+            {% set comDetailsHtml = case.probationPractitioner.name %}
         {% endif %}
         {% if case.licenceVersionOf and(case.licenceStatus === 'IN_PROGRESS' or case.licenceStatus === 'SUBMITTED') %}
             {% set licenceStatusHtml = statusBadge({ status: case.licenceStatus, size: 'small' }, params.config) +
@@ -124,7 +120,7 @@
                         "data-sort-value": case.nomisLegalStatus
                     },
                     text: case.nomisLegalStatus | legalStatus | titlecase
-                }), caseData) 
+                }), caseData)
             %}
         {% endif %}
 
@@ -169,7 +165,7 @@
             }
         ), caseData) %}
         {% if params.tabType === 'attentionNeeded' and params.hasSelectedMultiplePrisonCaseloads and params.isSearchPageView %}
-            {% set caseData = (caseData.splice(-1, 0, 
+            {% set caseData = (caseData.splice(-1, 0,
                 {
                     attributes: {
                     id: 'location-' + loop.index,
@@ -186,7 +182,7 @@
                             "data-sort-value": case.lastWorkedOnBy
                         },
                         text: case.lastWorkedOnBy
-                    }), caseData) 
+                    }), caseData)
             %}
         {% endif %}
         {% if params.tabType !== 'attentionNeeded' %}
@@ -196,7 +192,7 @@
                             "data-sort-value": case.licenceStatus | getStatusOrder
                         },
                         html: licenceStatusHtml
-                    }), caseData) 
+                    }), caseData)
             %}
         {% endif %}
         {% set licences = (licences.push(caseData), licences) %}
