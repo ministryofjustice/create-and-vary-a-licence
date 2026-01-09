@@ -32,7 +32,11 @@ const inPrisonResults = [
     licenceId: 2,
     name: 'Test Person 2',
     prisonerNumber: 'A1234AB',
-    probationPractitioner: null,
+    probationPractitioner: {
+      name: 'Not allocated',
+      staffCode: null,
+      allocated: false,
+    },
     releaseDate: '01/08/2025',
     releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.SUBMITTED,
@@ -49,6 +53,11 @@ const inPrisonResults = [
     licenceId: 2,
     name: 'Test Person 2',
     prisonerNumber: 'A1234AB',
+    probationPractitioner: {
+      name: 'Not allocated',
+      staffCode: null,
+      allocated: false,
+    },
     releaseDate: '01/08/2025',
     releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.SUBMITTED,
@@ -89,7 +98,11 @@ const onProbationResults = [
     licenceId: 2,
     name: 'Test Person 2',
     prisonerNumber: 'A1234AB',
-    probationPractitioner: null,
+    probationPractitioner: {
+      name: 'Not allocated',
+      staffCode: 'ABC123',
+      allocated: false,
+    },
     releaseDate: '01/08/2025',
     releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.ACTIVE,
@@ -106,6 +119,11 @@ const onProbationResults = [
     licenceId: 2,
     name: 'Test Person 2',
     prisonerNumber: 'A1234AB',
+    probationPractitioner: {
+      name: 'Not allocated',
+      staffCode: null,
+      allocated: false,
+    },
     releaseDate: '01/08/2025',
     releaseDateLabel: 'CRD',
     licenceStatus: LicenceStatus.ACTIVE,
@@ -235,14 +253,14 @@ describe('View CA Search Results', () => {
 
     expect($('#name-2 > .search-offender-name > a').text()).toBe('Test Person 2')
     expect($('#nomis-id-2').text()).toBe('A1234AB')
-    expect($('#probation-practitioner-2').text()).toBe('Unallocated')
+    expect($('#probation-practitioner-2').text()).toBe('Not allocated')
     expect($('#release-date-2').text()).toBe('CRD: 1 Aug 2025')
     expect($('#licence-last-worked-on-by-2').text()).toBe('Test Updater')
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('Submitted')
 
     expect($('#name-3 > .search-offender-name > a').text()).toBe('Test Person 2')
     expect($('#nomis-id-3').text()).toBe('A1234AB')
-    expect($('#probation-practitioner-3').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-3').text()).toBe('Not allocated')
     expect($('#release-date-3').text()).toBe('CRD: 1 Aug 2025Time-served release')
     expect($('#licence-last-worked-on-by-3').text()).toBe('Test Updater')
     expect($('#licence-status-3 > .status-badge').text().trim()).toBe('Submitted')
@@ -296,14 +314,14 @@ describe('View CA Search Results', () => {
 
     expect($('#name-2 > .search-offender-name > a').text()).toBe('Test Person 2')
     expect($('#nomis-id-2').text()).toBe('A1234AB')
-    expect($('#probation-practitioner-2').text()).toBe('Unallocated')
+    expect($('#probation-practitioner-2').text()).toBe('Not allocated')
     expect($('#release-date-2').text()).toBe('1 Aug 2025')
     expect($('#licence-last-worked-on-by-2').text()).toBe('Test Updater')
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('Active')
 
     expect($('#name-3 > .search-offender-name > a').text()).toBe('Test Person 2')
     expect($('#nomis-id-3').text()).toBe('A1234AB')
-    expect($('#probation-practitioner-3').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-3').text()).toBe('Not allocated')
     expect($('#release-date-3').text()).toBe('1 Aug 2025')
     expect($('#licence-last-worked-on-by-3').text()).toBe('Test Updater')
     expect($('#licence-status-3 > .status-badge').text().trim()).toBe('Active')
@@ -384,7 +402,11 @@ describe('View CA Search Results', () => {
           licenceId: 3,
           name: 'Test Person 3',
           prisonerNumber: 'A1234AC',
-          probationPractitioner: null,
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
           releaseDate: '01/08/2025',
           releaseDateLabel: 'CRD',
           licenceStatus: LicenceStatus.SUBMITTED,

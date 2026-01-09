@@ -2071,7 +2071,11 @@ export default {
             name: 'Another Person',
             prisonerNumber: 'AB1234E',
             probationPractitioner: options.isUnallocatedCom
-              ? null
+              ? {
+                  name: 'Not allocated',
+                  staffCode: null,
+                  allocated: false,
+                }
               : {
                   name: 'John Smith',
                   staffCode: 'X1234',

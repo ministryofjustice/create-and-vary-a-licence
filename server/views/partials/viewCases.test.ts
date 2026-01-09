@@ -68,32 +68,32 @@ describe('viewCases template', () => {
     expect(comHtml).toContain('activeTab=releases-in-two-working-days')
   })
 
-  it('should show "Not allocated yet" for time-served cases with no COM', () => {
+  it('should show "Not allocated" for time-served cases with no COM', () => {
     // Given
     const options = createComponentModel({
       kind: LicenceKind.TIME_SERVED,
-      probationPractitioner: null,
+      probationPractitioner: { name: 'Not allocated', staffCode: null, allocated: false } as ProbationPractitioner,
     })
 
     // When
     const $ = render({ options })
 
     // Then
-    expect($('#com-1').text()).toContain('Not allocated yet')
+    expect($('#com-1').text()).toContain('Not allocated')
   })
 
-  it('should show "Unallocated" for non-time-served cases with no COM', () => {
+  it('should show "Not allocated" for non-time-served cases with no COM', () => {
     // Given
     const options = createComponentModel({
       kind: LicenceKind.CRD,
-      probationPractitioner: null,
+      probationPractitioner: { name: 'Not allocated', staffCode: null, allocated: false } as ProbationPractitioner,
     })
 
     // When
     const $ = render({ options })
 
     // Then
-    expect($('#com-1').text()).toContain('Unallocated')
+    expect($('#com-1').text()).toContain('Not allocated')
   })
 
   const render = templateRenderer(`{% from "partials/viewCases.njk" import viewCases %}{{ viewCases(options) }}`)
