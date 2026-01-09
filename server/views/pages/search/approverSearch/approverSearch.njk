@@ -146,13 +146,8 @@
     {% if case.probationPractitioner.allocated %}
          {% set comDetailsHtml = '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" data-qa="comLink" class="govuk-link search-highlight">' + case.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% if case.kind == "TIME_SERVED" %}
-            {% set comDetailsHtml = 'Not allocated yet' %}
-        {% else %}
-            {% set comDetailsHtml = 'Unallocated' %}
-        {% endif %}
+        {% set comDetailsHtml = '<span class="search-highlight">' + case.probationPractitioner.name + '</span>' %}
     {% endif %}
-
 
     {% if case.kind == "TIME_SERVED"  %}
         {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
@@ -226,13 +221,8 @@
     {% if case.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" data-qa="comLink" class="govuk-link search-highlight">' + case.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% if case.kind == "TIME_SERVED" %}
-            {% set comDetailsHtml = 'Not allocated yet' %}
-        {% else %}
-            {% set comDetailsHtml = 'Unallocated' %}
-        {% endif %}
+        {% set comDetailsHtml = '<span class="search-highlight">' + case.probationPractitioner.name + '</span>' %}
     {% endif %}
-
 
     {% if case.kind == "TIME_SERVED"  %}
         {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
@@ -344,7 +334,7 @@
             <p data-qa="change-caseload">
                 Showing:
                 <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
-                    {{prisonsToDisplay | extractAttr('description') | join(', ')}} 
+                    {{prisonsToDisplay | extractAttr('description') | join(', ')}}
                 </span>
                 <a class="govuk-link govuk-!-margin-left-3" href="{{ changeLocationHref }}" data-qa="change-location-link">
                     Licences for other establishments
