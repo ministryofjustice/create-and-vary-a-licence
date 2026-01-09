@@ -105,7 +105,7 @@ context('Vary a licence - time served', () => {
     varyCasesPage.getUrgentHighlightMessage().should('contain', 'Time-served release')
     varyCasesPage.getLicenceStatusByIndex(1).should('contain', 'Review needed')
     const getProbationPractitioner = varyCasesPage.getProbationPractitioner(1)
-    getProbationPractitioner.should('contain', 'Not allocated yet')
+    getProbationPractitioner.should('contain', 'Not allocated')
     const timelinePage = varyCasesPage.selectCase()
     timelinePage.checkThatPageHasTimeServedReviewNeededMessage()
     const reviewLicencQuestionPage = timelinePage.clickReviewLicenceButton()
