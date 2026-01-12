@@ -67,7 +67,7 @@ export default class ApprovalViewPage extends Page {
   }
 
   checkProbationPractitionerDetailsNotAllocated = (): void => {
-    cy.contains('Not allocated yet')
+    cy.contains('Not allocated')
   }
 
   checkCorrectContactMessage = (): void => {

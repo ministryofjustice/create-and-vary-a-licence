@@ -104,7 +104,7 @@ context('Create a Time Served licence', () => {
       const releaseDateFlag = viewCasesList.getReleaseDateFlag()
       releaseDateFlag.should('contain', 'Time-served release')
       const getProbationPractitioner = viewCasesList.getProbationPractitioner(1)
-      getProbationPractitioner.should('contain', 'Not allocated yet')
+      getProbationPractitioner.should('contain', 'Not allocated')
       const confirmCreatePage = viewCasesList.clickATimeServedLicence()
       stubTimeServedOmuCase()
       confirmCreatePage.selectRadio('Yes')
@@ -123,7 +123,7 @@ context('Create a Time Served licence', () => {
       timeServedContactProbationPage.selectCommunicationMethodEmail()
       const confirmationPage = timeServedContactProbationPage.clickContinue()
       const caseloadPage = confirmationPage.clickReturnToCaCaseload(true)
-      caseloadPage.getProbationPractitioner(1).should('contain', 'Not allocated yet')
+      caseloadPage.getProbationPractitioner(1).should('contain', 'Not allocated')
       caseloadPage
         .getLicenceStatusByIndex(1)
         .invoke('text')
