@@ -766,11 +766,27 @@ export default {
     })
   },
 
-  stubPostLicence: (): SuperAgentRequest => {
+  stubPostPrisonLicence: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/licences-api/licence/create',
+        urlPattern: '/licences-api/licence/prison/nomisid/.*',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          licenceId: 1,
+        },
+      },
+    })
+  },
+
+  stubPostProbationLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/licences-api/licence/probation/nomisid/.*',
       },
       response: {
         status: 200,

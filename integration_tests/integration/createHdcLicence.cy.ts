@@ -27,7 +27,7 @@ context('Create an HDC licence', () => {
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubAddAdditionalCondition')
     cy.task('stubFeComponents')
-    cy.task('stubPostLicence')
+    cy.task('stubPostProbationLicence')
     cy.signIn()
   })
 

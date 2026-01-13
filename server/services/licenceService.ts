@@ -14,7 +14,6 @@ import type {
   BespokeConditionsRequest,
   ComReviewCount,
   ContactNumberRequest,
-  CreateLicenceRequest,
   CreateLicenceResponse,
   CreateVariationResponse,
   EditLicenceResponse,
@@ -62,8 +61,12 @@ export default class LicenceService {
     private readonly conditionService: ConditionService,
   ) {}
 
-  async createLicence(licence: CreateLicenceRequest, user: User): Promise<CreateLicenceResponse> {
-    return this.licenceApiClient.createLicence(licence, user)
+  async createPrisonLicence(nomsId: string, user: User): Promise<CreateLicenceResponse> {
+    return this.licenceApiClient.createPrisonLicence(nomsId, user)
+  }
+
+  async createProbationLicence(nomsId: string, user: User): Promise<CreateLicenceResponse> {
+    return this.licenceApiClient.createProbationLicence(nomsId, user)
   }
 
   async getLicence(id: number, user: User): Promise<Licence> {
