@@ -24,7 +24,7 @@ context('Create a licence', () => {
     cy.task('stubAddAdditionalCondition')
     cy.task('stubDeleteAdditionalConditionsByCode')
     cy.task('stubFeComponents')
-    cy.task('stubPostLicence')
+    cy.task('stubPostProbationLicence')
     cy.signIn()
   })
 
