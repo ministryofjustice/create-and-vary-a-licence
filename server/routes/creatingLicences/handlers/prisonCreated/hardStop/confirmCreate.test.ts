@@ -77,7 +77,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   describe('POST', () => {
     it('should create hardstop licence and should redirect if answer is YES', async () => {
       req.body.answer = 'Yes'
-      licenceService.createPrisonLicence.mockResolvedValue({ licenceId: 1, kind: 'HARD_STOP' } as LicenceSummary)
+      licenceService.createPrisonLicence.mockResolvedValue({ licenceId: 1 })
       await handler.POST(req, res)
       expect(licenceService.createPrisonLicence).toHaveBeenCalledWith('ABC123', {
         username: 'joebloggs',

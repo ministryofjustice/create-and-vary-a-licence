@@ -141,7 +141,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
 
   describe('POST', () => {
     it('should create licence and should redirect', async () => {
-      licenceService.createProbationLicence.mockResolvedValue({ licenceId: 1 } as LicenceSummary)
+      licenceService.createProbationLicence.mockResolvedValue({ licenceId: 1 })
       await handler.POST(req, res)
       expect(licenceService.createProbationLicence).toHaveBeenCalledWith('ABC123', {
         username: 'joebloggs',

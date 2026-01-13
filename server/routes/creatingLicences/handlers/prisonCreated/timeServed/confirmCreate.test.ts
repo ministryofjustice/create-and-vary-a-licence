@@ -128,7 +128,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
     it('should create time served licence and should redirect if answer is YES', async () => {
       req.body.answer = 'Yes'
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
-      licenceService.createPrisonLicence.mockResolvedValue({ licenceId: 1, kind: 'HARD_STOP' } as LicenceSummary)
+      licenceService.createPrisonLicence.mockResolvedValue({ licenceId: 1 })
 
       await handler.POST(req, res)
 
