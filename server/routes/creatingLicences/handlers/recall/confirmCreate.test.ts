@@ -141,14 +141,11 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
 
   describe('POST', () => {
     it('should create licence and should redirect', async () => {
-      licenceService.createLicence.mockResolvedValue({ licenceId: 1 } as LicenceSummary)
+      licenceService.createProbationLicence.mockResolvedValue({ licenceId: 1 } as LicenceSummary)
       await handler.POST(req, res)
-      expect(licenceService.createLicence).toHaveBeenCalledWith(
-        { nomsId: 'ABC123', type: 'PRRD' },
-        {
-          username: 'joebloggs',
-        },
-      )
+      expect(licenceService.createProbationLicence).toHaveBeenCalledWith('ABC123', {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-name')
     })
 
@@ -170,7 +167,7 @@ describe('Route Handlers - Create PRRD Licence - Confirm Create', () => {
       } as PrisonerWithCvlFields)
 
       await handler.POST(req, res)
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
+      expect(licenceService.createProbationLicence).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
       expect(logger.error).toHaveBeenCalledWith(
         'Access denied to PRRD licence creation POST due to being in hard stop period',

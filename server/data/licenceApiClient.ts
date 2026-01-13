@@ -21,7 +21,6 @@ import type {
   ComCreateCase,
   ComVaryCase,
   ContactNumberRequest,
-  CreateLicenceRequest,
   HdcLicenceData,
   Licence,
   LicenceConditionChange,
@@ -116,11 +115,24 @@ export default class LicenceApiClient extends RestClient {
     }
   }
 
-  async createLicence(licence: CreateLicenceRequest, user: User): Promise<CreateLicenceResponse> {
+  async createPrisonLicence(nomsId: string, user: User): Promise<CreateLicenceResponse> {
     const response = (await this.post(
       {
-        path: `/licence/create`,
-        data: licence,
+        path: `/licence/prison/nomisid/${nomsId}`,
+        returnBodyOnErrorIfPredicate: e => e.response.status === 409,
+      },
+      { username: user.username },
+    )) as Record<string, unknown>
+
+    return response.status === 409
+      ? { licenceId: response.existingResourceId as number }
+      : { licenceId: response.licenceId as number }
+  }
+
+  async createProbationLicence(nomsId: string, user: User): Promise<CreateLicenceResponse> {
+    const response = (await this.post(
+      {
+        path: `/licence/probation/nomisid/${nomsId}`,
         returnBodyOnErrorIfPredicate: e => e.response.status === 409,
       },
       { username: user.username },
