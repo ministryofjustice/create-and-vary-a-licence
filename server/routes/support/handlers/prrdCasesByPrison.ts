@@ -73,6 +73,10 @@ export default class PrrdCasesByPrisonRoutes {
     return res.redirect(`/support/prrd-cases/by-prison/${prisonCode || user.activeCaseload}`)
   }
 
+  private getProbationPractitionerName = (name: string, allocated: boolean) => {
+    return allocated ? convertToTitleCase(name) : name
+  }
+
   private async getCases(user: Express.LocalsUser, prisonCode: string) {
     const caCases = await this.caCaseloadService.getPrisonOmuCaseload(user, [prisonCode])
 
@@ -89,7 +93,10 @@ export default class PrrdCasesByPrisonRoutes {
           crn: deliusRecord?.case.crn,
           licenceStatus: caCase.licenceStatus,
           releaseDate: caCase.releaseDate,
-          probationPractitioner: convertToTitleCase(caCase.probationPractitioner?.name) || 'Unallocated',
+          probationPractitioner: this.getProbationPractitionerName(
+            caCase.probationPractitioner.name,
+            caCase.probationPractitioner.allocated,
+          ),
           probationPractitionerEmail: deliusRecord?.email,
         }
       })
