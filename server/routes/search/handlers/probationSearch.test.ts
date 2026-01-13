@@ -23,6 +23,11 @@ describe('Route Handlers - Search - Probation Search', () => {
         nomisId: 'A1234BC',
         comName: 'Test Staff',
         comStaffCode: deliusStaffIdentifier.toString(),
+        probationPractitioner: {
+          name: 'Test Staff',
+          staffCode: deliusStaffIdentifier.toString(),
+          allocated: true,
+        },
         teamName: 'Test Team',
         releaseDate: '2023-08-16',
         licenceId: 1,
@@ -42,6 +47,11 @@ describe('Route Handlers - Search - Probation Search', () => {
       nomisId: 'A1234BC',
       comName: 'Test Staff',
       comStaffCode: deliusStaffIdentifier.toString(),
+      probationPractitioner: {
+        name: 'Test Staff',
+        staffCode: deliusStaffIdentifier.toString(),
+        allocated: true,
+      },
       teamName: 'Test Team',
       releaseDate: '2023-08-16',
       licenceId: 1,
