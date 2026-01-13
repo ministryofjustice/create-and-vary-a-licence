@@ -3,11 +3,7 @@ import { Session } from 'express-session'
 
 import LicenceService from '../../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
-import {
-  LicenceSummary,
-  PrisonerWithCvlFields,
-  ExternalTimeServedRecordResponse,
-} from '../../../../../@types/licenceApiClientTypes'
+import { PrisonerWithCvlFields, ExternalTimeServedRecordResponse } from '../../../../../@types/licenceApiClientTypes'
 import TimeServedService from '../../../../../services/timeServedService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
@@ -128,19 +124,16 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
     it('should create time served licence and should redirect if answer is YES', async () => {
       req.body.answer = 'Yes'
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
-      licenceService.createLicence.mockResolvedValue({ licenceId: 1, kind: 'HARD_STOP' } as LicenceSummary)
+      licenceService.createPrisonLicence.mockResolvedValue({ licenceId: 1 })
 
       await handler.POST(req, res)
 
       expect(licenceService.getPrisonerDetail).toHaveBeenCalledWith('ABC123', {
         username: 'joebloggs',
       })
-      expect(licenceService.createLicence).toHaveBeenCalledWith(
-        { nomsId: 'ABC123', type: 'TIME_SERVED' },
-        {
-          username: 'joebloggs',
-        },
-      )
+      expect(licenceService.createPrisonLicence).toHaveBeenCalledWith('ABC123', {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/id/1/initial-meeting-name')
       expect(timeServedExternalRecordService.updateTimeServedExternalRecord).not.toHaveBeenCalled()
     })
@@ -158,7 +151,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       expect(licenceService.getPrisonerDetail).toHaveBeenCalledWith('ABC123', {
         username: 'joebloggs',
       })
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
+      expect(licenceService.createPrisonLicence).not.toHaveBeenCalled()
       expect(timeServedExternalRecordService.updateTimeServedExternalRecord).toHaveBeenCalledWith(
         'ABC123',
         12345,
@@ -186,7 +179,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       expect(licenceService.getPrisonerDetail).toHaveBeenCalledWith('ABC123', {
         username: 'joebloggs',
       })
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
+      expect(licenceService.createPrisonLicence).not.toHaveBeenCalled()
       expect(timeServedExternalRecordService.updateTimeServedExternalRecord).toHaveBeenCalledWith(
         'ABC123',
         12345,
@@ -215,7 +208,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       expect(licenceService.getPrisonerDetail).toHaveBeenCalledWith('ABC123', {
         username: 'joebloggs',
       })
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
+      expect(licenceService.createPrisonLicence).not.toHaveBeenCalled()
       expect(timeServedExternalRecordService.updateTimeServedExternalRecord).toHaveBeenCalledWith(
         'ABC123',
         12345,

@@ -44,7 +44,7 @@ beforeEach(() => {
   })
   licenceService.getOmuEmail.mockResolvedValue({ email: 'test@test.test' } as OmuContact)
   licenceService.getParentLicenceOrSelf.mockResolvedValue(licence)
-  licenceService.createLicence.mockResolvedValue({ licenceId: 1 })
+  licenceService.createProbationLicence.mockResolvedValue({ licenceId: 1 })
 
   conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([])
 

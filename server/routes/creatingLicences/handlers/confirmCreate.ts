@@ -3,7 +3,6 @@ import moment from 'moment'
 import ProbationService from '../../../services/probationService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
-import LicenceKind from '../../../enumeration/LicenceKind'
 import logger from '../../../../logger'
 
 export default class ConfirmCreateRoutes {
@@ -51,7 +50,7 @@ export default class ConfirmCreateRoutes {
       return res.redirect('/access-denied')
     }
 
-    const { licenceId } = await this.licenceService.createLicence({ nomsId: nomisId, type: LicenceKind.CRD }, user)
+    const { licenceId } = await this.licenceService.createProbationLicence(nomisId, user)
     return res.redirect(`/licence/create/id/${licenceId}/initial-meeting-name`)
   }
 }

@@ -58,20 +58,17 @@ describe('Licence Service', () => {
     jest.clearAllMocks()
   })
 
-  describe('Create Licence', () => {
+  describe('Create Prison Licence', () => {
     it('Should create a CRD licence in the backend API', async () => {
-      await licenceService.createLicence({ nomsId: 'ABC1234', type: 'CRD' }, user)
-      expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1234', type: 'CRD' }, user)
+      await licenceService.createPrisonLicence('ABC1234', user)
+      expect(licenceApiClient.createPrisonLicence).toHaveBeenCalledWith('ABC1234', user)
     })
+  })
 
-    it('Should create a HARD_STOP licence in the backend API', async () => {
-      await licenceService.createLicence({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
-      expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
-    })
-
-    it('Should create a HARD_STOP licence in the backend API', async () => {
-      await licenceService.createLicence({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
-      expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
+  describe('Create Probation Licence', () => {
+    it('Should create a PRRD licence in the backend API', async () => {
+      await licenceService.createProbationLicence('ABC1234', user)
+      expect(licenceApiClient.createProbationLicence).toHaveBeenCalledWith('ABC1234', user)
     })
   })
 

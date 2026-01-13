@@ -68,27 +68,27 @@ describe('Licence API client tests', () => {
     jest.resetAllMocks()
   })
 
-  it('Create licence request', async () => {
+  it('Create probation licence request', async () => {
     post.mockResolvedValue({ licenceId: 1 } as CreateLicenceResponse)
 
-    const creationRequest = { nomsId: 'A1234AA', type: 'CRD' as const }
-    const result = await licenceApiClient.createLicence(creationRequest, { username: 'joebloggs' } as User)
+    const nomsId = 'A1234AA'
+    const result = await licenceApiClient.createProbationLicence(nomsId, { username: 'joebloggs' } as User)
 
     expect(post).toHaveBeenCalledWith(
-      { path: '/licence/create', data: creationRequest, returnBodyOnErrorIfPredicate: expect.any(Function) },
+      { path: `/licence/probation/nomisid/${nomsId}`, returnBodyOnErrorIfPredicate: expect.any(Function) },
       { username: 'joebloggs' },
     )
     expect(result).toEqual({ licenceId: 1 })
   })
 
-  it('Create licence request when resouce already exists', async () => {
+  it('Create probation licence request when resouce already exists', async () => {
     post.mockResolvedValue({ status: 409, existingResourceId: 3 })
 
-    const creationRequest = { nomsId: 'A1234AA', type: 'CRD' as const }
-    const result = await licenceApiClient.createLicence(creationRequest, { username: 'joebloggs' } as User)
+    const nomsId = 'A1234AA'
+    const result = await licenceApiClient.createProbationLicence(nomsId, { username: 'joebloggs' } as User)
 
     expect(post).toHaveBeenCalledWith(
-      { path: '/licence/create', data: creationRequest, returnBodyOnErrorIfPredicate: expect.any(Function) },
+      { path: `/licence/probation/nomisid/${nomsId}`, returnBodyOnErrorIfPredicate: expect.any(Function) },
       { username: 'joebloggs' },
     )
     expect(result).toEqual({ licenceId: 3 })
