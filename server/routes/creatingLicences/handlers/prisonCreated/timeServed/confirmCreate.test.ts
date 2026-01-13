@@ -3,11 +3,7 @@ import { Session } from 'express-session'
 
 import LicenceService from '../../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
-import {
-  LicenceSummary,
-  PrisonerWithCvlFields,
-  ExternalTimeServedRecordResponse,
-} from '../../../../../@types/licenceApiClientTypes'
+import { PrisonerWithCvlFields, ExternalTimeServedRecordResponse } from '../../../../../@types/licenceApiClientTypes'
 import TimeServedService from '../../../../../services/timeServedService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>

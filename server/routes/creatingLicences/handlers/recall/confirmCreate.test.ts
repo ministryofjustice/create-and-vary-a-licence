@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import ProbationService from '../../../../services/probationService'
-import { CvlPrisoner, LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
+import { CvlPrisoner, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
 import logger from '../../../../../logger'
 import { LicenceKind } from '../../../../enumeration'
 
