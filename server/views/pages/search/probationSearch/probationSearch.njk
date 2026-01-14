@@ -19,7 +19,7 @@
         {% else %}
             {% set link = offender | createOffenderLink  %}
         {% endif %}
-        {% if offender.comName or offender.licenceStatus === 'TIMED_OUT' or  offender.kind == "TIME_SERVED" or offender.isOnProbation %}
+        {% if offender.probationPractitioner.name or offender.licenceStatus === 'TIMED_OUT' or  offender.kind == "TIME_SERVED" or offender.isOnProbation %}
             <a id="name-button-{{ index }}" href="{{ link }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offender.name }}</a>
         {% else %}
             <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offender.name }}</span>
@@ -123,14 +123,10 @@
 {%  set recallsMessage = "have not breached a post-sentence supervision order" %}
 
 {% for offender in peopleInPrison %}
-    {% if offender.comName %}
-        {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
+    {% if offender.probationPractitioner.allocated %}
+        {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% if offender.kind == "TIME_SERVED"%}
-            {% set comDetailsHtml = 'Not allocated yet' %}
-        {% else %}
-            {% set comDetailsHtml = 'Unallocated' %}
-        {% endif %}
+        {% set comDetailsHtml = '<span class="search-highlight">' + offender.probationPractitioner.name + '</span>' %}
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
@@ -162,7 +158,7 @@
         {
             attributes: {
                 id: 'probation-practitioner-' + loop.index,
-                "data-sort-value": offender.comName
+                "data-sort-value": offender.probationPractitioner.name
             },
             classes: "max-width max-width-200",
             html: comDetailsHtml
@@ -195,10 +191,10 @@
 {% endfor %}
 
 {% for offender in peopleOnProbation %}
-    {% if offender.comName %}
-        {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.comName + '</a>' %}
+    {% if offender.probationPractitioner.allocated %}
+        {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
-        {% set comDetailsHtml = 'Not allocated yet' %}
+        {% set comDetailsHtml = '<span class="search-highlight">' + offender.probationPractitioner.name + '</span>' %}
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
@@ -230,7 +226,7 @@
         {
             attributes: {
                 id: 'probation-practitioner-' + loop.index,
-                "data-sort-value": offender.comName
+                "data-sort-value": offender.probationPractitioner.name
             },
             classes: "max-width max-width-200",
             html: comDetailsHtml

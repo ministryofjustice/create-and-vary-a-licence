@@ -1547,6 +1547,11 @@ export default {
               nomisId: 'A1234BC',
               comName: 'Test Staff',
               comStaffCode: '3000',
+              probationPractitioner: {
+                name: 'Test Staff',
+                staffCode: '3000',
+                allocated: true,
+              },
               teamName: 'Test Team',
               releaseDate: '16/08/2023',
               licenceId: 1,
@@ -1571,6 +1576,11 @@ export default {
       nomisId: 'A1234BC',
       comName: 'Test Staff',
       comStaffCode: '3000',
+      probationPractitioner: {
+        name: 'Test Staff',
+        staffCode: '3000',
+        allocated: true,
+      },
       teamName: 'Test Team',
       releaseDate: '16/08/2023',
       licenceId: 1,

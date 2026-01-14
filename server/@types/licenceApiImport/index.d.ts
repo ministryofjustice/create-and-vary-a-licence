@@ -3340,12 +3340,6 @@ export interface components {
        * @example Base64 string
        */
       thumbnailImage?: string
-      /**
-       * Format: int64
-       * @description The id which references the original file data and full size image
-       * @example 9999
-       */
-      uploadDetailId: number
     }
     /** @description Request object for creating a new licence */
     CreateLicenceRequest: {
@@ -3446,10 +3440,18 @@ export interface components {
        * @example A1234AA
        */
       nomisId?: string
-      /** @description The forename and surname of the COM */
+      /**
+       * @deprecated
+       * @description The forename and surname of the COM
+       */
       comName?: string
-      /** @description The COM's staff code */
+      /**
+       * @deprecated
+       * @description The COM's staff code
+       */
       comStaffCode?: string
+      /** @description The details for the active supervising probation officer */
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /** @description The description of the COM's team */
       teamName?: string
       /**
@@ -3549,8 +3551,6 @@ export interface components {
        * @example A9999AA
        */
       prisonerNumber: string
-      /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
@@ -3692,7 +3692,7 @@ export interface components {
        */
       releaseDate?: string
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
     }
     /** @description Response object which describes a result from a vary approver caseload search */
     VaryApproverCaseloadSearchResponse: {
@@ -3747,7 +3747,7 @@ export interface components {
        */
       approvedOn?: string
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /**
        * @description Type of this licence
        * @enum {string}
@@ -3863,7 +3863,7 @@ export interface components {
        */
       isReviewNeeded: boolean
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description Date which the hard stop period will start
@@ -3943,7 +3943,7 @@ export interface components {
        */
       isReviewNeeded: boolean
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description Date which the hard stop period will start
@@ -4020,7 +4020,7 @@ export interface components {
        */
       prisonerNumber: string
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
@@ -5922,9 +5922,9 @@ export interface components {
       /**
        * Format: date
        * @description Licence start date
-       * @example 2024-07-15
+       * @example 15/07/2024
        */
-      licenceStartDate: string
+      licenceStartDate?: string
     }
     /** @description Response representing a last-minute handover case */
     LastMinuteHandoverCaseResponse: {
