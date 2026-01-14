@@ -4,7 +4,6 @@ import { format } from 'date-fns'
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import UserService from '../../../services/userService'
 import ProbationService from '../../../services/probationService'
-import { convertToTitleCase } from '../../../utils/utils'
 import { TimeServedCase } from '../../../@types/licenceApiClientTypes'
 import { DeliusManager } from '../../../@types/deliusClientTypes'
 
@@ -47,7 +46,6 @@ export default class TimeServedCasesByPrisonRoutes {
       'CRN',
       'Legal Status',
       'Release Date',
-      'Probation Practitioner',
       'Probation Practitioner Email',
       'Is Time Served Case',
       'Is Time Served Case By All Prison Rule',
@@ -68,7 +66,6 @@ export default class TimeServedCasesByPrisonRoutes {
         aCase.crn,
         aCase.legalStatus,
         aCase.releaseDate,
-        aCase.probationPractitioner,
         aCase.probationPractitionerEmail,
         aCase.isTimeServedCase,
         aCase.isTimeServedCaseByAllPrisonRule,
@@ -118,7 +115,6 @@ export default class TimeServedCasesByPrisonRoutes {
       crn: deliusRecord?.case?.crn,
       legalStatus: aCase.nomisLegalStatus,
       releaseDate: aCase.releaseDate,
-      probationPractitioner: convertToTitleCase(aCase?.probationPractitioner?.name),
       probationPractitionerEmail: deliusRecord?.email,
       isTimeServedCase: aCase.isTimeServedCase,
       isTimeServedCaseByAllPrisonRule: aCase.isTimeServedCaseByAllPrisonRule,

@@ -52,13 +52,21 @@ context('Approve a licence - time served', () => {
   })
 
   it('approve a time served licence with no com allocated', () => {
+    const unallocatedProbationPractitioner = {
+      staffCode: null,
+      name: 'Not allocated',
+      allocated: false,
+    }
     cy.task('stubGetApprovalCaseload', {
       kind: 'TIME_SERVED',
       statusCode: 'SUBMITTED',
-      probationPractitioner: null,
+      probationPractitioner: unallocatedProbationPractitioner,
       urgentApproval: true,
     })
-    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: null, kind: 'TIME_SERVED' })
+    cy.task('stubGetRecentlyApprovedCaseload', {
+      probationPractitioner: unallocatedProbationPractitioner,
+      kind: 'TIME_SERVED',
+    })
 
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetStaffDetails')

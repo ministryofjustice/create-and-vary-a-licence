@@ -70,7 +70,6 @@ describe('Caseload Service', () => {
             nomisLegalStatus: 'SENTENCED',
             prisonCode: 'MDI',
             prisonerNumber: 'A1234AA',
-            probationPractitioner: { name: 'Probation User', allocated: true },
             releaseDate: '12/12/2024',
             isTimeServedCase: true,
             isTimeServedCaseByAllPrisonRule: true,

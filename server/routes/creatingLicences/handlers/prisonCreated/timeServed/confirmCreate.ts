@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import moment from 'moment'
 import YesOrNo from '../../../../../enumeration/yesOrNo'
 import LicenceService from '../../../../../services/licenceService'
-import LicenceKind from '../../../../../enumeration/LicenceKind'
 import { convertToTitleCase } from '../../../../../utils/utils'
 import { ExternalTimeServedRecordRequest } from '../../../../../@types/licenceApiClientTypes'
 import TimeServedService from '../../../../../services/timeServedService'
@@ -55,10 +54,7 @@ export default class ConfirmCreateRoutes {
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
     if (answer === YesOrNo.YES) {
-      const { licenceId } = await this.licenceService.createLicence(
-        { nomsId: nomisId, type: LicenceKind.TIME_SERVED },
-        user,
-      )
+      const { licenceId } = await this.licenceService.createPrisonLicence(nomisId, user)
       return res.redirect(`/licence/time-served/create/id/${licenceId}/initial-meeting-name`)
     }
 

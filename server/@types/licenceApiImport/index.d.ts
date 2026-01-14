@@ -184,46 +184,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/offender/crn/{crn}/responsible-com': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender.
-     * @description Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_CVL_ADMIN.
-     */
-    put: operations['updateResponsibleCom']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/offender/crn/{crn}/probation-team': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Updates in-flight licences associated with an offender with a new probation team.
-     * @description Updates in-flight licences associated with an offender with a new probation team. Requires ROLE_CVL_ADMIN.
-     */
-    put: operations['updateProbationTeam']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/licences/time-served/{licenceId}/confirm/probation-contact': {
     parameters: {
       query?: never
@@ -1582,26 +1542,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/report/upcoming-releases-with-monitoring': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve list of upcoming cases with electronic monitoring conditions for FTR-56 report
-     * @description Returns a list of LastMinuteHandoverCaseResponse objects
-     */
-    get: operations['getUpcomingReleasesWithMonitoringConditions']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/queue-admin/get-dlq-messages/{dlqName}': {
     parameters: {
       query?: never
@@ -1750,46 +1690,6 @@ export interface paths {
      * @description Returns a single prisoner by prison number
      */
     get: operations['findByNumber']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/offender/report/last-minute-handover-cases': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve list of cases that need to be reported to the TAG team
-     * @description Returns a list of LastMinuteHandoverCaseResponse objects
-     */
-    get: operations['getLastMinuteCases']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/reports/last-minute-handover-cases': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve list of cases that need to be reported to the TAG team
-     * @description Returns a list of LastMinuteHandoverCaseResponse objects
-     */
-    get: operations['getLastMinuteCases_1']
     put?: never
     post?: never
     delete?: never
@@ -2041,6 +1941,46 @@ export interface paths {
     }
     /** @description Gets the metric dashboard definition. */
     get: operations['dashboardDefinition']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/cvl-report/upcoming-releases-with-monitoring': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve list of upcoming cases with electronic monitoring conditions for FTR-56 report
+     * @description Returns a list of LastMinuteHandoverCaseResponse objects
+     */
+    get: operations['getUpcomingReleasesWithMonitoringConditions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/cvl-report/last-minute-handover-cases': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve list of cases that need to be reported to the TAG team
+     * @description Returns a list of LastMinuteHandoverCaseResponse objects
+     */
+    get: operations['getLastMinuteCases']
     put?: never
     post?: never
     delete?: never
@@ -2348,83 +2288,6 @@ export interface components {
        * @example 12/12/2001
        */
       dateOfBirth: string
-    }
-    /** @description Request object for updating the COM responsible for an offender */
-    UpdateComRequest: {
-      /**
-       * Format: int64
-       * @description The unique identifier of the COM, retrieved from Delius
-       * @example 22003829
-       */
-      staffIdentifier: number
-      /**
-       * @description The Delius staff code for the COM
-       * @example X012345
-       */
-      staffCode?: string
-      /**
-       * @description The Delius username for the COM
-       * @example jbloggs
-       */
-      staffUsername: string
-      /**
-       * @description The email address of the COM
-       * @example jbloggs@probation.gov.uk
-       */
-      staffEmail?: string
-      /**
-       * @description The first name of the COM
-       * @example Joseph
-       */
-      firstName?: string
-      /**
-       * @description The last name of the COM
-       * @example Bloggs
-       */
-      lastName?: string
-    }
-    /** @description Request object for updating an offender's probation team */
-    UpdateProbationTeamRequest: {
-      /**
-       * @description The probation area code supervising this licence
-       * @example N01
-       */
-      probationAreaCode: string
-      /**
-       * @description The probation area description
-       * @example Wales
-       */
-      probationAreaDescription?: string
-      /**
-       * @description The probation delivery unit (PDU or borough) code
-       * @example NA01A12
-       */
-      probationPduCode?: string
-      /**
-       * @description The PDU description
-       * @example Cardiff
-       */
-      probationPduDescription?: string
-      /**
-       * @description The local administrative unit (LAU or district) code
-       * @example NA01A12
-       */
-      probationLauCode?: string
-      /**
-       * @description The LAU description
-       * @example Cardiff North
-       */
-      probationLauDescription?: string
-      /**
-       * @description The probation team code supervising this licence
-       * @example NA01A12-A
-       */
-      probationTeamCode?: string
-      /**
-       * @description The team description
-       * @example Cardiff North A
-       */
-      probationTeamDescription?: string
     }
     TimeServedProbationConfirmContactRequest: {
       /** @enum {string} */
@@ -2833,6 +2696,40 @@ export interface components {
     UpdateAdditionalConditionDataRequest: {
       /** @description The list of data inputs associated with this additional condition */
       data: components['schemas']['AdditionalConditionData'][]
+    }
+    /** @description Request object for updating the COM responsible for an offender */
+    UpdateComRequest: {
+      /**
+       * Format: int64
+       * @description The unique identifier of the COM, retrieved from Delius
+       * @example 22003829
+       */
+      staffIdentifier: number
+      /**
+       * @description The Delius staff code for the COM
+       * @example X012345
+       */
+      staffCode?: string
+      /**
+       * @description The Delius username for the COM
+       * @example jbloggs
+       */
+      staffUsername: string
+      /**
+       * @description The email address of the COM
+       * @example jbloggs@probation.gov.uk
+       */
+      staffEmail?: string
+      /**
+       * @description The first name of the COM
+       * @example Joseph
+       */
+      firstName?: string
+      /**
+       * @description The last name of the COM
+       * @example Bloggs
+       */
+      lastName?: string
     }
     /** @description Describes an audit event request */
     AuditEvent: {
@@ -3443,12 +3340,6 @@ export interface components {
        * @example Base64 string
        */
       thumbnailImage?: string
-      /**
-       * Format: int64
-       * @description The id which references the original file data and full size image
-       * @example 9999
-       */
-      uploadDetailId: number
     }
     /** @description Request object for creating a new licence */
     CreateLicenceRequest: {
@@ -3549,10 +3440,18 @@ export interface components {
        * @example A1234AA
        */
       nomisId?: string
-      /** @description The forename and surname of the COM */
+      /**
+       * @deprecated
+       * @description The forename and surname of the COM
+       */
       comName?: string
-      /** @description The COM's staff code */
+      /**
+       * @deprecated
+       * @description The COM's staff code
+       */
       comStaffCode?: string
+      /** @description The details for the active supervising probation officer */
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /** @description The description of the COM's team */
       teamName?: string
       /**
@@ -3652,8 +3551,6 @@ export interface components {
        * @example A9999AA
        */
       prisonerNumber: string
-      /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
@@ -3795,7 +3692,7 @@ export interface components {
        */
       releaseDate?: string
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
     }
     /** @description Response object which describes a result from a vary approver caseload search */
     VaryApproverCaseloadSearchResponse: {
@@ -3850,7 +3747,7 @@ export interface components {
        */
       approvedOn?: string
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /**
        * @description Type of this licence
        * @enum {string}
@@ -3966,7 +3863,7 @@ export interface components {
        */
       isReviewNeeded: boolean
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description Date which the hard stop period will start
@@ -4046,7 +3943,7 @@ export interface components {
        */
       isReviewNeeded: boolean
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description Date which the hard stop period will start
@@ -4123,7 +4020,7 @@ export interface components {
        */
       prisonerNumber: string
       /** @description The details for the active supervising probation officer */
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner']
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
@@ -4356,38 +4253,6 @@ export interface components {
        */
       count: number
     }
-    /** @description Response representing a case with Electronic monitoring conditions, coming up for release */
-    UpcomingReleasesWithMonitoringConditionsResponse: {
-      /**
-       * @description Unique prison number of the prisoner
-       * @example A1234BC
-       */
-      prisonNumber: string
-      /**
-       * @description Case reference number (CRN) from probation system
-       * @example X123456
-       */
-      crn: string
-      /**
-       * @description Current licence status of the case
-       * @example IN_PROGRESS
-       * @enum {string}
-       */
-      status:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-    }
     DlqMessage: {
       body: {
         [key: string]: unknown
@@ -4430,157 +4295,54 @@ export interface components {
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
       /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
        */
-      responsibleComFullName?: string
-      /** @description The address of initial appointment */
-      licenceAppointmentAddress?: components['schemas']['AddressResponse']
+      id: number
       /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * @description The version number used for standard and additional conditions
+       * @example 1.4
+       */
+      version?: string
+      /**
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string
+      /**
+       * @deprecated
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
        */
-      appointmentTelephoneNumber?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      appointmentContact?: string
       /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
+       * @description The username which created this licence
+       * @example X12333
        */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      createdByUsername?: string
       /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /**
-       * @description The team description
-       * @example Cardiff South
-       */
-      probationTeamDescription?: string
-      /**
-       * @description The probation area description
-       * @example Wales
-       */
-      probationAreaDescription?: string
-      /**
-       * @description The description for the PDU
-       * @example North Wales
-       */
-      probationPduDescription?: string
-      /**
-       * @description The LAU description
-       * @example North Wales
-       */
-      probationLauDescription?: string
-      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
-      isEligibleForEarlyRelease: boolean
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       * @example 06/06/2023
-       */
-      topupSupervisionExpiryDate?: string
-      /**
-       * Format: date
-       * @description The earliest conditional release date of the person on licence
-       * @example 13/08/2022
-       */
-      conditionalReleaseDate?: string
-      /**
-       * Format: date
-       * @description The release date after being recalled
-       * @example 06/06/2023
-       */
-      postRecallReleaseDate?: string
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
-       */
-      topupSupervisionStartDate?: string
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][]
-      /**
-       * @description The current status code for this licence
-       * @example IN_PROGRESS
-       * @enum {string}
-       */
-      statusCode?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-      kind: string
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string
+      createdByFullName?: string
       /**
        * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       * @example 24/08/2022 11:30:33
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
        */
-      supersededDate?: string
+      dateLastUpdated?: string
       /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
        */
-      updatedByUsername?: string
-      /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
-       */
-      bookingNo?: string
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string
-      /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
-       */
-      nomsId?: string
-      /**
-       * @description The first name of the person on licence
-       * @example Michael
-       */
-      forename?: string
-      /**
-       * @description The family name of the person on licence
-       * @example Smith
-       */
-      surname?: string
-      /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number
+      submittedByFullName?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
@@ -4676,6 +4438,93 @@ export interface components {
       /** @description The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
+       * Format: date
+       * @description The actual release date (if set)
+       * @example 13/09/2022
+       */
+      actualReleaseDate?: string
+      /**
+       * Format: date
+       * @description The sentence start date
+       * @example 13/09/2019
+       */
+      sentenceStartDate?: string
+      /**
+       * Format: date
+       * @description The sentence end date
+       * @example 13/09/2022
+       */
+      sentenceEndDate?: string
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
+       */
+      supersededDate?: string
+      /**
+       * @description The username of the person who last updated this licence
+       * @example X34433
+       */
+      updatedByUsername?: string
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean
+      /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
+      bookingId?: number
+      /**
+       * @description The current status code for this licence
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      statusCode?:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
+      kind: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn?: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string
+      /**
        * @description The agency code of the detaining prison
        * @example LEI
        */
@@ -4684,6 +4533,62 @@ export interface components {
       isVariation: boolean
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean
+      /**
+       * @description The type of appointment with for the initial appointment
+       * @example SPECIFIC_PERSON
+       * @enum {string}
+       */
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      /**
+       * @description The team description
+       * @example Cardiff South
+       */
+      probationTeamDescription?: string
+      /**
+       * @description The probation area description
+       * @example Wales
+       */
+      probationAreaDescription?: string
+      /**
+       * @description The description for the PDU
+       * @example North Wales
+       */
+      probationPduDescription?: string
+      /**
+       * @description The LAU description
+       * @example North Wales
+       */
+      probationLauDescription?: string
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
+       */
+      topupSupervisionExpiryDate?: string
+      /**
+       * Format: date
+       * @description The earliest conditional release date of the person on licence
+       * @example 13/08/2022
+       */
+      conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       * @example 06/06/2023
+       */
+      postRecallReleaseDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
        * @description The email address for the supervising probation officer
        * @example jane.jones@nps.gov.uk
@@ -4717,65 +4622,20 @@ export interface components {
        */
       isReviewNeeded: boolean
       /**
-       * Format: date
-       * @description The actual release date (if set)
-       * @example 13/09/2022
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
        */
-      actualReleaseDate?: string
+      pnc?: string
       /**
-       * Format: date
-       * @description The sentence start date
-       * @example 13/09/2019
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
        */
-      sentenceStartDate?: string
+      cro?: string
       /**
-       * Format: date
-       * @description The sentence end date
-       * @example 13/09/2022
+       * @description The prison booking number for the person on this licence
+       * @example F12333
        */
-      sentenceEndDate?: string
-      /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
-      /**
-       * @description The version number of this licence
-       * @example 1.3
-       */
-      licenceVersion?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       * @example 24/08/2022 09:30:33
-       */
-      dateLastUpdated?: string
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /**
-       * @deprecated
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentContact?: string
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string
+      bookingNo?: string
       /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
@@ -4783,22 +4643,27 @@ export interface components {
        */
       comStaffId?: number
       /**
-       * Format: int64
-       * @description Unique identifier for this licence within the service
-       * @example 99999
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
        */
-      id: number
+      responsibleComFullName?: string
+      /** @description The address of initial appointment */
+      licenceAppointmentAddress?: components['schemas']['AddressResponse']
       /**
-       * @description The licence type code
-       * @example AP
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentTelephoneNumber?: string
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
        * @enum {string}
        */
-      typeCode: 'AP' | 'AP_PSS' | 'PSS'
-      /**
-       * @description The version number used for standard and additional conditions
-       * @example 1.4
-       */
-      version?: string
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
     } & (
       | components['schemas']['PrrdLicenceResponse']
       | components['schemas']['CrdLicence']
@@ -5166,63 +5031,6 @@ export interface components {
       prisoner: components['schemas']['Prisoner']
       /** @description Additional CVL specific information including derived fields */
       cvl: components['schemas']['CvlFields']
-    }
-    /** @description Response representing a last-minute handover case */
-    LastMinuteHandoverCaseResponse: {
-      /**
-       * Format: date
-       * @description Planned release date of the prisoner
-       * @example 2025-10-15
-       */
-      releaseDate: string
-      /** @description Name of the probation region handling the case */
-      probationRegion?: string
-      /**
-       * @description Unique prison number of the prisoner
-       * @example A1234BC
-       */
-      prisonerNumber: string
-      /**
-       * @description Case reference number (CRN) from probation system
-       * @example X123456
-       */
-      crn?: string
-      /**
-       * @description Full name of the prisoner
-       * @example John Smith
-       */
-      prisonerName: string
-      /** @description Assigned probation practitioner */
-      probationPractitioner?: string
-      /**
-       * @description Current licence status of the case
-       * @example IN_PROGRESS
-       * @enum {string}
-       */
-      status:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-      /**
-       * @description Prison code where the prisoner is held
-       * @example LEI
-       */
-      prisonCode?: string
-      /**
-       * @description Name of the prison
-       * @example Bedford Prison
-       */
-      prisonName?: string
     }
     EligibilityAssessment: {
       /**
@@ -6079,6 +5887,101 @@ export interface components {
     ValueVisualisationColumnDefinition: {
       id: string
       equals: string
+    }
+    /** @description Response representing a case with Electronic monitoring conditions, coming up for release */
+    UpcomingReleasesWithMonitoringConditionsResponse: {
+      /**
+       * @description Unique prison number of the prisoner
+       * @example A1234BC
+       */
+      prisonNumber: string
+      /**
+       * @description Case reference number (CRN) from probation system
+       * @example X123456
+       */
+      crn: string
+      /**
+       * @description Current licence status of the case
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      status:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
+      /**
+       * Format: date
+       * @description Licence start date
+       * @example 15/07/2024
+       */
+      licenceStartDate?: string
+    }
+    /** @description Response representing a last-minute handover case */
+    LastMinuteHandoverCaseResponse: {
+      /**
+       * Format: date
+       * @description Planned release date of the prisoner
+       * @example 2025-10-15
+       */
+      releaseDate: string
+      /** @description Name of the probation region handling the case */
+      probationRegion?: string
+      /**
+       * @description Unique prison number of the prisoner
+       * @example A1234BC
+       */
+      prisonerNumber: string
+      /**
+       * @description Case reference number (CRN) from probation system
+       * @example X123456
+       */
+      crn?: string
+      /**
+       * @description Full name of the prisoner
+       * @example John Smith
+       */
+      prisonerName: string
+      /** @description Assigned probation practitioner */
+      probationPractitioner?: string
+      /**
+       * @description Current licence status of the case
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      status:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
+      /**
+       * @description Prison code where the prisoner is held
+       * @example LEI
+       */
+      prisonCode?: string
+      /**
+       * @description Name of the prison
+       * @example Bedford Prison
+       */
+      prisonName?: string
     }
     /** @description Describes a prisoner due for release */
     Case: {
@@ -6946,144 +6849,6 @@ export interface operations {
     }
     responses: {
       /** @description The offender details were updated */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  updateResponsibleCom: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        crn: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateComRequest']
-      }
-    }
-    responses: {
-      /** @description The responsible COM was updated */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  updateProbationTeam: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        crn: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateProbationTeamRequest']
-      }
-    }
-    responses: {
-      /** @description The probation team was updated */
       200: {
         headers: {
           [name: string]: unknown
@@ -12160,71 +11925,6 @@ export interface operations {
       }
     }
   }
-  getUpcomingReleasesWithMonitoringConditions: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description A list of last minute handover cases */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UpcomingReleasesWithMonitoringConditionsResponse'][]
-        }
-      }
-      /** @description Bad request, request parameters must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   getDlqMessages: {
     parameters: {
       query?: {
@@ -12779,136 +12479,6 @@ export interface operations {
       }
       /** @description Could not find prisoner with prison number */
       404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getLastMinuteCases: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description A list of last minute handover cases */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LastMinuteHandoverCaseResponse'][]
-        }
-      }
-      /** @description Bad request, request parameters must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getLastMinuteCases_1: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description A list of last minute handover cases */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LastMinuteHandoverCaseResponse'][]
-        }
-      }
-      /** @description Bad request, request parameters must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
         headers: {
           [name: string]: unknown
         }
@@ -13870,6 +13440,136 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getUpcomingReleasesWithMonitoringConditions: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A list of last minute handover cases */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UpcomingReleasesWithMonitoringConditionsResponse'][]
+        }
+      }
+      /** @description Bad request, request parameters must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getLastMinuteCases: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A list of last minute handover cases */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['LastMinuteHandoverCaseResponse'][]
+        }
+      }
+      /** @description Bad request, request parameters must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */

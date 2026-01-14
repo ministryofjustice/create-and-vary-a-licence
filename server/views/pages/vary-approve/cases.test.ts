@@ -117,7 +117,7 @@ describe('View Vary Approver case list', () => {
     expect($('#release-date-2').text()).toBe('2 Nov 2022')
   })
 
-  it('should display probation practitioner as Unallocated', () => {
+  it('should display probation practitioner as Not allocated', () => {
     const unallocatedComCase = [
       {
         licenceId: 3,
@@ -126,7 +126,11 @@ describe('View Vary Approver case list', () => {
         licenceType: LicenceType.AP,
         releaseDate: '15/09/2023',
         variationRequestDate: '20/06/2024',
-        probationPractitioner: null,
+        probationPractitioner: {
+          name: 'Not allocated',
+          staffCode: null,
+          allocated: false,
+        },
       },
     ] as VaryApproverCase[]
     const $ = render({
@@ -135,7 +139,7 @@ describe('View Vary Approver case list', () => {
       regionCases: false,
     })
 
-    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
   })
 })

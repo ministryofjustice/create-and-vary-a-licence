@@ -3,7 +3,7 @@ import { Session } from 'express-session'
 
 import LicenceService from '../../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
-import { LicenceSummary, PrisonerWithCvlFields } from '../../../../../@types/licenceApiClientTypes'
+import { PrisonerWithCvlFields } from '../../../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -77,21 +77,18 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   describe('POST', () => {
     it('should create hardstop licence and should redirect if answer is YES', async () => {
       req.body.answer = 'Yes'
-      licenceService.createLicence.mockResolvedValue({ licenceId: 1, kind: 'HARD_STOP' } as LicenceSummary)
+      licenceService.createPrisonLicence.mockResolvedValue({ licenceId: 1 })
       await handler.POST(req, res)
-      expect(licenceService.createLicence).toHaveBeenCalledWith(
-        { nomsId: 'ABC123', type: 'HARD_STOP' },
-        {
-          username: 'joebloggs',
-        },
-      )
+      expect(licenceService.createPrisonLicence).toHaveBeenCalledWith('ABC123', {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-name')
     })
 
     it('should not create licence and should redirect when answer is NO', async () => {
       req.body.answer = 'No'
       await handler.POST(req, res)
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
+      expect(licenceService.createPrisonLicence).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
     })
 
@@ -99,7 +96,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       req.body.answer = 'No'
       req.session = {} as Session
       await handler.POST(req, res)
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
+      expect(licenceService.createPrisonLicence).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
     })
   })

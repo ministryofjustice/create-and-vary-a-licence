@@ -15,7 +15,6 @@ import {
   ContactNumberRequest,
   ExternalTimeServedRecordRequest,
   Licence,
-  LicenceCreationResponse,
   LicencePermissionsRequest,
   LicenceSummary,
   OverrideLicencePrisonerDetailsRequest,
@@ -28,11 +27,13 @@ import {
   UpdateElectronicMonitoringProgrammeRequest,
   UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
-  UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
   VaryApproverCaseloadSearchRequest,
+  CreateLicenceResponse,
+  CreateVariationResponse,
+  EditLicenceResponse,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -67,27 +68,27 @@ describe('Licence API client tests', () => {
     jest.resetAllMocks()
   })
 
-  it('Create licence request', async () => {
-    post.mockResolvedValue({ licenceId: 1 } as LicenceCreationResponse)
+  it('Create probation licence request', async () => {
+    post.mockResolvedValue({ licenceId: 1 } as CreateLicenceResponse)
 
-    const creationRequest = { nomsId: 'A1234AA', type: 'CRD' as const }
-    const result = await licenceApiClient.createLicence(creationRequest, { username: 'joebloggs' } as User)
+    const nomsId = 'A1234AA'
+    const result = await licenceApiClient.createProbationLicence(nomsId, { username: 'joebloggs' } as User)
 
     expect(post).toHaveBeenCalledWith(
-      { path: '/licence/create', data: creationRequest, returnBodyOnErrorIfPredicate: expect.any(Function) },
+      { path: `/licence/probation/nomisid/${nomsId}`, returnBodyOnErrorIfPredicate: expect.any(Function) },
       { username: 'joebloggs' },
     )
     expect(result).toEqual({ licenceId: 1 })
   })
 
-  it('Create licence request when resouce already exists', async () => {
+  it('Create probation licence request when resouce already exists', async () => {
     post.mockResolvedValue({ status: 409, existingResourceId: 3 })
 
-    const creationRequest = { nomsId: 'A1234AA', type: 'CRD' as const }
-    const result = await licenceApiClient.createLicence(creationRequest, { username: 'joebloggs' } as User)
+    const nomsId = 'A1234AA'
+    const result = await licenceApiClient.createProbationLicence(nomsId, { username: 'joebloggs' } as User)
 
     expect(post).toHaveBeenCalledWith(
-      { path: '/licence/create', data: creationRequest, returnBodyOnErrorIfPredicate: expect.any(Function) },
+      { path: `/licence/probation/nomisid/${nomsId}`, returnBodyOnErrorIfPredicate: expect.any(Function) },
       { username: 'joebloggs' },
     )
     expect(result).toEqual({ licenceId: 3 })
@@ -240,7 +241,7 @@ describe('Licence API client tests', () => {
 
   describe('Match Licences', () => {
     it('Should pass parameters to sort the matched licences', async () => {
-      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as unknown as LicenceSummary])
 
       const result = await licenceApiClient.matchLicences({
         statuses: [LicenceStatus.IN_PROGRESS],
@@ -269,7 +270,7 @@ describe('Licence API client tests', () => {
     })
 
     it('Should call the endpoint without the sort query params', async () => {
-      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as unknown as LicenceSummary])
 
       const result = await licenceApiClient.matchLicences({
         statuses: [LicenceStatus.IN_PROGRESS],
@@ -291,50 +292,6 @@ describe('Licence API client tests', () => {
         { username: 'joebloggs' },
       )
       expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
-    })
-  })
-
-  it('should update responsible COM for an offender', async () => {
-    await licenceApiClient.updateResponsibleCom('X1234', {
-      staffIdentifier: 2000,
-      staffUsername: 'joebloggs',
-      staffEmail: 'joebloggs@probation.gov.uk',
-    } as UpdateComRequest)
-
-    expect(put).toHaveBeenCalledWith({
-      path: '/offender/crn/X1234/responsible-com',
-      data: {
-        staffIdentifier: 2000,
-        staffUsername: 'joebloggs',
-        staffEmail: 'joebloggs@probation.gov.uk',
-      },
-    })
-  })
-
-  it('should update probation team for an offender', async () => {
-    await licenceApiClient.updateProbationTeam('X1234', {
-      probationAreaCode: 'N02',
-      probationAreaDescription: 'N02 Region',
-      probationPduCode: 'PDU2',
-      probationPduDescription: 'PDU2 Description',
-      probationLauCode: 'LAU2',
-      probationLauDescription: 'LAU2 Description',
-      probationTeamCode: 'Team2',
-      probationTeamDescription: 'Team2 Description',
-    } as UpdateProbationTeamRequest)
-
-    expect(put).toHaveBeenCalledWith({
-      path: '/offender/crn/X1234/probation-team',
-      data: {
-        probationAreaCode: 'N02',
-        probationAreaDescription: 'N02 Region',
-        probationPduCode: 'PDU2',
-        probationPduDescription: 'PDU2 Description',
-        probationLauCode: 'LAU2',
-        probationLauDescription: 'LAU2 Description',
-        probationTeamCode: 'Team2',
-        probationTeamDescription: 'Team2 Description',
-      },
     })
   })
 
@@ -371,21 +328,21 @@ describe('Licence API client tests', () => {
   })
 
   it('should edit a licence', async () => {
-    post.mockResolvedValue({ id: 1, prisonCode: 'MDI' } as Licence)
+    post.mockResolvedValue({ licenceId: 1 } as EditLicenceResponse)
 
     const result = await licenceApiClient.editLicence('1', { username: 'joebloggs' } as User)
 
     expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/edit' }, { username: 'joebloggs' })
-    expect(result).toEqual({ id: 1, prisonCode: 'MDI' })
+    expect(result).toEqual({ licenceId: 1 })
   })
 
   it('Create variation', async () => {
-    post.mockResolvedValue({ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary)
+    post.mockResolvedValue({ licenceId: 1 } as CreateVariationResponse)
 
     const result = await licenceApiClient.createVariation('1', { username: 'joebloggs' } as User)
 
     expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/create-variation' }, { username: 'joebloggs' })
-    expect(result).toEqual({ licenceId: 1, prisonCode: 'MDI' })
+    expect(result).toEqual({ licenceId: 1 })
   })
 
   it('Activate variation', async () => {

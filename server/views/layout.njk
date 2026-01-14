@@ -112,9 +112,10 @@
 {% block bodyEnd %}
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
   <!-- Govuk Lib -->
+  <script src="/assets/govuk/all.bundle.js"></script>
   <script type="module" src="/assets/govukFrontendInit.js"></script>
   <!-- MoJ Lib -->
-  <script src="/assets/moj/all.js"></script>
+  <script src="/assets/moj/all.bundle.js"></script>
   <script type="module" src="/assets/mojInit.mjs"></script>
   {% block pageScripts %}{% endblock %}
 {% endblock %}

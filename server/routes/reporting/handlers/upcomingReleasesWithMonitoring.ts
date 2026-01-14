@@ -19,10 +19,15 @@ export default class UpcomingReleasesWithMonitoringConditionsRoutes {
   GET_CSV = async (req: Request, res: Response): Promise<void> => {
     const upcomingCases = await this.getUpcomingReleasesWithMonitoring()
 
-    const header = ['Prison Number', 'CRN', 'Licence Status']
+    const header = ['Prison Number', 'CRN', 'Licence Status', 'Licence Start Date']
 
     const csv = upcomingCases
-      .map(upcomingCases => [upcomingCases.prisonNumber, upcomingCases.crn, upcomingCases.status])
+      .map(upcomingCases => [
+        upcomingCases.prisonNumber,
+        upcomingCases.crn,
+        upcomingCases.status,
+        upcomingCases.licenceStartDate,
+      ])
       .map(row => row.join(','))
       .join('\n')
 
@@ -42,6 +47,7 @@ export default class UpcomingReleasesWithMonitoringConditionsRoutes {
         crn: upcomingCase.crn,
         prisonNumber: upcomingCase.prisonNumber,
         status: upcomingCase.status,
+        licenceStartDate: upcomingCase.licenceStartDate,
       }
     })
   }

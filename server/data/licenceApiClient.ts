@@ -21,11 +21,11 @@ import type {
   ComCreateCase,
   ComVaryCase,
   ContactNumberRequest,
-  CreateLicenceRequest,
   HdcLicenceData,
   Licence,
   LicenceConditionChange,
-  LicenceCreationResponse,
+  CreateLicenceResponse,
+  CreateVariationResponse,
   LicenceEvent,
   LicencePolicyResponse,
   LicenceSummary,
@@ -46,7 +46,6 @@ import type {
   UpdateElectronicMonitoringProgrammeRequest,
   UpdateOffenderDetailsRequest,
   UpdatePrisonInformationRequest,
-  UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
   UpdateStandardConditionDataRequest,
@@ -63,8 +62,11 @@ import type {
   ExternalTimeServedRecordResponse,
   TimeServedProbationConfirmContactRequest,
   UpcomingReleasesWithMonitoringConditionsResponse,
+  EditLicenceResponse,
+  ComReviewCount,
+  UpdateComRequest,
+  UpdatePrisonUserRequest,
 } from '../@types/licenceApiClientTypes'
-import { ComReviewCount, UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
 import LicenceType from '../enumeration/licenceType'
@@ -113,11 +115,24 @@ export default class LicenceApiClient extends RestClient {
     }
   }
 
-  async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceCreationResponse> {
+  async createPrisonLicence(nomsId: string, user: User): Promise<CreateLicenceResponse> {
     const response = (await this.post(
       {
-        path: `/licence/create`,
-        data: licence,
+        path: `/licence/prison/nomisid/${nomsId}`,
+        returnBodyOnErrorIfPredicate: e => e.response.status === 409,
+      },
+      { username: user.username },
+    )) as Record<string, unknown>
+
+    return response.status === 409
+      ? { licenceId: response.existingResourceId as number }
+      : { licenceId: response.licenceId as number }
+  }
+
+  async createProbationLicence(nomsId: string, user: User): Promise<CreateLicenceResponse> {
+    const response = (await this.post(
+      {
+        path: `/licence/probation/nomisid/${nomsId}`,
         returnBodyOnErrorIfPredicate: e => e.response.status === 409,
       },
       { username: user.username },
@@ -354,14 +369,6 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<Buffer>
   }
 
-  async updateResponsibleCom(crn: string, updateResponsibleComRequest: UpdateComRequest): Promise<void> {
-    await this.put({ path: `/offender/crn/${crn}/responsible-com`, data: updateResponsibleComRequest })
-  }
-
-  async updateProbationTeam(crn: string, updateProbationTeamRequest: UpdateProbationTeamRequest): Promise<void> {
-    await this.put({ path: `/offender/crn/${crn}/probation-team`, data: updateProbationTeamRequest })
-  }
-
   async updateComDetails(updateComRequest: UpdateComRequest): Promise<void> {
     await this.put({ path: `/com/update`, data: updateComRequest })
   }
@@ -374,23 +381,14 @@ export default class LicenceApiClient extends RestClient {
     return (await this.post(
       { path: `/licence/id/${licenceId}/edit` },
       { username: user?.username },
-    )) as Promise<LicenceSummary>
+    )) as Promise<EditLicenceResponse>
   }
 
-  async createVariation(licenceId: string, user: User): Promise<LicenceSummary> {
+  async createVariation(licenceId: string, user: User): Promise<CreateVariationResponse> {
     return (await this.post(
       { path: `/licence/id/${licenceId}/create-variation` },
       { username: user?.username },
-    )) as Promise<LicenceSummary>
-  }
-
-  async submittedVariationsByProbationArea(probationAreaCode: string, user: User) {
-    return (await this.get(
-      {
-        path: `/licence/variations/submitted/area/${probationAreaCode}`,
-      },
-      { username: user?.username },
-    )) as LicenceSummary[]
+    )) as Promise<CreateVariationResponse>
   }
 
   async updateSpoDiscussion(licenceId: string, request: UpdateSpoDiscussionRequest, user: User): Promise<void> {

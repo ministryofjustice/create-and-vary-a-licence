@@ -6,6 +6,12 @@ import statusConfig from '../../../../licences/licenceStatus'
 import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 import LicenceKind from '../../../../enumeration/LicenceKind'
 
+interface ProbationPractitioner {
+  name: string
+  staffCode: string
+  allocated: boolean
+}
+
 const render = templateRenderer(
   fs.readFileSync('server/views/pages/search/probationSearch/probationSearch.njk').toString(),
 )
@@ -21,6 +27,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
@@ -58,7 +69,7 @@ describe('View Probation Search Results', () => {
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
   })
 
-  it('should display Not allocated yet when com is not given', () => {
+  it('should display Not allocated when com is not given', () => {
     const $ = render({
       statusConfig,
       peopleOnProbation: [
@@ -66,6 +77,11 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
@@ -82,7 +98,7 @@ describe('View Probation Search Results', () => {
       },
       queryTerm: 'Test',
     })
-    expect($('#probation-practitioner-1').text().trim()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-1').text().trim()).toBe('Not allocated')
   })
 
   it('should display prison name link if on isOnProbation', () => {
@@ -93,6 +109,11 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
@@ -120,6 +141,11 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
@@ -149,6 +175,11 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
@@ -180,6 +211,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
@@ -227,6 +263,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: null,
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
@@ -254,7 +295,7 @@ describe('View Probation Search Results', () => {
     expect($('#name-1 > .search-offender-name > .govuk-heading-s').text()).toBe('Test Person')
     expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
     expect($('#licence-type-1').text().trim()).toBe('Standard determinate')
-    expect($('#probation-practitioner-1').text()).toBe('Unallocated')
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated')
 
     expect($('#team-name-1').text()).toBe('Test Team')
     expect($('#release-date-1').text()).toBe('CRD: 16 Aug 2023')
@@ -271,6 +312,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: null,
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: '3000',
+            allocated: false,
+          },
           teamName: 'Test Team',
           releaseDate: '',
           licenceId: null,
@@ -301,6 +347,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: null,
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: '3000',
+            allocated: false,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
@@ -331,6 +382,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
@@ -362,6 +418,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
@@ -393,6 +454,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
@@ -424,6 +490,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 2,
@@ -455,6 +526,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
@@ -485,6 +561,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 3,
@@ -515,6 +596,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '20/12/2025',
           licenceId: 1,
@@ -550,6 +636,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '20/12/2025',
           licenceId: 1,
@@ -585,6 +676,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '20/12/2025',
           licenceId: 1,
@@ -622,6 +718,11 @@ describe('View Probation Search Results', () => {
           nomisId: 'A1234BC',
           comName: 'Test Staff',
           comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
           teamName: 'Test Team',
           releaseDate: '20/12/2025',
           licenceId: 1,
@@ -659,6 +760,11 @@ describe('View Probation Search Results', () => {
       crn: 'CRN',
       comName: 'Bob',
       comStaffCode: '123',
+      probationPractitioner: {
+        name: 'Bob',
+        staffCode: '123',
+        allocated: true,
+      },
       teamName: 'AAA',
       licenceType: 'AP',
       licenceId: 1,
@@ -696,6 +802,11 @@ describe('View Probation Search Results', () => {
       crn: 'CRN',
       comName: 'Bob',
       comStaffCode: '123',
+      probationPractitioner: {
+        name: 'Bob',
+        staffCode: '123',
+        allocated: true,
+      },
       teamName: 'AAA',
       licenceType: 'AP',
       licenceId: 1,
@@ -718,76 +829,6 @@ describe('View Probation Search Results', () => {
 
     // Then
     expect($('#release-date-1').text()).toBe('1 Jul 2025Time-served release')
-  })
-
-  it('renders Not allocated yet for time-served when no com given with people in prison', () => {
-    // Given
-    const offenders = [
-      {
-        kind: 'TIME_SERVED',
-        releaseDate: '01/07/2025',
-        releaseDateLabel: 'CRD',
-      },
-    ].map((o, idx) => ({
-      name: `Offender ${idx}`,
-      crn: 'CRN',
-      teamName: 'AAA',
-      licenceType: 'AP',
-      licenceId: 1,
-      licenceStatus: LicenceStatus.IN_PROGRESS,
-      isOnProbation: false,
-      ...o,
-    }))
-
-    // Given
-    const $ = render({
-      statusConfig,
-      peopleInPrison: offenders,
-      peopleOnProbation: [],
-      tabParameters: {
-        activeTab: '#people-in-prison',
-        prisonTabId: 'tab-heading-prison',
-        probationTabId: 'tab-heading-probation',
-      },
-    })
-
-    // Then
-    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
-  })
-
-  it('renders Not allocated yet for time-served when no com given with people on probation', () => {
-    // Given
-    const offenders = [
-      {
-        kind: 'TIME_SERVED',
-        releaseDate: '01/07/2025',
-        releaseDateLabel: 'CRD',
-      },
-    ].map((o, idx) => ({
-      name: `Offender ${idx}`,
-      crn: 'CRN',
-      teamName: 'AAA',
-      licenceType: 'AP',
-      licenceId: 1,
-      licenceStatus: LicenceStatus.IN_PROGRESS,
-      isOnProbation: false,
-      ...o,
-    }))
-
-    // Given
-    const $ = render({
-      statusConfig,
-      peopleInPrison: [],
-      peopleOnProbation: offenders,
-      tabParameters: {
-        activeTab: '#people-in-prison',
-        prisonTabId: 'tab-heading-prison',
-        probationTabId: 'tab-heading-probation',
-      },
-    })
-
-    // Then
-    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
   })
 
   it('should correctly show tab counts result counts', () => {
@@ -824,6 +865,11 @@ describe('View Probation Search Results', () => {
           name: 'Timed Out Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          } as ProbationPractitioner,
           teamName: 'Test Team',
           licenceId: 1,
           licenceType: 'AP',

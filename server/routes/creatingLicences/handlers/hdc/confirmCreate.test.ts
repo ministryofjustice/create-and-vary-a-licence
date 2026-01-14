@@ -187,14 +187,11 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
 
   describe('POST', () => {
     it('should create an hdc licence and should redirect', async () => {
-      licenceService.createLicence.mockResolvedValue({ licenceId: 1, kind: 'HDC' } as LicenceSummary)
+      licenceService.createProbationLicence.mockResolvedValue({ licenceId: 1, kind: 'HDC' } as LicenceSummary)
       await handler.POST(req, res)
-      expect(licenceService.createLicence).toHaveBeenCalledWith(
-        { nomsId: 'ABC123', type: 'HDC' },
-        {
-          username: 'joebloggs',
-        },
-      )
+      expect(licenceService.createProbationLicence).toHaveBeenCalledWith('ABC123', {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-name')
     })
 

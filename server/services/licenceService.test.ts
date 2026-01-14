@@ -20,11 +20,9 @@ import {
   LicenceSummary,
   PrisonerWithCvlFields,
   StandardCondition,
-  UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
   UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
-  UpdateProbationTeamRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
@@ -60,20 +58,17 @@ describe('Licence Service', () => {
     jest.clearAllMocks()
   })
 
-  describe('Create Licence', () => {
+  describe('Create Prison Licence', () => {
     it('Should create a CRD licence in the backend API', async () => {
-      await licenceService.createLicence({ nomsId: 'ABC1234', type: 'CRD' }, user)
-      expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1234', type: 'CRD' }, user)
+      await licenceService.createPrisonLicence('ABC1234', user)
+      expect(licenceApiClient.createPrisonLicence).toHaveBeenCalledWith('ABC1234', user)
     })
+  })
 
-    it('Should create a HARD_STOP licence in the backend API', async () => {
-      await licenceService.createLicence({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
-      expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
-    })
-
-    it('Should create a HARD_STOP licence in the backend API', async () => {
-      await licenceService.createLicence({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
-      expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
+  describe('Create Probation Licence', () => {
+    it('Should create a PRRD licence in the backend API', async () => {
+      await licenceService.createProbationLicence('ABC1234', user)
+      expect(licenceApiClient.createProbationLicence).toHaveBeenCalledWith('ABC1234', user)
     })
   })
 
@@ -428,24 +423,6 @@ describe('Licence Service', () => {
     expect(result).toEqual({ licenceId: 2 })
   })
 
-  it('should update COM responsible for an offender', async () => {
-    await licenceService.updateResponsibleCom('X1234', {
-      staffIdentifier: 2000,
-      staffUsername: 'joebloggs',
-      staffEmail: 'joebloggs@probation.gov.uk',
-      firstName: 'Joseph',
-      lastName: 'Bloggs',
-    } as UpdateComRequest)
-
-    expect(licenceApiClient.updateResponsibleCom).toHaveBeenCalledWith('X1234', {
-      staffIdentifier: 2000,
-      staffUsername: 'joebloggs',
-      staffEmail: 'joebloggs@probation.gov.uk',
-      firstName: 'Joseph',
-      lastName: 'Bloggs',
-    })
-  })
-
   it('should update prison user responsible for an offender', async () => {
     await licenceService.updatePrisonUserDetails({
       staffUsername: 'joebloggs',
@@ -459,30 +436,6 @@ describe('Licence Service', () => {
       staffEmail: 'joebloggs@probation.gov.uk',
       firstName: 'Joseph',
       lastName: 'Bloggs',
-    })
-  })
-
-  it('should update the probation team for an offender', async () => {
-    await licenceService.updateProbationTeam('X1234', {
-      probationAreaCode: 'N02',
-      probationAreaDescription: 'N02 Region',
-      probationPduCode: 'PDU2',
-      probationPduDescription: 'PDU2 Description',
-      probationLauCode: 'LAU2',
-      probationLauDescription: 'LAU2 Description',
-      probationTeamCode: 'Team2',
-      probationTeamDescription: 'Team2 Description',
-    } as UpdateProbationTeamRequest)
-
-    expect(licenceApiClient.updateProbationTeam).toHaveBeenCalledWith('X1234', {
-      probationAreaCode: 'N02',
-      probationAreaDescription: 'N02 Region',
-      probationPduCode: 'PDU2',
-      probationPduDescription: 'PDU2 Description',
-      probationLauCode: 'LAU2',
-      probationLauDescription: 'LAU2 Description',
-      probationTeamCode: 'Team2',
-      probationTeamDescription: 'Team2 Description',
     })
   })
 

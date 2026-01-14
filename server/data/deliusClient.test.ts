@@ -39,12 +39,6 @@ describe('Delius client tests', () => {
     expect(result).toEqual({ id: 2000 })
   })
 
-  it('Assign Delius role', async () => {
-    await deliusClient.assignDeliusRole('username')
-
-    expect(put).toHaveBeenCalledWith({ path: `/users/username/roles` })
-  })
-
   it('Get PDU heads', async () => {
     get.mockResolvedValue([{ name: { forename: 'a' } }, { name: { forename: 'b' } }] as DeliusPDUHead[])
 

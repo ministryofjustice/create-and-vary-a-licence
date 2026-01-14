@@ -6,6 +6,12 @@ import statusConfig from '../../../licences/licenceStatus'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
+interface ProbationPractitioner {
+  name: string
+  staffCode: string
+  allocated: boolean
+}
+
 const render = templateRenderer(fs.readFileSync('server/views/pages/create/caseload.njk').toString())
 
 describe('Create a Licence Views - Caseload', () => {
@@ -57,6 +63,11 @@ describe('Create a Licence Views - Caseload', () => {
           name: 'John Smith',
           crnNumber: 'X123456',
           releaseDate: '01 September 2022',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          } as ProbationPractitioner,
           isClickable: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
@@ -65,6 +76,11 @@ describe('Create a Licence Views - Caseload', () => {
           name: 'Zohn Smith',
           crnNumber: 'X123456',
           releaseDate: '01 September 2022',
+          probationPractitioner: {
+            name: 'Not allocated',
+            staffCode: null,
+            allocated: false,
+          } as ProbationPractitioner,
           isClickable: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
@@ -80,11 +96,11 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('#name-2 > .caseload-offender-name > a').text()).toBe('John Smith')
     expect($('#release-date-2').text()).toBe('01 September 2022')
-    expect($('#probation-practitioner-2').text()).toBe('Unallocated')
+    expect($('#probation-practitioner-2').text()).toBe('Not allocated')
 
     expect($('#name-3 > .caseload-offender-name > a').text()).toBe('Zohn Smith')
     expect($('#release-date-3').text()).toBe('01 September 2022Time-served release')
-    expect($('#probation-practitioner-3').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-3').text()).toBe('Not allocated')
   })
 
   it('should display the caseload with a case outside the pilot area', () => {
@@ -338,6 +354,11 @@ describe('Create a Licence Views - Caseload', () => {
         crnNumber: 'A123456',
         prisonerNumber: 'ABC123',
         releaseDate: '20 December 2025',
+        probationPractitioner: {
+          name: 'Not allocated',
+          staffCode: null,
+          allocated: false,
+        } as ProbationPractitioner,
         isClickable: true,
         licenceStatus: LicenceStatus.IN_PROGRESS,
         createLink: '/licence/create/nomisId/ABC123/confirm',
@@ -355,6 +376,6 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#release-date-1').text()).toBe('20 December 2025Time-served release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Time-served release')
-    expect($('#probation-practitioner-1').text()).toBe('Not allocated yet')
+    expect($('#probation-practitioner-1').text()).toBe('Not allocated')
   })
 })

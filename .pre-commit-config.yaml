@@ -5,26 +5,12 @@
 # Other hooks maybe added or removed as needed to suit individual project requirements.
 
 repos:
-  #. Temporary disabled while we investigate issues with it
-  #  - repo: https://github.com/ministryofjustice/devsecops-hooks
-  #    rev: v1.1.0
-  #    hooks:
-  #      - id: baseline
+  - repo: https://github.com/ministryofjustice/devsecops-hooks
+    rev: v1.3.0
+    hooks:
+      - id: baseline
   - repo: local
     hooks:
-      - id: gitleaks
-        name: Scan commit for secrets
-        language: system
-        entry: gitleaks git --pre-commit --redact --staged --verbose --config .gitleaks/config.toml --gitleaks-ignore-path .gitleaks/.gitleaksignore
-        require_serial: true
-        pass_filenames: false
-      - id: lint
-        name: linting code
-        language: system
-        entry: ./node_modules/.bin/lint-staged
-        types_or: [ts,javascript,css]
-        require_serial: true
-        pass_filenames: false
       - id: typecheck
         name: verify types
         language: system

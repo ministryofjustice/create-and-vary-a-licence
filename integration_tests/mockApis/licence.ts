@@ -333,19 +333,6 @@ export default {
     })
   },
 
-  stubUpdateResponsibleCom: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'PUT',
-        urlPattern: `/licences-api/offender/crn/.*/responsible-com`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      },
-    })
-  },
-
   stubGetLicence: (options: {
     licenceKind?: LicenceKind
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
@@ -779,19 +766,33 @@ export default {
     })
   },
 
-  stubPostLicence: (): SuperAgentRequest => {
+  stubPostPrisonLicence: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/licences-api/licence/create',
+        urlPattern: '/licences-api/licence/prison/nomisid/.*',
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           licenceId: 1,
-          licenceType: 'AP',
-          licenceStatus: 'IN_PROGRESS',
+        },
+      },
+    })
+  },
+
+  stubPostProbationLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/licences-api/licence/probation/nomisid/.*',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          licenceId: 1,
         },
       },
     })
@@ -1546,6 +1547,11 @@ export default {
               nomisId: 'A1234BC',
               comName: 'Test Staff',
               comStaffCode: '3000',
+              probationPractitioner: {
+                name: 'Test Staff',
+                staffCode: '3000',
+                allocated: true,
+              },
               teamName: 'Test Team',
               releaseDate: '16/08/2023',
               licenceId: 1,
@@ -1570,6 +1576,11 @@ export default {
       nomisId: 'A1234BC',
       comName: 'Test Staff',
       comStaffCode: '3000',
+      probationPractitioner: {
+        name: 'Test Staff',
+        staffCode: '3000',
+        allocated: true,
+      },
       teamName: 'Test Team',
       releaseDate: '16/08/2023',
       licenceId: 1,
@@ -2086,7 +2097,11 @@ export default {
             name: 'Another Person',
             prisonerNumber: 'AB1234E',
             probationPractitioner: options.isUnallocatedCom
-              ? null
+              ? {
+                  name: 'Not allocated',
+                  staffCode: null,
+                  allocated: false,
+                }
               : {
                   name: 'John Smith',
                   staffCode: 'X1234',
@@ -2228,7 +2243,11 @@ export default {
             licenceStatus: options.licenceStatus,
             licenceType: 'PSS',
             probationPractitioner: options.isUnallocatedCom
-              ? null
+              ? {
+                  name: 'Not allocated',
+                  staffCode: null,
+                  allocated: false,
+                }
               : { staffCode: 'X12345', name: 'John Smith', allocated: true },
             hardStopDate: '03/01/2023',
             hardStopWarningDate: '01/01/2023',
