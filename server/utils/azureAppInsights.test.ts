@@ -1,4 +1,4 @@
-cimport { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
+import { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 import { addUserDataToRequests, overrideOperationName } from './azureAppInsights'
 
 const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>

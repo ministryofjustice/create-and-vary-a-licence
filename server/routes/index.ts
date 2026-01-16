@@ -62,8 +62,8 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   router.use(timeServedInitialAppointmentRoutes(services))
   router.use(pathfinderRoutes(services))
   router.use(createTimeServedLicenceRoutes(services))
-  router.use(dprRoutes(services, nunjucksEnvironment))
   router.get('/prisoner/:nomsId/image', prisonerController.getImage())
-  
+  router.use(dprRoutes(services, nunjucksEnvironment))
+
   return router
 }

@@ -65,6 +65,7 @@ export function appWithAllRoutes({
   signedCookies?: () => Record<string, Record<string, string>>
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  const overrideServices = { downloadPermissionService: { enabled: true }, ...services } as Services
+  // const overrideServices = { downloadPermissionService: { enabled: true }, ...services } as Services
+  const overrideServices = services as Services
   return appSetup(overrideServices, userSupplier)
 }
