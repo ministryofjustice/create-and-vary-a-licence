@@ -31,15 +31,30 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       } else {
         classType = type
       }
+
+      const files = req.files as {
+        [key: string]: Express.Multer.File[]
+      }
+
+      const inBound = files?.inBoundFilename?.[0]
+      const outOfBound = files?.outOfBoundFilename?.[0]
+
+      const selectedFile = inBound ?? outOfBound
+
       // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
-      if (req.file && req.file.fieldname === 'outOfBoundFilename') {
-        req.body = { ...req.body, outOfBoundFilename: req.file.originalname }
+      if (selectedFile) {
+        req.body = {
+          ...req.body,
+
+          ...(inBound && { inBoundFilename: inBound.originalname }),
+          ...(outOfBound && { outOfBoundFilename: outOfBound.originalname }),
+        }
       }
 
       // Build an object which is used by validators to check things against
       const validationScope = plainToInstance(
         classType,
-        { ...req.body, licence, uploadFile: req.file },
+        { ...req.body, licence, uploadFile: selectedFile },
         { excludeExtraneousValues: false },
       )
 

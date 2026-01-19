@@ -39,8 +39,15 @@ export default class FileUploadInputRoutes {
       redirect += '?fromReview=true'
     }
 
-    if (req.file) {
-      await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
+    const files = req.files as Record<string, Express.Multer.File[]>
+
+    const inbound = files?.inBoundFilename?.[0]
+    const outbound = files?.outOfBoundFilename?.[0]
+
+    const file = inbound ?? outbound
+
+    if (file) {
+      await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, file, user)
     }
     const condition = licence.additionalLicenceConditions.find(
       (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),

@@ -59,6 +59,7 @@ import ReportToApprovedPremisesPolicyV3 from '../routes/manageConditions/types/a
 import RestrictionOfResidencyPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/restrictionOfResidencyPolicyV3'
 import UnsupervisedContactPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/unsupervisedContactPolicyV3'
 import WorkingWithChildrenPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/workingWithChildrenPolicyV3'
+import InBoundsRegion from '../routes/manageConditions/types/additionalConditionInputs/inBoundsRegion'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -292,6 +293,9 @@ export default class ConditionService {
           break
         case 'WorkingWithChildrenPolicyV3':
           validator = WorkingWithChildrenPolicyV3
+          break
+        case 'InBoundsRegion':
+          validator = InBoundsRegion
           break
         default: {
           // silently ignore
