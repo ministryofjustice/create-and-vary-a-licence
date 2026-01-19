@@ -169,7 +169,7 @@ describe('validationMiddleware', () => {
       req = {
         params: {},
         flash: jest.fn(),
-        file: uploadFile,
+        files: { outOfBoundFilename: [uploadFile] },
         body: { outOfBoundArea: 'Anywhere' },
       } as unknown as Request
 

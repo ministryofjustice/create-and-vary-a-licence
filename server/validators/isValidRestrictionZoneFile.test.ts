@@ -33,7 +33,7 @@ describe('File upload validation', () => {
   })
 
   it('should fail validation when no file has been selected', async () => {
-    const value = plainToInstance(TestClass, { })
+    const value = plainToInstance(TestClass, {})
     const errors: ValidationError[] = await validate(value)
     expect(errors.length).toBe(1)
     expect(errors[0].constraints).toEqual({
