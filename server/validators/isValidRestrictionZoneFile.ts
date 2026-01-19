@@ -2,7 +2,7 @@ import { registerDecorator, ValidationArguments, ValidationOptions } from 'class
 import { isBlank } from '../utils/utils'
 
 export default function IsValidRestrictionZoneFile(validationOptions?: ValidationOptions) {
-  // Max exclusion file size in MB, this is configurable in licence API
+  // Max file size in MB, this is configurable in licence API
   const MAX_FILE_SIZE_MB = 10
 
   const isValidRestrictionZoneFile = (inBoundFilename: string, { object }: ValidationArguments) => {
