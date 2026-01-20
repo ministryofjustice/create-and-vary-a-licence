@@ -31,7 +31,6 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       } else {
         classType = type
       }
-      console.log('req.file', req.file)
 
       // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
       if (req.file) {
