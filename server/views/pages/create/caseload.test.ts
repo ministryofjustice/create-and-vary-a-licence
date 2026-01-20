@@ -360,7 +360,7 @@ describe('Create a Licence Views - Caseload', () => {
           allocated: false,
         } as ProbationPractitioner,
         isClickable: true,
-        licenceStatus: LicenceStatus.IN_PROGRESS,
+        licenceStatus: LicenceStatus.TIMED_OUT,
         createLink: '/licence/create/nomisId/ABC123/confirm',
         kind: LicenceKind.TIME_SERVED,
       },
@@ -377,5 +377,6 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#release-date-1').text()).toBe('20 December 2025Time-served release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Time-served release')
     expect($('#probation-practitioner-1').text()).toBe('Not allocated')
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Timed out')
   })
 })
