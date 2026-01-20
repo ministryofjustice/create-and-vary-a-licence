@@ -23,7 +23,9 @@ describe('View prison will create this licence page', () => {
     expect($('p.govuk-body').first().text()).toContain(
       'The prison will create a licence for this person as none was submitted in time for their final release checks.',
     )
-    expect($('#licence-review-warning').text()).toContain('This licence must be reviewed after this person is released.')
+    expect($('#licence-review-warning').text()).toContain(
+      'This licence must be reviewed after this person is released.',
+    )
   })
 
   it('should display licence details for TIME_SERVED', () => {
@@ -45,6 +47,8 @@ describe('View prison will create this licence page', () => {
     expect($('p.govuk-body').first().text()).toContain(
       "The prison will create this person's licence because they are being released immediately following sentencing having served time on remand.",
     )
-    expect($('#licence-review-warning').text()).toContain('This licence must be reviewed after this person is released.')
+    expect($('#licence-review-warning').text()).toContain(
+      'This licence must be reviewed after this person is released.',
+    )
   })
 })
