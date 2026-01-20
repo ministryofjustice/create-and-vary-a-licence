@@ -17,7 +17,7 @@ describe('File upload validation', () => {
     path: 'test-file',
     originalname: 'test.txt',
     size: 10,
-    fieldname: 'outOfBoundFilename',
+    fieldname: 'filename',
     mimetype: 'application/pdf',
   } as Express.Multer.File
 
