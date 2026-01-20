@@ -3,7 +3,7 @@ import { IsIn, IsNotEmpty, ValidateNested } from 'class-validator'
 import { Expose, Type } from 'class-transformer'
 import validationMiddleware from './validationMiddleware'
 
-import IsValidExclusionZoneFile from '../validators/isValidExclusionZoneFile'
+import IsValidZoneDefinitionFile from '../validators/IsValidZoneDefinitionFile'
 import ConditionService from '../services/conditionService'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
@@ -41,7 +41,7 @@ describe('validationMiddleware', () => {
       outOfBoundArea: string
 
       @Expose()
-      @IsValidExclusionZoneFile()
+      @IsValidZoneDefinitionFile()
       outOfBoundFilename: string
     }
 

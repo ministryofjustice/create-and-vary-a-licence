@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import FileUploadType from '../../../../enumeration/fileUploadType'
 import { AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
+import { mapToTargetField } from '../../../../utils/utils'
 
 export default class FileUploadInputRoutes {
   constructor(
@@ -39,20 +40,13 @@ export default class FileUploadInputRoutes {
       redirect += '?fromReview=true'
     }
 
-    const files = req.files as Record<string, Express.Multer.File[]>
-
-    const inbound = files?.inBoundFilename?.[0]
-    const outbound = files?.outOfBoundFilename?.[0]
-
-    const file = inbound ?? outbound
-
-    if (file) {
-      await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, file, user)
+    if (req.file) {
+      await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
     }
     const condition = licence.additionalLicenceConditions.find(
       (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),
     )
-    await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
+    await this.licenceService.updateAdditionalConditionData(licenceId, condition, mapToTargetField(req.body), user)
 
     return res.redirect(redirect)
   }

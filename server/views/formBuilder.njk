@@ -216,11 +216,13 @@
                         {{ includeExclusionZoneImage(licenceId, additionalCondition, item, csrfToken) }}
                     {% else %}
                         {# Form values were present but empty, so show the file selector #}
-                        {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors, item) }}
+                        <input type="hidden" name="fileTargetField" value="{{ input.name }}"/>
+                        {{ fileTypeInput('filename', '.pdf,.PDF,application/pdf' , input.label, validationErrors, item) }}
                     {% endif %}
                 {% else %}
                     {# No form values were present, so show the file selector with no default value #}
-                    {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors) }}
+                    <input type="hidden" name="fileTargetField" value="{{ input.name }}"/>
+                    {{ fileTypeInput('filename', '.pdf,.PDF,application/pdf' , input.label, validationErrors) }}
                 {% endfor %}
             {% endif %}
 

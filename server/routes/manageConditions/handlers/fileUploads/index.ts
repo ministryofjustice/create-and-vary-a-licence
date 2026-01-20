@@ -34,10 +34,7 @@ export default function Index({ licenceService, conditionService }: Services): R
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      upload.fields([
-        { name: 'inBoundFilename', maxCount: 1 },
-        { name: 'outOfBoundFilename', maxCount: 1 },
-      ]),
+      upload.single('filename'),
       validationMiddleware(conditionService, type),
       handler,
     )

@@ -1,24 +1,24 @@
 import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator'
 import { isBlank } from '../utils/utils'
 
-export default function IsValidRestrictionZoneFile(validationOptions?: ValidationOptions) {
-  // Max file size in MB, this is configurable in licence API
+export default function IsValidZoneDefinitionFile(validationOptions?: ValidationOptions) {
+  // Max exclusion file size in MB, this is configurable in licence API
   const MAX_FILE_SIZE_MB = 10
 
-  const isValidRestrictionZoneFile = (inBoundFilename: string, { object }: ValidationArguments) => {
+  const isValidZoneDefinitionFile = (filename: string, { object }: ValidationArguments) => {
     const { uploadFile } = object as Record<string, Record<string, unknown>>
     // If there is a file upload present in the request then validate it
     if (uploadFile) {
       return (
-        uploadFile.fieldname === 'inBoundFilename' &&
-        uploadFile.originalname === inBoundFilename &&
+        uploadFile.fieldname === 'filename' &&
+        uploadFile.originalname === filename &&
         uploadFile.mimetype === 'application/pdf' &&
         (uploadFile.size as number) > 0 &&
         isValidSize(uploadFile)
       )
     }
     // If no file upload present (amend on other fields) just check there is a file name already present
-    return !isBlank(inBoundFilename)
+    return !isBlank(filename)
   }
 
   const isValidSize = (uploadFile: Record<string, unknown>): boolean => {
@@ -29,12 +29,12 @@ export default function IsValidRestrictionZoneFile(validationOptions?: Validatio
 
   return (validatedObject: unknown, propertyName: string) => {
     registerDecorator({
-      name: 'isValidRestrictionZoneFile',
+      name: 'isValidExclusionZoneFile',
       target: validatedObject.constructor,
       propertyName,
       options: validationOptions,
       validator: {
-        validate: isValidRestrictionZoneFile,
+        validate: isValidZoneDefinitionFile,
         defaultMessage({ object }: ValidationArguments): string {
           const { uploadFile } = object as Record<string, Record<string, unknown>>
           if (uploadFile && !isValidSize(uploadFile)) {

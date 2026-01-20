@@ -1,8 +1,12 @@
-import { Expose } from 'class-transformer'
-import IsValidRestrictionZoneFile from '../../../../validators/isValidRestrictionZoneFile'
+import { Expose, Transform } from 'class-transformer'
+import IsValidZoneDefinitionFile from '../../../../validators/IsValidZoneDefinitionFile'
 
 export default class InBoundsRegion {
   @Expose()
-  @IsValidRestrictionZoneFile()
-  inBoundFilename: string
+  @IsValidZoneDefinitionFile()
+  filename: string
+
+  @Expose()
+  @Transform(({ obj }) => obj.fileTargetField)
+  fileTargetField!: string
 }
