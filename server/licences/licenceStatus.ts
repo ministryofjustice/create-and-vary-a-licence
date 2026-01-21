@@ -83,7 +83,7 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     colour: 'grey',
   },
   TIMED_OUT: {
-    label: 'Timed Out',
+    label: 'Timed out',
     description: 'Timed Out',
     colour: 'grey',
   },
