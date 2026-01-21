@@ -21,13 +21,11 @@
             {% else %}
                 <p class="govuk-body">A licence for this person has been created by the prison because none was submitted in time for their final release checks.</p>
             {% endif %}
-            <p class="govuk-body">
-                Once this person is released, you will need to review this licence and make any changes you require.
-            </p>
+            <p class="govuk-body" id="licence-created-by-prison-inset">Once this person is released, the licence must be reviewed. If changes are needed, the licence can be varied.</p>
             
             {{ inductionMeetingDetails(licence, isInProgress, validationErrors, contactForChangeText) }}
 
-            <h1 class="govuk-heading-m">Licence conditions</h2>
+            <h1 class="govuk-heading-m">Licence conditions</h1>
             {{ immediateReleaseConditions(licence.typeCode) }}
             <p class="govuk-body">The prison <strong>cannot</strong>  add any other additional or bespoke conditions.</p>
             <p class="govuk-body">If you need to add any additional or bespoke licence conditions, you can do so after release.</p>
