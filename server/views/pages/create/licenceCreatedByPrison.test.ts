@@ -61,4 +61,19 @@ describe('View print licence button', () => {
       'A licence for this person has been created by the prison because they are being released immediately following sentencing having served time on remand.',
     )
   })
+  it('should show A licence for this person txt', () => {
+    const $ = render({
+      licence: {
+        statusCode: LicenceStatus.APPROVED,
+        prisonDescription: 'prisonDescription',
+        typeCode: LicenceType.PSS,
+        kind: 'HARD_STOP',
+      },
+      omuEmail: 'jbloggs@justice.gov.uk',
+      backLink: '/licence/create/caseload',
+    })
+    expect($('#licence-created-by-prison-inset').first().text()).toContain(
+      'Once this person is released, the licence must be reviewed. If changes are needed, the licence can be varied.',
+    )
+  })
 })
