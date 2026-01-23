@@ -213,7 +213,7 @@
                     {# This is to cater for other input types which are part of the Add-Another pattern #}
                     {% if (item.length > 1) and (additionalCondition.uploadSummary[0].thumbnailImage) %}
                         {# There was a value for the uploaded file name - show the thumbnail image and a delete link #}
-                        <input type="hidden" name="{{ input.name | normalizedFilename }}" value="{{ item }}"/>
+                        <input type="hidden" name="filename" value="{{ item }}"/>
                         {{ includeExclusionZoneImage(licenceId, additionalCondition, item, csrfToken) }}
                     {% else %}
                         {# Form values were present but empty, so show the file selector #}

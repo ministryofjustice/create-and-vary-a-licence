@@ -845,36 +845,4 @@ describe('Nunjucks Filters', () => {
       })
     })
   })
-
-  describe('normalizedFilename', () => {
-    it('should return the original value if it is not a string', () => {
-      const $ = renderTemplate('{{ value | normalizedFilename }}', { value: 123 })
-      expect($('body').text()).toBe('123')
-    })
-
-    it('should normalise "inboundfilename" to "filename"', () => {
-      const $ = renderTemplate('{{ value | normalizedFilename }}', { value: 'inboundfilename' })
-      expect($('body').text()).toBe('filename')
-    })
-
-    it('should normalise "outofboundfilename" to "filename"', () => {
-      const $ = renderTemplate('{{ value | normalizedFilename }}', { value: 'outofboundfilename' })
-      expect($('body').text()).toBe('filename')
-    })
-
-    it('should ignore case when normalising the filename', () => {
-      const $ = renderTemplate('{{ value | normalizedFilename }}', { value: ' InBoUnDFileName ' })
-      expect($('body').text()).toBe('filename')
-    })
-
-    it('should trim input strings', () => {
-      const $ = renderTemplate('{{ value | normalizedFilename }}', { value: '  myFile  ' })
-      expect($('body').text()).toBe('myFile')
-    })
-
-    it('should return the trimmed name when not a special filename', () => {
-      const $ = renderTemplate('{{ value | normalizedFilename }}', { value: 'somefile.txt ' })
-      expect($('body').text()).toBe('somefile.txt')
-    })
-  })
 })

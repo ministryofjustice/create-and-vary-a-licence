@@ -441,13 +441,6 @@ export function registerNunjucks(app?: express.Express): Environment {
     return `${hourInt}${minute === '00' ? '' : `:${minute}`}am`
   })
 
-  njkEnv.addFilter('normalizedFilename', name => {
-    if (typeof name !== 'string') return name
-
-    const n = name.trim().toLowerCase()
-    return n === 'inboundfilename' || n === 'outofboundfilename' ? 'filename' : name.trim()
-  })
-
   njkEnv.addFilter('formatAddressTitleCase', (address, isMultiple) => formatAddressTitleCase(address, isMultiple))
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)

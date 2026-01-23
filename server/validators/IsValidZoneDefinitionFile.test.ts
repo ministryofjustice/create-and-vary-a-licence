@@ -13,77 +13,142 @@ class TestClass {
 }
 
 describe('File upload validation', () => {
-  const uploadFile = {
-    path: 'test-file',
-    originalname: 'test.txt',
-    size: 10,
-    fieldname: 'filename',
-    mimetype: 'application/pdf',
-  } as Express.Multer.File
+  const MESSAGES = {
+    REQUIRED_PDF: 'Select a PDF map',
+    REQUIRED_VALUE: 'Enter a value',
+    TOO_LARGE: 'The selected file must be smaller than 10MB',
+  } as const
 
-  it('should pass validation for a normal file upload', async () => {
-    const value = plainToInstance(TestClass, {
-      outOfBoundArea: 'Somewhere',
-      outOfBoundFilename: uploadFile.originalname,
-      uploadFile,
-    })
-    const errors: ValidationError[] = await validate(value)
-    expect(errors.length).toBe(0)
-  })
+  const makeFile = (overrides: Partial<Express.Multer.File> = {}): Express.Multer.File =>
+    ({
+      path: 'test-file',
+      originalname: 'test.pdf',
+      size: 10,
+      fieldname: 'filename',
+      mimetype: 'application/pdf',
+      ...overrides,
+    }) as Express.Multer.File
 
-  it('should pass validation when a filename already exists and area is not blank', async () => {
-    const value = plainToInstance(TestClass, { outOfBoundArea: 'Somewhere', outOfBoundFilename: 'test.pdf' })
-    const errors: ValidationError[] = await validate(value)
-    expect(errors.length).toBe(0)
-  })
+  const makeValue = (overrides: Record<string, unknown> = {}) =>
+    plainToInstance(
+      TestClass,
+      {
+        outOfBoundArea: 'Somewhere',
+        outOfBoundFilename: 'test.pdf',
+        fileTargetField: 'outOfBoundFilename',
+        ...overrides,
+      },
+      { exposeDefaultValues: true },
+    )
 
-  it('should fail validation for a missing area description', async () => {
-    const value = plainToInstance(TestClass, {
-      outOfBoundArea: null,
-      outOfBoundFilename: uploadFile.originalname,
-      uploadFile,
-    })
-    const errors: ValidationError[] = await validate(value)
-    expect(errors.length).toBe(1)
+  const expectNoErrors = (errors: ValidationError[]) => {
+    expect(errors).toHaveLength(0)
+  }
+
+  const expectSingleErrorWithMessage = (errors: ValidationError[], constraintKey: string, message: string) => {
+    expect(errors).toHaveLength(1)
     expect(errors[0].constraints).toEqual({
-      isNotEmpty: 'Enter a value',
+      [constraintKey]: message,
+    })
+  }
+
+  describe('valid cases', () => {
+    it('should pass for a normal file upload', async () => {
+      const uploadFile = makeFile()
+      const value = makeValue({
+        outOfBoundFilename: uploadFile.originalname,
+        uploadFile,
+      })
+      const errors = await validate(value)
+      expectNoErrors(errors)
+    })
+
+    it('should pass when a filename already exists and area is not blank (no upload)', async () => {
+      const value = makeValue({})
+      const errors = await validate(value)
+      expectNoErrors(errors)
     })
   })
 
-  it('should fail validation when no file has been selected', async () => {
-    const value = plainToInstance(TestClass, { outOfBoundArea: 'Somewhere' })
-    const errors: ValidationError[] = await validate(value)
-    expect(errors.length).toBe(1)
-    expect(errors[0].constraints).toEqual({
-      isValidExclusionZoneFile: 'Select a PDF map',
+  describe('invalid cases (user-fixable)', () => {
+    it('should fail when area description is missing', async () => {
+      const uploadFile = makeFile()
+      const value = makeValue({
+        outOfBoundArea: null,
+        outOfBoundFilename: uploadFile.originalname,
+        uploadFile,
+      })
+      const errors = await validate(value)
+      expectSingleErrorWithMessage(errors, 'isNotEmpty', MESSAGES.REQUIRED_VALUE)
+    })
+
+    it('should fail when no file has been selected and no filename exists', async () => {
+      const value = makeValue({
+        outOfBoundFilename: undefined,
+        uploadFile: undefined,
+      })
+      const errors = await validate(value)
+      expectSingleErrorWithMessage(errors, 'isValidExclusionZoneFile', MESSAGES.REQUIRED_PDF)
+    })
+
+    it('should fail when an upload is attempted for an incorrect field name', async () => {
+      const fileWithIncorrectField = makeFile({ fieldname: 'incorrect' })
+      const value = makeValue({
+        outOfBoundFilename: fileWithIncorrectField.originalname,
+        uploadFile: fileWithIncorrectField,
+      })
+      const errors = await validate(value)
+      expectSingleErrorWithMessage(errors, 'isValidExclusionZoneFile', MESSAGES.REQUIRED_PDF)
+    })
+
+    it('should fail when the upload file exceeds the maximum size limit', async () => {
+      const bigFile = makeFile({ size: 99999999999 })
+      const value = makeValue({
+        outOfBoundFilename: bigFile.originalname,
+        uploadFile: bigFile,
+      })
+      const errors = await validate(value)
+      expectSingleErrorWithMessage(errors, 'isValidExclusionZoneFile', MESSAGES.TOO_LARGE)
     })
   })
 
-  it('should fail validation when an upload is attempted for an incorrect field name', async () => {
-    const fileWithIncorrectField = { ...uploadFile, fieldname: 'incorrect' }
-    const value = plainToInstance(TestClass, {
-      outOfBoundArea: 'Somewhere',
-      outOfBoundFilename: fileWithIncorrectField.originalname,
-      uploadFile: fileWithIncorrectField,
-    })
-    const errors: ValidationError[] = await validate(value)
-    expect(errors.length).toBe(1)
-    expect(errors[0].constraints).toEqual({
-      isValidExclusionZoneFile: 'Select a PDF map',
+  describe.each([
+    {
+      name: 'fails when mimetype is not application/pdf',
+      fileOverrides: { mimetype: 'image/png' },
+      expectedMessage: 'Select a PDF map',
+    },
+    {
+      name: 'fails when originalname is blank',
+      fileOverrides: { originalname: '' },
+      expectedMessage: 'Select a PDF map',
+    },
+  ])('edge cases: $name', ({ fileOverrides, expectedMessage }) => {
+    it('returns a single constraint error', async () => {
+      const badFile = makeFile(fileOverrides as Partial<Express.Multer.File>)
+      const value = makeValue({
+        outOfBoundFilename: badFile.originalname || 'test.pdf',
+        uploadFile: badFile,
+      })
+      const errors = await validate(value)
+      expectSingleErrorWithMessage(errors, 'isValidExclusionZoneFile', expectedMessage)
     })
   })
 
-  it('should fail validation when the upload file exceeds the maximum size limit', async () => {
-    const bigFile = { ...uploadFile, size: 99999999999, fieldname: 'incorrect' }
-    const value = plainToInstance(TestClass, {
-      outOfBoundArea: 'Somewhere',
-      outOfBoundFilename: bigFile.originalname,
-      uploadFile: bigFile,
-    })
-    const errors: ValidationError[] = await validate(value)
-    expect(errors.length).toBe(1)
-    expect(errors[0].constraints).toEqual({
-      isValidExclusionZoneFile: 'The selected file must be smaller than 10MB',
+  describe('security: unexpected logical filename should throw', () => {
+    it('should throw for a disallowed logical filename (should never happen)', async () => {
+      const uploadFile = makeFile()
+      const value = makeValue({
+        outOfBoundFilename: uploadFile.originalname,
+        fileTargetField: 'incorrectFieldName',
+        uploadFile,
+      })
+
+      try {
+        await validate(value)
+      } catch (e) {
+        expect(e.message).toEqual('Unexpected filename value "incorrectFieldName"')
+      }
     })
   })
 })

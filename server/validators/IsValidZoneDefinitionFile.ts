@@ -4,8 +4,14 @@ import { isBlank } from '../utils/utils'
 export default function IsValidZoneDefinitionFile(validationOptions?: ValidationOptions) {
   // Max exclusion file size in MB, this is configurable in licence API
   const MAX_FILE_SIZE_MB = 10
+  const ALLOWED_FILENAMES = ['inBoundFilename', 'outOfBoundFilename']
 
   const isValidZoneDefinitionFile = (filename: string, { object }: ValidationArguments) => {
+    const fileTargetField = (object as Record<string, unknown>).fileTargetField as string
+    if (!ALLOWED_FILENAMES.includes(fileTargetField)) {
+      throw new Error(`Unexpected filename value "${fileTargetField}"`)
+    }
+
     const { uploadFile } = object as Record<string, Record<string, unknown>>
     // If there is a file upload present in the request then validate it
     if (uploadFile) {
