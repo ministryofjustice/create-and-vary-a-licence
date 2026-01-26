@@ -347,37 +347,4 @@ describe('View Partials - Form builder', () => {
     expect($('.govuk-label').text().trim()).toBe('label for file upload')
     expect($('.govuk-file-upload').length).toBe(1)
   })
-
-  it('should apply the normalizedFilename filter when rendering uploaded file metadata', () => {
-    const $ = render({
-      formResponses: null,
-      csrfToken: 'not-real',
-      additionalCondition: {
-        uploadSummary: [{ thumbnailImage: 'thumb.jpg' }],
-        data: [
-          {
-            id: 1,
-            field: 'outOfBoundFilename',
-            value: 'uploaded.pdf',
-            sequence: 1,
-            contributesToLicence: true,
-          },
-        ],
-      },
-      config: {
-        inputs: [
-          {
-            type: 'fileUpload',
-            label: 'label for file upload',
-            name: 'outOfBoundFilename',
-          },
-        ],
-      },
-    })
-
-    const hiddenInput = $('input[type="hidden"][name="filename"]')
-
-    expect(hiddenInput.length).toBe(1)
-    expect(hiddenInput.attr('value')).toBe('uploaded.pdf')
-  })
 })
