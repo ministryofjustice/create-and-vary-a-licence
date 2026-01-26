@@ -177,7 +177,7 @@
     "nodemon": "^3.1.11",
     "openapi-typescript": "^7.10.1",
     "redis-mock": "^0.56.3",
-    "sass": "^1.97.0",
+    "sass": "1.97.0",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.6",
     "typescript": "^5.9.3"
