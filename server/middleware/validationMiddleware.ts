@@ -31,9 +31,10 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       } else {
         classType = type
       }
+
       // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
-      if (req.file && req.file.fieldname === 'outOfBoundFilename') {
-        req.body = { ...req.body, outOfBoundFilename: req.file.originalname }
+      if (req.file) {
+        req.body = { ...req.body, filename: req.file.originalname }
       }
 
       // Build an object which is used by validators to check things against
