@@ -1,8 +1,12 @@
-import { Expose } from 'class-transformer'
-import IsValidExclusionZoneFile from '../../../../validators/isValidExclusionZoneFile'
+import { Expose, Transform } from 'class-transformer'
+import IsValidZoneDefinitionFile from '../../../../validators/IsValidZoneDefinitionFile'
 
 export default class OutOfBoundsRegionPolicyV3 {
   @Expose()
-  @IsValidExclusionZoneFile()
-  outOfBoundFilename: string
+  @IsValidZoneDefinitionFile()
+  filename: string
+
+  @Expose()
+  @Transform(({ obj }) => obj.fileTargetField)
+  fileTargetField!: string
 }
