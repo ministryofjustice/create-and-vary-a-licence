@@ -148,7 +148,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/lodash": "^4.17.23",
     "@types/multer": "^2.0.0",
-    "@types/node": "^24.10.9",
+    "@types/node": "^24.10.1",
     "@types/number-to-words": "^1.2.3",
     "@types/nunjucks": "^3.2.6",
     "@types/nunjucks-date": "^0.0.10",
