@@ -63,4 +63,21 @@ describe('View and print a licence - case list', () => {
     })
     expect($('#release-date-1').text()).toBe('3 Aug 2022HDC release')
   })
+
+  it('should display the urgent approval label is the case requires urgent approval', () => {
+    const $ = render({
+      cases: [
+        {
+          name: 'John Smith',
+          prisonerNumber: 'A1234AC',
+          releaseDate: '3 Aug 2022',
+          urgentApproval: true,
+          kind: LicenceKind.TIME_SERVED,
+        },
+      ],
+      approvalNeededView: true,
+    })
+
+    expect($('.urgent-highlight').text()).toContain('Urgent approval required forupcoming release')
+  })
 })

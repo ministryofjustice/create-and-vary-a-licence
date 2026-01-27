@@ -149,9 +149,7 @@
         {% set comDetailsHtml = '<span class="search-highlight">' + case.probationPractitioner.name + '</span>' %}
     {% endif %}
 
-    {% if case.kind == "TIME_SERVED"  %}
-        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
-    {% elseif case.urgentApproval %}
+    {% if case.urgentApproval %}
         {% set releaseDate = '<span class="urgent-highlight" data-qa="releaseDate">' + case.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">Urgent approval required for<br>upcoming release</span>' %}
     {% elseif case.kind == 'HDC' %}
@@ -160,8 +158,6 @@
     {% else %}
         {% set releaseDate = '<span data-qa="releaseDate">' + case.releaseDate | cvlDateToDateShort  + '</span>' %}
     {% endif %}
-
-
 
     {% set result = [
     {
@@ -224,9 +220,7 @@
         {% set comDetailsHtml = '<span class="search-highlight">' + case.probationPractitioner.name + '</span>' %}
     {% endif %}
 
-    {% if case.kind == "TIME_SERVED"  %}
-        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
-    {% elseif case.kind == 'HDC' %}
+    {% if case.kind == 'HDC' %}
         {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% else %}
