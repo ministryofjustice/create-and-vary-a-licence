@@ -4,12 +4,8 @@ import DprService from '../../../services/dprService'
 import DprReportsRoutes from './dprReports'
 import { DprReportDefinition } from '../../../@types/dprReportingTypes'
 
-jest.mock('../../../services/dprService')
-jest.mock('../../../data/systemToken', () => {
-  return { getSystemToken: jest.fn().mockResolvedValue('token') }
-})
-
 const dprService = new DprService(null) as jest.Mocked<DprService>
+jest.mock('../../../services/dprService')
 
 describe('Route Handlers - DPR Reports', () => {
   const handler = new DprReportsRoutes(dprService)
@@ -20,9 +16,6 @@ describe('Route Handlers - DPR Reports', () => {
 
   beforeEach(() => {
     req = {
-      user: {
-        username: 'joebloggs',
-      },
       params: {
         id: '1',
       },
@@ -32,6 +25,7 @@ describe('Route Handlers - DPR Reports', () => {
       render: jest.fn(),
       locals: {
         user: {
+          token: 'token',
           username: 'joebloggs',
         },
       },
