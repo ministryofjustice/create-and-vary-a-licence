@@ -57,7 +57,7 @@ interface StreamRequest {
   errorLogger?: (e: UnsanitisedError) => void
 }
 
-export interface SignedWithMethod {
+interface SignedWithMethod {
   token?: string
   username?: string
 }
