@@ -64,7 +64,7 @@ describe('View and print a licence - case list', () => {
     expect($('#release-date-1').text()).toBe('3 Aug 2022HDC release')
   })
 
-  it('should display the urgent approval label is the case requires urgent approval', () => {
+  it('should display the urgent approval label if the case requires urgent approval', () => {
     const $ = render({
       cases: [
         {
