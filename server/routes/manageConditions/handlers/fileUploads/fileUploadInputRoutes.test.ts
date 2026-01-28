@@ -147,7 +147,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         const uploadFile = {
           path: 'test-file',
           originalname: 'test.txt',
-          fieldname: 'outOfBoundFilename',
+          fieldname: 'filename',
           mimetype: 'application/pdf',
           size: 100,
         } as Express.Multer.File
@@ -159,7 +159,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           },
           file: uploadFile,
           query: {},
-          body: { outOfBoundFilename: 'test.txt' },
+          body: { filename: 'test.txt', fileTargetField: 'outOfBoundFilename' },
         } as unknown as Request
 
         licenceService.uploadExclusionZoneFile = jest.fn()
@@ -176,7 +176,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         } as Licence
       })
 
-      it('should recognise a file upload', async () => {
+      it('should recognise a outOfBounds file upload', async () => {
         await handler.POST(req, res)
         expect(licenceService.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', req.file, {
           username: 'joebloggs',
@@ -185,6 +185,20 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           '1',
           { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
           { outOfBoundFilename: 'test.txt' },
+          { username: 'joebloggs' },
+        )
+      })
+
+      it('should recognise a inBound file upload', async () => {
+        req.body.fileTargetField = 'inBoundFilename'
+        await handler.POST(req, res)
+        expect(licenceService.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', req.file, {
+          username: 'joebloggs',
+        })
+        expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
+          '1',
+          { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
+          { inBoundFilename: 'test.txt' },
           { username: 'joebloggs' },
         )
       })
@@ -290,7 +304,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         const uploadFile = {
           path: 'test-file',
           originalname: 'test.txt',
-          fieldname: 'outOfBoundFilename',
+          fieldname: 'filename',
           mimetype: 'application/pdf',
           size: 100,
         } as Express.Multer.File
@@ -302,7 +316,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           },
           file: uploadFile,
           query: {},
-          body: { outOfBoundFilename: 'test.txt' },
+          body: { filename: 'test.txt', fileTargetField: 'outOfBoundFilename' },
         } as unknown as Request
 
         licenceService.uploadExclusionZoneFile = jest.fn()

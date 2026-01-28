@@ -54,7 +54,7 @@ const approvalNeededCases = [
     },
     submittedByFullName: 'Submitted Person',
     releaseDate: '01/05/2024',
-    urgentApproval: false,
+    urgentApproval: true,
     approvedBy: null,
     approvedOn: null,
     kind: 'TIME_SERVED',
@@ -212,7 +212,7 @@ describe('View Prison Approver Search Results', () => {
 
     expect($('#nomis-id-3').text()).toBe('A1234AB')
     expect($('#probation-practitioner-3').text()).toBe('Not allocated')
-    expect($('#release-date-3').text()).toBe('1 May 2024Time-served release')
+    expect($('#release-date-3').text()).toBe('1 May 2024Urgent approval required forupcoming release')
   })
 
   it('should display the results in a table with links to the licence and COM details page for the recently approved tab', () => {
@@ -268,7 +268,7 @@ describe('View Prison Approver Search Results', () => {
 
     expect($('#nomis-id-3').text()).toBe('A1234AF')
     expect($('#probation-practitioner-3').text()).toBe('Not allocated')
-    expect($('#release-date-3').text()).toBe('12 Apr 2024Time-served release')
+    expect($('#release-date-3').text()).toBe('12 Apr 2024')
   })
 
   it('should display urgent approval required warning label when needed', () => {
