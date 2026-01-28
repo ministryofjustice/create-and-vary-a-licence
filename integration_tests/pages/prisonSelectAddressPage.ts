@@ -1,6 +1,4 @@
 import Page from './page'
-import AppointmentContactPage from './appointmentContact'
-import ViewALicencePage from './viewALicence'
 
 export default class PrisonSelectAddressPage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -14,16 +12,6 @@ export default class PrisonSelectAddressPage extends Page {
   selectAddress = (): PrisonSelectAddressPage => {
     cy.get('[data-qa="address-1"]').click()
     return Page.verifyOnPage(PrisonSelectAddressPage)
-  }
-
-  clickContinue = (): AppointmentContactPage => {
-    cy.get(this.continueButtonId).click()
-    return Page.verifyOnPage(AppointmentContactPage)
-  }
-
-  clickContinueToReturn = (): ViewALicencePage => {
-    cy.get(this.continueButtonId).click()
-    return Page.verifyOnPage(ViewALicencePage)
   }
 
   addPreferredAddressCheckbox = () => {
