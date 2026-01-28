@@ -145,19 +145,12 @@ describe('InitialMeetingPlaceRoutes', () => {
     })
 
     it('Given addressRemoved flash is set, When GET called, Then should render view with addressRemoved message', async () => {
-      // Given
       config.postcodeLookupEnabled = true
       addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
-
-      // Mock flash to return the message
       const flash = req.flash as jest.Mock
       flash.mockReturnValueOnce(['Address removed'])
-
-      // When
       await handler.GET(req as Request, res as Response)
-
-      // Then
       expect(req.flash).toHaveBeenCalledWith('addressRemoved')
       expect(res.render).toHaveBeenCalledWith(
         'pages/initialAppointment/prisonCreated/initialMeetingPlace',
