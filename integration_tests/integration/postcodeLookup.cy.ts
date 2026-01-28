@@ -156,7 +156,6 @@ context('Postcode lookup', () => {
         tabType: 'FUTURE_RELEASES',
         kind: LicenceKind.HARD_STOP,
         hasNomisLicence: false,
-        // isInHardStopPeriod: false,
       })
 
       const indexPage = Page.verifyOnPage(IndexPage)
