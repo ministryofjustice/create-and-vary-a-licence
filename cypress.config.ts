@@ -123,6 +123,7 @@ export default defineConfig({
         stubGetStaffCreateCaseload: licence.stubGetStaffCreateCaseload,
         stubGetStaffVaryCaseload: licence.stubGetStaffVaryCaseload,
         stubReviewWithOutVariation: licence.stubReviewWithOutVariation,
+        stubDeleteAppointmentAddress: licence.stubDeleteAppointmentAddress,
         stubGetStaffCreateCaseloadForHardStop: licence.stubGetStaffCreateCaseloadForHardStop,
         stubDeleteAdditionalConditionById: licence.stubDeleteAdditionalConditionById,
         stubDeleteAdditionalConditionsByCode: licence.stubDeleteAdditionalConditionsByCode,

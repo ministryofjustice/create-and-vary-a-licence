@@ -4,6 +4,7 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "moj/components/banner/macro.njk" import mojBanner %}
 
 {% set pageTitle = applicationName + " - Create a licence - Where is the initial appointment?" %}
 {% set pageId = "appointment-place-page" %}
@@ -12,13 +13,24 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
+            {% if addressRemoved %}
+                {{ mojBanner({
+                    type: 'success',
+                    text: addressRemoved,
+                    iconFallbackText: 'Success'
+                }) }}
+            {% endif %}
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l">Where is the initial appointment?</h1>
                 <h1 class="govuk-heading-m" data-qa="use-saved-address">Use a saved address</h1>
                 {% if preferredAddresses.length > 0 %}
                     {% set preferredAddressesOptions = [] %}
                     {% for address in preferredAddresses %}
                     {% set deleteUrl = "/staff/hard-stop/delete/id/" + licence.id + "/address/preferred/" + address.reference + "?pathType="+ action %}
-                    {% set addressHtml = (address | formatAddressTitleCase(true) | safe) + 
+                    {% set addressHtml = (address | formatAddressTitleCase(true) | safe) +
                         '&nbsp;&nbsp;<a href="' + deleteUrl + '" class="govuk-link govuk-link--no-visited-state" data-qa="delete-address-' + loop.index + '">Delete</a>' %}
                         {% set preferredAddressesOptions = (preferredAddressesOptions.push({
                             html: addressHtml,

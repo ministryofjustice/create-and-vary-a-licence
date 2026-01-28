@@ -1,6 +1,7 @@
 import AppointmentContactPage from './appointmentContact'
 import Page from './page'
 import SelectAddressPage from './selectAddress'
+import PrisonSelectAddressPage from './prisonSelectAddressPage'
 
 export default class AppointmentPlacePage extends Page {
   private searchQueryId = '#searchQuery'
@@ -31,6 +32,11 @@ export default class AppointmentPlacePage extends Page {
     return Page.verifyOnPage(SelectAddressPage)
   }
 
+  findAddressForPrison = (): PrisonSelectAddressPage => {
+    cy.get(this.searchAddressesButtonId).click()
+    return Page.verifyOnPage(PrisonSelectAddressPage)
+  }
+
   useSavedAddressField = () => {
     return cy.get(this.useSavedAddress)
   }
@@ -39,6 +45,11 @@ export default class AppointmentPlacePage extends Page {
 
   deleteAddressLink = () => {
     return cy.get(this.deleteAddress)
+  }
+
+  deleteAddressLinkByIndex = (index: number) => {
+    cy.get(`[data-qa="delete-address-${index}"]`).click()
+    return this
   }
 
   useThisAddressBtnClick = (): AppointmentPlacePage => {
@@ -55,5 +66,15 @@ export default class AppointmentPlacePage extends Page {
 
   errorListSummary = () => {
     return cy.get(this.errorList)
+  }
+
+  getSuccessBanner = () => {
+    return cy.get('[class*="moj-banner"][class*="success"]')
+  }
+
+  getSuccessBannerText = () => {
+    return cy.get('[class*="moj-banner"][class*="success"]').then($banner => {
+      return $banner.text()
+    })
   }
 }

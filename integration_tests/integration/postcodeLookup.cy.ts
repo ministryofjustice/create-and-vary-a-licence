@@ -16,6 +16,7 @@ context('Postcode lookup', () => {
       cy.task('stubGetActivePolicyConditions')
       cy.task('stubFeComponents')
       cy.task('stubPostProbationLicence')
+      cy.task('stubDeleteAppointmentAddress')
       cy.signIn()
     })
 
@@ -32,6 +33,9 @@ context('Postcode lookup', () => {
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.getAddressNotSavedMessage().should('not.exist')
       appointmentPlacePage.deleteAddressLink().should('exist')
+      appointmentPlacePage.deleteAddressLinkByIndex(1)
+      appointmentPlacePage.getSuccessBanner().should('be.visible')
+      appointmentPlacePage.getSuccessBannerText().should('contain', 'Address removed')
       const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
       selectAddressPage.selectAddress()
       selectAddressPage.addPreferredAddressCheckbox().should('exist')
@@ -99,8 +103,10 @@ context('Postcode lookup', () => {
       cy.task('stubGetCompletedLicence', {
         statusCode: 'APPROVED',
         typeCode: 'AP_PSS',
+        kind: LicenceKind.HARD_STOP,
         electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
         electronicMonitoringProviderStatus: 'COMPLETE',
+        isInHardStopPeriod: true,
       })
       cy.task('stubGetHdcStatus')
       cy.task('stubRecordAuditEvent')
@@ -113,6 +119,7 @@ context('Postcode lookup', () => {
       cy.task('stubPostPrisonLicence')
       cy.task('stubGetPrisonUserCaseloads', singleCaseload)
       cy.task('stubPutLicenceAppointmentPerson')
+      cy.task('stubDeleteAppointmentAddress')
       cy.signIn()
     })
 
@@ -142,8 +149,14 @@ context('Postcode lookup', () => {
     })
 
     it('should display the postcode lookup search page with a preferred address available in the hard-stop window', () => {
-      cy.task('stubGetLicenceInHardStop')
       cy.task('stubSearchForAddresses')
+      cy.task('stubGetPrisonOmuCaseload', {
+        licenceId: '1',
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        tabType: 'FUTURE_RELEASES',
+        kind: LicenceKind.HARD_STOP,
+        hasNomisLicence: false,
+      })
 
       const indexPage = Page.verifyOnPage(IndexPage)
       const viewCasesList = indexPage.clickViewAndPrintALicence()
@@ -161,10 +174,15 @@ context('Postcode lookup', () => {
 
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.deleteAddressLink().should('exist')
+      appointmentPlacePage.deleteAddressLinkByIndex(1)
+      appointmentPlacePage.getSuccessBanner().should('be.visible')
+      appointmentPlacePage.getSuccessBannerText().should('contain', 'Address removed')
       appointmentPlacePage.getAddressNotSavedMessage().should('not.exist')
-      const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-      selectAddressPage.selectAddress()
-      selectAddressPage.addPreferredAddressCheckbox().should('exist')
+      const selectAddressPrisonPage = appointmentPlacePage
+        .enterAddressOrPostcode('123 Fake Street')
+        .findAddressForPrison()
+      selectAddressPrisonPage.selectAddress()
+      selectAddressPrisonPage.addPreferredAddressCheckbox().should('exist')
     })
   })
 
