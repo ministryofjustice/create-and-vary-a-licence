@@ -47,6 +47,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       },
       body: formAddress,
       query: {},
+      flash: jest.fn(),
     } as unknown as Request
 
     res = {
@@ -115,6 +116,34 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           continueOrSaveLabel: 'Save',
           manualAddressEntryUrl: '/licence/hard-stop/edit/id/1/manual-address-entry',
         })
+      })
+
+      it('Given addressRemoved flash is set, When GET called, Then should render view with addressRemoved message', async () => {
+        // Given
+        config.postcodeLookupEnabled = true
+        addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
+        const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
+
+        // Mock flash to return the message
+        const flash = req.flash as jest.Mock
+        flash.mockReturnValueOnce(['Address removed'])
+
+        // When
+        await handler.GET(req as Request, res as Response)
+
+        // Then
+        expect(req.flash).toHaveBeenCalledWith('addressRemoved')
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/initialAppointment/prisonCreated/initialMeetingPlace',
+          expect.objectContaining({
+            action: 'edit',
+            preferredAddresses,
+            formAddress,
+            continueOrSaveLabel: 'Save',
+            manualAddressEntryUrl: '/licence/hard-stop/edit/id/1/manual-address-entry',
+            addressRemoved: 'Address removed',
+          }),
+        )
       })
     })
 

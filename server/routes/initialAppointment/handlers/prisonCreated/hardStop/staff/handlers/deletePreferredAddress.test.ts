@@ -18,6 +18,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
         query: {
           PathType: 'create',
         },
+        flash: jest.fn(),
       } as unknown as Request
 
       res = {
@@ -37,6 +38,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       await handler.DELETE(req, res)
 
       expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
+      expect(req.flash).toHaveBeenCalledWith('addressRemoved', 'Address removed')
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/hard-stop/create/id/${req.params.licenceId}/initial-meeting-place`,
       )
@@ -48,6 +50,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       await handler.DELETE(req, res)
 
       expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
+      expect(req.flash).toHaveBeenCalledWith('addressRemoved', 'Address removed')
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
       )
@@ -59,6 +62,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
       await handler.DELETE(req, res)
 
       expect(addressService.deleteAddressByReference).toHaveBeenCalledWith(req.params.reference, res.locals.user)
+      expect(req.flash).toHaveBeenCalledWith('addressRemoved', 'Address removed')
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
       )
