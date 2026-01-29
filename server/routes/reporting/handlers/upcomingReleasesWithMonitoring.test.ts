@@ -68,7 +68,9 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       `attachment; filename=upcoming-releases-with-monitoring-conditions-report-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`,
     )
 
-    const headerLine = ['Prison Number', 'Name', 'CRN', 'Licence Status', 'Ems conditions', 'Licence Start Date'].join(',')
+    const headerLine = ['Prison Number', 'Name', 'CRN', 'Licence Status', 'Ems conditions', 'Licence Start Date'].join(
+      ',',
+    )
 
     const expectedRow = ['A1234BC', 'full name', 'CRN123', 'SUBMITTED', '12h, 45a, 78b', '01/01/2024'].join(',')
 
