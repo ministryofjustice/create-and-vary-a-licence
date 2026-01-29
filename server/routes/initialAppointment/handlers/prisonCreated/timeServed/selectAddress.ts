@@ -3,6 +3,8 @@ import AddressService from '../../../../../services/addressService'
 import { AddAddressRequest } from '../../../../../@types/licenceApiClientTypes'
 import PathType from '../../../../../enumeration/pathType'
 import { getTimeServedEditPath } from './index'
+import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
+import UserType from '../../../../../enumeration/userType'
 
 export default class SelectAddressRoutes {
   constructor(
@@ -54,6 +56,7 @@ export default class SelectAddressRoutes {
     } as AddAddressRequest
 
     await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
+    flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
 
     if (this.path === PathType.EDIT) {
       return res.redirect(getTimeServedEditPath(licence))
