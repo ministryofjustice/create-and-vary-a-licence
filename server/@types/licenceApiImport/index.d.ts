@@ -6,1134 +6,1199 @@
 export interface paths {
   '/time-served/external-records/{nomsId}/{bookingId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Retrieve the timeserved external record for creating a licence in NOMIS
      * @description Fetches the timeserved external record for a given NOMIS ID and booking ID. Returns null if no record exists. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getTimeServedExternalRecord']
+    get: operations['getTimeServedExternalRecord'];
     /**
      * Creates or updates a Time Served External Record.
      * @description Creates or updates a Time Served External Record Reason. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateTimeServedExternalRecord']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateTimeServedExternalRecord'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/queue-admin/retry-dlq/{dlqName}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['retryDlq']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['retryDlq'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/queue-admin/retry-all-dlqs': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['retryAllDlqs']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['retryAllDlqs'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/queue-admin/purge-queue/{queueName}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['purgeQueue']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['purgeQueue'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/prison-case-administrator/update': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Create/updates the details of a prison user.
      * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updatePrisonUser']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updatePrisonUser'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/prison-user/update': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Create/updates the details of a prison user.
      * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updatePrisonUser_1']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updatePrisonUser_1'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/omu/{prisonCode}/contact/email': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get OMU email address.
      * @description Obtain prison Offender Management Unit email address. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getOmuContactByPrisonCode']
+    get: operations['getOmuContactByPrisonCode'];
     /**
      * Updates the OMU email address.
      * @description Updates the OMU email address used to contact members of a prison OMU. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateOmuEmail']
-    post?: never
+    put: operations['updateOmuEmail'];
+    post?: never;
     /**
      * Delete the OMU email address.
      * @description Delete prison Offender Management Unit email address. Requires ROLE_CVL_ADMIN.
      */
-    delete: operations['deleteOmuContactByPrisonCode']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    delete: operations['deleteOmuContactByPrisonCode'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/offender/sync-com/crn/{crn}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Updates the COM allocation for for licences linked to the given CRN.
      * @description Updates the COM allocation for for licences linked to the given CRN.
      */
-    put: operations['syncComAllocation']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['syncComAllocation'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/offender/nomisid/{nomsId}/update-offender-details': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Updates the offender's personal information on all of their licences.
      * @description Updates the name and date of birth stored on all licences associated with the given offender. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateOffenderDetails']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateOffenderDetails'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licences/time-served/{licenceId}/confirm/probation-contact': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Adds the probation contact confirmation for a time served licence.
      * @description Adds the probation contact status and communication methods for a time served licence. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['addTimeServedProbationConfirmContact']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['addTimeServedProbationConfirmContact'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/vlo-discussion': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Sets whether the variation has been discussed with a VLO.
      * @description Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateVloDiscussion']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateVloDiscussion'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/submit': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED.
      * @description Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED, and record the details of the COM who submitted. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['submitLicence']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['submitLicence'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/status': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the status of a licence.
      * @description Update the status of a licence. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateLicenceStatus']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateLicenceStatus'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/standard-conditions': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the standard conditions for a licence.
      * @description Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateStandardConditions']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateStandardConditions'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/spo-discussion': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Sets whether the variation has been discussed with an SPO.
      * @description Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateSpoDiscussion']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateSpoDiscussion'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/sentence-dates': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Updates the sentence dates.
      * @description Updates the sentence dates. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateSentenceDates']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateSentenceDates'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/refer-variation': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Updates a licence to referred and stores the reason provided.
      * @description Updates a licence to referred and stores the reason provided by the approver. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['referVariation']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['referVariation'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/reason-for-variation': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Updates the reason for the licence variation.
      * @description Updates the reason for the licence variation. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateReasonForVariation']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateReasonForVariation'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/prison-information': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Updates the prison information.
      * @description Updates the prison information. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updatePrisonInformation']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updatePrisonInformation'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/override/dates': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Override licence dates
      * @description Override the dates for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['changeDates']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['changeDates'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/curfew-times': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the curfew times for a HDC licence.
      * @description Replace the curfew times against a HDC licence if curfew times change. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateCurfewTimes']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateCurfewTimes'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/contact-number': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the officer contact number for a licence
      * @description Update the contact number for the officer related to this licence. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateContactNumber']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateContactNumber'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/bespoke-conditions': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Add or replace the bespoke conditions for a licence.
      * @description Add or replace the bespoke conditions on a licence with the content of this request. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateBespokeConditions']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateBespokeConditions'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/approve-variation': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Approves a licence variation.
      * @description Approves a licence variation. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['approveVariation']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['approveVariation'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/appointmentTime': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the appointment date and time
      * @description Update the date and time for the initial appointment. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateAppointmentTime']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateAppointmentTime'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/appointmentPerson': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the person to meet at the initial appointment
      * @description Update the person the person on probation will meet at the initial appointment Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateAppointmentPerson']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateAppointmentPerson'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/appointment/address': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the address where the initial appointment will take place
      * @description Update the address where the initial appointment will take place. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['addAppointmentAddress']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['addAppointmentAddress'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/appointment-address': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the address where the initial appointment will take place
      * @deprecated
      * @description Update the address where the initial appointment will take place. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateAppointmentAddress']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateAppointmentAddress'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/additional-conditions': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the set of additional conditions on the licence.
      * @description Update the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateAdditionalConditions']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateAdditionalConditions'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/additional-conditions/condition/{additionalConditionId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Update the user entered data to accompany an additional condition template.
      * @description Update the user entered data to accompany an additional condition template. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateAdditionalConditionData']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateAdditionalConditionData'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/activate-variation': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Activates an approved variation. Inactivates previous licence.
      * @description Activates a variation. Inactivates previous licence. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['activateVariation']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['activateVariation'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/com/update': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Create/updates the details of a community offender manager.
      * @description Create/updates the details of a community offender manager (e.g. email address). Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateComDetails']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['updateComDetails'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/audit/save': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
     /**
      * Records an auditable event.
      * @description Records an auditable event related to an action taken by a user or an automated in-service process. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['recordAuditEvent']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    put: operations['recordAuditEvent'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/recalculate-licence-start-dates': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Recalculates licence start dates
      * @description Recalculates licence start dates for the given number of licences. Licences are updated sequentially, from newest to oldest, starting with the one after the provided ID. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['recalculateLicenceStartDates']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['recalculateLicenceStartDates'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/licence/{licenceId}/condition/{conditionId}/supporting-document': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get the condition image for a specified licence and condition
+     * @description Get the condition image. Requires ROLE_CVL_ADMIN.
+     */
+    get: operations['getImage'];
+    put?: never;
+    /**
+     * Upload a multipart/form-data request containing a PDF file.
+     * @description Uploads a condition file and description. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['uploadFile'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/licence/probation/nomisid/{nomsId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create a probation licence
+     * @description Creates a probation licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['createProbationLicence'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/licence/prison/nomisid/{nomsId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create a prison licence
+     * @description Creates a prison licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['createPrisonLicence'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/match': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Get a list of licence summaries matching the supplied criteria.
      * @description Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['getLicencesMatchingCriteria']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getLicencesMatchingCriteria'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/inactivate-licences': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Inactivate licences in bulk
      * @description Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['inactivateLicences']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['inactivateLicences'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/review-with-no-variation-required': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Marks the HardStop / Time served licence as having been reviewed with no variation required.
      * @description Marks the HardStop / Time served licence as having been reviewed with no variation required. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['reviewWithNoVariationRequired']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['reviewWithNoVariationRequired'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/permissions': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Check what access a user has to a licence
      * @description Check what access a user has to a licence
      */
-    post: operations['getLicencePermissions']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getLicencePermissions'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/override/type': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Override a licence type
      * @description Override the type for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['changeType']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['changeType'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/override/status': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Override a licence status
      * @description Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['changeStatus']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['changeStatus'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/override/prisoner-details': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Override prisoner details on a licence
      * @description Override the prisoner details for an existing licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['changePrisonerDetails']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['changePrisonerDetails'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/electronic-monitoring-programmes': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Updates the electronic monitoring programme details.
      * @description Updates the electronic monitoring programme details. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['updateElectronicMonitoringProgramme']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['updateElectronicMonitoringProgramme'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/edit': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Create a new version of an approved licence
      * @description Create a new version of an  approved licence. The new licence will have a new id and have status IN_PROGRESS. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['editLicence']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['editLicence'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/delete-additional-conditions-by-code': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Remove additional conditions from the licence.
      * @description Remove any instances of the additional conditions with the supplied condition codes from the licence. This includes any existing accompanying data per condition. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['deleteAdditionalConditionsByCode']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['deleteAdditionalConditionsByCode'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/deactivate-licence-and-variations': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Deactivate an active licence and any associated variations
      * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['deactivateLicenceAndVariations']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['deactivateLicenceAndVariations'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/create-variation': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Create a variation of this licence
      * @description Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['createVariation']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['createVariation'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/additional-condition/{conditionType}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Add additional condition to the licence.
      * @description Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_CVL_ADMIN.
      */
-    post: operations['addAdditionalCondition']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['addAdditionalCondition'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/create': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Create a licence
+     * @deprecated
      * @description Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['createLicence']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['createLicence'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/jobs/warn-licence-review-overdue': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Reminds COMs to review licences after release.
      * @description Triggers a job that sends a notification when the COM has not reviewed a review needed licence 5 days after activation.
      */
-    post: operations['runLicenceReviewOverdueJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['runLicenceReviewOverdueJob'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/jobs/time-out-licences': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Times out licences that have hit hard stop.
      * @description Triggers a job that causes licences with a status of IN_PROGRESS and a CRD or ARD less than two working days to be updated to TIMED_OUT.
      */
-    post: operations['runTimeOutLicencesServiceJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['runTimeOutLicencesServiceJob'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/jobs/remove-expired-conditions': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Remove AP conditions from in-progress variations after PSS starts.
      * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'.
      */
-    post: operations['runRemoveExpiredConditionsJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['runRemoveExpiredConditionsJob'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/jobs/prompt-licence-creation': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Notifies the COM of upcoming releases which they need to create a licence for.
      * @description Notifies the COM of upcoming releases which they need to create a licence for.
      */
-    post: operations['runJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['runJob'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/jobs/notify-probation-of-unapproved-licences': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Warn of unapproved licences after release
      * @description Send an email to probation practitioner of any previously approved licences that have been edited but not re-approved by prisoners release date
      */
-    post: operations['notifyProbationOfUnapprovedLicences']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['notifyProbationOfUnapprovedLicences'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/jobs/expire-licences': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Expires licences that have ended.
      * @description Triggers a job that causes licences with an ACTIVE status to be deactivated if they are passed their TUSED (if present) or LED (if TUSED is null).
      */
-    post: operations['runLicenceExpiryJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['runLicenceExpiryJob'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/jobs/deactivate-licences-past-release-date': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Deactivate licences which are past release date.
      * @description Deactivate licences from IN_PROGRESS and SUBMITTED status to INACTIVE where these are past release date already.
      */
-    post: operations['runDeactivateLicencesJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['runDeactivateLicencesJob'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/jobs/deactivate-hdc-licences': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Deactivates HDC licences past their release date
      * @description Deactivates HDC licences past their release date
      */
-    post: operations['runJob_1']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['runJob_1'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/jobs/activate-licences': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Activates and inactivates licences on release day.
      * @description Triggers a job that activates licences with:
@@ -1146,1106 +1211,1108 @@ export interface paths {
      *            It also inactivates CRD licences that have been approved for HDC.
      *            This only fires for licences we haven't processed a release event for.
      */
-    post: operations['runLicenceActivationJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['runLicenceActivationJob'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/file-upload': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Upload a multipart/form-data request containing a PDF exclusion zone file.
+     * @deprecated
      * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['uploadExclusionZoneFile']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['uploadExclusionZoneFile'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/com/case-search': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Search for offenders on a given staff member's caseload.
      * @deprecated
      * @description Search for offenders on a given staff member's caseload. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['searchForOffenderOnStaffCaseload']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['searchForOffenderOnStaffCaseload'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/cases/time-served/{prisonCode}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /** Returns a list of time served cases for a prison */
-    post: operations['getTimeServedCases']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getTimeServedCases'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/vary-approver': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Returns the variation approver caseload for a probation region
      * @description Returns an enriched list of cases for people that have a variation to be approved
      */
-    post: operations['getVaryApproverCaseload']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getVaryApproverCaseload'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/vary-approver/case-search': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Search for offenders on a given variation approver's caseload
      * @description Search for offenders on a given variation approver's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
-    post: operations['searchForOffenderOnVaryApproverCaseload']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['searchForOffenderOnVaryApproverCaseload'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/prison-approver/recently-approved': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Returns a caseload that has recently been approved
      * @description Returns an enriched list of cases which have recently been approved
      */
-    post: operations['getRecentlyApproved']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getRecentlyApproved'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/prison-approver/case-search': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Search for offenders on a given approver's caseload
      * @description Search for offenders on a given approver's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
-    post: operations['searchForOffenderOnApproverCaseload']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['searchForOffenderOnApproverCaseload'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/prison-approver/approval-needed': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Returns a caseload waiting for approval
      * @description Returns an enriched list of cases which are awaiting approval
      */
-    post: operations['getApprovalNeeded']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getApprovalNeeded'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/com/team/vary-case-load': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Returns the vary caseload for a team
      * @description Returns an enriched list of cases which can have a variation created for a team
      */
-    post: operations['getTeamVaryCaseload']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getTeamVaryCaseload'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/com/team/create-case-load': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Returns the create caseload for a team
      * @description Returns an enriched list of cases which require a licence to be created for a team
      */
-    post: operations['getTeamCreateCaseload']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getTeamCreateCaseload'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/com/case-search': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Search for offenders on a given staff member's caseload.
      * @description Search for offenders on a given staff member's caseload. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['searchForOffenderOnProbationUserCaseload']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['searchForOffenderOnProbationUserCaseload'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/case-admin/probation-view': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Returns a case admin caseload
      * @description Returns an enriched list of cases for people on probation
      */
-    post: operations['getProbationView']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getProbationView'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/case-admin/prison-view': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Returns a case admin caseload
      * @description Returns an enriched list of cases for people on prison
      */
-    post: operations['getPrisonView']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['getPrisonView'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/case-admin/case-search': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Search for offenders on a given case admin's caseload.
      * @description Search for offenders on a given case admin's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
-    post: operations['searchForOffenderOnPrisonCaseAdminCaseload']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['searchForOffenderOnPrisonCaseAdminCaseload'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/audit/retrieve': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Retrieves a list of auditable events matching the criteria provided.
      * @description Retrieves a list of auditable events matching the criteria provided. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['requestAuditEvents']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations['requestAuditEvents'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/subject-access-request': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Provides content for a prisoner to satisfy the needs of a subject access request on their behalf
      * @description Requires role SAR_DATA_ACCESS or additional role as specified by hmpps.sar.additionalAccessRole configuration.
      */
-    get: operations['getSarContentByReference']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getSarContentByReference'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/staff/address/preferred': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Retrieve the preferred address for a staff member
      * @description Fetches the preferred address associated with the given staff identifier. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getPreferredAddress']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getPreferredAddress'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/reports/{reportId}/{reportVariantId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** @description Returns the dataset for the given report ID and report variant ID filtered by the filters provided in the query. */
-    get: operations['configuredApiDataset']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['configuredApiDataset'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/reports/{reportId}/{reportVariantId}/{fieldId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** @description Returns the dataset for the given report ID and report variant ID filtered by the filters provided in the query. */
-    get: operations['configuredApiDynamicFilter']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['configuredApiDynamicFilter'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/reports/{reportId}/{reportVariantId}/count': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** @description Returns the number of records for the given report ID and report variant ID filtered by the filters provided in the query. */
-    get: operations['configuredApiCount']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['configuredApiCount'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/queue-admin/get-dlq-messages/{dlqName}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['getDlqMessages']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['getDlqMessages'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/public/policy/{version}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get a policy by its version number
      * @description Returns a policy by its version number. Requires ROLE_VIEW_LICENCES.
      */
-    get: operations['getPolicyByVersionNumber']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getPolicyByVersionNumber'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/public/policy/latest': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get latest policy.
      * @description Returns latest policy. Requires ROLE_VIEW_LICENCES.
      */
-    get: operations['getLatestPolicy']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getLatestPolicy'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/public/licences/{licenceId}/conditions/{conditionId}/image-upload': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get an associated image upload for a specific licence and condition
      * @description Returns an associated image upload for a specified licence and condition. Requires ROLE_VIEW_LICENCES.
      */
-    get: operations['getImageUpload']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getImageUpload'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/public/licences/id/{licenceId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get a licence by its licence id
      * @description Returns a single licence detail by its unique identifier. Requires ROLE_VIEW_LICENCES.
      */
-    get: operations['getLicenceById']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getLicenceById'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/public/licence-summaries/prison-number/{prisonNumber}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get a list of in flight licences by prison number
      * @description Returns a list of licence summaries by a person's prison number. Requires ROLE_VIEW_LICENCES.
      */
-    get: operations['getLicencesByPrisonNumber']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getLicencesByPrisonNumber'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/public/licence-summaries/crn/{crn}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get a list of in flight licences by CRN
      * @description Returns a list of licence summaries by a person's CRN. Requires ROLE_VIEW_LICENCES.
      */
-    get: operations['getLicenceByCrn']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getLicenceByCrn'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/prisoner-search/nomisid/{nomsId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Returns a single prisoner by prison number
      * @description Returns a single prisoner by prison number
      */
-    get: operations['findByNumber']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['findByNumber'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/offender/nomisid/{nomsId}/is-91-status': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Retrieve IS-91 status for offender
      * @description Returns IS-91 status for creating a licence for a specific prisoner. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getIS91Status']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getIS91Status'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/offender/nomisid/{nomsId}/ineligibility-reasons': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Retrieve ineligibility reasons for offender
      * @description Returns ineligibility reasons for creating a licence for a specific prisoner. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getIneligibilityReasons']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getIneligibilityReasons'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get a licence by its licence id
      * @description Returns a single licence detail by its unique identifier. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getLicenceById_1']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getLicenceById_1'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence-policy/version/{version}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get licence policy be version number
      * @description Returns a single policy using its unique identifier. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getPolicyByVersion']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getPolicyByVersion'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence-policy/compare/{version}/licence/{licenceId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get differences between saved licences conditions and new policy
      * @description Returns condition data saved against a licence no longer present within the new licence policyRequires ROLE_CVL_ADMIN.
      */
-    get: operations['compareLicence']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['compareLicence'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence-policy/active': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get the active licence policy
      * @description Returns the active policy using its unique identifier. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getCurrentPolicy']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getCurrentPolicy'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence-policy/': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get all licence policy versions
      * @description Returns a list of policies, active and presentRequires ROLE_CVL_ADMIN.
      */
-    get: operations['getPolicies']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getPolicies'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/hdc/curfew/licenceId/{licenceId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get curfew details from HDC.
      * @description Get curfew details from HDC. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getHdcLicenceData']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getHdcLicenceData'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/full-size-image': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get the exclusion zone map image for a specified licence and condition
+     * @deprecated
      * @description Get the exclusion zone map image. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getExclusionZoneImage']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getExclusionZoneImage'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/events/match': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get a list of licence events that match the supplied criteria.
      * @description Get a list of licence events that match the supplied criteria. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getEventsMatchingCriteria']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getEventsMatchingCriteria'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/definitions': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** @description Gets summaries of all report definitions */
-    get: operations['definitions']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['definitions'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/definitions/{reportId}/{variantId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** @description Gets report definition containing a single variant. */
-    get: operations['definition']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['definition'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/definitions/{dataProductDefinitionId}/dashboards/{dashboardId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** @description Gets the metric dashboard definition. */
-    get: operations['dashboardDefinition']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['dashboardDefinition'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/cvl-report/upcoming-releases-with-monitoring': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Retrieve list of upcoming cases with electronic monitoring conditions for FTR-56 report
      * @description Returns a list of LastMinuteHandoverCaseResponse objects
      */
-    get: operations['getUpcomingReleasesWithMonitoringConditions']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getUpcomingReleasesWithMonitoringConditions'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/cvl-report/last-minute-handover-cases': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Retrieve list of cases that need to be reported to the TAG team
      * @description Returns a list of LastMinuteHandoverCaseResponse objects
      */
-    get: operations['getLastMinuteCases']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getLastMinuteCases'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/coms-to-prompt': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Retrieve a list of cases that we will send an email for.
      * @description Retrieve a list of cases that we have identified to encourage them to progress cases. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['run']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['run'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/com/{staffIdentifier}/review-counts': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Retrieve the individual and team count of cases that the probation practitioner needs to review
      * @description Retrieve the individual and team count of cases that the probation practitioner needs to review. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['retrieveReviewCounts']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['retrieveReviewCounts'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/com/staff/{deliusStaffIdentifier}/vary-case-load': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Returns the vary caseload for a member of staff
      * @description Returns an enriched list of cases which can have a variation created for a member of staff
      */
-    get: operations['getStaffVaryCaseload']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getStaffVaryCaseload'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/caseload/com/staff/{deliusStaffIdentifier}/create-case-load': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Returns the create caseload for a member of staff
      * @description Returns an enriched list of cases which require a licence to be created
      */
-    get: operations['getStaffCreateCaseload']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getStaffCreateCaseload'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/bank-holidays': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get the bank holiday dates for England and Wales
      * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_CVL_ADMIN.
      */
-    get: operations['getBankHolidaysForEnglandAndWales']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['getBankHolidaysForEnglandAndWales'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/address/search/by/text/{searchQuery}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Searches for addresses that match the given search text
      * @description Searches for addresses that match the given search text
      */
-    get: operations['searchForAddresses']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['searchForAddresses'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/address/search/by/reference/{reference}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Gets an address by it's reference
      * @description Gets an address by it's reference (Unique Property Reference Number)
      */
-    get: operations['searchForAddressByReference']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    get: operations['searchForAddressByReference'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/staff/address/reference/{reference}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
     /**
      * Delete address by reference
      * @description Deletes the address linked to a staff member using the provided reference. Requires ROLE_CVL_ADMIN.
      */
-    delete: operations['deleteAddressByReference']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    delete: operations['deleteAddressByReference'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/discard': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
     /**
      * Discards a licence record.
      * @description Discards a licence record. Requires ROLE_CVL_ADMIN.
      */
-    delete: operations['discard']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    delete: operations['discard'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/licence/id/{licenceId}/additional-condition/id/{conditionId}': {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
     /**
      * Remove additional condition with specified condition Id
      * @description Remove additional condition from the licence list of additional conditions.All user submitted condition data will also be removed.
      */
-    delete: operations['deleteAdditionalCondition']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    delete: operations['deleteAdditionalCondition'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     ErrorResponse: {
       /** Format: int32 */
-      status: number
+      status: number;
       /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
+      errorCode?: number;
+      userMessage?: string;
+      developerMessage?: string;
+      moreInfo?: string;
+    };
     /** @description Request object with information for NOMIS Time Served licence */
     ExternalTimeServedRecordRequest: {
       /**
        * @description The reason for creating this licence
        * @example Time served release
        */
-      reason: string
+      reason: string;
       /**
        * @description The prison code where the offender is located
        * @example LEI
        */
-      prisonCode: string
-    }
+      prisonCode: string;
+    };
     RetryDlqResult: {
       /** Format: int32 */
-      messagesFoundCount: number
-    }
+      messagesFoundCount: number;
+    };
     PurgeQueueResult: {
       /** Format: int32 */
-      messagesFoundCount: number
-    }
+      messagesFoundCount: number;
+    };
     /** @description Request object for updating a prison case administrator */
     UpdatePrisonUserRequest: {
       /**
        * @description The NOMIS username of the case administrator
        * @example jbloggs
        */
-      staffUsername: string
+      staffUsername: string;
       /**
        * @description The email address of the case administrator
        * @example jbloggs@probation.gov.uk
        */
-      staffEmail?: string
+      staffEmail?: string;
       /**
        * @description The first name of the case administrator
        * @example Joseph
        */
-      firstName?: string
+      firstName?: string;
       /**
        * @description The last name of the case administrator
        * @example Bloggs
        */
-      lastName?: string
-    }
+      lastName?: string;
+    };
     /** @description Request object for updating / creating OMU email contact */
     UpdateOmuEmailRequest: {
       /**
@@ -2253,69 +2320,72 @@ export interface components {
        * @description The email used to contact the OMU
        * @example test@omu.prison.com
        */
-      email: string
-    }
+      email: string;
+    };
     OmuContact: {
       /** Format: int64 */
-      id?: number
-      prisonCode: string
-      email: string
+      id?: number;
+      prisonCode: string;
+      email: string;
       /** Format: date-time */
-      dateCreated: string
+      dateCreated: string;
       /** Format: date-time */
-      dateLastUpdated?: string
-    }
+      dateLastUpdated?: string;
+    };
     /** @description Request object for updating an offender's personal details */
     UpdateOffenderDetailsRequest: {
       /**
        * @description The offender forename
        * @example Steven
        */
-      forename: string
+      forename: string;
       /**
        * @description The offender middle names
        * @example Jason Kyle
        */
-      middleNames?: string
+      middleNames?: string;
       /**
        * @description The offender surname
        * @example Smith
        */
-      surname: string
+      surname: string;
       /**
        * Format: date
        * @description The offender's date of birth, from either prison or probation services
        * @example 12/12/2001
        */
-      dateOfBirth: string
-    }
+      dateOfBirth: string;
+    };
     TimeServedProbationConfirmContactRequest: {
       /** @enum {string} */
-      contactStatus: 'ALREADY_CONTACTED' | 'WILL_CONTACT_SOON' | 'CANNOT_CONTACT'
-      communicationMethods: ('EMAIL' | 'TEAMS' | 'PHONE' | 'OTHER')[]
-      otherCommunicationDetail?: string
-    }
+      contactStatus:
+        | 'ALREADY_CONTACTED'
+        | 'WILL_CONTACT_SOON'
+        | 'CANNOT_CONTACT';
+      communicationMethods: ('EMAIL' | 'TEAMS' | 'PHONE' | 'OTHER')[];
+      otherCommunicationDetail?: string;
+    };
     /** @description Request object for updating the VLO discussion */
     UpdateVloDiscussionRequest: {
       /**
        * @description Whether or not the licence variation has been discussed with a VLO
        * @example Yes
        */
-      vloDiscussion: string
-    }
+      vloDiscussion: string;
+    };
     /** @description Request object for creating a new licence */
     NotifyRequest: {
       /**
        * @description The name of the person to contact
        * @example Joe Bloggs
        */
-      name?: string
+      name?: string;
       /**
        * @description The email address to send the notification to
        * @example joebloggs@probation.gov.uk
        */
-      email?: string
-    }
+      email?: string;
+    };
     /** @description Request object for updating the status of a licence */
     StatusUpdateRequest: {
       /**
@@ -2336,18 +2406,18 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /**
        * @description The username of the person who is updating this status
        * @example X12333
        */
-      username: string
+      username: string;
       /**
        * @description The full name of the person who is updating this status
        * @example John Smythe
        */
-      fullName?: string
-    }
+      fullName?: string;
+    };
     /** @description Describes a standard condition on this licence */
     StandardCondition: {
       /**
@@ -2355,66 +2425,66 @@ export interface components {
        * @description The internal ID for this standard condition on this licence
        * @example 98987
        */
-      id: number
+      id: number;
       /**
        * @description The unique code for this standard condition
        * @example 9ce9d594-e346-4785-9642-c87e764bee37
        */
-      code: string
+      code: string;
       /**
        * Format: int32
        * @description The sequence of this standard condition
        * @example 1
        */
-      sequence: number
+      sequence: number;
       /**
        * @description The text of this standard condition
        * @example Be of generally good behaviour
        */
-      text: string
-    }
+      text: string;
+    };
     UpdateStandardConditionDataRequest: {
       /** @description The list of standard licence conditions from service configuration */
-      standardLicenceConditions: components['schemas']['StandardCondition'][]
+      standardLicenceConditions: components['schemas']['StandardCondition'][];
       /** @description The list of standard post sentence supervision conditions from service configuration */
-      standardPssConditions: components['schemas']['StandardCondition'][]
-    }
+      standardPssConditions: components['schemas']['StandardCondition'][];
+    };
     /** @description Request object for updating the SPO discussion */
     UpdateSpoDiscussionRequest: {
       /**
        * @description Whether or not the licence variation has been discussed with an SPO
        * @example Yes
        */
-      spoDiscussion: string
-    }
+      spoDiscussion: string;
+    };
     /** @description Request object for referring a licence variation */
     ReferVariationRequest: {
       /** @description A large string containing rich text markup. A reason for referring the licence variation. */
-      reasonForReferral: string
-    }
+      reasonForReferral: string;
+    };
     /** @description Request object for updating the reason for variation */
     UpdateReasonForVariationRequest: {
       /** @description A large string containing rich text markup. A reason for varying the licence. */
-      reasonForVariation: string
-    }
+      reasonForVariation: string;
+    };
     /** @description Request object for updating the prison information on a licence */
     UpdatePrisonInformationRequest: {
       /**
        * @description The identifier of the prison
        * @example PVI
        */
-      prisonCode: string
+      prisonCode: string;
       /**
        * @description The detailed name of the prison
        * @example Pentonville (HMP)
        */
-      prisonDescription: string
+      prisonDescription: string;
       /**
        * @description The prison telephone number
        * @example +44 276 54545
        */
-      prisonTelephone?: string
-    }
+      prisonTelephone?: string;
+    };
     /** @description Request object for overriding licence dates */
     OverrideLicenceDatesRequest: {
       /**
@@ -2422,70 +2492,77 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      updatedKind: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      updatedKind:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
       /**
        * Format: date
        * @description The conditional release date
        * @example 18/06/2022
        */
-      conditionalReleaseDate?: string
+      conditionalReleaseDate?: string;
       /**
        * Format: date
        * @description The actual release date
        * @example 18/07/2022
        */
-      actualReleaseDate?: string
+      actualReleaseDate?: string;
       /**
        * Format: date
        * @description The sentence start date
        * @example 06/05/2019
        */
-      sentenceStartDate?: string
+      sentenceStartDate?: string;
       /**
        * Format: date
        * @description The sentence end date
        * @example 06/05/2023
        */
-      sentenceEndDate?: string
+      sentenceEndDate?: string;
       /**
        * Format: date
        * @description The licence expiry date
        * @example 06/05/2023
        */
-      licenceExpiryDate?: string
+      licenceExpiryDate?: string;
       /**
        * Format: date
        * @description The date when the post sentence supervision period starts
        * @example 06/05/2023
        */
-      topupSupervisionStartDate?: string
+      topupSupervisionStartDate?: string;
       /**
        * Format: date
        * @description The date when the post sentence supervision period ends
        * @example 06/06/2023
        */
-      topupSupervisionExpiryDate?: string
+      topupSupervisionExpiryDate?: string;
       /**
        * Format: date
        * @description The release date after being recalled
        * @example 06/06/2023
        */
-      postRecallReleaseDate?: string
+      postRecallReleaseDate?: string;
       /**
        * Format: date
        * @description The person's actual home detention curfew date
        * @example 06/06/2023
        */
-      homeDetentionCurfewActualDate?: string
+      homeDetentionCurfewActualDate?: string;
       /**
        * Format: date
        * @description The person's home detention curfew end date
        * @example 06/06/2023
        */
-      homeDetentionCurfewEndDate?: string
+      homeDetentionCurfewEndDate?: string;
       /** @description Reason for overriding the licence dates */
-      reason: string
-    }
+      reason: string;
+    };
     /** @description Describes the curfew times on this hdc licence */
     HdcCurfewTimes: {
       /**
@@ -2493,63 +2570,77 @@ export interface components {
        * @description The internal ID for these curfew times on this hdc licence
        * @example 98987
        */
-      id?: number
+      id?: number;
       /**
        * Format: int32
        * @description Sequence of this curfew time within the curfew times
        * @example 1
        */
-      curfewTimesSequence?: number
+      curfewTimesSequence?: number;
       /**
        * @description The day on which this curfew starts for this curfew time
        * @example MONDAY
        * @enum {string}
        */
-      fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      fromDay?:
+        | 'MONDAY'
+        | 'TUESDAY'
+        | 'WEDNESDAY'
+        | 'THURSDAY'
+        | 'FRIDAY'
+        | 'SATURDAY'
+        | 'SUNDAY';
       /**
        * Format: HH:mm
        * @description The time at which this curfew starts on the fromDay
        * @example 01:00:00
        */
-      fromTime?: string
+      fromTime?: string;
       /**
        * @description The day on which this curfew ends for this curfew time
        * @example MONDAY
        * @enum {string}
        */
-      untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      untilDay?:
+        | 'MONDAY'
+        | 'TUESDAY'
+        | 'WEDNESDAY'
+        | 'THURSDAY'
+        | 'FRIDAY'
+        | 'SATURDAY'
+        | 'SUNDAY';
       /**
        * Format: HH:mm
        * @description The time at which this curfew ends on the untilDay
        * @example 01:00:00
        */
-      untilTime?: string
-    }
+      untilTime?: string;
+    };
     UpdateCurfewTimesRequest: {
       /** @description The list of hdc licence curfew times from service configuration */
-      curfewTimes: components['schemas']['HdcCurfewTimes'][]
-    }
+      curfewTimes: components['schemas']['HdcCurfewTimes'][];
+    };
     /** @description Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
        */
-      telephone: string
+      telephone: string;
       /**
        * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 07700 900000
        */
-      telephoneAlternative?: string
-    }
+      telephoneAlternative?: string;
+    };
     /** @description A list of bespoke conditions to add to a licence */
     BespokeConditionRequest: {
       /**
        * @description A list of bespoke conditions to add to a licence
        * @example ['cond1', 'cond2']
        */
-      conditions: string[]
-    }
+      conditions: string[];
+    };
     /** @description Request object for updating the date and time of the initial appointment */
     AppointmentTimeRequest: {
       /**
@@ -2557,14 +2648,17 @@ export interface components {
        * @description The date and time of the initial appointment
        * @example 12/12/2021 10:35
        */
-      appointmentTime?: string
+      appointmentTime?: string;
       /**
        * @description The type of appointment time at the initial appointment
        * @example IMMEDIATE_UPON_RELEASE
        * @enum {string}
        */
-      appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
-    }
+      appointmentTimeType:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME';
+    };
     /** @description Request object for updating the person the person on probation will meet at the initial appointment */
     AppointmentPersonRequest: {
       /**
@@ -2572,99 +2666,102 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string}
        */
-      appointmentPersonType: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      appointmentPersonType:
+        | 'DUTY_OFFICER'
+        | 'RESPONSIBLE_COM'
+        | 'SPECIFIC_PERSON';
       /**
        * @description The name of the person the person on probation will meet at the initial appointment
        * @example John Smith
        */
-      appointmentPerson?: string
-    }
+      appointmentPerson?: string;
+    };
     /** @description A request object to add an address */
     AddAddressRequest: {
       /**
        * @description Unique Property Reference Number, acquired from OsPlacesApi, post code and address look up
        * @example 200010019924
        */
-      uprn?: string
+      uprn?: string;
       /**
        * @description The first line of the address
        * @example 12
        */
-      firstLine: string
+      firstLine: string;
       /**
        * @description The second line of the address
        * @example Penarth
        */
-      secondLine?: string
+      secondLine?: string;
       /**
        * @description The town or city of the address
        * @example Cardiff
        */
-      townOrCity: string
+      townOrCity: string;
       /**
        * @description The county of the address
        * @example Vale of Glamorgan
        */
-      county?: string
+      county?: string;
       /**
        * @description The postcode of the address
        * @example CF64 1AB
        */
-      postcode: string
+      postcode: string;
       /**
        * @description Source of the address
        * @example MANUAL
        * @enum {string}
        */
-      source: 'MANUAL' | 'OS_PLACES'
+      source: 'MANUAL' | 'OS_PLACES';
       /**
        * @description Flag to indicate if the address should be added to the user's saved addresses
        * @example true
        */
-      isPreferredAddress: boolean
-    }
+      isPreferredAddress: boolean;
+    };
     /** @description Request object for updating the address of the initial appointment */
     AppointmentAddressRequest: {
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
-      appointmentAddress: string
-    }
+      appointmentAddress: string;
+    };
     /** @description Describes an additional condition to create/update */
     AdditionalConditionRequest: {
       /**
        * @description Coded value for the additional condition
        * @example meetingAddress
        */
-      code: string
+      code: string;
       /**
        * @description The category of the additional condition
        * @example Freedom of movement
        */
-      category: string
+      category: string;
       /**
        * Format: int32
        * @description Sequence of this additional condition within the additional conditions
        * @example 1
        */
-      sequence?: number
+      sequence?: number;
       /**
        * @description The textual value for this additional condition
        * @example You must not enter the location [DESCRIPTION]
        */
-      text: string
-    }
+      text: string;
+    };
     /** @description Request object for updating the list of additional conditions on a licence */
     AdditionalConditionsRequest: {
       /** @description The list of additional conditions */
-      additionalConditions: components['schemas']['AdditionalConditionRequest'][]
+      additionalConditions: components['schemas']['AdditionalConditionRequest'][];
       /**
        * @description The type of additional condition, either licence or post sentence supervision
        * @enum {string}
        */
-      conditionType: 'AP' | 'PSS'
-    }
+      conditionType: 'AP' | 'PSS';
+    };
     /** @description Describes the data entered for an additional condition */
     AdditionalConditionData: {
       /**
@@ -2672,31 +2769,31 @@ export interface components {
        * @description The internal ID of this data item, for this condition on this licence
        * @example 98989
        */
-      id?: number
+      id?: number;
       /**
        * @description The field name of this data item for this condition on this licence
        * @example location
        */
-      field?: string
+      field?: string;
       /**
        * @description The value of this data item
        * @example Norfolk
        */
-      value?: string
+      value?: string;
       /**
        * Format: int32
        * @description The sequence of this data item, for this condition on this licence
        * @example 1
        */
-      sequence: number
+      sequence: number;
       /** @description Whether this data item contributes to the licence or whether it is just used for rendering purposes */
-      contributesToLicence: boolean
-    }
+      contributesToLicence: boolean;
+    };
     /** @description Request object for updating the list of additional conditions on a licence */
     UpdateAdditionalConditionDataRequest: {
       /** @description The list of data inputs associated with this additional condition */
-      data: components['schemas']['AdditionalConditionData'][]
-    }
+      data: components['schemas']['AdditionalConditionData'][];
+    };
     /** @description Request object for updating the COM responsible for an offender */
     UpdateComRequest: {
       /**
@@ -2704,33 +2801,33 @@ export interface components {
        * @description The unique identifier of the COM, retrieved from Delius
        * @example 22003829
        */
-      staffIdentifier: number
+      staffIdentifier: number;
       /**
        * @description The Delius staff code for the COM
        * @example X012345
        */
-      staffCode?: string
+      staffCode?: string;
       /**
        * @description The Delius username for the COM
        * @example jbloggs
        */
-      staffUsername: string
+      staffUsername: string;
       /**
        * @description The email address of the COM
        * @example jbloggs@probation.gov.uk
        */
-      staffEmail?: string
+      staffEmail?: string;
       /**
        * @description The first name of the COM
        * @example Joseph
        */
-      firstName?: string
+      firstName?: string;
       /**
        * @description The last name of the COM
        * @example Bloggs
        */
-      lastName?: string
-    }
+      lastName?: string;
+    };
     /** @description Describes an audit event request */
     AuditEvent: {
       /**
@@ -2738,63 +2835,83 @@ export interface components {
        * @description The internal ID of the audit event
        * @example 1234
        */
-      id?: number
+      id?: number;
       /**
        * Format: int64
        * @description The internal ID of the licence that this event related to, or null if unrelated to a licence
        * @example 1234
        */
-      licenceId?: number
+      licenceId?: number;
       /**
        * Format: date-time
        * @description The date and time of the event
        * @example 12/01/2022 23:14:23
        */
-      eventTime: string
+      eventTime: string;
       /**
        * @description Username who initiated the event, if a user event, or SYSTEM if an automated event
        * @example X63533
        */
-      username?: string
+      username?: string;
       /**
        * @description The full name of the person who performed this auditable event, or SYSTEM if an automated event.
        * @example Joe Bloggs
        */
-      fullName?: string
+      fullName?: string;
       /**
        * @description The event type. One of SYSTEM_EVENT or USER_EVENT
        * @example USER_EVENT
        * @enum {string}
        */
-      eventType: 'USER_EVENT' | 'SYSTEM_EVENT'
+      eventType: 'USER_EVENT' | 'SYSTEM_EVENT';
       /**
        * @description A summary of the action taken
        * @example Updated a bespoke condition
        */
-      summary: string
+      summary: string;
       /**
        * @description A detailed description of the action taken
        * @example Updated a bespoke condition
        */
-      detail?: string
+      detail?: string;
       /** @description The changes that were made based on the action taken */
       changes?: {
-        [key: string]: unknown
-      }
-    }
+        [key: string]: unknown;
+      };
+    };
     /** @description Request object for updating licence start dates for a batch of licences. */
     RecalculateLicenceStartDatesRequest: {
       /**
        * Format: int64
        * @description The update batch size.
        */
-      batchSize: number
+      batchSize: number;
       /**
        * Format: int64
        * @description The ID of the last updated licence.
        */
-      id: number
-    }
+      id: number;
+    };
+    /** @description A reference to the created licence */
+    CreateLicenceResponse: {
+      /**
+       * Format: int64
+       * @description Internal identifier for this licence generated within this service
+       * @example 123344
+       */
+      licenceId: number;
+    };
+    EntityAlreadyExistsResponse: {
+      /** Format: int32 */
+      status: number;
+      /** Format: int32 */
+      errorCode?: number;
+      userMessage?: string;
+      developerMessage?: string;
+      moreInfo?: string;
+      /** Format: int64 */
+      existingResourceId: number;
+    };
     /** @description Request object for searching licences by field */
     MatchLicencesRequest: {
       /**
@@ -2815,18 +2932,18 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
-      )[]
+      )[];
       /**
        * @description A list of NOMIS ID's
        * @example ['B76546GH', 'Y76499GY']
        */
-      nomsId?: string[]
+      nomsId?: string[];
       /**
        * @description A list of probation delivery unit codes
        * @example ['N55', 'P66']
        */
-      pdu?: string[]
-    }
+      pdu?: string[];
+    };
     /** @description Response object which summarises a licence */
     LicenceSummary: {
       /**
@@ -2834,19 +2951,26 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      kind:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
       /**
        * Format: int64
        * @description Internal identifier for this licence generated within this service
        * @example 123344
        */
-      licenceId: number
+      licenceId: number;
       /**
        * @description Licence type code
        * @example AP
        * @enum {string}
        */
-      licenceType: 'AP' | 'AP_PSS' | 'PSS'
+      licenceType: 'AP' | 'AP_PSS' | 'PSS';
       /**
        * @description The status of this licence
        * @example IN_PROGRESS
@@ -2865,254 +2989,254 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /**
        * @description The prison nomis identifier for this offender
        * @example A1234AA
        */
-      nomisId: string
+      nomisId: string;
       /**
        * @description The offender surname
        * @example Smith
        */
-      surname?: string
+      surname?: string;
       /**
        * @description The offender forename
        * @example Brian
        */
-      forename?: string
+      forename?: string;
       /**
        * @description The prison code where this offender resides or was released from
        * @example MDI
        */
-      prisonCode?: string
+      prisonCode?: string;
       /**
        * @description The prison where this offender resides or was released from
        * @example Moorland (HMP)
        */
-      prisonDescription?: string
+      prisonDescription?: string;
       /**
        * @description The probation area code where the licence is supervised
        * @example N01
        */
-      probationAreaCode?: string
+      probationAreaCode?: string;
       /**
        * @description The probation area description
        * @example Wales
        */
-      probationAreaDescription?: string
+      probationAreaDescription?: string;
       /**
        * @description The probation delivery unit (PDU or borough) where the licence is supervised
        * @example N01CA
        */
-      probationPduCode?: string
+      probationPduCode?: string;
       /**
        * @description The description for the PDU
        * @example North Wales
        */
-      probationPduDescription?: string
+      probationPduDescription?: string;
       /**
        * @description The local administrative unit (LAU or district) where the licence is supervised
        * @example NA01CA-02
        */
-      probationLauCode?: string
+      probationLauCode?: string;
       /**
        * @description The LAU description
        * @example North Wales
        */
-      probationLauDescription?: string
+      probationLauDescription?: string;
       /**
        * @description The probation team code which supervises the licence
        * @example NA01CA-02-A
        */
-      probationTeamCode?: string
+      probationTeamCode?: string;
       /**
        * @description The team description
        * @example Cardiff South
        */
-      probationTeamDescription?: string
+      probationTeamDescription?: string;
       /**
        * Format: date
        * @description The conditional release date on the licence
        * @example 12/12/2022
        */
-      conditionalReleaseDate?: string
+      conditionalReleaseDate?: string;
       /**
        * Format: date
        * @description The actual release date on the licence
        * @example 12/12/2022
        */
-      actualReleaseDate?: string
+      actualReleaseDate?: string;
       /**
        * Format: date
        * @description The sentence start date
        * @example 13/09/2019
        */
-      sentenceStartDate?: string
+      sentenceStartDate?: string;
       /**
        * Format: date
        * @description The sentence end date
        * @example 13/09/2022
        */
-      sentenceEndDate?: string
+      sentenceEndDate?: string;
       /**
        * Format: date
        * @description The date that the licence will start
        * @example 13/09/2022
        */
-      licenceStartDate?: string
+      licenceStartDate?: string;
       /**
        * Format: date
        * @description The date that the licence will expire
        * @example 13/09/2024
        */
-      licenceExpiryDate?: string
+      licenceExpiryDate?: string;
       /**
        * Format: date
        * @description The date when the post sentence supervision period starts, from prison services
        * @example 06/05/2023
        */
-      topupSupervisionStartDate?: string
+      topupSupervisionStartDate?: string;
       /**
        * Format: date
        * @description The date when the post sentence supervision period ends, from prison services
        * @example 06/06/2023
        */
-      topupSupervisionExpiryDate?: string
+      topupSupervisionExpiryDate?: string;
       /**
        * Format: date
        * @description The release date after being recalled
        * @example 06/06/2023
        */
-      postRecallReleaseDate?: string
+      postRecallReleaseDate?: string;
       /**
        * Format: date
        * @description The date when the hard stop period starts
        * @example 11/09/2022
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description The date when warning about the hard stop period begins
        * @example 11/09/2022
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
+      isInHardStopPeriod: boolean;
       /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean;
       /**
        * @description The case reference number (CRN) of this person, from either prison or probation service
        * @example X12344
        */
-      crn?: string
+      crn?: string;
       /**
        * Format: date
        * @description The offender's date of birth, from either prison or probation services
        * @example 12/12/2001
        */
-      dateOfBirth?: string
+      dateOfBirth?: string;
       /**
        * @description The username of the responsible probation officer
        * @example jsmith
        */
-      comUsername?: string
+      comUsername?: string;
       /**
        * Format: int64
        * @description The bookingId associated with the licence
        * @example 773722
        */
-      bookingId?: number
+      bookingId?: number;
       /**
        * Format: date-time
        * @description The date the licence was created
        * @example 02/12/2001 10:15
        */
-      dateCreated?: string
+      dateCreated?: string;
       /**
        * @description The full name of the person who approved the licence
        * @example John Smith
        */
-      approvedByName?: string
+      approvedByName?: string;
       /**
        * Format: date-time
        * @description The date and time that this licence was approved
        * @example 24/08/2022 11:30:33
        */
-      approvedDate?: string
+      approvedDate?: string;
       /**
        * Format: date-time
        * @description The date and time that this licence was submitted for approval
        * @example 24/08/2022 11:30:33
        */
-      submittedDate?: string
+      submittedDate?: string;
       /**
        * @description The version number of this licence
        * @example 1.3
        */
-      licenceVersion?: string
+      licenceVersion?: string;
       /**
        * Format: int64
        * @description The licence Id which this licence is a version of
        * @example 86
        */
-      versionOf?: number
+      versionOf?: number;
       /**
        * @description Is a review of this licence is required
        * @example true
        */
-      isReviewNeeded: boolean
+      isReviewNeeded: boolean;
       /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
-      updatedByFullName?: string
+      updatedByFullName?: string;
       /**
        * Format: date
        * @description The person’s actual home detention curfew date
        * @example 30/01/2025
        */
-      homeDetentionCurfewActualDate?: string
-    }
+      homeDetentionCurfewActualDate?: string;
+    };
     /** @description Request object for checking what access a user has to a licence */
     LicencePermissionsRequest: {
       /**
        * @description For a COM user, the teams they are allocated to
        * @example ['team-A', 'team-S']
        */
-      teamCodes: string[]
-    }
+      teamCodes: string[];
+    };
     /** @description Response object containing permissions a user has for a licence */
     LicencePermissionsResponse: {
       /**
        * @description If true then the user can view the licence
        * @example true
        */
-      view: boolean
-    }
+      view: boolean;
+    };
     /** @description Request object for overriding a licence type */
     OverrideLicenceTypeRequest: {
       /**
        * @description The new licence Type to assign to the licence
        * @enum {string}
        */
-      licenceType: 'AP' | 'AP_PSS' | 'PSS'
+      licenceType: 'AP' | 'AP_PSS' | 'PSS';
       /** @description Reason for overriding the licence status */
-      reason: string
-    }
+      reason: string;
+    };
     ProblemDetail: {
       /** Format: uri */
-      type?: string
-      title?: string
+      type?: string;
+      title?: string;
       /** Format: int32 */
-      status?: number
-      detail?: string
+      status?: number;
+      detail?: string;
       /** Format: uri */
-      instance?: string
+      instance?: string;
       properties?: {
-        [key: string]: unknown
-      }
-    }
+        [key: string]: unknown;
+      };
+    };
     /** @description Request object for overriding a licence status */
     OverrideLicenceStatusRequest: {
       /**
@@ -3132,46 +3256,46 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /** @description Reason for overriding the licence status */
-      reason: string
-    }
+      reason: string;
+    };
     /** @description Request object for overriding prisoner details */
     OverrideLicencePrisonerDetailsRequest: {
       /**
        * @description The prisoner's forename
        * @example John
        */
-      forename: string
+      forename: string;
       /**
        * @description The prisoner's middle names
        * @example James Micheal
        */
-      middleNames?: string
+      middleNames?: string;
       /**
        * @description The prisoner's surname
        * @example Smith
        */
-      surname: string
+      surname: string;
       /**
        * Format: date
        * @description The prisoner's date of birth
        * @example 21/01/1995
        */
-      dateOfBirth: string
+      dateOfBirth: string;
       /** @description Reason for overriding the prisoner details */
-      reason: string
-    }
+      reason: string;
+    };
     /** @description Request for providing details about any electronic monitoring programme */
     UpdateElectronicMonitoringProgrammeRequest: {
       /** @description Is the licence to be tagged for electronic monitoring programme */
-      isToBeTaggedForProgramme?: boolean
+      isToBeTaggedForProgramme?: boolean;
       /**
        * @description Programme Name of the licence
        * @example Off Some Road
        */
-      programmeName?: string
-    }
+      programmeName?: string;
+    };
     /** @description A reference to the edited licence */
     EditLicenceResponse: {
       /**
@@ -3179,16 +3303,16 @@ export interface components {
        * @description Internal identifier for this licence edited within this service
        * @example 123344
        */
-      licenceId: number
-    }
+      licenceId: number;
+    };
     /** @description A list of licence condition codes to be removed from a licence */
     DeleteAdditionalConditionsByCodeRequest: {
       /**
        * @description List of condition codes
        * @example a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5
        */
-      conditionCodes: string[]
-    }
+      conditionCodes: string[];
+    };
     /** @description Request object for deactivating an active licence and its variations */
     DeactivateLicenceAndVariationsRequest: {
       /**
@@ -3196,8 +3320,8 @@ export interface components {
        * @example RESENTENCED
        * @enum {string}
        */
-      reason: 'RECALLED' | 'RESENTENCED'
-    }
+      reason: 'RECALLED' | 'RESENTENCED';
+    };
     /** @description A reference to the created variation licence */
     CreateVariationResponse: {
       /**
@@ -3205,42 +3329,42 @@ export interface components {
        * @description Internal identifier for this licence generated within this service
        * @example 123344
        */
-      licenceId: number
-    }
+      licenceId: number;
+    };
     /** @description Describes an additional condition request */
     AddAdditionalConditionRequest: {
       /**
        * @description Coded value for the additional condition
        * @example meetingAddress
        */
-      conditionCode: string
+      conditionCode: string;
       /**
        * @description Condition type, either AP or PSS
        * @example AP
        */
-      conditionType: string
+      conditionType: string;
       /**
        * @description The category of the additional condition
        * @example Freedom of movement
        */
-      conditionCategory: string
+      conditionCategory: string;
       /**
        * Format: int32
        * @description Sequence of this additional condition within the additional conditions
        * @example 1
        */
-      sequence?: number
+      sequence?: number;
       /**
        * @description The textual value for this additional condition
        * @example You must not enter the location [DESCRIPTION]
        */
-      conditionText: string
+      conditionText: string;
       /**
        * @description The condition text with the users data inserted into the template
        * @example You must not enter the location Tesco Superstore
        */
-      expandedText: string
-    }
+      expandedText: string;
+    };
     /** @description Describes an additional condition */
     AdditionalCondition: {
       /**
@@ -3248,47 +3372,47 @@ export interface components {
        * @description The internal ID for this additional condition for this licence
        * @example 98989
        */
-      id?: number
+      id?: number;
       /**
        * @description Coded value for the additional condition
        * @example meetingAddress
        */
-      code: string
+      code: string;
       /**
        * @description Version number for condition
        * @example 2.1
        */
-      version?: string
+      version?: string;
       /**
        * @description The category of the additional condition
        * @example Freedom of movement
        */
-      category?: string
+      category?: string;
       /**
        * Format: int32
        * @description Sequence of this additional condition within the additional conditions
        * @example 1
        */
-      sequence?: number
+      sequence?: number;
       /**
        * @description The textual value for this additional condition
        * @example You must not enter the location [DESCRIPTION]
        */
-      text?: string
+      text?: string;
       /**
        * @description The condition text with the users data inserted into the template
        * @example You must not enter the location Tesco Superstore
        */
-      expandedText?: string
+      expandedText?: string;
       /** @description The list of data items entered for this additional condition */
-      data: components['schemas']['AdditionalConditionData'][]
+      data: components['schemas']['AdditionalConditionData'][];
       /** @description The list of file upload summary for this additional condition */
-      uploadSummary: components['schemas']['AdditionalConditionUploadSummary'][]
+      uploadSummary: components['schemas']['AdditionalConditionUploadSummary'][];
       /** @description Whether the condition is ready to submit for approval */
-      readyToSubmit?: boolean
+      readyToSubmit?: boolean;
       /** @description Whether the condition requires input from the user */
-      requiresInput?: boolean
-    }
+      requiresInput?: boolean;
+    };
     /** @description Describes the files uploaded for an additional condition */
     AdditionalConditionUploadSummary: {
       /**
@@ -3296,124 +3420,104 @@ export interface components {
        * @description The internal ID of this upload for this condition on this licence
        * @example 98989
        */
-      id: number
+      id: number;
       /**
        * @description The original file name uploaded for this condition on this licence
        * @example exclusion-zone.pdf
        */
-      filename?: string
+      filename?: string;
       /**
        * @description The file type uploaded for this condition on this licence
        * @example application/pdf
        */
-      fileType?: string
+      fileType?: string;
       /**
        * @description The mime type based on the type of image that has been extracted from the upload
        * @example image/png
        */
-      imageType?: string
+      imageType?: string;
       /**
        * Format: int32
        * @description The original file size in bytes
        * @example 27566
        */
-      fileSize: number
+      fileSize: number;
       /**
        * Format: int32
        * @description The image size in bytes
        * @example 27566
        */
-      imageSize?: number
+      imageSize?: number;
       /**
        * Format: date-time
        * @description The date and time this file was uploaded
        * @example 12/12/2021 10:35
        */
-      uploadedTime: string
+      uploadedTime: string;
       /**
        * @description The description provided in this document
        * @example A description of the exclusion zone boundaries
        */
-      description?: string
+      description?: string;
       /**
        * @description The thumbnail for the  exclusion zone map as a base64-encoded JPEG image
        * @example Base64 string
        */
-      thumbnailImage?: string
-    }
+      thumbnailImage?: string;
+    };
     /** @description Request object for creating a new licence */
     CreateLicenceRequest: {
       /**
        * @description The prison nomis identifier for this offender
        * @example A1234AA
        */
-      nomsId: string
+      nomsId: string;
       /**
        * @description The type of licence to create
        * @example CRD
        * @enum {string}
        */
-      type: 'PRRD' | 'CRD' | 'HARD_STOP' | 'HDC' | 'TIME_SERVED'
-    }
-    /** @description A reference to the created licence */
-    CreateLicenceResponse: {
-      /**
-       * Format: int64
-       * @description Internal identifier for this licence generated within this service
-       * @example 123344
-       */
-      licenceId: number
-    }
-    EntityAlreadyExistsResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-      /** Format: int64 */
-      existingResourceId: number
-    }
+      type: 'PRRD' | 'CRD' | 'HARD_STOP' | 'HDC' | 'TIME_SERVED';
+    };
     ProbationSearchSortBy: {
       /** @enum {string} */
-      field: 'FORENAME' | 'SURNAME' | 'CRN' | 'COM_FORENAME' | 'COM_SURNAME'
+      field: 'FORENAME' | 'SURNAME' | 'CRN' | 'COM_FORENAME' | 'COM_SURNAME';
       /** @enum {string} */
-      direction: 'ASC' | 'DESC'
-    }
+      direction: 'ASC' | 'DESC';
+    };
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
     ProbationUserSearchRequest: {
       /**
        * @description The query the user wishes to search for (e.g. CRN, name, NOMIS ID)
        * @example Joe Bloggs
        */
-      query: string
+      query: string;
       /**
        * Format: int64
        * @description The delius staff identifier of the probation staff member
        * @example 14829475
        */
-      staffIdentifier: number
+      staffIdentifier: number;
       /** @description A list of fields to sort by along with the sort direction for each */
-      sortBy: components['schemas']['ProbationSearchSortBy'][]
-    }
+      sortBy: components['schemas']['ProbationSearchSortBy'][];
+    };
     /** @description Describes an enriched probation com search result */
     ComSearchResponse: {
       /** @description A list of probation search results */
-      results: components['schemas']['FoundComCase'][]
+      results: components['schemas']['FoundComCase'][];
       /**
        * Format: int32
        * @description Based on the search results, the number of results where an offender is in prison
        * @example 10
        */
-      inPrisonCount: number
+      inPrisonCount: number;
       /**
        * Format: int32
        * @description Based on the search results, the number of results where an offender is on probation
        * @example 10
        */
-      onProbationCount: number
-    }
+      onProbationCount: number;
+    };
     /** @description Describes a com search result which has been found and enriched */
     FoundComCase: {
       /**
@@ -3421,78 +3525,85 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      kind:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
       /**
        * Format: int64
        * @description the prison booking id
        * @example 123
        */
-      bookingId?: number
+      bookingId?: number;
       /** @description The forename and surname of the offender */
-      name: string
+      name: string;
       /**
        * @description The case reference number (CRN) of the offender,
        * @example X12344
        */
-      crn?: string
+      crn?: string;
       /**
        * @description The prison nomis number for the offender
        * @example A1234AA
        */
-      nomisId?: string
+      nomisId?: string;
       /**
        * @deprecated
        * @description The forename and surname of the COM
        */
-      comName?: string
+      comName?: string;
       /**
        * @deprecated
        * @description The COM's staff code
        */
-      comStaffCode?: string
+      comStaffCode?: string;
       /** @description The details for the active supervising probation officer */
-      probationPractitioner: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner'];
       /** @description The description of the COM's team */
-      teamName?: string
+      teamName?: string;
       /**
        * Format: date
        * @description The release date of the offender
        * @example 27/07/2023
        */
-      releaseDate?: string
+      releaseDate?: string;
       /**
        * Format: date
        * @description The date when the hard stop period starts
        * @example 11/09/2022
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description The date when warning about the hard stop period begins
        * @example 11/09/2022
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
+      isInHardStopPeriod: boolean;
       /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean;
       /**
        * Format: int64
        * @description The ID of the most recent and relevant licence
        * @example 123344
        */
-      licenceId?: number
+      licenceId?: number;
       /**
        * Format: int64
        * @description The licence Id which this licence is a version of
        * @example 86
        */
-      versionOf?: number
+      versionOf?: number;
       /**
        * @description The type of licence
        * @enum {string}
        */
-      licenceType?: 'AP' | 'AP_PSS' | 'PSS'
+      licenceType?: 'AP' | 'AP_PSS' | 'PSS';
       /**
        * @description The status of the licence
        * @enum {string}
@@ -3510,77 +3621,77 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /** @description Indicates whether the offender is in prison or out on probation */
-      isOnProbation?: boolean
+      isOnProbation?: boolean;
       /**
        * @description Label for release date
        * @example Confirmed release date
        */
-      releaseDateLabel?: string
+      releaseDateLabel?: string;
       /**
        * @description Is a review of this licence is required
        * @example true
        */
-      isReviewNeeded?: boolean
-    }
+      isReviewNeeded?: boolean;
+    };
     /** @description Describes a probation practitioner on an approval case */
     ProbationPractitioner: {
       /**
        * @description The unique staff code for the probation practitioner
        * @example SH00001
        */
-      staffCode?: string
+      staffCode?: string;
       /**
        * @description The full name of the probation practitioner
        * @example Joe Bloggs
        */
-      name: string
+      name: string;
       /** @description Is a probation practitioner allocated? */
-      allocated: boolean
-    }
+      allocated: boolean;
+    };
     /** @description Describes a Time Served case */
     TimeServedCase: {
       /**
        * @description The full name of the person on licence
        * @example John Doe
        */
-      name: string
+      name: string;
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
-      prisonerNumber: string
+      prisonerNumber: string;
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
        * @example 30/11/2022
        */
-      releaseDate?: string
+      releaseDate?: string;
       /**
        * Format: date
        * @description The sentence start date
        * @example 30/11/2022
        */
-      sentenceStartDate?: string
+      sentenceStartDate?: string;
       /**
        * Format: date
        * @description The conditional release date
        * @example 30/11/2022
        */
-      conditionalReleaseDate?: string
+      conditionalReleaseDate?: string;
       /**
        * Format: date
        * @description The conditional override release date
        * @example 30/11/2022
        */
-      conditionalReleaseDateOverride?: string
+      conditionalReleaseDateOverride?: string;
       /**
        * Format: date
        * @description The confirmed release date
        * @example 30/11/2022
        */
-      confirmedReleaseDate?: string
+      confirmedReleaseDate?: string;
       /**
        * @description Legal Status
        * @example SENTENCED
@@ -3596,45 +3707,45 @@ export interface components {
         | 'IMMIGRATION_DETAINEE'
         | 'REMAND'
         | 'UNKNOWN'
-        | 'OTHER'
+        | 'OTHER';
       /**
        * @description The agency code where this offender resides or was released from
        * @example MDI
        */
-      prisonCode?: string
+      prisonCode?: string;
       /**
        * @description This case is a time served based on CRDS rule
        * @example true
        */
-      isTimeServedCaseByCrdsRule: boolean
+      isTimeServedCaseByCrdsRule: boolean;
       /**
        * @description This case is a time served based on CRDS rule
        * @example true
        */
-      isTimeServedCaseByNonCrdsRule: boolean
+      isTimeServedCaseByNonCrdsRule: boolean;
       /**
        * @description This case is a time served based on All prison rule
        * @example true
        */
-      isTimeServedCaseByAllPrisonRule: boolean
+      isTimeServedCaseByAllPrisonRule: boolean;
       /**
        * @description This case is a time served based on ignoring the confirmed release date
        * @example true
        */
-      isTimeServedCaseByIgnoreArdRule: boolean
+      isTimeServedCaseByIgnoreArdRule: boolean;
       /**
        * @description This is a suspected time serve case
        * @example true
        */
-      isTimeServedCase: boolean
-    }
+      isTimeServedCase: boolean;
+    };
     /** @description Describes a Time Served case */
     TimeServedCaseload: {
       /** @description List of the cases we have identified as being time served cases */
-      identifiedCases: components['schemas']['TimeServedCase'][]
+      identifiedCases: components['schemas']['TimeServedCase'][];
       /** @description Other cases coming up for release */
-      otherCases: components['schemas']['TimeServedCase'][]
-    }
+      otherCases: components['schemas']['TimeServedCase'][];
+    };
     /** @description Search criteria for vary approver caseload search */
     VaryApproverCaseloadSearchRequest: {
       /**
@@ -3643,18 +3754,18 @@ export interface components {
        *       "N55PDV"
        *     ]
        */
-      probationPduCodes?: string[]
+      probationPduCodes?: string[];
       /**
        * @description The probation region where the licence is supervised
        * @example N01
        */
-      probationAreaCode?: string
+      probationAreaCode?: string;
       /**
        * @description Search text to filter caseload
        * @example Joe Bloggs
        */
-      searchTerm?: string
-    }
+      searchTerm?: string;
+    };
     /** @description Describes a vary approver case */
     VaryApproverCase: {
       /**
@@ -3662,45 +3773,45 @@ export interface components {
        * @description Unique identifier for this licence within the service
        * @example 99999
        */
-      licenceId?: number
+      licenceId?: number;
       /**
        * @description The full name of the person on licence
        * @example An offender
        */
-      name?: string
+      name?: string;
       /**
        * @description The case reference number (CRN) for the person on this licence
        * @example X12444
        */
-      crnNumber: string
+      crnNumber: string;
       /**
        * @description The licence type code
        * @example AP
        * @enum {string}
        */
-      licenceType?: 'AP' | 'AP_PSS' | 'PSS'
+      licenceType?: 'AP' | 'AP_PSS' | 'PSS';
       /**
        * Format: date
        * @description The date on which the licence variation was created
        * @example 30/11/2022
        */
-      variationRequestDate?: string
+      variationRequestDate?: string;
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
        * @example 30/11/2022
        */
-      releaseDate?: string
+      releaseDate?: string;
       /** @description The details for the active supervising probation officer */
-      probationPractitioner: components['schemas']['ProbationPractitioner']
-    }
+      probationPractitioner?: components['schemas']['ProbationPractitioner'];
+    };
     /** @description Response object which describes a result from a vary approver caseload search */
     VaryApproverCaseloadSearchResponse: {
       /** @description A list of cases in a pdu search results */
-      pduCasesResponse: components['schemas']['VaryApproverCase'][]
+      pduCasesResponse: components['schemas']['VaryApproverCase'][];
       /** @description A list of cases in a region search results */
-      regionCasesResponse: components['schemas']['VaryApproverCase'][]
-    }
+      regionCasesResponse: components['schemas']['VaryApproverCase'][];
+    };
     /** @description Describes an approval case */
     ApprovalCase: {
       /**
@@ -3708,82 +3819,89 @@ export interface components {
        * @description Unique identifier for this licence within the service
        * @example 99999
        */
-      licenceId?: number
+      licenceId?: number;
       /**
        * @description The full name of the person on licence
        * @example John Doe
        */
-      name?: string
+      name?: string;
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
-      prisonerNumber?: string
+      prisonerNumber?: string;
       /**
        * @description The full name of the person who last submitted this licence
        * @example Jane Doe
        */
-      submittedByFullName?: string
+      submittedByFullName?: string;
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
        * @example 30/11/2022
        */
-      releaseDate?: string
+      releaseDate?: string;
       /**
        * @description Whether an urgent approval is needed for this person
        * @example false
        */
-      urgentApproval?: boolean
+      urgentApproval?: boolean;
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
        */
-      approvedBy?: string
+      approvedBy?: string;
       /**
        * Format: date-time
        * @description The date and time that this prison approved this licence
        * @example 19/06/2024 09:00:00
        */
-      approvedOn?: string
+      approvedOn?: string;
       /** @description The details for the active supervising probation officer */
-      probationPractitioner: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner'];
       /**
        * @description Type of this licence
        * @enum {string}
        */
-      kind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      kind?:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
       /**
        * @description The agency code where this offender resides or was released from
        * @example LEI
        */
-      prisonCode?: string
+      prisonCode?: string;
       /**
        * @description The agency description of the detaining prison
        * @example Leeds (HMP)
        */
-      prisonDescription?: string
-    }
+      prisonDescription?: string;
+    };
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
     ApproverSearchRequest: {
       /**
        * @description The prison caseloads of the prison staff member
        * @example ['BAI']
        */
-      prisonCaseloads: string[]
+      prisonCaseloads: string[];
       /**
        * @description The query the user wishes to search for (e.g. CRN, name, NOMIS ID)
        * @example Joe Bloggs
        */
-      query: string
-    }
+      query: string;
+    };
     /** @description Response object which describes a result from an approver caseload search */
     ApproverSearchResponse: {
       /** @description A list of cases needing approval search results */
-      approvalNeededResponse: components['schemas']['ApprovalCase'][]
+      approvalNeededResponse: components['schemas']['ApprovalCase'][];
       /** @description A list of recently approved cases search results */
-      recentlyApprovedResponse: components['schemas']['ApprovalCase'][]
-    }
+      recentlyApprovedResponse: components['schemas']['ApprovalCase'][];
+    };
     /** @description Request object for requesting a case load for a team */
     TeamCaseloadRequest: {
       /**
@@ -3793,7 +3911,7 @@ export interface components {
        *       "teamC"
        *     ]
        */
-      probationTeamCodes: string[]
+      probationTeamCodes: string[];
       /**
        * @description The teams linked to the user to get the case loads for
        * @example [
@@ -3801,37 +3919,37 @@ export interface components {
        *       "teamC"
        *     ]
        */
-      teamSelected: string[]
-    }
+      teamSelected: string[];
+    };
     /** @description Describes an COM case */
     ComVaryCase: {
       /**
        * @description The full name of the person on licence
        * @example John Doe
        */
-      name: string
+      name: string;
       /**
        * @description The case reference number (CRN) for the person on this licence
        * @example X12444
        */
-      crnNumber?: string
+      crnNumber?: string;
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
-      prisonerNumber?: string
+      prisonerNumber?: string;
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
        * @example 30/11/2022
        */
-      releaseDate?: string
+      releaseDate?: string;
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
        * @example 99999
        */
-      licenceId?: number
+      licenceId?: number;
       /**
        * @description The new status for this licence
        * @example APPROVED
@@ -3850,68 +3968,75 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /**
        * @description The licence type code
        * @example AP
        * @enum {string}
        */
-      licenceType: 'AP' | 'AP_PSS' | 'PSS'
+      licenceType: 'AP' | 'AP_PSS' | 'PSS';
       /**
        * @description Is a review of this licence is required
        * @example true
        */
-      isReviewNeeded: boolean
+      isReviewNeeded: boolean;
       /** @description The details for the active supervising probation officer */
-      probationPractitioner: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner'];
       /**
        * Format: date
        * @description Date which the hard stop period will start
        * @example 03/05/2023
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description Date which to show the hard stop warning
        * @example 01/05/2023
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /**
        * @description Type of this licence
        * @example CRD
        * @enum {string}
        */
-      kind: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
-    }
+      kind:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
+    };
     /** @description Describes an COM case */
     ComCreateCase: {
       /**
        * @description The full name of the person on licence
        * @example John Doe
        */
-      name: string
+      name: string;
       /**
        * @description The case reference number (CRN) for the person on this licence
        * @example X12444
        */
-      crnNumber?: string
+      crnNumber?: string;
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
-      prisonerNumber?: string
+      prisonerNumber?: string;
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
        * @example 30/11/2022
        */
-      releaseDate?: string
+      releaseDate?: string;
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
        * @example 99999
        */
-      licenceId?: number
+      licenceId?: number;
       /**
        * @description The new status for this licence
        * @example APPROVED
@@ -3930,38 +4055,45 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /**
        * @description The licence type code
        * @example AP
        * @enum {string}
        */
-      licenceType: 'AP' | 'AP_PSS' | 'PSS'
+      licenceType: 'AP' | 'AP_PSS' | 'PSS';
       /**
        * @description Is a review of this licence is required
        * @example true
        */
-      isReviewNeeded: boolean
+      isReviewNeeded: boolean;
       /** @description The details for the active supervising probation officer */
-      probationPractitioner: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner'];
       /**
        * Format: date
        * @description Date which the hard stop period will start
        * @example 03/05/2023
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description Date which to show the hard stop warning
        * @example 01/05/2023
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /**
        * @description Type of this licence
        * @example CRD
        * @enum {string}
        */
-      kind: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      kind:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
       /**
        * @description How this licence will need to be created
        * @example PRISON_WILL_CREATE_THIS_LICENCE
@@ -3972,23 +4104,23 @@ export interface components {
         | 'PRISON_WILL_CREATE_THIS_LICENCE'
         | 'LICENCE_CREATED_BY_PRISON'
         | 'LICENCE_NOT_STARTED'
-        | 'LICENCE_IN_PROGRESS'
-    }
+        | 'LICENCE_IN_PROGRESS';
+    };
     /** @description Search Criteria for CA Caseload Search */
     CaCaseloadSearch: {
       /**
        * @description Search text to filter caseload
        * @example 2022-04-20
        */
-      searchString?: string
+      searchString?: string;
       /**
        * @description List of Prison Ids (can include OUT and TRN) to restrict the search by. Unrestricted if not supplied or null
        * @example [
        *       "MDI"
        *     ]
        */
-      prisonCodes: string[]
-    }
+      prisonCodes: string[];
+    };
     /** @description Describes an CA(OMU) case */
     CaCase: {
       /**
@@ -3996,42 +4128,49 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      kind?:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
        * @example 99999
        */
-      licenceId?: number
+      licenceId?: number;
       /**
        * Format: int64
        * @description The version number of this licence
        * @example 1.3
        */
-      licenceVersionOf?: number
+      licenceVersionOf?: number;
       /**
        * @description The full name of the person on licence
        * @example John Doe
        */
-      name: string
+      name: string;
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
-      prisonerNumber: string
+      prisonerNumber: string;
       /** @description The details for the active supervising probation officer */
-      probationPractitioner: components['schemas']['ProbationPractitioner']
+      probationPractitioner: components['schemas']['ProbationPractitioner'];
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
        * @example 30/11/2022
        */
-      releaseDate?: string
+      releaseDate?: string;
       /**
        * @description Label for release date
        * @example Confirmed release date
        */
-      releaseDateLabel?: string
+      releaseDateLabel?: string;
       /**
        * @description The new status for this licence
        * @example APPROVED
@@ -4050,13 +4189,16 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /**
        * @description The type of tab this licence has to be populated
        * @example RELEASES_IN_NEXT_TWO_WORKING_DAYS
        * @enum {string}
        */
-      tabType?: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS' | 'FUTURE_RELEASES' | 'ATTENTION_NEEDED'
+      tabType?:
+        | 'RELEASES_IN_NEXT_TWO_WORKING_DAYS'
+        | 'FUTURE_RELEASES'
+        | 'ATTENTION_NEEDED';
       /**
        * @description Legal Status
        * @example SENTENCED
@@ -4072,48 +4214,48 @@ export interface components {
         | 'IMMIGRATION_DETAINEE'
         | 'REMAND'
         | 'UNKNOWN'
-        | 'OTHER'
+        | 'OTHER';
       /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
-      lastWorkedOnBy?: string
+      lastWorkedOnBy?: string;
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
+      isInHardStopPeriod: boolean;
       /**
        * @description The agency code where this offender resides or was released from
        * @example MDI
        */
-      prisonCode?: string
+      prisonCode?: string;
       /**
        * @description The agency description of the detaining prison
        * @example Leeds (HMP)
        */
-      prisonDescription?: string
-      hasNomisLicence: boolean
-    }
+      prisonDescription?: string;
+      hasNomisLicence: boolean;
+    };
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
     PrisonUserSearchRequest: {
       /**
        * @description The query the user wishes to search for (e.g. CRN, name, NOMIS ID)
        * @example Joe Bloggs
        */
-      query: string
+      query: string;
       /**
        * @description The prison caseloads of the prison staff member
        * @example ['BAI']
        */
-      prisonCaseloads: string[]
-    }
+      prisonCaseloads: string[];
+    };
     /** @description Describes an enriched prison case admin search result */
     PrisonCaseAdminSearchResult: {
       /** @description A list of offenders that are in prison */
-      inPrisonResults: components['schemas']['CaCase'][]
+      inPrisonResults: components['schemas']['CaCase'][];
       /** @description A list of offenders that are on probation */
-      onProbationResults: components['schemas']['CaCase'][]
+      onProbationResults: components['schemas']['CaCase'][];
       /** @description A list of offenders that require attention */
-      attentionNeededResults: components['schemas']['CaCase'][]
-    }
+      attentionNeededResults: components['schemas']['CaCase'][];
+    };
     /** @description Describes an audit event request */
     AuditRequest: {
       /**
@@ -4121,157 +4263,157 @@ export interface components {
        * @description The internal ID of the licence to request audit events for
        * @example 1234
        */
-      licenceId?: number
+      licenceId?: number;
       /**
        * @description Username to request events for
        * @example X63533
        */
-      username?: string
+      username?: string;
       /**
        * Format: date-time
        * @description The start date and time to query for events (default is 1 month ago)
        * @example 13/11/2021 23:14:13
        */
-      startTime?: string
+      startTime?: string;
       /**
        * Format: date-time
        * @description The end time to query for events (default is now)
        * @example 12/01/2022 23:14:13
        */
-      endTime?: string
-    }
+      endTime?: string;
+    };
     ExternalTimeServedRecordResponse: {
       /**
        * @description The NOMIS identifier for the offender
        * @example A1234AA
        */
-      nomsId: string
+      nomsId: string;
       /**
        * Format: int64
        * @description The booking ID associated with the offender
        * @example 123456
        */
-      bookingId: number
+      bookingId: number;
       /**
        * @description The reason why the licence was created in NOMIS
        * @example Time served release
        */
-      reason: string
+      reason: string;
       /**
        * @description The prison code where the offender is located
        * @example LEI
        */
-      prisonCode: string
+      prisonCode: string;
       /**
        * Format: date-time
        * @description The date when this record was created
        * @example 2025-10-29T16:00:00Z
        */
-      dateCreated: string
+      dateCreated: string;
       /**
        * Format: date-time
        * @description The date when this record was last updated
        * @example 2025-10-29T16:00:00Z
        */
-      dateLastUpdated: string
-    }
+      dateLastUpdated: string;
+    };
     Attachment: {
       /**
        * Format: int32
        * @description The number of the attachment which will match any corresponding reference in the content section
        */
-      attachmentNumber: number
+      attachmentNumber: number;
       /** @description The name or description of the attachment which will be included in the report */
-      name: string
+      name: string;
       /** @description The content type of the attachment */
-      contentType: string
+      contentType: string;
       /** @description The url to be used to download the attachment file */
-      url: string
+      url: string;
       /**
        * Format: int32
        * @description The size of the attachment file in bytes
        */
-      filesize: number
+      filesize: number;
       /** @description The filename of attachment file */
-      filename: string
-    }
+      filename: string;
+    };
     HmppsSubjectAccessRequestContent: {
       /** @description The content of the subject access request response */
-      content: unknown
+      content: unknown;
       /** @description The details of any attachments for the subject access request response */
-      attachments?: components['schemas']['Attachment'][]
-    }
+      attachments?: components['schemas']['Attachment'][];
+    };
     /** @description A response object for a address */
     AddressResponse: {
       /**
        * @description The address's unique reference
        * @example f47ac10b-58cc-4372-a567-0e02b2c3d479 or 10023122431
        */
-      reference: string
+      reference: string;
       /**
        * @description Unique Property Reference Number, acquired from OsPlacesApi, post code and address look up
        * @example 200010019924
        */
-      uprn?: string
+      uprn?: string;
       /**
        * @description The first line of the address
        * @example 12
        */
-      firstLine: string
+      firstLine: string;
       /**
        * @description The second line of the address
        * @example Penarth
        */
-      secondLine?: string
+      secondLine?: string;
       /**
        * @description The town or city of the address
        * @example Cardiff
        */
-      townOrCity: string
+      townOrCity: string;
       /**
        * @description The county of the address
        * @example Vale of Glamorgan
        */
-      county?: string
+      county?: string;
       /**
        * @description The postcode of the address
        * @example CF64 1AB
        */
-      postcode: string
+      postcode: string;
       /**
        * @description Source of the address
        * @example MANUAL
        * @enum {string}
        */
-      source: 'MANUAL' | 'OS_PLACES'
-    }
+      source: 'MANUAL' | 'OS_PLACES';
+    };
     Count: {
       /**
        * Format: int64
        * @description The total number of records
        * @example 501
        */
-      count: number
-    }
+      count: number;
+    };
     DlqMessage: {
       body: {
-        [key: string]: unknown
-      }
-      messageId: string
-    }
+        [key: string]: unknown;
+      };
+      messageId: string;
+    };
     GetDlqResult: {
       /** Format: int32 */
-      messagesFoundCount: number
+      messagesFoundCount: number;
       /** Format: int32 */
-      messagesReturnedCount: number
-      messages: components['schemas']['DlqMessage'][]
-    }
+      messagesReturnedCount: number;
+      messages: components['schemas']['DlqMessage'][];
+    };
     LicencePolicy: {
-      version: string
-      standardConditions: components['schemas']['StandardConditions']
-      additionalConditions: components['schemas']['AdditionalConditions']
-      changeHints: components['schemas']['ChangeHint'][]
-    }
+      version: string;
+      standardConditions: components['schemas']['StandardConditions'];
+      additionalConditions: components['schemas']['AdditionalConditions'];
+      changeHints: components['schemas']['ChangeHint'][];
+    };
     /** @description Describes a bespoke condition on a licence */
     BespokeCondition: {
       /**
@@ -4279,211 +4421,279 @@ export interface components {
        * @description The internal ID for this condition on this licence
        * @example 98989
        */
-      id: number
+      id: number;
       /**
        * Format: int32
        * @description The sequence of this bespoke condition on this licence
        * @example 1
        */
-      sequence?: number
+      sequence?: number;
       /**
        * @description The text of this bespoke condition
        * @example You should not visit any music venues
        */
-      text?: string
-    }
+      text?: string;
+    };
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
-      /**
-       * Format: int64
-       * @description Unique identifier for this licence within the service
-       * @example 99999
-       */
-      id: number
-      /**
-       * @description The licence type code
-       * @example AP
-       * @enum {string}
-       */
-      typeCode: 'AP' | 'AP_PSS' | 'PSS'
-      /**
-       * @description The version number used for standard and additional conditions
-       * @example 1.4
-       */
-      version?: string
       /**
        * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 07700 900000
        */
-      appointmentAlternativeTelephoneNumber?: string
+      appointmentAlternativeTelephoneNumber?: string;
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number;
       /**
        * @deprecated
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
        */
-      appointmentContact?: string
+      appointmentContact?: string;
       /**
        * @description The username which created this licence
        * @example X12333
        */
-      createdByUsername?: string
+      createdByUsername?: string;
       /**
        * @description The full name of the person who created licence or variation
        * @example Test Person
        */
-      createdByFullName?: string
+      createdByFullName?: string;
       /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       * @example 24/08/2022 09:30:33
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
        */
-      dateLastUpdated?: string
+      nomsId?: string;
       /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
+       * @description The first name of the person on licence
+       * @example Michael
        */
-      submittedByFullName?: string
+      forename?: string;
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string;
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn?: string;
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
-      appointmentPerson?: string
+      appointmentPerson?: string;
       /**
        * @description The type of appointment time of the initial appointment
        * @example SPECIFIC_DATE_TIME
        * @enum {string}
        */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
+      appointmentTimeType?:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME';
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
        * @example 23/08/2022 12:12
        */
-      appointmentTime?: string
+      appointmentTime?: string;
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
-      appointmentAddress?: string
+      appointmentAddress?: string;
       /**
        * @description The probation area code where this licence is supervised from
        * @example N01
        */
-      probationAreaCode?: string
+      probationAreaCode?: string;
       /**
        * @description The Probation Delivery Unit (PDU or borough) supervising this licence
        * @example PDU01
        */
-      probationPduCode?: string
+      probationPduCode?: string;
       /**
        * @description The Local Administrative Unit (LAU or district) supervising this licence
        * @example LAU01
        */
-      probationLauCode?: string
+      probationLauCode?: string;
       /**
        * @description The team code that is supervising this licence
        * @example Cardiff-A
        */
-      probationTeamCode?: string
+      probationTeamCode?: string;
       /**
        * Format: date
        * @description The date that the licence will start
        * @example 13/09/2022
        */
-      licenceStartDate?: string
-      eligibleKind?: string
+      licenceStartDate?: string;
+      eligibleKind?: string;
       /**
        * Format: date
        * @description The date that the licence will expire
        * @example 13/09/2024
        */
-      licenceExpiryDate?: string
+      licenceExpiryDate?: string;
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
-      earliestReleaseDate?: string
+      earliestReleaseDate?: string;
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
        */
-      approvedByUsername?: string
+      approvedByUsername?: string;
       /**
        * @description The full name of the person who approved the licence on behalf of the prison governor
        * @example John Smith
        */
-      approvedByName?: string
+      approvedByName?: string;
       /**
        * Format: date-time
        * @description The date and time that this prison approved this licence
        * @example 24/08/2022 11:30:33
        */
-      approvedDate?: string
+      approvedDate?: string;
       /**
        * Format: date-time
        * @description The date and time that this licence was submitted for approval
        * @example 24/08/2022 11:30:33
        */
-      submittedDate?: string
+      submittedDate?: string;
       /**
        * @description The agency description of the detaining prison
        * @example Leeds (HMP)
        */
-      prisonDescription?: string
+      prisonDescription?: string;
       /**
        * @description The telephone number to contact the prison
        * @example 0161 234 4747
        */
-      prisonTelephone?: string
+      prisonTelephone?: string;
       /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition'][]
-      /**
-       * Format: date
-       * @description The actual release date (if set)
-       * @example 13/09/2022
-       */
-      actualReleaseDate?: string
-      /**
-       * Format: date
-       * @description The sentence start date
-       * @example 13/09/2019
-       */
-      sentenceStartDate?: string
-      /**
-       * Format: date
-       * @description The sentence end date
-       * @example 13/09/2022
-       */
-      sentenceEndDate?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
-      /**
-       * @description The version number of this licence
-       * @example 1.3
-       */
-      licenceVersion?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       * @example 24/08/2022 11:30:33
-       */
-      supersededDate?: string
-      /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
-       */
-      updatedByUsername?: string
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean
+      bespokeConditions: components['schemas']['BespokeCondition'][];
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
        * @example 989898
        */
-      bookingId?: number
+      bookingId?: number;
+      /**
+       * @description The agency code of the detaining prison
+       * @example LEI
+       */
+      prisonCode?: string;
+      /** @deprecated */
+      isVariation: boolean;
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
+      isInPssPeriod?: boolean;
+      /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string;
+      /**
+       * @description The middle names of the person on licence
+       * @example John Peter
+       */
+      middleNames?: string;
+      /**
+       * Format: date
+       * @description The date of birth of the person on licence
+       * @example 12/05/1987
+       */
+      dateOfBirth?: string;
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       * @example 24/08/2022 09:30:33
+       */
+      dateCreated?: string;
+      /**
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
+       */
+      comUsername?: string;
+      /**
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean;
+      /**
+       * Format: date
+       * @description The actual release date (if set)
+       * @example 13/09/2022
+       */
+      actualReleaseDate?: string;
+      /**
+       * Format: date
+       * @description The sentence start date
+       * @example 13/09/2019
+       */
+      sentenceStartDate?: string;
+      /**
+       * Format: date
+       * @description The sentence end date
+       * @example 13/09/2022
+       */
+      sentenceEndDate?: string;
+      /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
+       */
+      submittedByFullName?: string;
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string;
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string;
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
+       */
+      dateLastUpdated?: string;
+      /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string;
+      /**
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
+       */
+      cro?: string;
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
+       */
+      supersededDate?: string;
+      /**
+       * @description The username of the person who last updated this licence
+       * @example X34433
+       */
+      updatedByUsername?: string;
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean;
+      /**
+       * @description The prison booking number for the person on this licence
+       * @example F12333
+       */
+      bookingNo?: string;
       /**
        * @description The current status code for this licence
        * @example IN_PROGRESS
@@ -4502,168 +4712,109 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
-      kind: string
+        | 'TIMED_OUT';
+      kind: string;
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
        */
-      crn?: string
+      typeCode: 'AP' | 'AP_PSS' | 'PSS';
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * @description The version number used for standard and additional conditions
+       * @example 1.4
        */
-      nomsId?: string
+      version?: string;
       /**
-       * @description The first name of the person on licence
-       * @example Michael
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
        */
-      forename?: string
-      /**
-       * @description The family name of the person on licence
-       * @example Smith
-       */
-      surname?: string
-      /**
-       * @description The agency code of the detaining prison
-       * @example LEI
-       */
-      prisonCode?: string
-      /** @deprecated */
-      isVariation: boolean
-      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
-      isInPssPeriod?: boolean
+      id: number;
       /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
        * @enum {string}
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      appointmentPersonType?:
+        | 'DUTY_OFFICER'
+        | 'RESPONSIBLE_COM'
+        | 'SPECIFIC_PERSON';
       /**
        * @description The team description
        * @example Cardiff South
        */
-      probationTeamDescription?: string
+      probationTeamDescription?: string;
       /**
        * @description The probation area description
        * @example Wales
        */
-      probationAreaDescription?: string
+      probationAreaDescription?: string;
       /**
        * @description The description for the PDU
        * @example North Wales
        */
-      probationPduDescription?: string
+      probationPduDescription?: string;
       /**
        * @description The LAU description
        * @example North Wales
        */
-      probationLauDescription?: string
+      probationLauDescription?: string;
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
-      isEligibleForEarlyRelease: boolean
+      isEligibleForEarlyRelease: boolean;
       /**
        * Format: date
        * @description The date when the post sentence supervision period ends, from prison services
        * @example 06/06/2023
        */
-      topupSupervisionExpiryDate?: string
+      topupSupervisionExpiryDate?: string;
       /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
        * @example 13/08/2022
        */
-      conditionalReleaseDate?: string
+      conditionalReleaseDate?: string;
       /**
        * Format: date
        * @description The release date after being recalled
        * @example 06/06/2023
        */
-      postRecallReleaseDate?: string
+      postRecallReleaseDate?: string;
       /**
        * Format: date
        * @description The date when the post sentence supervision period starts, from prison services
        * @example 06/05/2023
        */
-      topupSupervisionStartDate?: string
+      topupSupervisionStartDate?: string;
       /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      standardLicenceConditions?: components['schemas']['StandardCondition'][];
       /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][]
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string
-      /**
-       * @description The middle names of the person on licence
-       * @example John Peter
-       */
-      middleNames?: string
-      /**
-       * Format: date
-       * @description The date of birth of the person on licence
-       * @example 12/05/1987
-       */
-      dateOfBirth?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       * @example 24/08/2022 09:30:33
-       */
-      dateCreated?: string
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string
-      /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
-       */
-      bookingNo?: string
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string
-      /** @description The address of initial appointment */
-      licenceAppointmentAddress?: components['schemas']['AddressResponse']
-      /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentTelephoneNumber?: string
+      standardPssConditions?: components['schemas']['StandardCondition'][];
       /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][];
       /**
        * @description The status of the electronic monitoring provider
        * @example NOT_NEEDED
        * @enum {string}
        */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      electronicMonitoringProviderStatus:
+        | 'NOT_NEEDED'
+        | 'NOT_STARTED'
+        | 'COMPLETE';
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string;
+      /** @description The address of initial appointment */
+      licenceAppointmentAddress?: components['schemas']['AddressResponse'];
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentTelephoneNumber?: string;
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][];
     } & (
       | components['schemas']['PrrdLicenceResponse']
       | components['schemas']['CrdLicence']
@@ -4672,7 +4823,7 @@ export interface components {
       | components['schemas']['HdcLicence']
       | components['schemas']['HdcVariationLicence']
       | components['schemas']['TimeServedLicence']
-    )
+    );
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
       /**
@@ -4680,30 +4831,37 @@ export interface components {
        * @description Unique identifier for this licence within the service
        * @example 99999
        */
-      id: number
+      id: number;
       /**
        * @description Kind of licence
        * @example CRD
        * @enum {string}
        */
-      kind: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      kind:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
       /**
        * @description The type of conditions on a licence policy which can be AP (All Purpose) and/or PSS (Post Sentence Supervision)
        * @example AP
        * @enum {string}
        */
-      licenceType: 'AP' | 'PSS' | 'AP_PSS'
+      licenceType: 'AP' | 'PSS' | 'AP_PSS';
       /**
        * @description The policy version number the licence is currently on
        * @example V2_1
        * @enum {string}
        */
-      policyVersion: 'V1_0' | 'V2_0' | 'V2_1' | 'V3_0'
+      policyVersion: 'V1_0' | 'V2_0' | 'V2_1' | 'V3_0';
       /**
        * @description The version of this specific licence, this is unique within the context of a booking
        * @example 1.4
        */
-      version: string
+      version: string;
       /**
        * @description The current status code for the licence. This is non exhaustive and subject to change
        * @example IN_PROGRESS
@@ -4722,59 +4880,59 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /**
        * @description The prison identifier for the person on the licence. Also known as the NOMIS ID
        * @example A1234AA
        */
-      prisonNumber: string
+      prisonNumber: string;
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on the licence
        * @example 989898
        */
-      bookingId: number
+      bookingId: number;
       /**
        * @description The Delius case reference number (CRN) for the person on the licence
        * @example X12444
        */
-      crn: string
+      crn: string;
       /**
        * @description The username of the person who approved the licence (PDU head or governor)
        * @example X33221
        */
-      approvedByUsername?: string
+      approvedByUsername?: string;
       /**
        * Format: date-time
        * @description The date and time that the prison approved the licence, where licences approved before 01/04/2023 will not have an approved time
        * @example 2023-11-20T00:00:00Z
        */
-      approvedDateTime?: string
+      approvedDateTime?: string;
       /**
        * @description The username of the person who created the licence
        * @example X12333
        */
-      createdByUsername: string
+      createdByUsername: string;
       /**
        * Format: date-time
        * @description The date and time when the version/variation of the licence was created at
        * @example 2023-11-20T00:00:00Z
        */
-      createdDateTime?: string
+      createdDateTime?: string;
       /**
        * @description The username of the person who last updated the licence
        * @example X34433
        */
-      updatedByUsername?: string
+      updatedByUsername?: string;
       /**
        * Format: date-time
        * @description The date and time that the licence was last updated
        * @example 2023-11-20T00:00:00Z
        */
-      updatedDateTime?: string
+      updatedDateTime?: string;
       /** @description Whether the licence in PSS period? This is when Licence End Date < TODAY <= TUSED (Top Up Supervision End Date) */
-      isInPssPeriod: boolean
-    }
+      isInPssPeriod: boolean;
+    };
     /** @description Additional information pertinent to CVL */
     CvlFields: {
       /**
@@ -4782,117 +4940,131 @@ export interface components {
        * @example AP_PSS
        * @enum {string}
        */
-      licenceType: 'AP' | 'AP_PSS' | 'PSS'
+      licenceType: 'AP' | 'AP_PSS' | 'PSS';
       /**
        * Format: date
        * @description Date which the hard stop period will start
        * @example 03/05/2023
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description Date which to show the hard stop warning
        * @example 01/05/2023
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
+      isInHardStopPeriod: boolean;
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
-      isEligibleForEarlyRelease: boolean
+      isEligibleForEarlyRelease: boolean;
       /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean;
       /**
        * Format: date
        * @description Date that the licence is due to activate
        * @example 05/05/2023
        */
-      licenceStartDate?: string
+      licenceStartDate?: string;
       /**
        * @description The kind of licence this person should have based on their current dates
        * @example CRD
        * @enum {string}
        */
-      licenceKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      licenceKind?:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
       /**
        * @description Type of hardstop licence
        * @example TIME_SERVED
        * @enum {string}
        */
-      hardStopKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
-    }
+      hardStopKind?:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
+    };
     Prisoner: {
       /**
        * @description Prisoner Number
        * @example A1234AA
        */
-      prisonerNumber: string
+      prisonerNumber: string;
       /**
        * @description PNC Number
        * @example 12/394773H
        */
-      pncNumber?: string
+      pncNumber?: string;
       /**
        * @description CRO Number
        * @example 29906/12J
        */
-      croNumber?: string
+      croNumber?: string;
       /**
        * @description Booking No.
        * @example 0001200924
        */
-      bookingId?: string
+      bookingId?: string;
       /**
        * @description Book Number
        * @example 38412A
        */
-      bookNumber?: string
+      bookNumber?: string;
       /**
        * @description First Name
        * @example Joe
        */
-      firstName: string
+      firstName: string;
       /**
        * @description Middle Names
        * @example John James
        */
-      middleNames?: string
+      middleNames?: string;
       /**
        * @description Last name
        * @example Bloggs
        */
-      lastName: string
+      lastName: string;
       /**
        * Format: date
        * @description Date of Birth
        * @example 1975-04-02
        */
-      dateOfBirth: string
+      dateOfBirth: string;
       /**
        * @description Status of the prisoner
        * @example ACTIVE IN
        */
-      status: string
+      status: string;
       /**
        * @description In/Out Status
        * @example IN
        * @enum {string}
        */
-      inOutStatus?: 'IN' | 'OUT' | 'TRN'
+      inOutStatus?: 'IN' | 'OUT' | 'TRN';
       /**
        * @description Prison ID
        * @example MDI
        */
-      prisonId?: string
+      prisonId?: string;
       /**
        * @description Location Description
        * @example Outside - released from Leeds
        */
-      locationDescription?: string
+      locationDescription?: string;
       /**
        * @description Prison Name
        * @example HMP Leeds
        */
-      prisonName?: string
+      prisonName?: string;
       /**
        * @description Legal Status
        * @example SENTENCED
@@ -4908,163 +5080,175 @@ export interface components {
         | 'IMMIGRATION_DETAINEE'
         | 'REMAND'
         | 'UNKNOWN'
-        | 'OTHER'
+        | 'OTHER';
       /**
        * @description The prisoner's imprisonment status code.
        * @example LIFE
        */
-      imprisonmentStatus?: string
+      imprisonmentStatus?: string;
       /**
        * @description The prisoner's imprisonment status description.
        * @example Serving Life Imprisonment
        */
-      imprisonmentStatusDescription?: string
+      imprisonmentStatusDescription?: string;
       /**
        * @description Most serious offence for this sentence
        * @example Robbery
        */
-      mostSeriousOffence: string
+      mostSeriousOffence: string;
       /**
        * @description Indicates that the prisoner has been recalled
        * @example false
        */
-      recall?: boolean
+      recall?: boolean;
       /**
        * @description Indicates that the prisoner has an indeterminate sentence
        * @example true
        */
-      indeterminateSentence?: boolean
+      indeterminateSentence?: boolean;
       /**
        * Format: date
        * @description Start Date for this sentence
        * @example 2020-04-03
        */
-      sentenceStartDate?: string
+      sentenceStartDate?: string;
       /**
        * Format: date
        * @description Actual of most likely Release Date
        * @example 2023-05-02
        */
-      releaseDate?: string
+      releaseDate?: string;
       /**
        * Format: date
        * @description Release Date Confirmed
        * @example 2023-05-01
        */
-      confirmedReleaseDate?: string
+      confirmedReleaseDate?: string;
       /**
        * Format: date
        * @description Sentence Expiry Date
        * @example 2023-05-01
        */
-      sentenceExpiryDate?: string
+      sentenceExpiryDate?: string;
       /**
        * Format: date
        * @description Licence Expiry Date
        * @example 2023-05-01
        */
-      licenceExpiryDate?: string
+      licenceExpiryDate?: string;
       /**
        * Format: date
        * @description HDC Eligibility Date
        * @example 2023-05-01
        */
-      homeDetentionCurfewEligibilityDate?: string
+      homeDetentionCurfewEligibilityDate?: string;
       /**
        * Format: date
        * @description HDC Actual Date
        * @example 2023-05-01
        */
-      homeDetentionCurfewActualDate?: string
+      homeDetentionCurfewActualDate?: string;
       /**
        * Format: date
        * @description HDC End Date
        * @example 2023-05-02
        */
-      homeDetentionCurfewEndDate?: string
+      homeDetentionCurfewEndDate?: string;
       /**
        * Format: date
        * @description Top-up supervision start date
        * @example 2023-04-29
        */
-      topupSupervisionStartDate?: string
+      topupSupervisionStartDate?: string;
       /**
        * Format: date
        * @description Top-up supervision expiry date
        * @example 2023-05-01
        */
-      topupSupervisionExpiryDate?: string
+      topupSupervisionExpiryDate?: string;
       /**
        * Format: date
        * @description Parole  Eligibility Date
        * @example 2023-05-01
        */
-      paroleEligibilityDate?: string
+      paroleEligibilityDate?: string;
       /**
        * Format: date
        * @description Post Recall Release Date. if postRecallReleaseOverrideDate is available then it will be set as postRecallReleaseDate
        * @example 2023-05-01
        */
-      postRecallReleaseDate?: string
+      postRecallReleaseDate?: string;
       /**
        * Format: date
        * @description Conditional Release Date. If conditionalReleaseOverrideDate is available then it will be set as conditionalReleaseDate
        * @example 2023-05-01
        */
-      conditionalReleaseDate?: string
+      conditionalReleaseDate?: string;
       /**
        * Format: date
        * @description Actual Parole Date
        * @example 2023-05-01
        */
-      actualParoleDate?: string
+      actualParoleDate?: string;
       /**
        * Format: date
        * @description Release on Temporary Licence Date
        * @example 2023-05-01
        */
-      releaseOnTemporaryLicenceDate?: string
-    }
+      releaseOnTemporaryLicenceDate?: string;
+    };
     /** @description A combination of the NOMIS prisoner record and additional CVL fields */
     PrisonerWithCvlFields: {
       /** @description Details about a prisoner */
-      prisoner: components['schemas']['Prisoner']
+      prisoner: components['schemas']['Prisoner'];
       /** @description Additional CVL specific information including derived fields */
-      cvl: components['schemas']['CvlFields']
-    }
+      cvl: components['schemas']['CvlFields'];
+    };
     EligibilityAssessment: {
       /**
        * @description A list of reasons the case is ineligible for any kind of CVL licence
        * @example ['A reason']
        */
-      genericIneligibilityReasons: string[]
+      genericIneligibilityReasons: string[];
       /**
        * @description A list of reasons the case is ineligible for a CRD licence
        * @example ['A reason']
        */
-      crdIneligibilityReasons: string[]
+      crdIneligibilityReasons: string[];
       /**
        * @description A list of reasons the case is ineligible for a PRRD licence
        * @example ['A reason']
        */
-      prrdIneligibilityReasons: string[]
+      prrdIneligibilityReasons: string[];
       /**
-       * @description A boolean denoting eligibility for CVL
-       * @example true
+       * @description A list of reasons the case is ineligible for an HDC licence
+       * @example ['A reason']
        */
-      isEligible: boolean
+      hdcIneligibilityReasons: string[];
       /**
        * @description The kind of licence that the case is eligible for. Null if ineligible.
        * @example CRD
        * @enum {string}
        */
-      eligibleKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      eligibleKind?:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
+      /**
+       * @description A boolean denoting eligibility for CVL
+       * @example true
+       */
+      isEligible: boolean;
       /**
        * @description A combined list of all of the reasons for ineligibility
        * @example ['A reason']
        */
-      ineligibilityReasons: string[]
-    }
+      ineligibilityReasons: string[];
+    };
     /** @description Describes a CRD licence within this service */
     CrdLicence: Omit<
       WithRequired<
@@ -5088,48 +5272,48 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind: 'CRD'
+      kind: 'CRD';
       /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example CRD
        * @enum {string}
        */
-      eligibleKind: 'CRD'
+      eligibleKind: 'CRD';
       /**
        * Format: date
        * @description Date which the hard stop period will start
        * @example 03/05/2023
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description Date which to show the hard stop warning
        * @example 01/05/2023
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
+      isInHardStopPeriod: boolean;
       /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean;
       /** @description Describes a electronic monitoring provider on a licence */
-      electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider']
+      electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider'];
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      kind: 'CRD'
-    }
+      kind: 'CRD';
+    };
     /** @description Describes a electronic monitoring provider on a licence */
     ElectronicMonitoringProvider: {
       /** @description Is the licence to be tagged for electronic monitoring programme */
-      isToBeTaggedForProgramme?: boolean
+      isToBeTaggedForProgramme?: boolean;
       /**
        * @description Programme Name of the licence
        * @example Off Some Road
        */
-      programmeName?: string
-    }
+      programmeName?: string;
+    };
     /** @description Describes a licence that was created by a prison */
     HardStopLicence: Omit<
       WithRequired<
@@ -5152,42 +5336,42 @@ export interface components {
        * @example HARD_STOP
        * @enum {string}
        */
-      kind: 'HARD_STOP'
+      kind: 'HARD_STOP';
       /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example CRD
        * @enum {string}
        */
-      eligibleKind?: 'CRD' | 'PRRD' | 'TIME_SERVED'
+      eligibleKind?: 'CRD' | 'PRRD' | 'TIME_SERVED';
       /**
        * Format: date-time
        * @description The date time when the hardstop licence was reviewed by a probation practitioner
        * @example 06/06/2023 09:32
        */
-      reviewDate?: string
+      reviewDate?: string;
       /**
        * Format: date
        * @description Date which the hard stop period will start
        * @example 03/05/2023
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description Date which to show the hard stop warning
        * @example 01/05/2023
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
+      isInHardStopPeriod: boolean;
       /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean;
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      kind: 'HARD_STOP'
-    }
+      kind: 'HARD_STOP';
+    };
     /** @description Describes a curfew address on a HDC licence */
     HdcCurfewAddress: {
       /**
@@ -5195,33 +5379,33 @@ export interface components {
        * @description The internal ID for this curfew address on this HDC licence
        * @example 98987
        */
-      id?: number
+      id?: number;
       /**
        * @description The first line of the curfew address
        * @example 1
        */
-      addressLine1?: string
+      addressLine1?: string;
       /**
        * @description The second line of the curfew address
        * @example Off Some Road
        */
-      addressLine2?: string
+      addressLine2?: string;
       /**
        * @description The town or city associated with the curfew address
        * @example Some Town or City
        */
-      townOrCity?: string
+      townOrCity?: string;
       /**
        * @description The county for the curfew address
        * @example SomeCounty
        */
-      county?: string
+      county?: string;
       /**
        * @description The postcode for the curfew address
        * @example SO30 2UH
        */
-      postcode?: string
-    }
+      postcode?: string;
+    };
     /** @description Describes a HDC licence within this service */
     HdcLicence: Omit<
       WithRequired<
@@ -5245,54 +5429,54 @@ export interface components {
        * @example HDC
        * @enum {string}
        */
-      kind: 'HDC'
+      kind: 'HDC';
       /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example HDC
        * @enum {string}
        */
-      eligibleKind: 'HDC'
+      eligibleKind: 'HDC';
       /**
        * Format: date
        * @description The offender’s actual home detention curfew date
        * @example 06/05/2023
        */
-      homeDetentionCurfewActualDate?: string
+      homeDetentionCurfewActualDate?: string;
       /**
        * Format: date
        * @description The offender’s home detention curfew end date
        * @example 06/05/2023
        */
-      homeDetentionCurfewEndDate?: string
+      homeDetentionCurfewEndDate?: string;
       /** @description The curfew times for this licence */
-      curfewTimes?: components['schemas']['HdcCurfewTimes'][]
+      curfewTimes?: components['schemas']['HdcCurfewTimes'][];
       /**
        * Format: date
        * @description Date which the hard stop period will start
        * @example 03/05/2023
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description Date which to show the hard stop warning
        * @example 01/05/2023
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
+      isInHardStopPeriod: boolean;
       /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean;
       /** @description The curfew address for this licence */
-      curfewAddress?: components['schemas']['HdcCurfewAddress']
+      curfewAddress?: components['schemas']['HdcCurfewAddress'];
       /** @description Describes a electronic monitoring provider on a licence */
-      electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider']
+      electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider'];
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      kind: 'HDC'
-    }
+      kind: 'HDC';
+    };
     /** @description Describes a HDC licence variation within this service */
     HdcVariationLicence: Omit<
       WithRequired<
@@ -5316,51 +5500,51 @@ export interface components {
        * @example HDC_VARIATION
        * @enum {string}
        */
-      kind: 'HDC_VARIATION'
+      kind: 'HDC_VARIATION';
       /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example HDC
        * @enum {string}
        */
-      eligibleKind: 'HDC'
+      eligibleKind: 'HDC';
       /**
        * Format: date
        * @description The offender’s actual home detention curfew date
        * @example 06/05/2023
        */
-      homeDetentionCurfewActualDate?: string
+      homeDetentionCurfewActualDate?: string;
       /**
        * Format: date
        * @description The offender’s home detention curfew end date
        * @example 06/05/2023
        */
-      homeDetentionCurfewEndDate?: string
+      homeDetentionCurfewEndDate?: string;
       /**
        * @description Have you have discussed this variation request with your SPO?
        * @example Yes
        */
-      spoDiscussion?: string
+      spoDiscussion?: string;
       /**
        * @description Have you consulted with the victim liaison officer (VLO) for this case?
        * @example Yes
        */
-      vloDiscussion?: string
+      vloDiscussion?: string;
       /** @description The curfew times for this licence */
-      curfewTimes?: components['schemas']['HdcCurfewTimes'][]
+      curfewTimes?: components['schemas']['HdcCurfewTimes'][];
       /**
        * Format: int64
        * @description The licence Id which this licence is a variation of
        */
-      variationOf?: number
+      variationOf?: number;
       /** @description The curfew address for this licence */
-      curfewAddress?: components['schemas']['HdcCurfewAddress']
+      curfewAddress?: components['schemas']['HdcCurfewAddress'];
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      kind: 'HdcVariationLicence'
-    }
+      kind: 'HdcVariationLicence';
+    };
     /** @description Describes a PRRD licence within this service */
     PrrdLicenceResponse: Omit<
       WithRequired<
@@ -5384,38 +5568,38 @@ export interface components {
        * @example PRRD
        * @enum {string}
        */
-      kind: 'PRRD'
+      kind: 'PRRD';
       /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example PRRD
        * @enum {string}
        */
-      eligibleKind: 'PRRD'
+      eligibleKind: 'PRRD';
       /**
        * Format: date
        * @description Date which the hard stop period will start
        * @example 03/05/2023
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description Date which to show the hard stop warning
        * @example 01/05/2023
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
+      isInHardStopPeriod: boolean;
       /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean;
       /** @description Describes a electronic monitoring provider on a licence */
-      electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider']
+      electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider'];
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      kind: 'PRRD'
-    }
+      kind: 'PRRD';
+    };
     /** @description Describes a time served licence that was created by a prison */
     TimeServedLicence: Omit<
       WithRequired<
@@ -5438,42 +5622,42 @@ export interface components {
        * @example TIME_SERVED
        * @enum {string}
        */
-      kind: 'TIME_SERVED'
+      kind: 'TIME_SERVED';
       /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example CRD
        * @enum {string}
        */
-      eligibleKind?: 'CRD' | 'PRRD'
+      eligibleKind?: 'CRD' | 'PRRD';
       /**
        * Format: date-time
        * @description The date time when the hardstop licence was reviewed by a probation practitioner
        * @example 06/06/2023 09:32
        */
-      reviewDate?: string
+      reviewDate?: string;
       /**
        * Format: date
        * @description Date which the hard stop period will start
        * @example 03/05/2023
        */
-      hardStopDate?: string
+      hardStopDate?: string;
       /**
        * Format: date
        * @description Date which to show the hard stop warning
        * @example 01/05/2023
        */
-      hardStopWarningDate?: string
+      hardStopWarningDate?: string;
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
+      isInHardStopPeriod: boolean;
       /** @description Is the prisoner due to be released in the next two working days */
-      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean;
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      kind: 'TIME_SERVED'
-    }
+      kind: 'TIME_SERVED';
+    };
     /** @description Describes a licence variation within this service */
     VariationLicence: Omit<
       WithRequired<
@@ -5496,166 +5680,185 @@ export interface components {
        * @example VARIATION
        * @enum {string}
        */
-      kind: 'VARIATION'
+      kind: 'VARIATION';
       /**
        * @description The eligible kind of the licence that this variation is created from
        * @example CRD
        * @enum {string}
        */
-      eligibleKind?: 'CRD' | 'PRRD'
+      eligibleKind?: 'CRD' | 'PRRD';
       /**
        * @description Have you have discussed this variation request with your SPO?
        * @example Yes
        */
-      spoDiscussion?: string
+      spoDiscussion?: string;
       /**
        * @description Have you consulted with the victim liaison officer (VLO) for this case?
        * @example Yes
        */
-      vloDiscussion?: string
+      vloDiscussion?: string;
       /**
        * Format: int64
        * @description The licence Id which this licence is a variation of
        */
-      variationOf?: number
+      variationOf?: number;
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      kind: 'VARIATION'
-    }
+      kind: 'VARIATION';
+    };
     AddAnother: {
-      label: string
-    }
+      label: string;
+    };
     AdditionalConditionAp: {
-      code: string
-      category: string
-      text: string
-      tpl?: string
-      requiresInput: boolean
-      inputs?: components['schemas']['Input'][]
-      categoryShort?: string
-      subtext?: string
-      type?: string
-      skippable?: boolean
-      requiresElectronicMonitoringResponse: boolean
-    }
+      code: string;
+      category: string;
+      text: string;
+      tpl?: string;
+      requiresInput: boolean;
+      inputs?: components['schemas']['Input'][];
+      categoryShort?: string;
+      subtext?: string;
+      type?: string;
+      skippable?: boolean;
+      requiresElectronicMonitoringResponse: boolean;
+    };
     AdditionalConditionPss: {
-      code: string
-      category: string
-      text: string
-      tpl?: string
-      requiresInput: boolean
-      categoryShort?: string
-      pssDates?: boolean
-      inputs?: components['schemas']['Input'][]
-      type?: string
-      skippable?: boolean
-    }
+      code: string;
+      category: string;
+      text: string;
+      tpl?: string;
+      requiresInput: boolean;
+      categoryShort?: string;
+      pssDates?: boolean;
+      inputs?: components['schemas']['Input'][];
+      type?: string;
+      skippable?: boolean;
+    };
     AdditionalConditions: {
-      AP: components['schemas']['AdditionalConditionAp'][]
-      PSS: components['schemas']['AdditionalConditionPss'][]
-    }
+      AP: components['schemas']['AdditionalConditionAp'][];
+      PSS: components['schemas']['AdditionalConditionPss'][];
+    };
     ChangeHint: {
-      previousCode: string
-      replacements: string[]
-    }
+      previousCode: string;
+      replacements: string[];
+    };
     Conditional: {
-      inputs: components['schemas']['ConditionalInput'][]
-    }
+      inputs: components['schemas']['ConditionalInput'][];
+    };
     ConditionalInput: {
       /** @enum {string} */
-      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check'
-      label: string
-      name: string
+      type:
+        | 'radio'
+        | 'address'
+        | 'timePicker'
+        | 'datePicker'
+        | 'fileUpload'
+        | 'text'
+        | 'check';
+      label: string;
+      name: string;
       /** @enum {string} */
-      case?: 'lower' | 'upper' | 'capitalised'
-      handleIndefiniteArticle?: boolean
-      includeBefore?: string
-      subtext?: string
-    }
+      case?: 'lower' | 'upper' | 'capitalised';
+      handleIndefiniteArticle?: boolean;
+      includeBefore?: string;
+      subtext?: string;
+    };
     Input: {
       /** @enum {string} */
-      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check'
-      label: string
-      name: string
-      listType?: string
-      options?: components['schemas']['Option'][]
+      type:
+        | 'radio'
+        | 'address'
+        | 'timePicker'
+        | 'datePicker'
+        | 'fileUpload'
+        | 'text'
+        | 'check';
+      label: string;
+      name: string;
+      listType?: string;
+      options?: components['schemas']['Option'][];
       /** @enum {string} */
-      case?: 'lower' | 'upper' | 'capitalised'
-      handleIndefiniteArticle?: boolean
-      addAnother?: components['schemas']['AddAnother']
-      includeBefore?: string
-      subtext?: string
-    }
+      case?: 'lower' | 'upper' | 'capitalised';
+      handleIndefiniteArticle?: boolean;
+      addAnother?: components['schemas']['AddAnother'];
+      includeBefore?: string;
+      subtext?: string;
+    };
     Option: {
-      value: string
-      conditional?: components['schemas']['Conditional']
-    }
+      value: string;
+      conditional?: components['schemas']['Conditional'];
+    };
     StandardConditionAp: {
       /**
        * @description The unique code for this standard AP condition
        * @example 9ce9d594-e346-4785-9642-c87e764bee37
        */
-      code: string
+      code: string;
       /**
        * @description The text of this standard AP condition
        * @example Be of generally good behaviour
        */
-      text: string
-      tpl?: string
-    }
+      text: string;
+      tpl?: string;
+    };
     StandardConditionPss: {
       /**
        * @description The unique code for this standard PSS condition
        * @example 9ce9d594-e346-4785-9642-c87e764bee37
        */
-      code: string
+      code: string;
       /**
        * @description The text of this standard PSS condition
        * @example Be of generally good behaviour
        */
-      text: string
-      tpl?: string
-    }
+      text: string;
+      tpl?: string;
+    };
     StandardConditions: {
-      AP: components['schemas']['StandardConditionAp'][]
-      PSS: components['schemas']['StandardConditionPss'][]
-    }
+      AP: components['schemas']['StandardConditionAp'][];
+      PSS: components['schemas']['StandardConditionPss'][];
+    };
     LicenceConditionChanges: {
       /** @enum {string} */
-      changeType: 'DELETED' | 'REPLACED' | 'REMOVED_NO_REPLACEMENTS' | 'NEW_OPTIONS' | 'TEXT_CHANGE'
-      code: string
+      changeType:
+        | 'DELETED'
+        | 'REPLACED'
+        | 'REMOVED_NO_REPLACEMENTS'
+        | 'NEW_OPTIONS'
+        | 'TEXT_CHANGE';
+      code: string;
       /** Format: int32 */
-      sequence?: number
-      previousText: string
-      currentText?: string
-      suggestions: components['schemas']['SuggestedCondition'][]
-    }
+      sequence?: number;
+      previousText: string;
+      currentText?: string;
+      suggestions: components['schemas']['SuggestedCondition'][];
+    };
     SuggestedCondition: {
-      code: string
-      currentText: string
-    }
+      code: string;
+      currentText: string;
+    };
     FirstNight: {
       /**
        * Format: HH:mm
        * @example 00:00
        */
-      firstNightFrom: string
+      firstNightFrom: string;
       /**
        * Format: HH:mm
        * @example 00:00
        */
-      firstNightUntil: string
-    }
+      firstNightUntil: string;
+    };
     HdcLicenceData: {
       /** Format: int64 */
-      licenceId?: number
-      curfewAddress?: components['schemas']['HdcCurfewAddress']
-      firstNightCurfewHours?: components['schemas']['FirstNight']
-      curfewTimes?: components['schemas']['HdcCurfewTimes'][]
-    }
+      licenceId?: number;
+      curfewAddress?: components['schemas']['HdcCurfewAddress'];
+      firstNightCurfewHours?: components['schemas']['FirstNight'];
+      curfewTimes?: components['schemas']['HdcCurfewTimes'][];
+    };
     /** @description Describes an event that was related to a licence */
     LicenceEvent: {
       /**
@@ -5663,13 +5866,13 @@ export interface components {
        * @description The internal ID of the licence event
        * @example 1234
        */
-      id: number
+      id: number;
       /**
        * Format: int64
        * @description The internal ID of the licence that this event relates to
        * @example 1234
        */
-      licenceId: number
+      licenceId: number;
       /**
        * @description The licence event type
        * @example LicenceEventType.VARIATION_SUBMITTED
@@ -5696,91 +5899,105 @@ export interface components {
         | 'NOT_STARTED'
         | 'TIMED_OUT'
         | 'REVIEWED_WITHOUT_VARIATION'
-        | 'REVIEWED_WITH_VARIATION'
+        | 'REVIEWED_WITH_VARIATION';
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
        */
-      username?: string
+      username?: string;
       /**
        * @description The forename of the person related to this event, or SYSTEM if an automated event.
        * @example Joe
        */
-      forenames?: string
+      forenames?: string;
       /**
        * @description The surname of the person related to this event, or SYSTEM if an automated event.
        * @example Bloggs
        */
-      surname?: string
+      surname?: string;
       /**
        * @description A reason or description related to the event
        * @example Reason for variation
        */
-      eventDescription?: string
+      eventDescription?: string;
       /**
        * Format: date-time
        * @description The date and time of the event
        * @example 12/01/2022 23:14:23
        */
-      eventTime: string
-    }
+      eventTime: string;
+    };
     DashboardDefinitionSummary: {
-      id: string
-      name: string
-      description: string
-    }
+      id: string;
+      name: string;
+      description: string;
+    };
     ReportDefinitionSummary: {
-      id: string
-      name: string
-      description?: string
-      variants: components['schemas']['VariantDefinitionSummary'][]
-      dashboards?: components['schemas']['DashboardDefinitionSummary'][]
-      authorised: boolean
-    }
+      id: string;
+      name: string;
+      description?: string;
+      variants: components['schemas']['VariantDefinitionSummary'][];
+      dashboards?: components['schemas']['DashboardDefinitionSummary'][];
+      authorised: boolean;
+    };
     VariantDefinitionSummary: {
-      id: string
-      name: string
-      description?: string
-    }
+      id: string;
+      name: string;
+      description?: string;
+    };
     ChildVariantDefinition: {
-      id: string
-      name: string
-      resourceName: string
-      specification?: components['schemas']['Specification']
-      joinFields: string[]
-    }
+      id: string;
+      name: string;
+      resourceName: string;
+      specification?: components['schemas']['Specification'];
+      joinFields: string[];
+    };
     DynamicFilterOption: {
       /** Format: int32 */
-      minimumLength?: number
-    }
+      minimumLength?: number;
+    };
     FieldDefinition: {
-      name: string
-      display: string
+      name: string;
+      display: string;
       /** @enum {string} */
-      wordWrap?: 'none' | 'normal' | 'break-words'
-      filter?: components['schemas']['FilterDefinition']
-      sortable: boolean
-      defaultsort: boolean
+      wordWrap?: 'none' | 'normal' | 'break-words';
+      filter?: components['schemas']['FilterDefinition'];
+      sortable: boolean;
+      defaultsort: boolean;
       /** @enum {string} */
-      type: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time'
-      mandatory: boolean
-      visible: boolean
-      calculated: boolean
-      header: boolean
-    }
+      type: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time';
+      mandatory: boolean;
+      visible: boolean;
+      calculated: boolean;
+      header: boolean;
+    };
     FilterDefinition: {
       /** @enum {string} */
-      type: 'Radio' | 'Select' | 'multiselect' | 'daterange' | 'autocomplete' | 'text' | 'date' | 'granulardaterange'
-      mandatory: boolean
-      pattern?: string
-      staticOptions?: components['schemas']['FilterOption'][]
-      dynamicOptions?: components['schemas']['DynamicFilterOption']
-      defaultValue?: string
-      min?: string
-      max?: string
-      interactive?: boolean
+      type:
+        | 'Radio'
+        | 'Select'
+        | 'multiselect'
+        | 'daterange'
+        | 'autocomplete'
+        | 'text'
+        | 'date'
+        | 'granulardaterange';
+      mandatory: boolean;
+      pattern?: string;
+      staticOptions?: components['schemas']['FilterOption'][];
+      dynamicOptions?: components['schemas']['DynamicFilterOption'];
+      defaultValue?: string;
+      min?: string;
+      max?: string;
+      interactive?: boolean;
       /** @enum {string} */
-      defaultGranularity?: 'hourly' | 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually'
+      defaultGranularity?:
+        | 'hourly'
+        | 'daily'
+        | 'weekly'
+        | 'monthly'
+        | 'quarterly'
+        | 'annually';
       /** @enum {string} */
       defaultQuickFilterValue?:
         | 'today'
@@ -5803,103 +6020,129 @@ export interface components {
         | 'next-three-months'
         | 'next-full-three-months'
         | 'next-year'
-        | 'next-full-year'
-    }
+        | 'next-full-year';
+    };
     FilterOption: {
-      name: string
-      display: string
-    }
+      name: string;
+      display: string;
+    };
     ReportSummary: {
-      id: string
+      id: string;
       /** @enum {string} */
-      template: 'table-header' | 'table-footer' | 'section-header' | 'section-footer' | 'page-header' | 'page-footer'
-      fields: components['schemas']['SummaryField'][]
-    }
+      template:
+        | 'table-header'
+        | 'table-footer'
+        | 'section-header'
+        | 'section-footer'
+        | 'page-header'
+        | 'page-footer';
+      fields: components['schemas']['SummaryField'][];
+    };
     SingleVariantReportDefinition: {
-      id: string
-      name: string
-      description?: string
-      variant: components['schemas']['VariantDefinition']
-    }
+      id: string;
+      name: string;
+      description?: string;
+      variant: components['schemas']['VariantDefinition'];
+    };
     Specification: {
       /** @enum {string} */
-      template: 'list' | 'list-section' | 'list-tab' | 'summary' | 'summary-section' | 'parent-child'
-      fields: components['schemas']['FieldDefinition'][]
-      sections: string[]
-    }
+      template:
+        | 'list'
+        | 'list-section'
+        | 'list-tab'
+        | 'summary'
+        | 'summary-section'
+        | 'parent-child';
+      fields: components['schemas']['FieldDefinition'][];
+      sections: string[];
+    };
     SummaryField: {
-      name: string
-      display?: string
+      name: string;
+      display?: string;
       /** @enum {string} */
-      type?: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time'
-      header?: boolean
-      mergeRows?: boolean
-    }
+      type?:
+        | 'boolean'
+        | 'date'
+        | 'double'
+        | 'HTML'
+        | 'long'
+        | 'string'
+        | 'time';
+      header?: boolean;
+      mergeRows?: boolean;
+    };
     VariantDefinition: {
-      id: string
-      name: string
-      resourceName: string
-      description?: string
-      specification?: components['schemas']['Specification']
-      classification?: string
-      printable?: boolean
-      summaries?: components['schemas']['ReportSummary'][]
-      interactive?: boolean
-      childVariants?: components['schemas']['ChildVariantDefinition'][]
-    }
+      id: string;
+      name: string;
+      resourceName: string;
+      description?: string;
+      specification?: components['schemas']['Specification'];
+      classification?: string;
+      printable?: boolean;
+      summaries?: components['schemas']['ReportSummary'][];
+      interactive?: boolean;
+      childVariants?: components['schemas']['ChildVariantDefinition'][];
+    };
     DashboardDefinition: {
-      id: string
-      name: string
-      description: string
-      sections: components['schemas']['DashboardSectionDefinition'][]
-      filterFields?: components['schemas']['FieldDefinition'][]
-    }
+      id: string;
+      name: string;
+      description: string;
+      sections: components['schemas']['DashboardSectionDefinition'][];
+      filterFields?: components['schemas']['FieldDefinition'][];
+    };
     DashboardSectionDefinition: {
-      id: string
-      display?: string
-      description?: string
-      visualisations: components['schemas']['DashboardVisualisationDefinition'][]
-    }
+      id: string;
+      display?: string;
+      description?: string;
+      visualisations: components['schemas']['DashboardVisualisationDefinition'][];
+    };
     DashboardVisualisationColumnDefinition: {
-      id: string
-      display: string
+      id: string;
+      display: string;
       /** @enum {string} */
-      aggregate?: 'sum' | 'average'
+      aggregate?: 'sum' | 'average';
       /** @enum {string} */
-      unit?: 'NUMBER' | 'PERCENTAGE'
-      displayValue?: boolean
-      axis?: string
-    }
+      unit?: 'NUMBER' | 'PERCENTAGE';
+      displayValue?: boolean;
+      axis?: string;
+    };
     DashboardVisualisationColumnsDefinition: {
-      keys?: components['schemas']['DashboardVisualisationColumnDefinition'][]
-      measures: components['schemas']['DashboardVisualisationColumnDefinition'][]
-      filters?: components['schemas']['ValueVisualisationColumnDefinition'][]
-      expectNulls: boolean
-    }
+      keys?: components['schemas']['DashboardVisualisationColumnDefinition'][];
+      measures: components['schemas']['DashboardVisualisationColumnDefinition'][];
+      filters?: components['schemas']['ValueVisualisationColumnDefinition'][];
+      expectNulls: boolean;
+    };
     DashboardVisualisationDefinition: {
-      id: string
+      id: string;
       /** @enum {string} */
-      type: 'list' | 'doughnut' | 'bar' | 'bar-timeseries' | 'line' | 'scorecard' | 'scorecard-group'
-      display?: string
-      description?: string
-      columns: components['schemas']['DashboardVisualisationColumnsDefinition']
-    }
+      type:
+        | 'list'
+        | 'doughnut'
+        | 'bar'
+        | 'bar-timeseries'
+        | 'line'
+        | 'scorecard'
+        | 'scorecard-group';
+      display?: string;
+      description?: string;
+      columns: components['schemas']['DashboardVisualisationColumnsDefinition'];
+    };
     ValueVisualisationColumnDefinition: {
-      id: string
-      equals: string
-    }
+      id: string;
+      equals: string;
+    };
     /** @description Response representing a case with Electronic monitoring conditions, coming up for release */
     UpcomingReleasesWithMonitoringConditionsResponse: {
       /**
        * @description Unique prison number of the prisoner
        * @example A1234BC
        */
-      prisonNumber: string
+      prisonNumber: string;
       /**
        * @description Case reference number (CRN) from probation system
        * @example X123456
        */
-      crn: string
+      crn: string;
       /**
        * @description Current licence status of the case
        * @example IN_PROGRESS
@@ -5918,14 +6161,24 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /**
        * Format: date
        * @description Licence start date
        * @example 15/07/2024
        */
-      licenceStartDate?: string
-    }
+      licenceStartDate?: string;
+      /**
+       * @description em condition codes
+       * @example 14a, 14b, 14c, 5a
+       */
+      emConditionCodes?: string;
+      /**
+       * @description full name of prisoner
+       * @example Forename Surname
+       */
+      fullName?: string;
+    };
     /** @description Response representing a last-minute handover case */
     LastMinuteHandoverCaseResponse: {
       /**
@@ -5933,26 +6186,26 @@ export interface components {
        * @description Planned release date of the prisoner
        * @example 2025-10-15
        */
-      releaseDate: string
+      releaseDate: string;
       /** @description Name of the probation region handling the case */
-      probationRegion?: string
+      probationRegion?: string;
       /**
        * @description Unique prison number of the prisoner
        * @example A1234BC
        */
-      prisonerNumber: string
+      prisonerNumber: string;
       /**
        * @description Case reference number (CRN) from probation system
        * @example X123456
        */
-      crn?: string
+      crn?: string;
       /**
        * @description Full name of the prisoner
        * @example John Smith
        */
-      prisonerName: string
+      prisonerName: string;
       /** @description Assigned probation practitioner */
-      probationPractitioner?: string
+      probationPractitioner?: string;
       /**
        * @description Current licence status of the case
        * @example IN_PROGRESS
@@ -5971,48 +6224,55 @@ export interface components {
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
-        | 'TIMED_OUT'
+        | 'TIMED_OUT';
       /**
        * @description Prison code where the prisoner is held
        * @example LEI
        */
-      prisonCode?: string
+      prisonCode?: string;
       /**
        * @description Name of the prison
        * @example Bedford Prison
        */
-      prisonName?: string
-    }
+      prisonName?: string;
+    };
     /** @description Describes a prisoner due for release */
     Case: {
       /**
        * @description The full name of the prisoner
        * @example John Smith
        */
-      name: string
+      name: string;
       /**
        * @description The case reference number (CRN) for the person on this licence
        * @example X12444
        */
-      crn: string
+      crn: string;
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
        * @example 30/11/2022
        */
-      licenceStartDate: string
+      licenceStartDate: string;
       /**
        * @description The licence kind which the prisoner is eligible for
        * @example CRD
        * @enum {string}
        */
-      kind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
-    }
+      kind?:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED';
+    };
     PromptComNotification: {
-      email: string
-      comName: string
-      initialPromptCases: components['schemas']['Case'][]
-    }
+      email: string;
+      comName: string;
+      initialPromptCases: components['schemas']['Case'][];
+    };
     /** @description Describes the counts of cases needed for review by a Probation Practitioner */
     ComReviewCount: {
       /**
@@ -6020,5654 +6280,5956 @@ export interface components {
        * @description A count of cases that the probation practitioner needs to review
        * @example 42
        */
-      myCount: number
+      myCount: number;
       /** @description A list of teams, the probation practitioner is attached and the count of cases that need review */
-      teams: components['schemas']['TeamCountsDto'][]
-    }
+      teams: components['schemas']['TeamCountsDto'][];
+    };
     /** @description Describes a team and the respective count of their cases that need review */
     TeamCountsDto: {
       /**
        * @description The team code
        * @example ABC123
        */
-      teamCode: string
+      teamCode: string;
       /**
        * Format: int64
        * @description A count of cases that need to be reviewed
        * @example 42
        */
-      count: number
-    }
+      count: number;
+    };
     /** @description Response object which describes an result from a address search */
     AddressSearchResponse: {
       /**
        * @description The address's Unique Property Reference Number
        * @example 200010019924
        */
-      uprn: string
+      uprn: string;
       /**
        * @description The address's first line
        * @example 34
        */
-      firstLine: string
+      firstLine: string;
       /**
        * @description The address's second line
        * @example Urchfont
        */
-      secondLine?: string
+      secondLine?: string;
       /**
        * @description The address's Town or City
        * @example Chippenham
        */
-      townOrCity: string
+      townOrCity: string;
       /**
        * @description The address's county
        * @example Shropshire
        */
-      county: string
+      county: string;
       /**
        * @description The address's postcode
        * @example RG13HS
        */
-      postcode: string
+      postcode: string;
       /**
        * @description The address's country
        * @example Wales
        */
-      country: string
-    }
-  }
-  responses: never
-  parameters: never
-  requestBodies: never
-  headers: never
-  pathItems: never
+      country: string;
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
-export type $defs = Record<string, never>
+export type $defs = Record<string, never>;
 export interface operations {
   getTimeServedExternalRecord: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        nomsId: string
-        bookingId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        nomsId: string;
+        bookingId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description The timeserved external record was retrieved successfully */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ExternalTimeServedRecordResponse']
-        }
-      }
+          'application/json': components['schemas']['ExternalTimeServedRecordResponse'];
+        };
+      };
       /** @description Bad request, invalid parameters */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description a timeserved external record was not found */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateTimeServedExternalRecord: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        nomsId: string
-        bookingId: number
-      }
-      cookie?: never
-    }
+        nomsId: string;
+        bookingId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ExternalTimeServedRecordRequest']
-      }
-    }
+        'application/json': components['schemas']['ExternalTimeServedRecordRequest'];
+      };
+    };
     responses: {
       /** @description Licence created or updated successfully */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Record not found */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   retryDlq: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        dlqName: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        dlqName: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['RetryDlqResult']
-        }
-      }
+          '*/*': components['schemas']['RetryDlqResult'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   retryAllDlqs: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['RetryDlqResult'][]
-        }
-      }
+          '*/*': components['schemas']['RetryDlqResult'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   purgeQueue: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        queueName: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        queueName: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['PurgeQueueResult']
-        }
-      }
+          '*/*': components['schemas']['PurgeQueueResult'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updatePrisonUser: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdatePrisonUserRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdatePrisonUserRequest'];
+      };
+    };
     responses: {
       /** @description The User was created/updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updatePrisonUser_1: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdatePrisonUserRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdatePrisonUserRequest'];
+      };
+    };
     responses: {
       /** @description The User was created/updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getOmuContactByPrisonCode: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        prisonCode: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        prisonCode: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description The OMU was found */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['OmuContact']
-        }
-      }
+          'application/json': components['schemas']['OmuContact'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Not found, the OMU email was not found */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateOmuEmail: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        prisonCode: string
-      }
-      cookie?: never
-    }
+        prisonCode: string;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateOmuEmailRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdateOmuEmailRequest'];
+      };
+    };
     responses: {
       /** @description The OMU was updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['OmuContact']
-        }
-      }
+          'application/json': components['schemas']['OmuContact'];
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   deleteOmuContactByPrisonCode: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        prisonCode: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        prisonCode: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description The OMU email address was deleted */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   syncComAllocation: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        crn: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        crn: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description The COM allocation info was */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Not-found, an invalid CRN was provided */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateOffenderDetails: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        nomsId: string
-      }
-      cookie?: never
-    }
+        nomsId: string;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateOffenderDetailsRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdateOffenderDetailsRequest'];
+      };
+    };
     responses: {
       /** @description The offender details were updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   addTimeServedProbationConfirmContact: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['TimeServedProbationConfirmContactRequest']
-      }
-    }
+        'application/json': components['schemas']['TimeServedProbationConfirmContactRequest'];
+      };
+    };
     responses: {
       /** @description Probation contact confirmation added successfully */
       204: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request — request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised — requires a valid OAuth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden — requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Licence record not found */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateVloDiscussion: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateVloDiscussionRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdateVloDiscussionRequest'];
+      };
+    };
     responses: {
       /** @description VLO discussion updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   submitLicence: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        'application/json': components['schemas']['NotifyRequest'][]
-      }
-    }
+        'application/json': components['schemas']['NotifyRequest'][];
+      };
+    };
     responses: {
       /** @description Licence submitted for approval */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateLicenceStatus: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['StatusUpdateRequest']
-      }
-    }
+        'application/json': components['schemas']['StatusUpdateRequest'];
+      };
+    };
     responses: {
       /** @description Licence status updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateStandardConditions: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateStandardConditionDataRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdateStandardConditionDataRequest'];
+      };
+    };
     responses: {
       /** @description Standard conditions updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateSpoDiscussion: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateSpoDiscussionRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdateSpoDiscussionRequest'];
+      };
+    };
     responses: {
       /** @description SPO discussion updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateSentenceDates: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Sentence dates updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   referVariation: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ReferVariationRequest']
-      }
-    }
+        'application/json': components['schemas']['ReferVariationRequest'];
+      };
+    };
     responses: {
       /** @description Licence updated to referred and the referral reason stored */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateReasonForVariation: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateReasonForVariationRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdateReasonForVariationRequest'];
+      };
+    };
     responses: {
       /** @description Reason for variation updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updatePrisonInformation: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdatePrisonInformationRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdatePrisonInformationRequest'];
+      };
+    };
     responses: {
       /** @description Prison information updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   changeDates: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['OverrideLicenceDatesRequest']
-      }
-    }
+        'application/json': components['schemas']['OverrideLicenceDatesRequest'];
+      };
+    };
     responses: {
       /** @description Licence dates have been updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Accepted */
       202: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateCurfewTimes: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateCurfewTimesRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdateCurfewTimesRequest'];
+      };
+    };
     responses: {
       /** @description Curfew times updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateContactNumber: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ContactNumberRequest']
-      }
-    }
+        'application/json': components['schemas']['ContactNumberRequest'];
+      };
+    };
     responses: {
       /** @description Contact number updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateBespokeConditions: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['BespokeConditionRequest']
-      }
-    }
+        'application/json': components['schemas']['BespokeConditionRequest'];
+      };
+    };
     responses: {
       /** @description Bespoke conditions added or replaced */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   approveVariation: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Variation approved */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateAppointmentTime: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AppointmentTimeRequest']
-      }
-    }
+        'application/json': components['schemas']['AppointmentTimeRequest'];
+      };
+    };
     responses: {
       /** @description Appointment date and time updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateAppointmentPerson: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AppointmentPersonRequest']
-      }
-    }
+        'application/json': components['schemas']['AppointmentPersonRequest'];
+      };
+    };
     responses: {
       /** @description Appointment person updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   addAppointmentAddress: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AddAddressRequest']
-      }
-    }
+        'application/json': components['schemas']['AddAddressRequest'];
+      };
+    };
     responses: {
       /** @description Address updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateAppointmentAddress: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AppointmentAddressRequest']
-      }
-    }
+        'application/json': components['schemas']['AppointmentAddressRequest'];
+      };
+    };
     responses: {
       /** @description Address updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateAdditionalConditions: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AdditionalConditionsRequest']
-      }
-    }
+        'application/json': components['schemas']['AdditionalConditionsRequest'];
+      };
+    };
     responses: {
       /** @description Set of additional conditions updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateAdditionalConditionData: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-        additionalConditionId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+        additionalConditionId: number;
+      };
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateAdditionalConditionDataRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdateAdditionalConditionDataRequest'];
+      };
+    };
     responses: {
       /** @description Additional condition updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   activateVariation: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Licence variation activated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   updateComDetails: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateComRequest']
-      }
-    }
+        'application/json': components['schemas']['UpdateComRequest'];
+      };
+    };
     responses: {
       /** @description The COM was create/updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   recordAuditEvent: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AuditEvent']
-      }
-    }
+        'application/json': components['schemas']['AuditEvent'];
+      };
+    };
     responses: {
       /** @description The audit event was recorded */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   recalculateLicenceStartDates: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['RecalculateLicenceStartDatesRequest']
-      }
-    }
+        'application/json': components['schemas']['RecalculateLicenceStartDatesRequest'];
+      };
+    };
     responses: {
       /** @description Licences updated */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': unknown
-        }
-      }
+          'application/json': unknown;
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Resource not found */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getLicencesMatchingCriteria: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  getImage: {
     parameters: {
-      query?: {
-        sortBy?: string
-        sortOrder?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['MatchLicencesRequest']
-      }
-    }
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+        conditionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
-      /** @description Returned matching licence summary details - empty if no matches. */
+      /** @description Image returned */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['LicenceSummary'][]
-        }
-      }
+          'image/jpeg': unknown;
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  inactivateLicences: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': number[]
-      }
-    }
-    responses: {
-      /** @description Inactivate Licences */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  reviewWithNoVariationRequired: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Licence successfully marked as reviewed */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description No image was found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getLicencePermissions: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  uploadFile: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LicencePermissionsRequest']
-      }
-    }
-    responses: {
-      /** @description The permissions the user has for the licence are returned */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LicencePermissionsResponse']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  changeType: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['OverrideLicenceTypeRequest']
-      }
-    }
-    responses: {
-      /** @description Status has been updated */
-      202: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ProblemDetail']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  changeStatus: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['OverrideLicenceStatusRequest']
-      }
-    }
-    responses: {
-      /** @description Status has been updated */
-      202: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  changePrisonerDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['OverrideLicencePrisonerDetailsRequest']
-      }
-    }
-    responses: {
-      /** @description Prisoner details updated */
-      202: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  updateElectronicMonitoringProgramme: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateElectronicMonitoringProgrammeRequest']
-      }
-    }
-    responses: {
-      /** @description Electronic monitoring programme details updated */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  editLicence: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Licence version created */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['EditLicenceResponse']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  deleteAdditionalConditionsByCode: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DeleteAdditionalConditionsByCodeRequest']
-      }
-    }
-    responses: {
-      /** @description Set of additional conditions removed */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  deactivateLicenceAndVariations: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DeactivateLicenceAndVariationsRequest']
-      }
-    }
-    responses: {
-      /** @description Licence(s) deactivated */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LicenceSummary']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  createVariation: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Licence variation created */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CreateVariationResponse']
-        }
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  addAdditionalCondition: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-        conditionType: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['AddAdditionalConditionRequest']
-      }
-    }
-    responses: {
-      /** @description Set of additional conditions added */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AdditionalCondition']
-        }
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  createLicence: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateLicenceRequest']
-      }
-    }
-    responses: {
-      /** @description Licence created */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CreateLicenceResponse']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Conflict, resource already exists */
-      409: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['EntityAlreadyExistsResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runLicenceReviewOverdueJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description licence review overdue job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runTimeOutLicencesServiceJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Time out job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runRemoveExpiredConditionsJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description run-remove-ap-conditions-job */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description The job ran successfully */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  notifyProbationOfUnapprovedLicences: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Emails sent */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runLicenceExpiryJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Expiry job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runDeactivateLicencesJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Deactivation request for licences past release date is processed successfully. */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runJob_1: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description The job ran successfully */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runLicenceActivationJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Activation job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  uploadExclusionZoneFile: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-        conditionId: number
-      }
-      cookie?: never
-    }
+        licenceId: number;
+        conditionId: number;
+      };
+      cookie?: never;
+    };
     requestBody?: {
       content: {
         'multipart/form-data': {
           /** Format: binary */
-          file: string
-        }
-      }
-    }
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description The condition file was uploaded */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  createProbationLicence: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        nomsId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Probation licence created */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CreateLicenceResponse'];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Conflict, resource already exists */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['EntityAlreadyExistsResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  createPrisonLicence: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        nomsId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Prison licence created */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CreateLicenceResponse'];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Conflict, resource already exists */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['EntityAlreadyExistsResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  getLicencesMatchingCriteria: {
+    parameters: {
+      query?: {
+        sortBy?: string;
+        sortOrder?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['MatchLicencesRequest'];
+      };
+    };
+    responses: {
+      /** @description Returned matching licence summary details - empty if no matches. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['LicenceSummary'][];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  inactivateLicences: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': number[];
+      };
+    };
+    responses: {
+      /** @description Inactivate Licences */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  reviewWithNoVariationRequired: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Licence successfully marked as reviewed */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  getLicencePermissions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['LicencePermissionsRequest'];
+      };
+    };
+    responses: {
+      /** @description The permissions the user has for the licence are returned */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['LicencePermissionsResponse'];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  changeType: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OverrideLicenceTypeRequest'];
+      };
+    };
+    responses: {
+      /** @description Status has been updated */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ProblemDetail'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  changeStatus: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OverrideLicenceStatusRequest'];
+      };
+    };
+    responses: {
+      /** @description Status has been updated */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  changePrisonerDetails: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OverrideLicencePrisonerDetailsRequest'];
+      };
+    };
+    responses: {
+      /** @description Prisoner details updated */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  updateElectronicMonitoringProgramme: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateElectronicMonitoringProgrammeRequest'];
+      };
+    };
+    responses: {
+      /** @description Electronic monitoring programme details updated */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  editLicence: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Licence version created */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['EditLicenceResponse'];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  deleteAdditionalConditionsByCode: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DeleteAdditionalConditionsByCodeRequest'];
+      };
+    };
+    responses: {
+      /** @description Set of additional conditions removed */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  deactivateLicenceAndVariations: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DeactivateLicenceAndVariationsRequest'];
+      };
+    };
+    responses: {
+      /** @description Licence(s) deactivated */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['LicenceSummary'];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  createVariation: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Licence variation created */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CreateVariationResponse'];
+        };
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  addAdditionalCondition: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+        conditionType: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AddAdditionalConditionRequest'];
+      };
+    };
+    responses: {
+      /** @description Set of additional conditions added */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AdditionalCondition'];
+        };
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  createLicence: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateLicenceRequest'];
+      };
+    };
+    responses: {
+      /** @description Licence created */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CreateLicenceResponse'];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Conflict, resource already exists */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['EntityAlreadyExistsResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  runLicenceReviewOverdueJob: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description licence review overdue job executed. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/html': unknown;
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  runTimeOutLicencesServiceJob: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Time out job executed. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/html': unknown;
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  runRemoveExpiredConditionsJob: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description run-remove-ap-conditions-job */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/html': unknown;
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  runJob: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description The job ran successfully */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  notifyProbationOfUnapprovedLicences: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Emails sent */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/html': unknown;
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  runLicenceExpiryJob: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Expiry job executed. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/html': unknown;
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  runDeactivateLicencesJob: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Deactivation request for licences past release date is processed successfully. */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/html': unknown;
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  runJob_1: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description The job ran successfully */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/html': unknown;
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  runLicenceActivationJob: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Activation job executed. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/html': unknown;
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  uploadExclusionZoneFile: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        licenceId: number;
+        conditionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        'multipart/form-data': {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
     responses: {
       /** @description The exclusion zone file was uploaded */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   searchForOffenderOnStaffCaseload: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ProbationUserSearchRequest']
-      }
-    }
+        'application/json': components['schemas']['ProbationUserSearchRequest'];
+      };
+    };
     responses: {
       /** @description The query retrieved a set of enriched results */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ComSearchResponse']
-        }
-      }
+          'application/json': components['schemas']['ComSearchResponse'];
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getTimeServedCases: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        prisonCode: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        prisonCode: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Returns a list of time served cases */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['TimeServedCaseload'][]
-        }
-      }
+          'application/json': components['schemas']['TimeServedCaseload'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getVaryApproverCaseload: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['VaryApproverCaseloadSearchRequest']
-      }
-    }
+        'application/json': components['schemas']['VaryApproverCaseloadSearchRequest'];
+      };
+    };
     responses: {
       /** @description Returns a list of cases with variations awaiting approval */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['VaryApproverCase'][]
-        }
-      }
+          'application/json': components['schemas']['VaryApproverCase'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   searchForOffenderOnVaryApproverCaseload: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['VaryApproverCaseloadSearchRequest']
-      }
-    }
+        'application/json': components['schemas']['VaryApproverCaseloadSearchRequest'];
+      };
+    };
     responses: {
       /** @description The query retrieved a set of enriched results */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['VaryApproverCaseloadSearchResponse']
-        }
-      }
+          'application/json': components['schemas']['VaryApproverCaseloadSearchResponse'];
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getRecentlyApproved: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': string[]
-      }
-    }
+        'application/json': string[];
+      };
+    };
     responses: {
       /** @description Returns a list of cases that have recently been approved */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ApprovalCase'][]
-        }
-      }
+          'application/json': components['schemas']['ApprovalCase'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   searchForOffenderOnApproverCaseload: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ApproverSearchRequest']
-      }
-    }
+        'application/json': components['schemas']['ApproverSearchRequest'];
+      };
+    };
     responses: {
       /** @description The query retrieved a set of enriched results */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ApproverSearchResponse']
-        }
-      }
+          'application/json': components['schemas']['ApproverSearchResponse'];
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getApprovalNeeded: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': string[]
-      }
-    }
+        'application/json': string[];
+      };
+    };
     responses: {
       /** @description Returns a list of cases awaiting approval */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ApprovalCase'][]
-        }
-      }
+          'application/json': components['schemas']['ApprovalCase'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getTeamVaryCaseload: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['TeamCaseloadRequest']
-      }
-    }
+        'application/json': components['schemas']['TeamCaseloadRequest'];
+      };
+    };
     responses: {
       /** @description Returns a list of cases that can have a variation created for a team */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ComVaryCase'][]
-        }
-      }
+          'application/json': components['schemas']['ComVaryCase'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getTeamCreateCaseload: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['TeamCaseloadRequest']
-      }
-    }
+        'application/json': components['schemas']['TeamCaseloadRequest'];
+      };
+    };
     responses: {
       /** @description Returns a list of cases that require a licence to be created for a team */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ComCreateCase'][]
-        }
-      }
+          'application/json': components['schemas']['ComCreateCase'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   searchForOffenderOnProbationUserCaseload: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ProbationUserSearchRequest']
-      }
-    }
+        'application/json': components['schemas']['ProbationUserSearchRequest'];
+      };
+    };
     responses: {
       /** @description The query retrieved a set of enriched results */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ComSearchResponse']
-        }
-      }
+          'application/json': components['schemas']['ComSearchResponse'];
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getProbationView: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CaCaseloadSearch']
-      }
-    }
+        'application/json': components['schemas']['CaCaseloadSearch'];
+      };
+    };
     responses: {
       /** @description Returns a list of cases for people on probation */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['CaCase'][]
-        }
-      }
+          'application/json': components['schemas']['CaCase'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getPrisonView: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CaCaseloadSearch']
-      }
-    }
+        'application/json': components['schemas']['CaCaseloadSearch'];
+      };
+    };
     responses: {
       /** @description Returns a list of cases for people on prison */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['CaCase'][]
-        }
-      }
+          'application/json': components['schemas']['CaCase'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   searchForOffenderOnPrisonCaseAdminCaseload: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['PrisonUserSearchRequest']
-      }
-    }
+        'application/json': components['schemas']['PrisonUserSearchRequest'];
+      };
+    };
     responses: {
       /** @description The query retrieved a set of enriched results */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['PrisonCaseAdminSearchResult']
-        }
-      }
+          'application/json': components['schemas']['PrisonCaseAdminSearchResult'];
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   requestAuditEvents: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AuditRequest']
-      }
-    }
+        'application/json': components['schemas']['AuditRequest'];
+      };
+    };
     responses: {
       /** @description The a list of matching auditable events is returned. */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['AuditEvent'][]
-        }
-      }
+          'application/json': components['schemas']['AuditEvent'][];
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getSarContentByReference: {
     parameters: {
       query?: {
         /** @description NOMIS Prison Reference Number */
-        prn?: string
+        prn?: string;
         /** @description nDelius Case Reference Number */
-        crn?: string
+        crn?: string;
         /** @description Optional parameter denoting minimum date of event occurrence which should be returned in the response */
-        fromDate?: string
+        fromDate?: string;
         /** @description Optional parameter denoting maximum date of event occurrence which should be returned in the response */
-        toDate?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+        toDate?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Request successfully processed - content found */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['HmppsSubjectAccessRequestContent']
-        }
-      }
+          'application/json': components['schemas']['HmppsSubjectAccessRequestContent'];
+        };
+      };
       /** @description Request successfully processed - no content found */
       204: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': Record<string, never>
-        }
-      }
+          'application/json': Record<string, never>;
+        };
+      };
       /** @description Subject Identifier is not recognised by this service */
       209: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': Record<string, never>
-        }
-      }
+          'application/json': Record<string, never>;
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The client does not have authorisation to make this request */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unexpected error occurred */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getPreferredAddress: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description The preferred address was retrieved successfully */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['AddressResponse'][]
-        }
-      }
+          'application/json': components['schemas']['AddressResponse'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   configuredApiDataset: {
     parameters: {
       query: {
-        selectedPage?: number
-        pageSize?: number
-        sortColumn?: string
-        sortedAsc?: boolean
+        selectedPage?: number;
+        pageSize?: number;
+        sortColumn?: string;
+        sortedAsc?: boolean;
         /**
          * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
@@ -11680,80 +12242,80 @@ export interface operations {
          *     }
          */
         filters: {
-          [key: string]: string
-        }
+          [key: string]: string;
+        };
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
          *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
-        dataProductDefinitionsPath?: string
-      }
-      header?: never
+        dataProductDefinitionsPath?: string;
+      };
+      header?: never;
       path: {
-        reportId: string
-        reportVariantId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        reportId: string;
+        reportVariantId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description default response */
       default: {
         headers: {
           /** @description Provides additional information about why no data has been returned. */
-          'x-no-data-warning'?: string
-          [name: string]: unknown
-        }
+          'x-no-data-warning'?: string;
+          [name: string]: unknown;
+        };
         content: {
           '*/*': {
-            [key: string]: unknown
-          }[]
-        }
-      }
-    }
-  }
+            [key: string]: unknown;
+          }[];
+        };
+      };
+    };
+  };
   configuredApiDynamicFilter: {
     parameters: {
       query: {
-        pageSize?: number
-        sortedAsc?: boolean
+        pageSize?: number;
+        sortedAsc?: boolean;
         /**
          * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
@@ -11766,83 +12328,83 @@ export interface operations {
          *     }
          */
         filters: {
-          [key: string]: string
-        }
+          [key: string]: string;
+        };
         /**
          * @description The value to match the start of the fieldId
          * @example Lond
          */
-        prefix: string
+        prefix: string;
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
          *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
-        dataProductDefinitionsPath?: string
-      }
-      header?: never
+        dataProductDefinitionsPath?: string;
+      };
+      header?: never;
       path: {
-        reportId: string
-        reportVariantId: string
+        reportId: string;
+        reportVariantId: string;
         /**
          * @description The name of the schema field which will be used as a dynamic filter.
          * @example name
          */
-        fieldId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        fieldId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description default response */
       default: {
         headers: {
           /** @description Provides additional information about why no data has been returned. */
-          'x-no-data-warning'?: string
-          [name: string]: unknown
-        }
+          'x-no-data-warning'?: string;
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': string[]
-        }
-      }
-    }
-  }
+          '*/*': string[];
+        };
+      };
+    };
+  };
   configuredApiCount: {
     parameters: {
       query: {
@@ -11858,1306 +12420,1306 @@ export interface operations {
          *     }
          */
         filters: {
-          [key: string]: string
-        }
+          [key: string]: string;
+        };
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
          *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
-        dataProductDefinitionsPath?: string
-      }
-      header?: never
+        dataProductDefinitionsPath?: string;
+      };
+      header?: never;
       path: {
-        reportId: string
-        reportVariantId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        reportId: string;
+        reportVariantId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description default response */
       default: {
         headers: {
           /** @description Provides additional information about why no data has been returned. */
-          'x-no-data-warning'?: string
-          [name: string]: unknown
-        }
+          'x-no-data-warning'?: string;
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['Count']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['Count'];
+        };
+      };
+    };
+  };
   getDlqMessages: {
     parameters: {
       query?: {
-        maxMessages?: number
-      }
-      header?: never
+        maxMessages?: number;
+      };
+      header?: never;
       path: {
-        dlqName: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        dlqName: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['GetDlqResult']
-        }
-      }
+          '*/*': components['schemas']['GetDlqResult'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getPolicyByVersionNumber: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
         /**
          * @description The version of the licence policy
          * @example 2.1
          */
-        version: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        version: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Policy found */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['LicencePolicy']
-        }
-      }
+          'application/json': components['schemas']['LicencePolicy'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The policy for this version was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getLatestPolicy: {
     parameters: {
       query?: {
-        licenceStartDate?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+        licenceStartDate?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Policy found */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['LicencePolicy']
-        }
-      }
+          'application/json': components['schemas']['LicencePolicy'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token. */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role. */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getImageUpload: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
         /** @description This is the identifier for a licence */
-        licenceId: number
+        licenceId: number;
         /** @description This is the internal identifier for a condition */
-        conditionId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        conditionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Image returned */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'image/jpeg': unknown
-        }
-      }
+          'image/jpeg': unknown;
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description No image was found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getLicenceById: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
         /** @description This is the identifier for a licence */
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Licence found */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['Licence']
-        }
-      }
+          'application/json': components['schemas']['Licence'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getLicencesByPrisonNumber: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
         /**
          * @description The prison identifier for the person on the licence (also known as NOMS id)
          * @example A1234BC
          */
-        prisonNumber: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        prisonNumber: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description A list of found licence summaries */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['PublicLicenceSummary'][]
-        }
-      }
+          'application/json': components['schemas']['PublicLicenceSummary'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getLicenceByCrn: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
         /**
          * @description The case reference number (CRN) for the person on the licence
          * @example A123456
          */
-        crn: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        crn: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description A list of found licence summaries */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['PublicLicenceSummary'][]
-        }
-      }
+          'application/json': components['schemas']['PublicLicenceSummary'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   findByNumber: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        nomsId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        nomsId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Returning A list of prisoners */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['PrisonerWithCvlFields'][]
-        }
-      }
+          'application/json': components['schemas']['PrisonerWithCvlFields'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Could not find prisoner with prison number */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getIS91Status: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        nomsId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        nomsId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description a boolean for IS-91 status */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': boolean
-        }
-      }
+          'application/json': boolean;
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Could not find prisoner */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getIneligibilityReasons: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        nomsId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        nomsId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description a list of ineligibility reasons */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['EligibilityAssessment']
-        }
-      }
+          'application/json': components['schemas']['EligibilityAssessment'];
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Could not find prisoner */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getLicenceById_1: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Licence found */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['Licence']
-        }
-      }
+          'application/json': components['schemas']['Licence'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getPolicyByVersion: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        version: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        version: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Licence Policy found */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['LicencePolicy']
-        }
-      }
+          'application/json': components['schemas']['LicencePolicy'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   compareLicence: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        version: string
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        version: string;
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['LicenceConditionChanges'][]
-        }
-      }
+          'application/json': components['schemas']['LicenceConditionChanges'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getCurrentPolicy: {
     parameters: {
       query?: {
-        licenceStartDate?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+        licenceStartDate?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Licence Policy found */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['LicencePolicy']
-        }
-      }
+          'application/json': components['schemas']['LicencePolicy'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getPolicies: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Licence Policy found */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['LicencePolicy']
-        }
-      }
+          'application/json': components['schemas']['LicencePolicy'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getHdcLicenceData: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description The HDC curfew information was retrieved */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['HdcLicenceData']
-        }
-      }
+          'application/json': components['schemas']['HdcLicenceData'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The curfew details for this licence ID were not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getExclusionZoneImage: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-        conditionId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        licenceId: number;
+        conditionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Image returned */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'image/jpeg': unknown
-        }
-      }
+          'image/jpeg': unknown;
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description No image was found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getEventsMatchingCriteria: {
     parameters: {
       query?: {
-        licenceId?: number
+        licenceId?: number;
         eventType?: (
           | 'CREATED'
           | 'SUBMITTED'
@@ -13180,72 +13742,72 @@ export interface operations {
           | 'TIMED_OUT'
           | 'REVIEWED_WITHOUT_VARIATION'
           | 'REVIEWED_WITH_VARIATION'
-        )[]
-        sortBy?: string
-        sortOrder?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+        )[];
+        sortBy?: string;
+        sortOrder?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Returned matching licence events - empty if no matches. */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['LicenceEvent'][]
-        }
-      }
+          'application/json': components['schemas']['LicenceEvent'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   definitions: {
     parameters: {
       query?: {
@@ -13253,67 +13815,67 @@ export interface operations {
          * @description Set this parameter to filter the list to only include reports for the given rendering method.
          * @example HTML
          */
-        renderMethod?: 'HTML' | 'PDF' | 'SVG'
+        renderMethod?: 'HTML' | 'PDF' | 'SVG';
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
          *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
-        dataProductDefinitionsPath?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+        dataProductDefinitionsPath?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ReportDefinitionSummary'][]
-        }
-      }
+          '*/*': components['schemas']['ReportDefinitionSummary'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   definition: {
     parameters: {
       query?: {
@@ -13322,72 +13884,72 @@ export interface operations {
          *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
-        dataProductDefinitionsPath?: string
-      }
-      header?: never
+        dataProductDefinitionsPath?: string;
+      };
+      header?: never;
       path: {
         /**
          * @description The ID of the report definition.
          * @example external-movements
          */
-        reportId: string
+        reportId: string;
         /**
          * @description The ID of the variant definition.
          * @example list
          */
-        variantId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        variantId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['SingleVariantReportDefinition']
-        }
-      }
+          '*/*': components['schemas']['SingleVariantReportDefinition'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   dashboardDefinition: {
     parameters: {
       query?: {
@@ -13396,900 +13958,900 @@ export interface operations {
          *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
-        dataProductDefinitionsPath?: string
-      }
-      header?: never
+        dataProductDefinitionsPath?: string;
+      };
+      header?: never;
       path: {
         /**
          * @description The ID of the Data Product Definition.
          * @example external-movements
          */
-        dataProductDefinitionId: string
+        dataProductDefinitionId: string;
         /**
          * @description The ID of the dashboard.
          * @example dashboardId
          */
-        dashboardId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        dashboardId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description OK */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['DashboardDefinition']
-        }
-      }
+          '*/*': components['schemas']['DashboardDefinition'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getUpcomingReleasesWithMonitoringConditions: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description A list of last minute handover cases */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['UpcomingReleasesWithMonitoringConditionsResponse'][]
-        }
-      }
+          'application/json': components['schemas']['UpcomingReleasesWithMonitoringConditionsResponse'][];
+        };
+      };
       /** @description Bad request, request parameters must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getLastMinuteCases: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description A list of last minute handover cases */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['LastMinuteHandoverCaseResponse'][]
-        }
-      }
+          'application/json': components['schemas']['LastMinuteHandoverCaseResponse'][];
+        };
+      };
       /** @description Bad request, request parameters must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   run: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description list of COMs we'll send email to */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['PromptComNotification'][]
-        }
-      }
+          'application/json': components['schemas']['PromptComNotification'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   retrieveReviewCounts: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        staffIdentifier: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        staffIdentifier: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description The review counts were retrieved successfully */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ComReviewCount']
-        }
-      }
+          'application/json': components['schemas']['ComReviewCount'];
+        };
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getStaffVaryCaseload: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        deliusStaffIdentifier: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        deliusStaffIdentifier: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Returns a list of cases that can have a variation created */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ComVaryCase'][]
-        }
-      }
+          'application/json': components['schemas']['ComVaryCase'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getStaffCreateCaseload: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        deliusStaffIdentifier: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        deliusStaffIdentifier: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Returns a list of cases that require a licence to be created */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ComCreateCase'][]
-        }
-      }
+          'application/json': components['schemas']['ComCreateCase'][];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   getBankHolidaysForEnglandAndWales: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Bank Holidays retrieved */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': string[]
-        }
-      }
+          'application/json': string[];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Bank holidays were not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   searchForAddresses: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        searchQuery: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        searchQuery: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Returns addresses matching the given search text */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['AddressSearchResponse']
-        }
-      }
+          'application/json': components['schemas']['AddressSearchResponse'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   searchForAddressByReference: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        reference: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        reference: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Returns the address with the provided reference */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['AddressSearchResponse']
-        }
-      }
+          'application/json': components['schemas']['AddressSearchResponse'];
+        };
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   deleteAddressByReference: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        reference: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        reference: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Address has been removed successfully */
       204: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Address with this reference was not found */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   discard: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        licenceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Licence discarded */
       200: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad request, request body must be valid */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
   deleteAdditionalCondition: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
-        licenceId: number
-        conditionId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        licenceId: number;
+        conditionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Condition has been removed from the licence */
       204: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Bad Request */
       400: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Forbidden, requires an appropriate role */
       403: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description The licence for this ID was not found. */
       404: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
       /** @description Internal Server Error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+          '*/*': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
 }
 type WithRequired<T, K extends keyof T> = T & {
-  [P in K]-?: T[P]
-}
+  [P in K]-?: T[P];
+};

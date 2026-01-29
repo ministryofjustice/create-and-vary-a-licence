@@ -16,6 +16,8 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       prisonNumber: 'A1234BC',
       status: 'SUBMITTED',
       licenceStartDate: '01/01/2024',
+      fullName: 'full name',
+      emConditionCodes: '12h, 45a, 78b',
     },
   ]
 
@@ -40,6 +42,8 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       prisonNumber: 'A1234BC',
       status: 'SUBMITTED',
       licenceStartDate: '01/01/2024',
+      fullName: 'full name',
+      emConditionCodes: '12h, 45a, 78b',
     }
 
     expect(res.render).toHaveBeenCalledWith('pages/reports/upcomingReleasesWithMonitoring', {
@@ -64,9 +68,9 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       `attachment; filename=upcoming-releases-with-monitoring-conditions-report-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`,
     )
 
-    const headerLine = ['Prison Number', 'CRN', 'Licence Status', 'Licence Start Date'].join(',')
+    const headerLine = ['Prison Number', 'Name', 'CRN', 'Licence Status', 'Ems conditions', 'Licence Start Date'].join(',')
 
-    const expectedRow = ['A1234BC', 'CRN123', 'SUBMITTED', '01/01/2024'].join(',')
+    const expectedRow = ['A1234BC', 'full name', 'CRN123', 'SUBMITTED', '12h, 45a, 78b', '01/01/2024'].join(',')
 
     const sentBody = (res.send as jest.Mock).mock.calls[0][0]
     expect(sentBody).toBe(`${headerLine}\n${expectedRow}`)
