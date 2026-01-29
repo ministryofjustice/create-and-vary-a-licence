@@ -691,8 +691,8 @@ describe('isTimeServedLicence', () => {
     const licence = { kind: LicenceKind.CRD } as Licence
     expect(isTimeServedLicence(licence)).toBe(false)
   })
-}
-    
+})
+
 describe('mapToTargetField', () => {
   it('should map filename to the target field', () => {
     const input = {
