@@ -28,6 +28,7 @@ import {
   isHdcLicence,
   lowercaseFirstLetter,
   escapeCsv,
+  isTimeServedLicence,
   mapToTargetField,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
@@ -545,6 +546,11 @@ describe('isInHardStopPeriod', () => {
     expect(isInHardStopPeriod(licence)).toBe(false)
   })
 
+  it('returns false if the licence is a time served licence', () => {
+    licence.kind = LicenceKind.TIME_SERVED
+    expect(isInHardStopPeriod(licence)).toBe(false)
+  })
+
   it('returns false if the licence is not in the hard stop period', () => {
     licence = { kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
     expect(isInHardStopPeriod(licence)).toBe(false)
@@ -672,6 +678,18 @@ describe('escapeCsv', () => {
 
     // Then
     expect(result).toBe('"hello\nworld"')
+  })
+})
+
+describe('isTimeServedLicence', () => {
+  it('returns true when the licence kind is TIME_SERVED', () => {
+    const licence = { kind: LicenceKind.TIME_SERVED } as Licence
+    expect(isTimeServedLicence(licence)).toBe(true)
+  })
+
+  it('returns false when the licence kind is not TIME_SERVED', () => {
+    const licence = { kind: LicenceKind.CRD } as Licence
+    expect(isTimeServedLicence(licence)).toBe(false)
   })
 })
 

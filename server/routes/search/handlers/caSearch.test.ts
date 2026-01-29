@@ -1206,13 +1206,13 @@ describe('Route Handlers - Search - Ca Search', () => {
     expect(link).toBe('/licence/time-served/create/nomisId/A1234TS/do-you-want-to-create-the-licence-on-this-service')
   })
 
-  it('should return time-served check-your-answers link for in-progress TIME_SERVED licence in hard stop period', async () => {
+  it('should return time-served check-your-answers link for in-progress TIME_SERVED licence', async () => {
     // Given
     const timeServedCase = createCase({
       kind: LicenceKind.TIME_SERVED,
       licenceId: 10,
       licenceStatus: LicenceStatus.IN_PROGRESS,
-      isInHardStopPeriod: true,
+      isInHardStopPeriod: false,
     })
 
     // When
@@ -1220,6 +1220,39 @@ describe('Route Handlers - Search - Ca Search', () => {
 
     // Then
     expect(link).toBe('/licence/time-served/id/10/check-your-answers')
+  })
+
+  it('should map TIMED_OUT to NOMIS_LICENCE when hasNomisLicence is true', async () => {
+    // Given
+    const nomisTimedOutCase = createCase({
+      licenceStatus: LicenceStatus.TIMED_OUT,
+      hasNomisLicence: true,
+      isInHardStopPeriod: false,
+      prisonerNumber: 'A1234NM',
+    })
+
+    searchService.getCaSearchResults.mockResolvedValue({
+      inPrisonResults: [nomisTimedOutCase],
+      onProbationResults: [],
+      attentionNeededResults: [],
+    })
+    req.query = { queryTerm: 'test' }
+
+    // When
+    await handler.GET(req, res)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/search/caSearch/caSearch',
+      expect.objectContaining({
+        inPrisonResults: expect.arrayContaining([
+          expect.objectContaining({
+            prisonerNumber: 'A1234NM',
+            licenceStatus: LicenceStatus.NOMIS_LICENCE,
+          }),
+        ]),
+      }),
+    )
   })
 
   const createCase = (overrides = {}): CaCase => {

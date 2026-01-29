@@ -82,7 +82,7 @@ export default class CaSearch {
       tabParameters,
       inPrisonResults: inPrisonResults.map(caCase => {
         const link = this.getLink(caCase)
-        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus)
+        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus, caCase.hasNomisLicence)
         return {
           ...caCase,
           link,
@@ -91,7 +91,7 @@ export default class CaSearch {
       }),
       onProbationResults: onProbationResults.map(caCase => {
         const link = this.getLink(caCase)
-        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus)
+        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus, caCase.hasNomisLicence)
         return {
           ...caCase,
           link,
@@ -115,8 +115,12 @@ export default class CaSearch {
     })
   }
 
-  private getStatus = (licenceStatus: LicenceStatus) => {
-    return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
+  private getStatus = (licenceStatus: LicenceStatus, hasNomisLicence: boolean): LicenceStatus => {
+    if (licenceStatus !== LicenceStatus.TIMED_OUT) {
+      return licenceStatus
+    }
+
+    return hasNomisLicence ? LicenceStatus.NOMIS_LICENCE : LicenceStatus.NOT_STARTED
   }
 
   getLink = (caCase: CaCase): string => {
@@ -146,10 +150,14 @@ export default class CaSearch {
         if (this.isEditableInHardStop(<LicenceKind>caCase.kind, <LicenceStatus>caCase.licenceStatus)) {
           return `/licence/hard-stop/id/${caCase.licenceId}/check-your-answers${query}`
         }
+      }
+
+      if (caCase.kind === LicenceKind.TIME_SERVED) {
         if (this.isEditableInTimeServed(<LicenceKind>caCase.kind, <LicenceStatus>caCase.licenceStatus)) {
           return `/licence/time-served/id/${caCase.licenceId}/check-your-answers${query}`
         }
       }
+
       return `/licence/view/id/${caCase.licenceId}/show${query}`
     }
 
@@ -166,7 +174,7 @@ export default class CaSearch {
       return false
     }
     if (
-      isInHardStopPeriod &&
+      (kind === LicenceKind.TIME_SERVED || isInHardStopPeriod) &&
       (this.isEditableInHardStop(kind, licenceStatus) || this.isEditableInTimeServed(kind, licenceStatus))
     ) {
       return true

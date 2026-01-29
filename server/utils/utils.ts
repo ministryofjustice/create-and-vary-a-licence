@@ -10,6 +10,7 @@ import type {
   HdcLicence,
   HdcVariationLicence,
   Licence,
+  TimeServedLicence,
   VariationLicence,
 } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
@@ -265,7 +266,10 @@ const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], k
 
 const isInHardStopPeriod = (licence: Licence): boolean => {
   return (
-    licence.kind !== LicenceKind.VARIATION && licence.kind !== LicenceKind.HDC_VARIATION && licence.isInHardStopPeriod
+    licence.kind !== LicenceKind.VARIATION &&
+    licence.kind !== LicenceKind.HDC_VARIATION &&
+    licence.kind !== LicenceKind.TIME_SERVED &&
+    licence.isInHardStopPeriod
   )
 }
 
@@ -275,6 +279,10 @@ function isVariation(licence: Licence): licence is VariationLicence | HdcVariati
 
 function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLicence {
   return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
+}
+
+function isTimeServedLicence(licence: Licence): licence is TimeServedLicence {
+  return licence.kind === LicenceKind.TIME_SERVED
 }
 
 const lowercaseFirstLetter = (message: string): string => message.charAt(0).toLowerCase() + message.slice(1)
@@ -330,5 +338,6 @@ export {
   formatAddressTitleCase,
   formatAddressLine,
   lowercaseFirstLetter,
+  isTimeServedLicence,
   mapToTargetField,
 }
