@@ -1206,13 +1206,13 @@ describe('Route Handlers - Search - Ca Search', () => {
     expect(link).toBe('/licence/time-served/create/nomisId/A1234TS/do-you-want-to-create-the-licence-on-this-service')
   })
 
-  it('should return time-served check-your-answers link for in-progress TIME_SERVED licence in hard stop period', async () => {
+  it('should return time-served check-your-answers link for in-progress TIME_SERVED licence', async () => {
     // Given
     const timeServedCase = createCase({
       kind: LicenceKind.TIME_SERVED,
       licenceId: 10,
       licenceStatus: LicenceStatus.IN_PROGRESS,
-      isInHardStopPeriod: true,
+      isInHardStopPeriod: false,
     })
 
     // When

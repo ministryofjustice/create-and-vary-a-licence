@@ -146,10 +146,14 @@ export default class CaSearch {
         if (this.isEditableInHardStop(<LicenceKind>caCase.kind, <LicenceStatus>caCase.licenceStatus)) {
           return `/licence/hard-stop/id/${caCase.licenceId}/check-your-answers${query}`
         }
+      }
+
+      if (caCase.kind === LicenceKind.TIME_SERVED) {
         if (this.isEditableInTimeServed(<LicenceKind>caCase.kind, <LicenceStatus>caCase.licenceStatus)) {
           return `/licence/time-served/id/${caCase.licenceId}/check-your-answers${query}`
         }
       }
+
       return `/licence/view/id/${caCase.licenceId}/show${query}`
     }
 
@@ -166,7 +170,7 @@ export default class CaSearch {
       return false
     }
     if (
-      isInHardStopPeriod &&
+      (kind === LicenceKind.TIME_SERVED || isInHardStopPeriod) &&
       (this.isEditableInHardStop(kind, licenceStatus) || this.isEditableInTimeServed(kind, licenceStatus))
     ) {
       return true
