@@ -144,7 +144,7 @@ describe('InitialMeetingPlaceRoutes', () => {
       )
     })
 
-    it('Given addressRemoved flash is set, When GET called, Then should render view with addressRemoved message', async () => {
+    it('should render view with addressRemoved message', async () => {
       config.postcodeLookupEnabled = true
       addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
