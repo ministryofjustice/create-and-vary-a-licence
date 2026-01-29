@@ -28,6 +28,8 @@ import {
   isHdcLicence,
   lowercaseFirstLetter,
   escapeCsv,
+  isTimeServedLicence,
+  mapToTargetField,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -544,6 +546,11 @@ describe('isInHardStopPeriod', () => {
     expect(isInHardStopPeriod(licence)).toBe(false)
   })
 
+  it('returns false if the licence is a time served licence', () => {
+    licence.kind = LicenceKind.TIME_SERVED
+    expect(isInHardStopPeriod(licence)).toBe(false)
+  })
+
   it('returns false if the licence is not in the hard stop period', () => {
     licence = { kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
     expect(isInHardStopPeriod(licence)).toBe(false)
@@ -671,5 +678,92 @@ describe('escapeCsv', () => {
 
     // Then
     expect(result).toBe('"hello\nworld"')
+  })
+})
+
+describe('isTimeServedLicence', () => {
+  it('returns true when the licence kind is TIME_SERVED', () => {
+    const licence = { kind: LicenceKind.TIME_SERVED } as Licence
+    expect(isTimeServedLicence(licence)).toBe(true)
+  })
+
+  it('returns false when the licence kind is not TIME_SERVED', () => {
+    const licence = { kind: LicenceKind.CRD } as Licence
+    expect(isTimeServedLicence(licence)).toBe(false)
+  })
+})
+
+describe('mapToTargetField', () => {
+  it('should map filename to the target field', () => {
+    const input = {
+      filename: 'doc.pdf',
+      fileTargetField: 'outOfBoundFilename',
+    }
+
+    const output = mapToTargetField(input)
+
+    expect(output).toEqual({
+      outOfBoundFilename: 'doc.pdf',
+    })
+  })
+
+  it('should preserve additional fields', () => {
+    const input = {
+      eventName: 'Event123',
+      filename: 'photo.png',
+      fileTargetField: 'inBoundFilename',
+      extra: 'abc',
+    }
+
+    const output = mapToTargetField(input)
+
+    expect(output).toEqual({
+      eventName: 'Event123',
+      extra: 'abc',
+      inBoundFilename: 'photo.png',
+    })
+  })
+
+  it('should allow dynamic field names', () => {
+    const input = {
+      filename: 'file.txt',
+      fileTargetField: 'customFieldName',
+    }
+
+    const output = mapToTargetField(input)
+
+    expect(output).toEqual({
+      customFieldName: 'file.txt',
+    })
+  })
+
+  it('should remove filename and fileTargetField from the output', () => {
+    const input = {
+      filename: 'abc.jpg',
+      fileTargetField: 'outOfBoundFilename',
+      something: 123,
+    }
+
+    const output = mapToTargetField(input)
+
+    expect(output.filename).toBeUndefined()
+    expect(output.fileTargetField).toBeUndefined()
+    expect(output.something).toBe(123)
+    expect(output.outOfBoundFilename).toBe('abc.jpg')
+  })
+
+  it('should work even with deeply nested unrelated fields', () => {
+    const input = {
+      filename: 'nested.doc',
+      fileTargetField: 'outOfBoundFilename',
+      nested: { a: 1, b: { c: 2 } },
+    }
+
+    const output = mapToTargetField(input)
+
+    expect(output).toEqual({
+      nested: { a: 1, b: { c: 2 } },
+      outOfBoundFilename: 'nested.doc',
+    })
   })
 })

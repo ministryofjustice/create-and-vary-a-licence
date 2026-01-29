@@ -10,6 +10,7 @@ import type {
   HdcLicence,
   HdcVariationLicence,
   Licence,
+  TimeServedLicence,
   VariationLicence,
 } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
@@ -20,6 +21,12 @@ const ISO_DATE = 'yyyy-MM-dd'
 const JSON_DATE_TIME = 'DD/MM/YYYY HH:mm'
 const SIMPLE_DATE_TIME = 'D/MM/YYYY HHmm'
 const TWELVE_HOUR_TIME = 'hh:mm a'
+
+interface FileMapInput {
+  filename: string
+  fileTargetField: string
+  [key: string]: unknown
+}
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -259,7 +266,10 @@ const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], k
 
 const isInHardStopPeriod = (licence: Licence): boolean => {
   return (
-    licence.kind !== LicenceKind.VARIATION && licence.kind !== LicenceKind.HDC_VARIATION && licence.isInHardStopPeriod
+    licence.kind !== LicenceKind.VARIATION &&
+    licence.kind !== LicenceKind.HDC_VARIATION &&
+    licence.kind !== LicenceKind.TIME_SERVED &&
+    licence.isInHardStopPeriod
   )
 }
 
@@ -271,6 +281,10 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
   return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
 }
 
+function isTimeServedLicence(licence: Licence): licence is TimeServedLicence {
+  return licence.kind === LicenceKind.TIME_SERVED
+}
+
 const lowercaseFirstLetter = (message: string): string => message.charAt(0).toLowerCase() + message.slice(1)
 
 function escapeCsv(value: string | null | undefined): string {
@@ -280,6 +294,14 @@ function escapeCsv(value: string | null | undefined): string {
     return `"${escaped}"`
   }
   return escaped
+}
+
+const mapToTargetField = (input: FileMapInput) => {
+  const { filename, fileTargetField, ...rest } = input
+  return {
+    ...rest,
+    [fileTargetField]: filename,
+  }
 }
 
 export {
@@ -316,4 +338,6 @@ export {
   formatAddressTitleCase,
   formatAddressLine,
   lowercaseFirstLetter,
+  isTimeServedLicence,
+  mapToTargetField,
 }

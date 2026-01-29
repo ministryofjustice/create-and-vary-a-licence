@@ -935,5 +935,35 @@ describe('Route handlers - View and print case list', () => {
         }),
       )
     })
+
+    it('should link to time served check-your-answers when in progress and not in hard stop period', async () => {
+      const timeServedInProgress = {
+        ...caCase[0],
+        kind: LicenceKind.TIME_SERVED,
+        licenceId: 10,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        isInHardStopPeriod: false,
+      } as CaCase
+
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue([timeServedInProgress])
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/view/cases',
+        expect.objectContaining({
+          cases: expect.arrayContaining([
+            expect.objectContaining({
+              licenceId: 10,
+              licenceStatus: 'IN_PROGRESS',
+              link: '/licence/time-served/id/10/check-your-answers',
+              kind: LicenceKind.TIME_SERVED,
+            }),
+          ]),
+        }),
+      )
+    })
   })
 })
