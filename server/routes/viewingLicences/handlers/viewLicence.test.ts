@@ -308,6 +308,55 @@ describe('Route - view and approve a licence', () => {
       })
     })
 
+    describe('when it is a time served case', () => {
+      it('should be editable by prison CAs when it is a time served case', async () => {
+        res = {
+          render: jest.fn(),
+          redirect: jest.fn(),
+          locals: {
+            user,
+            licence: {
+              ...licence,
+              statusCode: LicenceStatus.APPROVED,
+              kind: LicenceKind.TIME_SERVED,
+              isInHardStopPeriod: false,
+            },
+          },
+        } as unknown as Response
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+          additionalConditions: [],
+          isEditableByPrison: true,
+          isPrisonUser: true,
+          hdcLicenceData: null,
+        })
+        expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+      })
+
+      it('should not be editable by prison CAs when it is a time served case and with licence status ACTIVE', async () => {
+        res = {
+          render: jest.fn(),
+          redirect: jest.fn(),
+          locals: {
+            user,
+            licence: { ...licence, kind: LicenceKind.TIME_SERVED, isInHardStopPeriod: false },
+          },
+        } as unknown as Response
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+          additionalConditions: [],
+          isEditableByPrison: false,
+          isPrisonUser: true,
+          hdcLicenceData: null,
+        })
+        expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+      })
+    })
+
     it('should set isPrisonUser to false when the auth source is not nomis', async () => {
       res = {
         render: jest.fn(),

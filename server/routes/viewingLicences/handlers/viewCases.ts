@@ -105,7 +105,10 @@ export default class ViewAndPrintCaseRoutes {
           ? `?lastApprovedVersion=${caCase.licenceVersionOf}`
           : ''
 
-      if (caCase.isInHardStopPeriod && this.isEditableTimedOutStatus(licenceStatus)) {
+      if (
+        (caCase.isInHardStopPeriod || caCase.kind === LicenceKind.TIME_SERVED) &&
+        this.isEditableTimedOutStatus(licenceStatus)
+      ) {
         const timedOutKind = caCase.kind === LicenceKind.TIME_SERVED ? 'time-served' : 'hard-stop'
         return `/licence/${timedOutKind}/id/${caCase.licenceId}/check-your-answers${query}`
       }
@@ -125,7 +128,7 @@ export default class ViewAndPrintCaseRoutes {
       return false
     }
 
-    if (isInHardStopPeriod && this.isEditableInHardStop(kind, licenceStatus)) {
+    if ((kind === LicenceKind.TIME_SERVED || isInHardStopPeriod) && this.isEditableInHardStop(kind, licenceStatus)) {
       return true
     }
     return !this.nonViewableStatuses.includes(licenceStatus)

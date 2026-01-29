@@ -92,3 +92,4 @@ export type EligibilityAssessment = components['schemas']['EligibilityAssessment
 export type ExternalTimeServedRecordRequest = components['schemas']['ExternalTimeServedRecordRequest']
 export type ExternalTimeServedRecordResponse = components['schemas']['ExternalTimeServedRecordResponse']
 export type TimeServedProbationConfirmContactRequest = components['schemas']['TimeServedProbationConfirmContactRequest']
+export type TimeServedLicence = components['schemas']['TimeServedLicence']

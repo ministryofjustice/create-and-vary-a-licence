@@ -4,7 +4,13 @@ import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
-import { groupingBy, isHdcLicence, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
+import {
+  groupingBy,
+  isHdcLicence,
+  isInHardStopPeriod,
+  isTimeServedLicence,
+  parseCvlDateTime,
+} from '../../../utils/utils'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
@@ -71,7 +77,8 @@ export default class ViewAndPrintLicenceRoutes {
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions as AdditionalCondition[], 'code'),
         warningMessage,
-        isEditableByPrison: licence.statusCode !== LicenceStatus.ACTIVE && isInHardStopPeriod(licence),
+        isEditableByPrison:
+          licence.statusCode !== LicenceStatus.ACTIVE && (isTimeServedLicence(licence) || isInHardStopPeriod(licence)),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
         hdcLicenceData,
