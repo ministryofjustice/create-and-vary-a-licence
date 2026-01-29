@@ -82,7 +82,7 @@ export default class CaSearch {
       tabParameters,
       inPrisonResults: inPrisonResults.map(caCase => {
         const link = this.getLink(caCase)
-        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus)
+        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus, caCase.hasNomisLicence)
         return {
           ...caCase,
           link,
@@ -91,7 +91,7 @@ export default class CaSearch {
       }),
       onProbationResults: onProbationResults.map(caCase => {
         const link = this.getLink(caCase)
-        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus)
+        const licenceStatus = this.getStatus(<LicenceStatus>caCase.licenceStatus, caCase.hasNomisLicence)
         return {
           ...caCase,
           link,
@@ -115,8 +115,12 @@ export default class CaSearch {
     })
   }
 
-  private getStatus = (licenceStatus: LicenceStatus) => {
-    return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
+  private getStatus = (licenceStatus: LicenceStatus, hasNomisLicence: boolean): LicenceStatus => {
+    if (licenceStatus !== LicenceStatus.TIMED_OUT) {
+      return licenceStatus
+    }
+
+    return hasNomisLicence ? LicenceStatus.NOMIS_LICENCE : LicenceStatus.NOT_STARTED
   }
 
   getLink = (caCase: CaCase): string => {

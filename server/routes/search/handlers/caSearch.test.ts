@@ -1222,6 +1222,39 @@ describe('Route Handlers - Search - Ca Search', () => {
     expect(link).toBe('/licence/time-served/id/10/check-your-answers')
   })
 
+  it('should map TIMED_OUT to NOMIS_LICENCE when hasNomisLicence is true', async () => {
+    // Given
+    const nomisTimedOutCase = createCase({
+      licenceStatus: LicenceStatus.TIMED_OUT,
+      hasNomisLicence: true,
+      isInHardStopPeriod: false,
+      prisonerNumber: 'A1234NM',
+    })
+
+    searchService.getCaSearchResults.mockResolvedValue({
+      inPrisonResults: [nomisTimedOutCase],
+      onProbationResults: [],
+      attentionNeededResults: [],
+    })
+    req.query = { queryTerm: 'test' }
+
+    // When
+    await handler.GET(req, res)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/search/caSearch/caSearch',
+      expect.objectContaining({
+        inPrisonResults: expect.arrayContaining([
+          expect.objectContaining({
+            prisonerNumber: 'A1234NM',
+            licenceStatus: LicenceStatus.NOMIS_LICENCE,
+          }),
+        ]),
+      }),
+    )
+  })
+
   const createCase = (overrides = {}): CaCase => {
     return {
       kind: LicenceKind.CRD,

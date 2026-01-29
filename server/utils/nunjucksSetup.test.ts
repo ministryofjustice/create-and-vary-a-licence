@@ -375,6 +375,16 @@ describe('Nunjucks Filters', () => {
       ).toEqual(LicenceStatus.TIMED_OUT)
     })
 
+    it('should return TIMED_OUT status for TIME_SERVED', () => {
+      expect(
+        registerNunjucks().getFilter('getlicenceStatusForSearchResults')({
+          isReviewNeeded: false,
+          kind: LicenceKind.TIME_SERVED,
+          licenceStatus: LicenceStatus.SUBMITTED,
+        } as FoundComCase),
+      ).toEqual(LicenceStatus.TIMED_OUT)
+    })
+
     it('should return the same status as licence status', () => {
       expect(
         registerNunjucks().getFilter('getlicenceStatusForSearchResults')({

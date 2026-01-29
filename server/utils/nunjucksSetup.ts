@@ -404,8 +404,13 @@ export function registerNunjucks(app?: express.Express): Environment {
     if (licence.isReviewNeeded) {
       return LicenceStatus.REVIEW_NEEDED
     }
-    const isHardStopLicence = licence?.kind === 'HARD_STOP'
-    return isHardStopLicence ? LicenceStatus.TIMED_OUT : <LicenceStatus>licence.licenceStatus
+
+    const isTimedOutLicence = licence?.kind === 'HARD_STOP' || licence?.kind === 'TIME_SERVED'
+    if (isTimedOutLicence) {
+      return LicenceStatus.TIMED_OUT
+    }
+
+    return <LicenceStatus>licence.licenceStatus
   })
 
   njkEnv.addFilter('legalStatus', (status: string) => {
