@@ -30,6 +30,7 @@ export default class InitialMeetingPlaceRoutes {
       preferredAddresses,
       formAddress,
       manualAddressEntryUrl: `${basePath}/manual-address-entry${fromReviewParam}`,
+      addressRemovedMessage: req.flash('addressRemovedMessage')?.[0],
     })
   }
 

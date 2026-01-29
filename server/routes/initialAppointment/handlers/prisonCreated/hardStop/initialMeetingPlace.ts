@@ -33,6 +33,7 @@ export default class InitialMeetingPlaceRoutes {
       formAddress,
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
       manualAddressEntryUrl: `${basePath}/manual-address-entry`,
+      addressRemovedMessage: req.flash('addressRemovedMessage')?.[0],
     })
   }
 
