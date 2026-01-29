@@ -1,5 +1,5 @@
 import { Readable } from 'stream'
-import RestClient, { SignedWithMethod } from './hmppsRestClient'
+import RestClient from './hmppsRestClient'
 import type {
   AddAdditionalConditionRequest,
   AddAddressRequest,
@@ -729,7 +729,7 @@ export default class LicenceApiClient extends RestClient {
     await this.post({ path: `/licence/id/${licenceId}/electronic-monitoring-programmes`, data: request })
   }
 
-  async getDprReportDefinitions(user: SignedWithMethod): Promise<DprReportDefinition[]> {
+  async getDprReportDefinitions(user: User): Promise<DprReportDefinition[]> {
     return (await this.get({ path: `/definitions` }, user)) as Promise<DprReportDefinition[]>
   }
 

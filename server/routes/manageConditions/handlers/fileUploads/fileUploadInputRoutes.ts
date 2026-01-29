@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import FileUploadType from '../../../../enumeration/fileUploadType'
 import { AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
+import { mapToTargetField } from '../../../../utils/utils'
 
 export default class FileUploadInputRoutes {
   constructor(
@@ -45,7 +46,7 @@ export default class FileUploadInputRoutes {
     const condition = licence.additionalLicenceConditions.find(
       (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),
     )
-    await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
+    await this.licenceService.updateAdditionalConditionData(licenceId, condition, mapToTargetField(req.body), user)
 
     return res.redirect(redirect)
   }

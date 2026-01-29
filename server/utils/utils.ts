@@ -22,6 +22,12 @@ const JSON_DATE_TIME = 'DD/MM/YYYY HH:mm'
 const SIMPLE_DATE_TIME = 'D/MM/YYYY HHmm'
 const TWELVE_HOUR_TIME = 'hh:mm a'
 
+interface FileMapInput {
+  filename: string
+  fileTargetField: string
+  [key: string]: unknown
+}
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -290,6 +296,14 @@ function escapeCsv(value: string | null | undefined): string {
   return escaped
 }
 
+const mapToTargetField = (input: FileMapInput) => {
+  const { filename, fileTargetField, ...rest } = input
+  return {
+    ...rest,
+    [fileTargetField]: filename,
+  }
+}
+
 export {
   escapeCsv,
   convertToTitleCase,
@@ -325,4 +339,5 @@ export {
   formatAddressLine,
   lowercaseFirstLetter,
   isTimeServedLicence,
+  mapToTargetField,
 }

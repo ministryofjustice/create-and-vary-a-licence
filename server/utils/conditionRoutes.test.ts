@@ -5,6 +5,7 @@ import {
   getEditConditionHref,
   getDeleteConditionHref,
   OUT_OF_BOUNDS_PREMISES_CONDITION_CODE,
+  RESTRICTION_ZONE_CONDITION_CODE,
 } from './conditionRoutes'
 
 describe('conditionRoutes', () => {
@@ -123,6 +124,32 @@ describe('conditionRoutes', () => {
           fromReview: false,
         }),
       ).toStrictEqual(`/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads`)
+    })
+
+    test('RESTRICTION_ZONE condition, from review', () => {
+      expect(
+        getEditConditionHref({
+          licenceId: 1,
+          conditionId: 2,
+          conditionCode: RESTRICTION_ZONE_CONDITION_CODE,
+          fromReview: true,
+        }),
+      ).toStrictEqual(
+        `/licence/create/id/1/additional-licence-conditions/condition/${RESTRICTION_ZONE_CONDITION_CODE}/file-uploads?fromReview=true`,
+      )
+    })
+
+    test('RESTRICTION_ZONE condition, not from review', () => {
+      expect(
+        getEditConditionHref({
+          licenceId: 1,
+          conditionId: 2,
+          conditionCode: RESTRICTION_ZONE_CONDITION_CODE,
+          fromReview: false,
+        }),
+      ).toStrictEqual(
+        `/licence/create/id/1/additional-licence-conditions/condition/${RESTRICTION_ZONE_CONDITION_CODE}/file-uploads`,
+      )
     })
   })
 
