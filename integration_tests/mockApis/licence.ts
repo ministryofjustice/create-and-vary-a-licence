@@ -3018,4 +3018,17 @@ export default {
       },
     })
   },
+  stubDeleteAppointmentAddress: () => {
+    return stubFor({
+      request: {
+        method: 'DELETE',
+        urlPattern: `/licences-api/staff/address/reference/.*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
 }
