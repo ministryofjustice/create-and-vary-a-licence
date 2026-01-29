@@ -2,8 +2,11 @@ import { Request, Response } from 'express'
 import PathType from '../../../../../enumeration/pathType'
 import AddressService from '../../../../../services/addressService'
 import ManualAddressPostcodeLookupRoutes from './manualAddressPostcodeLookup'
+import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
+import UserType from '../../../../../enumeration/userType'
 
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
+jest.mock('../../initialMeetingUpdatedFlashMessage')
 
 describe('Route Handlers - Create a licence - Manual address entry', () => {
   let req: Request
@@ -98,7 +101,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           },
           user,
         )
-
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
         expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/create/id/${licenceId}/initial-meeting-contact`)
       })
 
@@ -120,7 +123,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           },
           user,
         )
-
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
         expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/id/123/check-your-answers`)
       })
     })

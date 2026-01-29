@@ -48,6 +48,7 @@ export default class InitialMeetingPlaceRoutes {
     if (config.postcodeLookupEnabled) {
       if (preferredAddress) {
         await this.handlePreferredAddress(licence, preferredAddress, user)
+        flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
       } else if (searchQuery?.trim()) {
         return res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}`)
       }

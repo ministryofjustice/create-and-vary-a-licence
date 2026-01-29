@@ -234,6 +234,7 @@ describe('InitialMeetingPlaceRoutes', () => {
         { ...preferredAddress, isPreferredAddress: false },
         user,
       )
+      expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, licence, UserType.PRISON)
       expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
       expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
     })
