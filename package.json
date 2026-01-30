@@ -10,7 +10,7 @@
     "compile-sass": "./bin/build-css.sh -q --quiet-deps --no-source-map",
     "watch-ts": "tsc -w",
     "watch-views": "nodemon --watch server/views -e html,njk -x npm run copy-views",
-    "watch-node": "DEBUG=gov-starter-server* nodemon --env-file=.env --watch dist/ dist/server.js | bunyan -o short",
+    "watch-node": "DEBUG=gov-starter-server* nodemon --env-file=.env --enable-source-maps --watch dist/ dist/server.js | bunyan -o short",
     "watch-sass": "npm run compile-sass -- --watch",
     "build": "rm -rf dist && npm run compile-sass && tsc && npm run copy-views",
     "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
