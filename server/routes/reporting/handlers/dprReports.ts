@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import ReportListUtils from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/report-list/utils'
 import DprService from '../../../services/dprService'
 import config from '../../../config'
+import { getSystemToken } from '../../../data/systemToken'
 
 export default class DprReportsRoutes {
   constructor(private readonly dprService: DprService) {}
@@ -10,7 +11,9 @@ export default class DprReportsRoutes {
     const { id } = req.params
     const { user } = res.locals
 
-    const dprReports = await this.dprService.getDefinitions(user)
+    const { token } = await getSystemToken(req.user.username)
+
+    const dprReports = await this.dprService.getDefinitions({ token, username: user.username })
     const reportDefinition = dprReports.find(report => report.id === id)
     const variant = reportDefinition.variants.find(variant => variant.id === id)
 
@@ -21,7 +24,7 @@ export default class DprReportsRoutes {
       apiUrl: config.apis.licenceApi.url,
       apiTimeout: config.apis.licenceApi.timeout.deadline,
       layoutTemplate: 'partials/dprReport.njk',
-      tokenProvider: () => user?.token,
+      tokenProvider: () => token,
     })(req, res, next)
   }
 }
