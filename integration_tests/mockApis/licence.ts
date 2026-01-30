@@ -393,8 +393,8 @@ export default {
   stubSearchForAddresses: (): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'GET',
-        urlPattern: `/licences-api/address/search/by/text/.*`,
+        method: 'POST',
+        urlPattern: `/licences-api/address/search/by/text/`,
       },
       response: {
         status: 200,
