@@ -194,8 +194,8 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async searchForAddresses(requestBody: { searchQuery: string }, user: User): Promise<AddressSearchResponse[]> {
-    return (await this.get(
-      { path: `/address/search/by/text/${requestBody.searchQuery}` },
+    return (await this.post(
+      { path: '/address/search/by/text/', data: requestBody },
       { username: user.username },
     )) as Promise<AddressSearchResponse[]>
   }
