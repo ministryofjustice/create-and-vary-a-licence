@@ -95,7 +95,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.975.0",
     "@ministryofjustice/frontend": "8.0.0",
-    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "4.21.0",
+    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "4.28.3",
     "@ministryofjustice/hmpps-monitoring": "^1.0.0",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
@@ -112,7 +112,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "filesize": "^11.0.13",
-    "govuk-frontend": "5.13.0",
+    "govuk-frontend": "5.14.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.1",
     "jquery": "^3.7.1",
@@ -136,8 +136,8 @@
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "^1.0.2",
     "@ministryofjustice/hmpps-npm-script-allowlist": "^0.0.3",
-    "@ministryofjustice/hmpps-precommit-hooks": "2.0.0-beta.1",
-    "@tsconfig/node24": "24.0.3",
+    "@ministryofjustice/hmpps-precommit-hooks": "2.0.0-beta.5",
+    "@tsconfig/node24": "24.0.4",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
@@ -163,7 +163,7 @@
     "better-npm-audit": "^3.11.0",
     "cheerio": "^1.2.0",
     "concurrently": "^9.2.1",
-    "cypress": "^15.7.1",
+    "cypress": "^15.9.0",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
     "jest": "^30.2.0",
@@ -177,12 +177,12 @@
     "nodemon": "^3.1.11",
     "openapi-typescript": "^7.10.1",
     "redis-mock": "^0.56.3",
-    "sass": "^1.97.0",
+    "sass": "^1.97.3",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.6",
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "semver": "^7.5.3"
+    "semver": "^7.7.3"
   }
 }
