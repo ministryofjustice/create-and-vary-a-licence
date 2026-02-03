@@ -27,8 +27,8 @@ export default class ApprovalCaseRoutes {
     ).map(c => {
       return {
         ...c,
-        releaseDate: c.releaseDate ? format(parseCvlDate(c.releaseDate), 'dd MMM yyyy') : 'not found',
-        approvedOn: c.approvedOn ? format(parseCvlDateTime(c.approvedOn, { withSeconds: true }), 'dd MMM yyyy') : null,
+        releaseDate: c.releaseDate ? format(parseCvlDate(c.releaseDate), 'd MMM yyyy') : 'not found',
+        approvedOn: c.approvedOn ? format(parseCvlDateTime(c.approvedOn, { withSeconds: true }), 'd MMM yyyy') : null,
       }
     })
 
