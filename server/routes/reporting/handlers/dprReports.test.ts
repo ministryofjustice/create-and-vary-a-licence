@@ -3,9 +3,14 @@ import ReportListUtils from '@ministryofjustice/hmpps-digital-prison-reporting-f
 import DprService from '../../../services/dprService'
 import DprReportsRoutes from './dprReports'
 import { DprReportDefinition } from '../../../@types/dprReportingTypes'
+import { getSystemToken } from '../../../data/systemToken'
+
+jest.mock('../../../services/dprService')
+jest.mock('../../../data/systemToken', () => {
+  return { getSystemToken: jest.fn().mockResolvedValue({ token: 'token' }) }
+})
 
 const dprService = new DprService(null) as jest.Mocked<DprService>
-jest.mock('../../../services/dprService')
 
 describe('Route Handlers - DPR Reports', () => {
   const handler = new DprReportsRoutes(dprService)
@@ -16,6 +21,9 @@ describe('Route Handlers - DPR Reports', () => {
 
   beforeEach(() => {
     req = {
+      user: {
+        username: 'joebloggs',
+      },
       params: {
         id: '1',
       },
@@ -25,7 +33,6 @@ describe('Route Handlers - DPR Reports', () => {
       render: jest.fn(),
       locals: {
         user: {
-          token: 'token',
           username: 'joebloggs',
         },
       },
@@ -62,6 +69,8 @@ describe('Route Handlers - DPR Reports', () => {
         }),
       )
       expect(dprHandler).toHaveBeenCalledWith(req, res, next)
+      expect(getSystemToken).toHaveBeenCalledWith('joebloggs')
+      expect(dprService.getDefinitions).toHaveBeenCalledWith({ token: 'token', username: 'joebloggs' })
     })
   })
 })
