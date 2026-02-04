@@ -1,8 +1,7 @@
 import type { Request, Response } from 'express'
-import { format } from 'date-fns'
 import type PrisonerService from '../../../services/prisonerService'
 import type ApproverCaseloadService from '../../../services/lists/approverCaseloadService'
-import { cvlDateToDateShort, parseCvlDate, parseCvlDateTime } from '../../../utils/utils'
+import { cvlDateToDateShort } from '../../../utils/utils'
 
 export default class ApprovalCaseRoutes {
   constructor(
