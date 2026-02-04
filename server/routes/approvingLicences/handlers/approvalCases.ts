@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import { format } from 'date-fns'
 import type PrisonerService from '../../../services/prisonerService'
 import type ApproverCaseloadService from '../../../services/lists/approverCaseloadService'
-import { parseCvlDate, parseCvlDateTime } from '../../../utils/utils'
+import { cvlDateToDateShort, parseCvlDate, parseCvlDateTime } from '../../../utils/utils'
 
 export default class ApprovalCaseRoutes {
   constructor(
@@ -27,8 +27,8 @@ export default class ApprovalCaseRoutes {
     ).map(c => {
       return {
         ...c,
-        releaseDate: c.releaseDate ? format(parseCvlDate(c.releaseDate), 'd MMM yyyy') : 'not found',
-        approvedOn: c.approvedOn ? format(parseCvlDateTime(c.approvedOn, { withSeconds: true }), 'd MMM yyyy') : null,
+        releaseDate: c.releaseDate ? cvlDateToDateShort(c.releaseDate) : 'not found',
+        approvedOn: c.approvedOn ? cvlDateToDateShort(c.approvedOn) : null,
       }
     })
 
