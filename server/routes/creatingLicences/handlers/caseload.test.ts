@@ -248,7 +248,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             crnNumber: 'X381309',
             name: 'Person Four',
-            releaseDate: '03 Oct 2022',
+            releaseDate: '3 Oct 2022',
             prisonerNumber: '321',
             licenceId: 1,
             licenceType: LicenceType.AP,
