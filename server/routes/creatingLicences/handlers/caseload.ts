@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import statusConfig from '../../../licences/licenceStatus'
 import logger from '../../../../logger'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
-import { parseCvlDate } from '../../../utils/utils'
+import { cvlDateToDateShort, parseCvlDate } from '../../../utils/utils'
 import LicenceCreationType from '../../../enumeration/licenceCreationType'
 import { LicenceKind } from '../../../enumeration'
 
@@ -50,7 +50,7 @@ export default class CaseloadRoutes {
           comCase.licenceId,
           comCase.prisonerNumber,
         ),
-        releaseDate: comCase.releaseDate && format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy'),
+        releaseDate: comCase.releaseDate && cvlDateToDateShort(comCase.releaseDate),
         hardStopDate: comCase.hardStopDate && format(parseCvlDate(comCase.hardStopDate), 'dd/MM/yyyy'),
         hardStopWarningDate:
           comCase.hardStopWarningDate && format(parseCvlDate(comCase.hardStopWarningDate), 'dd/MM/yyyy'),

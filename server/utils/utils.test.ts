@@ -318,6 +318,9 @@ describe('cvlDateToDateShort', () => {
   it('format date', () => {
     expect(cvlDateToDateShort('01/01/2023')).toEqual('1 Jan 2023')
   })
+  it('format date with time', () => {
+    expect(cvlDateToDateShort('01/01/2023 12:13:14')).toEqual('1 Jan 2023')
+  })
 })
 
 describe('parseCvlDate', () => {
