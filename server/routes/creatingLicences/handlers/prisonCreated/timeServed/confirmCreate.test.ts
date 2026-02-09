@@ -222,5 +222,22 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
     })
+
+    it('should redirect to NDelius record missing if answer is YES and licence cannot be created because of missing Delius record', async () => {
+      req.body.answer = 'Yes'
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      licenceService.createPrisonLicence.mockResolvedValue(null)
+
+      await handler.POST(req, res)
+
+      expect(licenceService.getPrisonerDetail).toHaveBeenCalledWith('ABC123', {
+        username: 'joebloggs',
+      })
+      expect(licenceService.createPrisonLicence).toHaveBeenCalledWith('ABC123', {
+        username: 'joebloggs',
+      })
+      expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/nomisId/ABC123/ndelius-missing-error')
+      expect(timeServedExternalRecordService.updateTimeServedExternalRecord).not.toHaveBeenCalled()
+    })
   })
 })

@@ -13,7 +13,6 @@ export type UpdateStandardConditionDataRequest = components['schemas']['UpdateSt
 export type UpdateAdditionalConditionDataRequest = components['schemas']['UpdateAdditionalConditionDataRequest']
 export type AdditionalConditionData = components['schemas']['AdditionalConditionData']
 export type ContactNumberRequest = components['schemas']['ContactNumberRequest']
-export type CreateLicenceRequest = components['schemas']['CreateLicenceRequest']
 export type CreateLicenceResponse = components['schemas']['CreateLicenceResponse']
 export type CreateVariationResponse = components['schemas']['CreateVariationResponse']
 export type EditLicenceResponse = components['schemas']['EditLicenceResponse']

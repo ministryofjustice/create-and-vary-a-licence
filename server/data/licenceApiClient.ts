@@ -115,18 +115,25 @@ export default class LicenceApiClient extends RestClient {
     }
   }
 
-  async createPrisonLicence(nomsId: string, user: User): Promise<CreateLicenceResponse> {
+  async createPrisonLicence(nomsId: string, user: User): Promise<CreateLicenceResponse | null> {
     const response = (await this.post(
       {
         path: `/licence/prison/nomisid/${nomsId}`,
-        returnBodyOnErrorIfPredicate: e => e.response.status === 409,
+        returnBodyOnErrorIfPredicate: e => e.response.status === 409 || e.response.status === 422,
       },
       { username: user.username },
     )) as Record<string, unknown>
 
-    return response.status === 409
-      ? { licenceId: response.existingResourceId as number }
-      : { licenceId: response.licenceId as number }
+    const { status } = response
+    if (status === 409) {
+      return { licenceId: response.existingResourceId as number }
+    }
+
+    if (status === 422) {
+      return null
+    }
+
+    return { licenceId: response.licenceId as number }
   }
 
   async createProbationLicence(nomsId: string, user: User): Promise<CreateLicenceResponse> {

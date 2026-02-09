@@ -10,6 +10,7 @@ import CreateLicenceInNomisOrCvl from '../../../types/createLicenceInNomisOrCvl'
 import ContactProbationTeamRoutes from './contactProbationTeamRoutes'
 import { CreateTimeServedProbationConfirmContact } from '../../../types/createTimeServedProbationConfirmContact'
 import PathType from '../../../../../enumeration/pathType'
+import NDeliusRecordMissingRoutes from './ndeliusRecordMissingRoutes'
 
 export default function Index({ licenceService, conditionService, timeServedService }: Services): Router {
   const router = Router()
@@ -46,6 +47,10 @@ export default function Index({ licenceService, conditionService, timeServedServ
     const controller = new ContactProbationTeamRoutes(timeServedService, PathType.CREATE)
     get('/create/id/:licenceId/contact-probation-team', controller.GET)
     post('/create/id/:licenceId/contact-probation-team', controller.POST, CreateTimeServedProbationConfirmContact)
+  }
+  {
+    const controller = new NDeliusRecordMissingRoutes(licenceService)
+    get('/create/nomisId/:nomisId/ndelius-missing-error', controller.GET)
   }
   return router
 }
