@@ -1,0 +1,53 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Create and vary a licence – There is a problem – NDelius link missing" %}
+{% set pageId = "time-served-ndelius-link-missing" %}
+{% set backLinkHref = backLink %}
+
+{% block beforeContent %}
+    {{ super() }}
+    <div class="govuk-grid-row" role="region" aria-label="Licence summary">
+        <div class="govuk-grid-column-full border-bottom">
+            <div class="govuk-caption-m">
+                <span class="pipe-separated__item">Prison number: {{ nomisId }}</span>
+                <span class="pipe-separated__item" data-qa="date">
+                Release date: {{ licenceStartDate | datetimeToDate }}
+            </span>
+                <span class="pipe-separated__item">Date of birth: {{ dateOfBirth | datetimeToDate }}</span>
+            </div>
+            <span class="govuk-heading-m">NDelius Missing</span>
+        </div>
+    </div>
+
+{% endblock %}
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-top-5">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+                There is a problem with this licence?
+            </h1>
+            <p class="govuk-body">
+                You cannot start this person’s licence because their prison number is missing from NDelius. This means they cannot be linked to a NOMIS record.
+            </p>
+            <h2 class="govuk-heading-m govuk-!-margin-top-6">
+                How to fix this issue
+            </h2>
+            <p class="govuk-body">
+                Before you can continue, ask the court or community probation team to add this person’s prison number to their NDelius record using Search DSS.
+            </p>
+            <h2 class="govuk-heading-m govuk-!-margin-top-6">
+                For support
+            </h2>
+            <p class="govuk-body">
+                If they need help, tell them to <a data-qa="technology-portal-link" href="https://mojprod.service-now.com/moj_sp?id=sc_cat_item&table=sc_cat_item&sys_id=e389e8931b8bc65025dc6351f54bcb82&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=e389e8931b8bc65025dc6351f54bcb82%20">request support on Technology Portal</a>
+            </p>
+            {{ govukButton({
+                text: "Return to case list",
+                classes: "govuk-button--secondary govuk-!-margin-top-3",
+                href: backLink,
+                attributes: { 'data-qa': 'return-to-case-list' }
+            }) }}
+        </div>
+    </div>
+{% endblock %}

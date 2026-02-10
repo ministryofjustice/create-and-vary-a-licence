@@ -54,8 +54,11 @@ export default class ConfirmCreateRoutes {
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
     if (answer === YesOrNo.YES) {
-      const { licenceId } = await this.licenceService.createPrisonLicence(nomisId, user)
-      return res.redirect(`/licence/time-served/create/id/${licenceId}/initial-meeting-name`)
+      const createLicenceResponse = await this.licenceService.createPrisonLicence(nomisId, user)
+      if (createLicenceResponse == null) {
+        return res.redirect(`/licence/time-served/create/nomisId/${nomisId}/ndelius-missing-error`)
+      }
+      return res.redirect(`/licence/time-served/create/id/${createLicenceResponse.licenceId}/initial-meeting-name`)
     }
 
     if (answer === YesOrNo.NO) {
