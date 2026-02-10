@@ -10,7 +10,7 @@
     <div class="govuk-grid-row" role="region" aria-label="Licence summary">
         <div class="govuk-grid-column-full border-bottom">
             <div class="govuk-caption-m">
-                <span class="pipe-separated__item">Prison number: {{ nomsId }}</span>
+                <span class="pipe-separated__item">Prison number: {{ nomisId }}</span>
                 <span class="pipe-separated__item" data-qa="date">
                 Release date: {{ licenceStartDate | datetimeToDate }}
             </span>
@@ -40,7 +40,7 @@
                 For support
             </h2>
             <p class="govuk-body">
-                If they need help, tell them to <a href="https://mojprod.service-now.com/moj_sp?id=sc_cat_item&table=sc_cat_item&sys_id=e389e8931b8bc65025dc6351f54bcb82&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=e389e8931b8bc65025dc6351f54bcb82%20">request support on Technology Portal</a>
+                If they need help, tell them to <a data-qa="technology-portal-link" href="https://mojprod.service-now.com/moj_sp?id=sc_cat_item&table=sc_cat_item&sys_id=e389e8931b8bc65025dc6351f54bcb82&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=e389e8931b8bc65025dc6351f54bcb82%20">request support on Technology Portal</a>
             </p>
             {{ govukButton({
                 text: "Return to case list",
