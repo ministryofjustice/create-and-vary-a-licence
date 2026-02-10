@@ -1,3 +1,5 @@
+import { createDprServices } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/utils/CreateDprServices'
+
 import UserService from './userService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
@@ -16,7 +18,6 @@ import TimelineService from './timelineService'
 import CaCaseloadService from './lists/caCaseloadService'
 import ComCaseloadService from './lists/comCaseloadService'
 import HdcService from './hdcService'
-import DprService from './dprService'
 import AddressService from './addressService'
 import TimeServedService from './timeServedService'
 
@@ -28,7 +29,16 @@ const {
   licenceApiClient,
   prisonRegisterApiClient,
   feComponentsClient,
+  reportingClients,
 } = dataAccess()
+
+const dprServices = createDprServices(reportingClients, {
+  bookmarking: true,
+  download: true,
+  collections: false,
+  missingReports: false,
+  saveDefaults: true,
+})
 
 const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
@@ -47,7 +57,6 @@ const searchService = new SearchService(licenceApiClient)
 const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
 const hdcService = new HdcService(licenceApiClient)
-const dprService = new DprService(licenceApiClient)
 const addressService = new AddressService(licenceApiClient)
 const timeServedService = new TimeServedService(licenceApiClient)
 
@@ -70,9 +79,9 @@ export const services = {
   feComponentsService,
   timelineService,
   hdcService,
-  dprService,
   addressService,
   timeServedService,
+  dprServices,
 }
 
 export type Services = typeof services

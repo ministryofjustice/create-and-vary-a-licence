@@ -10,7 +10,7 @@
     <h1 class="govuk-heading-l">Reporting</h1>
     <div class="grid-row">
       <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-m govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">CVL</h2>
+        <h2 class="govuk-heading-m govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">Create and vary a licence reports</h2>
         <div class="card-group">
           <div class="govuk-grid-column-one-third card-group__item">
             {{ card({
@@ -34,24 +34,19 @@
 
     <div class="grid-row">
       <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-m govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">DPR</h2>
+        <h2 class="govuk-heading-m govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">Digital prison reporting reports</h2>
         <div class="card-group">
-          <div class="govuk-grid-column-one-third card-group__item">
-            {{ card({
-                "href": "/reports/active-licences",
+            {% for report in definitions %}
+              <div class="govuk-grid-column-one-third card-group__item">
+              {% set variant = report.variants[0] %}
+              {{ card({
+                "href": "/dpr/view-report/sync/report/" + report.id + "/" + variant.id + "/load-report",
                 "clickable": "true",
-                "heading": "Active licences in the last 3 months",
-                "description": "Active licences with release date in the last 3 months"
-            }) }}
-          </div>
-          <div class="govuk-grid-column-one-third card-group__item">
-            {{ card({
-                "href": "/reports/em-install-at-source",
-                "clickable": "true",
-                "heading": "EM Install at Source",
-                "description": "Prisoners due for release in the next 14 days who have a licence with an Electronic Monitoring Condition"
-            }) }}
-          </div>
+                "heading": variant.name,
+                "description": variant.description
+              }) }}
+              </div>
+            {% endfor %}
         </div>
       </div>
     </div>

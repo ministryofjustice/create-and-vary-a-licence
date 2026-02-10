@@ -1,8 +1,8 @@
+import { components } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/types/api'
 import CvlUserDetails from '../CvlUserDetails'
-import { DprReportDefinition } from '../dprReportingTypes'
 import { LicenceConditionChange, Licence } from '../licenceApiClientTypes'
 
-export default {}
+type ReportDefinitionSummary = components['schemas']['ReportDefinitionSummary']
 
 declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
@@ -20,7 +20,7 @@ declare module 'express-session' {
   }
 }
 
-export declare global {
+declare global {
   namespace Express {
     interface User {
       username: string
@@ -35,7 +35,7 @@ export declare global {
     interface Locals {
       user?: LocalsUser
       licence: Licence
-      reportDefinitions?: DprReportDefinition[]
+      definitions?: ReportDefinitionSummary[]
     }
 
     interface Request {
@@ -45,6 +45,7 @@ export declare global {
     }
 
     interface Response {
+      locals: Locals
       internalRedirect(url: string): void
       renderPDF(view: string, pageData: Record<string, unknown>, options: Record<string, unknown>): void
     }
