@@ -1,5 +1,5 @@
 import { Readable } from 'stream'
-import RestClient, { SignedWithMethod } from './hmppsRestClient'
+import RestClient from './hmppsRestClient'
 import type {
   AddAdditionalConditionRequest,
   AddAddressRequest,
@@ -74,7 +74,6 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
 import logger from '../../logger'
 import { isVariation } from '../utils/utils'
-import { DprReportDefinition } from '../@types/dprReportingTypes'
 
 export default class LicenceApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -734,10 +733,6 @@ export default class LicenceApiClient extends RestClient {
 
   async updateElectronicMonitoringProgramme(licenceId: number, request: UpdateElectronicMonitoringProgrammeRequest) {
     await this.post({ path: `/licence/id/${licenceId}/electronic-monitoring-programmes`, data: request })
-  }
-
-  async getDprReportDefinitions(user: SignedWithMethod): Promise<DprReportDefinition[]> {
-    return (await this.get({ path: `/definitions` }, user)) as Promise<DprReportDefinition[]>
   }
 
   async syncComAllocation(crn: string, user?: User): Promise<void> {

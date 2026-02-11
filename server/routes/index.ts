@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import type { Environment } from 'nunjucks'
 import { Services } from '../services'
 import createLicenceRoutes from './creatingLicences'
 import createHardStopLicenceRoutes from './creatingLicences/handlers/prisonCreated/hardStop'
@@ -30,7 +31,7 @@ import staffRoutes from './staff'
 import hardStopStaffRoutes from './initialAppointment/handlers/prisonCreated/hardStop/staff'
 import createTimeServedLicenceRoutes from './creatingLicences/handlers/prisonCreated/timeServed'
 
-export default function Index(services: Services): Router {
+export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
   const router = Router({ mergeParams: true })
   const prisonerController = new PrisonerController(services.prisonerService)
 
@@ -60,7 +61,7 @@ export default function Index(services: Services): Router {
   router.use(hardStopInitialAppointmentRoutes(services))
   router.use(timeServedInitialAppointmentRoutes(services))
   router.use(pathfinderRoutes(services))
-  router.use(dprRoutes(services))
+  router.use(dprRoutes(services, nunjucksEnvironment))
   router.use(createTimeServedLicenceRoutes(services))
 
   router.get('/prisoner/:nomsId/image', prisonerController.getImage())
