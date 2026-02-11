@@ -5,10 +5,13 @@ import LicenceService from '../../../../../services/licenceService'
 import { convertToTitleCase } from '../../../../../utils/utils'
 import { ExternalTimeServedRecordRequest } from '../../../../../@types/licenceApiClientTypes'
 import TimeServedService from '../../../../../services/timeServedService'
+import ProbationService from '../../../../../services/probationService'
+import logger from '../../../../../../logger'
 
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly licenceService: LicenceService,
+    private readonly probationService: ProbationService,
     private readonly timeServedService: TimeServedService,
   ) {}
 
@@ -20,6 +23,13 @@ export default class ConfirmCreateRoutes {
       cvl: { licenceType, isEligibleForEarlyRelease, licenceStartDate, licenceKind },
       prisoner: { dateOfBirth, firstName, lastName, bookingId },
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
+
+    try {
+      await this.probationService.getProbationer(nomisId)
+    } catch (e) {
+      logger.info(`Probation record not found for nomisId ${nomisId}: ${e.message}`)
+      return res.redirect(`/licence/time-served/create/nomisId/${nomisId}/ndelius-missing-error`)
+    }
 
     const existingTimeServedExternalRecord = await this.timeServedService.getTimeServedExternalRecord(
       nomisId,
