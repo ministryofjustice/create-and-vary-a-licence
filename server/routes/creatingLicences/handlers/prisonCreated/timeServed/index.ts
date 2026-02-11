@@ -12,7 +12,12 @@ import { CreateTimeServedProbationConfirmContact } from '../../../types/createTi
 import PathType from '../../../../../enumeration/pathType'
 import NDeliusRecordMissingRoutes from './ndeliusRecordMissingRoutes'
 
-export default function Index({ licenceService, conditionService, timeServedService }: Services): Router {
+export default function Index({
+  licenceService,
+  conditionService,
+  probationService,
+  timeServedService,
+}: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/time-served${path}`
@@ -35,7 +40,7 @@ export default function Index({ licenceService, conditionService, timeServedServ
       handler,
     )
   {
-    const controller = new ConfirmCreateRoutes(licenceService, timeServedService)
+    const controller = new ConfirmCreateRoutes(licenceService, probationService, timeServedService)
     get('/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service', controller.GET)
     post(
       '/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service',

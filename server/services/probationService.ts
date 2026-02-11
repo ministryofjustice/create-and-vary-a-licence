@@ -19,7 +19,7 @@ export default class ProbationService {
 
   async getProbationer(crnOrNomisId: string): Promise<DeliusRecord> {
     const probationer = await this.deliusClient.getCase(crnOrNomisId)
-    if (!probationer) throw new Error(`No delius record found`)
+    if (!probationer || !probationer.crn) throw new Error(`No delius record found`)
     return probationer
   }
 

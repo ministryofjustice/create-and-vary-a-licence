@@ -5,15 +5,18 @@ import LicenceService from '../../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import { PrisonerWithCvlFields, ExternalTimeServedRecordResponse } from '../../../../../@types/licenceApiClientTypes'
 import TimeServedService from '../../../../../services/timeServedService'
+import ProbationService from '../../../../../services/probationService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
+const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 const timeServedExternalRecordService = new TimeServedService(null) as jest.Mocked<TimeServedService>
 
 jest.mock('../../../../../services/licenceService')
+jest.mock('../../../../../services/probationService')
 jest.mock('../../../../../services/timeServedService')
 
 describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(licenceService, timeServedExternalRecordService)
+  const handler = new ConfirmCreateRoutes(licenceService, probationService, timeServedExternalRecordService)
   let req: Request
   let res: Response
 
@@ -117,6 +120,16 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
         backLink: req.session?.returnToCase,
         existingTimeServedExternalRecord,
       })
+    })
+
+    it('should redirect to ndelius record missing page is Delius record is missing', async () => {
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      probationService.getProbationer.mockRejectedValue(new Error('Delius record not found'))
+
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/time-served/create/nomisId/${req.params.nomisId}/ndelius-missing-error`,
+      )
     })
   })
 
