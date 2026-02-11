@@ -35,7 +35,7 @@ function appSetup(services: Services, userSupplier: () => User): Express {
 
   app.set('view engine', 'njk')
 
-  nunjucksSetup(app, testAppInfo)
+  const nunjucksEnvironment = nunjucksSetup(app, testAppInfo)
   app.use(setUpHealthChecks(testAppInfo))
   app.use((req, res, next) => {
     req.user = userSupplier()
@@ -47,7 +47,7 @@ function appSetup(services: Services, userSupplier: () => User): Express {
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
-  app.use(cvlRoutes(services))
+  app.use(cvlRoutes(services, nunjucksEnvironment))
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler())
 
@@ -65,5 +65,6 @@ export function appWithAllRoutes({
   signedCookies?: () => Record<string, Record<string, string>>
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(services as Services, userSupplier)
+  const overrideServices = { dprServices: { downloadPermissionService: { enabled: true } }, ...services } as Services
+  return appSetup(overrideServices, userSupplier)
 }
