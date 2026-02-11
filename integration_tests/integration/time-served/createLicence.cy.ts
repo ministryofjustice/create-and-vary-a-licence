@@ -26,6 +26,7 @@ context('Create a Time Served licence', () => {
     stubTimeServedOmuCase({ licenceId: null, hasNomisLicence: false, licenceStatus: 'TIMED_OUT' })
     cy.task('stubUpdateTimeServedExternalRecord')
     cy.task('stubGetTimeServedExternalRecordReasonNotSet')
+    cy.task('stubGetProbationer')
     cy.signIn()
   })
 
