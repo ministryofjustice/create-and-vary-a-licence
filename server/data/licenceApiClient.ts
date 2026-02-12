@@ -659,7 +659,7 @@ export default class LicenceApiClient extends RestClient {
       {
         path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load`,
       },
-      { username: user?.username },
+      { username: user.username },
     )) as Promise<ComCreateCase[]>
   }
 
@@ -669,7 +669,7 @@ export default class LicenceApiClient extends RestClient {
         path: `/caseload/com/team/create-case-load`,
         data: teamCaseloadRequest,
       },
-      { username: user?.username },
+      { username: user.username },
     )) as Promise<ComCreateCase[]>
   }
 
@@ -678,7 +678,7 @@ export default class LicenceApiClient extends RestClient {
       {
         path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/vary-case-load`,
       },
-      { username: user?.username },
+      { username: user.username },
     )) as Promise<ComVaryCase[]>
   }
 
@@ -688,7 +688,7 @@ export default class LicenceApiClient extends RestClient {
         path: `/caseload/com/team/vary-case-load`,
         data: teamCaseloadRequest,
       },
-      { username: user?.username },
+      { username: user.username },
     )) as Promise<ComVaryCase[]>
   }
 
