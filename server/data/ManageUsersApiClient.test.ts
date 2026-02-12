@@ -1,5 +1,5 @@
 import HmppsRestClient from './hmppsRestClient'
-import ManageUsersApiClient, { PrisonUserDetails, PrisonUserEmail } from './manageUsersApiClient'
+import ManageUsersApiClient, { UserDetails, UserEmail } from './manageUsersApiClient'
 import { User } from '../@types/CvlUserDetails'
 import { InMemoryTokenStore } from './tokenStore'
 
@@ -19,7 +19,7 @@ describe('Auth Api client tests', () => {
   })
 
   it('Get user', async () => {
-    get.mockResolvedValue({ name: 'Joe Bloggs' } as PrisonUserDetails)
+    get.mockResolvedValue({ name: 'Joe Bloggs' } as UserDetails)
 
     const result = await authClient.getUser({ token: 'token' } as User)
 
@@ -28,7 +28,7 @@ describe('Auth Api client tests', () => {
   })
 
   it('Get user email', async () => {
-    get.mockResolvedValue({ email: 'jbloggs@justice.gov.uk' } as PrisonUserEmail)
+    get.mockResolvedValue({ email: 'jbloggs@justice.gov.uk' } as UserEmail)
 
     const result = await authClient.getUserEmail({ token: 'token' } as User)
 

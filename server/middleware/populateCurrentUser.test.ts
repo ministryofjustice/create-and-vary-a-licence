@@ -4,7 +4,7 @@ import { addDays, format, subDays } from 'date-fns'
 import populateCurrentUser from './populateCurrentUser'
 import UserService from '../services/userService'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
-import { PrisonUserDetails, PrisonUserEmail } from '../data/manageUsersApiClient'
+import { UserDetails, UserEmail } from '../data/manageUsersApiClient'
 import { DeliusStaff } from '../@types/deliusClientTypes'
 import LicenceService from '../services/licenceService'
 import { User } from '../@types/CvlUserDetails'
@@ -95,7 +95,7 @@ describe('populateCurrentUser', () => {
       username: 'joebloggs',
       email: 'jbloggs@prison.gov.uk',
       verified: true,
-    } as PrisonUserEmail)
+    } as UserEmail)
 
     userServiceMock.getPrisonUserCaseloads.mockResolvedValue([
       {
@@ -144,7 +144,7 @@ describe('populateCurrentUser', () => {
       username: 'joebloggs',
       email: 'jbloggs@prison.gov.uk',
       verified: true,
-    } as PrisonUserEmail)
+    } as UserEmail)
 
     userServiceMock.getPrisonUserCaseloads.mockResolvedValue([
       {
@@ -167,6 +167,7 @@ describe('populateCurrentUser', () => {
       hasMultipleCaseloadsInNomis: true,
       hasSelectedMultiplePrisonCaseloads: false,
       prisonCaseloadToDisplay: ['MDI'],
+      reportUserId: '3000',
     })
     expect(licenceServiceMock.updatePrisonUserDetails).toHaveBeenCalledWith({
       staffUsername: 'joebloggs',
@@ -192,7 +193,7 @@ describe('populateCurrentUser', () => {
     userServiceMock.getUserEmail.mockResolvedValue({
       username: 'joebloggs',
       verified: true,
-    } as PrisonUserEmail)
+    } as UserEmail)
 
     userServiceMock.getPrisonUserCaseloads.mockResolvedValue([
       {
@@ -300,16 +301,18 @@ describe('populateCurrentUser', () => {
 
     userServiceMock.getUser.mockResolvedValue({
       name: 'Joe Bloggs',
-    } as PrisonUserDetails)
+      userId: 'some-id',
+    } as UserDetails)
     userServiceMock.getUserEmail.mockResolvedValue({
       email: 'jbloggs@prison.gov.uk',
-    } as PrisonUserEmail)
+    } as UserEmail)
 
     await middleware(req, res, next)
 
     expect(req.session.currentUser).toMatchObject({
       displayName: 'Joe Bloggs',
       emailAddress: 'jbloggs@prison.gov.uk',
+      reportUserId: 'some-id',
     })
     expect(next).toHaveBeenCalled()
   })

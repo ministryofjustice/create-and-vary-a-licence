@@ -35,10 +35,22 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
     const { token } = await getSystemToken(req.user.username)
     const dprUser = new DprUser()
     dprUser.token = token
-    dprUser.id = req.user.uuid
+    dprUser.id = res.locals.user.reportUserId
     dprUser.emailAddress = res.locals.user.emailAddress
     dprUser.displayName = res.locals.user.displayName
     res.locals.dprUser = dprUser
+    return next()
+  }
+
+  const giveDownloadPermissionsMiddleware: RequestHandler = async (req, res, next): Promise<void> => {
+    const { dprUser } = res.locals
+    for (const report of res.locals.definitions ?? []) {
+      const variants = report.variants?.map(variants => variants.id) ?? []
+      for (const variant of variants) {
+        // eslint-disable-next-line no-await-in-loop
+        await services.dprServices.downloadPermissionService.saveDownloadPermissionData(dprUser.id, report.id, variant)
+      }
+    }
     return next()
   }
 
@@ -52,7 +64,7 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   const reportHomeHandler = new ReportHomeRoutes()
   get('/', dprUserMiddleware, dprResourcesMiddleware, reportHomeHandler.GET)
 
-  router.use('/dpr', dprUserMiddleware, dprResourcesMiddleware)
+  router.use('/dpr', dprUserMiddleware, dprResourcesMiddleware, giveDownloadPermissionsMiddleware)
   router.use('/', dprPlatformRoutes({ services: services.dprServices, layoutPath }))
 
   return router

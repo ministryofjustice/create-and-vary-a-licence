@@ -49,7 +49,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             cvlUser.hasMultipleCaseloadsInNomis = cvlUser.prisonCaseload.length > 1
             cvlUser.hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
             cvlUser.prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [cvlUser.activeCaseload]
-
+            cvlUser.reportUserId = prisonUser.staffId.toString()
             logger.info(
               `Prison user session : username ${prisonUser?.username} name ${cvlUser?.displayName} caseload ${cvlUser?.prisonCaseload}`,
             )
@@ -77,6 +77,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             cvlUser.probationPduCodes = Array.from(new Set(teams.map(team => team?.borough?.code)))
             cvlUser.probationLauCodes = Array.from(new Set(teams.map(team => team?.district?.code)))
             cvlUser.probationTeamCodes = teams.map(team => team?.code)
+            cvlUser.reportUserId = null
             cvlUser.probationTeams = teams
               .map(team => ({ code: team.code, label: team.description }))
               .sort((a, b) => (a.label > b.label ? 1 : -1))
@@ -98,6 +99,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             const authUser = await userService.getUser(user)
             if (authUser) {
               cvlUser.displayName = convertToTitleCase(authUser?.name)
+              cvlUser.reportUserId = authUser?.userId
             }
 
             logger.info(`Auth user session : username ${user?.username} name ${cvlUser?.displayName}`)
