@@ -539,11 +539,17 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async searchForOffenderOnStaffCaseload(searchRequest: ProbationSearchRequest): Promise<ComSearchResponse> {
-    return (await this.post({
-      path: `/caseload/com/case-search`,
-      data: searchRequest,
-    })) as Promise<ComSearchResponse>
+  async searchForOffenderOnStaffCaseload(
+    searchRequest: ProbationSearchRequest,
+    user: User,
+  ): Promise<ComSearchResponse> {
+    return (await this.post(
+      {
+        path: `/caseload/com/case-search`,
+        data: searchRequest,
+      },
+      { username: user.username },
+    )) as Promise<ComSearchResponse>
   }
 
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {

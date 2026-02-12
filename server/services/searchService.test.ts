@@ -13,13 +13,19 @@ describe('Search Service', () => {
   })
 
   describe('Probation Search', () => {
+    const user = {
+      deliusStaffIdentifier: 3000,
+    } as User
     it('calls Licence API client to search', async () => {
-      await searchService.getComSearchResponses('Test', 3000)
-      expect(licenceApiClient.searchForOffenderOnStaffCaseload).toHaveBeenCalledWith({
-        query: 'Test',
-        staffIdentifier: 3000,
-        sortBy: [],
-      })
+      await searchService.getComSearchResponses('Test', user)
+      expect(licenceApiClient.searchForOffenderOnStaffCaseload).toHaveBeenCalledWith(
+        {
+          query: 'Test',
+          staffIdentifier: 3000,
+          sortBy: [],
+        },
+        user,
+      )
     })
   })
 

@@ -10,12 +10,15 @@ import { User } from '../@types/CvlUserDetails'
 export default class SearchService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
-  async getComSearchResponses(queryTerm: string, deliusStaffIdentifier: number): Promise<ComSearchResponse> {
-    return this.licenceApiClient.searchForOffenderOnStaffCaseload({
-      query: queryTerm,
-      staffIdentifier: deliusStaffIdentifier,
-      sortBy: [],
-    })
+  async getComSearchResponses(queryTerm: string, user: User): Promise<ComSearchResponse> {
+    return this.licenceApiClient.searchForOffenderOnStaffCaseload(
+      {
+        query: queryTerm,
+        staffIdentifier: user.deliusStaffIdentifier,
+        sortBy: [],
+      },
+      user,
+    )
   }
 
   async getCaSearchResults(queryTerm: string, prisonCaseloads: string[]): Promise<PrisonCaseAdminSearchResult> {
