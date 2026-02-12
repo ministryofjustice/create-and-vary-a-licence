@@ -55,11 +55,14 @@ describe('Search Service', () => {
     } as User
     it('calls Licence API client to search', async () => {
       await searchService.getVaryApproverSearchResults(user, 'Test')
-      expect(licenceApiClient.searchForOffenderOnVaryApproverCaseload).toHaveBeenCalledWith({
-        probationPduCodes: ['PDU A', 'PDU B'],
-        probationAreaCode: undefined,
-        searchTerm: 'Test',
-      })
+      expect(licenceApiClient.searchForOffenderOnVaryApproverCaseload).toHaveBeenCalledWith(
+        {
+          probationPduCodes: ['PDU A', 'PDU B'],
+          probationAreaCode: undefined,
+          searchTerm: 'Test',
+        },
+        user,
+      )
     })
   })
 })

@@ -654,48 +654,68 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<CaCase[]>
   }
 
-  async getStaffCreateCaseload(deliusStaffIdentifier: number): Promise<ComCreateCase[]> {
-    return (await this.get({
-      path: `/caseload/com/staff/${deliusStaffIdentifier}/create-case-load`,
-    })) as Promise<ComCreateCase[]>
+  async getStaffCreateCaseload(user: User): Promise<ComCreateCase[]> {
+    return (await this.get(
+      {
+        path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load`,
+      },
+      { username: user?.username },
+    )) as Promise<ComCreateCase[]>
   }
 
-  async getTeamCreateCaseload(teamCaseloadRequest: TeamCaseloadRequest): Promise<ComCreateCase[]> {
-    return (await this.post({
-      path: `/caseload/com/team/create-case-load`,
-      data: teamCaseloadRequest,
-    })) as Promise<ComCreateCase[]>
+  async getTeamCreateCaseload(teamCaseloadRequest: TeamCaseloadRequest, user: User): Promise<ComCreateCase[]> {
+    return (await this.post(
+      {
+        path: `/caseload/com/team/create-case-load`,
+        data: teamCaseloadRequest,
+      },
+      { username: user?.username },
+    )) as Promise<ComCreateCase[]>
   }
 
-  async getStaffVaryCaseload(deliusStaffIdentifier: number): Promise<ComVaryCase[]> {
-    return (await this.get({
-      path: `/caseload/com/staff/${deliusStaffIdentifier}/vary-case-load`,
-    })) as Promise<ComVaryCase[]>
+  async getStaffVaryCaseload(user: User): Promise<ComVaryCase[]> {
+    return (await this.get(
+      {
+        path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/vary-case-load`,
+      },
+      { username: user?.username },
+    )) as Promise<ComVaryCase[]>
   }
 
-  async getTeamVaryCaseload(teamCaseloadRequest: TeamCaseloadRequest): Promise<ComVaryCase[]> {
-    return (await this.post({
-      path: `/caseload/com/team/vary-case-load`,
-      data: teamCaseloadRequest,
-    })) as Promise<ComVaryCase[]>
+  async getTeamVaryCaseload(teamCaseloadRequest: TeamCaseloadRequest, user: User): Promise<ComVaryCase[]> {
+    return (await this.post(
+      {
+        path: `/caseload/com/team/vary-case-load`,
+        data: teamCaseloadRequest,
+      },
+      { username: user?.username },
+    )) as Promise<ComVaryCase[]>
   }
 
   async getVaryApproverCaseload(
     varyApproverCaseloadRequest: VaryApproverCaseloadSearchRequest,
+    user: User,
   ): Promise<VaryApproverCase[]> {
-    return (await this.post({
-      path: `/caseload/vary-approver`,
-      data: varyApproverCaseloadRequest,
-    })) as Promise<VaryApproverCase[]>
+    return (await this.post(
+      {
+        path: `/caseload/vary-approver`,
+        data: varyApproverCaseloadRequest,
+      },
+      { username: user.username },
+    )) as Promise<VaryApproverCase[]>
   }
 
   async searchForOffenderOnVaryApproverCaseload(
     searchRequest: VaryApproverCaseloadSearchRequest,
+    user: User,
   ): Promise<VaryApproverCaseloadSearchResponse> {
-    return (await this.post({
-      path: `/caseload/vary-approver/case-search`,
-      data: searchRequest,
-    })) as Promise<VaryApproverCaseloadSearchResponse>
+    return (await this.post(
+      {
+        path: `/caseload/vary-approver/case-search`,
+        data: searchRequest,
+      },
+      { username: user.username },
+    )) as Promise<VaryApproverCaseloadSearchResponse>
   }
 
   async getHdcLicenceData(licenceId: number): Promise<HdcLicenceData> {

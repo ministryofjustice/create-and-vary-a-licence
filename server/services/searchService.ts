@@ -36,10 +36,13 @@ export default class SearchService {
   }
 
   async getVaryApproverSearchResults(user: User, queryTerm: string): Promise<VaryApproverCaseloadSearchResponse> {
-    return this.licenceApiClient.searchForOffenderOnVaryApproverCaseload({
-      probationPduCodes: user.probationPduCodes,
-      probationAreaCode: user.probationAreaCode,
-      searchTerm: queryTerm,
-    })
+    return this.licenceApiClient.searchForOffenderOnVaryApproverCaseload(
+      {
+        probationPduCodes: user.probationPduCodes,
+        probationAreaCode: user.probationAreaCode,
+        searchTerm: queryTerm,
+      },
+      user,
+    )
   }
 }

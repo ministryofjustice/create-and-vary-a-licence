@@ -667,19 +667,27 @@ describe('Licence API client tests', () => {
 
   describe('Vary approver caseloads: ', () => {
     it('Should get licences in a PDU for variation approval', async () => {
-      await licenceApiClient.getVaryApproverCaseload({ probationPduCodes: ['N55PDV'] })
-      expect(post).toHaveBeenCalledWith({
-        path: '/caseload/vary-approver',
-        data: { probationPduCodes: ['N55PDV'] },
-      })
+      await licenceApiClient.getVaryApproverCaseload({ probationPduCodes: ['N55PDV'] }, {
+        username: 'joebloggs',
+      } as User)
+      expect(post).toHaveBeenCalledWith(
+        {
+          path: '/caseload/vary-approver',
+          data: { probationPduCodes: ['N55PDV'] },
+        },
+        { username: 'joebloggs' },
+      )
     })
 
     it('Should get all licences in a region for variation approval', async () => {
-      await licenceApiClient.getVaryApproverCaseload({ probationAreaCode: 'N01' })
-      expect(post).toHaveBeenCalledWith({
-        path: '/caseload/vary-approver',
-        data: { probationAreaCode: 'N01' },
-      })
+      await licenceApiClient.getVaryApproverCaseload({ probationAreaCode: 'N01' }, { username: 'joebloggs' } as User)
+      expect(post).toHaveBeenCalledWith(
+        {
+          path: '/caseload/vary-approver',
+          data: { probationAreaCode: 'N01' },
+        },
+        { username: 'joebloggs' },
+      )
     })
 
     it('Should search for licences', async () => {
@@ -687,8 +695,14 @@ describe('Licence API client tests', () => {
         probationPduCodes: ['N55PDV'],
         searchTerm: 'search term',
       } as VaryApproverCaseloadSearchRequest
-      await licenceApiClient.searchForOffenderOnVaryApproverCaseload(searchRequest)
-      expect(post).toHaveBeenCalledWith({ path: '/caseload/vary-approver/case-search', data: searchRequest })
+      await licenceApiClient.searchForOffenderOnVaryApproverCaseload(searchRequest, { username: 'joebloggs' } as User)
+      expect(post).toHaveBeenCalledWith(
+        {
+          path: '/caseload/vary-approver/case-search',
+          data: searchRequest,
+        },
+        { username: 'joebloggs' },
+      )
     })
   })
 
