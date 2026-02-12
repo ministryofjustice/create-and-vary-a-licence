@@ -1,4 +1,4 @@
-import ManageUsersApiClient, { PrisonUserDetails, PrisonUserEmail } from '../data/manageUsersApiClient'
+import ManageUsersApiClient, { UserDetails, UserEmail } from '../data/manageUsersApiClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
 import ProbationService from './probationService'
@@ -12,11 +12,11 @@ export default class UserService {
     private readonly probationService: ProbationService,
   ) {}
 
-  async getUser(user: User): Promise<PrisonUserDetails> {
+  async getUser(user: User): Promise<UserDetails> {
     return this.manageUsersApiClient.getUser(user)
   }
 
-  async getUserEmail(user: User): Promise<PrisonUserEmail> {
+  async getUserEmail(user: User): Promise<UserEmail> {
     return this.manageUsersApiClient.getUserEmail(user)
   }
 

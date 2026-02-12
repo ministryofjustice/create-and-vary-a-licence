@@ -3,12 +3,12 @@ import RestClient from './hmppsRestClient'
 import { User } from '../@types/CvlUserDetails'
 import { TokenStore } from './tokenStore'
 
-export type PrisonUserDetails = {
+export type UserDetails = {
   name: string
-  activeCaseLoadId: string
+  userId: string
 }
 
-export type PrisonUserEmail = {
+export type UserEmail = {
   username: string
   email?: string
   verified: boolean
@@ -19,11 +19,11 @@ export default class ManageUsersApiClient extends RestClient {
     super(tokenStore, 'Manage users API', config.apis.manageUsersApi as ApiConfig)
   }
 
-  async getUser(user: User): Promise<PrisonUserDetails> {
-    return (await this.get({ path: '/users/me' }, { token: user.token })) as Promise<PrisonUserDetails>
+  async getUser(user: User): Promise<UserDetails> {
+    return (await this.get({ path: '/users/me' }, { token: user.token })) as Promise<UserDetails>
   }
 
-  async getUserEmail(user: User): Promise<PrisonUserEmail> {
-    return (await this.get({ path: '/users/me/email' }, { token: user.token })) as Promise<PrisonUserEmail>
+  async getUserEmail(user: User): Promise<UserEmail> {
+    return (await this.get({ path: '/users/me/email' }, { token: user.token })) as Promise<UserEmail>
   }
 }

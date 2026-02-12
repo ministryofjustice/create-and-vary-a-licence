@@ -1,5 +1,5 @@
 import UserService from './userService'
-import ManageUsersApiClient, { PrisonUserDetails, PrisonUserEmail } from '../data/manageUsersApiClient'
+import ManageUsersApiClient, { UserDetails, UserEmail } from '../data/manageUsersApiClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
 import ProbationService from './probationService'
@@ -26,14 +26,12 @@ describe('User service', () => {
   })
 
   describe('getUser', () => {
-    it('Retrieves user name and active caseload', async () => {
+    it('Retrieves user name', async () => {
       manageUsersApiClient.getUser.mockResolvedValue({
         name: 'john smith',
-        activeCaseLoadId: 'MDI',
-      } as PrisonUserDetails)
+      } as UserDetails)
       const result = await userService.getUser(user)
       expect(result.name).toEqual('john smith')
-      expect(result.activeCaseLoadId).toEqual('MDI')
       expect(manageUsersApiClient.getUser).toHaveBeenCalled()
     })
 
@@ -50,7 +48,7 @@ describe('User service', () => {
         username: 'JSMITH',
         email: 'js@prison.com',
         verified: true,
-      } as PrisonUserEmail)
+      } as UserEmail)
       const result = await userService.getUserEmail(user)
       expect(result.email).toEqual('js@prison.com')
       expect(manageUsersApiClient.getUserEmail).toHaveBeenCalled()
