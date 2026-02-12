@@ -97,10 +97,9 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getComSearchResponses).toHaveBeenCalledWith('Test', deliusStaffIdentifier)
+      expect(searchService.getComSearchResponses).toHaveBeenCalledWith('Test', res.locals.user)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier,
         queryTerm: 'Test',
         peopleInPrison,
         peopleOnProbation: [],
@@ -117,10 +116,9 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getComSearchResponses).toHaveBeenCalledWith('A123456', deliusStaffIdentifier)
+      expect(searchService.getComSearchResponses).toHaveBeenCalledWith('A123456', res.locals.user)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier,
         queryTerm: 'A123456',
         peopleInPrison,
         peopleOnProbation,
@@ -137,10 +135,9 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getComSearchResponses).toHaveBeenCalledWith('staff', deliusStaffIdentifier)
+      expect(searchService.getComSearchResponses).toHaveBeenCalledWith('staff', res.locals.user)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier,
         queryTerm: 'staff',
         peopleInPrison,
         peopleOnProbation,
@@ -159,10 +156,9 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       await handler.GET(req, res)
 
-      expect(searchService.getComSearchResponses).toHaveBeenCalledWith(queryTerm.trim(), deliusStaffIdentifier)
+      expect(searchService.getComSearchResponses).toHaveBeenCalledWith(queryTerm.trim(), res.locals.user)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier,
         queryTerm: trimmedQueryTerm,
         peopleInPrison,
         peopleOnProbation: [],
@@ -188,7 +184,6 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(searchService.getComSearchResponses).not.toHaveBeenCalled()
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier,
         queryTerm: '',
         peopleInPrison: [],
         peopleOnProbation: [],
@@ -215,7 +210,6 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(searchService.getComSearchResponses).not.toHaveBeenCalled()
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier,
         queryTerm: '',
         peopleInPrison: [],
         peopleOnProbation: [],
@@ -315,12 +309,14 @@ describe('Route Handlers - Search - Probation Search', () => {
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
-        deliusStaffIdentifier,
         queryTerm: 'Test',
         peopleInPrison: [],
         peopleOnProbation: expectedSortedResults,
         backLink: '/licence/vary/caseload',
-        tabParameters: { ...tabParameters, activeTab: '#people-on-probation' },
+        tabParameters: {
+          ...tabParameters,
+          activeTab: '#people-on-probation',
+        },
         statusConfig,
         previousCaseloadPage,
         hasPriorityCases: true,

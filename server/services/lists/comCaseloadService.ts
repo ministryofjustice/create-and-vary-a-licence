@@ -10,19 +10,28 @@ export default class ComCaseloadService {
   ) {}
 
   public async getStaffCreateCaseload(user: User): Promise<ComCreateCase[]> {
-    return this.licenceApiClient.getStaffCreateCaseload(user.deliusStaffIdentifier)
+    return this.licenceApiClient.getStaffCreateCaseload(user)
   }
 
   public async getTeamCreateCaseload(user: User, teamSelected: string[]): Promise<ComCreateCase[]> {
-    return this.licenceApiClient.getTeamCreateCaseload({ probationTeamCodes: user.probationTeamCodes, teamSelected })
+    return this.licenceApiClient.getTeamCreateCaseload(
+      { probationTeamCodes: user.probationTeamCodes, teamSelected },
+      user,
+    )
   }
 
   async getStaffVaryCaseload(user: User): Promise<ComVaryCase[]> {
-    return this.licenceApiClient.getStaffVaryCaseload(user.deliusStaffIdentifier)
+    return this.licenceApiClient.getStaffVaryCaseload(user)
   }
 
   async getTeamVaryCaseload(user: User, teamSelected?: string[]): Promise<ComVaryCase[]> {
-    return this.licenceApiClient.getTeamVaryCaseload({ probationTeamCodes: user.probationTeamCodes, teamSelected })
+    return this.licenceApiClient.getTeamVaryCaseload(
+      {
+        probationTeamCodes: user.probationTeamCodes,
+        teamSelected,
+      },
+      user,
+    )
   }
 
   async getComReviewCount(user: User): Promise<ComReviewCount> {
