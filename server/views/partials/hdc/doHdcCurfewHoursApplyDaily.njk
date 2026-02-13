@@ -1,0 +1,54 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Create a licence - Do HDC Curfew Hours Apply Daily" %}
+{% set pageId = "do-hdc-curfew-hours-apply-daily" %}
+{% set backLinkHref = "" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Do the same HDC curfew hours apply every day?</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "radio-option",
+                    name: "answer",
+                    fieldset: {
+                        attributes: {
+                            id: 'answer'
+                        },
+                        legend: {
+                            text: "Do the same HDC curfew hours apply every day?",
+                            classes: "govuk-visually-hidden"
+                        }
+                    },
+                    errorMessage: validationErrors | findError('answer'),
+                    items: [
+                        {
+                            value: "Yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "No",
+                            text: "No"
+                        }
+                    ]
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}
