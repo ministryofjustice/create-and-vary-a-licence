@@ -23,6 +23,8 @@ import SelectAddressRoutes from './handlers/selectAddress'
 import ManualAddressPostcodeLookupRoutes from './handlers/manualAddressPostcodeLookup'
 import ManualAddress from './types/manualAddress'
 import PostcodeLookupInputValidation from './types/PostcodeLookupInputValidation'
+import DoHdcCurfewHoursApplyDailyRoutes from './handlers/doHdcCurfewHoursApplyDaily'
+import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
 
 export default function Index({ licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
@@ -137,6 +139,12 @@ export default function Index({ licenceService, conditionService, addressService
     const controller = new ManualAddressPostcodeLookupRoutes(addressService, UserType.PRISON)
     get('/view/id/:licenceId/manual-address-entry', controller.GET, UserType.PRISON)
     post('/view/id/:licenceId/manual-address-entry', controller.POST, ManualAddress)
+  }
+
+  {
+    const controller = new DoHdcCurfewHoursApplyDailyRoutes()
+    get('/create/id/:licenceId/do-hdc-curfew-hours-apply-daily', controller.GET, UserType.PROBATION)
+    post('/create/id/:licenceId/do-hdc-curfew-hours-apply-daily', controller.POST, YesOrNoQuestion)
   }
   return router
 }
