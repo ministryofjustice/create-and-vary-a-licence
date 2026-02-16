@@ -1,0 +1,6 @@
+{
+  "low": true,
+  "package-manager": "auto",
+  "registry": "https://registry.npmjs.org",
+  "allowlist": ["GHSA-73rr-hh4g-fpgx|mocha>diff"]
+}
