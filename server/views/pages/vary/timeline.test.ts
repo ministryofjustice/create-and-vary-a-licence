@@ -2,21 +2,10 @@ import fs from 'fs'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import config from '../../../config'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/vary/timeline.njk').toString())
 
 describe('Timeline', () => {
-  const existingConfig = config
-
-  beforeEach(() => {
-    config.hdcEnabled = true
-  })
-
-  afterEach(() => {
-    config.hdcEnabled = existingConfig.hdcEnabled
-  })
-
   it('should display the text Last update with the date', () => {
     const $ = render({
       timelineEvents: [
@@ -57,27 +46,11 @@ describe('Timeline', () => {
     expect($('[data-qa=date]').text()).toContain('Licence end date:')
   })
 
-  it('should display the View licence button for HDC licences when hdcEnabled is false', () => {
-    config.hdcEnabled = false
-    const { hdcEnabled } = config
+  it('should display the How do I vary the licence component for HDC licences when licence kind is HDC', () => {
     const $ = render({
       licence: { kind: LicenceKind.HDC },
       timelineEvents: [],
       callToAction: 'VIEW',
-      hdcEnabled,
-    })
-    expect($('[data-qa=view-licence]').length).toBe(1)
-    expect($('[data-qa=view-licence]').text().trim()).toContain('View licence')
-  })
-
-  it('should display the How do I vary the licence component for HDC licences when hdcEnabled is false', () => {
-    config.hdcEnabled = false
-    const { hdcEnabled } = config
-    const $ = render({
-      licence: { kind: LicenceKind.HDC },
-      timelineEvents: [],
-      callToAction: 'VIEW',
-      hdcEnabled,
     })
     expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain('How do I vary this licence?')
     expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain(
@@ -85,25 +58,11 @@ describe('Timeline', () => {
     )
   })
 
-  it('should display the View or vary licence button for HDC licences when hdcEnabled is true', () => {
-    const { hdcEnabled } = config
+  it('should not display the How do I vary the licence component for HDC licences when licence kind is not HDC', () => {
     const $ = render({
-      licence: { kind: LicenceKind.HDC },
+      licence: { kind: LicenceKind.CRD },
       timelineEvents: [],
       callToAction: 'VIEW_OR_VARY',
-      hdcEnabled,
-    })
-    expect($('[data-qa=view-or-vary-licence]').length).toBe(1)
-    expect($('[data-qa=view-or-vary-licence]').text().trim()).toContain('View or vary licence')
-  })
-
-  it('should not display the How do I vary the licence component for HDC licences when hdcEnabled is true', () => {
-    const { hdcEnabled } = config
-    const $ = render({
-      licence: { kind: LicenceKind.HDC },
-      timelineEvents: [],
-      callToAction: 'VIEW_OR_VARY',
-      hdcEnabled,
     })
     expect($('body').text().trim()).not.toContain('How do I vary this licence?')
     expect($('[data-qa=hdc-vary-licence]').text().trim()).not.toContain(

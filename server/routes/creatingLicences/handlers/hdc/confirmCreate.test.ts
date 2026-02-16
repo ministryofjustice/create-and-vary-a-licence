@@ -23,7 +23,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   const existingConfig = config
 
   beforeEach(() => {
-    config.hdcEnabled = false
+    config.hdcEnabled = true
     req = {
       body: {
         answer: null,
@@ -85,8 +85,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       })
     })
 
-    it('should redirect to access-denied if hdc licence block is enabled', async () => {
-      config.hdcEnabled = true
+    it('should redirect to access-denied if hdcEnabled is disabled', async () => {
+      config.hdcEnabled = false
       const prisonerDetails = {
         prisoner: {
           prisonerNumber: 'G4169UO',

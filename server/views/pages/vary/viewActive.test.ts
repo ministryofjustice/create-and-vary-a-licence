@@ -134,7 +134,7 @@ describe('ViewActive', () => {
 
   it('should not display vary buttons for a HDC licence if hdcEnabled is false', () => {
     config.hdcEnabled = false
-    const hdcIntegrationMvp2 = config.hdcEnabled
+    const { hdcEnabled } = config
     const $ = render({
       licence: {
         ...licence,
@@ -144,7 +144,7 @@ describe('ViewActive', () => {
         statusCode: LicenceStatus.ACTIVE,
         kind: LicenceKind.HDC,
       },
-      hdcIntegrationMvp2,
+      hdcEnabled,
       callToActions: { shouldShowVaryButton: true },
     })
     expect($('[data-qa="vary-licence"]').length).toBe(0)
@@ -152,7 +152,7 @@ describe('ViewActive', () => {
 
   it('should display vary buttons for a HDC licence if hdcEnabled is true', () => {
     config.hdcEnabled = true
-    const hdcIntegrationMvp2 = config.hdcEnabled
+    const { hdcEnabled } = config
     const $ = render({
       licence: {
         ...licence,
@@ -162,7 +162,7 @@ describe('ViewActive', () => {
         statusCode: LicenceStatus.ACTIVE,
         kind: LicenceKind.HDC,
       },
-      hdcIntegrationMvp2,
+      hdcEnabled,
       callToActions: { shouldShowVaryButton: true },
     })
     expect($('[data-qa="vary-licence"]').length).toBe(2)

@@ -29,14 +29,12 @@
             {{ timelineCta(callToAction, licence) }}
             {{ currentLicenceEvents(timelineEvents) }}
 
-            {% if not hdcEnabled %}
-                {% if licence.kind === 'HDC' %}
-                    {{ govukDetails({
-                        summaryText: "How do I vary this licence?",
-                        html: "Email createandvaryalicence@digital.justice.gov.uk to vary this licence.",
-                        attributes: { 'data-qa': 'hdc-vary-licence' }
-                    }) }}
-                {% endif %}
+            {% if licence.kind === 'HDC' %}
+                {{ govukDetails({
+                    summaryText: "How do I vary this licence?",
+                    html: "Email createandvaryalicence@digital.justice.gov.uk to vary this licence.",
+                    attributes: { 'data-qa': 'hdc-vary-licence' }
+                }) }}
             {% endif %}
         </form>
     {% endset -%}
