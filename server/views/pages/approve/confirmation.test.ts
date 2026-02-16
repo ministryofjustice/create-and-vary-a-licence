@@ -11,7 +11,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -28,7 +28,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -46,7 +46,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -63,7 +63,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: true,
+        hdcEnabled: true,
         applicationName: 'Create and vary a licence',
       })
 
@@ -83,7 +83,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -101,7 +101,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -116,7 +116,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: false,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -136,7 +136,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -149,7 +149,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -163,7 +163,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -177,7 +177,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -192,7 +192,7 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
+        hdcEnabled: false,
         applicationName: 'Create and vary a licence',
       })
 

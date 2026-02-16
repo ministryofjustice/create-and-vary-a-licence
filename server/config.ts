@@ -196,8 +196,7 @@ export default {
     requiredInProduction,
   ),
   monitoringSupplierTelephone: get('MONITORING_SUPPLIER_TELEPHONE', '0800 137 291', requiredInProduction),
-  hdcIntegrationMvp2Enabled: get('HDC_INTEGRATION_MVP2_ENABLED', 'false', requiredInProduction) === 'true',
-  hdcLicenceCreationBlockEnabled: get('HDC_LICENCE_CREATION_BLOCK', 'false', requiredInProduction) === 'true',
+  hdcEnabled: get('HDC_ENABLED', 'false', requiredInProduction) === 'true',
   postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
   timeServed: {
     enabled: get('TIME_SERVED_ENABLED', 'false', requiredInProduction) === 'true',

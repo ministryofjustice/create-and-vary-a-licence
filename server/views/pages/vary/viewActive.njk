@@ -8,7 +8,7 @@
 {% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
 
 {% set pageTitle = applicationName + " - Vary a licence - Active licence" %}
-{% set isInVariation = licence.statusCode == 'VARIATION_IN_PROGRESS' or licence.statusCode == 'VARIATION_SUBMITTED' 
+{% set isInVariation = licence.statusCode == 'VARIATION_IN_PROGRESS' or licence.statusCode == 'VARIATION_SUBMITTED'
     or licence.statusCode == 'VARIATION_REJECTED' or licence.statusCode == 'VARIATION_APPROVED' %}
 {% set pageId = "view-active-licence-page" %}
 {% set backLinkHref = "/licence/vary/caseload" %}
@@ -26,10 +26,10 @@
         </div>
     </div>
 
-    {% if hdcIntegrationMvp2Enabled %}
+    {% if hdcEnabled %}
         {{ activeCta(callToActions, licence, false) }}
     {% else %}
-        {% if licence.kind !== 'HDC' %} 
+        {% if licence.kind !== 'HDC' %}
             {{ activeCta(callToActions, licence, false ) }}
         {% endif %}
     {% endif %}
@@ -41,7 +41,7 @@
 
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
         <div class="govuk-grid-column-full">
-            {% if ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') 
+            {% if ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS')
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, null, [], 'Additional licence conditions') }}
                 {{ bespokeConditions(licence.id, null, 'Bespoke licence conditions', null, licence.bespokeConditions) }}
@@ -49,11 +49,11 @@
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence, null, [], 'Additional post sentence supervision requirements') }}
             {% endif %}
-            {% if licence.typeCode === 'AP_PSS' and licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) 
+            {% if licence.typeCode === 'AP_PSS' and licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod)
                 and (additionalConditions.length or bespokeConditionsToDisplay.length)  %}
                 <div>
                     <h2 class="govuk-heading-m" id="conditions-expired">Conditions from expired licence</h2>
-                    <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 
+                    <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>,
                     so the conditions from their standard determinate licence can no longer be varied.</p>
                     <details class="govuk-details" data-module="govuk-details">
                         <summary class="govuk-details__summary">
@@ -68,14 +68,14 @@
                     </details>
                 </div>
             {% endif %}
-            
+
         </div>
     </div>
 
-    {% if hdcIntegrationMvp2Enabled %}
+    {% if hdcEnabled %}
         {{ activeCta(callToActions, licence, true) }}
     {% else %}
-        {% if licence.kind !== 'HDC' %} 
+        {% if licence.kind !== 'HDC' %}
             {{ activeCta(callToActions, licence, true) }}
         {% endif %}
     {% endif %}

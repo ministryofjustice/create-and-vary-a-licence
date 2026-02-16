@@ -10,11 +10,11 @@ describe('Timeline', () => {
   const existingConfig = config
 
   beforeEach(() => {
-    config.hdcIntegrationMvp2Enabled = true
+    config.hdcEnabled = true
   })
 
   afterEach(() => {
-    config.hdcIntegrationMvp2Enabled = existingConfig.hdcIntegrationMvp2Enabled
+    config.hdcEnabled = existingConfig.hdcEnabled
   })
 
   it('should display the text Last update with the date', () => {
@@ -57,27 +57,27 @@ describe('Timeline', () => {
     expect($('[data-qa=date]').text()).toContain('Licence end date:')
   })
 
-  it('should display the View licence button for HDC licences when hdcIntegrationMvp2Enabled is false', () => {
-    config.hdcIntegrationMvp2Enabled = false
-    const { hdcIntegrationMvp2Enabled } = config
+  it('should display the View licence button for HDC licences when hdcEnabled is false', () => {
+    config.hdcEnabled = false
+    const { hdcEnabled } = config
     const $ = render({
       licence: { kind: LicenceKind.HDC },
       timelineEvents: [],
       callToAction: 'VIEW',
-      hdcIntegrationMvp2Enabled,
+      hdcEnabled,
     })
     expect($('[data-qa=view-licence]').length).toBe(1)
     expect($('[data-qa=view-licence]').text().trim()).toContain('View licence')
   })
 
-  it('should display the How do I vary the licence component for HDC licences when hdcIntegrationMvp2Enabled is false', () => {
-    config.hdcIntegrationMvp2Enabled = false
-    const { hdcIntegrationMvp2Enabled } = config
+  it('should display the How do I vary the licence component for HDC licences when hdcEnabled is false', () => {
+    config.hdcEnabled = false
+    const { hdcEnabled } = config
     const $ = render({
       licence: { kind: LicenceKind.HDC },
       timelineEvents: [],
       callToAction: 'VIEW',
-      hdcIntegrationMvp2Enabled,
+      hdcEnabled,
     })
     expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain('How do I vary this licence?')
     expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain(
@@ -85,25 +85,25 @@ describe('Timeline', () => {
     )
   })
 
-  it('should display the View or vary licence button for HDC licences when hdcIntegrationMvp2Enabled is true', () => {
-    const { hdcIntegrationMvp2Enabled } = config
+  it('should display the View or vary licence button for HDC licences when hdcEnabled is true', () => {
+    const { hdcEnabled } = config
     const $ = render({
       licence: { kind: LicenceKind.HDC },
       timelineEvents: [],
       callToAction: 'VIEW_OR_VARY',
-      hdcIntegrationMvp2Enabled,
+      hdcEnabled,
     })
     expect($('[data-qa=view-or-vary-licence]').length).toBe(1)
     expect($('[data-qa=view-or-vary-licence]').text().trim()).toContain('View or vary licence')
   })
 
-  it('should not display the How do I vary the licence component for HDC licences when hdcIntegrationMvp2Enabled is true', () => {
-    const { hdcIntegrationMvp2Enabled } = config
+  it('should not display the How do I vary the licence component for HDC licences when hdcEnabled is true', () => {
+    const { hdcEnabled } = config
     const $ = render({
       licence: { kind: LicenceKind.HDC },
       timelineEvents: [],
       callToAction: 'VIEW_OR_VARY',
-      hdcIntegrationMvp2Enabled,
+      hdcEnabled,
     })
     expect($('body').text().trim()).not.toContain('How do I vary this licence?')
     expect($('[data-qa=hdc-vary-licence]').text().trim()).not.toContain(

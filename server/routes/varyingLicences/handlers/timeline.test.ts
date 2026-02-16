@@ -30,7 +30,7 @@ describe('Route Handlers - Timeline', () => {
   const existingConfig = config
 
   beforeEach(() => {
-    config.hdcIntegrationMvp2Enabled = true
+    config.hdcEnabled = true
     req = {
       params: {
         licenceId: 1,
@@ -42,7 +42,7 @@ describe('Route Handlers - Timeline', () => {
   })
 
   afterEach(() => {
-    config.hdcIntegrationMvp2Enabled = existingConfig.hdcIntegrationMvp2Enabled
+    config.hdcEnabled = existingConfig.hdcEnabled
     config.timeServed = existingConfig.timeServed
   })
 
@@ -272,7 +272,7 @@ describe('Route Handlers - Timeline', () => {
       })
     })
 
-    it('should render view or vary call to action for HDC licences when hdcIntegrationMvp2Enabled is true', async () => {
+    it('should render view or vary call to action for HDC licences when hdcEnabled is true', async () => {
       res = {
         ...commonRes,
         locals: {
@@ -313,8 +313,8 @@ describe('Route Handlers - Timeline', () => {
       })
     })
 
-    it('should render view call to action for HDC licences when hdcIntegrationMvp2Enabled is false', async () => {
-      config.hdcIntegrationMvp2Enabled = false
+    it('should render view call to action for HDC licences when hdcEnabled is false', async () => {
+      config.hdcEnabled = false
       res = {
         ...commonRes,
         locals: {

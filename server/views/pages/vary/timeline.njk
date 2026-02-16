@@ -29,7 +29,7 @@
             {{ timelineCta(callToAction, licence) }}
             {{ currentLicenceEvents(timelineEvents) }}
 
-            {% if not hdcIntegrationMvp2Enabled %}
+            {% if not hdcEnabled %}
                 {% if licence.kind === 'HDC' %}
                     {{ govukDetails({
                         summaryText: "How do I vary this licence?",

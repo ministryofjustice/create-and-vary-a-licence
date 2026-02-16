@@ -33,8 +33,7 @@ generic-service:
     # To enable common front-end components
     COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
     MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
-    HDC_INTEGRATION_MVP2_ENABLED: 'false'
-    HDC_LICENCE_CREATION_BLOCK: 'true'
+    HDC_ENABLED: 'false'
     TIME_SERVED_ENABLED_PRISONS: "MDI, BAI, BNI, LEI, WCI, EXI, WDI, IWI, EWI"
 
   namespace_secrets:
