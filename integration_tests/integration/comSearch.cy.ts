@@ -53,4 +53,53 @@ context('Search for a person', () => {
     searchPage.getRow(4).contains('Test Person4')
     searchPage.getRow(4).contains('15 Aug 2023')
   })
+
+  it('should display LAO cases in people in prison tab with restricted information', () => {
+    cy.task('stubGetComSearchResponsesWithLao')
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicenceToEdit()
+    const searchPage = caseloadPage.clickSearch('Test')
+
+    searchPage.getSearchInput().should('have.value', 'Test')
+    searchPage.getPrisonTabTitle().contains('People in prison (2 results)')
+    searchPage.checkOnPage()
+
+    searchPage.getRow(0).find('.search-offender-name').should('contain.text', 'Access restricted on NDelius')
+    searchPage.getRow(0).find('#name-1>.search-offender-name>.govuk-hint').should('contain.text', 'CRN: A123456')
+    searchPage.getRow(0).find('#licence-type-1').contains('Restricted')
+    searchPage.getRow(0).find('#probation-practitioner-1').contains('Restricted')
+    searchPage.getRow(0).find('#team-name-1').contains('Restricted')
+    searchPage.getRow(0).find('#release-date-1').contains('Restricted')
+    searchPage.getRow(0).find('#licence-status-1').contains('Restricted')
+
+    searchPage.getRow(0).find('a[id^="name-button"]').should('not.exist')
+    searchPage.getRow(0).find('a[data-qa="comLink"]').should('not.exist')
+
+    searchPage.getRow(1).find('.search-offender-name').should('contain.text', 'Test Person')
+    searchPage.getRow(1).find('a[id^="name-button"]').should('exist')
+    searchPage.getRow(1).find('a[data-qa="comLink"]').should('exist')
+  })
+
+  it('should display LAO cases in people on probation tab with restricted information', () => {
+    cy.task('stubGetComSearchResponsesWithLaoOnProbation')
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicenceToEdit()
+    const searchPage = caseloadPage.clickSearch('Test')
+
+    searchPage.clickOnProbationTab()
+    searchPage.getProbationTabTitle().contains('People on probation (1 result)')
+
+    searchPage.getRow(0).find('.search-offender-name').should('contain.text', 'Access restricted on NDelius')
+    searchPage.getRow(0).find('#name-1>.search-offender-name>.govuk-hint').should('contain.text', 'CRN: A123456')
+    searchPage.getRow(0).find('#licence-type-1').contains('Restricted')
+    searchPage.getRow(0).find('#probation-practitioner-1').contains('Restricted')
+    searchPage.getRow(0).find('#team-name-1').contains('Restricted')
+    searchPage.getRow(0).find('#release-date-1').contains('Restricted')
+    searchPage.getRow(0).find('#licence-status-1').contains('Restricted')
+
+    searchPage.getRow(0).find('a[id^="name-button"]').should('not.exist')
+    searchPage.getRow(0).find('a[data-qa="comLink"]').should('not.exist')
+  })
 })

@@ -108,6 +108,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         statusConfig,
         previousCaseloadPage,
         hasPriorityCases: false,
+        laoEnabled: false,
       })
     })
 
@@ -127,6 +128,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         statusConfig,
         previousCaseloadPage,
         hasPriorityCases: false,
+        laoEnabled: false,
       })
     })
 
@@ -146,6 +148,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         statusConfig,
         previousCaseloadPage,
         hasPriorityCases: false,
+        laoEnabled: false,
       })
     })
 
@@ -167,6 +170,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         statusConfig,
         previousCaseloadPage,
         hasPriorityCases: false,
+        laoEnabled: false,
       })
     })
 
@@ -192,6 +196,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         statusConfig,
         previousCaseloadPage,
         hasPriorityCases: false,
+        laoEnabled: false,
       })
     })
 
@@ -218,6 +223,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         statusConfig,
         previousCaseloadPage,
         hasPriorityCases: false,
+        laoEnabled: false,
       })
     })
 
@@ -320,6 +326,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         statusConfig,
         previousCaseloadPage,
         hasPriorityCases: true,
+        laoEnabled: false,
       })
     })
   })

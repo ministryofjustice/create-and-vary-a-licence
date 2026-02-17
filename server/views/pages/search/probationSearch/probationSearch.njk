@@ -14,15 +14,20 @@
 
 {% macro offenderName(offender, index) %}
     <div class="search-offender-name">
-        {% if offender.isOnProbation %}
-            {% set link = "/licence/vary/id/" + offender.licenceId + "/timeline" %}
+        {% if laoEnabled and offender.isLao %}
+            {{ offender.name }}
         {% else %}
-            {% set link = offender | createOffenderLink  %}
-        {% endif %}
-        {% if offender.probationPractitioner.name or offender.licenceStatus === 'TIMED_OUT' or  offender.kind == "TIME_SERVED" or offender.isOnProbation %}
-            <a id="name-button-{{ index }}" href="{{ link }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offender.name }}</a>
-        {% else %}
-            <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offender.name }}</span>
+            {% if offender.isOnProbation %}
+                {% set link = "/licence/vary/id/" + offender.licenceId + "/timeline" %}
+            {% else %}
+                {% set link = offender | createOffenderLink  %}
+            {% endif %}
+
+            {% if offender.probationPractitioner.name or offender.licenceStatus === 'TIMED_OUT' or  offender.kind == "TIME_SERVED" or offender.isOnProbation %}
+                <a id="name-button-{{ index }}" href="{{ link }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offender.name }}</a>
+            {% else %}
+                <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offender.name }}</span>
+            {% endif %}
         {% endif %}
         <div class="govuk-hint govuk-!-font-size-16 search-highlight">CRN: {{ offender.crn }}</div>
     </div>
@@ -123,13 +128,17 @@
 {%  set recallsMessage = "have not breached a post-sentence supervision order" %}
 
 {% for offender in peopleInPrison %}
-    {% if offender.probationPractitioner.allocated %}
+    {% if laoEnabled and offender.isLao %}
+        {% set comDetailsHtml = offender.probationPractitioner.name %}
+    {% elseif offender.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set comDetailsHtml = '<span class="search-highlight">' + offender.probationPractitioner.name + '</span>' %}
     {% endif %}
 
-    {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
+    {% if laoEnabled and offender.isLao %}
+        {% set releaseDate = 'Restricted' %}
+    {% elseif offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
@@ -138,6 +147,12 @@
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
     {% else %}
         {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
+    {% endif %}
+
+    {% if laoEnabled and offender.isLao %}
+        {% set teamName = 'Restricted' %}
+    {% else %}
+        {% set teamName = offender.teamName %}
     {% endif %}
 
     {% set result = [
@@ -153,7 +168,7 @@
             attributes: {
                 id: 'licence-type-' + loop.index
             },
-            html:licenceDescription(offender.licenceType)
+            html:licenceDescription(offender.licenceType, offender.isLao, laoEnabled)
         },
         {
             attributes: {
@@ -166,10 +181,10 @@
         {
             attributes: {
                 id: 'team-name-' + loop.index,
-                "data-sort-value": offender.teamName
+                "data-sort-value": teamName
             },
             classes: "max-width max-width-200",
-            html: offender.teamName
+            html: teamName
         },
         {
             attributes: {
@@ -191,13 +206,17 @@
 {% endfor %}
 
 {% for offender in peopleOnProbation %}
-    {% if offender.probationPractitioner.allocated %}
+    {% if laoEnabled and offender.isLao %}
+        {% set comDetailsHtml = offender.probationPractitioner.name %}
+    {% elseif offender.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set comDetailsHtml = '<span class="search-highlight">' + offender.probationPractitioner.name + '</span>' %}
     {% endif %}
 
-    {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
+    {% if laoEnabled and offender.isLao %}
+        {% set releaseDate = 'Restricted' %}
+    {% elseif offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
@@ -206,6 +225,12 @@
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
     {% else %}
         {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
+    {% endif %}
+
+    {% if laoEnabled and offender.isLao %}
+        {% set teamName = 'Restricted' %}
+    {% else %}
+        {% set teamName = offender.teamName %}
     {% endif %}
 
     {% set result = [
@@ -221,7 +246,7 @@
             attributes: {
                 id: 'licence-type-' + loop.index
             },
-            html:licenceDescription(offender.licenceType)
+            html:licenceDescription(offender.licenceType, offender.isLao, laoEnabled)
         },
         {
             attributes: {
@@ -234,10 +259,10 @@
         {
             attributes: {
                 id: 'team-name-' + loop.index,
-                "data-sort-value": offender.teamName
+                "data-sort-value": teamName
             },
             classes: "max-width max-width-200",
-            html: offender.teamName
+            html: teamName
         },
         {
             attributes: {

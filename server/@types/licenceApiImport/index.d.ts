@@ -1628,6 +1628,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/reports/{reportId}/dashboards/{dashboardId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Returns the dataset for the given report ID and dashboard ID filtered by the filters provided in the query. */
+    get: operations['configuredApiDatasetForDashboard']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/queue-admin/get-dlq-messages/{dlqName}': {
     parameters: {
       query?: never
@@ -1756,6 +1773,40 @@ export interface paths {
      * @description Returns a list of licence summaries by a person's CRN. Requires ROLE_VIEW_LICENCES.
      */
     get: operations['getLicenceByCrn']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/productCollections': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Gets all product collections */
+    get: operations['getCollections']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/productCollections/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Gets product collection by id */
+    get: operations['getCollections_1']
     put?: never
     post?: never
     delete?: never
@@ -2002,6 +2053,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/definitions/{reportId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Gets report definition summary */
+    get: operations['definitionSummary']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/definitions/{reportId}/{variantId}': {
     parameters: {
       query?: never
@@ -2168,27 +2236,6 @@ export interface paths {
      * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getBankHolidaysForEnglandAndWales']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/address/search/by/text/{searchQuery}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Searches for addresses that match the given search text
-     * @deprecated
-     * @description Searches for addresses that match the given search text
-     */
-    get: operations['searchForAddresses']
     put?: never
     post?: never
     delete?: never
@@ -2929,11 +2976,6 @@ export interface components {
        * @example ['B76546GH', 'Y76499GY']
        */
       nomsId?: string[]
-      /**
-       * @description A list of probation delivery unit codes
-       * @example ['N55', 'P66']
-       */
-      pdu?: string[]
     }
     /** @description Response object which summarises a licence */
     LicenceSummary: {
@@ -3611,6 +3653,11 @@ export interface components {
        * @example true
        */
       isReviewNeeded?: boolean
+      /**
+       * @description Is the offender a limited access offender (LAO)?
+       * @example true
+       */
+      isLao?: boolean
     }
     /** @description Describes a probation practitioner on an approval case */
     ProbationPractitioner: {
@@ -4697,12 +4744,6 @@ export interface components {
       actualReleaseDate?: string
       /**
        * Format: date
-       * @description The sentence start date
-       * @example 13/09/2019
-       */
-      sentenceStartDate?: string
-      /**
-       * Format: date
        * @description The sentence end date
        * @example 13/09/2022
        */
@@ -4713,6 +4754,12 @@ export interface components {
        * @example 06/05/2023
        */
       topupSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description The sentence start date
+       * @example 13/09/2019
+       */
+      sentenceStartDate?: string
       /**
        * @description The telephone number to contact the prison
        * @example 0161 234 4747
@@ -4903,6 +4950,22 @@ export interface components {
       updatedDateTime?: string
       /** @description Whether the licence in PSS period? This is when Licence End Date < TODAY <= TUSED (Top Up Supervision End Date) */
       isInPssPeriod: boolean
+    }
+    ProductCollectionSummary: {
+      id: string
+      name: string
+      version: string
+      ownerName: string
+    }
+    ProductCollectionDTO: {
+      id: string
+      name: string
+      version: string
+      ownerName: string
+      products: components['schemas']['ProductCollectionProduct'][]
+    }
+    ProductCollectionProduct: {
+      productId: string
     }
     /** @description Additional information pertinent to CVL */
     CvlFields: {
@@ -5861,7 +5924,9 @@ export interface components {
     DashboardDefinitionSummary: {
       id: string
       name: string
-      description: string
+      description?: string
+      /** @enum {string} */
+      loadType?: 'sync' | 'async'
     }
     ReportDefinitionSummary: {
       id: string
@@ -5875,6 +5940,9 @@ export interface components {
       id: string
       name: string
       description?: string
+      isMissing: boolean
+      /** @enum {string} */
+      loadType?: 'sync' | 'async'
     }
     ChildVariantDefinition: {
       id: string
@@ -5895,6 +5963,8 @@ export interface components {
       filter?: components['schemas']['FilterDefinition']
       sortable: boolean
       defaultsort: boolean
+      /** @enum {string} */
+      sortDirection?: 'asc' | 'desc'
       /** @enum {string} */
       type: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time'
       mandatory: boolean
@@ -5938,6 +6008,8 @@ export interface components {
         | 'next-full-three-months'
         | 'next-year'
         | 'next-full-year'
+      /** Format: int32 */
+      index?: number
     }
     FilterOption: {
       name: string
@@ -5957,7 +6029,16 @@ export interface components {
     }
     Specification: {
       /** @enum {string} */
-      template: 'list' | 'list-section' | 'list-tab' | 'summary' | 'summary-section' | 'parent-child'
+      template:
+        | 'list'
+        | 'list-section'
+        | 'list-tab'
+        | 'summary'
+        | 'summary-section'
+        | 'parent-child'
+        | 'parent-child-section'
+        | 'row-section'
+        | 'row-section-child'
       fields: components['schemas']['FieldDefinition'][]
       sections: string[]
     }
@@ -5981,12 +6062,31 @@ export interface components {
       interactive?: boolean
       childVariants?: components['schemas']['ChildVariantDefinition'][]
     }
+    DashboardBucketDefinition: {
+      /** Format: int64 */
+      min?: number
+      /** Format: int64 */
+      max?: number
+      hexColour?: string
+    }
     DashboardDefinition: {
       id: string
       name: string
-      description: string
+      description?: string
       sections: components['schemas']['DashboardSectionDefinition'][]
       filterFields?: components['schemas']['FieldDefinition'][]
+    }
+    DashboardOptionDefinition: {
+      useRagColour?: boolean
+      baseColour?: string
+      buckets?: components['schemas']['DashboardBucketDefinition'][]
+      showLatest?: boolean
+      columnsAsList?: boolean
+      horizontal?: boolean
+      xStacked?: boolean
+      yStacked?: boolean
+      xstacked?: boolean
+      ystacked?: boolean
     }
     DashboardSectionDefinition: {
       id: string
@@ -5996,13 +6096,14 @@ export interface components {
     }
     DashboardVisualisationColumnDefinition: {
       id: string
-      display: string
+      display?: string
       /** @enum {string} */
       aggregate?: 'sum' | 'average'
       /** @enum {string} */
       unit?: 'NUMBER' | 'PERCENTAGE'
       displayValue?: boolean
       axis?: string
+      optional?: boolean
     }
     DashboardVisualisationColumnsDefinition: {
       keys?: components['schemas']['DashboardVisualisationColumnDefinition'][]
@@ -6013,14 +6114,24 @@ export interface components {
     DashboardVisualisationDefinition: {
       id: string
       /** @enum {string} */
-      type: 'list' | 'doughnut' | 'bar' | 'bar-timeseries' | 'line' | 'scorecard' | 'scorecard-group'
+      type:
+        | 'list'
+        | 'doughnut'
+        | 'bar'
+        | 'bar-timeseries'
+        | 'line'
+        | 'scorecard'
+        | 'scorecard-group'
+        | 'matrix-timeseries'
+        | 'line-timeseries'
       display?: string
       description?: string
       columns: components['schemas']['DashboardVisualisationColumnsDefinition']
+      options?: components['schemas']['DashboardOptionDefinition']
     }
     ValueVisualisationColumnDefinition: {
       id: string
-      equals: string
+      equals?: string
     }
     /** @description Response representing a case with Electronic monitoring conditions, coming up for release */
     UpcomingReleasesWithMonitoringConditionsResponse: {
@@ -12402,6 +12513,94 @@ export interface operations {
       }
     }
   }
+  configuredApiDatasetForDashboard: {
+    parameters: {
+      query: {
+        selectedPage?: number
+        pageSize?: number
+        sortColumn?: string
+        sortedAsc?: boolean
+        /**
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
+         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
+         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
+         *           filters.someMultiselectFilter=a,b,c
+         * @example {
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
+         *     }
+         */
+        filters: {
+          [key: string]: string
+        }
+        /**
+         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         * @example definitions/prisons/orphanage
+         */
+        dataProductDefinitionsPath?: string
+      }
+      header?: never
+      path: {
+        reportId: string
+        dashboardId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description default response */
+      default: {
+        headers: {
+          /** @description Provides additional information about why no data has been returned. */
+          'x-no-data-warning'?: string
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': {
+            [key: string]: unknown
+          }[]
+        }
+      }
+    }
+  }
   getDlqMessages: {
     parameters: {
       query?: {
@@ -12885,6 +13084,124 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getCollections: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ProductCollectionSummary'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getCollections_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /**
+         * @description The ID of the product collection.
+         * @example 72c22579-3f77-4e23-8d16-1e5aadcc88c9
+         */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ProductCollectionDTO']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -13791,7 +14108,7 @@ export interface operations {
       }
     }
   }
-  definition: {
+  definitionSummary: {
     parameters: {
       query?: {
         /**
@@ -13800,6 +14117,89 @@ export interface operations {
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
+      }
+      header?: never
+      path: {
+        /**
+         * @description The ID of the report definition.
+         * @example external-movements
+         */
+        reportId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ReportDefinitionSummary']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  definition: {
+    parameters: {
+      query: {
+        /**
+         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
+         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
+         * @example definitions/prisons/orphanage
+         */
+        dataProductDefinitionsPath?: string
+        /**
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
+         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
+         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
+         *           filters.someMultiselectFilter=a,b,c
+         * @example {
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
+         *     }
+         */
+        filters: {
+          [key: string]: string
+        }
       }
       header?: never
       path: {
@@ -13867,13 +14267,27 @@ export interface operations {
   }
   dashboardDefinition: {
     parameters: {
-      query?: {
+      query: {
         /**
          * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
          *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
          * @example definitions/prisons/orphanage
          */
         dataProductDefinitionsPath?: string
+        /**
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
+         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
+         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
+         *           filters.someMultiselectFilter=a,b,c
+         * @example {
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
+         *     }
+         */
+        filters: {
+          [key: string]: string
+        }
       }
       header?: never
       path: {
@@ -14382,73 +14796,6 @@ export interface operations {
       }
       /** @description Bank holidays were not found. */
       404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  searchForAddresses: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        searchQuery: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns addresses matching the given search text */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AddressSearchResponse']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
         headers: {
           [name: string]: unknown
         }
