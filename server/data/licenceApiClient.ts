@@ -295,16 +295,15 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/submit`, data: body }, { username: user.username })
   }
 
+  /** @deprecated use a custom api endpoint instead */
   async matchLicences({
     statuses,
     nomisIds,
-    pdus,
     sortBy,
     user,
   }: {
     statuses?: string[]
     nomisIds?: string[]
-    pdus?: string[]
     sortBy?: string
     sortOrder?: string
     user?: User
@@ -315,7 +314,6 @@ export default class LicenceApiClient extends RestClient {
         data: {
           status: statuses,
           nomsId: nomisIds,
-          pdu: pdus,
         },
         query: {
           sortBy: sortBy || undefined,

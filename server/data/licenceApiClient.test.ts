@@ -246,7 +246,6 @@ describe('Licence API client tests', () => {
       const result = await licenceApiClient.matchLicences({
         statuses: [LicenceStatus.IN_PROGRESS],
         nomisIds: ['ABC1234'],
-        pdus: [],
         sortBy: 'conditionalReleaseDate',
         user: { username: 'joebloggs' } as User,
       })
@@ -257,7 +256,6 @@ describe('Licence API client tests', () => {
           data: {
             status: [LicenceStatus.IN_PROGRESS],
             nomsId: ['ABC1234'],
-            pdu: [],
           },
           query: {
             sortBy: 'conditionalReleaseDate',
@@ -275,7 +273,6 @@ describe('Licence API client tests', () => {
       const result = await licenceApiClient.matchLicences({
         statuses: [LicenceStatus.IN_PROGRESS],
         nomisIds: ['ABC1234'],
-        pdus: [],
         user: { username: 'joebloggs' } as User,
       })
 
@@ -285,7 +282,6 @@ describe('Licence API client tests', () => {
           data: {
             status: [LicenceStatus.IN_PROGRESS],
             nomsId: ['ABC1234'],
-            pdu: [],
           },
           query: {},
         },
