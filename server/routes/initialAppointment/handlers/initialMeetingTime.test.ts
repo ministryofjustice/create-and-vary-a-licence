@@ -104,30 +104,36 @@ describe('Route - create licence - initial meeting date and time', () => {
     describe('getNextPage', () => {
       it('should redirect to the additional licence conditions question page if licence type is AP', async () => {
         res.locals.licence.typeCode = 'AP'
-        expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
+        expect(handler.getNextPage(res.locals.licence, req)).toBe(
           '/licence/create/id/1/additional-licence-conditions-question',
         )
       })
 
       it('should redirect to the additional licence conditions question page if licence type is AP_PSS', async () => {
         res.locals.licence.typeCode = 'AP_PSS'
-        expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
+        expect(handler.getNextPage(res.locals.licence, req)).toBe(
           '/licence/create/id/1/additional-licence-conditions-question',
         )
       })
 
       it('should redirect to the additional pss conditions question page if licence type is PSS', async () => {
         res.locals.licence.typeCode = 'PSS'
-        expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
+        expect(handler.getNextPage(res.locals.licence, req)).toBe(
           '/licence/create/id/1/additional-pss-conditions-question',
+        )
+      })
+
+      it('should redirect to the standard HDC curfew questions page if the licence kind is HDC', async () => {
+        res.locals.licence.typeCode = 'AP_PSS'
+        res.locals.licence.kind = 'HDC'
+        expect(handler.getNextPage(res.locals.licence, req)).toBe(
+          '/licence/create/id/1/hdc/standard-curfew-hours-question',
         )
       })
 
       it('should redirect to the check your answers page if fromReview flag is set', async () => {
         req.query.fromReview = 'true'
-        expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
-          '/licence/create/id/1/check-your-answers',
-        )
+        expect(handler.getNextPage(res.locals.licence, req)).toBe('/licence/create/id/1/check-your-answers')
       })
     })
   })
@@ -162,7 +168,7 @@ describe('Route - create licence - initial meeting date and time', () => {
 
     describe('getNextPage', () => {
       it('should redirect to the show page', async () => {
-        expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe('/licence/view/id/1/show')
+        expect(handler.getNextPage(res.locals.licence, req)).toBe('/licence/view/id/1/show')
       })
     })
   })
