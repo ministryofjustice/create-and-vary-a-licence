@@ -11,7 +11,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -28,7 +27,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -46,7 +44,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -57,13 +54,12 @@ describe('Approval confirmation page', () => {
   })
 
   describe('HDC licence with MVP2 enabled', () => {
-    it('should display HDC reapproval message when MVP2 enabled', () => {
+    it('should display HDC reapproval message when licence kind is HDC', () => {
       const $ = render({
         licence: { kind: 'HDC' },
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: true,
         applicationName: 'Create and vary a licence',
       })
 
@@ -74,22 +70,18 @@ describe('Approval confirmation page', () => {
         'Probation practitioners can update the reporting instructions. You do not need to approve those changes',
       )
     })
-  })
 
-  describe('HDC licence without MVP2', () => {
-    it('should display HDC change message when MVP2 disabled', () => {
+    it('should not display HDC reapproval message when licence kind is not HDC', () => {
       const $ = render({
-        licence: { kind: 'HDC' },
+        licence: { kind: 'CRD' },
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
-      expect($('p').text()).toContain('The probation practitioner can change reporting instructions and curfew details')
-      expect($('p').text()).toContain(
-        'These changes do not need to be reapproved, but a case administrator might need to reprint the licence',
+      expect($('p').text()).not.toContain(
+        "You'll need to reapprove the licence if changes are made to the HDC curfew details or licence conditions",
       )
     })
   })
@@ -101,7 +93,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -116,7 +107,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: false,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -136,7 +126,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -149,7 +138,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -163,7 +151,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -177,7 +164,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 
@@ -192,7 +178,6 @@ describe('Approval confirmation page', () => {
         titleText: 'Licence approved',
         confirmationMessage: 'The licence has been approved',
         isComEmailAvailable: true,
-        hdcIntegrationMvp2Enabled: false,
         applicationName: 'Create and vary a licence',
       })
 

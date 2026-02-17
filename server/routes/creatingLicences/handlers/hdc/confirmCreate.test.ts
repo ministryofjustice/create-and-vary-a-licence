@@ -23,7 +23,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   const existingConfig = config
 
   beforeEach(() => {
-    config.hdcLicenceCreationBlockEnabled = false
+    config.hdcEnabled = true
     req = {
       body: {
         answer: null,
@@ -68,7 +68,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
-    config.hdcLicenceCreationBlockEnabled = existingConfig.hdcLicenceCreationBlockEnabled
+    config.hdcEnabled = existingConfig.hdcEnabled
   })
 
   describe('GET', () => {
@@ -85,8 +85,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       })
     })
 
-    it('should redirect to access-denied if hdc licence block is enabled', async () => {
-      config.hdcLicenceCreationBlockEnabled = true
+    it('should redirect to access-denied if hdcEnabled is disabled', async () => {
+      config.hdcEnabled = false
       const prisonerDetails = {
         prisoner: {
           prisonerNumber: 'G4169UO',

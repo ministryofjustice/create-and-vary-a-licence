@@ -28,7 +28,7 @@ export default class TimelineRoutes {
     if (licence.statusCode === VARIATION_APPROVED) {
       return PRINT_TO_ACTIVATE
     }
-    if (config.hdcIntegrationMvp2Enabled) {
+    if (config.hdcEnabled) {
       if (licence.statusCode === ACTIVE && !licence.isReviewNeeded) {
         return VIEW_OR_VARY
       }
