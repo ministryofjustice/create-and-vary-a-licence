@@ -18,7 +18,14 @@ export default function Index(services: Services): Router {
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      licenceKindCheckMiddleware([LicenceKind.CRD, LicenceKind.HARD_STOP, LicenceKind.HDC_VARIATION, LicenceKind.PRRD, LicenceKind.TIME_SERVED, LicenceKind.VARIATION]),
+      licenceKindCheckMiddleware([
+        LicenceKind.CRD,
+        LicenceKind.HARD_STOP,
+        LicenceKind.HDC_VARIATION,
+        LicenceKind.PRRD,
+        LicenceKind.TIME_SERVED,
+        LicenceKind.VARIATION,
+      ]),
       handler,
     )
 
@@ -27,7 +34,14 @@ export default function Index(services: Services): Router {
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      licenceKindCheckMiddleware([LicenceKind.CRD, LicenceKind.HARD_STOP, LicenceKind.HDC_VARIATION, LicenceKind.PRRD, LicenceKind.TIME_SERVED, LicenceKind.VARIATION]),
+      licenceKindCheckMiddleware([
+        LicenceKind.CRD,
+        LicenceKind.HARD_STOP,
+        LicenceKind.HDC_VARIATION,
+        LicenceKind.PRRD,
+        LicenceKind.TIME_SERVED,
+        LicenceKind.VARIATION,
+      ]),
       validationMiddleware(conditionService, type),
       handler,
     )

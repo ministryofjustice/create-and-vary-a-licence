@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import LicenceService from '../../../services/licenceService'
 import YesOrNo from '../../../enumeration/yesOrNo'
 
 export default class StandardCurfewHoursQuestionRoutes {
