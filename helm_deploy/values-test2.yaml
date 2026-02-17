@@ -35,6 +35,7 @@ generic-service:
     MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
     HDC_ENABLED: 'false'
     TIME_SERVED_ENABLED_PRISONS: "MDI, BAI, BNI, LEI, WCI, EXI, WDI, IWI, EWI"
+    LAO_ENABLED: "false"
 
   namespace_secrets:
     create-and-vary-a-licence-prison-events-sqs-instance-output:

@@ -401,6 +401,10 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('getlicenceStatusForSearchResults', (licence: FoundComCase): LicenceStatus => {
+    if (licence.isLao) {
+      return LicenceStatus.RESTRICTED
+    }
+
     if (licence.isReviewNeeded) {
       return LicenceStatus.REVIEW_NEEDED
     }
@@ -459,6 +463,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('timeServedEnabled', config.timeServed.enabled)
   njkEnv.addGlobal('timeServedSurveyUrl', config.timeServed.surveyUrl)
   njkEnv.addGlobal('timeServedServiceNowUrl', config.timeServed.serviceNowUrl)
+  njkEnv.addGlobal('laoEnabled', config.laoEnabled)
 
   return njkEnv
 }

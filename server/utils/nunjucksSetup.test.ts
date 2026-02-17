@@ -394,6 +394,15 @@ describe('Nunjucks Filters', () => {
         } as FoundComCase),
       ).toEqual(LicenceStatus.SUBMITTED)
     })
+
+    it('should return RESTRICTED status', () => {
+      expect(
+        registerNunjucks().getFilter('getlicenceStatusForSearchResults')({
+          isLao: true,
+          licenceStatus: LicenceStatus.ACTIVE,
+        } as FoundComCase),
+      ).toEqual(LicenceStatus.RESTRICTED)
+    })
   })
 
   describe('cvlDateToDateShort', () => {

@@ -5,6 +5,7 @@ import statusConfig from '../../../../licences/licenceStatus'
 
 import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 import LicenceKind from '../../../../enumeration/LicenceKind'
+import config from '../../../../config'
 
 interface ProbationPractitioner {
   name: string
@@ -893,5 +894,131 @@ describe('View Probation Search Results', () => {
 
     // Then
     expect($('#name-button-1').attr('href')).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
+  })
+
+  it('should display LAO offender with restricted information in people in prison tab', () => {
+    config.laoEnabled = true
+    const $ = render({
+      statusConfig,
+      peopleInPrison: [
+        {
+          name: 'Access restricted on NDelius',
+          crn: 'A123456',
+          nomisId: '',
+          probationPractitioner: {
+            name: 'Restricted',
+            staffCode: 'Restricted',
+            allocated: true,
+          },
+          licenceType: null,
+          teamName: 'Restricted',
+          releaseDate: '16/08/2023',
+          licenceId: 1,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          isOnProbation: false,
+          releaseDateLabel: 'CRD',
+          isLao: true,
+        },
+      ],
+      peopleOnProbation: [],
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'A123456',
+    })
+
+    expect($('#name-1 > .search-offender-name > .govuk-heading-s').length).toBe(0)
+    expect($('#name-1 > .search-offender-name > a').length).toBe(0)
+    expect($('#name-1 > .search-offender-name').text()).toContain('Access restricted on NDelius')
+    expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
+    expect($('#licence-type-1').text().trim()).toBe('Restricted')
+    expect($('#probation-practitioner-1').text()).toBe('Restricted')
+    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
+    expect($('#team-name-1').text()).toBe('Restricted')
+    expect($('#release-date-1').text()).toBe('Restricted')
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Restricted')
+  })
+
+  it('should display LAO offender with restricted information in people on probation tab', () => {
+    config.laoEnabled = true
+    const $ = render({
+      statusConfig,
+      peopleInPrison: [],
+      peopleOnProbation: [
+        {
+          name: 'Access restricted on NDelius',
+          crn: 'A123456',
+          nomisId: '',
+          probationPractitioner: {
+            name: 'Restricted',
+            staffCode: 'Restricted',
+            allocated: true,
+          },
+          licenceType: null,
+          teamName: 'Restricted',
+          releaseDate: '16/08/2023',
+          licenceId: 1,
+          licenceStatus: LicenceStatus.ACTIVE,
+          isOnProbation: true,
+          releaseDateLabel: 'CRD',
+          isLao: true,
+        },
+      ],
+      tabParameters: {
+        activeTab: '#people-on-probation',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'A123456',
+    })
+
+    expect($('#name-1 > .search-offender-name > a').length).toBe(0)
+    expect($('#name-1 > .search-offender-name').text()).toContain('Access restricted on NDelius')
+    expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
+    expect($('#licence-type-1').text().trim()).toBe('Restricted')
+    expect($('#probation-practitioner-1').text()).toBe('Restricted')
+    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
+    expect($('#team-name-1').text()).toBe('Restricted')
+    expect($('#release-date-1').text()).toBe('Restricted')
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Restricted')
+  })
+
+  it('should not display probation practitioner name as link when LAO and is on probation', () => {
+    config.laoEnabled = true
+    const $ = render({
+      statusConfig,
+      peopleInPrison: [],
+      peopleOnProbation: [
+        {
+          name: 'Access restricted on NDelius',
+          crn: 'A123456',
+          nomisId: '',
+          probationPractitioner: {
+            name: 'Restricted',
+            staffCode: 'Restricted',
+            allocated: true,
+          },
+          licenceType: null,
+          teamName: 'Restricted',
+          releaseDate: '16/08/2023',
+          licenceId: 1,
+          licenceStatus: LicenceStatus.ACTIVE,
+          isOnProbation: true,
+          releaseDateLabel: 'CRD',
+          isLao: true,
+        },
+      ],
+      tabParameters: {
+        activeTab: '#people-on-probation',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'A123456',
+    })
+
+    expect($('#probation-practitioner-1').text()).toBe('Restricted')
+    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
   })
 })

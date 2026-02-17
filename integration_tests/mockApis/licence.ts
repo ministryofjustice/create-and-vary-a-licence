@@ -3031,4 +3031,96 @@ export default {
       },
     })
   },
+  stubSearchForOffenderOnStaffCaseloadWithLao: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/com/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          results: [
+            {
+              name: 'Access restricted on NDelius',
+              crn: 'A123456',
+              nomisId: '',
+              probationPractitioner: {
+                name: 'Restricted',
+                staffCode: 'Restricted',
+                allocated: true,
+              },
+              teamName: 'Restricted',
+              releaseDate: '16/08/2023',
+              licenceType: null,
+              licenceStatus: LicenceStatus.IN_PROGRESS,
+              isOnProbation: false,
+              releaseDateLabel: 'CRD',
+              kind: 'CRD',
+              isLao: true,
+            },
+            {
+              name: 'Test Person',
+              crn: 'A234567',
+              nomisId: 'A1234BC',
+              probationPractitioner: {
+                name: 'Test Staff',
+                staffCode: '3000',
+                allocated: true,
+              },
+              teamName: 'Test Team',
+              releaseDate: '16/08/2023',
+              licenceType: 'AP',
+              licenceStatus: LicenceStatus.IN_PROGRESS,
+              isOnProbation: false,
+              releaseDateLabel: 'CRD',
+              kind: 'CRD',
+              isLao: false,
+            },
+          ],
+          inPrisonCount: 2,
+          onProbationCount: 0,
+        },
+      },
+    })
+  },
+
+  stubSearchForOffenderOnStaffCaseloadWithLaoOnProbation: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/com/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          results: [
+            {
+              name: 'Access restricted on NDelius',
+              crn: 'A123456',
+              nomisId: '',
+              probationPractitioner: {
+                name: 'Restricted',
+                staffCode: 'Restricted',
+                allocated: true,
+              },
+              teamName: 'Restricted',
+              releaseDate: '16/08/2023',
+              licenceId: 1,
+              licenceType: null,
+              licenceStatus: LicenceStatus.ACTIVE,
+              isOnProbation: true,
+              releaseDateLabel: 'CRD',
+              kind: 'CRD',
+              isLao: true,
+            },
+          ],
+          inPrisonCount: 0,
+          onProbationCount: 1,
+        },
+      },
+    })
+  },
 }

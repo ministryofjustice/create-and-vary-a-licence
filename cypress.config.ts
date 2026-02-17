@@ -140,6 +140,8 @@ export default defineConfig({
         stubGetTimeServedExternalRecordReasonSet: licence.stubGetTimeServedExternalRecordReasonSet,
         stubAddTimeServedProbationConfirmContact: licence.stubAddTimeServedProbationConfirmContact,
         stubGetTimeServedExternalRecordReasonNotSet: licence.stubGetTimeServedExternalRecordReasonNotSet,
+        stubGetComSearchResponsesWithLao: licence.stubSearchForOffenderOnStaffCaseloadWithLao,
+        stubGetComSearchResponsesWithLaoOnProbation: licence.stubSearchForOffenderOnStaffCaseloadWithLaoOnProbation,
 
         stubGetProbationer: delius.stubGetProbationer,
         stubGetProbationers: delius.stubGetProbationers,
