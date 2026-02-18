@@ -350,6 +350,18 @@
                             {% endif %}
                         </td>
                     </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDC ineligibility reasons</th>
+                        <td class="govuk-table__cell">
+                            {% if ineligibilityReasons.genericIneligibilityReasons.concat(ineligibilityReasons.hdcIneligibilityReasons) | length %}
+                                {% for reason in (ineligibilityReasons.genericIneligibilityReasons.concat(ineligibilityReasons.hdcIneligibilityReasons)) %}
+                                    <li>{{reason}}</li>
+                                {% endfor %}
+                            {% else %}
+                                None
+                            {% endif %}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
