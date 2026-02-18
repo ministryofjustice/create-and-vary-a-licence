@@ -268,7 +268,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         ],
         multipleTeams: false,
         statusConfig,
-        teamView: false,
+        view: 'me',
         teamName: null,
       })
       expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
@@ -350,10 +350,106 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         statusConfig,
         multipleTeams: true,
         teamName: 'teamA',
-        teamView: true,
+        view: 'team',
       })
       expect(comCaseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(comCaseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
+    })
+
+    it('should render view with My HDC Cases tab selected', async () => {
+      req.query = { view: 'hdc' }
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Test Person',
+            crnNumber: 'X381306',
+            releaseDate: '12 Oct 2022',
+            hardStopDate: '10/10/2022',
+            hardStopWarningDate: '10/10/2022',
+            kind: 'CRD',
+            prisonerNumber: '123',
+            licenceId: 1,
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Joe Bloggs',
+              staffCode: 'X6789',
+              allocated: true,
+            },
+            sortDate: parseIsoDate('2022-10-12'),
+            createLink: '/licence/create/id/1/check-your-answers',
+            isClickable: true,
+          },
+          {
+            crnNumber: 'X381307',
+            name: 'Another Person',
+            releaseDate: '11 Oct 2022',
+            prisonerNumber: '456',
+            licenceId: 1,
+            licenceType: LicenceType.AP,
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            hardStopDate: '10/10/2022',
+            hardStopWarningDate: '10/10/2022',
+            kind: 'TIME_SERVED',
+            probationPractitioner: {
+              name: 'Not Allocated',
+              staffCode: 'X6789U',
+              allocated: false,
+            },
+            sortDate: parseIsoDate('2022-10-11'),
+            createLink: '/licence/create/id/1/check-your-answers',
+            isClickable: true,
+          },
+          {
+            crnNumber: 'X381308',
+            name: 'Person Three',
+            releaseDate: '12 Oct 2022',
+            prisonerNumber: '789',
+            licenceId: 1,
+            licenceType: LicenceType.AP,
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            hardStopDate: '11/10/2022',
+            hardStopWarningDate: '10/10/2022',
+            kind: 'HARD_STOP',
+            probationPractitioner: {
+              name: 'Not Allocated',
+              staffCode: 'X6789U',
+              allocated: true,
+            },
+            sortDate: parseIsoDate('2022-10-12'),
+            createLink: '/licence/create/id/1/check-your-answers',
+            isClickable: true,
+          },
+          {
+            crnNumber: 'X381309',
+            name: 'Person Four',
+            releaseDate: '3 Oct 2022',
+            prisonerNumber: '321',
+            licenceId: 1,
+            licenceType: LicenceType.AP,
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            hardStopDate: '01/10/2022',
+            hardStopWarningDate: '01/10/2022',
+            kind: 'CRD',
+            probationPractitioner: {
+              name: 'Not Allocated',
+              staffCode: 'X6789U',
+              allocated: false,
+            },
+            sortDate: parseIsoDate('2022-10-03'),
+            createLink: '/licence/create/id/1/check-your-answers',
+            isClickable: false,
+          },
+        ],
+        multipleTeams: false,
+        statusConfig,
+        view: 'hdc',
+        teamName: null,
+      })
+      expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(comCaseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
     })
 
     it('should redirect to change team page when user has multiple teams and no active team selected', async () => {
@@ -421,7 +517,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         multipleTeams: false,
         statusConfig,
         teamName: null,
-        teamView: false,
+        view: 'me',
       })
       expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
     })

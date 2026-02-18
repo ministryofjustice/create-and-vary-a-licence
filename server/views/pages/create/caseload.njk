@@ -113,11 +113,22 @@
     <nav class="moj-sub-navigation" aria-label="Sub navigation">
         <ul class="moj-sub-navigation__list">
             <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if not teamView %}aria-current="page"{% endif %} href="?view=me">My cases</a>
+            <a class="moj-sub-navigation__link"
+                {% if view == 'me' or not view %}aria-current="page"{% endif %}
+                href="?view=me">My cases</a>
             </li>
             <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if teamView %}aria-current="page"{% endif %} href="?view=team">Team cases</a>
+            <a class="moj-sub-navigation__link"
+                {% if view == 'team' %}aria-current="page"{% endif %}
+                href="?view=team">Team cases</a>
             </li>
+            {% if hdcEnabled %}
+                <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link"
+                    {% if view == 'hdc' %}aria-current="page"{% endif %}
+                    href="?view=hdc">My HDC cases</a>
+                </li>
+            {% endif %}
         </ul>
     </nav>
 
