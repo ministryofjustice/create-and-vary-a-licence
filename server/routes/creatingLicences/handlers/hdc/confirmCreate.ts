@@ -19,7 +19,7 @@ export default class ConfirmCreateRoutes {
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/create/caseload'
 
-    if (config.hdcLicenceCreationBlockEnabled) {
+    if (!config.hdcEnabled) {
       logger.error('Access denied to HDC licence creation GET due HDC licence not to be created in CVL')
       return res.redirect('/access-denied')
     }

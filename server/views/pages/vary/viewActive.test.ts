@@ -34,12 +34,12 @@ describe('ViewActive', () => {
   const existingConfig = config
 
   beforeEach(() => {
-    config.hdcIntegrationMvp2Enabled = true
+    config.hdcEnabled = true
   })
 
   afterEach(() => {
     jest.resetAllMocks()
-    config.hdcIntegrationMvp2Enabled = existingConfig.hdcIntegrationMvp2Enabled
+    config.hdcEnabled = existingConfig.hdcEnabled
   })
 
   it('should display expired section if licence type is AP_PSS, is in pss period, isActivatedInPssPeriod with additional conditions', () => {
@@ -132,9 +132,9 @@ describe('ViewActive', () => {
     expect($('[data-qa=hdc-curfew-details]').length).toBe(0)
   })
 
-  it('should not display vary buttons for a HDC licence if hdcIntegrationMvp2Enabled is false', () => {
-    config.hdcIntegrationMvp2Enabled = false
-    const hdcIntegrationMvp2 = config.hdcIntegrationMvp2Enabled
+  it('should not display vary buttons for a HDC licence if hdcEnabled is false', () => {
+    config.hdcEnabled = false
+    const { hdcEnabled } = config
     const $ = render({
       licence: {
         ...licence,
@@ -144,15 +144,15 @@ describe('ViewActive', () => {
         statusCode: LicenceStatus.ACTIVE,
         kind: LicenceKind.HDC,
       },
-      hdcIntegrationMvp2,
+      hdcEnabled,
       callToActions: { shouldShowVaryButton: true },
     })
     expect($('[data-qa="vary-licence"]').length).toBe(0)
   })
 
-  it('should display vary buttons for a HDC licence if hdcIntegrationMvp2Enabled is true', () => {
-    config.hdcIntegrationMvp2Enabled = true
-    const hdcIntegrationMvp2 = config.hdcIntegrationMvp2Enabled
+  it('should display vary buttons for a HDC licence if hdcEnabled is true', () => {
+    config.hdcEnabled = true
+    const { hdcEnabled } = config
     const $ = render({
       licence: {
         ...licence,
@@ -162,7 +162,7 @@ describe('ViewActive', () => {
         statusCode: LicenceStatus.ACTIVE,
         kind: LicenceKind.HDC,
       },
-      hdcIntegrationMvp2,
+      hdcEnabled,
       callToActions: { shouldShowVaryButton: true },
     })
     expect($('[data-qa="vary-licence"]').length).toBe(2)

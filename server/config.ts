@@ -196,8 +196,7 @@ export default {
     requiredInProduction,
   ),
   monitoringSupplierTelephone: get('MONITORING_SUPPLIER_TELEPHONE', '0800 137 291', requiredInProduction),
-  hdcIntegrationMvp2Enabled: get('HDC_INTEGRATION_MVP2_ENABLED', 'false', requiredInProduction) === 'true',
-  hdcLicenceCreationBlockEnabled: get('HDC_LICENCE_CREATION_BLOCK', 'false', requiredInProduction) === 'true',
+  hdcEnabled: get('HDC_ENABLED', 'false', requiredInProduction) === 'true',
   postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
   timeServed: {
     enabled: get('TIME_SERVED_ENABLED', 'false', requiredInProduction) === 'true',
@@ -210,4 +209,5 @@ export default {
       'https://mojprod.service-now.com/moj_sp?id=sc_cat_item&table=sc_cat_item&sys_id=e389e8931b8bc65025dc6351f54bcb82&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=e389e8931b8bc65025dc6351f54bcb82',
     ),
   },
+  laoEnabled: get('LAO_ENABLED', 'false', requiredInProduction) === 'true',
 }

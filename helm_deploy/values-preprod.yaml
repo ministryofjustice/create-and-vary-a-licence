@@ -28,9 +28,9 @@ generic-service:
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
     MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"
-    HDC_INTEGRATION_MVP2_ENABLED: "false"
-    HDC_LICENCE_CREATION_BLOCK: "true"
+    HDC_ENABLED: "false"
     TIME_SERVED_ENABLED_PRISONS: "BNI, WCI, EXI, IWI, EWI"
+    LAO_ENABLED: "false"
 
   namespace_secrets:
     create-and-vary-a-licence-prison-events-sqs-instance-output:

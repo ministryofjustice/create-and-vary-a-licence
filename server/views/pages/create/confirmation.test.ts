@@ -42,10 +42,10 @@ describe('Hdc Confirmation', () => {
     )
   })
 
-  it('should show correct message when kind is HDC and hdcIntegrationMvp2Enabled is enabled', () => {
+  it('should show correct message when kind is HDC and hdcEnabled is enabled', () => {
     const $ = render({
       kind: 'HDC',
-      hdcIntegrationMvp2Enabled: true,
+      hdcEnabled: true,
     })
     expect($('#change-message').text().toString()).toContain(
       'To request a change to the curfew address or first night curfew hours, email createandvaryalicence@digital.justice.gov.uk',
