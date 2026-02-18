@@ -6,6 +6,7 @@ import StandardCurfewHoursQuestionRoutes from './handlers/standardCurfewHoursQue
 import licenceKindCheckMiddleware from '../../middleware/licenceKindCheckMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import { LicenceKind } from '../../enumeration'
+import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
 
 export default function Index(services: Services): Router {
   const router = Router()
@@ -49,7 +50,7 @@ export default function Index(services: Services): Router {
   {
     const controller = new StandardCurfewHoursQuestionRoutes()
     get('/standard-curfew-hours-question', controller.GET)
-    post('/standard-curfew-hours-question', controller.POST)
+    post('/standard-curfew-hours-question', controller.POST, YesOrNoQuestion)
   }
 
   return router

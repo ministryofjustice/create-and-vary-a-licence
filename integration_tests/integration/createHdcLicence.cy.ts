@@ -46,6 +46,8 @@ context('Create an HDC licence', () => {
       const additionalConditionsPage = appointmentTimePage
         .enterDate(moment(appointmentDate))
         .enterTime(moment())
+        .clickContinueToStandardCurfewHours()
+        .selectYes()
         .clickContinue()
         .selectYes()
         .clickContinue()
