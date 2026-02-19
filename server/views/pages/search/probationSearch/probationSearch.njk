@@ -150,11 +150,11 @@
     {% endif %}
 
     {% if laoEnabled and offender.isLao %}
-        {% set teamName = 'Restricted' %}
-        {% set status = 'Restricted' %}
+        {% set licenceType = 'Restricted'%}
+        {% set licenceStatus = 'Restricted' %}
     {% else %}
-        {% set teamName = offender.teamName %}
-        {% set status = statusBadge({ status: offender | getlicenceStatusForSearchResults, size: 'small' }, statusConfig) %}
+        {% set licenceType = licenceDescription(offender.licenceType) %}
+        {% set licenceStatus = statusBadge({ status: offender | getlicenceStatusForSearchResults, size: 'small' }, statusConfig) %}
     {% endif %}
 
     {% set result = [
@@ -170,7 +170,7 @@
             attributes: {
                 id: 'licence-type-' + loop.index
             },
-            html:licenceDescription(offender.licenceType, offender.isLao, laoEnabled)
+            html:licenceType
         },
         {
             attributes: {
@@ -183,10 +183,10 @@
         {
             attributes: {
                 id: 'team-name-' + loop.index,
-                "data-sort-value": teamName
+                "data-sort-value": offender.teamName
             },
             classes: "max-width max-width-200",
-            html: teamName
+            html: offender.teamName
         },
         {
             attributes: {
@@ -200,7 +200,7 @@
                 id: 'licence-status-' + loop.index,
                 "data-sort-value": offender.licenceStatus | getStatusOrder
             },
-            html: status
+            html: licenceStatus
         }
     ] %}
 
@@ -230,11 +230,11 @@
     {% endif %}
 
     {% if laoEnabled and offender.isLao %}
-        {% set teamName = 'Restricted' %}
-        {% set status = 'Restricted' %}
+        {% set licenceType = 'Restricted'%}
+        {% set licenceStatus = 'Restricted' %}
     {% else %}
-        {% set teamName = offender.teamName %}
-        {% set status = statusBadge({ status: offender | getlicenceStatusForSearchResults, size: 'small' }, statusConfig) %}
+        {% set licenceType = licenceDescription(offender.licenceType) %}
+        {% set licenceStatus = statusBadge({ status: offender | getlicenceStatusForSearchResults, size: 'small' }, statusConfig) %}
     {% endif %}
 
     {% set result = [
@@ -250,7 +250,7 @@
             attributes: {
                 id: 'licence-type-' + loop.index
             },
-            html:licenceDescription(offender.licenceType, offender.isLao, laoEnabled)
+            html:licenceType
         },
         {
             attributes: {
@@ -263,10 +263,10 @@
         {
             attributes: {
                 id: 'team-name-' + loop.index,
-                "data-sort-value": teamName
+                "data-sort-value": offender.teamName
             },
             classes: "max-width max-width-200",
-            html: teamName
+            html: offender.teamName
         },
         {
             attributes: {
@@ -280,7 +280,7 @@
                 id: 'licence-status-' + loop.index,
                 "data-sort-value": offender.licenceStatus | getStatusOrder
             },
-            html: status
+            html: licenceStatus
         }
     ] %}
 
