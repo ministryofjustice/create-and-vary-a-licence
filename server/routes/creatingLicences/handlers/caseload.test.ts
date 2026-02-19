@@ -406,6 +406,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
+            isLao: false,
+            laoEnabled: config.laoEnabled,
           },
           {
             crnNumber: 'X381307',
@@ -426,6 +428,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-11'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
+            isLao: false,
+            laoEnabled: config.laoEnabled,
           },
           {
             crnNumber: 'X381308',
@@ -446,6 +450,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
+            isLao: false,
+            laoEnabled: config.laoEnabled,
           },
           {
             crnNumber: 'X381309',
@@ -466,6 +472,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-03'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: false,
+            isLao: false,
+            laoEnabled: config.laoEnabled,
           },
         ],
         multipleTeams: false,
