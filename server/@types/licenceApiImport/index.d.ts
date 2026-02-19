@@ -4108,6 +4108,11 @@ export interface components {
         | 'LICENCE_CREATED_BY_PRISON'
         | 'LICENCE_NOT_STARTED'
         | 'LICENCE_IN_PROGRESS'
+      /**
+       * @description Is the offender a limited access offender (LAO)?
+       * @example true
+       */
+      isLao: boolean
     }
     /** @description Search Criteria for CA Caseload Search */
     CaCaseloadSearch: {

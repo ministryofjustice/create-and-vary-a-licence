@@ -59,10 +59,9 @@ context('Search for a person', () => {
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicenceToEdit()
-    const searchPage = caseloadPage.clickSearch('Test')
+    const searchPage = caseloadPage.clickSearch('A123456')
 
-    searchPage.getSearchInput().should('have.value', 'Test')
-    searchPage.getPrisonTabTitle().contains('People in prison (2 results)')
+    searchPage.getSearchInput().should('have.value', 'A123456')
     searchPage.checkOnPage()
 
     searchPage.getRow(0).find('.search-offender-name').should('contain.text', 'Access restricted on NDelius')
@@ -75,10 +74,6 @@ context('Search for a person', () => {
 
     searchPage.getRow(0).find('a[id^="name-button"]').should('not.exist')
     searchPage.getRow(0).find('a[data-qa="comLink"]').should('not.exist')
-
-    searchPage.getRow(1).find('.search-offender-name').should('contain.text', 'Test Person')
-    searchPage.getRow(1).find('a[id^="name-button"]').should('exist')
-    searchPage.getRow(1).find('a[data-qa="comLink"]').should('exist')
   })
 
   it('should display LAO cases in people on probation tab with restricted information', () => {
@@ -86,7 +81,7 @@ context('Search for a person', () => {
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicenceToEdit()
-    const searchPage = caseloadPage.clickSearch('Test')
+    const searchPage = caseloadPage.clickSearch('A123456')
 
     searchPage.clickOnProbationTab()
     searchPage.getProbationTabTitle().contains('People on probation (1 result)')

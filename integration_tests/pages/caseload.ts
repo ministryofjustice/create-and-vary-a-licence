@@ -64,5 +64,9 @@ export default class CaseloadPage extends Page {
     return Page.verifyOnPage(SearchPage)
   }
 
+  getRow = (row: number) => {
+    return cy.get('tbody tr').eq(row)
+  }
+
   getLicenceStatusByIndex = (index: number) => cy.get(this.licenceStatusId + index)
 }

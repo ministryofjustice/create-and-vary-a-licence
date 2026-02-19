@@ -10,12 +10,16 @@
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
 
-{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isClickable, index, createLink) %}
+{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isClickable, index, createLink, isLao) %}
     <div class="caseload-offender-name">
-        {% if isClickable %}
-            <a id="name-button-{{ index }}" href="{{ createLink }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+        {% if laoEnabled and isLao %}
+            {{ offenderName }}
         {% else %}
-            <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</span>
+            {% if isClickable %}
+                <a id="name-button-{{ index }}" href="{{ createLink }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+            {% else %}
+                <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</span>
+            {% endif %}
         {% endif %}
         <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
     </div>
@@ -24,14 +28,17 @@
 {% set offenders = [] %}
 
 {% for offender in caseload %}
-
-    {% if offender.probationPractitioner.allocated %}
+    {% if laoEnabled and offender.isLao %}
+        {% set comDetailsHtml = offender.probationPractitioner.name %}
+    {% elseif offender.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set comDetailsHtml = offender.probationPractitioner.name %}
     {% endif %}
 
-    {% if offender.kind === "HDC" or offender.kind === "HDC_VARIATION" %}
+    {% if laoEnabled and offender.isLao %}
+        {% set releaseDate = 'Restricted' %}
+    {% elseif offender.kind === "HDC" or offender.kind === "HDC_VARIATION" %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
@@ -42,6 +49,13 @@
         {% set releaseDate = offender.releaseDate %}
     {% endif %}
 
+    {% if laoEnabled and offender.isLao %}
+        {% set licenceType = 'Restricted' %}
+        {% set licenceStatus = 'Restricted' %}
+    {% else %}
+        {% set licenceType = licenceDescription(offender.licenceType) %}
+        {% set licenceStatus = statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig) %}
+    {% endif %}
 
     {% set offenders = (offenders.push([
         {
@@ -50,13 +64,13 @@
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, offender.licenceId, offender.isClickable, loop.index, offender.createLink)
+            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, offender.licenceId, offender.isClickable, loop.index, offender.createLink, offender.isLao)
         },
         {
             attributes: {
                 id: 'licence-type-' + loop.index
             },
-            html: licenceDescription(offender.licenceType)
+            html: licenceType
         },
         {
             attributes: {
@@ -78,7 +92,7 @@
                 id: 'licence-status-' + loop.index,
                 "data-sort-value": offender.licenceStatus | getStatusOrder
             },
-            html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig)
+            html: licenceStatus
         }
     ]), offenders) %}
 {% endfor %}

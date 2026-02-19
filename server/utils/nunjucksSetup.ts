@@ -401,10 +401,6 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('getlicenceStatusForSearchResults', (licence: FoundComCase): LicenceStatus => {
-    if (licence.isLao) {
-      return LicenceStatus.RESTRICTED
-    }
-
     if (licence.isReviewNeeded) {
       return LicenceStatus.REVIEW_NEEDED
     }

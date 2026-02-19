@@ -7,6 +7,7 @@ import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { cvlDateToDateShort, parseCvlDate } from '../../../utils/utils'
 import LicenceCreationType from '../../../enumeration/licenceCreationType'
 import { LicenceKind } from '../../../enumeration'
+import config from '../../../config'
 
 export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
@@ -60,6 +61,8 @@ export default class CaseloadRoutes {
           comCase.kind === LicenceKind.HARD_STOP,
         sortDate: comCase.releaseDate && parseCvlDate(comCase.releaseDate),
         kind: comCase.kind,
+        isLao: comCase.isLao,
+        laoEnabled: config.laoEnabled,
       }
     })
 

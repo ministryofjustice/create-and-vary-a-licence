@@ -5,6 +5,7 @@ import statusConfig from '../../../licences/licenceStatus'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import config from '../../../config'
 
 interface ProbationPractitioner {
   name: string
@@ -378,5 +379,166 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('.urgent-highlight-message').text().toString()).toEqual('Time-served release')
     expect($('#probation-practitioner-1').text()).toBe('Not allocated')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Timed out')
+  })
+
+  it('should display LAO offender with restricted information and no clickable links', () => {
+    config.laoEnabled = true
+    const $ = render({
+      statusConfig,
+      caseload: [
+        {
+          name: 'Access restricted on NDelius',
+          crnNumber: 'A123456',
+          prisonerNumber: 'ABC123',
+          releaseDate: '16/08/2023',
+          probationPractitioner: {
+            name: 'Restricted',
+            staffCode: 'Restricted',
+            allocated: true,
+          },
+          isClickable: true,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          createLink: '/licence/create/id/1/check-your-answers',
+          licenceType: 'AP',
+          isLao: true,
+          laoEnabled: true,
+        },
+      ],
+    })
+
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#name-1 > .caseload-offender-name').text()).toContain('Access restricted on NDelius')
+    expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
+    expect($('#licence-type-1').text().trim()).toBe('Restricted')
+    expect($('#probation-practitioner-1').text()).toBe('Restricted')
+    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
+    expect($('#release-date-1').text()).toBe('Restricted')
+    expect($('#licence-status-1').text().trim()).toBe('Restricted')
+  })
+
+  it('should display normal offender information when laoEnabled is false', () => {
+    const $ = render({
+      statusConfig,
+      caseload: [
+        {
+          name: 'Test Person',
+          crnNumber: 'X111111',
+          prisonerNumber: 'ABC123',
+          releaseDate: '03 August 2022',
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffCode: 'ABC123',
+            allocated: true,
+          },
+          isClickable: true,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          createLink: '/licence/create/id/1/check-your-answers',
+          licenceType: 'AP',
+          isLao: false,
+          laoEnabled: false,
+        },
+      ],
+    })
+
+    expect($('#name-1 > .caseload-offender-name > a').length).toBe(1)
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
+    expect($('#licence-type-1').text().trim()).toBe('Standard determinate')
+    expect($('#probation-practitioner-1 > a').length).toBe(1)
+    expect($('#licence-status-1 > .status-badge').length).toBe(1)
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
+  })
+
+  it('should display normal offender information when isLao is false', () => {
+    config.laoEnabled = true
+
+    const $ = render({
+      statusConfig,
+      caseload: [
+        {
+          name: 'Test Person',
+          crnNumber: 'X222222',
+          prisonerNumber: 'ABC456',
+          releaseDate: '03 August 2022',
+          probationPractitioner: {
+            name: 'Jane Smith',
+            staffCode: 'XYZ789',
+            allocated: true,
+          },
+          isClickable: true,
+          licenceStatus: LicenceStatus.SUBMITTED,
+          createLink: '/licence/create/id/2/check-your-answers',
+          licenceType: 'AP_PSS',
+          isLao: false,
+          laoEnabled: true,
+        },
+      ],
+    })
+
+    expect($('#name-1 > .caseload-offender-name > a').length).toBe(1)
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
+    expect($('#licence-type-1').text().trim()).toContain('Standard determinate')
+    expect($('#probation-practitioner-1 > a').length).toBe(1)
+    expect($('#probation-practitioner-1 > a').text()).toBe('Jane Smith')
+    expect($('#licence-status-1 > .status-badge').length).toBe(1)
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Submitted')
+  })
+
+  it('should handle mixed LAO and non-LAO offenders in the same caseload', () => {
+    config.laoEnabled = true
+    const $ = render({
+      statusConfig,
+      caseload: [
+        {
+          name: 'Access restricted on NDelius',
+          crnNumber: 'X111111',
+          prisonerNumber: 'LAO123',
+          releaseDate: '16/08/2023',
+          probationPractitioner: {
+            name: 'Restricted',
+            staffCode: 'Restricted',
+            allocated: false,
+          },
+          isClickable: false,
+          licenceStatus: LicenceStatus.ACTIVE,
+          licenceType: 'AP',
+          isLao: true,
+          laoEnabled: true,
+        },
+        {
+          name: 'Test Person',
+          crnNumber: 'X222222',
+          prisonerNumber: 'ABC456',
+          releaseDate: '03 August 2022',
+          probationPractitioner: {
+            name: 'Jane Smith',
+            staffCode: 'XYZ789',
+            allocated: true,
+          },
+          isClickable: true,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          createLink: '/licence/create/id/2/check-your-answers',
+          licenceType: 'AP',
+          isLao: false,
+          laoEnabled: true,
+        },
+      ],
+    })
+
+    expect($('tbody .govuk-table__row').length).toBe(2)
+
+    expect($('#name-1 > .caseload-offender-name > a').length).toBe(0)
+    expect($('#name-1 > .caseload-offender-name').text()).toContain('Access restricted on NDelius')
+    expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X111111')
+    expect($('#licence-type-1').text().trim()).toBe('Restricted')
+    expect($('#probation-practitioner-1').text()).toBe('Restricted')
+    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
+    expect($('#release-date-1').text()).toBe('Restricted')
+    expect($('#licence-status-1').text().trim()).toBe('Restricted')
+
+    expect($('#name-2 > .caseload-offender-name > a').length).toBe(1)
+    expect($('#name-2 > .caseload-offender-name > a').text()).toBe('Test Person')
+    expect($('#licence-type-2').text().trim()).toBe('Standard determinate')
+    expect($('#licence-status-2 > .status-badge').length).toBe(1)
+    expect($('#licence-status-2 > .status-badge').text().trim()).toBe('In progress')
   })
 })
