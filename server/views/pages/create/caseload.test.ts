@@ -16,6 +16,13 @@ interface ProbationPractitioner {
 const render = templateRenderer(fs.readFileSync('server/views/pages/create/caseload.njk').toString())
 
 describe('Create a Licence Views - Caseload', () => {
+  const existingConfig = config
+
+  afterEach(() => {
+    jest.resetAllMocks()
+    config.hdcEnabled = existingConfig.hdcEnabled
+  })
+
   it('should display a table containing the caseload', () => {
     const $ = render({
       caseload: [
@@ -43,6 +50,47 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#name-2 > .caseload-offender-name > a').text()).toBe('John Smith')
     expect($('#name-2 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X123456')
     expect($('#release-date-2').text()).toBe('01 September 2022')
+  })
+
+  it('shouyld select My cases by default', () => {
+    const $ = render({
+      caseload: [],
+      statusConfig,
+      teamName: null,
+      multipleTeams: false,
+      view: '',
+    })
+    expect($('.moj-sub-navigation__link[aria-current="page"]').text()).toBe('My cases')
+  })
+
+  it('should select Team cases when view=team is passed as a query parameter', () => {
+    const $ = render({
+      caseload: [],
+      statusConfig,
+      teamName: null,
+      multipleTeams: false,
+      view: 'team',
+    })
+    expect($('.moj-sub-navigation__link[aria-current="page"]').text()).toBe('Team cases')
+  })
+
+  it('should select My HDC cases when view=hdc is passed as a query parameter', () => {
+    config.hdcEnabled = true
+    const $ = render({
+      caseload: [],
+      statusConfig,
+      teamName: null,
+      multipleTeams: false,
+      view: 'hdc',
+    })
+    expect($('.moj-sub-navigation__link[aria-current="page"]').text()).toBe('My HDC cases')
+  })
+
+  it('should not show My HDC cases tab when HDC is not enabled', () => {
+    config.hdcEnabled = false
+    const $ = render({})
+    expect($('.moj-sub-navigation__link').length).toBe(2)
+    expect($('.moj-sub-navigation__link').text()).not.toContain('My HDC cases')
   })
 
   it('should display probation practitioner in the table or unallocated', () => {
