@@ -28,6 +28,7 @@ context('Create an HDC licence', () => {
     cy.task('stubAddAdditionalCondition')
     cy.task('stubFeComponents')
     cy.task('stubPostProbationLicence')
+    cy.task('stubUpdateCurfewTimes')
     cy.signIn()
   })
 
@@ -46,6 +47,8 @@ context('Create an HDC licence', () => {
       const additionalConditionsPage = appointmentTimePage
         .enterDate(moment(appointmentDate))
         .enterTime(moment())
+        .clickContinueToStandardCurfewHours()
+        .selectYes()
         .clickContinue()
         .selectYes()
         .clickContinue()

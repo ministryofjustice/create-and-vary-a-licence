@@ -66,6 +66,7 @@ import type {
   ComReviewCount,
   UpdateComRequest,
   UpdatePrisonUserRequest,
+  CurfewTimesRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -804,6 +805,13 @@ export default class LicenceApiClient extends RestClient {
   ): Promise<void> {
     return (await this.put(
       { path: `/licences/time-served/${licenceId}/confirm/probation-contact`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
+  }
+
+  async updateCurfewTimes(licenceId: number, request: CurfewTimesRequest, user: User): Promise<void> {
+    return (await this.put(
+      { path: `/licence/id/${licenceId}/curfew-times`, data: request },
       { username: user?.username },
     )) as Promise<void>
   }

@@ -30,6 +30,7 @@ import dprRoutes from './reporting'
 import staffRoutes from './staff'
 import hardStopStaffRoutes from './initialAppointment/handlers/prisonCreated/hardStop/staff'
 import createTimeServedLicenceRoutes from './creatingLicences/handlers/prisonCreated/timeServed'
+import hdcRoutes from './hdc'
 
 export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
   const router = Router({ mergeParams: true })
@@ -63,6 +64,7 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   router.use(pathfinderRoutes(services))
   router.use(dprRoutes(services, nunjucksEnvironment))
   router.use(createTimeServedLicenceRoutes(services))
+  router.use(hdcRoutes(services))
 
   router.get('/prisoner/:nomsId/image', prisonerController.getImage())
 
