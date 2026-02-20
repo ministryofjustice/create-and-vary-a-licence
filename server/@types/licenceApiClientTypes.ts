@@ -92,3 +92,4 @@ export type ExternalTimeServedRecordRequest = components['schemas']['ExternalTim
 export type ExternalTimeServedRecordResponse = components['schemas']['ExternalTimeServedRecordResponse']
 export type TimeServedProbationConfirmContactRequest = components['schemas']['TimeServedProbationConfirmContactRequest']
 export type TimeServedLicence = components['schemas']['TimeServedLicence']
+export type CurfewTimesRequest = components['schemas']['UpdateCurfewTimesRequest']

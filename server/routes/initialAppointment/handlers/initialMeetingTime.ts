@@ -5,6 +5,8 @@ import LicenceType from '../../../enumeration/licenceType'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
+import { Licence } from '../../../@types/licenceApiClientTypes'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class InitialMeetingTimeRoutes {
   constructor(
@@ -20,7 +22,7 @@ export default class InitialMeetingTimeRoutes {
     return res.render('pages/initialAppointment/initialMeetingTime', {
       formDate,
       appointmentTimeType,
-      skipUrl: this.getNextPage(licence.id.toString(), licence.typeCode, req),
+      skipUrl: this.getNextPage(licence, req),
       canSkip: !licence.appointmentTimeType,
     })
   }
@@ -32,19 +34,22 @@ export default class InitialMeetingTimeRoutes {
 
     flashInitialApptUpdatedMessage(req, licence, this.userType)
 
-    return res.redirect(this.getNextPage(licenceId, licence.typeCode, req))
+    return res.redirect(this.getNextPage(licence, req))
   }
 
-  getNextPage = (licenceId: string, typeCode: string, request: Request): string => {
+  getNextPage = (licence: Licence, request: Request): string => {
     if (this.userType === UserType.PRISON) {
-      return `/licence/view/id/${licenceId}/show`
+      return `/licence/view/id/${licence.id}/show`
     }
     if (request.query?.fromReview) {
-      return `/licence/create/id/${licenceId}/check-your-answers`
+      return `/licence/create/id/${licence.id}/check-your-answers`
     }
-    if (typeCode === LicenceType.AP || typeCode === LicenceType.AP_PSS) {
-      return `/licence/create/id/${licenceId}/additional-licence-conditions-question`
+    if (licence.kind === LicenceKind.HDC) {
+      return `/licence/create/id/${licence.id}/hdc/standard-curfew-hours-question`
     }
-    return `/licence/create/id/${licenceId}/additional-pss-conditions-question`
+    if (licence.typeCode === LicenceType.AP || licence.typeCode === LicenceType.AP_PSS) {
+      return `/licence/create/id/${licence.id}/additional-licence-conditions-question`
+    }
+    return `/licence/create/id/${licence.id}/additional-pss-conditions-question`
   }
 }
