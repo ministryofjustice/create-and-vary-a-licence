@@ -128,17 +128,13 @@
 {%  set recallsMessage = "have not breached a post-sentence supervision order" %}
 
 {% for offender in peopleInPrison %}
-    {% if laoEnabled and offender.isLao %}
-        {% set comDetailsHtml = offender.probationPractitioner.name %}
-    {% elseif offender.probationPractitioner.allocated %}
+    {% if offender.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set comDetailsHtml = '<span class="search-highlight">' + offender.probationPractitioner.name + '</span>' %}
     {% endif %}
 
-    {% if laoEnabled and offender.isLao %}
-        {% set releaseDate = 'Restricted' %}
-    {% elseif offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
+    {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
@@ -147,14 +143,6 @@
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
     {% else %}
         {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
-    {% endif %}
-
-    {% if laoEnabled and offender.isLao %}
-        {% set licenceType = 'Restricted'%}
-        {% set licenceStatus = 'Restricted' %}
-    {% else %}
-        {% set licenceType = licenceDescription(offender.licenceType) %}
-        {% set licenceStatus = statusBadge({ status: offender | getlicenceStatusForSearchResults, size: 'small' }, statusConfig) %}
     {% endif %}
 
     {% set result = [
@@ -170,7 +158,7 @@
             attributes: {
                 id: 'licence-type-' + loop.index
             },
-            html:licenceType
+            html:licenceDescription(offender.licenceType) | redactIfLao(offender)
         },
         {
             attributes: {
@@ -178,7 +166,7 @@
                 "data-sort-value": offender.probationPractitioner.name
             },
             classes: "max-width max-width-200",
-            html: comDetailsHtml
+            html: comDetailsHtml | redactIfLao(offender)
         },
         {
             attributes: {
@@ -193,14 +181,14 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": offender.releaseDate | cvlDateToDateShort | dateToUnix
             },
-            html: releaseDate
+            html: releaseDate | redactIfLao(offender)
         },
         {
             attributes: {
                 id: 'licence-status-' + loop.index,
                 "data-sort-value": offender.licenceStatus | getStatusOrder
             },
-            html: licenceStatus
+            html: statusBadge({ status: offender | getlicenceStatusForSearchResults, size: 'small' }, statusConfig) | redactIfLao(offender)
         }
     ] %}
 
@@ -208,17 +196,13 @@
 {% endfor %}
 
 {% for offender in peopleOnProbation %}
-    {% if laoEnabled and offender.isLao %}
-        {% set comDetailsHtml = offender.probationPractitioner.name %}
-    {% elseif offender.probationPractitioner.allocated %}
+    {% if offender.probationPractitioner.allocated %}
         {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set comDetailsHtml = '<span class="search-highlight">' + offender.probationPractitioner.name + '</span>' %}
     {% endif %}
 
-    {% if laoEnabled and offender.isLao %}
-        {% set releaseDate = 'Restricted' %}
-    {% elseif offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
+    {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% elseif offender | shouldShowHardStopWarning %}
@@ -227,14 +211,6 @@
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
     {% else %}
         {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
-    {% endif %}
-
-    {% if laoEnabled and offender.isLao %}
-        {% set licenceType = 'Restricted'%}
-        {% set licenceStatus = 'Restricted' %}
-    {% else %}
-        {% set licenceType = licenceDescription(offender.licenceType) %}
-        {% set licenceStatus = statusBadge({ status: offender | getlicenceStatusForSearchResults, size: 'small' }, statusConfig) %}
     {% endif %}
 
     {% set result = [
@@ -250,7 +226,7 @@
             attributes: {
                 id: 'licence-type-' + loop.index
             },
-            html:licenceType
+            html:licenceDescription(offender.licenceType) | redactIfLao(offender)
         },
         {
             attributes: {
@@ -258,7 +234,7 @@
                 "data-sort-value": offender.probationPractitioner.name
             },
             classes: "max-width max-width-200",
-            html: comDetailsHtml
+            html: comDetailsHtml | redactIfLao(offender)
         },
         {
             attributes: {
@@ -273,14 +249,14 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": offender.releaseDate | cvlDateToDateShort | dateToUnix
             },
-            html: releaseDate
+            html: releaseDate | redactIfLao(offender)
         },
         {
             attributes: {
                 id: 'licence-status-' + loop.index,
                 "data-sort-value": offender.licenceStatus | getStatusOrder
             },
-            html: licenceStatus
+            html: statusBadge({ status: offender | getlicenceStatusForSearchResults, size: 'small' }, statusConfig) | redactIfLao(offender)
         }
     ] %}
 

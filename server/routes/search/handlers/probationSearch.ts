@@ -3,7 +3,6 @@ import moment from 'moment/moment'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 import { FoundComCase, ComSearchResponse } from '../../../@types/licenceApiClientTypes'
-import config from '../../../config'
 
 export default class ProbationSearch {
   constructor(private readonly searchService: SearchService) {}
@@ -55,7 +54,6 @@ export default class ProbationSearch {
       previousCaseloadPage,
       tabParameters,
       hasPriorityCases,
-      laoEnabled: config.laoEnabled,
     })
   }
 
