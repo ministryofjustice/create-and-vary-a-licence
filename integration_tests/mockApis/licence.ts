@@ -3123,4 +3123,18 @@ export default {
       },
     })
   },
+
+  stubUpdateCurfewTimes: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licences-api/licence/id/(\\d)*/curfew-times`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
 }
