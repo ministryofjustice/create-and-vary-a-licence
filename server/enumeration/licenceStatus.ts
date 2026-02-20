@@ -17,7 +17,6 @@ enum LicenceStatus {
   TIMED_OUT = 'TIMED_OUT',
   REVIEW_NEEDED = 'REVIEW_NEEDED',
   NOMIS_LICENCE = 'NOMIS_LICENCE',
-  RESTRICTED = 'RESTRICTED',
 }
 
 const selectableLicenceStatus = Object.values(LicenceStatus).filter(

@@ -7,12 +7,15 @@ import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { cvlDateToDateShort, parseCvlDate } from '../../../utils/utils'
 import LicenceCreationType from '../../../enumeration/licenceCreationType'
 import { LicenceKind } from '../../../enumeration'
+import config from '../../../config'
 
 export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const teamView = req.query?.view === 'team'
+    const view = (req.query?.view as string) || 'me'
+    const teamView = view === 'team'
+
     const { user } = res.locals
 
     logger.info(`GET caseload for ${user?.username} with roles ${user?.userRoles} team view: ${teamView}`)
@@ -25,7 +28,7 @@ export default class CaseloadRoutes {
       multipleTeams = user.probationTeamCodes.length > 1
 
       // user must select a team if more than one is available
-      if (user.probationTeamCodes.length > 1 && !selectedTeam) {
+      if (multipleTeams && !selectedTeam) {
         res.redirect('caseload/change-team')
         return
       }
@@ -60,15 +63,17 @@ export default class CaseloadRoutes {
           comCase.kind === LicenceKind.HARD_STOP,
         sortDate: comCase.releaseDate && parseCvlDate(comCase.releaseDate),
         kind: comCase.kind,
+        isLao: comCase.isLao,
+        laoEnabled: config.laoEnabled,
       }
     })
 
     res.render('pages/create/caseload', {
       caseload: comCaseload,
       statusConfig,
-      teamView,
       teamName,
       multipleTeams,
+      view,
     })
   }
 

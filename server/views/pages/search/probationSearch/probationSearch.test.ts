@@ -938,7 +938,7 @@ describe('View Probation Search Results', () => {
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
     expect($('#team-name-1').text()).toBe('Restricted')
     expect($('#release-date-1').text()).toBe('Restricted')
-    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Restricted')
+    expect($('#licence-status-1').text().trim()).toBe('Restricted')
   })
 
   it('should display LAO offender with restricted information in people on probation tab', () => {
@@ -982,7 +982,7 @@ describe('View Probation Search Results', () => {
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
     expect($('#team-name-1').text()).toBe('Restricted')
     expect($('#release-date-1').text()).toBe('Restricted')
-    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Restricted')
+    expect($('#licence-status-1').text().trim()).toBe('Restricted')
   })
 
   it('should not display probation practitioner name as link when LAO and is on probation', () => {

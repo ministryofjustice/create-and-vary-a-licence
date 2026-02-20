@@ -1,4 +1,4 @@
-{% macro licenceDescription(typeCode, isLao, laoEnabled) %}
+{% macro licenceDescription(typeCode) %}
     {% if typeCode === 'AP' %}
         Standard determinate
     {% elseif typeCode === 'AP_PSS' %}
@@ -6,8 +6,6 @@
         Post sentence supervision
     {% elseif typeCode === 'PSS' %}
         Post sentence supervision
-    {% elseif laoEnabled and isLao == true %}
-        Restricted
     {% else %}
         {{ typeCode }}
     {% endif %}
