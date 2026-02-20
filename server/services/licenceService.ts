@@ -16,6 +16,7 @@ import type {
   ContactNumberRequest,
   CreateLicenceResponse,
   CreateVariationResponse,
+  CurfewTimesRequest,
   EditLicenceResponse,
   EligibilityAssessment,
   LastMinuteHandoverCaseResponse,
@@ -500,5 +501,9 @@ export default class LicenceService {
       newLicence = await this.createVariation(licenceId, user)
     }
     return newLicence
+  }
+
+  async updateCurfewTimes(licenceId: number, curfewTimesRequest: CurfewTimesRequest, user: User): Promise<void> {
+    return this.licenceApiClient.updateCurfewTimes(licenceId, curfewTimesRequest, user)
   }
 }

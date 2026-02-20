@@ -1,6 +1,11 @@
 import { Request, Response } from 'express'
 import StandardCurfewHoursQuestionRoutes from './standardCurfewHoursQuestion'
 import YesOrNo from '../../../enumeration/yesOrNo'
+import LicenceService from '../../../services/licenceService'
+import { getStandardHdcCurfewTimes } from '../../../utils/utils'
+
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
+jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', () => {
   let req: Request
@@ -22,12 +27,14 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
         user: {
           username: 'joebloggs',
         },
-        licence: {},
+        licence: {
+          id: 1,
+        },
       },
     } as unknown as Response
   })
 
-  const handler = new StandardCurfewHoursQuestionRoutes()
+  const handler = new StandardCurfewHoursQuestionRoutes(licenceService)
 
   describe('GET', () => {
     it('should render view', async () => {
@@ -47,6 +54,13 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
       req.body = { answer: YesOrNo.YES }
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
+    })
+
+    it('when the answer is yes, it should send the standard curfew times to the licence API', async () => {
+      req.body = { answer: YesOrNo.YES }
+      await handler.POST(req, res)
+      const standardCurfewTimes = getStandardHdcCurfewTimes()
+      expect(licenceService.updateCurfewTimes).toHaveBeenCalledWith(1, standardCurfewTimes, res.locals.user)
     })
   })
 })

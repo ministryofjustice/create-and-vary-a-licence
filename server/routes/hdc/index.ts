@@ -48,7 +48,7 @@ export default function Index(services: Services): Router {
     )
 
   {
-    const controller = new StandardCurfewHoursQuestionRoutes()
+    const controller = new StandardCurfewHoursQuestionRoutes(licenceService)
     get('/standard-curfew-hours-question', controller.GET)
     post('/standard-curfew-hours-question', controller.POST, YesOrNoQuestion)
   }
