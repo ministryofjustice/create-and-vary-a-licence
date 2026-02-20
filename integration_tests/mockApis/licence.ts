@@ -2301,6 +2301,52 @@ export default {
       },
     })
   },
+  stubGetStaffVaryCaseloadWithLao: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/caseload/com/staff/(\\d)*/vary-case-load`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            name: 'Test Person',
+            crnNumber: 'X344165',
+            prisonerNumber: 'G9786GC',
+            releaseDate: '01/09/2024',
+            licenceId: 1,
+            licenceStatus: 'ACTIVE',
+            licenceType: 'PSS',
+            probationPractitioner: { staffCode: 'X12345', name: 'John Smith', allocated: true },
+            hardStopDate: '03/01/2023',
+            hardStopWarningDate: '01/01/2023',
+            licenceCreationType: 'LICENCE_NOT_STARTED',
+            isReviewNeeded: false,
+            kind: 'CRD',
+            isLao: false,
+          },
+          {
+            name: 'Access Restricted in NDelius',
+            crnNumber: 'A123456',
+            prisonerNumber: 'A1234BC',
+            releaseDate: '20/12/2025',
+            licenceId: null,
+            licenceStatus: null,
+            licenceType: 'AP',
+            probationPractitioner: { staffCode: 'Restricted', name: 'Restricted', allocated: true },
+            hardStopDate: null,
+            hardStopWarningDate: null,
+            licenceCreationType: 'LICENCE_NOT_STARTED',
+            isReviewNeeded: false,
+            kind: 'CRD',
+            isLao: true,
+          },
+        ],
+      },
+    })
+  },
 
   stubDeleteAdditionalConditionById: () => {
     return stubFor({

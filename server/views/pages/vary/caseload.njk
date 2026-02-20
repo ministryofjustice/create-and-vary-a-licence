@@ -10,9 +10,13 @@
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
 
-{% macro offenderName(offenderName, crn, licenceId, index) %}
+{% macro offenderName(offenderName, crn, licenceId, index, isLao) %}
     <div class="caseload-offender-name">
-        <a href="/licence/vary/id/{{ licenceId }}/timeline" id="name-link-{{ index }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+        {% if laoEnabled and isLao %}
+            {{ offenderName }}
+        {% else %}
+            <a href="/licence/vary/id/{{ licenceId }}/timeline" id="name-link-{{ index }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+        {% endif %}
         <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
     </div>
 {% endmacro %}
@@ -43,13 +47,13 @@
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crnNumber, offender.licenceId, loop.index)
+            html: offenderName(offender.name, offender.crnNumber, offender.licenceId, loop.index, offender.isLao)
         },
         {
             attributes: {
                 id: 'licence-type-' + loop.index
             },
-            html: licenceDescription(offender.licenceType)
+            html: licenceDescription(offender.licenceType) | redactIfLao(offender)
         },
         {
             attributes: {
@@ -57,7 +61,7 @@
                 "data-sort-value": offender.probationPractitioner.name
             },
             classes: "max-width max-width-200",
-            html: practitionerHtml
+            html: practitionerHtml | redactIfLao(offender)
         },
         {
             attributes: {
@@ -65,14 +69,14 @@
                 "data-sort-value": offender.releaseDate | dateToUnix
             },
             classes: 'approval-due-date',
-            html: releaseDate
+            html: releaseDate | redactIfLao(offender)
         },
         {
             attributes: {
                 id: 'licence-status-' + loop.index,
                 "data-sort-value": offender.licenceStatus | getStatusOrder
             },
-            html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig)
+            html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig) | redactIfLao(offender)
         }
     ]), licences) %}
 {% endfor %}
