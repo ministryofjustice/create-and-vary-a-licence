@@ -1,3 +1,4 @@
+import ComDetailsPage from './comDetails'
 import Page from './page'
 import TimelinePage from './timelinePage'
 
@@ -32,4 +33,14 @@ export default class VaryCasesPage extends Page {
   getLicenceStatusByIndex = (index: number) => cy.get(this.licenceStatusId + index)
 
   getProbationPractitioner = (index: number) => cy.get(this.probationPractitionerId + index)
+
+  getRow = (n: number) => {
+    return cy.get('tbody tr').eq(n)
+  }
+
+  clickProbationPractitioner = (index: number): ComDetailsPage => {
+    cy.task('stubGetStaffDetailsByStaffCode')
+    this.getProbationPractitioner(index).find('a').click()
+    return Page.verifyOnPage(ComDetailsPage)
+  }
 }

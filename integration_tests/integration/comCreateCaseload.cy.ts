@@ -1,7 +1,7 @@
 import IndexPage from '../pages'
 import Page from '../pages/page'
 
-context('View COM caseload', () => {
+context('View COM create caseload', () => {
   const dates: string[] = []
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ context('View COM caseload', () => {
     cy.signIn()
   })
 
-  it('should navigate to the com caseload page and display offender details', () => {
+  it('should navigate to the com create caseload page and display offender details', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     let caseloadPage = indexPage.clickCreateALicence(true)
     cy.get('#name-1 .caseload-offender-name a').should('exist')
@@ -33,7 +33,7 @@ context('View COM caseload', () => {
     caseloadPage.signOut().click()
   })
 
-  it('should navigate to the com caseload page and display LAO case restrictions', () => {
+  it('should navigate to the com create caseload page and display LAO case restrictions', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     let caseloadPage = indexPage.clickCreateALicenceWithLao()
     caseloadPage.getRow(0).within(() => {

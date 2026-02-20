@@ -1,9 +1,12 @@
 import Page from './page'
 import ReviewLicenceQuestionPage from './reviewLicenceQuestionPage'
+import VaryCasesPage from './varyCases'
 import ViewActiveLicencePage from './viewActiveLicencePage'
 
 export default class TimelinePage extends Page {
   private reviewLicenceId = '[data-qa=review-licence]'
+
+  private returnButtonId = '[data-qa=return-to-caselist]'
 
   constructor() {
     super('view-timeline-page')
@@ -32,5 +35,10 @@ export default class TimelinePage extends Page {
   clickReviewLicenceButton = (): ReviewLicenceQuestionPage => {
     cy.get(this.reviewLicenceId).click()
     return Page.verifyOnPage(ReviewLicenceQuestionPage)
+  }
+
+  clickReturnToCaseload() {
+    cy.get(this.returnButtonId).click()
+    return Page.verifyOnPage(VaryCasesPage)
   }
 }
