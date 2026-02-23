@@ -4820,6 +4820,8 @@ export interface components {
       /**
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
        */
       comUsername?: string
       /**

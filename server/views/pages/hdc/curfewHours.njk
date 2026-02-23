@@ -1,0 +1,80 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "partials/initialMeetingTimeInputs.njk" import initialMeetingTimeInputs %}
+{% from "partials/timePicker.njk" import timePicker %}
+{% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
+
+{% set pageTitle = applicationName + " - Create a licence - Curfew Hours" %}
+{% set pageId = "curfew-hours" %}
+{% set backLinkHref = "" %}
+{% macro renderTimePicker(id, labelText, formResponses) %}
+    {{ timePicker({
+        name: id,
+        id: id,
+        label: {
+        text: labelText,
+        classes: "govuk-!-font-weight-bold"
+        },
+        hint: {
+        text: "For example, 9:30am or 2:55pm"
+        },
+        errorMessage: validationErrors | findError(id),
+        formResponses: formResponses[id] or formDate[id]
+    }) }}
+{% endmacro %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Enter the curfew hours</h1>
+        </div>
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-m govuk-!-margin-bottom-2">Monday to Sunday</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+
+                {{ renderTimePicker('curfewStart', 'Start time', formResponses) }}
+                {{ renderTimePicker('curfewEnd', 'End time', formResponses) }}
+
+                <div class="govuk-!-margin-top-8">
+                    <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
+
+                    {{ govukDetails({
+                        summaryText: "If curfews are longer than 12 hours",
+                        html: "You must use a bespoke licence condition approved by PPCS if: <ul class='govuk-list--bullet'><li>the total length of someone's curfews is more than 12 hours</li><li>they need more than 3 curfews</li></ul>",
+                        classes: "govuk-!-margin-1"
+                    }) }}
+
+                    {{ govukDetails({
+                        summaryText: "If you are also adding reporting instructions",
+                        html: "Add an hour to the total length of someone's curfews each time you ask them to report to a police station or approved premises in an additional licence condition.</br></br>If this total is more than 12 hours, you must use a bespoke condition approved by PPCS.</br></br>For example, if someone had an 11-hour curfew and had to report to a police station twice a day, the total length of their curfews would be 13 hours. This would need PPCS approval.",
+                        classes: "govuk-!-margin-1"
+                    }) }}
+                </div>
+
+                <div class="govuk-!-margin-top-8 govuk-button-group">
+                    {{ govukButton({
+                        text: continueOrSave,
+                        type: "submit",
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+                    {% if (canSkip)%}
+                        {{ govukButton({
+                            text: 'Skip this for now',
+                            href: skipUrl,
+                            classes: "govuk-button--secondary",
+                            attributes: { 'data-qa': 'skip' }
+                        }) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

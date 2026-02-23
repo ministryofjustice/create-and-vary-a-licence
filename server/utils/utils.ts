@@ -22,6 +22,8 @@ const ISO_DATE = 'yyyy-MM-dd'
 const JSON_DATE_TIME = 'DD/MM/YYYY HH:mm'
 const SIMPLE_DATE_TIME = 'D/MM/YYYY HHmm'
 const TWELVE_HOUR_TIME = 'hh:mm a'
+const TWENTY_FOUR_HOUR_TIME = 'HH:mm:ss'
+const DAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'] as const
 
 interface FileMapInput {
   filename: string
@@ -142,8 +144,21 @@ const jsonDtTo12HourTime = (dt: string): string => {
 }
 
 const json24HourTimeTo12HourTime = (dt: string): string => {
-  const momentTime = moment(dt, 'HH:mm:ss')
+  const momentTime = moment(dt, TWENTY_FOUR_HOUR_TIME)
   return momentTime.isValid() ? momentTime.format(TWELVE_HOUR_TIME) : null
+}
+
+const simpleTimeTo24Hour = (time: SimpleTime): string => {
+  const { hour, minute, ampm } = time
+  return moment(`${hour}:${minute} ${ampm}`, TWELVE_HOUR_TIME).format(TWENTY_FOUR_HOUR_TIME)
+}
+
+const simpleTimeToMinutes = (time: SimpleTime): number => {
+  const { hour, minute, ampm } = time
+
+  const m = moment(`${hour}:${minute} ${ampm}`, TWELVE_HOUR_TIME)
+
+  return m.hours() * 60 + m.minutes()
 }
 
 const parseIsoDate = (date: string) => {
@@ -361,6 +376,31 @@ const getStandardHdcCurfewTimes = () => {
   } as CurfewTimesRequest
 }
 
+function buildCurfewTimesRequest(start: SimpleTime, end: SimpleTime): CurfewTimesRequest {
+  const startMinutes = simpleTimeToMinutes(start)
+  const endMinutes = simpleTimeToMinutes(end)
+
+  const spansNextDay = endMinutes <= startMinutes
+
+  const fromTime = simpleTimeTo24Hour(start)
+  const untilTime = simpleTimeTo24Hour(end)
+
+  const curfewTimes = DAYS.map((fromDay, sequence) => {
+    const nextDayIndex = (sequence + 1) % DAYS.length
+    const untilDay = spansNextDay ? DAYS[nextDayIndex] : fromDay
+
+    return {
+      curfewTimesSequence: sequence,
+      fromDay,
+      fromTime,
+      untilDay,
+      untilTime,
+    }
+  })
+
+  return { curfewTimes }
+}
+
 export {
   escapeCsv,
   convertToTitleCase,
@@ -398,4 +438,5 @@ export {
   isTimeServedLicence,
   mapToTargetField,
   getStandardHdcCurfewTimes,
+  buildCurfewTimesRequest,
 }

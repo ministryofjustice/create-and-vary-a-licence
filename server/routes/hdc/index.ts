@@ -7,6 +7,9 @@ import licenceKindCheckMiddleware from '../../middleware/licenceKindCheckMiddlew
 import validationMiddleware from '../../middleware/validationMiddleware'
 import { LicenceKind } from '../../enumeration'
 import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
+import CurfewHoursRoutes from './handlers/curfewHours'
+import DoHdcCurfewHoursApplyDailyRoutes from './handlers/doHdcCurfewHoursApplyDaily'
+import CurfewTerms from './types/curfewTerms'
 
 export default function Index(services: Services): Router {
   const router = Router()
@@ -51,6 +54,18 @@ export default function Index(services: Services): Router {
     const controller = new StandardCurfewHoursQuestionRoutes(licenceService)
     get('/standard-curfew-hours-question', controller.GET)
     post('/standard-curfew-hours-question', controller.POST, YesOrNoQuestion)
+  }
+
+  {
+    const controller = new DoHdcCurfewHoursApplyDailyRoutes()
+    get('/do-hdc-curfew-hours-apply-daily', controller.GET)
+    post('/do-hdc-curfew-hours-apply-daily', controller.POST, YesOrNoQuestion)
+  }
+
+  {
+    const controller = new CurfewHoursRoutes()
+    get('/curfew-hours', controller.GET)
+    post('/curfew-hours', controller.POST, CurfewTerms)
   }
 
   return router
