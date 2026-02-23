@@ -4767,16 +4767,16 @@ export interface components {
        */
       dateOfBirth?: string
       /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string
+      /**
        * Format: date
        * @description The sentence start date
        * @example 13/09/2019
        */
       sentenceStartDate?: string
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string
       /**
        * Format: date
        * @description The actual release date (if set)
@@ -4818,8 +4818,6 @@ export interface components {
        */
       dateCreated?: string
       /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
        */
