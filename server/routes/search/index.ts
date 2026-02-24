@@ -5,8 +5,9 @@ import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import CaSearchRoutes from './handlers/caSearch'
 import ApproverSearchRoutes from './handlers/approverSearch'
 import VaryApproverSearchRoutes from './handlers/varyApproverSearch'
+import RestrictedDetailsRoutes from './handlers/restrictedDetails'
 
-export default function Index({ searchService, prisonerService }: Services): Router {
+export default function Index({ searchService, prisonerService, licenceService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/search${path}`
@@ -19,12 +20,14 @@ export default function Index({ searchService, prisonerService }: Services): Rou
   const caSearchHandler = new CaSearchRoutes(searchService, prisonerService)
   const approverSearchHandler = new ApproverSearchRoutes(searchService, prisonerService)
   const varyApproverSearchHandler = new VaryApproverSearchRoutes(searchService)
+  const restrictedDetailsHandler = new RestrictedDetailsRoutes(licenceService)
 
   // Operations
   get('/probation-search', 'ROLE_LICENCE_RO', probationSearchHandler.GET)
   get('/ca-search', 'ROLE_LICENCE_CA', caSearchHandler.GET)
   get('/approver-search', 'ROLE_LICENCE_DM', approverSearchHandler.GET)
   get('/vary-approver-search', 'ROLE_LICENCE_ACO', varyApproverSearchHandler.GET)
+  get('/:crn/restricted', 'ROLE_LICENCE_RO', restrictedDetailsHandler.GET)
 
   return router
 }

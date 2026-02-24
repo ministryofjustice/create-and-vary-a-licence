@@ -67,6 +67,7 @@ import type {
   UpdateComRequest,
   UpdatePrisonUserRequest,
   CurfewTimesRequest,
+  CaseAccessDetails,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -814,5 +815,9 @@ export default class LicenceApiClient extends RestClient {
       { path: `/licence/id/${licenceId}/curfew-times`, data: request },
       { username: user?.username },
     )) as Promise<void>
+  }
+
+  async getCaseAccessDetails(crn: string): Promise<CaseAccessDetails> {
+    return (await this.get({ path: `/probation-staff/${crn}/permissions` })) as Promise<CaseAccessDetails>
   }
 }
