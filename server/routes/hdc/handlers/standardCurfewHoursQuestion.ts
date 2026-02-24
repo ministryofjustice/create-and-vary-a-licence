@@ -17,6 +17,6 @@ export default class StandardCurfewHoursQuestionRoutes {
       await this.licenceService.updateCurfewTimes(licence.id, getStandardHdcCurfewTimes(), user)
       return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions-question`)
     }
-    return res.redirect(`/licence/create/id/${licence.id}/do-hdc-curfew-hours-apply-daily`)
+    return res.redirect(`/licence/create/id/${licence.id}/hdc/do-hdc-curfew-hours-apply-daily`)
   }
 }

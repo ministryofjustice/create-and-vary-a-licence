@@ -47,7 +47,7 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
     it('when the answer is no, it should redirect to the do hdc curfew hours apply daily page', async () => {
       req.body = { answer: YesOrNo.NO }
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/do-hdc-curfew-hours-apply-daily')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/hdc/do-hdc-curfew-hours-apply-daily')
     })
 
     it('when the answer is yes, it should redirect to the additional licence conditions question page', async () => {

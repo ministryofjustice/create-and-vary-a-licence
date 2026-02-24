@@ -4042,11 +4042,6 @@ export interface components {
        * @enum {string}
        */
       kind: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
-      /**
-       * @description Is the offender a limited access offender (LAO)?
-       * @example true
-       */
-      isLao: boolean
     }
     /** @description Describes an COM case */
     ComCreateCase: {
@@ -4138,6 +4133,7 @@ export interface components {
         | 'LICENCE_CREATED_BY_PRISON'
         | 'LICENCE_NOT_STARTED'
         | 'LICENCE_IN_PROGRESS'
+        | 'LICENCE_CREATION_RESTRICTED'
       /**
        * @description Is the offender a limited access offender (LAO)?
        * @example true
@@ -4767,16 +4763,16 @@ export interface components {
        */
       dateOfBirth?: string
       /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string
-      /**
        * Format: date
        * @description The sentence start date
        * @example 13/09/2019
        */
       sentenceStartDate?: string
+      /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string
       /**
        * Format: date
        * @description The actual release date (if set)
@@ -4832,13 +4828,13 @@ export interface components {
        * @example true
        */
       isReviewNeeded: boolean
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
        * @description The version number of this licence
        * @example 1.3
        */
       licenceVersion?: string
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /**

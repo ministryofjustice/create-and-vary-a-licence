@@ -1,14 +1,16 @@
 import { Request, Response } from 'express'
 import { buildCurfewTimesRequest } from '../../../utils/utils'
+import LicenceService from '../../../services/licenceService'
 
 export default class CurfewHoursRoutes {
+  constructor(private readonly licenceService: LicenceService) {}
+
   GET = async (req: Request, res: Response): Promise<void> => res.render('pages/hdc/curfewHours')
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    console.log(req.body)
+    const { licence, user } = res.locals
     const { curfewStart, curfewEnd } = req.body
-    const response = buildCurfewTimesRequest(curfewStart, curfewEnd)
-    const { licenceId } = req.params
-    return res.redirect(`/licence/create/id/${licenceId}/hdc/do-hdc-curfew-hours-apply-daily`)
+    await this.licenceService.updateCurfewTimes(licence.id, buildCurfewTimesRequest(curfewStart, curfewEnd), user)
+    return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions-question`)
   }
 }

@@ -439,4 +439,6 @@ export {
   mapToTargetField,
   getStandardHdcCurfewTimes,
   buildCurfewTimesRequest,
+  DAYS,
+  simpleTimeTo24Hour,
 }

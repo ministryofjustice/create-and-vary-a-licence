@@ -63,7 +63,7 @@ export default function Index(services: Services): Router {
   }
 
   {
-    const controller = new CurfewHoursRoutes()
+    const controller = new CurfewHoursRoutes(licenceService)
     get('/curfew-hours', controller.GET)
     post('/curfew-hours', controller.POST, CurfewTerms)
   }
