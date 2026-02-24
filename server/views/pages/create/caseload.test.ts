@@ -449,7 +449,6 @@ describe('Create a Licence Views - Caseload', () => {
           createLink: '/licence/create/id/1/check-your-answers',
           licenceType: 'AP',
           isLao: true,
-          laoEnabled: true,
         },
       ],
     })
@@ -483,7 +482,6 @@ describe('Create a Licence Views - Caseload', () => {
           createLink: '/licence/create/id/1/check-your-answers',
           licenceType: 'AP',
           isLao: false,
-          laoEnabled: false,
         },
       ],
     })
@@ -517,7 +515,6 @@ describe('Create a Licence Views - Caseload', () => {
           createLink: '/licence/create/id/2/check-your-answers',
           licenceType: 'AP_PSS',
           isLao: false,
-          laoEnabled: true,
         },
       ],
     })
@@ -550,7 +547,6 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.ACTIVE,
           licenceType: 'AP',
           isLao: true,
-          laoEnabled: true,
         },
         {
           name: 'Test Person',
@@ -567,7 +563,6 @@ describe('Create a Licence Views - Caseload', () => {
           createLink: '/licence/create/id/2/check-your-answers',
           licenceType: 'AP',
           isLao: false,
-          laoEnabled: true,
         },
       ],
     })

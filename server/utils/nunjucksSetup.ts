@@ -448,6 +448,13 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('formatAddressTitleCase', (address, isMultiple) => formatAddressTitleCase(address, isMultiple))
 
+  njkEnv.addFilter('redactIfLao', (value: string, offender: { isLao?: boolean }): string => {
+    if (config.laoEnabled && offender?.isLao) {
+      return 'Restricted'
+    }
+    return value
+  })
+
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('serviceNowUrl', config.serviceNowUrl)
   njkEnv.addGlobal('epf2Url', config.epf2Url)
