@@ -7,7 +7,6 @@ import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
 import type {
   AddressSearchResponse,
-  CurfewTimesRequest,
   HdcLicence,
   HdcVariationLicence,
   Licence,
@@ -320,87 +319,6 @@ const mapToTargetField = (input: FileMapInput) => {
   }
 }
 
-const getStandardHdcCurfewTimes = () => {
-  return {
-    curfewTimes: [
-      {
-        curfewTimesSequence: 0,
-        fromDay: 'MONDAY',
-        fromTime: '19:00:00',
-        untilDay: 'TUESDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 1,
-        fromDay: 'TUESDAY',
-        fromTime: '19:00:00',
-        untilDay: 'WEDNESDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 2,
-        fromDay: 'WEDNESDAY',
-        fromTime: '19:00:00',
-        untilDay: 'THURSDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 3,
-        fromDay: 'THURSDAY',
-        fromTime: '19:00:00',
-        untilDay: 'FRIDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 4,
-        fromDay: 'FRIDAY',
-        fromTime: '19:00:00',
-        untilDay: 'SATURDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 5,
-        fromDay: 'SATURDAY',
-        fromTime: '19:00:00',
-        untilDay: 'SUNDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 6,
-        fromDay: 'SUNDAY',
-        fromTime: '19:00:00',
-        untilDay: 'MONDAY',
-        untilTime: '07:00:00',
-      },
-    ],
-  } as CurfewTimesRequest
-}
-
-function buildCurfewTimesRequest(start: SimpleTime, end: SimpleTime): CurfewTimesRequest {
-  const startMinutes = simpleTimeToMinutes(start)
-  const endMinutes = simpleTimeToMinutes(end)
-
-  const spansNextDay = endMinutes <= startMinutes
-
-  const fromTime = simpleTimeTo24Hour(start)
-  const untilTime = simpleTimeTo24Hour(end)
-
-  const curfewTimes = DAYS.map((fromDay, sequence) => {
-    const nextDayIndex = (sequence + 1) % DAYS.length
-    const untilDay = spansNextDay ? DAYS[nextDayIndex] : fromDay
-
-    return {
-      curfewTimesSequence: sequence,
-      fromDay,
-      fromTime,
-      untilDay,
-      untilTime,
-    }
-  })
-
-  return { curfewTimes }
-}
-
 export {
   escapeCsv,
   convertToTitleCase,
@@ -437,8 +355,7 @@ export {
   lowercaseFirstLetter,
   isTimeServedLicence,
   mapToTargetField,
-  getStandardHdcCurfewTimes,
-  buildCurfewTimesRequest,
   DAYS,
   simpleTimeTo24Hour,
+  simpleTimeToMinutes,
 }

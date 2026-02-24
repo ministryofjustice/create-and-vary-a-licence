@@ -3,7 +3,7 @@ import { Validate } from 'class-validator'
 import ValidCurfewTime from '../../../validators/curfewTimeValidator'
 import { SimpleTime } from '../../manageConditions/types'
 
-class CurfewTerms {
+class CurfewTimes {
   @Expose()
   @Type(() => SimpleTime)
   @Validate(ValidCurfewTime)
@@ -15,4 +15,4 @@ class CurfewTerms {
   curfewEnd: SimpleTime
 }
 
-export default CurfewTerms
+export default CurfewTimes

@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
-import LicenceService from '../../../services/licenceService'
-import { buildCurfewTimesRequest } from '../../../utils/utils'
 import CurfewHoursRoutes from './curfewHours'
+import HdcService from '../../../services/hdcService'
 
-const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-jest.mock('../../../services/licenceService')
+const hdcService = new HdcService(null) as jest.Mocked<HdcService>
+jest.mock('../../../services/hdcService')
 
 describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', () => {
   let req: Request
@@ -33,7 +32,7 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
     } as unknown as Response
   })
 
-  const handler = new CurfewHoursRoutes(licenceService)
+  const handler = new CurfewHoursRoutes(hdcService)
 
   describe('GET', () => {
     it('should render view', async () => {
@@ -49,8 +48,11 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
         curfewEnd: { hour: '10', minute: '30', ampm: 'am' },
       }
       await handler.POST(req, res)
-      const curfewTimes = buildCurfewTimesRequest(req.body.curfewStart, req.body.curfewEnd)
-      expect(licenceService.updateCurfewTimes).toHaveBeenCalledWith(1, curfewTimes, res.locals.user)
+      expect(hdcService.updateCurfewTimes).toHaveBeenCalledWith(
+        1,
+        { curfewStart: req.body.curfewStart, curfewEnd: req.body.curfewEnd },
+        res.locals.user,
+      )
     })
   })
 })

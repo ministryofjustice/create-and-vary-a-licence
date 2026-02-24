@@ -32,6 +32,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           allocated: true,
         },
         isReviewNeeded: false,
+        isLao: false,
       },
       {
         licenceId: 2,
@@ -47,6 +48,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: true,
+        isLao: false,
       },
     ])
 
@@ -65,6 +67,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: false,
+        isLao: false,
       },
       {
         licenceId: 2,
@@ -80,6 +83,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: false,
+        isLao: false,
       },
       {
         licenceId: 3,
@@ -95,6 +99,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: true,
+        isLao: false,
       },
     ])
 
@@ -269,6 +274,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           isReviewNeeded: false,
           kind: LicenceKind.CRD,
+          isLao: false,
         },
       ])
       comCaseloadService.getComReviewCount.mockResolvedValueOnce({

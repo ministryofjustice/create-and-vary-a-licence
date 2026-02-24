@@ -30,10 +30,6 @@ import {
   escapeCsv,
   isTimeServedLicence,
   mapToTargetField,
-  buildCurfewTimesRequest,
-  DAYS,
-  simpleTimeTo24Hour,
-  getStandardHdcCurfewTimes,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -771,44 +767,6 @@ describe('mapToTargetField', () => {
     expect(output).toEqual({
       nested: { a: 1, b: { c: 2 } },
       outOfBoundFilename: 'nested.doc',
-    })
-  })
-})
-
-describe('buildCurfewTimesRequest', () => {
-  it('returns one entry per day with same fromDay/untilDay when end > start (same-day span)', () => {
-    const start = new SimpleTime('9', '0', AmPm.AM)
-    const end = new SimpleTime('5', '0', AmPm.PM)
-
-    const result = buildCurfewTimesRequest(start, end)
-    expect(result.curfewTimes).toHaveLength(DAYS.length)
-
-    result.curfewTimes.forEach((row, idx) => {
-      expect(row.curfewTimesSequence).toBe(idx)
-      expect(row.fromDay).toBe(DAYS[idx])
-      expect(row.untilDay).toBe(DAYS[idx])
-      expect(row.fromTime).toBe(simpleTimeTo24Hour(start))
-      expect(row.untilTime).toBe(simpleTimeTo24Hour(end))
-    })
-  })
-
-  it('builds correct HDC-style next-day curfew schedule', () => {
-    const start = new SimpleTime('07', '00', AmPm.PM)
-    const end = new SimpleTime('07', '00', AmPm.AM)
-
-    const result = buildCurfewTimesRequest(start, end)
-
-    expect(result).toEqual(getStandardHdcCurfewTimes())
-  })
-
-  it('treats equal times as next-day span (end <= start)', () => {
-    const start = new SimpleTime('9', '0', AmPm.AM)
-    const end = new SimpleTime('9', '0', AmPm.AM)
-
-    const result = buildCurfewTimesRequest(start, end)
-    result.curfewTimes.forEach((row, idx) => {
-      const nextIdx = (idx + 1) % DAYS.length
-      expect(row.untilDay).toBe(DAYS[nextIdx])
     })
   })
 })
