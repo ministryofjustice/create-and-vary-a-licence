@@ -571,7 +571,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('#name-1 > .caseload-offender-name > a').length).toBe(1)
     expect($('#name-1 > .caseload-offender-name').text()).toContain('Access restricted on NDelius')
-    expect($('#name-1 > .caseload-offender-name > a').attr('href')).toContain('/search/X111111/restricted/')
+    expect($('#name-1 > .caseload-offender-name > a').attr('href')).toContain('/search/X111111/restricted')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X111111')
     expect($('#licence-type-1').text().trim()).toBe('Restricted')
     expect($('#probation-practitioner-1').text()).toBe('Restricted')

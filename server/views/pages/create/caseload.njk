@@ -13,7 +13,7 @@
 {% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isClickable, index, createLink, isLao) %}
     <div class="caseload-offender-name">
         {% if laoEnabled and isLao %}
-            <a id="name-button-{{ index }}" href="{{ "/search/" + crn + "/restricted/" }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
+            <a id="name-button-{{ index }}" href="{{ "/search/" + crn + "/restricted" }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
         {% else %}
             {% if isClickable %}
                 <a id="name-button-{{ index }}" href="{{ createLink }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
