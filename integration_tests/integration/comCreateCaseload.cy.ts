@@ -47,7 +47,7 @@ context('View COM create caseload', () => {
       cy.get('#licence-status-1 .status-badge').should('contain', 'Not started')
     })
     caseloadPage.getRow(1).within(() => {
-      cy.get('#name-2 .caseload-offender-name a').should('not.exist')
+      cy.get('#name-2 .caseload-offender-name a').should('exist')
       cy.get('#name-2 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
       cy.get('#licence-type-2').should('contain', 'Restricted')
       cy.get('#probation-practitioner-2 a').should('not.exist')

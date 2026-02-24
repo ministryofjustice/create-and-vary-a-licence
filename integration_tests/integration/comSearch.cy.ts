@@ -72,7 +72,7 @@ context('Search for a person', () => {
     searchPage.getRow(0).find('#release-date-1').contains('Restricted')
     searchPage.getRow(0).find('#licence-status-1').contains('Restricted')
 
-    searchPage.getRow(0).find('a[id^="name-button"]').should('not.exist')
+    searchPage.getRow(0).find('a[id^="name-button"]').should('exist')
     searchPage.getRow(0).find('a[data-qa="comLink"]').should('not.exist')
   })
 
@@ -94,7 +94,7 @@ context('Search for a person', () => {
     searchPage.getRow(0).find('#release-date-1').contains('Restricted')
     searchPage.getRow(0).find('#licence-status-1').contains('Restricted')
 
-    searchPage.getRow(0).find('a[id^="name-button"]').should('not.exist')
+    searchPage.getRow(0).find('a[id^="name-button"]').should('exist')
     searchPage.getRow(0).find('a[data-qa="comLink"]').should('not.exist')
   })
 })
