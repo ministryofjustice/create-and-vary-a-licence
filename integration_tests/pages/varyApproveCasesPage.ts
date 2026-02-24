@@ -36,4 +36,8 @@ export default class VaryApproveCasesPage extends Page {
   getVariationRequestDate = n => {
     return cy.get(this.variationRequestDate).eq(n)
   }
+
+  getRow = (n: number) => {
+    return cy.get('tbody tr').eq(n)
+  }
 }
