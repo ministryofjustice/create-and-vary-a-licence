@@ -58,4 +58,23 @@ context('ACO review a licence variation', () => {
     varyApproveCasesPage = varyReferConfirmPage.clickBackToCaseList()
     varyApproveCasesPage.signOut().click()
   })
+
+  it('ACO cannot see LAO cases if they are restricted', () => {
+    cy.task('stubApproveVariation')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let varyApproveCasesPage = indexPage.clickApproveAVariation()
+    varyApproveCasesPage.getRow(2).within(() => {
+      cy.get('#name-3 .caseload-offender-name a').should('not.exist')
+      cy.get('#name-3 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
+      cy.get('#licence-type-3').should('contain', 'Restricted')
+      cy.get('#probation-practitioner-3 a').should('not.exist')
+      cy.get('#probation-practitioner-3').should('contain', 'Restricted')
+      cy.get('#release-date-3').should('contain', 'Restricted')
+      cy.get('#variation-request-date-3').should('contain', 'Restricted')
+    })
+    const varyApproveViewPage = varyApproveCasesPage.selectCase()
+    const varyApproveConfirmPage = varyApproveViewPage.clickApproveVariation()
+    varyApproveCasesPage = varyApproveConfirmPage.clickBackToCaseList()
+    varyApproveCasesPage.signOut().click()
+  })
 })
