@@ -32,6 +32,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           allocated: true,
         },
         isReviewNeeded: false,
+        isLao: false,
       },
       {
         licenceId: 2,
@@ -47,6 +48,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: true,
+        isLao: false,
       },
     ])
 
@@ -65,6 +67,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: false,
+        isLao: false,
       },
       {
         licenceId: 2,
@@ -80,6 +83,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: false,
+        isLao: false,
       },
       {
         licenceId: 3,
@@ -95,6 +99,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
         kind: LicenceKind.CRD,
         isReviewNeeded: true,
+        isLao: false,
       },
     ])
 
@@ -156,6 +161,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
+            isLao: false,
           },
           {
             licenceId: 1,
@@ -171,6 +177,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
+            isLao: false,
           },
         ],
         multipleTeams: false,
@@ -204,6 +211,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
+            isLao: false,
           },
           {
             licenceId: 1,
@@ -219,6 +227,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
+            isLao: false,
           },
           {
             licenceId: 2,
@@ -234,6 +243,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
+            isLao: false,
           },
         ],
         multipleTeams: true,
@@ -264,6 +274,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           isReviewNeeded: false,
           kind: LicenceKind.CRD,
+          isLao: false,
         },
       ])
       comCaseloadService.getComReviewCount.mockResolvedValueOnce({
@@ -289,6 +300,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             isReviewNeeded: false,
             kind: LicenceKind.CRD,
+            isLao: false,
           },
         ],
         multipleTeams: true,
@@ -324,6 +336,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
+            isLao: false,
           },
         ],
         multipleTeams: true,
@@ -359,6 +372,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
+            isLao: false,
           },
           {
             licenceId: 1,
@@ -374,6 +388,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
+            isLao: false,
           },
         ],
         multipleTeams: true,
@@ -409,6 +424,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
+            isLao: false,
           },
         ],
         multipleTeams: true,
@@ -439,6 +455,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
+          isLao: false,
         },
         {
           licenceId: 2,
@@ -454,6 +471,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
         {
           licenceId: 3,
@@ -469,6 +487,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
         {
           licenceId: 4,
@@ -484,6 +503,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
         {
           licenceId: 5,
@@ -499,6 +519,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
+          isLao: false,
         },
         {
           licenceId: 6,
@@ -514,6 +535,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
         {
           licenceId: 7,
@@ -529,6 +551,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
+          isLao: false,
         },
         {
           licenceId: 8,
@@ -544,6 +567,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
       ]
       const sortedCaseload = [
@@ -557,6 +581,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
+          isLao: false,
         },
         {
           licenceId: 5,
@@ -568,6 +593,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
+          isLao: false,
         },
         {
           licenceId: 1,
@@ -579,6 +605,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: true,
+          isLao: false,
         },
         {
           licenceId: 4,
@@ -590,6 +617,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
         {
           licenceId: 2,
@@ -601,6 +629,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
         {
           licenceId: 3,
@@ -612,6 +641,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
         {
           licenceId: 6,
@@ -623,6 +653,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
         {
           licenceId: 8,
@@ -634,6 +665,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
           kind: LicenceKind.CRD,
           isReviewNeeded: false,
+          isLao: false,
         },
       ]
       expect(caseload.sort(handler.prioritiseReviewNeeded)).toEqual(sortedCaseload)
@@ -664,6 +696,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
+            isLao: false,
           },
           {
             licenceId: 1,
@@ -679,6 +712,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
+            isLao: false,
           },
         ],
         multipleTeams: false,
@@ -724,6 +758,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: true,
+            isLao: false,
           },
           {
             licenceId: 1,
@@ -739,6 +774,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
+            isLao: false,
           },
           {
             licenceId: 2,
@@ -754,6 +790,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
             kind: LicenceKind.CRD,
             isReviewNeeded: false,
+            isLao: false,
           },
         ],
         multipleTeams: true,
