@@ -62,4 +62,14 @@ context('View COM create caseload', () => {
     caseloadPage = confirmCreatePage.clickReturnToCaseload()
     caseloadPage.signOut().click()
   })
+
+  it('The LAO restrictions should navigate to the restricted details page', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicenceWithLao()
+
+    const restrictedDetailsPage = caseloadPage.clickRestrictedName()
+    restrictedDetailsPage
+      .getRestrictedDetails()
+      .contains('This record has been restricted due to sensitive information')
+  })
 })
