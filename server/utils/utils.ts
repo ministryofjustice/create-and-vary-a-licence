@@ -7,7 +7,6 @@ import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
 import type {
   AddressSearchResponse,
-  CurfewTimesRequest,
   HdcLicence,
   HdcVariationLicence,
   Licence,
@@ -22,6 +21,8 @@ const ISO_DATE = 'yyyy-MM-dd'
 const JSON_DATE_TIME = 'DD/MM/YYYY HH:mm'
 const SIMPLE_DATE_TIME = 'D/MM/YYYY HHmm'
 const TWELVE_HOUR_TIME = 'hh:mm a'
+const TWENTY_FOUR_HOUR_TIME = 'HH:mm:ss'
+const DAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'] as const
 
 interface FileMapInput {
   filename: string
@@ -142,8 +143,21 @@ const jsonDtTo12HourTime = (dt: string): string => {
 }
 
 const json24HourTimeTo12HourTime = (dt: string): string => {
-  const momentTime = moment(dt, 'HH:mm:ss')
+  const momentTime = moment(dt, TWENTY_FOUR_HOUR_TIME)
   return momentTime.isValid() ? momentTime.format(TWELVE_HOUR_TIME) : null
+}
+
+const simpleTimeTo24Hour = (time: SimpleTime): string => {
+  const { hour, minute, ampm } = time
+  return moment(`${hour}:${minute} ${ampm}`, TWELVE_HOUR_TIME).format(TWENTY_FOUR_HOUR_TIME)
+}
+
+const simpleTimeToMinutes = (time: SimpleTime): number => {
+  const { hour, minute, ampm } = time
+
+  const m = moment(`${hour}:${minute} ${ampm}`, TWELVE_HOUR_TIME)
+
+  return m.hours() * 60 + m.minutes()
 }
 
 const parseIsoDate = (date: string) => {
@@ -305,62 +319,6 @@ const mapToTargetField = (input: FileMapInput) => {
   }
 }
 
-const getStandardHdcCurfewTimes = () => {
-  return {
-    curfewTimes: [
-      {
-        curfewTimesSequence: 0,
-        fromDay: 'MONDAY',
-        fromTime: '19:00:00',
-        untilDay: 'TUESDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 1,
-        fromDay: 'TUESDAY',
-        fromTime: '19:00:00',
-        untilDay: 'WEDNESDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 2,
-        fromDay: 'WEDNESDAY',
-        fromTime: '19:00:00',
-        untilDay: 'THURSDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 3,
-        fromDay: 'THURSDAY',
-        fromTime: '19:00:00',
-        untilDay: 'FRIDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 4,
-        fromDay: 'FRIDAY',
-        fromTime: '19:00:00',
-        untilDay: 'SATURDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 5,
-        fromDay: 'SATURDAY',
-        fromTime: '19:00:00',
-        untilDay: 'SUNDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 6,
-        fromDay: 'SUNDAY',
-        fromTime: '19:00:00',
-        untilDay: 'MONDAY',
-        untilTime: '07:00:00',
-      },
-    ],
-  } as CurfewTimesRequest
-}
-
 export {
   escapeCsv,
   convertToTitleCase,
@@ -397,5 +355,7 @@ export {
   lowercaseFirstLetter,
   isTimeServedLicence,
   mapToTargetField,
-  getStandardHdcCurfewTimes,
+  DAYS,
+  simpleTimeTo24Hour,
+  simpleTimeToMinutes,
 }

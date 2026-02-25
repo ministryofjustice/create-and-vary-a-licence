@@ -16,7 +16,6 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import {
   AdditionalCondition,
   ContactNumberRequest,
-  CurfewTimesRequest,
   Licence,
   LicenceSummary,
   PrisonerWithCvlFields,
@@ -739,29 +738,6 @@ describe('Licence Service', () => {
         nomisIds: [nomisId],
       })
       expect(licenceApiClient.createVariation).toHaveBeenCalledWith(licenceId, user)
-    })
-  })
-
-  describe('updateCurfewTimes', () => {
-    const user = { username: 'joebloggs' } as User
-    const licenceId = 123
-
-    it('should call to update the HDC curfew times', async () => {
-      const request = {
-        curfewTimes: [
-          {
-            curfewTimesSequence: 0,
-            fromDay: 'MONDAY',
-            fromTime: '00:00:00',
-            untilDay: 'MONDAY',
-            untilTime: '00:00:01',
-          },
-        ],
-      } as CurfewTimesRequest
-
-      await licenceService.updateCurfewTimes(licenceId, request, user)
-
-      expect(licenceApiClient.updateCurfewTimes).toHaveBeenCalledWith(licenceId, request, user)
     })
   })
 })
