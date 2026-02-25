@@ -1,0 +1,35 @@
+{% extends "layout.njk" %}
+
+{% set pageTitle = applicationName + " - Restricted Details" %}
+{% set pageId = "restricted-details-page" %}
+{% set backLinkHref = "/" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l" id="restricted-access-heading">Access restricted on NDelius
+                <br>
+                <span class="govuk-caption-l" id="crn-caption">CRN: {{ crn }}</span>
+            </h1>
+            <p class="govuk-body" id="restricted-access-description">Access to this person's details has been restricted on NDelius.<br>
+                This could be because the information is sensitive.</p>
+            <span class="govuk-heading-m govuk-!-margin-top-6" id="additional-info-heading">Additional information from NDelius</span>
+            <p class="govuk-hint" id="recorded-by-hint">Recorded by the person who restricted access.</p>
+            <div class="govuk-inset-text" style="margin-top: 20px;" id="restriction-message"> {{ message }} </div>
+            <span class="govuk-heading-m govuk-!-margin-top-6" id="guidance-heading">If you need more guidance</span>
+            <p class="govuk-body" id="equip-link-paragraph"><a
+                        href="https://equip-portal.equip.service.justice.gov.uk/ctrlwebisapi.dll/app/diagram/0%3AFF2D8D3F16B44268B814F7F8177A16F7.0CCF9118DFAC43F697E66CE331889D60"
+                        id="equip-link">Check
+                    EQuiP to find out more about restricted access</a>.</p>
+            <div class="govuk-button-group" id="button-group">
+                {{ govukButton({
+                    text: "Return to cases",
+                    classes: "govuk-button--secondary govuk-!-margin-top-3",
+                    href: "/licence/create/caseload",
+                    attributes: { 'data-qa': 'return-to-cases' }
+                }) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

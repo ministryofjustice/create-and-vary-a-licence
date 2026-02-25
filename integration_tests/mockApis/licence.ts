@@ -3249,6 +3249,23 @@ export default {
       },
     })
   },
+    
+  stubGetCaseAccessDetails: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/probation-staff/.+/permissions`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          type: 'RESTRICTED',
+          message: 'This record has been restricted due to sensitive information',
+        },
+      },
+    })
+  },
 
   stubGetVaryApproverSearchResultsWithLao: (): SuperAgentRequest => {
     return stubFor({

@@ -1,5 +1,6 @@
 import Page from '../pages/page'
 import IndexPage from '../pages'
+import RestrictedDetailsPage from '../pages/restrictedDetails'
 
 context('Search for a person', () => {
   const dates: string[] = []
@@ -72,8 +73,16 @@ context('Search for a person', () => {
     searchPage.getRow(0).find('#release-date-1').contains('Restricted')
     searchPage.getRow(0).find('#licence-status-1').contains('Restricted')
 
-    searchPage.getRow(0).find('a[id^="name-button"]').should('not.exist')
+    searchPage.getRow(0).find('a[id^="name-button"]').should('exist')
     searchPage.getRow(0).find('a[data-qa="comLink"]').should('not.exist')
+
+    cy.task('stubGetCaseAccessDetails')
+    searchPage.clickLaoOffenderName()
+
+    const restrictedDetailsPage = Page.verifyOnPage(RestrictedDetailsPage)
+    restrictedDetailsPage
+      .getRestrictedDetails()
+      .contains('This record has been restricted due to sensitive information')
   })
 
   it('should display LAO cases in people on probation tab with restricted information', () => {
@@ -94,7 +103,15 @@ context('Search for a person', () => {
     searchPage.getRow(0).find('#release-date-1').contains('Restricted')
     searchPage.getRow(0).find('#licence-status-1').contains('Restricted')
 
-    searchPage.getRow(0).find('a[id^="name-button"]').should('not.exist')
+    searchPage.getRow(0).find('a[id^="name-button"]').should('exist')
     searchPage.getRow(0).find('a[data-qa="comLink"]').should('not.exist')
+
+    cy.task('stubGetCaseAccessDetails')
+    searchPage.clickLaoOffenderName()
+
+    const restrictedDetailsPage = Page.verifyOnPage(RestrictedDetailsPage)
+    restrictedDetailsPage
+      .getRestrictedDetails()
+      .contains('This record has been restricted due to sensitive information')
   })
 })
