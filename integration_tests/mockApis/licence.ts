@@ -3249,7 +3249,7 @@ export default {
       },
     })
   },
-    
+
   stubGetCaseAccessDetails: (): SuperAgentRequest => {
     return stubFor({
       request: {
