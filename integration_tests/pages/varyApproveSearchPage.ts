@@ -65,4 +65,8 @@ export default class VaryApprovalSearchPage extends Page {
     cy.get('.govuk-back-link').click()
     return Page.verifyOnPage(VaryApproveCasesPage)
   }
+
+  getRow = (n: number) => {
+    return cy.get('tbody tr').eq(n)
+  }
 }
