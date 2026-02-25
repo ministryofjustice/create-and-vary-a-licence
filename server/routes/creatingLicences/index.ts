@@ -24,6 +24,7 @@ import LicenceChangesNotApprovedInTimeRoutes from './handlers/licenceChangesNotA
 import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import UserType from '../../enumeration/userType'
 import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMiddleware'
+import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
 export default function Index({
   licenceService,
@@ -43,21 +44,30 @@ export default function Index({
    * to explicitly inject the licence data into their individual view contexts.
    */
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), fetchLicence(licenceService), handler)
-
-  const getWithHardStopCheck = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
+      fetchLicence(licenceService),
+      handler,
+    )
+
+  const getWithHardStopCheck = (path: string, handler: RequestHandler) => {
+    return router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       hardStopCheckMiddleware(UserType.PROBATION),
       handler,
     )
+  }
 
   const getWithPreLicenceCreationCheck = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       preLicenceCreationMiddleware(probationService),
       handler,
@@ -67,6 +77,7 @@ export default function Index({
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(UserType.PROBATION),
@@ -77,6 +88,7 @@ export default function Index({
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       preLicenceCreationMiddleware(probationService),
       validationMiddleware(conditionService, type),

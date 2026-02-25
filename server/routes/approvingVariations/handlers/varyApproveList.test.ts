@@ -39,6 +39,7 @@ describe('Route Handlers - Variation approval list', () => {
           name: 'Com Four',
           allocated: true,
         },
+        isLao: false,
       },
     ])
   })

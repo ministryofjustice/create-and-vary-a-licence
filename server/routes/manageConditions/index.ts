@@ -18,6 +18,7 @@ import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
 import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
 import DeleteConditionsByCodeRoutes from './handlers/deleteConditionsByCodeHandler'
+import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
 export default function Index(services: Services): Router {
   const router = Router()
@@ -32,12 +33,19 @@ export default function Index(services: Services): Router {
    * to explicitly inject the licence data into their individual view contexts.
    */
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), fetchLicence(licenceService), handler)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
+      fetchLicence(licenceService),
+      handler,
+    )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       handler,

@@ -31,6 +31,7 @@ import staffRoutes from './staff'
 import hardStopStaffRoutes from './initialAppointment/handlers/prisonCreated/hardStop/staff'
 import createTimeServedLicenceRoutes from './creatingLicences/handlers/prisonCreated/timeServed'
 import hdcRoutes from './hdc'
+import checkComCaseAccessMiddlewareGlobal from '../middleware/checkComCaseAccessMiddlewareGlobal'
 
 export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
   const router = Router({ mergeParams: true })
@@ -40,8 +41,9 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   router.use(populateCurrentUser(services.userService, services.licenceService))
   router.use(flashMessages())
   router.use(fromReviewMiddleware())
+  router.use(checkComCaseAccessMiddlewareGlobal(services.licenceService))
 
-  router.use(homeRoutes())
+  router.use(homeRoutes(services))
   router.use(rolloutRoutes())
   router.use(createLicenceRoutes(services))
   router.use(createHardStopLicenceRoutes(services))

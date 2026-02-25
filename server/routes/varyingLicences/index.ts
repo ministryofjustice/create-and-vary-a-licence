@@ -27,6 +27,7 @@ import PolicyChangesInputCallbackRoutes from './handlers/policyChangesInputCallb
 import PolicyConfirmDeleteRoutes from './handlers/policyConfirmDelete'
 import ReviewLicenceRoutes from './handlers/reviewLicence'
 import YesOrNotApplicableDto from '../creatingLicences/types/yesOrNotApplicable'
+import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
 function alterResObject() {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -57,6 +58,7 @@ export default function Index({
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       alterResObject(),
       handler,
@@ -66,6 +68,7 @@ export default function Index({
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       handler,

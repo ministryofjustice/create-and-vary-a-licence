@@ -12,6 +12,8 @@ import type {
   AuditEvent,
   AuditRequest,
   BespokeConditionsRequest,
+  CaseAccessDetails,
+  CheckCaseAccessRequest,
   ComReviewCount,
   ContactNumberRequest,
   CreateLicenceResponse,
@@ -505,5 +507,9 @@ export default class LicenceService {
 
   async updateCurfewTimes(licenceId: number, curfewTimesRequest: CurfewTimesRequest, user: User): Promise<void> {
     return this.licenceApiClient.updateCurfewTimes(licenceId, curfewTimesRequest, user)
+  }
+
+  async checkComCaseAccess(request: CheckCaseAccessRequest, user: User): Promise<CaseAccessDetails> {
+    return this.licenceApiClient.checkComCaseAccess(request, user)
   }
 }
