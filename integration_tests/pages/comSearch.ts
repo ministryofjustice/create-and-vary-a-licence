@@ -1,5 +1,6 @@
 import CheckAnswersPage from './checkAnswers'
 import ComDetailsPage from './comDetails'
+import RestrictedDetailsPage from './restrictedDetails'
 import Page from './page'
 
 export default class SearchPage extends Page {
@@ -23,6 +24,11 @@ export default class SearchPage extends Page {
     cy.task('stubGetLicenceVariationInProgress')
     cy.get(this.licenceLinkId).click()
     return Page.verifyOnPage(CheckAnswersPage)
+  }
+
+  clickLaoOffenderName = (): RestrictedDetailsPage => {
+    cy.get(this.licenceLinkId).click()
+    return Page.verifyOnPage(RestrictedDetailsPage)
   }
 
   clickComName = (): ComDetailsPage => {

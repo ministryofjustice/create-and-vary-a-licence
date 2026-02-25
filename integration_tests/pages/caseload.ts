@@ -6,6 +6,7 @@ import SearchPage from './comSearch'
 import PrisonWillCreateLicencePage from './prisonWillCreateLicencePage'
 import LicenceNotApprovedInTimePage from './licenceNotApprovedInTimePage'
 import HardStopLicencePage from './hardStopLicencePage'
+import RestrictedDetailsPage from './restrictedDetails'
 
 export default class CaseloadPage extends Page {
   private createLicenceButtonId = '#name-button-1'
@@ -56,6 +57,12 @@ export default class CaseloadPage extends Page {
     cy.task('stubGetStaffDetailsByStaffCode')
     cy.contains('td a', 'John Smith').click()
     return Page.verifyOnPage(ComDetailsPage)
+  }
+
+  clickRestrictedName = (): RestrictedDetailsPage => {
+    cy.task('stubGetCaseAccessDetails')
+    cy.contains('td a', 'Restricted').click()
+    return Page.verifyOnPage(RestrictedDetailsPage)
   }
 
   clickSearch = (text: string): SearchPage => {

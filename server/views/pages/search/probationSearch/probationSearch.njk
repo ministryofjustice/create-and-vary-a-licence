@@ -15,7 +15,7 @@
 {% macro offenderName(offender, index) %}
     <div class="search-offender-name">
         {% if laoEnabled and offender.isLao %}
-            {{ offender.name }}
+            <a id="name-button-{{ index }}" href="{{ "/search/" + offender.crn + "/restricted" }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offender.name }}</a>
         {% else %}
             {% if offender.isOnProbation %}
                 {% set link = "/licence/vary/id/" + offender.licenceId + "/timeline" %}
