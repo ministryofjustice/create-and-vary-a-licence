@@ -31,6 +31,7 @@ describe('Vary Approver Caseload Service', () => {
           name: 'An ProbationOfficer',
           allocated: true,
         },
+        isLao: false,
       },
     ])
 
