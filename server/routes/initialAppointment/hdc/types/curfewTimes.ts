@@ -1,7 +1,7 @@
 import { Expose, Type } from 'class-transformer'
 import { Validate } from 'class-validator'
-import ValidCurfewTime from '../../../validators/curfewTimeValidator'
-import { SimpleTime } from '../../manageConditions/types'
+import ValidCurfewTime from '../../../../validators/curfewTimeValidator'
+import { SimpleTime } from '../../../manageConditions/types'
 
 class CurfewTimes {
   @Expose()

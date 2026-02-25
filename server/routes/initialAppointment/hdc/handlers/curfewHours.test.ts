@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import CurfewHoursRoutes from './curfewHours'
-import HdcService from '../../../services/hdcService'
+import HdcService from '../../../../services/hdcService'
 
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
-jest.mock('../../../services/hdcService')
+jest.mock('../../../../services/hdcService')
 
 describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', () => {
   let req: Request

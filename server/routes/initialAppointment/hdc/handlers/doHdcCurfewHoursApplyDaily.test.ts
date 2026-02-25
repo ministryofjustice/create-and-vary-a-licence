@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { Request, Response } from 'express'
 import DoHdcCurfewHoursApplyDailyRoutes from './doHdcCurfewHoursApplyDaily'
-import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/hdc/doHdcCurfewHoursApplyDaily.njk').toString())
 

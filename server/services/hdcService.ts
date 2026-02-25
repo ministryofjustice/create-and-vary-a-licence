@@ -1,7 +1,7 @@
 import { User } from '../@types/CvlUserDetails'
 import { CurfewTimesRequest, HdcLicenceData } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
-import CurfewTimes from '../routes/hdc/types/curfewTimes'
+import CurfewTimes from '../routes/initialAppointment/hdc/types/curfewTimes'
 import { SimpleTime } from '../routes/manageConditions/types'
 import { DAYS, simpleTimeTo24Hour, simpleTimeToMinutes } from '../utils/utils'
 

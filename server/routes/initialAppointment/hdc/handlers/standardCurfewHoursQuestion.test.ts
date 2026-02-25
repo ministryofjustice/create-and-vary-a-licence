@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import StandardCurfewHoursQuestionRoutes from './standardCurfewHoursQuestion'
-import YesOrNo from '../../../enumeration/yesOrNo'
-import HdcService from '../../../services/hdcService'
+import YesOrNo from '../../../../enumeration/yesOrNo'
+import HdcService from '../../../../services/hdcService'
 import STANDARD_CURFEW_TIMES from '../curfewDefaults'
 
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
-jest.mock('../../../services/hdcService')
+jest.mock('../../../../services/hdcService')
 
 describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', () => {
   let req: Request

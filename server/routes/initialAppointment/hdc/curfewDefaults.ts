@@ -1,4 +1,4 @@
-import { SimpleTime } from '../manageConditions/types'
+import { SimpleTime } from '../../manageConditions/types'
 import CurfewTimes from './types/curfewTimes'
 
 const STANDARD_CURFEW_TIMES = {
