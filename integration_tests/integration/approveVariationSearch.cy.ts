@@ -14,6 +14,7 @@ context('ACO search a licence variation', () => {
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubFeComponents')
+    cy.task('stubCheckComCaseAccess')
     cy.signIn()
   })
 

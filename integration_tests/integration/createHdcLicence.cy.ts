@@ -29,6 +29,7 @@ context('Create an HDC licence', () => {
     cy.task('stubFeComponents')
     cy.task('stubPostProbationLicence')
     cy.task('stubUpdateCurfewTimes')
+    cy.task('stubCheckComCaseAccess')
     cy.signIn()
   })
 

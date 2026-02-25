@@ -3243,18 +3243,31 @@ export default {
     })
   },
 
+<<<<<<< HEAD
   stubGetCaseAccessDetails: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
         urlPattern: `/licences-api/probation-staff/.+/permissions`,
+=======
+  stubCheckComCaseAccess: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/licences-api/probation-staff/case-access',
+>>>>>>> 6c9380aa (CVSL-3781: Update integration tests.)
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
+<<<<<<< HEAD
           type: 'RESTRICTED',
           message: 'This record has been restricted due to sensitive information',
+=======
+          crn: 'crn',
+          type: 'NONE',
+>>>>>>> 6c9380aa (CVSL-3781: Update integration tests.)
         },
       },
     })
