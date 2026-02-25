@@ -12,6 +12,7 @@ import type {
   AuditEvent,
   AuditRequest,
   BespokeConditionsRequest,
+  CaseAccessDetails,
   ComReviewCount,
   ContactNumberRequest,
   CreateLicenceResponse,
@@ -500,5 +501,9 @@ export default class LicenceService {
       newLicence = await this.createVariation(licenceId, user)
     }
     return newLicence
+  }
+
+  async getCaseAccessDetails(crn: string): Promise<CaseAccessDetails> {
+    return this.licenceApiClient.getCaseAccessDetails(crn)
   }
 }
