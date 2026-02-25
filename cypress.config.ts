@@ -145,12 +145,8 @@ export default defineConfig({
         stubGetStaffCreateCaseloadWithLao: licence.stubGetStaffCreateCaseloadWithLao,
         stubUpdateCurfewTimes: licence.stubUpdateCurfewTimes,
         stubGetStaffVaryCaseloadWithLao: licence.stubGetStaffVaryCaseloadWithLao,
-<<<<<<< HEAD
         stubGetCaseAccessDetails: licence.stubGetCaseAccessDetails,
-=======
         stubCheckComCaseAccess: licence.stubCheckComCaseAccess,
-
->>>>>>> 6c9380aa (CVSL-3781: Update integration tests.)
         stubGetProbationer: delius.stubGetProbationer,
         stubGetProbationers: delius.stubGetProbationers,
         stubGetStaffDetails: delius.stubGetStaffDetails,
