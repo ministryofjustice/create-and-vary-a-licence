@@ -145,6 +145,7 @@ export default defineConfig({
         stubGetStaffCreateCaseloadWithLao: licence.stubGetStaffCreateCaseloadWithLao,
         stubUpdateCurfewTimes: licence.stubUpdateCurfewTimes,
         stubGetStaffVaryCaseloadWithLao: licence.stubGetStaffVaryCaseloadWithLao,
+        stubGetVaryApproverSearchResultsWithLao: licence.stubGetVaryApproverSearchResultsWithLao,
 
         stubGetProbationer: delius.stubGetProbationer,
         stubGetProbationers: delius.stubGetProbationers,
