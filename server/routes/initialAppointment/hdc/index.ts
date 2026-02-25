@@ -1,16 +1,19 @@
 import { RequestHandler, Router } from 'express'
-import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
-import fetchLicence from '../../middleware/fetchLicenceMiddleware'
-import { Services } from '../../services'
+import roleCheckMiddleware from '../../../middleware/roleCheckMiddleware'
+import fetchLicence from '../../../middleware/fetchLicenceMiddleware'
+import { Services } from '../../../services'
 import StandardCurfewHoursQuestionRoutes from './handlers/standardCurfewHoursQuestion'
-import licenceKindCheckMiddleware from '../../middleware/licenceKindCheckMiddleware'
-import validationMiddleware from '../../middleware/validationMiddleware'
-import { LicenceKind } from '../../enumeration'
-import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
+import licenceKindCheckMiddleware from '../../../middleware/licenceKindCheckMiddleware'
+import validationMiddleware from '../../../middleware/validationMiddleware'
+import { LicenceKind } from '../../../enumeration'
+import YesOrNoQuestion from '../../creatingLicences/types/yesOrNo'
+import CurfewHoursRoutes from './handlers/curfewHours'
+import DoHdcCurfewHoursApplyDailyRoutes from './handlers/doHdcCurfewHoursApplyDaily'
+import CurfewTimes from './types/curfewTimes'
 
 export default function Index(services: Services): Router {
   const router = Router()
-  const { conditionService, licenceService } = services
+  const { conditionService, licenceService, hdcService } = services
 
   const routePrefix = (path: string) => `/licence/create/id/:licenceId/hdc${path}`
 
@@ -48,9 +51,21 @@ export default function Index(services: Services): Router {
     )
 
   {
-    const controller = new StandardCurfewHoursQuestionRoutes(licenceService)
+    const controller = new StandardCurfewHoursQuestionRoutes(hdcService)
     get('/standard-curfew-hours-question', controller.GET)
     post('/standard-curfew-hours-question', controller.POST, YesOrNoQuestion)
+  }
+
+  {
+    const controller = new DoHdcCurfewHoursApplyDailyRoutes()
+    get('/do-hdc-curfew-hours-apply-daily', controller.GET)
+    post('/do-hdc-curfew-hours-apply-daily', controller.POST, YesOrNoQuestion)
+  }
+
+  {
+    const controller = new CurfewHoursRoutes(hdcService)
+    get('/curfew-hours', controller.GET)
+    post('/curfew-hours', controller.POST, CurfewTimes)
   }
 
   return router

@@ -1,9 +1,9 @@
 import fs from 'fs'
 import { Request, Response } from 'express'
 import DoHdcCurfewHoursApplyDailyRoutes from './doHdcCurfewHoursApplyDaily'
-import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 
-const render = templateRenderer(fs.readFileSync('server/views/partials/hdc/doHdcCurfewHoursApplyDaily.njk').toString())
+const render = templateRenderer(fs.readFileSync('server/views/pages/hdc/doHdcCurfewHoursApplyDaily.njk').toString())
 
 describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', () => {
   let req: Request
@@ -36,7 +36,7 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
     it('should render view', async () => {
       req.query = { edit: 'telNumber' }
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('partials/hdc/doHdcCurfewHoursApplyDaily')
+      expect(res.render).toHaveBeenCalledWith('pages/hdc/doHdcCurfewHoursApplyDaily')
     })
   })
 
@@ -50,7 +50,7 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
   describe('POST', () => {
     it('should redirect to the do hdc curfew hours apply daily page', async () => {
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/do-hdc-curfew-hours-apply-daily')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/hdc/do-hdc-curfew-hours-apply-daily')
     })
   })
 })

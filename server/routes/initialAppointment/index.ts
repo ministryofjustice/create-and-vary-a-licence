@@ -145,10 +145,5 @@ export default function Index({ licenceService, conditionService, addressService
     post('/view/id/:licenceId/manual-address-entry', controller.POST, ManualAddress)
   }
 
-  {
-    const controller = new DoHdcCurfewHoursApplyDailyRoutes()
-    get('/create/id/:licenceId/do-hdc-curfew-hours-apply-daily', controller.GET, UserType.PROBATION)
-    post('/create/id/:licenceId/do-hdc-curfew-hours-apply-daily', controller.POST, YesOrNoQuestion)
-  }
   return router
 }

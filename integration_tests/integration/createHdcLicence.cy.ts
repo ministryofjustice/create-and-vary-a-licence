@@ -2,6 +2,8 @@ import moment from 'moment'
 import ConfirmCreatePage from '../pages/confirmCreate'
 import LicenceCreationType from '../../server/enumeration/licenceCreationType'
 import CurfewType from '../../server/enumeration/CurfewType'
+import DoHdcCurfewHoursApplyDailyPage from '../pages/doHdcCurfewHoursApplyDailyPage'
+import CurfewHoursPage from '../pages/curfewHoursPage'
 
 context('Create an HDC licence', () => {
   const dates: string[] = []
@@ -117,6 +119,70 @@ context('Create an HDC licence', () => {
       })
       const caseloadPageExit = confirmationPage.clickReturn()
       caseloadPageExit.signOut().click()
+    })
+  })
+
+  it('should show select yes or no error if no option selected for do the same curfew hours apply every day', () => {
+    cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
+    const confirmCreatePage = new ConfirmCreatePage()
+    confirmCreatePage.clickContinue()
+
+    cy.visit('licence/create/id/1/hdc/do-hdc-curfew-hours-apply-daily')
+    const doHdcCurfewHoursApplyDailyPage = new DoHdcCurfewHoursApplyDailyPage()
+    doHdcCurfewHoursApplyDailyPage.clickContinueWithError().assertErrorSummaryMessage('Select yes or no')
+  })
+
+  describe('when the same curfew hours apply every day', () => {
+    it('should validate curfew hours start and end times if no curfew hours are entered', () => {
+      cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
+      const confirmCreatePage = new ConfirmCreatePage()
+      confirmCreatePage.clickContinue()
+
+      cy.visit('licence/create/id/1/hdc/curfew-hours')
+      const curfewHoursPage = new CurfewHoursPage()
+      curfewHoursPage.clickContinueWithError().assertErrorSummaryMessage(['Enter a start time', 'Enter an end time'])
+    })
+
+    it('should validate curfew hours start and end times if the start time is missing am or pm', () => {
+      cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
+      const confirmCreatePage = new ConfirmCreatePage()
+      confirmCreatePage.clickContinue()
+
+      cy.visit('licence/create/id/1/hdc/curfew-hours')
+      const curfewHoursPage = new CurfewHoursPage()
+      curfewHoursPage
+        .enterCurfewStartTime({ hour: '10', minute: '00', ampm: '' })
+        .enterCurfewEndTime({ hour: '11', minute: '00', ampm: 'am' })
+        .clickContinueWithError()
+        .assertErrorSummaryMessage(['Start time must include am or pm'])
+    })
+
+    it('should validate curfew hours start and end times if the end time is missing am or pm', () => {
+      cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
+      const confirmCreatePage = new ConfirmCreatePage()
+      confirmCreatePage.clickContinue()
+
+      cy.visit('licence/create/id/1/hdc/curfew-hours')
+      const curfewHoursPage = new CurfewHoursPage()
+      curfewHoursPage
+        .enterCurfewStartTime({ hour: '10', minute: '00', ampm: 'am' })
+        .enterCurfewEndTime({ hour: '11', minute: '00', ampm: '' })
+        .clickContinueWithError()
+        .assertErrorSummaryMessage(['End time must include am or pm'])
+    })
+
+    it('should validate curfew hours start and end times if the same no hour entered for start time', () => {
+      cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
+      const confirmCreatePage = new ConfirmCreatePage()
+      confirmCreatePage.clickContinue()
+
+      cy.visit('licence/create/id/1/hdc/curfew-hours')
+      const curfewHoursPage = new CurfewHoursPage()
+      curfewHoursPage
+        .enterCurfewStartTime({ hour: '', minute: '30', ampm: 'am' })
+        .enterCurfewEndTime({ hour: '11', minute: '00', ampm: 'am' })
+        .clickContinueWithError()
+        .assertErrorSummaryMessage(['Start time must include an hour in 12-hour clock format'])
     })
   })
 })
