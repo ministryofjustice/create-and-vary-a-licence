@@ -3225,4 +3225,21 @@ export default {
       },
     })
   },
+
+  stubCheckComCaseAccess: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/licences-api/probation-staff/case-access',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          crn: 'crn',
+          type: 'NONE',
+        },
+      },
+    })
+  },
 }

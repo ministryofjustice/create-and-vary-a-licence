@@ -13,6 +13,7 @@ context('Search for a person', () => {
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubFeComponents')
+    cy.task('stubCheckComCaseAccess')
     cy.signIn()
   })
 

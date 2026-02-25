@@ -12,6 +12,7 @@ context('Create a licence', () => {
     cy.task('stubGetOmuEmail')
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubFeComponents')
+    cy.task('stubCheckComCaseAccess')
     cy.signIn()
   })
 

@@ -21,6 +21,7 @@ context('Vary a licence - time served', () => {
       isReviewNeeded: true,
     })
     cy.task('stubReviewWithOutVariation')
+    cy.task('stubCheckComCaseAccess')
     cy.signIn()
   })
 
