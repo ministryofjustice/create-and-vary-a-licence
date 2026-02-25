@@ -18,15 +18,27 @@ import type {
   BespokeConditionsRequest,
   CaCase,
   CaCaseloadSearch,
+  CaseAccessDetails,
+  CheckCaseAccessRequest,
   ComCreateCase,
+  ComReviewCount,
+  ComSearchResponse,
   ComVaryCase,
   ContactNumberRequest,
-  HdcLicenceData,
-  Licence,
-  LicenceConditionChange,
   CreateLicenceResponse,
   CreateVariationResponse,
+  CurfewTimesRequest,
+  EditLicenceResponse,
+  EligibilityAssessment,
+  ExternalTimeServedRecordRequest,
+  ExternalTimeServedRecordResponse,
+  HdcLicenceData,
+  LastMinuteHandoverCaseResponse,
+  Licence,
+  LicenceConditionChange,
   LicenceEvent,
+  LicencePermissionsRequest,
+  LicencePermissionsResponse,
   LicencePolicyResponse,
   LicenceSummary,
   NotifyRequest,
@@ -38,14 +50,18 @@ import type {
   PrisonerWithCvlFields,
   PrisonUserSearchRequest,
   ProbationSearchRequest,
-  ComSearchResponse,
   ReferVariationRequest,
   StatusUpdateRequest,
   TeamCaseloadRequest,
+  TimeServedCaseload,
+  TimeServedProbationConfirmContactRequest,
+  UpcomingReleasesWithMonitoringConditionsResponse,
   UpdateAdditionalConditionDataRequest,
+  UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
   UpdateOffenderDetailsRequest,
   UpdatePrisonInformationRequest,
+  UpdatePrisonUserRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
   UpdateStandardConditionDataRequest,
@@ -53,21 +69,6 @@ import type {
   VaryApproverCase,
   VaryApproverCaseloadSearchRequest,
   VaryApproverCaseloadSearchResponse,
-  TimeServedCaseload,
-  LicencePermissionsRequest,
-  LicencePermissionsResponse,
-  LastMinuteHandoverCaseResponse,
-  EligibilityAssessment,
-  ExternalTimeServedRecordRequest,
-  ExternalTimeServedRecordResponse,
-  TimeServedProbationConfirmContactRequest,
-  UpcomingReleasesWithMonitoringConditionsResponse,
-  EditLicenceResponse,
-  ComReviewCount,
-  UpdateComRequest,
-  UpdatePrisonUserRequest,
-  CurfewTimesRequest,
-  CaseAccessDetails,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -819,5 +820,15 @@ export default class LicenceApiClient extends RestClient {
 
   async getCaseAccessDetails(crn: string): Promise<CaseAccessDetails> {
     return (await this.get({ path: `/probation-staff/${crn}/permissions` })) as Promise<CaseAccessDetails>
+  }
+
+  async checkComCaseAccess(request: CheckCaseAccessRequest, user: User): Promise<CaseAccessDetails> {
+    return (await this.post(
+      {
+        path: `/probation-staff/case-access`,
+        data: request,
+      },
+      { username: user.username },
+    )) as CaseAccessDetails
   }
 }

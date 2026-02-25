@@ -88,6 +88,7 @@ describe('createLicenceRoutes', () => {
     beforeEach(() => {
       licenceService.getLicence.mockResolvedValue({ ...licence, isInHardStopPeriod: true } as Licence)
       licenceService.getPrisonerDetail.mockResolvedValue({ cvl: { isInHardStopPeriod: true } } as PrisonerWithCvlFields)
+      licenceService.checkComCaseAccess.mockResolvedValue({ crn: 'crn1234', type: 'NONE' })
     })
     describe('GETs', () => {
       it('should redirect to access-denied when trying to access create a licence page', () => {
@@ -201,6 +202,7 @@ describe('createLicenceRoutes', () => {
         } as CvlPrisoner,
         cvl: { isInHardStopPeriod: false },
       } as PrisonerWithCvlFields)
+      licenceService.checkComCaseAccess.mockResolvedValue({ crn: 'crn1234', type: 'NONE' })
     })
     describe('GETs', () => {
       it('should allow access create a licence page', () => {

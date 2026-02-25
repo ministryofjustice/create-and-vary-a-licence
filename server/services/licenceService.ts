@@ -13,6 +13,7 @@ import type {
   AuditRequest,
   BespokeConditionsRequest,
   CaseAccessDetails,
+  CheckCaseAccessRequest,
   ComReviewCount,
   ContactNumberRequest,
   CreateLicenceResponse,
@@ -510,5 +511,9 @@ export default class LicenceService {
 
   async getCaseAccessDetails(crn: string): Promise<CaseAccessDetails> {
     return this.licenceApiClient.getCaseAccessDetails(crn)
+  }
+
+  async checkComCaseAccess(request: CheckCaseAccessRequest, user: User): Promise<CaseAccessDetails> {
+    return this.licenceApiClient.checkComCaseAccess(request, user)
   }
 }
