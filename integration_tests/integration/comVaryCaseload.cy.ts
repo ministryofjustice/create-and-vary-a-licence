@@ -19,6 +19,7 @@ context('View COM vary caseload', () => {
     })
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubFeComponents')
+    cy.task('stubCheckComCaseAccess')
     cy.signIn()
   })
 

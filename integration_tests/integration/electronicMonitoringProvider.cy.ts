@@ -23,6 +23,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     cy.task('stubDeleteAdditionalConditionsByCode')
     cy.task('stubFeComponents')
     cy.task('stubPostProbationLicence')
+    cy.task('stubCheckComCaseAccess')
     cy.signIn()
   })
 

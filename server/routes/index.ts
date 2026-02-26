@@ -41,7 +41,7 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   router.use(flashMessages())
   router.use(fromReviewMiddleware())
 
-  router.use(homeRoutes())
+  router.use(homeRoutes(services))
   router.use(rolloutRoutes())
   router.use(createLicenceRoutes(services))
   router.use(createHardStopLicenceRoutes(services))

@@ -8,6 +8,7 @@ import { Services } from '../../../../services'
 import YesOrNoQuestion from '../../types/yesOrNo'
 import ConfirmCreateRoutes from './confirmCreate'
 import preLicenceCreationMiddleware from '../../../../middleware/preLicenceCreationMiddleware'
+import checkComCaseAccessMiddleware from '../../../../middleware/checkComCaseAccessMiddleware'
 
 export default function Index({ licenceService, conditionService, probationService }: Services): Router {
   const router = Router()
@@ -24,6 +25,7 @@ export default function Index({ licenceService, conditionService, probationServi
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       preLicenceCreationMiddleware(probationService),
       handler,

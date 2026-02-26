@@ -932,7 +932,7 @@ describe('View Probation Search Results', () => {
     expect($('#name-1 > .search-offender-name > .govuk-heading-s').length).toBe(1)
     expect($('#name-1 > .search-offender-name > a').length).toBe(1)
     expect($('#name-1 > .search-offender-name').text()).toContain('Access restricted on NDelius')
-    expect($('#name-1 > .search-offender-name > a').attr('href')).toContain('/search/A123456/restricted')
+    expect($('#name-1 > .search-offender-name > a').attr('href')).toContain('/A123456/restricted')
     expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
     expect($('#licence-type-1').text().trim()).toBe('Restricted')
     expect($('#probation-practitioner-1').text()).toBe('Restricted')
@@ -977,7 +977,7 @@ describe('View Probation Search Results', () => {
 
     expect($('#name-1 > .search-offender-name > a').length).toBe(1)
     expect($('#name-1 > .search-offender-name').text()).toContain('Access restricted on NDelius')
-    expect($('#name-1 > .search-offender-name > a').attr('href')).toContain('/search/A123456/restricted')
+    expect($('#name-1 > .search-offender-name > a').attr('href')).toContain('/A123456/restricted')
     expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
     expect($('#licence-type-1').text().trim()).toBe('Restricted')
     expect($('#probation-practitioner-1').text()).toBe('Restricted')

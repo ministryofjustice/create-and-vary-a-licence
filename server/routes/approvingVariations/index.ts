@@ -10,6 +10,7 @@ import VaryReferRoutes from './handlers/varyRefer'
 import VaryReferConfirmRoutes from './handlers/varyReferConfirm'
 import ComDetailsRoutes from './handlers/comDetails'
 import ReasonForReferral from '../creatingLicences/types/reasonForReferral'
+import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
 export default function Index({
   licenceService,
@@ -29,13 +30,20 @@ export default function Index({
 
   // Setup middleware processing for GET
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_ACO']), fetchLicence(licenceService), handler)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_ACO']),
+      checkComCaseAccessMiddleware(licenceService),
+      fetchLicence(licenceService),
+      handler,
+    )
 
   // Setup middleware processing for POST
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_ACO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       handler,

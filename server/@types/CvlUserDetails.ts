@@ -1,4 +1,4 @@
-export default class CvlUserDetails {
+export class CvlUserDetails {
   // e.g. john
   firstName?: string
 
@@ -31,6 +31,9 @@ export default class CvlUserDetails {
 
   // Probation staffCode in nDelius e.g. X345H
   deliusStaffCode?: string
+
+  // Is this user a probation user
+  isProbationUser?: boolean
 
   // Probation area code
   probationAreaCode?: string

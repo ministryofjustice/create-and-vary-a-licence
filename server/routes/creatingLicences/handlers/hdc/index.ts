@@ -6,6 +6,7 @@ import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 import { Services } from '../../../../services'
 import ConfirmCreateRoutes from './confirmCreate'
 import preLicenceCreationMiddleware from '../../../../middleware/preLicenceCreationMiddleware'
+import checkComCaseAccessMiddleware from '../../../../middleware/checkComCaseAccessMiddleware'
 
 export default function Index({
   licenceService,
@@ -27,6 +28,7 @@ export default function Index({
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       preLicenceCreationMiddleware(probationService),
       handler,

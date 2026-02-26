@@ -7,6 +7,7 @@ import ViewAndPrintCaseRoutes from './handlers/viewCases'
 import ViewAndPrintLicenceRoutes from './handlers/viewLicence'
 import PrintLicenceRoutes from './handlers/printLicence'
 import ComDetailsRoutes from './handlers/comDetails'
+import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
 export default function Index({
   licenceService,
@@ -23,6 +24,7 @@ export default function Index({
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
+      checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       handler,
     )

@@ -148,6 +148,7 @@ export default defineConfig({
         stubGetVaryApproverSearchResultsWithLao: licence.stubGetVaryApproverSearchResultsWithLao,
 
         stubGetCaseAccessDetails: licence.stubGetCaseAccessDetails,
+        stubCheckComCaseAccess: licence.stubCheckComCaseAccess,
         stubGetProbationer: delius.stubGetProbationer,
         stubGetProbationers: delius.stubGetProbationers,
         stubGetStaffDetails: delius.stubGetStaffDetails,

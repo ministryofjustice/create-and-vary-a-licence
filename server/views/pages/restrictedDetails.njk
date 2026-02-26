@@ -1,8 +1,16 @@
-{% extends "layout.njk" %}
+1{% extends "layout.njk" %}
 
 {% set pageTitle = applicationName + " - Restricted Details" %}
 {% set pageId = "restricted-details-page" %}
 {% set backLinkHref = "/" %}
+
+{% if user.userRoles.includes('ROLE_LICENCE_ACO') %}
+    {% set caseloadLink = '/licence/vary-approve/caseload' %}
+{% elseif isVaryJourney %}
+    {% set caseloadLink = '/licence/vary/caseload' %}
+{% else %}
+    {% set caseloadLink = '/licence/create/caseload' %}
+{% endif %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -32,4 +40,3 @@
         </div>
     </div>
 {% endblock %}
-
