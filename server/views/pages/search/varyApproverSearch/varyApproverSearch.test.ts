@@ -2,6 +2,7 @@ import fs from 'fs'
 import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 import LicenceType from '../../../../enumeration/licenceType'
 import { VaryApproverCase } from '../../../../@types/licenceApiClientTypes'
+import config from '../../../../config'
 
 const render = templateRenderer(
   fs.readFileSync('server/views/pages/search/varyApproverSearch/varyApproverSearch.njk').toString(),
@@ -26,6 +27,19 @@ const pduCases = [
       name: 'Com One',
       allocated: true,
     },
+    isLao: false,
+  },
+]
+
+const laoCases: VaryApproverCase[] = [
+  {
+    licenceId: null,
+    name: 'Access restricted on NDelius',
+    crnNumber: 'A111111',
+    licenceType: 'AP',
+    releaseDate: '10 Jan 2023',
+    probationPractitioner: { staffCode: 'Restricted', name: 'Restricted', allocated: true },
+    isLao: true,
   },
 ]
 
@@ -42,6 +56,7 @@ const regionCases = [
       name: 'Com One',
       allocated: true,
     },
+    isLao: false,
   },
   {
     licenceId: 2,
@@ -55,6 +70,38 @@ const regionCases = [
       name: 'Com Four',
       allocated: true,
     },
+    isLao: false,
+  },
+]
+
+const pduCasesWithLao: VaryApproverCase[] = [
+  {
+    licenceId: 1,
+    name: 'Test Person One',
+    crnNumber: 'X12345',
+    licenceType: LicenceType.AP,
+    releaseDate: '01/05/2024',
+    variationRequestDate: '03/06/2024',
+    probationPractitioner: {
+      staffCode: 'X1231',
+      name: 'Com One',
+      allocated: true,
+    },
+    isLao: false,
+  },
+  {
+    licenceId: null,
+    name: 'Access restricted on NDelius',
+    crnNumber: 'A111111',
+    licenceType: null,
+    releaseDate: null,
+    variationRequestDate: null,
+    probationPractitioner: {
+      staffCode: 'Restricted',
+      name: 'Restricted',
+      allocated: true,
+    },
+    isLao: true,
   },
 ]
 
@@ -256,5 +303,92 @@ describe('View Vary Approver Search Results', () => {
 
     expect($('#probation-practitioner-1').text()).toBe('Not allocated')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
+  })
+
+  it('should render name as plain text for LAO users', () => {
+    config.laoEnabled = true
+    const $ = render({
+      queryTerm: 'A111111',
+      backLink: '/licence/vary-approve/list',
+      tabParameters: {
+        activeTab: '#pdu-cases',
+        pduCases: {
+          tabId: 'tab-heading-pdu-cases',
+          tabHeading: 'Cases in this PDU',
+          resultsCount: 1,
+        },
+        regionCases: {
+          tabId: 'tab-heading-region-cases',
+          tabHeading: 'All cases in this region',
+          resultsCount: 0,
+        },
+      },
+      pduCases: laoCases,
+      regionCases: [],
+    })
+    expect($('#name-link-1').length).toBe(0)
+    expect($('#name-1').text()).toContain('Access restricted on NDelius')
+    expect($('.govuk-hint').text()).toContain('CRN: A111111')
+  })
+
+  it('should redact LAO cases in PDU tab', () => {
+    config.laoEnabled = true
+    const $ = render({
+      queryTerm: 'A111111',
+      backLink: '/licence/vary-approve/list',
+      tabParameters: {
+        activeTab: '#pdu-cases',
+        pduCases: {
+          tabId: 'tab-heading-pdu-cases',
+          tabHeading: 'Cases in this PDU',
+          resultsCount: 1,
+        },
+        regionCases: {
+          tabId: 'tab-heading-region-cases',
+          tabHeading: 'All cases in this region',
+          resultsCount: 0,
+        },
+      },
+      pduCases: laoCases,
+      regionCases: [],
+    })
+
+    expect($('#licence-type-1').text()).toContain('Restricted')
+    expect($('#probation-practitioner-1').text()).toContain('Restricted')
+    expect($('#variation-request-date-1').text()).toContain('Restricted')
+    expect($('#release-date-1').text()).toContain('Restricted')
+  })
+
+  it('should redact LAO cases in Region tab', () => {
+    config.laoEnabled = true
+    const $ = render({
+      queryTerm: 'A111111',
+      backLink: '/licence/vary-approve/list',
+      tabParameters: {
+        activeTab: '#region-cases',
+        pduCases: {
+          tabId: 'tab-heading-pdu-cases',
+          tabHeading: 'Cases in this PDU',
+          resultsCount: 0,
+        },
+        regionCases: {
+          tabId: 'tab-heading-region-cases',
+          tabHeading: 'All cases in this region',
+          resultsCount: 2,
+        },
+      },
+      pduCases: [],
+      regionCases: pduCasesWithLao,
+    })
+
+    expect($('#name-link-1').text()).toBe('Test Person One')
+    expect($('#name-link-1').attr('href').trim()).toBe('/licence/vary-approve/id/1/view')
+    expect($('#licence-type-1').text()).toContain('Standard determinate')
+    expect($('#probation-practitioner-1').text()).toBe('Com One')
+
+    expect($('#name-2').text()).toContain('Access restricted on NDelius')
+    expect($('#name-link-2').length).toBe(0)
+    expect($('#licence-type-2').text()).toContain('Restricted')
+    expect($('#probation-practitioner-2').text()).toContain('Restricted')
   })
 })

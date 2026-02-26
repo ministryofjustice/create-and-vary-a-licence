@@ -2965,6 +2965,7 @@ export default {
                 name: 'Com One',
                 allocated: true,
               },
+              isLao: false,
             },
             {
               licenceId: 2,
@@ -2978,6 +2979,7 @@ export default {
                 name: 'Com Four',
                 allocated: true,
               },
+              isLao: false,
             },
             {
               licenceId: 3,
@@ -2991,6 +2993,7 @@ export default {
                 name: 'Com Four',
                 allocated: true,
               },
+              isLao: false,
             },
           ],
           regionCasesResponse: [
@@ -3006,6 +3009,7 @@ export default {
                 name: 'Com One',
                 allocated: true,
               },
+              isLao: false,
             },
             {
               licenceId: 2,
@@ -3019,6 +3023,7 @@ export default {
                 name: 'Com Four',
                 allocated: true,
               },
+              isLao: false,
             },
             {
               licenceId: 3,
@@ -3032,6 +3037,7 @@ export default {
                 name: 'Com Four',
                 allocated: true,
               },
+              isLao: false,
             },
             {
               licenceId: 4,
@@ -3045,6 +3051,7 @@ export default {
                 name: 'Com Three',
                 allocated: true,
               },
+              isLao: false,
             },
           ],
         },
@@ -3272,6 +3279,87 @@ export default {
         jsonBody: {
           crn: 'crn',
           type: 'NONE',
+
+  stubGetVaryApproverSearchResultsWithLao: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/vary-approver/case-search`,
+
+          pduCasesResponse: [
+            {
+              licenceId: 1,
+              name: 'Test Person One',
+              crnNumber: 'X12345',
+              licenceType: LicenceType.AP,
+              releaseDate: '01/05/2024',
+              variationRequestDate: '03/06/2024',
+              probationPractitioner: {
+                staffCode: 'X1231',
+                name: 'Com One',
+                allocated: true,
+              },
+              isLao: false,
+            },
+            {
+              licenceId: null,
+              name: 'Access Restricted in NDelius',
+              crnNumber: 'X12346',
+              licenceType: LicenceType.AP,
+              releaseDate: null,
+              variationRequestDate: null,
+              probationPractitioner: {
+                staffCode: 'Restricted',
+                name: 'Restricted',
+                allocated: true,
+              },
+              isLao: true,
+            },
+          ],
+          regionCasesResponse: [
+            {
+              licenceId: 1,
+              name: 'Test Person One',
+              crnNumber: 'X12345',
+              licenceType: LicenceType.AP,
+              releaseDate: '01/05/2024',
+              variationRequestDate: '03/06/2024',
+              probationPractitioner: {
+                staffCode: 'X1231',
+                name: 'Com One',
+                allocated: true,
+              },
+              isLao: false,
+            },
+            {
+              licenceId: null,
+              name: 'Access Restricted in NDelius',
+              crnNumber: 'X12346',
+              licenceType: LicenceType.AP,
+              releaseDate: null,
+              variationRequestDate: null,
+              probationPractitioner: {
+                staffCode: 'Restricted',
+                name: 'Restricted',
+                allocated: true,
+              },
+              isLao: true,
+            },
+            {
+              licenceId: 3,
+              name: 'Test Person Three',
+              crnNumber: 'X12347',
+              licenceType: LicenceType.AP,
+              releaseDate: '02/11/2022',
+              variationRequestDate: '01/05/2024',
+              probationPractitioner: {
+                staffCode: 'X1234',
+                name: 'Com Four',
+                allocated: true,
+              },
+              isLao: false,
+            },
+          ],
         },
       },
     })
