@@ -6,8 +6,9 @@ export default class RestrictedDetails {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { crn } = req.params
+    const { user } = res.locals
 
-    const { message } = await this.licenceService.getCaseAccessDetails(crn)
+    const { message } = await this.licenceService.getCaseAccessDetails(crn, user)
 
     res.render('pages/restrictedDetails', { crn, message })
   }
