@@ -3279,13 +3279,21 @@ export default {
         jsonBody: {
           crn: 'crn',
           type: 'NONE',
+        },
+      },
+    })
+  },
 
   stubGetVaryApproverSearchResultsWithLao: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
         urlPattern: `/licences-api/caseload/vary-approver/case-search`,
-
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
           pduCasesResponse: [
             {
               licenceId: 1,
