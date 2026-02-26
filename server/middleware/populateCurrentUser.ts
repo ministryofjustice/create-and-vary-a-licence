@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import logger from '../../logger'
 import { convertToTitleCase, parseIsoDate, removeDuplicates } from '../utils/utils'
-import CvlUserDetails from '../@types/CvlUserDetails'
+import { CvlUserDetails } from '../@types/CvlUserDetails'
 import config from '../config'
 import LicenceService from '../services/licenceService'
 import UserService from '../services/userService'
@@ -34,6 +34,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
           const { caseloadsSelected = [] } = req.session
 
           if (user.authSource === 'nomis') {
+            cvlUser.isProbationUser = false
             // Assemble user information from Nomis via prison API
             const [prisonUser, prisonUserCaseload] = await Promise.all([
               userService.getPrisonUser(user),
@@ -65,6 +66,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             // Assemble user information from Delius
             const probationUser = await userService.getProbationUser(user)
 
+            cvlUser.isProbationUser = true
             cvlUser.firstName = probationUser.name.forename
             cvlUser.lastName = probationUser.name.surname
             cvlUser.displayName = convertToTitleCase(`${cvlUser.firstName} ${cvlUser.lastName}`)

@@ -4,8 +4,8 @@ import AboutRoutes from './handlers/about'
 import ContactUsRoutes from './handlers/contactUs'
 import AccessibilityStatementRoutes from './handlers/accessibilityStatement'
 import WhatsNewController from '../whatsNewController/whatsNewController'
-import AccessRestrictedDeliusRoutes from './handlers/accessRestrictedDelius'
 import { Services } from '../../services'
+import RestrictedDetails from './handlers/restrictedDetails'
 
 export default function Index({ licenceService }: Services): Router {
   const router = Router()
@@ -17,14 +17,13 @@ export default function Index({ licenceService }: Services): Router {
   const contactUsHandler = new ContactUsRoutes()
   const accessibilityStatementHandler = new AccessibilityStatementRoutes()
   const whatsNewController = new WhatsNewController()
-  const accessRestrictedDelius = new AccessRestrictedDeliusRoutes(licenceService)
+  const restrictedDetails = new RestrictedDetails(licenceService)
 
   get('/', homeHandler.GET)
   get('/about', aboutHandler.GET)
   get('/contact', contactUsHandler.GET)
   get('/accessibility-statement', accessibilityStatementHandler.GET)
   get('/whats-new', whatsNewController.GET)
-  get('/crn/:crn/access-restricted-delius', accessRestrictedDelius.GET)
-
+  get('/:crn/restricted', restrictedDetails.GET)
   return router
 }

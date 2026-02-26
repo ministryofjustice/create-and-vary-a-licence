@@ -8,7 +8,7 @@ class RestrictedDetailsRoutes {
     const { crn } = req.params
     const { message } = await this.licenceService.getCaseAccessDetails(crn)
 
-    res.render('pages/search/probationSearch/restrictedDetails', { crn, message })
+    res.render('pages/restrictedDetails', { crn, message })
   }
 }
 

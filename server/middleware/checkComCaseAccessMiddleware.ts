@@ -7,7 +7,7 @@ export default function checkComCaseAccessMiddleware(licenceService: LicenceServ
   return async (req, res, next) => {
     const { user } = res.locals
 
-    if (!user?.deliusStaffIdentifier) {
+    if (!user?.isProbationUser) {
       return next()
     }
 
@@ -26,14 +26,10 @@ export default function checkComCaseAccessMiddleware(licenceService: LicenceServ
       const caseAccessDetails = await licenceService.checkComCaseAccess(request, user)
       logger.info(`case access details : ${caseAccessDetails}`)
       if (caseAccessDetails.type !== 'NONE') {
-        logger.info(`Access denied to restricted case for user ${user.deliusStaffIdentifier}, ${req.path}`)
+        logger.info(`Access denied to restricted case for user ${user.deliusStaffCode}, ${req.path}`)
         return res.redirect(`/crn/${caseAccessDetails.crn}/access-restricted-delius`)
       }
     } catch (error) {
-      logger.error(
-        error,
-        `Failed to get case access details, for user: ${user.deliusStaffIdentifier}, and request: ${request}`,
-      )
       return next(error)
     }
     return next()

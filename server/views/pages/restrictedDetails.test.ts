@@ -1,14 +1,18 @@
 import fs from 'fs'
 
-import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
+import { templateRenderer } from '../../utils/__testutils/templateTestUtils'
 
-const render = templateRenderer(
-  fs.readFileSync('server/views/pages/search/probationSearch/restrictedDetails.njk').toString(),
-)
+const render = templateRenderer(fs.readFileSync('server/views/pages/restrictedDetails.njk').toString())
 
 describe('View Restricted Details Page', () => {
   it('should display all elements with correct IDs and content', () => {
-    const $ = render({ crn: 'X339451', message: 'This record has been restricted due to sensitive information' })
+    const $ = render({
+      user: {
+        userRoles: 'a role',
+      },
+      crn: 'X339451',
+      message: 'This record has been restricted due to sensitive information',
+    })
 
     expect($('#restricted-access-heading').text().trim()).toContain('Access restricted on NDelius')
     expect($('#crn-caption').text().trim()).toBe('CRN: X339451')

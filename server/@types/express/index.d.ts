@@ -1,5 +1,5 @@
 import { components } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/types/api'
-import CvlUserDetails from '../CvlUserDetails'
+import { CvlUserDetails } from '../CvlUserDetails'
 import { LicenceConditionChange, Licence } from '../licenceApiClientTypes'
 
 type ReportDefinitionSummary = components['schemas']['ReportDefinitionSummary']
