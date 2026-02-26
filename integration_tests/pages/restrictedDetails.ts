@@ -10,4 +10,9 @@ export default class RestrictedDetailsPage extends Page {
   getRestrictedDetails = () => {
     return cy.get(this.restrictionMessage)
   }
+
+  clickBack = <T extends Page>(pageType: new () => T): T => {
+    cy.get('.govuk-back-link').click()
+    return Page.verifyOnPage(pageType)
+  }
 }

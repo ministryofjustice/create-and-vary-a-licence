@@ -15,6 +15,7 @@ context('ACO search a licence variation', () => {
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubFeComponents')
     cy.task('stubCheckComCaseAccess')
+    cy.task('stubGetCaseAccessDetails')
     cy.signIn()
   })
 
@@ -69,11 +70,11 @@ context('ACO search a licence variation', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const varyApproveCasesPage = indexPage.clickApproveAVariation()
     varyApproveCasesPage.clickSearch('A123456')
-    const searchPage = Page.verifyOnPage(VaryApprovalSearchPage)
+    let searchPage = Page.verifyOnPage(VaryApprovalSearchPage)
     searchPage.getSearchHeading().contains('Search results for A123456')
     searchPage.getPduCasesTabTitle().contains('Cases in this PDU (2 results)')
     searchPage.getRow(1).within(() => {
-      cy.get('#name-2 .caseload-offender-name a').should('not.exist')
+      cy.get('#name-2 .caseload-offender-name a').should('exist')
       cy.get('#name-2 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
       cy.get('#licence-type-2').should('contain', 'Restricted')
       cy.get('#probation-practitioner-2 a').should('not.exist')
@@ -81,10 +82,15 @@ context('ACO search a licence variation', () => {
       cy.get('#release-date-2').should('contain', 'Restricted')
       cy.get('#variation-request-date-2').should('contain', 'Restricted')
     })
+    const restrictedDetailsPage = searchPage.clickRestrictedOffenderName()
+    restrictedDetailsPage
+      .getRestrictedDetails()
+      .contains('This record has been restricted due to sensitive information')
+    searchPage = restrictedDetailsPage.clickBack(VaryApprovalSearchPage)
     searchPage.clickOnRegionCasesTab()
     searchPage.getRegionCasesTabTitle().contains('All cases in this region (3 results)')
     searchPage.getRow(4).within(() => {
-      cy.get('#name-2 .caseload-offender-name a').should('not.exist')
+      cy.get('#name-2 .caseload-offender-name a').should('exist')
       cy.get('#name-2 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
       cy.get('#licence-type-2').should('contain', 'Restricted')
       cy.get('#probation-practitioner-2 a').should('not.exist')

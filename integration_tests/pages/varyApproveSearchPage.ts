@@ -2,6 +2,7 @@ import Page from './page'
 import ComDetailsPage from './comDetails'
 import VaryApproveViewPage from './varyApproveViewPage'
 import VaryApproveCasesPage from './varyApproveCasesPage'
+import RestrictedDetailsPage from './restrictedDetails'
 
 export default class VaryApprovalSearchPage extends Page {
   private searchHeading = '#vary-approval-search-heading'
@@ -13,6 +14,8 @@ export default class VaryApprovalSearchPage extends Page {
   private probationPractionerLinkId = '[data-qa=comLink]'
 
   private licenceLinkId = '#name-link-1'
+
+  private restrictedLinkId = '#name-button-2'
 
   private variationRequestDate = '[data-qa=variationRequestDate]'
 
@@ -53,6 +56,11 @@ export default class VaryApprovalSearchPage extends Page {
   clickOffenderName = (): VaryApproveViewPage => {
     cy.get(this.licenceLinkId).click()
     return Page.verifyOnPage(VaryApproveViewPage)
+  }
+
+  clickRestrictedOffenderName = (): RestrictedDetailsPage => {
+    cy.get(this.restrictedLinkId).click()
+    return Page.verifyOnPage(RestrictedDetailsPage)
   }
 
   clickFirstComName = (): ComDetailsPage => {

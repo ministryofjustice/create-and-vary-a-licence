@@ -195,7 +195,7 @@ describe('View Vary Approver case list', () => {
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
   })
 
-  it('should display LAO case name as plain text without link', () => {
+  it('should display LAO case name as link to restricted details page', () => {
     config.laoEnabled = true
     const $ = render({
       caseload: laoCases,
@@ -204,8 +204,9 @@ describe('View Vary Approver case list', () => {
 
     expect($('#name-1').text()).toContain('Access restricted on NDelius')
     expect($('#name-1 .caseload-offender-name').text()).toContain('Access restricted on NDelius')
-    expect($('#name-link-1').length).toBe(0)
-    expect($('#name-1 a').length).toBe(0)
+    expect($('#name-link-1').length).toBe(1)
+    expect($('#name-1 a').length).toBe(1)
+    expect($('#name-link-1').attr('href').trim()).toBe('/X99999/restricted')
   })
 
   it('should redact LAO case data', () => {
@@ -234,7 +235,8 @@ describe('View Vary Approver case list', () => {
     expect($('#probation-practitioner-1').text()).toBe('Com One')
 
     expect($('#name-2').text()).toContain('Access restricted on NDelius')
-    expect($('#name-link-2').length).toBe(0)
+    expect($('#name-link-2').length).toBe(1)
+    expect($('#name-link-2').attr('href').trim()).toBe('/A123456/restricted')
     expect($('#licence-type-2').text()).toContain('Restricted')
     expect($('#probation-practitioner-2').text()).toContain('Restricted')
   })
