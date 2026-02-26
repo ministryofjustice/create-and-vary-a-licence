@@ -818,8 +818,11 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<void>
   }
 
-  async getCaseAccessDetails(crn: string): Promise<CaseAccessDetails> {
-    return (await this.get({ path: `/probation-staff/${crn}/permissions` })) as Promise<CaseAccessDetails>
+  async getCaseAccessDetails(crn: string, user: User): Promise<CaseAccessDetails> {
+    return (await this.get(
+      { path: `/probation-staff/${crn}/permissions` },
+      { username: user?.username },
+    )) as Promise<CaseAccessDetails>
   }
 
   async checkComCaseAccess(request: CheckCaseAccessRequest, user: User): Promise<CaseAccessDetails> {

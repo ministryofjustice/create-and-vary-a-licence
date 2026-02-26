@@ -504,8 +504,8 @@ export default class LicenceService {
     return newLicence
   }
 
-  async getCaseAccessDetails(crn: string): Promise<CaseAccessDetails> {
-    return this.licenceApiClient.getCaseAccessDetails(crn)
+  async getCaseAccessDetails(crn: string, user: User): Promise<CaseAccessDetails> {
+    return this.licenceApiClient.getCaseAccessDetails(crn, user)
   }
 
   async checkComCaseAccess(request: CheckCaseAccessRequest, user: User): Promise<CaseAccessDetails> {
