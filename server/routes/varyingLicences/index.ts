@@ -58,9 +58,9 @@ export default function Index({
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      alterResObject(),
       checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
-      alterResObject(),
       handler,
     )
 
