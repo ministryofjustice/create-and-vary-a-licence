@@ -10,6 +10,6 @@ export default class RestrictedDetails {
 
     const { message } = await this.licenceService.getCaseAccessDetails(crn, user)
 
-    res.render('pages/restrictedDetails', { crn, message })
+    res.render('pages/restrictedDetails', { crn, message, isVaryJourney: req.query.vary })
   }
 }

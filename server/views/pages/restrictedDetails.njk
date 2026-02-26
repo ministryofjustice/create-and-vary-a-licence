@@ -6,13 +6,14 @@
 
 {% if user.userRoles.includes('ROLE_LICENCE_ACO') %}
     {% set caseloadLink = '/licence/vary-approve/caseload' %}
-{% elseif isVaryJourney %}
+{% elseif isVaryJourney === 'true' %}
     {% set caseloadLink = '/licence/vary/caseload' %}
 {% else %}
     {% set caseloadLink = '/licence/create/caseload' %}
 {% endif %}
 
 {% block content %}
+    <p> {{ caseloadLink }}</p>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l" id="restricted-access-heading">Access restricted on NDelius
@@ -33,7 +34,7 @@
                 {{ govukButton({
                     text: "Return to cases",
                     classes: "govuk-button--secondary govuk-!-margin-top-3",
-                    href: "/licence/create/caseload",
+                    href: caseloadLink,
                     attributes: { 'data-qa': 'return-to-cases' }
                 }) }}
             </div>
