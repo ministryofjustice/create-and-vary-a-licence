@@ -17,7 +17,11 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+            allocated: true,
+          },
         },
       ],
       statusConfig: {
@@ -48,7 +52,11 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'VARIATION_IN_PROGRESS',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+            allocated: true,
+          },
         },
       ],
       statusConfig: {
@@ -79,7 +87,11 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'REVIEW_NEEDED',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+            allocated: true,
+          },
         },
       ],
       statusConfig: {
@@ -115,7 +127,11 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+            allocated: true,
+          },
           kind: 'HDC',
         },
       ],
@@ -149,7 +165,11 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+            allocated: true,
+          },
           kind: 'HDC_VARIATION',
         },
       ],
@@ -227,11 +247,17 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: null,
-          probationPractitioner: { staffCode: 'Restricted', name: 'Restricted', allocated: true },
-          isLao: true,
+          probationPractitioner: {
+            staffCode: 'Restricted',
+            name: 'Restricted',
+            allocated: true,
+          },
+          isRestricted: true,
         },
       ],
-      statusConfig: { ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' } },
+      statusConfig: {
+        ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
+      },
     })
     expect($('#name-link-1').length).toBe(0)
     expect($('#name-1').text()).toContain('Access restricted on NDelius')
@@ -249,11 +275,17 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
-          isLao: false,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+            allocated: true,
+          },
+          isRestricted: false,
         },
       ],
-      statusConfig: { ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' } },
+      statusConfig: {
+        ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
+      },
     })
     expect($('#name-link-1').attr('href')).toBe('/licence/vary/id/3/timeline')
     expect($('#name-link-1').text()).toContain('Test Person')
@@ -272,11 +304,17 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: null,
-          probationPractitioner: { staffCode: 'Restricted', name: 'Restricted', allocated: true },
-          isLao: true,
+          probationPractitioner: {
+            staffCode: 'Restricted',
+            name: 'Restricted',
+            allocated: true,
+          },
+          isRestricted: true,
         },
       ],
-      statusConfig: { ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' } },
+      statusConfig: {
+        ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
+      },
     })
     expect($('#licence-type-1').text().trim()).toBe('Restricted')
   })
@@ -292,11 +330,17 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: null,
-          probationPractitioner: { staffCode: 'Restricted', name: 'Restricted', allocated: true },
-          isLao: true,
+          probationPractitioner: {
+            staffCode: 'Restricted',
+            name: 'Restricted',
+            allocated: true,
+          },
+          isRestricted: true,
         },
       ],
-      statusConfig: { ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' } },
+      statusConfig: {
+        ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
+      },
     })
     expect($('#probation-practitioner-1').text().trim()).toBe('Restricted')
   })
@@ -313,11 +357,17 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: null,
-          probationPractitioner: { staffCode: 'Restricted', name: 'Restricted', allocated: true },
-          isLao: true,
+          probationPractitioner: {
+            staffCode: 'Restricted',
+            name: 'Restricted',
+            allocated: true,
+          },
+          isRestricted: true,
         },
       ],
-      statusConfig: { ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' } },
+      statusConfig: {
+        ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
+      },
     })
     expect($('#release-date-1').text().trim()).toBe('Restricted')
   })
@@ -334,11 +384,17 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: null,
-          probationPractitioner: { staffCode: 'Restricted', name: 'Restricted', allocated: true },
-          isLao: true,
+          probationPractitioner: {
+            staffCode: 'Restricted',
+            name: 'Restricted',
+            allocated: true,
+          },
+          isRestricted: true,
         },
       ],
-      statusConfig: { ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' } },
+      statusConfig: {
+        ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
+      },
     })
     expect($('#licence-status-1').text().trim()).toBe('Restricted')
   })
@@ -355,11 +411,17 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
           licenceStatus: 'ACTIVE',
-          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM', allocated: true },
-          isLao: false,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+            allocated: true,
+          },
+          isRestricted: false,
         },
       ],
-      statusConfig: { ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' } },
+      statusConfig: {
+        ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
+      },
     })
     expect($('#licence-type-1').text().trim()).not.toBe('Restricted')
     expect($('#probation-practitioner-1').text().trim()).not.toBe('Restricted')
@@ -378,8 +440,12 @@ describe('Caseload', () => {
           licenceType: 'AP',
           releaseDate: '10 Jan 2023',
           licenceStatus: null,
-          probationPractitioner: { staffCode: 'Restricted', name: 'Restricted', allocated: true },
-          isLao: true,
+          probationPractitioner: {
+            staffCode: 'Restricted',
+            name: 'Restricted',
+            allocated: true,
+          },
+          isRestricted: true,
         },
         {
           licenceId: 2,
@@ -388,13 +454,21 @@ describe('Caseload', () => {
           licenceType: 'PSS',
           releaseDate: '15 Feb 2023',
           licenceStatus: 'VARIATION_IN_PROGRESS',
-          probationPractitioner: { staffCode: 'X22222', name: 'Officer Two', allocated: true },
-          isLao: false,
+          probationPractitioner: {
+            staffCode: 'X22222',
+            name: 'Officer Two',
+            allocated: true,
+          },
+          isRestricted: false,
         },
       ],
       statusConfig: {
         ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
-        VARIATION_IN_PROGRESS: { label: 'Variation in progress', description: 'In progress', colour: 'blue' },
+        VARIATION_IN_PROGRESS: {
+          label: 'Variation in progress',
+          description: 'In progress',
+          colour: 'blue',
+        },
       },
     })
     expect($('tbody .govuk-table__row').length).toBe(2)

@@ -19,7 +19,7 @@ const pduCases = [
       name: 'Com One',
       allocated: true,
     },
-    isLao: false,
+    isRestricted: false,
   },
 ]
 
@@ -36,7 +36,7 @@ const laoCases: VaryApproverCase[] = [
       name: 'Restricted',
       allocated: true,
     },
-    isLao: true,
+    isRestricted: true,
   },
 ]
 
@@ -53,7 +53,7 @@ const pduCasesWithLao: VaryApproverCase[] = [
       name: 'Com One',
       allocated: true,
     },
-    isLao: false,
+    isRestricted: false,
   },
   {
     licenceId: null,
@@ -67,7 +67,7 @@ const pduCasesWithLao: VaryApproverCase[] = [
       name: 'Restricted',
       allocated: true,
     },
-    isLao: true,
+    isRestricted: true,
   },
 ]
 
@@ -84,7 +84,7 @@ const allRegionCases = [
       name: 'Com One',
       allocated: true,
     },
-    isLao: false,
+    isRestricted: false,
   },
   {
     licenceId: 2,
@@ -98,7 +98,7 @@ const allRegionCases = [
       name: 'Com Four',
       allocated: true,
     },
-    isLao: false,
+    isRestricted: false,
   },
 ]
 

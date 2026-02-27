@@ -210,7 +210,10 @@ export function registerNunjucks(app?: express.Express): Environment {
         collection.push(item)
       }
     })
-    return Array.from(map, ([fieldName, items]) => ({ fieldName, items })).map(groupedDataItems => {
+    return Array.from(map, ([fieldName, items]) => ({
+      fieldName,
+      items,
+    })).map(groupedDataItems => {
       return groupedDataItems.items.map((dataItem: AdditionalConditionData) => dataItem.value).join(', ')
     })
   })
@@ -448,8 +451,8 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('formatAddressTitleCase', (address, isMultiple) => formatAddressTitleCase(address, isMultiple))
 
-  njkEnv.addFilter('redactIfLao', (value: string, offender: { isLao?: boolean }): string => {
-    if (config.laoEnabled && offender?.isLao) {
+  njkEnv.addFilter('redactIfLao', (value: string, offender: { isRestricted?: boolean }): string => {
+    if (config.laoEnabled && offender?.isRestricted) {
       return 'Restricted'
     }
     return value

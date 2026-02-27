@@ -448,7 +448,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.IN_PROGRESS,
           createLink: '/licence/create/id/1/check-your-answers',
           licenceType: 'AP',
-          isLao: true,
+          isRestricted: true,
         },
       ],
     })
@@ -481,7 +481,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.IN_PROGRESS,
           createLink: '/licence/create/id/1/check-your-answers',
           licenceType: 'AP',
-          isLao: false,
+          isRestricted: false,
         },
       ],
     })
@@ -494,7 +494,7 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
   })
 
-  it('should display normal offender information when isLao is false', () => {
+  it('should display normal offender information when isRestricted is false', () => {
     config.laoEnabled = true
 
     const $ = render({
@@ -514,7 +514,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.SUBMITTED,
           createLink: '/licence/create/id/2/check-your-answers',
           licenceType: 'AP_PSS',
-          isLao: false,
+          isRestricted: false,
         },
       ],
     })
@@ -546,7 +546,7 @@ describe('Create a Licence Views - Caseload', () => {
           isClickable: false,
           licenceStatus: LicenceStatus.ACTIVE,
           licenceType: 'AP',
-          isLao: true,
+          isRestricted: true,
         },
         {
           name: 'Test Person',
@@ -562,7 +562,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.IN_PROGRESS,
           createLink: '/licence/create/id/2/check-your-answers',
           licenceType: 'AP',
-          isLao: false,
+          isRestricted: false,
         },
       ],
     })

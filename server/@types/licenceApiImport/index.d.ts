@@ -3738,7 +3738,7 @@ export interface components {
        * @description Is the offender a limited access offender (LAO)?
        * @example true
        */
-      isLao?: boolean
+      isRestricted?: boolean
     }
     /** @description Describes a probation practitioner on an approval case */
     ProbationPractitioner: {
@@ -3913,7 +3913,7 @@ export interface components {
        * @description Is the offender a limited access offender (LAO)?
        * @example true
        */
-      isLao: boolean
+      isRestricted: boolean
     }
     /** @description Response object which describes a result from a vary approver caseload search */
     VaryApproverCaseloadSearchResponse: {
@@ -4107,7 +4107,7 @@ export interface components {
        * @description Is the offender a limited access offender (LAO)?
        * @example true
        */
-      isLao: boolean
+      isRestricted: boolean
     }
     /** @description Describes an COM case */
     ComCreateCase: {
@@ -4203,7 +4203,7 @@ export interface components {
        * @description Is the offender a limited access offender (LAO)?
        * @example true
        */
-      isLao: boolean
+      isRestricted: boolean
     }
     /** @description Search Criteria for CA Caseload Search */
     CaCaseloadSearch: {

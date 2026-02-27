@@ -1,42 +1,38 @@
 {% extends "layout.njk" %}
-
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "partials/licenceDescription.njk" import licenceDescription %}
-
 {% set pageTitle = applicationName + " - Approve a variation" %}
 {% set pageId = "vary-approval-cases-page" %}
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
-
-{% macro offenderName(offenderName, crn, licenceId, index, isLao) %}
-    <div class="caseload-offender-name">
-        {% if laoEnabled and isLao %}
-            <a id="name-link-{{ index }}" href="{{ "/" + crn + "/restricted" }}"
-               class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
-        {% else %}
-        <a href="/licence/vary-approve/id/{{ licenceId }}/view" id="name-link-{{ index }}"
-           class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
-        {% endif %}
-        <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
-    </div>
-{% endmacro %}
-
-{% set licences = [] %}
-
-{% for offender in caseload %}
-    {% if offender.probationPractitioner.allocated %}
-        {% set probationHtml = '<a class="govuk-link" href="/licence/vary-approve/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
+{% macro offenderName(offenderName, crn, licenceId, index, isRestricted) %}
+  <div class="caseload-offender-name">
+    {% if laoEnabled and isRestricted %}
+      <a id="name-link-{{ index }}" href="{{ "/" + crn + "/restricted" }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
     {% else %}
-        {% set probationHtml = offender.probationPractitioner.name %}
+      <a
+        href="/licence/vary-approve/id/{{ licenceId }}/view"
+        id="name-link-{{ index }}"
+        class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
     {% endif %}
-    {% set licences = (licences.push([
+    <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
+  </div>
+{% endmacro %}
+{% set licences = [] %}
+{% for offender in caseload %}
+  {% if offender.probationPractitioner.allocated %}
+    {% set probationHtml = '<a class="govuk-link" href="/licence/vary-approve/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
+  {% else %}
+    {% set probationHtml = offender.probationPractitioner.name %}
+  {% endif %}
+  {% set licences = (licences.push([
         {
             attributes: {
                 id: 'name-' + loop.index,
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crnNumber, offender.licenceId, loop.index, offender.isLao)
+            html: offenderName(offender.name, offender.crnNumber, offender.licenceId, loop.index, offender.isRestricted)
         },
         {
             attributes: {
@@ -70,52 +66,43 @@
         }
     ]), licences) %}
 {% endfor %}
-
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">Select a person to approve their licence variation</h1>
-        </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <h1 class="govuk-heading-xl">Select a person to approve their licence variation</h1>
     </div>
-
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half">
-            <div class="moj-search govuk-!-margin-bottom-8">
-                <form method="GET" action="/search/vary-approver-search">
-                    <input type="hidden" id="activeTab" value="{{ activeTab }}">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-                            Find a case
-                        </label>
-                        <div id="search-hint" class="govuk-hint moj-search__hint">
-                            Search by name, CRN or probation practitioner
-                        </div>
-                        <input class="govuk-input moj-search__input" id="search" name="queryTerm"
-                                aria-describedby="search-hint" value="{{ search }}">
-                    </div>
-                    <button class="govuk-button moj-search__button " data-module="govuk-button"
-                            data-qa="search-button">
-                        Search
-                    </button>
-                </form>
-            </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <div class="moj-search govuk-!-margin-bottom-8">
+        <form method="GET" action="/search/vary-approver-search">
+          <input type="hidden" id="activeTab" value="{{ activeTab }}">
+            <div class="govuk-form-group">
+              <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+                Find a case
+              </label>
+              <div id="search-hint" class="govuk-hint moj-search__hint">
+                Search by name, CRN or probation practitioner
+              </div>
+              <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint" value="{{ search }}"></div>
+              <button class="govuk-button moj-search__button " data-module="govuk-button" data-qa="search-button">
+                Search
+              </button>
+            </form>
+          </div>
         </div>
-    </div>
-
-    <nav class="moj-sub-navigation" aria-label="Sub navigation">
+      </div>
+      <nav class="moj-sub-navigation" aria-label="Sub navigation">
         <ul class="moj-sub-navigation__list">
-            <li class="moj-sub-navigation__item">
-                <a id="myCases" class="moj-sub-navigation__link" {% if not regionCases %}aria-current="page"{% endif %}
-                   href="?view=me">Cases in this PDU</a>
-            </li>
-            <li class="moj-sub-navigation__item">
-                <a id="allRegions" class="moj-sub-navigation__link" {% if regionCases %}aria-current="page"{% endif %}
-                   href="?view=region">All cases in this region</a>
-            </li>
+          <li class="moj-sub-navigation__item">
+            <a id="myCases" class="moj-sub-navigation__link" {% if not regionCases %} aria-current="page" {% endif %} href="?view=me">Cases in this PDU</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a id="allRegions" class="moj-sub-navigation__link" {% if regionCases %} aria-current="page" {% endif %} href="?view=region">All cases in this region</a>
+          </li>
         </ul>
-    </nav>
-
-    {% if caseload.length > 0 %}
+      </nav>
+      {% if caseload.length > 0 %}
         {{ govukTable({
             attributes: {
                 'data-module': 'moj-sortable-table'
@@ -153,12 +140,11 @@
             ],
             rows: licences
         }) }}
-    {% else %}
+      {% else %}
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
-                <h2 id="vary-approval-empty-state-content"class="govuk-heading-s">No licence variations to approve.</h2>
-            </div>
+          <div class="govuk-grid-column-three-quarters">
+            <h2 id="vary-approval-empty-state-content" class="govuk-heading-s">No licence variations to approve.</h2>
+          </div>
         </div>
-    {% endif %}
-
-{% endblock %}
+      {% endif %}
+    {% endblock %}
