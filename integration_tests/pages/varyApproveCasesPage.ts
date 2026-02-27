@@ -1,9 +1,12 @@
 import Page from './page'
 import VaryApproveSearchPage from './varyApproveSearchPage'
 import VaryApproveViewPage from './varyApproveViewPage'
+import RestrictedDetailsPage from './restrictedDetails'
 
 export default class VaryApproveCasesPage extends Page {
   private varyApproveLinkId = '#name-link-1'
+
+  private restrictedLinkId = '#name-link-3'
 
   private allRegionsId = '#allRegions'
 
@@ -39,5 +42,10 @@ export default class VaryApproveCasesPage extends Page {
 
   getRow = (n: number) => {
     return cy.get('tbody tr').eq(n)
+  }
+
+  clickRestrictedOffenderName = (): RestrictedDetailsPage => {
+    cy.get(this.restrictedLinkId).click()
+    return Page.verifyOnPage(RestrictedDetailsPage)
   }
 }

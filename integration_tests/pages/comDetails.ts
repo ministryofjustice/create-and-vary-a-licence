@@ -6,8 +6,11 @@ import CaSearchPage from './caSearch'
 import ApprovalSearchPage from './approvalSearch'
 import VaryApprovalSearchPage from './varyApproveSearchPage'
 import VaryCasesPage from './varyCases'
+import RestrictedDetailsPage from './restrictedDetails'
 
 export default class ComDetailsPage extends Page {
+  private restrictedButtonId = '#name-button-2'
+
   constructor() {
     super('com-details-page')
   }
@@ -45,5 +48,10 @@ export default class ComDetailsPage extends Page {
   clickReturnToCaseload = (): CaseloadPage => {
     cy.get('[data-qa=return]').click()
     return Page.verifyOnPage(CaseloadPage)
+  }
+
+  clickRestrictedOffenderName = (): RestrictedDetailsPage => {
+    cy.get(this.restrictedButtonId).click()
+    return Page.verifyOnPage(RestrictedDetailsPage)
   }
 }

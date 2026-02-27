@@ -1,5 +1,6 @@
 import Page from '../pages/page'
 import IndexPage from '../pages'
+import VaryApproveCasesPage from '../pages/varyApproveCasesPage'
 
 context('ACO review a licence variation', () => {
   beforeEach(() => {
@@ -14,6 +15,7 @@ context('ACO review a licence variation', () => {
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubFeComponents')
     cy.task('stubCheckComCaseAccess')
+    cy.task('stubGetCaseAccessDetails')
     cy.signIn()
   })
 
@@ -65,7 +67,7 @@ context('ACO review a licence variation', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     let varyApproveCasesPage = indexPage.clickApproveAVariation()
     varyApproveCasesPage.getRow(2).within(() => {
-      cy.get('#name-3 .caseload-offender-name a').should('not.exist')
+      cy.get('#name-3 .caseload-offender-name a').should('exist')
       cy.get('#name-3 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
       cy.get('#licence-type-3').should('contain', 'Restricted')
       cy.get('#probation-practitioner-3 a').should('not.exist')
@@ -73,6 +75,11 @@ context('ACO review a licence variation', () => {
       cy.get('#release-date-3').should('contain', 'Restricted')
       cy.get('#variation-request-date-3').should('contain', 'Restricted')
     })
+    const restrictedDetailsPage = varyApproveCasesPage.clickRestrictedOffenderName()
+    restrictedDetailsPage
+      .getRestrictedDetails()
+      .contains('This record has been restricted due to sensitive information')
+    varyApproveCasesPage = restrictedDetailsPage.clickBack(VaryApproveCasesPage)
     const varyApproveViewPage = varyApproveCasesPage.selectCase()
     const varyApproveConfirmPage = varyApproveViewPage.clickApproveVariation()
     varyApproveCasesPage = varyApproveConfirmPage.clickBackToCaseList()

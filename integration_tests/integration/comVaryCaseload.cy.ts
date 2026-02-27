@@ -20,6 +20,7 @@ context('View COM vary caseload', () => {
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubFeComponents')
     cy.task('stubCheckComCaseAccess')
+    cy.task('stubGetCaseAccessDetails')
     cy.signIn()
   })
 
@@ -60,7 +61,7 @@ context('View COM vary caseload', () => {
       cy.get('#licence-status-1 .status-badge').should('contain', 'Active')
     })
     caseloadPage.getRow(1).within(() => {
-      cy.get('#name-2 .caseload-offender-name a').should('not.exist')
+      cy.get('#name-2 .caseload-offender-name a').should('exist')
       cy.get('#name-2 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
       cy.get('#licence-type-2').should('contain', 'Restricted')
       cy.get('#probation-practitioner-2 a').should('not.exist')
@@ -73,6 +74,10 @@ context('View COM vary caseload', () => {
     caseloadPage = timelinePage.clickReturnToCaseload()
     const comDetailsPage = caseloadPage.clickProbationPractitioner(1)
     comDetailsPage.clickBackToVaryCaseload()
+    const restrictedDetailsPage = comDetailsPage.clickRestrictedOffenderName()
+    restrictedDetailsPage
+      .getRestrictedDetails()
+      .contains('This record has been restricted due to sensitive information')
     caseloadPage.signOut().click()
   })
 })

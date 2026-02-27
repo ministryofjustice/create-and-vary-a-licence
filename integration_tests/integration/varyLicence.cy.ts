@@ -12,7 +12,7 @@ context('Vary a licence', () => {
     cy.task('stubGetStaffDetails')
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'VARIATION', status: 'ACTIVE' })
     cy.task('stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP_PSS' })
-    cy.task('stubGetStaffVaryCaseload', {
+    cy.task('stubGetStaffVaryCaseloadWithLao', {
       licenceId: 1,
       licenceStatus: LicenceStatus.ACTIVE,
       licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,
@@ -48,6 +48,19 @@ context('Vary a licence', () => {
     const confirmationPage = variationSummaryPage.clickSendForApproval()
 
     confirmationPage.signOut().click()
+  })
+
+  it('LAO entry should render with correct links', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const varyCasesPage = indexPage.clickVaryALicence()
+    varyCasesPage.getRow(1).within(() => {
+      cy.get('#name-2 .caseload-offender-name a').should('exist')
+      cy.get('#name-2 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
+      cy.get('#licence-type-2').should('contain', 'Restricted')
+      cy.get('#probation-practitioner-2 a').should('not.exist')
+      cy.get('#probation-practitioner-2').should('contain', 'Restricted')
+      cy.get('#release-date-2').should('contain', 'Restricted')
+    })
   })
 
   it('should click through the inflight licence vary journey, where the licence is not on the active policy version', () => {
