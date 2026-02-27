@@ -62,7 +62,7 @@ export default class CaseloadRoutes {
           comCase.kind === LicenceKind.HARD_STOP,
         sortDate: comCase.releaseDate && parseCvlDate(comCase.releaseDate),
         kind: comCase.kind,
-        isLao: comCase.isLao,
+        isRestricted: comCase.isRestricted,
       }
     })
 

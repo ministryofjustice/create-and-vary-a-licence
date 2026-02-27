@@ -1,61 +1,61 @@
 {% extends "layout.njk" %}
-
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/licenceDescription.njk" import licenceDescription %}
-
 {% set pageTitle = applicationName + " - Variation approvals - Search results" %}
 {% set pageId = "vary-approval-search-page" %}
 {% set backLinkHref = backLink %}
 {% set noJsBackLink = true %}
-
-{% macro offenderName(offenderName, crn, licenceId, index, isLao) %}
-    <div class="caseload-offender-name">
-        {% if laoEnabled and isLao %}
-            <a id="name-button-{{ index }}" href="{{ "/" + crn + "/restricted" }}"
-            class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
-        {% else %}
-            <a href="/licence/vary-approve/id/{{ licenceId }}/view" id="name-link-{{ index }}"
-            class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
-        {% endif %}
-        <div class="govuk-hint govuk-!-font-size-16 search-highlight">CRN: {{ crn }}</div>
-    </div>
+{% macro offenderName(offenderName, crn, licenceId, index, isRestricted) %}
+  <div class="caseload-offender-name">
+    {% if laoEnabled and isRestricted %}
+      <a id="name-button-{{ index }}" href="{{ "/" + crn + "/restricted" }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
+    {% else %}
+      <a
+        href="/licence/vary-approve/id/{{ licenceId }}/view"
+        id="name-link-{{ index }}"
+        class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
+    {% endif %}
+    <div class="govuk-hint govuk-!-font-size-16 search-highlight">CRN: {{ crn }}</div>
+  </div>
 {% endmacro %}
-
 {%- macro probationHtml(case) -%}
   {%- if case.probationPractitioner.allocated -%}
-    <a class="govuk-link search-highlight" data-qa="comLink" href="/licence/vary-approve/id/{{ case.licenceId }}/probation-practitioner">{{ case.probationPractitioner.name }}</a>
+    <a
+      class="govuk-link search-highlight"
+      data-qa="comLink"
+      href="/licence/vary-approve/id/{{ case.licenceId }}/probation-practitioner">{{ case.probationPractitioner.name }}</a>
   {%- else -%}
     <span class="search-highlight">{{ case.probationPractitioner.name }}</span>
   {%- endif -%}
 {%- endmacro -%}
-
 {% set pduResults = [] %}
 {% set regionResults = [] %}
-
 {% macro displayResults(tableHeadings, results, tabId, countText) %}
-    <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
-    {% if results.length == 0 %}
+  <h2 class="govuk-heading-l" id="{{ tabId }}">{{ countText }}</h2>
+  {% if results.length == 0 %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            <p id="vary-approval-search-empty-state-content">No licence variation requests that match '{{ queryTerm }}'. Try searching again.</p>
-            <p><strong>If you still cannot find a variation request</strong></p>
-            <p>Check if it was approved by another PDU head in this region.</p>
-            <p>Contact helpdesk by calling 0800 917 5148, or #6598 from inside a prison, if you think a variation request is missing.</p>
-            <p class="govuk-body">
-                {{ govukButton({
+      <div class="govuk-grid-column-full">
+        <p id="vary-approval-search-empty-state-content">No licence variation requests that match '{{ queryTerm }}'. Try searching again.</p>
+        <p>
+          <strong>If you still cannot find a variation request</strong>
+        </p>
+        <p>Check if it was approved by another PDU head in this region.</p>
+        <p>Contact helpdesk by calling 0800 917 5148, or #6598 from inside a prison, if you think a variation request is missing.</p>
+        <p class="govuk-body">
+          {{ govukButton({
                     text: "Return to case list",
                     classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
                     href: backLink,
                     attributes: { 'data-qa': 'return-to-caselist' }
                 }) }}
-            </p>
-        </div>
+        </p>
+      </div>
     </div>
-    {% else %}
-        <form method="GET">
-            {{ govukTable({
+  {% else %}
+    <form method="GET">
+      {{ govukTable({
                 attributes: {
                     'data-module': 'moj-sortable-table',
                     'id': 'searchResults'
@@ -65,10 +65,9 @@
                 head: tableHeadings,
                 rows: results
             }) }}
-        </form>
-    {% endif %}
+    </form>
+  {% endif %}
 {% endmacro %}
-
 {% set searchTableHeadings = [
     {
         text: "Name",
@@ -102,16 +101,15 @@
         }
     }
 ] %}
-
 {% for case in pduCases %}
-    {% set result = [
+  {% set result = [
         {
             attributes: {
                 id: 'name-' + loop.index,
                 "data-sort-value": case.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(case.name, case.crnNumber, case.licenceId, loop.index, case.isLao)
+            html: offenderName(case.name, case.crnNumber, case.licenceId, loop.index, case.isRestricted)
         },
         {
             attributes: {
@@ -144,20 +142,17 @@
             text: case.releaseDate | cvlDateToDateShort | redactIfLao(case)
         }
     ] %}
-
-    {% set pduResults = (pduResults.push(result), pduResults) %}
-
+  {% set pduResults = (pduResults.push(result), pduResults) %}
 {% endfor %}
-
 {% for case in regionCases %}
-    {% set result = [
+  {% set result = [
         {
             attributes: {
                 id: 'name-' + loop.index,
                 "data-sort-value": case.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(case.name, case.crnNumber, case.licenceId, loop.index, case.isLao)
+            html: offenderName(case.name, case.crnNumber, case.licenceId, loop.index, case.isRestricted)
         },
         {
             attributes: {
@@ -190,46 +185,37 @@
             text: case.releaseDate | cvlDateToDateShort | redactIfLao(case)
         }
     ] %}
-
-    {% set regionResults = (regionResults.push(result), regionResults) %}
-
+  {% set regionResults = (regionResults.push(result), regionResults) %}
 {% endfor %}
-
-
 {% set pduCasesCountText = "Cases in this PDU ("  + tabParameters.pduCases.resultsCount + tabParameters.pduCases.resultsCount | pluralise(" result") + ")" %}
 {% set regionCasesCountText = "All cases in this region ("  + tabParameters.regionCases.resultsCount + tabParameters.regionCases.resultsCount | pluralise(" result") + ")" %}
-
 {% set pduCases = displayResults(searchTableHeadings, pduResults, tabParameters.pduCases.tabId, pduCasesCountText) %}
 {% set regionCases = displayResults(searchTableHeadings, regionResults, tabParameters.regionCases.tabId, regionCasesCountText) %}
-
 {% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <input type="hidden" id="searchTerm" value="{{ queryTerm }}">
+        <h1 class="govuk-heading-xl" id="vary-approval-search-heading">Search results for {{ queryTerm }}</h1>
+      </div>
+    </div>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <input type="hidden" id="searchTerm" value="{{ queryTerm }}">
-            <h1 class="govuk-heading-xl" id="vary-approval-search-heading">Search results for {{ queryTerm }}</h1>
+      <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
+        <form method="GET">
+          <div class="govuk-form-group">
+            <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+              Find a case
+            </label>
+            <div id="search-hint" class="govuk-hint moj-search__hint approver-caseload-search">
+              Search by name, CRN or probation practitioner
+            </div>
+            <input class="govuk-input moj-search__input" id="search" name="queryTerm" value="{{ queryTerm }}" aria-describedby="search-hint"></div>
+            <button class="govuk-button moj-search__button " data-module="govuk-button">
+              Search
+            </button>
+          </form>
         </div>
-    </div>
-
-   <div class="govuk-grid-row">
-        <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
-            <form method="GET">
-                <div class="govuk-form-group">
-                    <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-                        Find a case
-                    </label>
-                    <div id="search-hint" class="govuk-hint moj-search__hint approver-caseload-search">
-                    Search by name, CRN or probation practitioner
-                    </div>
-                    <input class="govuk-input moj-search__input" id="search" name="queryTerm" value="{{ queryTerm }}" aria-describedby="search-hint">
-                </div>
-                <button class="govuk-button moj-search__button " data-module="govuk-button">
-                    Search
-                </button>
-            </form>
-        </div>
-    </div>
-
-    {{ govukTabs({
+      </div>
+      {{ govukTabs({
         items: [
             {
                 label: pduCasesCountText,
@@ -247,10 +233,7 @@
             }
         ]
     }) }}
-
-{% endblock %}
-
-
-{% block pageScripts %}
-    <script src="/assets/js/search/highlightSearchTerm.js"></script>
-{% endblock %}
+    {% endblock %}
+    {% block pageScripts %}
+      <script src="/assets/js/search/highlightSearchTerm.js"></script>
+    {% endblock %}

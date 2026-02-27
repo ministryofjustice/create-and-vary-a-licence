@@ -917,7 +917,7 @@ describe('View Probation Search Results', () => {
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
-          isLao: true,
+          isRestricted: true,
         },
       ],
       peopleOnProbation: [],
@@ -964,7 +964,7 @@ describe('View Probation Search Results', () => {
           licenceStatus: LicenceStatus.ACTIVE,
           isOnProbation: true,
           releaseDateLabel: 'CRD',
-          isLao: true,
+          isRestricted: true,
         },
       ],
       tabParameters: {
@@ -1009,7 +1009,7 @@ describe('View Probation Search Results', () => {
           licenceStatus: LicenceStatus.ACTIVE,
           isOnProbation: true,
           releaseDateLabel: 'CRD',
-          isLao: true,
+          isRestricted: true,
         },
       ],
       tabParameters: {

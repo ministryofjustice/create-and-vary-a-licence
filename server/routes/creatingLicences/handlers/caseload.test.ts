@@ -35,7 +35,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           staffCode: 'X6789',
           allocated: true,
         },
-        isLao: false,
+        isRestricted: false,
       },
       {
         crnNumber: 'X381307',
@@ -53,7 +53,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           staffCode: 'X6789U',
           allocated: false,
         },
-        isLao: false,
+        isRestricted: false,
       },
       {
         crnNumber: 'X381308',
@@ -71,7 +71,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           staffCode: 'X6789U',
           allocated: true,
         },
-        isLao: false,
+        isRestricted: false,
       },
       {
         crnNumber: 'X381309',
@@ -89,7 +89,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           staffCode: 'X6789U',
           allocated: false,
         },
-        isLao: false,
+        isRestricted: false,
       },
     ] as unknown as ComCreateCase[])
 
@@ -110,7 +110,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           staffCode: 'X12345',
           allocated: true,
         },
-        isLao: false,
+        isRestricted: false,
       },
       {
         crnNumber: 'X381307',
@@ -123,7 +123,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         hardStopDate: '10/10/2022',
         hardStopWarningDate: '10/10/2022',
         kind: LicenceKind.CRD,
-        isLao: false,
+        isRestricted: false,
       },
       {
         crnNumber: 'X381308',
@@ -136,7 +136,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         hardStopDate: '10/10/2022',
         hardStopWarningDate: '10/10/2022',
         kind: LicenceKind.CRD,
-        isLao: false,
+        isRestricted: false,
       },
       {
         crnNumber: 'X381309',
@@ -149,7 +149,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         hardStopDate: '10/10/2022',
         hardStopWarningDate: '10/10/2022',
         kind: LicenceKind.CRD,
-        isLao: false,
+        isRestricted: false,
       },
     ] as unknown as ComCreateCase[])
   })
@@ -212,7 +212,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
-            isLao: false,
+            isRestricted: false,
           },
           {
             crnNumber: 'X381307',
@@ -233,7 +233,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-11'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
-            isLao: false,
+            isRestricted: false,
           },
           {
             crnNumber: 'X381308',
@@ -254,7 +254,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
-            isLao: false,
+            isRestricted: false,
           },
           {
             crnNumber: 'X381309',
@@ -275,7 +275,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-03'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: false,
-            isLao: false,
+            isRestricted: false,
           },
         ],
         multipleTeams: false,
@@ -312,7 +312,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             isClickable: true,
             createLink: '/licence/create/id/1/check-your-answers',
             sortDate: parseIsoDate('2022-10-12'),
-            isLao: false,
+            isRestricted: false,
           },
           {
             name: 'Another Person',
@@ -328,7 +328,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/2/check-your-answers',
             isClickable: false,
-            isLao: false,
+            isRestricted: false,
           },
           {
             name: 'Person Three',
@@ -344,7 +344,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/3/check-your-answers',
             isClickable: false,
-            isLao: false,
+            isRestricted: false,
           },
           {
             name: 'Recall Person',
@@ -360,7 +360,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/4/check-your-answers',
             isClickable: false,
-            isLao: false,
+            isRestricted: false,
           },
         ],
         statusConfig,
@@ -397,7 +397,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
-            isLao: false,
+            isRestricted: false,
           },
           {
             crnNumber: 'X381307',
@@ -418,7 +418,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-11'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
-            isLao: false,
+            isRestricted: false,
           },
           {
             crnNumber: 'X381308',
@@ -439,7 +439,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
-            isLao: false,
+            isRestricted: false,
           },
           {
             crnNumber: 'X381309',
@@ -460,7 +460,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-03'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: false,
-            isLao: false,
+            isRestricted: false,
           },
         ],
         multipleTeams: false,
@@ -507,7 +507,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             staffCode: 'X12345',
             allocated: true,
           },
-          isLao: false,
+          isRestricted: false,
         },
       ] as unknown as ComCreateCase[])
 
@@ -533,7 +533,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             isClickable: true,
             createLink: '/licence/create/id/2/check-your-answers',
             sortDate: parseIsoDate('2022-10-12'),
-            isLao: false,
+            isRestricted: false,
           },
         ],
         multipleTeams: false,

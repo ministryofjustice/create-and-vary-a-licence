@@ -27,7 +27,7 @@ const pduCases = [
       name: 'Com One',
       allocated: true,
     },
-    isLao: false,
+    isRestricted: false,
   },
 ]
 
@@ -38,8 +38,12 @@ const laoCases: VaryApproverCase[] = [
     crnNumber: 'A111111',
     licenceType: 'AP',
     releaseDate: '10 Jan 2023',
-    probationPractitioner: { staffCode: 'Restricted', name: 'Restricted', allocated: true },
-    isLao: true,
+    probationPractitioner: {
+      staffCode: 'Restricted',
+      name: 'Restricted',
+      allocated: true,
+    },
+    isRestricted: true,
   },
 ]
 
@@ -56,7 +60,7 @@ const regionCases = [
       name: 'Com One',
       allocated: true,
     },
-    isLao: false,
+    isRestricted: false,
   },
   {
     licenceId: 2,
@@ -70,7 +74,7 @@ const regionCases = [
       name: 'Com Four',
       allocated: true,
     },
-    isLao: false,
+    isRestricted: false,
   },
 ]
 
@@ -87,7 +91,7 @@ const pduCasesWithLao: VaryApproverCase[] = [
       name: 'Com One',
       allocated: true,
     },
-    isLao: false,
+    isRestricted: false,
   },
   {
     licenceId: null,
@@ -101,7 +105,7 @@ const pduCasesWithLao: VaryApproverCase[] = [
       name: 'Restricted',
       allocated: true,
     },
-    isLao: true,
+    isRestricted: true,
   },
 ]
 

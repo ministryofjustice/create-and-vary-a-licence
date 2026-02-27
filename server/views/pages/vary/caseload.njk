@@ -1,53 +1,49 @@
 {% extends "layout.njk" %}
-
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/statusBadge.njk" import statusBadge %}
 {% from "partials/licenceDescription.njk" import licenceDescription %}
-
 {% set pageTitle = applicationName + " - Vary a licence - Caseload" %}
 {% set pageId = "vary-cases-page" %}
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
-
-{% macro offenderName(offenderName, crn, licenceId, index, isLao) %}
-    <div class="caseload-offender-name">
-        {% if laoEnabled and isLao %}
-            <a id="name-button-{{ index }}" href="{{ "/" + crn + "/restricted" }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
-        {% else %}
-            <a href="/licence/vary/id/{{ licenceId }}/timeline" id="name-link-{{ index }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
-        {% endif %}
-        <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
-    </div>
+{% macro offenderName(offenderName, crn, licenceId, index, isRestricted) %}
+  <div class="caseload-offender-name">
+    {% if laoEnabled and isRestricted %}
+      <a id="name-button-{{ index }}" href="{{ "/" + crn + "/restricted" }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
+    {% else %}
+      <a
+        href="/licence/vary/id/{{ licenceId }}/timeline"
+        id="name-link-{{ index }}"
+        class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+    {% endif %}
+    <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
+  </div>
 {% endmacro %}
-
 {% set licences = [] %}
-
 {% for offender in caseload %}
-    {% if offender.kind === 'HDC' or offender.kind === 'HDC_VARIATION' %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate
+  {% if offender.kind === 'HDC' or offender.kind === 'HDC_VARIATION' %}
+    {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
-    {% elseif offender.licenceStatus === "REVIEW_NEEDED" %}
-        {% set releaseMessage = 'Time-served release' if offender.kind === 'TIME_SERVED' else 'Timed out' %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">' + releaseMessage + '</span>' %}
-    {% else %}
-        {% set releaseDate = offender.releaseDate %}
-    {% endif %}
-
-    {% if offender.probationPractitioner.allocated %}
-        {% set practitionerHtml = '<a class="govuk-link" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
-    {% else %}
-        {% set practitionerHtml = offender.probationPractitioner.name %}
-    {% endif %}
-
-    {% set licences = (licences.push([
+  {% elseif offender.licenceStatus === "REVIEW_NEEDED" %}
+    {% set releaseMessage = 'Time-served release' if offender.kind === 'TIME_SERVED' else 'Timed out' %}
+    {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">' + releaseMessage + '</span>' %}
+  {% else %}
+    {% set releaseDate = offender.releaseDate %}
+  {% endif %}
+  {% if offender.probationPractitioner.allocated %}
+    {% set practitionerHtml = '<a class="govuk-link" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
+  {% else %}
+    {% set practitionerHtml = offender.probationPractitioner.name %}
+  {% endif %}
+  {% set licences = (licences.push([
         {
             attributes: {
                 id: 'name-' + loop.index,
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crnNumber, offender.licenceId, loop.index, offender.isLao)
+            html: offenderName(offender.name, offender.crnNumber, offender.licenceId, loop.index, offender.isRestricted)
         },
         {
             attributes: {
@@ -80,70 +76,64 @@
         }
     ]), licences) %}
 {% endfor %}
-
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">Select a person to vary licences and supervision orders</h1>
-        </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <h1 class="govuk-heading-xl">Select a person to vary licences and supervision orders</h1>
     </div>
-
-    <div class="govuk-grid-row">
-        <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
-            <form method="GET" action="/search/probation-search">
-                <input type="hidden" name="previousPage" value="vary">
-                <div class="govuk-form-group">
-                    <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-                        Find a case
-                    </label>
-                    <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
-                    Search by name, CRN or probation practitioner
-                    </div>
-                    <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint">
-                </div>
-                <button class="govuk-button moj-search__button " data-module="govuk-button" data-qa="search-button">
-                    Search
-                </button>
-            </form>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
+      <form method="GET" action="/search/probation-search">
+        <input type="hidden" name="previousPage" value="vary">
+          <div class="govuk-form-group">
+            <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+              Find a case
+            </label>
+            <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
+              Search by name, CRN or probation practitioner
+            </div>
+            <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint"></div>
+            <button class="govuk-button moj-search__button " data-module="govuk-button" data-qa="search-button">
+              Search
+            </button>
+          </form>
         </div>
-    </div>
-
-    <nav class="moj-sub-navigation" aria-label="Sub navigation">
+      </div>
+      <nav class="moj-sub-navigation" aria-label="Sub navigation">
         <ul class="moj-sub-navigation__list">
-            <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if not teamView %}aria-current="page"{% endif %} href="?view=me">My cases
-                    {% if myCount %}
-                        <span id="my-count" class="moj-notification-badge">{{ myCount }}</span>
-                    {% endif %}
-                </a>
-            </li>
-            <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if teamView %}aria-current="page"{% endif %} href="?view=team">Team cases
-                    {% if teamCount %}
-                        <span id="team-count" class="moj-notification-badge">{{ teamCount }}</span>
-                    {% endif %}
-                </a>
-            </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" {% if not teamView %} aria-current="page" {% endif %} href="?view=me">My cases
+              {% if myCount %}
+                <span id="my-count" class="moj-notification-badge">{{ myCount }}</span>
+              {% endif %}
+            </a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" {% if teamView %} aria-current="page" {% endif %} href="?view=team">Team cases
+              {% if teamCount %}
+                <span id="team-count" class="moj-notification-badge">{{ teamCount }}</span>
+              {% endif %}
+            </a>
+          </li>
         </ul>
-    </nav>
-
-    {% if multipleTeams %}
+      </nav>
+      {% if multipleTeams %}
         <div class="govuk-!-padding-top-2 govuk-!-padding-bottom-2 border-bottom">
-            <p data-qa="change-team">
-                Showing:
-                <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
-                        {{ teamName }}
-                    </span>
-                <a class="govuk-link govuk-!-margin-left-3" href="/licence/vary/caseload/change-team" data-qa="change-team-link">Change
-                    team</a>
-            </p>
+          <p data-qa="change-team">
+            Showing:
+            <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
+              {{ teamName }}
+            </span>
+            <a class="govuk-link govuk-!-margin-left-3" href="/licence/vary/caseload/change-team" data-qa="change-team-link">Change
+              team</a>
+          </p>
         </div>
-    {% endif %}
-
-    {% set sortOrder %}
-        {{ 'none' if hasPriorityCases else 'ascending' }}
-    {% endset %}
-    {% if caseload.length > 0 %}
+      {% endif %}
+      {% set sortOrder %}
+      {{ 'none' if hasPriorityCases else 'ascending' }}
+      {% endset %}
+      {% if caseload.length > 0 %}
         {{ govukTable({
             attributes: {
                 'data-module': 'moj-sortable-table'
@@ -181,13 +171,12 @@
             ],
             rows: licences
         }) }}
-    {% else %}
+      {% else %}
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
-                <br>
-                <h3 class="govuk-heading-s">No licences to display</h3>
+          <div class="govuk-grid-column-three-quarters">
+            <br>
+              <h3 class="govuk-heading-s">No licences to display</h3>
             </div>
-        </div>
-    {% endif %}
-
-{% endblock %}
+          </div>
+        {% endif %}
+      {% endblock %}

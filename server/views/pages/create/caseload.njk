@@ -1,58 +1,51 @@
 {% extends "layout.njk" %}
-
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/statusBadge.njk" import statusBadge %}
 {% from "partials/licenceDescription.njk" import licenceDescription %}
-
 {% set pageTitle = applicationName + " - Create a licence - Caseload" %}
 {% set pageId = "caseload-page" %}
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
-
-{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isClickable, index, createLink, isLao) %}
-    <div class="caseload-offender-name">
-        {% if laoEnabled and isLao %}
-            <a id="name-button-{{ index }}" href="{{ "/" + crn + "/restricted" }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
-        {% else %}
-            {% if isClickable %}
-                <a id="name-button-{{ index }}" href="{{ createLink }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
-            {% else %}
-                <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</span>
-            {% endif %}
-        {% endif %}
-        <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
-    </div>
+{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isClickable, index, createLink, isRestricted) %}
+  <div class="caseload-offender-name">
+    {% if laoEnabled and isRestricted %}
+      <a id="name-button-{{ index }}" href="{{ "/" + crn + "/restricted" }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0 search-highlight">{{ offenderName }}</a>
+    {% else %}
+      {% if isClickable %}
+        <a id="name-button-{{ index }}" href="{{ createLink }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+      {% else %}
+        <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</span>
+      {% endif %}
+    {% endif %}
+    <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
+  </div>
 {% endmacro %}
-
 {% set offenders = [] %}
-
 {% for offender in caseload %}
-    {% if offender.probationPractitioner.allocated %}
-        {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
-    {% else %}
-        {% set comDetailsHtml = offender.probationPractitioner.name %}
-    {% endif %}
-
-    {% if offender.kind === "HDC" or offender.kind === "HDC_VARIATION" %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate
+  {% if offender.probationPractitioner.allocated %}
+    {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
+  {% else %}
+    {% set comDetailsHtml = offender.probationPractitioner.name %}
+  {% endif %}
+  {% if offender.kind === "HDC" or offender.kind === "HDC_VARIATION" %}
+    {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
-    {% elseif offender | shouldShowHardStopWarning %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
-    {% elseif offender.kind == "TIME_SERVED"  %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
-    {% else %}
-        {% set releaseDate = offender.releaseDate %}
-    {% endif %}
-
-    {% set offenders = (offenders.push([
+  {% elseif offender | shouldShowHardStopWarning %}
+    {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
+  {% elseif offender.kind == "TIME_SERVED" %}
+    {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
+  {% else %}
+    {% set releaseDate = offender.releaseDate %}
+  {% endif %}
+  {% set offenders = (offenders.push([
         {
             attributes: {
                 id: 'name-' + loop.index,
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, offender.licenceId, offender.isClickable, loop.index, offender.createLink, offender.isLao)
+            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, offender.licenceId, offender.isClickable, loop.index, offender.createLink, offender.isRestricted)
         },
         {
             attributes: {
@@ -84,72 +77,60 @@
         }
     ]), offenders) %}
 {% endfor %}
-
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">Select a person to create licences and supervision orders</h1>
-        </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <h1 class="govuk-heading-xl">Select a person to create licences and supervision orders</h1>
     </div>
-
-    <div class="govuk-grid-row">
-        <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
-            <form method="GET" action="/search/probation-search">
-                <input type="hidden" name="previousPage" value="create">
-                <div class="govuk-form-group">
-                    <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-                        Find a case
-                    </label>
-                    <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
-                    Search by name, CRN or probation practitioner
-                    </div>
-                    <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint">
-                </div>
-                <button class="govuk-button moj-search__button " data-module="govuk-button" data-qa="search-button">
-                    Search
-                </button>
-            </form>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
+      <form method="GET" action="/search/probation-search">
+        <input type="hidden" name="previousPage" value="create">
+          <div class="govuk-form-group">
+            <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+              Find a case
+            </label>
+            <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
+              Search by name, CRN or probation practitioner
+            </div>
+            <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint"></div>
+            <button class="govuk-button moj-search__button " data-module="govuk-button" data-qa="search-button">
+              Search
+            </button>
+          </form>
         </div>
-    </div>
-
-    <nav class="moj-sub-navigation" aria-label="Sub navigation">
+      </div>
+      <nav class="moj-sub-navigation" aria-label="Sub navigation">
         <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" {% if view == 'me' or not view %} aria-current="page" {% endif %} href="?view=me">My cases</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" {% if view == 'team' %} aria-current="page" {% endif %} href="?view=team">Team cases</a>
+          </li>
+          {% if hdcEnabled %}
             <li class="moj-sub-navigation__item">
-            <a class="moj-sub-navigation__link"
-                {% if view == 'me' or not view %}aria-current="page"{% endif %}
-                href="?view=me">My cases</a>
+              <a class="moj-sub-navigation__link" {% if view == 'hdc' %} aria-current="page" {% endif %} href="?view=hdc">My HDC cases</a>
             </li>
-            <li class="moj-sub-navigation__item">
-            <a class="moj-sub-navigation__link"
-                {% if view == 'team' %}aria-current="page"{% endif %}
-                href="?view=team">Team cases</a>
-            </li>
-            {% if hdcEnabled %}
-                <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link"
-                    {% if view == 'hdc' %}aria-current="page"{% endif %}
-                    href="?view=hdc">My HDC cases</a>
-                </li>
-            {% endif %}
+          {% endif %}
         </ul>
-    </nav>
-
-    {% if multipleTeams %}
-    <div class="govuk-!-padding-top-2 govuk-!-padding-bottom-2 border-bottom">
-        <p data-qa="change-team">
+      </nav>
+      {% if multipleTeams %}
+        <div class="govuk-!-padding-top-2 govuk-!-padding-bottom-2 border-bottom">
+          <p data-qa="change-team">
             Showing:
             <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
-                        {{ teamName }}
-                    </span>
-            <a class="govuk-link govuk-!-margin-left-3" href="/licence/create/caseload/change-team" data-qa="change-team-link">Change
-                team</a>
-        </p>
-    </div>
-    {% endif %}
-
-    {% if caseload.length > 0 %}
+              {{ teamName }}
+            </span>
+            <a class="govuk-link govuk-!-margin-left-3" href="/licence/create/caseload/change-team" data-qa="change-team-link">
+            Change team</a>
+          </p>
+        </div>
+      {% endif %}
+      {% if caseload.length > 0 %}
         <form method="POST">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             {{ govukTable({
                 attributes: {
                     'data-module': 'moj-sortable-table'
@@ -187,13 +168,13 @@
                 ],
                 rows: offenders
             }) }}
-        </form>
-    {% else %}
-        <div class="govuk-grid-row">
+          </form>
+        {% else %}
+          <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                <br>
+              <br>
                 <h3 class="govuk-heading-s">No licences to display</h3>
+              </div>
             </div>
-        </div>
-    {% endif %}
-{% endblock %}
+          {% endif %}
+        {% endblock %}
