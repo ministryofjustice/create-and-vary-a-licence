@@ -2,10 +2,16 @@ import { RequestHandler } from 'express'
 import LicenceService from '../services/licenceService'
 import logger from '../../logger'
 import { CheckCaseAccessRequest } from '../@types/licenceApiClientTypes'
+import config from '../config'
 
 export default function checkComCaseAccessMiddleware(licenceService: LicenceService): RequestHandler {
   return async (req, res, next) => {
     const { user, isVaryJourney } = res.locals
+
+    const { laoEnabled } = config
+    if (!laoEnabled) {
+      return next()
+    }
 
     if (!user?.isProbationUser) {
       return next()
