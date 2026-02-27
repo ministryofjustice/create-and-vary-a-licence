@@ -5,7 +5,7 @@
 {% set backLinkHref = "/" %}
 
 {% if user.userRoles.includes('ROLE_LICENCE_ACO') %}
-    {% set caseloadLink = '/licence/vary-approve/caseload' %}
+    {% set caseloadLink = '/licence/vary-approve/list' %}
 {% elseif isVaryJourney === 'true' %}
     {% set caseloadLink = '/licence/vary/caseload' %}
 {% else %}
