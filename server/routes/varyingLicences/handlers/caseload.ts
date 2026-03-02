@@ -84,17 +84,22 @@ export default class CaseloadRoutes {
   }
 
   prioritiseReviewNeeded(
-    a: { isReviewNeeded: boolean; releaseDate: string },
-    b: { isReviewNeeded: boolean; releaseDate: string },
+    a: { isReviewNeeded: boolean; releaseDate: string; isRestricted: boolean; crnNumber?: string },
+    b: { isReviewNeeded: boolean; releaseDate: string; isRestricted: boolean; crnNumber?: string },
   ) {
+    // Restricted cases always go to the end, sorted by CRN
+    if (a.isRestricted && !b.isRestricted) return 1
+    if (!a.isRestricted && b.isRestricted) return -1
+    if (a.isRestricted && b.isRestricted) {
+      return a.crnNumber.localeCompare(b.crnNumber)
+    }
+
+    // Non-restricted cases: prioritize review needed, then sort by release date
+    if (a.isReviewNeeded && !b.isReviewNeeded) return -1
+    if (!a.isReviewNeeded && b.isReviewNeeded) return 1
+
     const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
     const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
-    if (a.isReviewNeeded && !b.isReviewNeeded) {
-      return -1
-    }
-    if (!a.isReviewNeeded && b.isReviewNeeded) {
-      return 1
-    }
     return crd1 - crd2
   }
 }
