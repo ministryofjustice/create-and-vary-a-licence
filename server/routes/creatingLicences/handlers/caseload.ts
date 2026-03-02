@@ -60,7 +60,7 @@ export default class CaseloadRoutes {
           comCase.probationPractitioner?.allocated ||
           comCase.kind === LicenceKind.TIME_SERVED ||
           comCase.kind === LicenceKind.HARD_STOP,
-        sortDate: comCase.releaseDate && parseCvlDate(comCase.releaseDate),
+        sortDate: !comCase.isRestricted && comCase.releaseDate ? parseCvlDate(comCase.releaseDate) : null,
         kind: comCase.kind,
         isRestricted: comCase.isRestricted,
       }

@@ -6,6 +6,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import { ComCreateCase } from '../../../@types/licenceApiClientTypes'
 
 const comCaseloadService = new ComCaseloadService(null, null) as jest.Mocked<ComCaseloadService>
 
@@ -834,6 +835,91 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamCount: 3,
         hasPriorityCases: true,
       })
+    })
+
+    it('should sort non-restricted cases by release date then name before restricted cases which are sorted by CRN regardless of whether a review is needed', async () => {
+      const mockCaseload = [
+        {
+          name: 'Access restricted on NDelius',
+          crnNumber: 'Z999999',
+          releaseDate: '05/01/2025',
+          isReviewNeeded: true,
+          isRestricted: true,
+          licenceType: 'AP',
+          probationPractitioner: {
+            staffCode: 'Restricted',
+            name: 'Restricted',
+            allocated: true,
+          },
+          kind: 'CRD',
+        },
+        {
+          name: 'Person A',
+          crnNumber: 'A123456',
+          releaseDate: '20/01/2025',
+          isReviewNeeded: false,
+          isRestricted: false,
+          licenceType: 'AP',
+          probationPractitioner: {
+            staffCode: 'A12345',
+            name: 'Test Com',
+            allocated: false,
+          },
+          kind: 'CRD',
+        },
+      ]
+      comCaseloadService.getStaffVaryCaseload.mockResolvedValue(mockCaseload as ComCreateCase[])
+      comCaseloadService.getComReviewCount.mockResolvedValue({ myCount: 1, teams: [] })
+
+      req.query = {}
+
+      await handler.GET(req, res)
+
+      const { caseload } = (res.render as jest.Mock).mock.calls[0][1]
+
+      expect(caseload[0].crnNumber).toBe('A123456')
+      expect(caseload[0].isRestricted).toBe(false)
+      expect(caseload[1].crnNumber).toBe('Z999999')
+      expect(caseload[1].isRestricted).toBe(true)
+    })
+
+    it('should sort multiple restricted cases by CRN', async () => {
+      const mockCaseload = [
+        {
+          name: 'Access restricted on NDelius',
+          crnNumber: 'Z999999',
+          releaseDate: '01/01/2025',
+          isReviewNeeded: false,
+          isRestricted: true,
+        },
+        {
+          name: 'Access restricted on NDelius',
+          crnNumber: 'M555555',
+          releaseDate: '15/01/2025',
+          isReviewNeeded: false,
+          isRestricted: true,
+        },
+        {
+          name: 'Access restricted on NDelius',
+          crnNumber: 'A111111',
+          releaseDate: '30/01/2025',
+          isReviewNeeded: false,
+          isRestricted: true,
+        },
+      ]
+
+      comCaseloadService.getStaffVaryCaseload.mockResolvedValue(mockCaseload as ComCreateCase[])
+      comCaseloadService.getComReviewCount.mockResolvedValue({ myCount: 0, teams: [] })
+
+      req.query = {}
+
+      await handler.GET(req, res)
+
+      const { caseload } = (res.render as jest.Mock).mock.calls[0][1]
+
+      expect(caseload[0].crnNumber).toBe('A111111')
+      expect(caseload[1].crnNumber).toBe('M555555')
+      expect(caseload[2].crnNumber).toBe('Z999999')
     })
   })
 })
