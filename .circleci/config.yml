@@ -147,6 +147,7 @@ workflows:
           name: helm_lint
       - hmpps/build_docker:
           name: build_docker
+          tag: 3.14
           filters:
             branches:
               only:
