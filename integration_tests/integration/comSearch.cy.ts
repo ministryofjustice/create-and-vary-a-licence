@@ -66,19 +66,18 @@ context('Search for a person', () => {
     searchPage.getSearchInput().should('have.value', 'A123456')
     searchPage.checkOnPage()
 
-    searchPage.getRow(0).find('.search-offender-name').should('contain.text', 'Access restricted on NDelius')
-    searchPage.getRow(0).find('#name-1>.search-offender-name>.govuk-hint').should('contain.text', 'CRN: A123456')
-    searchPage.getRow(0).find('#licence-type-1').contains('Restricted')
-    searchPage.getRow(0).find('#probation-practitioner-1').contains('Restricted')
-    searchPage.getRow(0).find('#team-name-1').contains('Restricted')
-    searchPage.getRow(0).find('#release-date-1').contains('Restricted')
-    searchPage.getRow(0).find('#licence-status-1').contains('Restricted')
-
-    searchPage.getRow(0).find('a[id^="name-button"]').should('exist')
-    searchPage.getRow(0).find('a[data-qa="comLink"]').should('not.exist')
+    searchPage.getRow(1).find('.search-offender-name').should('contain.text', 'Access restricted on NDelius')
+    searchPage.getRow(1).find('.govuk-hint').should('contain.text', 'CRN: A123456')
+    searchPage.getRow(1).find('#licence-type-2').contains('Restricted')
+    searchPage.getRow(1).find('#probation-practitioner-2').contains('Restricted')
+    searchPage.getRow(1).find('#team-name-2').contains('Restricted')
+    searchPage.getRow(1).find('#release-date-2').contains('Restricted')
+    searchPage.getRow(1).find('#licence-status-2').contains('Restricted')
+    searchPage.getRow(1).find('a[id^="name-button"]').should('exist')
+    searchPage.getRow(1).find('a[data-qa="comLink"]').should('not.exist')
 
     cy.task('stubGetCaseAccessDetails')
-    searchPage.clickLaoOffenderName()
+    searchPage.clickLaoOffenderName(2)
 
     const restrictedDetailsPage = Page.verifyOnPage(RestrictedDetailsPage)
     restrictedDetailsPage
@@ -108,7 +107,7 @@ context('Search for a person', () => {
     searchPage.getRow(0).find('a[data-qa="comLink"]').should('not.exist')
 
     cy.task('stubGetCaseAccessDetails')
-    searchPage.clickLaoOffenderName()
+    searchPage.clickLaoOffenderName(1)
 
     const restrictedDetailsPage = Page.verifyOnPage(RestrictedDetailsPage)
     restrictedDetailsPage
