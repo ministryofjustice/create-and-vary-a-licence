@@ -40,6 +40,8 @@ context('Create an HDC licence', () => {
     const confirmCreatePage = new ConfirmCreatePage()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+
+    appointmentPersonPage.selectAppointmentPersonType(3)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()

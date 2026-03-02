@@ -12,6 +12,20 @@
 {% set errorMessage = validationErrors | findError('contactName') %}
 {% set isError = errorMessage.text %}
 
+{% set DUTY_OFFICER = "DUTY_OFFICER" %}
+{% set SPECIFIC_PERSON = "SPECIFIC_PERSON" %}
+{% set contactNameHtml %}
+    <label class="govuk-label" for="Enter name">Enter name</label>
+    <input
+            class="govuk-input govuk-!-width-one-half {{ "govuk-input--error" if isError }}"
+            id="contactName"
+            name="contactName"
+            type="text"
+            value="{{ contactName }}"
+            aria-describedby="contactName"
+    >
+{% endset %}
+
 {% block content %}
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -32,31 +46,19 @@
                     {% endif %}
 
                     {% if userType == 'probation' %}
-                        {% set DUTY_OFFICER = "DUTY_OFFICER" %}
-                        {% set SPECIFIC_PERSON = "SPECIFIC_PERSON" %}
-                        {% set contactNameHtml %}
-                            <label class="govuk-label" for="Enter name">Enter name</label>
-                            <input
-                                    class="govuk-input govuk-!-width-one-half {{ "govuk-input--error" if isError }}"
-                                    id="contactName"
-                                    name="contactName"
-                                    type="text"
-                                    value="{{ contactName }}"
-                                    aria-describedby="contactName"
-                            >
-                        {% endset %}
-
                         {% set initialMeetingPersonOptions = [] %}
                         {% for value, text in appointmentPersonType %}
                             {% set initialMeetingPersonOptions = (initialMeetingPersonOptions.push(
-                                {   value: value,
+                                {
+                                    value: value,
                                     text: text,
                                     hint: {
-                                    text: "For example, someone at an approved premises or a different community probation practitioner."
-                                } if value === SPECIFIC_PERSON,
+                                        text: "For example, someone at an approved premises or a different community probation practitioner."
+                                    } if value === SPECIFIC_PERSON,
                                     conditional: {
-                                    html: contactNameHtml
-                                } if value === SPECIFIC_PERSON
+                                        html: contactNameHtml
+                                    } if value === SPECIFIC_PERSON
+
                                 }), initialMeetingPersonOptions) %}
                         {% endfor %}
 
