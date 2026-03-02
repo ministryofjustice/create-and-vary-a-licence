@@ -71,15 +71,29 @@ export default class ProbationSearch {
 }
 
 function sortByReviewNeededDateAndName(a: FoundComCase, b: FoundComCase, descending: boolean) {
-  const releaseDate1 = moment(a.releaseDate, 'DD/MM/YYYY').unix()
-  const releaseDate2 = moment(b.releaseDate, 'DD/MM/YYYY').unix()
+  // Restricted cases always go to the bottom
+  if (a.isRestricted && !b.isRestricted) {
+    return 1
+  }
+  if (!a.isRestricted && b.isRestricted) {
+    return -1
+  }
 
+  // If both are restricted, sort by CRN
+  if (a.isRestricted && b.isRestricted) {
+    return a.crn.localeCompare(b.crn)
+  }
+
+  // For non-restricted cases, prioritise review needed
   if (a.isReviewNeeded && !b.isReviewNeeded) {
     return -1
   }
   if (!a.isReviewNeeded && b.isReviewNeeded) {
     return 1
   }
+
+  const releaseDate1 = moment(a.releaseDate, 'DD/MM/YYYY').unix()
+  const releaseDate2 = moment(b.releaseDate, 'DD/MM/YYYY').unix()
 
   if (releaseDate1 === releaseDate2) {
     const foreName1 = a.name.split(' ')[0]

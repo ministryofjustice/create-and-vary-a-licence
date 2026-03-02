@@ -543,5 +543,41 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       })
       expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
     })
+
+    it('should render sort date as null for restricted cases so that they can be sorted correctly by crn and after non-restricted cases', async () => {
+      comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
+        {
+          crnNumber: 'A123456',
+          name: 'Access restricted on NDelius',
+          releaseDate: '20/12/2025',
+          prisonerNumber: 'LAO123',
+          licenceId: null,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          hardStopDate: null,
+          hardStopWarningDate: null,
+          kind: LicenceKind.CRD,
+          probationPractitioner: {
+            name: 'Restricted',
+            staffCode: 'Restricted',
+            allocated: true,
+          },
+          isRestricted: true,
+        },
+      ] as unknown as ComCreateCase[])
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/create/caseload',
+        expect.objectContaining({
+          caseload: expect.arrayContaining([
+            expect.objectContaining({
+              sortDate: null,
+            }),
+          ]),
+        }),
+      )
+      expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+    })
   })
 })

@@ -322,5 +322,268 @@ describe('Route Handlers - Search - Probation Search', () => {
         hasPriorityCases: true,
       })
     })
+
+    it('should sort non-restricted cases by release date then name before restricted cases which are sorted by CRN on probation tab', async () => {
+      const restrictedCase = {
+        name: 'Access restricted on NDelius',
+        crn: 'Z999999',
+        nomisId: '',
+        comName: 'Restricted',
+        comStaffCode: '',
+        probationPractitioner: {
+          name: 'Restricted',
+          staffCode: 'Restricted',
+          allocated: true,
+        },
+        teamName: 'Restricted',
+        releaseDate: '01/01/2024',
+        licenceId: 1,
+        licenceType: 'AP',
+        licenceStatus: LicenceStatus.ACTIVE,
+        releaseDateLabel: 'CRD',
+        kind: LicenceKind.CRD,
+        isOnProbation: true,
+        isRestricted: true,
+        isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      }
+
+      const nonRestrictedCase = {
+        name: 'Test Person',
+        crn: 'A111111',
+        nomisId: 'A1234BC',
+        comName: 'Test Staff',
+        comStaffCode: '3000',
+        probationPractitioner: {
+          name: 'Test Staff',
+          staffCode: '3000',
+          allocated: true,
+        },
+        teamName: 'Test Team',
+        releaseDate: '31/12/2025',
+        licenceId: 2,
+        licenceType: 'AP',
+        licenceStatus: LicenceStatus.ACTIVE,
+        releaseDateLabel: 'CRD',
+        kind: LicenceKind.CRD,
+        isOnProbation: true,
+        isRestricted: false,
+        isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      }
+
+      const searchResponse = {
+        results: [restrictedCase, nonRestrictedCase],
+        inPrisonCount: 0,
+        onProbationCount: 2,
+      }
+
+      const expectedSortedResults = [nonRestrictedCase, restrictedCase]
+
+      searchService.getComSearchResponses.mockResolvedValue(searchResponse as ComSearchResponse)
+      req.query = { queryTerm: 'Test', previousPage: 'create' }
+      previousCaseloadPage = 'create'
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
+        queryTerm: 'Test',
+        peopleInPrison: [],
+        peopleOnProbation: expectedSortedResults,
+        backLink: '/licence/create/caseload',
+        tabParameters: {
+          ...tabParameters,
+          activeTab: '#people-on-probation',
+        },
+        statusConfig,
+        previousCaseloadPage,
+        hasPriorityCases: false,
+      })
+    })
+
+    it('should sort multiple restricted LAO cases by CRN on probation tab', async () => {
+      const baseCase = {
+        name: 'Access restricted on NDelius',
+        nomisId: '',
+        comName: 'Restricted',
+        comStaffCode: '',
+        probationPractitioner: {
+          name: 'Restricted',
+          staffCode: 'Restricted',
+          allocated: true,
+        },
+        teamName: 'Restricted',
+        releaseDate: '01/01/2024',
+        licenceType: 'AP',
+        licenceStatus: LicenceStatus.ACTIVE,
+        releaseDateLabel: 'CRD',
+        kind: LicenceKind.CRD,
+        isOnProbation: true,
+        isRestricted: true,
+        isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      }
+
+      const case1 = { ...baseCase, crn: 'Z999999', licenceId: 1 }
+      const case2 = { ...baseCase, crn: 'C333333', licenceId: 2 }
+      const case3 = { ...baseCase, crn: 'A111111', licenceId: 3 }
+      const case4 = { ...baseCase, crn: 'M555555', licenceId: 4 }
+
+      const searchResponse = {
+        results: [case1, case2, case3, case4],
+        inPrisonCount: 0,
+        onProbationCount: 4,
+      }
+
+      const expectedSortedResults = [case3, case2, case4, case1]
+
+      searchService.getComSearchResponses.mockResolvedValue(searchResponse as ComSearchResponse)
+      req.query = { queryTerm: 'Test', previousPage: 'create' }
+      previousCaseloadPage = 'create'
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
+        queryTerm: 'Test',
+        peopleInPrison: [],
+        peopleOnProbation: expectedSortedResults,
+        backLink: '/licence/create/caseload',
+        tabParameters: {
+          ...tabParameters,
+          activeTab: '#people-on-probation',
+        },
+        statusConfig,
+        previousCaseloadPage,
+        hasPriorityCases: false,
+      })
+    })
+
+    it('should sort non-restricted cases by release date then name before restricted cases which are sorted by CRN on prison tab', async () => {
+      const restrictedCase = {
+        name: 'Access restricted on NDelius',
+        crn: 'Z999999',
+        nomisId: '',
+        comName: 'Restricted',
+        comStaffCode: '',
+        probationPractitioner: {
+          name: 'Restricted',
+          staffCode: 'Restricted',
+          allocated: true,
+        },
+        teamName: 'Restricted',
+        releaseDate: '01/01/2024',
+        licenceId: 1,
+        licenceType: 'AP',
+        licenceStatus: LicenceStatus.ACTIVE,
+        releaseDateLabel: 'CRD',
+        kind: LicenceKind.CRD,
+        isOnProbation: false,
+        isRestricted: true,
+        isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      }
+
+      const nonRestrictedCase = {
+        name: 'Test Person',
+        crn: 'A111111',
+        nomisId: 'A1234BC',
+        comName: 'Test Staff',
+        comStaffCode: '3000',
+        probationPractitioner: {
+          name: 'Test Staff',
+          staffCode: '3000',
+          allocated: true,
+        },
+        teamName: 'Test Team',
+        releaseDate: '31/12/2025',
+        licenceId: 2,
+        licenceType: 'AP',
+        licenceStatus: LicenceStatus.ACTIVE,
+        releaseDateLabel: 'CRD',
+        kind: LicenceKind.CRD,
+        isOnProbation: false,
+        isRestricted: false,
+        isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      }
+
+      const searchResponse = {
+        results: [restrictedCase, nonRestrictedCase],
+        inPrisonCount: 2,
+        onProbationCount: 0,
+      }
+
+      const expectedSortedResults = [nonRestrictedCase, restrictedCase]
+
+      searchService.getComSearchResponses.mockResolvedValue(searchResponse as ComSearchResponse)
+      req.query = { queryTerm: 'Test', previousPage: 'create' }
+      previousCaseloadPage = 'create'
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
+        queryTerm: 'Test',
+        peopleInPrison: expectedSortedResults,
+        peopleOnProbation: [],
+        backLink: '/licence/create/caseload',
+        tabParameters,
+        statusConfig,
+        previousCaseloadPage,
+        hasPriorityCases: false,
+      })
+    })
+
+    it('should sort multiple restricted cases by CRN on prison tab', async () => {
+      const baseCase = {
+        name: 'Access restricted on NDelius',
+        nomisId: '',
+        comName: 'Restricted',
+        comStaffCode: '',
+        probationPractitioner: {
+          name: 'Restricted',
+          staffCode: 'Restricted',
+          allocated: true,
+        },
+        teamName: 'Restricted',
+        releaseDate: '01/01/2024',
+        licenceType: 'AP',
+        licenceStatus: LicenceStatus.ACTIVE,
+        releaseDateLabel: 'CRD',
+        kind: LicenceKind.CRD,
+        isOnProbation: false,
+        isRestricted: true,
+        isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      }
+
+      const case1 = { ...baseCase, crn: 'D444444', licenceId: 1 }
+      const case2 = { ...baseCase, crn: 'B222222', licenceId: 2 }
+      const case3 = { ...baseCase, crn: 'A111111', licenceId: 3 }
+
+      const searchResponse = {
+        results: [case1, case2, case3],
+        inPrisonCount: 3,
+        onProbationCount: 0,
+      }
+
+      const expectedSortedResults = [case3, case2, case1]
+
+      searchService.getComSearchResponses.mockResolvedValue(searchResponse as ComSearchResponse)
+      req.query = { queryTerm: 'Test', previousPage: 'create' }
+      previousCaseloadPage = 'create'
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
+        queryTerm: 'Test',
+        peopleInPrison: expectedSortedResults,
+        peopleOnProbation: [],
+        backLink: '/licence/create/caseload',
+        tabParameters,
+        statusConfig,
+        previousCaseloadPage,
+        hasPriorityCases: false,
+      })
+    })
   })
 })

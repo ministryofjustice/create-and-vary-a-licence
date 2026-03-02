@@ -26,8 +26,8 @@ export default class SearchPage extends Page {
     return Page.verifyOnPage(CheckAnswersPage)
   }
 
-  clickLaoOffenderName = (): RestrictedDetailsPage => {
-    cy.get(this.licenceLinkId).click()
+  clickLaoOffenderName = (row: number): RestrictedDetailsPage => {
+    cy.get(`#name-button-${row}`).click()
     return Page.verifyOnPage(RestrictedDetailsPage)
   }
 
