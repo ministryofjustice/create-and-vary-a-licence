@@ -188,7 +188,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamView: false,
         myCount: 1,
         teamCount: 2,
-        hasPriorityCases: true,
+        hasCustomSorting: true,
       })
       expect(comCaseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
@@ -254,7 +254,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamView: true,
         myCount: 1,
         teamCount: 1,
-        hasPriorityCases: true,
+        hasCustomSorting: true,
       })
       expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -311,7 +311,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamView: true,
         myCount: 1,
         teamCount: 1,
-        hasPriorityCases: false,
+        hasCustomSorting: false,
       })
       expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -347,7 +347,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         search: 'smith',
         myCount: 1,
         teamCount: 1,
-        hasPriorityCases: false,
+        hasCustomSorting: false,
       })
       expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -399,7 +399,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         search: 'test',
         myCount: 1,
         teamCount: 1,
-        hasPriorityCases: true,
+        hasCustomSorting: true,
       })
       expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -435,7 +435,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         search: 'x12345',
         myCount: 1,
         teamCount: 1,
-        hasPriorityCases: false,
+        hasCustomSorting: false,
       })
       expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -755,7 +755,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamView: false,
         myCount: 2,
         teamCount: 5,
-        hasPriorityCases: true,
+        hasCustomSorting: true,
       })
     })
 
@@ -833,7 +833,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamView: true,
         myCount: 2,
         teamCount: 3,
-        hasPriorityCases: true,
+        hasCustomSorting: true,
       })
     })
 

@@ -131,7 +131,7 @@
         </div>
       {% endif %}
       {% set sortOrder %}
-      {{ 'none' if hasPriorityCases else 'ascending' }}
+      {{ 'none' if hasCustomSorting else 'ascending' }}
       {% endset %}
       {% if caseload.length > 0 %}
         {{ govukTable({

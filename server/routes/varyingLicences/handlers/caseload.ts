@@ -68,7 +68,10 @@ export default class CaseloadRoutes {
         )
       })
       .sort(this.prioritiseReviewNeeded)
-    const hasPriorityCases = caseloadViewModel.filter(c => c.isReviewNeeded).length > 0
+
+    const hasReviewNeededCases = caseloadViewModel.filter(c => c.isReviewNeeded).length > 0
+    const hasRestrictedCases = caseloadViewModel.filter(c => c.isRestricted).length > 0
+    const hasCustomSorting = hasReviewNeededCases || hasRestrictedCases
 
     res.render('pages/vary/caseload', {
       caseload: caseloadViewModel,
@@ -79,7 +82,7 @@ export default class CaseloadRoutes {
       search,
       myCount,
       teamCount: teams.reduce((totalCount, teams) => totalCount + teams.count, 0),
-      hasPriorityCases,
+      hasCustomSorting,
     })
   }
 
@@ -94,7 +97,7 @@ export default class CaseloadRoutes {
       return a.crnNumber.localeCompare(b.crnNumber)
     }
 
-    // Non-restricted cases: prioritize review needed, then sort by release date
+    // Non-restricted cases: prioritise review needed, then sort by release date
     if (a.isReviewNeeded && !b.isReviewNeeded) return -1
     if (!a.isReviewNeeded && b.isReviewNeeded) return 1
 
