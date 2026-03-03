@@ -21,7 +21,7 @@ export default class InitialMeetingNameRoutes {
       ...(isProbationPractionerAllocated && probationPractionerOption),
       SPECIFIC_PERSON: 'Someone else',
     }
-    res.render('pages/initialAppointment/initialMeetingName', {
+    res.render('pages/initialAppointment/initialMeetingPerson', {
       appointmentPersonType,
       userType: this.userType,
     })
