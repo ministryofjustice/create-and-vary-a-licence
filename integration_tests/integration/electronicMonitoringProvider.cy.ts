@@ -35,6 +35,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -124,6 +125,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -216,6 +218,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -297,6 +300,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -396,6 +400,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -437,6 +442,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -478,6 +484,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -554,6 +561,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()

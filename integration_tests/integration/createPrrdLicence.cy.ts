@@ -35,6 +35,7 @@ context('Create a licence', () => {
     const confirmCreatePage = new ConfirmCreatePage()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()

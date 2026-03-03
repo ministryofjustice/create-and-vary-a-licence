@@ -30,6 +30,7 @@ context('Postcode lookup', () => {
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
+      appointmentPersonPage.selectAppointmentPersonType(2)
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.getAddressNotSavedMessage().should('not.exist')
@@ -51,6 +52,7 @@ context('Postcode lookup', () => {
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
+      appointmentPersonPage.selectAppointmentPersonType(2)
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.getAddressNotSavedMessage().should('exist')
@@ -69,6 +71,7 @@ context('Postcode lookup', () => {
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
+      appointmentPersonPage.selectAppointmentPersonType(2)
       const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
       appointmentPlacePage.useSavedAddressField().should('exist')
       appointmentPlacePage.getAddressNotSavedMessage().should('not.exist')

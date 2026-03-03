@@ -52,6 +52,7 @@ context('Create a licence', () => {
     )
     cy.task('stubGetLicence', { isEligibleForEarlyRelease: true })
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -136,6 +137,7 @@ context('Create a licence', () => {
     const caseloadPage = indexPage.clickCreateAPssLicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(3)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -177,6 +179,7 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -203,6 +206,7 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -244,6 +248,7 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -324,6 +329,7 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -351,6 +357,7 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -381,6 +388,7 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
@@ -424,6 +432,7 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
+    appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
     const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
     const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
