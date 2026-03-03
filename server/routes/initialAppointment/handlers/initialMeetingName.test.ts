@@ -52,7 +52,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         await handler.GET(req, res)
 
         // Then
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingName', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPerson', {
           appointmentPersonType: {
             DUTY_OFFICER: 'Duty officer',
             SPECIFIC_PERSON: 'Someone else',
@@ -69,7 +69,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         await handler.GET(req, res)
 
         // Then
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingName', {
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPerson', {
           appointmentPersonType: {
             DUTY_OFFICER: 'Duty officer',
             RESPONSIBLE_COM: 'Test Tester, this person’s community probation practitioner',
@@ -127,7 +127,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
 
         // Then
         expect(res.render).toHaveBeenCalledWith(
-          'pages/initialAppointment/initialMeetingName',
+          'pages/initialAppointment/initialMeetingPerson',
           expect.objectContaining({ userType: UserType.PRISON }),
         )
       })
