@@ -921,5 +921,123 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       expect(caseload[1].crnNumber).toBe('M555555')
       expect(caseload[2].crnNumber).toBe('Z999999')
     })
+
+    it('should have custom sorting if caseload has review needed cases', async () => {
+      comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
+        {
+          licenceId: 1,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+          kind: LicenceKind.CRD,
+          prisonerNumber: 'A1234AA',
+          releaseDate: '01/05/2022',
+          crnNumber: 'X12345',
+          name: 'Bob Smith',
+          probationPractitioner: {
+            name: 'Test Com',
+            allocated: true,
+          },
+          isReviewNeeded: true,
+          isRestricted: false,
+        },
+      ])
+
+      comCaseloadService.getComReviewCount.mockResolvedValue({
+        myCount: 1,
+        teams: [],
+      })
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
+        caseload: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.REVIEW_NEEDED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Test Com',
+              allocated: true,
+            },
+            kind: LicenceKind.CRD,
+            isReviewNeeded: true,
+            isRestricted: false,
+          },
+        ],
+        multipleTeams: false,
+        statusConfig,
+        teamName: null,
+        teamView: false,
+        search: undefined,
+        myCount: 1,
+        teamCount: 0,
+        hasCustomSorting: true,
+      })
+    })
+
+    it('should have custom sorting if caseload has restricted cases', async () => {
+      comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
+        {
+          licenceId: 1,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.ACTIVE,
+          kind: LicenceKind.CRD,
+          prisonerNumber: 'A1234AA',
+          releaseDate: '01/05/2022',
+          crnNumber: 'X12345',
+          name: 'Access restricted on NDelius',
+          probationPractitioner: {
+            name: 'Restricted',
+            staffCode: 'Restricted',
+            allocated: true,
+          },
+          isReviewNeeded: false,
+          isRestricted: true,
+        },
+      ])
+
+      comCaseloadService.getComReviewCount.mockResolvedValue({
+        myCount: 0,
+        teams: [],
+      })
+
+      req.query = {}
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
+        caseload: [
+          {
+            licenceId: 1,
+            name: 'Access restricted on NDelius',
+            crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.ACTIVE,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Restricted',
+              staffCode: 'Restricted',
+              allocated: true,
+            },
+            kind: LicenceKind.CRD,
+            isReviewNeeded: false,
+            isRestricted: true,
+          },
+        ],
+        multipleTeams: false,
+        statusConfig,
+        teamName: null,
+        teamView: false,
+        search: undefined,
+        myCount: 0,
+        teamCount: 0,
+        hasCustomSorting: true,
+      })
+    })
   })
 })
