@@ -2,5 +2,8 @@
   "low": true,
   "package-manager": "auto",
   "registry": "https://registry.npmjs.org",
-  "allowlist": ["GHSA-73rr-hh4g-fpgx|mocha>diff"]
+  "allowlist": [
+    "GHSA-5c6j-r48x-rmvq|mocha>serialize-javascript",
+    "GHSA-73rr-hh4g-fpgx|mocha>diff"
+  ]
 }

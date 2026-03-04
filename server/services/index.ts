@@ -1,4 +1,4 @@
-import { createDprServices } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/utils/CreateDprServices'
+import { createDprServices } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
 
 import UserService from './userService'
 import PrisonerService from './prisonerService'

@@ -1,8 +1,10 @@
 import { Router, RequestHandler } from 'express'
 import type { Environment } from 'nunjucks'
-import setUpDprResources from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/middleware/setUpDprResources'
-import { DprUser } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/types/DprUser'
-import dprPlatformRoutes from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/routes'
+import {
+  setUpDprResources,
+  DprUser,
+  routes as dprPlatformRoutes,
+} from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
 
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import { Services } from '../../services'
