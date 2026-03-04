@@ -44,6 +44,7 @@ generic-service:
     EPF2_URL: "https://epf.linkspace.uk/planning"
     TIME_SERVED_ENABLED: "true"
     TIME_SERVED_ENABLED_PRISONS: "BNI, WCI, EXI, IWI, EWI"
+    HDC_ENABLED: "false"
 
     # HDC
     MONITORING_SUPPLIER_TELEPHONE: "0800 137 291"
