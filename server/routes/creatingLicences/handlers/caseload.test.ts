@@ -36,6 +36,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           allocated: true,
         },
         isRestricted: false,
+        hdcStatus: 'NOT_A_HDC_RELEASE',
       },
       {
         crnNumber: 'X381307',
@@ -54,6 +55,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           allocated: false,
         },
         isRestricted: false,
+        hdcStatus: 'NOT_A_HDC_RELEASE',
       },
       {
         crnNumber: 'X381308',
@@ -72,6 +74,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           allocated: true,
         },
         isRestricted: false,
+        hdcStatus: 'NOT_A_HDC_RELEASE',
       },
       {
         crnNumber: 'X381309',
@@ -90,6 +93,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           allocated: false,
         },
         isRestricted: false,
+        hdcStatus: 'NOT_A_HDC_RELEASE',
       },
     ] as unknown as ComCreateCase[])
 
@@ -111,6 +115,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           allocated: true,
         },
         isRestricted: false,
+        hdcStatus: 'NOT_A_HDC_RELEASE',
       },
       {
         crnNumber: 'X381307',
@@ -124,6 +129,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         hardStopWarningDate: '10/10/2022',
         kind: LicenceKind.CRD,
         isRestricted: false,
+        hdcStatus: 'NOT_A_HDC_RELEASE',
       },
       {
         crnNumber: 'X381308',
@@ -137,6 +143,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         hardStopWarningDate: '10/10/2022',
         kind: LicenceKind.CRD,
         isRestricted: false,
+        hdcStatus: 'NOT_A_HDC_RELEASE',
       },
       {
         crnNumber: 'X381309',
@@ -150,6 +157,86 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         hardStopWarningDate: '10/10/2022',
         kind: LicenceKind.CRD,
         isRestricted: false,
+        hdcStatus: 'NOT_A_HDC_RELEASE',
+      },
+    ] as unknown as ComCreateCase[])
+
+    comCaseloadService.getStaffCreateCaseloadHdc.mockResolvedValue([
+      {
+        crnNumber: 'X381306',
+        name: 'Test Person',
+        releaseDate: '12/10/2022',
+        prisonerNumber: '123',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        hardStopDate: '10/10/2022',
+        hardStopWarningDate: '10/10/2022',
+        kind: LicenceKind.HDC,
+        probationPractitioner: {
+          name: 'Joe Bloggs',
+          staffCode: 'X6789',
+          allocated: true,
+        },
+        isRestricted: false,
+        hdcStatus: 'APPROVED',
+      },
+      {
+        crnNumber: 'X381307',
+        name: 'Another Person',
+        releaseDate: '11/10/2022',
+        prisonerNumber: '456',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        hardStopDate: '10/10/2022',
+        hardStopWarningDate: '10/10/2022',
+        kind: LicenceKind.HDC,
+        probationPractitioner: {
+          name: 'Not Allocated',
+          staffCode: 'X6789U',
+          allocated: false,
+        },
+        isRestricted: false,
+        hdcStatus: 'APPROVED',
+      },
+      {
+        crnNumber: 'X381308',
+        name: 'Person Three',
+        releaseDate: '12/10/2022',
+        prisonerNumber: '789',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        hardStopDate: '11/10/2022',
+        hardStopWarningDate: '10/10/2022',
+        kind: LicenceKind.HDC,
+        probationPractitioner: {
+          name: 'Not Allocated',
+          staffCode: 'X6789U',
+          allocated: true,
+        },
+        isRestricted: false,
+        hdcStatus: 'APPROVED',
+      },
+      {
+        crnNumber: 'X381309',
+        name: 'Person Four',
+        releaseDate: '03/10/2022',
+        prisonerNumber: '321',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        hardStopDate: '01/10/2022',
+        hardStopWarningDate: '01/10/2022',
+        kind: LicenceKind.HDC,
+        probationPractitioner: {
+          name: 'Not Allocated',
+          staffCode: 'X6789U',
+          allocated: false,
+        },
+        isRestricted: false,
+        hdcStatus: 'APPROVED',
       },
     ] as unknown as ComCreateCase[])
   })
@@ -213,6 +300,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
             isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
           },
           {
             crnNumber: 'X381307',
@@ -234,6 +322,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
             isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
           },
           {
             crnNumber: 'X381308',
@@ -255,6 +344,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
             isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
           },
           {
             crnNumber: 'X381309',
@@ -276,6 +366,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: false,
             isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
           },
         ],
         multipleTeams: false,
@@ -313,6 +404,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/1/check-your-answers',
             sortDate: parseIsoDate('2022-10-12'),
             isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
           },
           {
             name: 'Another Person',
@@ -329,6 +421,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/2/check-your-answers',
             isClickable: false,
             isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
           },
           {
             name: 'Person Three',
@@ -345,6 +438,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/3/check-your-answers',
             isClickable: false,
             isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
           },
           {
             name: 'Recall Person',
@@ -361,6 +455,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/4/check-your-answers',
             isClickable: false,
             isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
           },
         ],
         statusConfig,
@@ -384,7 +479,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             releaseDate: '12 Oct 2022',
             hardStopDate: '10/10/2022',
             hardStopWarningDate: '10/10/2022',
-            kind: 'CRD',
+            kind: 'HDC',
             prisonerNumber: '123',
             licenceId: 1,
             licenceStatus: LicenceStatus.IN_PROGRESS,
@@ -398,18 +493,19 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
             isRestricted: false,
+            hdcStatus: 'APPROVED',
           },
           {
-            crnNumber: 'X381307',
             name: 'Another Person',
+            crnNumber: 'X381307',
             releaseDate: '11 Oct 2022',
-            prisonerNumber: '456',
-            licenceId: 1,
-            licenceType: LicenceType.AP,
-            licenceStatus: LicenceStatus.IN_PROGRESS,
             hardStopDate: '10/10/2022',
             hardStopWarningDate: '10/10/2022',
-            kind: 'TIME_SERVED',
+            kind: 'HDC',
+            prisonerNumber: '456',
+            licenceId: 1,
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Not Allocated',
               staffCode: 'X6789U',
@@ -417,20 +513,21 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             sortDate: parseIsoDate('2022-10-11'),
             createLink: '/licence/create/id/1/check-your-answers',
-            isClickable: true,
+            isClickable: false,
             isRestricted: false,
+            hdcStatus: 'APPROVED',
           },
           {
-            crnNumber: 'X381308',
             name: 'Person Three',
+            crnNumber: 'X381308',
             releaseDate: '12 Oct 2022',
-            prisonerNumber: '789',
-            licenceId: 1,
-            licenceType: LicenceType.AP,
-            licenceStatus: LicenceStatus.IN_PROGRESS,
             hardStopDate: '11/10/2022',
             hardStopWarningDate: '10/10/2022',
-            kind: 'HARD_STOP',
+            kind: 'HDC',
+            prisonerNumber: '789',
+            licenceId: 1,
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Not Allocated',
               staffCode: 'X6789U',
@@ -440,18 +537,19 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
             isRestricted: false,
+            hdcStatus: 'APPROVED',
           },
           {
-            crnNumber: 'X381309',
             name: 'Person Four',
+            crnNumber: 'X381309',
             releaseDate: '3 Oct 2022',
-            prisonerNumber: '321',
-            licenceId: 1,
-            licenceType: LicenceType.AP,
-            licenceStatus: LicenceStatus.IN_PROGRESS,
             hardStopDate: '01/10/2022',
             hardStopWarningDate: '01/10/2022',
-            kind: 'CRD',
+            kind: 'HDC',
+            prisonerNumber: '321',
+            licenceId: 1,
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Not Allocated',
               staffCode: 'X6789U',
@@ -461,6 +559,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: false,
             isRestricted: false,
+            hdcStatus: 'APPROVED',
           },
         ],
         multipleTeams: false,
@@ -468,7 +567,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         view: 'hdc',
         teamName: null,
       })
-      expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(comCaseloadService.getStaffCreateCaseloadHdc).toHaveBeenCalledWith(res.locals.user)
       expect(comCaseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
     })
 
@@ -563,6 +662,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             allocated: true,
           },
           isRestricted: true,
+          hdcStatus: 'NOT_A_HDC_RELEASE',
         },
       ] as unknown as ComCreateCase[])
 

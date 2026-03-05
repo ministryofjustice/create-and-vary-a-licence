@@ -13,6 +13,10 @@ export default class ComCaseloadService {
     return this.licenceApiClient.getStaffCreateCaseload(user)
   }
 
+  public async getStaffCreateCaseloadHdc(user: User): Promise<ComCreateCase[]> {
+    return this.licenceApiClient.getStaffCreateCaseloadHdc(user)
+  }
+
   public async getTeamCreateCaseload(user: User, teamSelected: string[]): Promise<ComCreateCase[]> {
     return this.licenceApiClient.getTeamCreateCaseload(
       { probationTeamCodes: user.probationTeamCodes, teamSelected },

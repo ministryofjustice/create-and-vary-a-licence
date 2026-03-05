@@ -40,11 +40,19 @@ export default class CaseloadRoutes {
       req.session.returnToCase = '/licence/create/caseload'
     }
 
-    const comCaseload = (
-      teamView
-        ? await this.comCaseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
-        : await this.comCaseloadService.getStaffCreateCaseload(user)
-    ).map(comCase => {
+    let comCaseload
+    switch (view) {
+      case 'team':
+        comCaseload = await this.comCaseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
+        break
+      case 'hdc':
+        comCaseload = await this.comCaseloadService.getStaffCreateCaseloadHdc(user)
+        break
+      default:
+        comCaseload = await this.comCaseloadService.getStaffCreateCaseload(user)
+    }
+
+    const viewModelCaseload = comCaseload.map(comCase => {
       return {
         ...comCase,
         createLink: this.findCreateLinkToDisplay(
@@ -67,7 +75,7 @@ export default class CaseloadRoutes {
     })
 
     res.render('pages/create/caseload', {
-      caseload: comCaseload,
+      caseload: viewModelCaseload,
       statusConfig,
       teamName,
       multipleTeams,

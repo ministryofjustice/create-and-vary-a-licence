@@ -664,6 +664,13 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<ComCreateCase[]>
   }
 
+  async getStaffCreateCaseloadHdc(user: User): Promise<ComCreateCase[]> {
+    return (await this.get(
+      { path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load/hdc` },
+      { username: user.username },
+    )) as Promise<ComCreateCase[]>
+  }
+
   async getTeamCreateCaseload(teamCaseloadRequest: TeamCaseloadRequest, user: User): Promise<ComCreateCase[]> {
     return (await this.post(
       {
