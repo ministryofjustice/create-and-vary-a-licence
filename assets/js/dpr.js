@@ -1,3 +1,3 @@
-import * as dprFrontend from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
+import { initAll } from '/assets/digital-prison-reporting/all.bundle.js'
 
-dprFrontend.initAll()
+initAll()

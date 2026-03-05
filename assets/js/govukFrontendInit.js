@@ -10,6 +10,3 @@ $('[class$=js-backlink]').on('click', e => {
     window.history.go(-1)
   }
 })
-
-// TEMP - can remove after DPR fix bookmark links
-$('.dpr-bookmark').remove()

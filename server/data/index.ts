@@ -1,4 +1,4 @@
-import { initDprReportingClients } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/data/dprReportingClient'
+import { initDprReportingClients } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
 import ManageUsersApiClient from './manageUsersApiClient'
 import { createRedisClient } from './redisClient'
 

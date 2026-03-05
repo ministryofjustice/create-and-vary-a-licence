@@ -1,4 +1,4 @@
-import { components } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/types/api'
+import { components } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
 import { CvlUserDetails } from '../CvlUserDetails'
 import { LicenceConditionChange, Licence } from '../licenceApiClientTypes'
 
