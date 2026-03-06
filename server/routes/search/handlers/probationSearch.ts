@@ -44,7 +44,11 @@ export default class ProbationSearch {
       probationTabId: 'tab-heading-probation',
     }
 
-    const hasPriorityCases = peopleOnProbation.filter(c => c.isReviewNeeded).length > 0
+    const hasReviewNeededCases = peopleOnProbation.filter(c => c.isReviewNeeded).length > 0
+    const hasRestrictedCasesInPrison = peopleInPrison.filter(c => c.isRestricted).length > 0
+    const hasRestrictedCasesOnProbation = peopleOnProbation.filter(c => c.isRestricted).length > 0
+    const hasCustomSorting = hasReviewNeededCases || hasRestrictedCasesInPrison || hasRestrictedCasesOnProbation
+
     return res.render('pages/search/probationSearch/probationSearch', {
       queryTerm,
       peopleInPrison,
@@ -53,7 +57,7 @@ export default class ProbationSearch {
       backLink,
       previousCaseloadPage,
       tabParameters,
-      hasPriorityCases,
+      hasCustomSorting,
     })
   }
 
