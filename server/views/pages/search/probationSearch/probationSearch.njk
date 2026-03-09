@@ -30,16 +30,14 @@
     <div class="govuk-hint govuk-!-font-size-16 search-highlight">CRN: {{ offender.crn }}</div>
   </div>
 {% endmacro %}
-{% macro displayResults(countText, caption, tabId, results, setPeopleInPrisonTab, hasPriorityCases) %}
+{% macro displayResults(countText, caption, tabId, results, setPeopleInPrisonTab) %}
   {% set caption = caption %}
-  {% if setPeopleInPrisonTab %}
+  {% if hasCustomSorting %}
+    {% set sortOrder = 'none' %}
+  {% elif setPeopleInPrisonTab %}
     {% set sortOrder = 'ascending' %}
   {% else %}
-    {% if hasPriorityCases %}
-      {% set sortOrder = 'none' %}
-    {% else %}
-      {% set sortOrder = 'descending' %}
-    {% endif %}
+    {% set sortOrder = 'descending' %}
   {% endif %}
   <h2 class="govuk-heading-l" id="{{ tabId }}">{{ countText }}</h2>
   {% if results.length == 0 %}

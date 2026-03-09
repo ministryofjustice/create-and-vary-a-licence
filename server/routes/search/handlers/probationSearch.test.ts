@@ -107,7 +107,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: false,
       })
     })
 
@@ -126,7 +126,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: false,
       })
     })
 
@@ -145,7 +145,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: false,
       })
     })
 
@@ -166,7 +166,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: false,
       })
     })
 
@@ -191,7 +191,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: false,
       })
     })
 
@@ -217,7 +217,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: false,
       })
     })
 
@@ -319,7 +319,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         },
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: true,
+        hasCustomSorting: true,
       })
     })
 
@@ -397,7 +397,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         },
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: true,
       })
     })
 
@@ -454,7 +454,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         },
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: true,
       })
     })
 
@@ -529,7 +529,7 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: true,
       })
     })
 
@@ -582,8 +582,166 @@ describe('Route Handlers - Search - Probation Search', () => {
         tabParameters,
         statusConfig,
         previousCaseloadPage,
-        hasPriorityCases: false,
+        hasCustomSorting: true,
       })
+    })
+
+    it('should have custom sorting if caseload has review needed cases', async () => {
+      const peopleOnProbation: FoundComCase[] = [
+        {
+          name: 'Test Person1',
+          crn: 'A123456',
+          nomisId: 'A1234BC',
+          comName: 'Test Staff',
+          comStaffCode: deliusStaffIdentifier.toString(),
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: deliusStaffIdentifier.toString(),
+            allocated: true,
+          },
+          teamName: 'Test Team',
+          releaseDate: '13/09/2028',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.ACTIVE,
+          releaseDateLabel: 'CRD',
+          kind: LicenceKind.CRD,
+          isOnProbation: true,
+          isReviewNeeded: false,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+        {
+          name: 'Test Person2',
+          crn: 'A123457',
+          nomisId: 'A1234BD',
+          comName: 'Test Staff',
+          comStaffCode: deliusStaffIdentifier.toString(),
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: deliusStaffIdentifier.toString(),
+            allocated: true,
+          },
+          teamName: 'Test Team',
+          releaseDate: '25/05/2027',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.ACTIVE,
+          releaseDateLabel: 'CRD',
+          kind: LicenceKind.CRD,
+          isOnProbation: true,
+          isReviewNeeded: true,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+        {
+          name: 'Test Person3',
+          crn: 'A123458',
+          nomisId: 'A1234BE',
+          comName: 'Test Staff',
+          comStaffCode: deliusStaffIdentifier.toString(),
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: deliusStaffIdentifier.toString(),
+            allocated: true,
+          },
+          teamName: 'Test Team',
+          releaseDate: '11/09/2032',
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: LicenceStatus.ACTIVE,
+          releaseDateLabel: 'CRD',
+          kind: LicenceKind.CRD,
+          isOnProbation: true,
+          isReviewNeeded: false,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+      ]
+
+      const searchResponse = {
+        results: peopleOnProbation,
+        inPrisonCount: 0,
+        onProbationCount: 1,
+      }
+
+      searchService.getComSearchResponses.mockResolvedValue(searchResponse as ComSearchResponse)
+
+      req.query = { queryTerm: 'Test', previousPage: 'vary' }
+      previousCaseloadPage = 'vary'
+
+      await handler.GET(req, res)
+
+      const { hasCustomSorting } = (res.render as jest.Mock).mock.calls[0][1]
+
+      expect(hasCustomSorting).toBe(true)
+    })
+
+    it('should have custom sorting if caseload has restricted cases', async () => {
+      const restrictedCase = {
+        name: 'Access restricted on NDelius',
+        crn: 'Z999999',
+        nomisId: '',
+        comName: 'Restricted',
+        comStaffCode: '',
+        probationPractitioner: {
+          name: 'Restricted',
+          staffCode: 'Restricted',
+          allocated: true,
+        },
+        teamName: 'Restricted',
+        releaseDate: '01/01/2024',
+        licenceId: 1,
+        licenceType: 'AP',
+        licenceStatus: LicenceStatus.ACTIVE,
+        releaseDateLabel: 'CRD',
+        kind: LicenceKind.CRD,
+        isOnProbation: false,
+        isRestricted: true,
+        isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      }
+
+      const nonRestrictedCase = {
+        name: 'Test Person',
+        crn: 'A111111',
+        nomisId: 'A1234BC',
+        comName: 'Test Staff',
+        comStaffCode: '3000',
+        probationPractitioner: {
+          name: 'Test Staff',
+          staffCode: '3000',
+          allocated: true,
+        },
+        teamName: 'Test Team',
+        releaseDate: '31/12/2025',
+        licenceId: 2,
+        licenceType: 'AP',
+        licenceStatus: LicenceStatus.ACTIVE,
+        releaseDateLabel: 'CRD',
+        kind: LicenceKind.CRD,
+        isOnProbation: false,
+        isRestricted: false,
+        isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      }
+
+      const searchResponse = {
+        results: [restrictedCase, nonRestrictedCase],
+        inPrisonCount: 2,
+        onProbationCount: 0,
+      }
+
+      searchService.getComSearchResponses.mockResolvedValue(searchResponse as ComSearchResponse)
+
+      req.query = { queryTerm: 'Test', previousPage: 'create' }
+      previousCaseloadPage = 'create'
+
+      await handler.GET(req, res)
+
+      const { hasCustomSorting } = (res.render as jest.Mock).mock.calls[0][1]
+
+      expect(hasCustomSorting).toBe(true)
     })
   })
 })
