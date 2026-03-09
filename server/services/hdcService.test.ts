@@ -21,11 +21,11 @@ describe('HDC Service', () => {
       county: 'county',
       postcode: 'addressPostcode',
     },
-    firstNightCurfewHours: {
+    hdcFirstNightCurfewHours: {
       firstNightFrom: '09:00',
       firstNightUntil: '17:00',
     },
-    curfewTimes: [
+    hdcWeeklyCurfewTimes: [
       {
         curfewTimesSequence: 0,
         fromDay: 'MONDAY',
@@ -82,15 +82,19 @@ describe('HDC Service', () => {
     jest.clearAllMocks()
   })
 
-  describe('updateCurfewTimes', () => {
+  describe('updateHdcWeeklyCurfewTimes', () => {
     const user = { username: 'joebloggs' } as User
     const licenceId = 123
 
     it('should call to update the HDC curfew times', async () => {
-      await hdcService.updateCurfewTimes(licenceId, STANDARD_CURFEW_TIMES, user)
-      const { curfewTimes } = exampleHdcLicenceData
+      await hdcService.updateHdcWeeklyCurfewTimes(licenceId, STANDARD_CURFEW_TIMES, user)
+      const { hdcWeeklyCurfewTimes } = exampleHdcLicenceData
 
-      expect(licenceApiClient.updateCurfewTimes).toHaveBeenCalledWith(licenceId, { curfewTimes }, user)
+      expect(licenceApiClient.updateHdcWeeklyCurfewTimes).toHaveBeenCalledWith(
+        licenceId,
+        { hdcWeeklyCurfewTimes },
+        user,
+      )
     })
   })
 
@@ -99,10 +103,10 @@ describe('HDC Service', () => {
       const start = new SimpleTime('9', '0', AmPm.AM)
       const end = new SimpleTime('5', '0', AmPm.PM)
 
-      const result = hdcService.buildCurfewTimesRequest(start, end)
-      expect(result.curfewTimes).toHaveLength(DAYS.length)
+      const result = hdcService.buildHdcWeeklyCurfewTimesRequest(start, end)
+      expect(result.hdcWeeklyCurfewTimes).toHaveLength(DAYS.length)
 
-      result.curfewTimes.forEach((row, idx) => {
+      result.hdcWeeklyCurfewTimes.forEach((row, idx) => {
         expect(row.curfewTimesSequence).toBe(idx)
         expect(row.fromDay).toBe(DAYS[idx])
         expect(row.untilDay).toBe(DAYS[idx])
@@ -114,19 +118,19 @@ describe('HDC Service', () => {
     it('builds correct HDC-style next-day curfew schedule', () => {
       const start = new SimpleTime('07', '00', AmPm.PM)
       const end = new SimpleTime('07', '00', AmPm.AM)
-      const { curfewTimes } = exampleHdcLicenceData
+      const { hdcWeeklyCurfewTimes } = exampleHdcLicenceData
 
-      const result = hdcService.buildCurfewTimesRequest(start, end)
+      const result = hdcService.buildHdcWeeklyCurfewTimesRequest(start, end)
 
-      expect(result).toEqual({ curfewTimes })
+      expect(result).toEqual({ hdcWeeklyCurfewTimes })
     })
 
     it('treats equal times as next-day span (end <= start)', () => {
       const start = new SimpleTime('9', '0', AmPm.AM)
       const end = new SimpleTime('9', '0', AmPm.AM)
 
-      const result = hdcService.buildCurfewTimesRequest(start, end)
-      result.curfewTimes.forEach((row, idx) => {
+      const result = hdcService.buildHdcWeeklyCurfewTimesRequest(start, end)
+      result.hdcWeeklyCurfewTimes.forEach((row, idx) => {
         const nextIdx = (idx + 1) % DAYS.length
         expect(row.untilDay).toBe(DAYS[nextIdx])
       })
@@ -152,7 +156,7 @@ describe('HDC Service', () => {
     })
 
     it('Should set allCurfewTimesEqual to false when curfew times are different', async () => {
-      exampleHdcLicenceData.curfewTimes[0].fromTime = '18:00:00'
+      exampleHdcLicenceData.hdcWeeklyCurfewTimes[0].fromTime = '18:00:00'
       licenceApiClient.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       const result = await hdcService.getHdcLicenceData(1)

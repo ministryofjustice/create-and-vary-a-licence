@@ -3282,11 +3282,11 @@ export default {
     })
   },
 
-  stubUpdateCurfewTimes: (): SuperAgentRequest => {
+  stubUpdateHdcWeeklyCurfewTimes: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licences-api/licence/id/(\\d)*/curfew-times`,
+        urlPattern: `/licences-api/licence/id/(\\d)*/hdc-weekly-curfew-times`,
       },
       response: {
         status: 200,
