@@ -105,8 +105,8 @@
 
    <div id="first-night" class="section">
       <p>
-         On the day of your release, you will be subject to curfew at your address from <span class="bold">{{ hdcLicenceData.hdcFirstNightCurfewHours.firstNightFrom | format24HourTimeTo12HourTime }}</span>
-         until <span class="bold">{{ hdcLicenceData.hdcFirstNightCurfewHours.firstNightUntil | format24HourTimeTo12HourTime }}</span>. The monitoring contractor will visit you at this address before
+         On the day of your release, you will be subject to curfew at your address from <span class="bold">{{ hdcLicenceData.firstNightCurfewHours.firstNightFrom | format24HourTimeTo12HourTime }}</span>
+         until <span class="bold">{{ hdcLicenceData.firstNightCurfewHours.firstNightUntil | format24HourTimeTo12HourTime }}</span>. The monitoring contractor will visit you at this address before
          midnight during this period in order to fit you with the tag. You must show the contractor this copy of the
          licence to confirm your identity. Your curfew will then run until the curfew finish time the following morning.
          On your last day of curfew the contractor will visit you to remove the tag and monitoring equipment. This will
@@ -118,7 +118,7 @@
       <p>
          After your day of release, you are required to remain at your place of curfew during the following hours:<br><br>
          <table class="wide">
-         {% for ct in (hdcLicenceData.hdcWeeklyCurfewTimes) %}
+         {% for ct in (hdcLicenceData.weeklyCurfewTimes) %}
             <tr>
                <td colspan="3">From</td>
                <td colspan="3"><span class="bold">{{ ct.fromTime | format24HourTimeTo12HourTime }}</span></td>

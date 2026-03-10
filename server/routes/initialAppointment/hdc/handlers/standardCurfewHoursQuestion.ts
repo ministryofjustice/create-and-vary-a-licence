@@ -14,7 +14,7 @@ export default class StandardCurfewHoursQuestionRoutes {
     const { licence, user } = res.locals
     const { answer } = req.body
     if (answer === YesOrNo.YES) {
-      await this.hdcService.updateHdcWeeklyCurfewTimes(licence.id, STANDARD_CURFEW_TIMES, user)
+      await this.hdcService.updateWeeklyCurfewTimes(licence.id, STANDARD_CURFEW_TIMES, user)
       return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions-question`)
     }
     return res.redirect(`/licence/create/id/${licence.id}/hdc/do-hdc-curfew-hours-apply-daily`)

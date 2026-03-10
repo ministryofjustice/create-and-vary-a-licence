@@ -53,11 +53,11 @@ describe('Print a HDC AP licence', () => {
           addressTown: 'addressTownOrCity',
           postCode: 'addressPostcode',
         },
-        hdcFirstNightCurfewHours: {
+        firstNightCurfewHours: {
           firstNightFrom: '09:00',
           firstNightUntil: '17:00',
         },
-        hdcWeeklyCurfewTimes: [
+        weeklyCurfewTimes: [
           {
             curfewTimesSequence: 1,
             fromDay: 'MONDAY',

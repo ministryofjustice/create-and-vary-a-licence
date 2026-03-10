@@ -416,7 +416,7 @@ export interface paths {
      * Update the hdc weekly curfew times for a HDC licence.
      * @description Replace the curfew times against a HDC licence if curfew times change. Requires ROLE_CVL_ADMIN.
      */
-    put: operations['updateHdcWeeklyCurfewTimes']
+    put: operations['updateWeeklyCurfewTimes']
     post?: never
     delete?: never
     options?: never
@@ -1176,6 +1176,37 @@ export interface paths {
      *                 </ul>
      */
     post: operations['progressionOfTypeApPssLicences']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/jobs/isr-active-licences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Progress AP_PSS & PSS Active/licences.
+     * @description Triggers a job to progress active licences
+     *
+     *                 The job applies where:
+     *                 - The current date is after 30/04/2026
+     *                 - The licence type code is PSS OR AP_PSS
+     *                 - The licence status is ACTIVE
+     *
+     *                 The licence will then be updated to:
+     *                 <ul>
+     *                   <li>INACTIVE status if PSS</li>
+     *                   <li>AP TYPE CODE if AP_PSS</li>
+     *                 </ul>
+     */
+    post: operations['progressionOfActiveLicences']
     delete?: never
     options?: never
     head?: never
@@ -2752,9 +2783,9 @@ export interface components {
        */
       untilTime?: string
     }
-    UpdateHdcWeeklyCurfewTimesRequest: {
+    UpdateWeeklyCurfewTimesRequest: {
       /** @description The list of hdc licence curfew times from service configuration */
-      hdcWeeklyCurfewTimes: components['schemas']['CurfewTimes'][]
+      weeklyCurfewTimes: components['schemas']['CurfewTimes'][]
     }
     /** @description Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
@@ -4630,6 +4661,11 @@ export interface components {
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
       /**
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string
+      /**
        * @description The full name of the supervising probation officer
        * @example Jane Jones
        */
@@ -4653,11 +4689,6 @@ export interface components {
        * @example A/12444
        */
       cro?: string
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string
       /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
@@ -4717,6 +4748,11 @@ export interface components {
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn?: string
+      /**
        * @description The current status code for this licence
        * @example IN_PROGRESS
        * @enum {string}
@@ -4737,16 +4773,35 @@ export interface components {
         | 'TIMED_OUT'
       kind: string
       /**
-       * Format: date-time
-       * @description The date and time of the initial appointment
-       * @example 23/08/2022 12:12
+       * @description The username which created this licence
+       * @example X12333
        */
-      appointmentTime?: string
+      createdByUsername?: string
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string
+      /**
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       */
+      earliestReleaseDate?: string
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
       nomsId?: string
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
@@ -4759,15 +4814,49 @@ export interface components {
        */
       appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
       /**
-       * @description The first name of the person on licence
-       * @example Michael
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
        */
-      forename?: string
+      appointmentTime?: string
       /**
-       * @description The family name of the person on licence
-       * @example Smith
+       * @description The address of initial appointment
+       * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
-      surname?: string
+      appointmentAddress?: string
+      /**
+       * @description The probation area code where this licence is supervised from
+       * @example N01
+       */
+      probationAreaCode?: string
+      /**
+       * @description The Probation Delivery Unit (PDU or borough) supervising this licence
+       * @example PDU01
+       */
+      probationPduCode?: string
+      /**
+       * @description The Local Administrative Unit (LAU or district) supervising this licence
+       * @example LAU01
+       */
+      probationLauCode?: string
+      /**
+       * @description The team code that is supervising this licence
+       * @example Cardiff-A
+       */
+      probationTeamCode?: string
+      /**
+       * Format: date
+       * @description The date that the licence will start
+       * @example 13/09/2022
+       */
+      licenceStartDate?: string
+      eligibleKind?: string
+      /**
+       * Format: date
+       * @description The date that the licence will expire
+       * @example 13/09/2024
+       */
+      licenceExpiryDate?: string
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -4811,48 +4900,10 @@ export interface components {
        */
       comUsername?: string
       /**
-       * @description The address of initial appointment
-       * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
+       * @description Is a review of this licence is required
+       * @example true
        */
-      appointmentAddress?: string
-      /**
-       * @description The probation area code where this licence is supervised from
-       * @example N01
-       */
-      probationAreaCode?: string
-      /**
-       * @description The Probation Delivery Unit (PDU or borough) supervising this licence
-       * @example PDU01
-       */
-      probationPduCode?: string
-      /**
-       * @description The Local Administrative Unit (LAU or district) supervising this licence
-       * @example LAU01
-       */
-      probationLauCode?: string
-      /**
-       * @description The team code that is supervising this licence
-       * @example Cardiff-A
-       */
-      probationTeamCode?: string
-      /**
-       * Format: date
-       * @description The date that the licence will start
-       * @example 13/09/2022
-       */
-      licenceStartDate?: string
-      eligibleKind?: string
-      /**
-       * Format: date
-       * @description The date that the licence will expire
-       * @example 13/09/2024
-       */
-      licenceExpiryDate?: string
-      /**
-       * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
-       */
-      earliestReleaseDate?: string
+      isReviewNeeded: boolean
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
@@ -4921,11 +4972,6 @@ export interface components {
        */
       licenceVersion?: string
       /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /**
        * Format: date-time
        * @description The date and time that this licence was last updated
        * @example 24/08/2022 09:30:33
@@ -4950,6 +4996,12 @@ export interface components {
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
       /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
        * @example 12345
@@ -4961,27 +5013,6 @@ export interface components {
        * @example 0114 2557665
        */
       appointmentContact?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
@@ -5621,9 +5652,9 @@ export interface components {
        */
       homeDetentionCurfewEndDate?: string
       /** @description The curfew times for this licence */
-      hdcWeeklyCurfewTimes?: components['schemas']['CurfewTimes'][]
+      weeklyCurfewTimes?: components['schemas']['CurfewTimes'][]
       /** @description The first night curfew time for this licence */
-      hdcFirstNightCurfewTimes?: components['schemas']['CurfewTimes']
+      firstNightCurfewTimes?: components['schemas']['CurfewTimes']
       /**
        * Format: date
        * @description Date which the hard stop period will start
@@ -5704,9 +5735,9 @@ export interface components {
        */
       vloDiscussion?: string
       /** @description The curfew times for this licence */
-      hdcWeeklyCurfewTimes?: components['schemas']['CurfewTimes'][]
+      weeklyCurfewTimes?: components['schemas']['CurfewTimes'][]
       /** @description The first night curfew time for this licence */
-      hdcFirstNightCurfewTimes?: components['schemas']['CurfewTimes']
+      firstNightCurfewTimes?: components['schemas']['CurfewTimes']
       /**
        * Format: int64
        * @description The licence Id which this licence is a variation of
@@ -6013,8 +6044,8 @@ export interface components {
       /** Format: int64 */
       licenceId?: number
       curfewAddress?: components['schemas']['HdcCurfewAddress']
-      hdcFirstNightCurfewHours?: components['schemas']['FirstNight']
-      hdcWeeklyCurfewTimes?: components['schemas']['CurfewTimes'][]
+      firstNightCurfewHours?: components['schemas']['FirstNight']
+      weeklyCurfewTimes?: components['schemas']['CurfewTimes'][]
     }
     /** @description Describes an event that was related to a licence */
     LicenceEvent: {
@@ -8143,7 +8174,7 @@ export interface operations {
       }
     }
   }
-  updateHdcWeeklyCurfewTimes: {
+  updateWeeklyCurfewTimes: {
     parameters: {
       query?: never
       header?: never
@@ -8154,7 +8185,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateHdcWeeklyCurfewTimesRequest']
+        'application/json': components['schemas']['UpdateWeeklyCurfewTimesRequest']
       }
     }
     responses: {
@@ -10985,6 +11016,69 @@ export interface operations {
     requestBody?: never
     responses: {
       /** @description Progression of AP+PSS licences job executed. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  progressionOfActiveLicences: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Progression of active licences job executed. */
       200: {
         headers: {
           [name: string]: unknown

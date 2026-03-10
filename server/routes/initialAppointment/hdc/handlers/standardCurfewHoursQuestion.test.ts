@@ -59,7 +59,7 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
     it('when the answer is yes, it should send the standard curfew times to the licence API', async () => {
       req.body = { answer: YesOrNo.YES }
       await handler.POST(req, res)
-      expect(hdcService.updateHdcWeeklyCurfewTimes).toHaveBeenCalledWith(1, STANDARD_CURFEW_TIMES, res.locals.user)
+      expect(hdcService.updateWeeklyCurfewTimes).toHaveBeenCalledWith(1, STANDARD_CURFEW_TIMES, res.locals.user)
     })
   })
 })

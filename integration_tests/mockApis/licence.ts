@@ -500,11 +500,11 @@ export default {
             county: 'Some County',
             postcode: 'A1 2BC',
           },
-          hdcFirstNightCurfewHours: {
+          firstNightCurfewHours: {
             firstNightFrom: '17:00',
             firstNightUntil: '07:00',
           },
-          hdcWeeklyCurfewTimes: [
+          weeklyCurfewTimes: [
             {
               id: 1,
               curfewTimesSequence: 1,

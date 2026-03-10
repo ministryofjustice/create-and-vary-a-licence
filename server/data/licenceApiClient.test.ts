@@ -34,7 +34,7 @@ import {
   CreateLicenceResponse,
   CreateVariationResponse,
   EditLicenceResponse,
-  HdcWeeklyCurfewTimesRequest,
+  WeeklyCurfewTimesRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -925,7 +925,7 @@ describe('Licence API client tests', () => {
 
     it('should call to update the HDC curfew times', async () => {
       const request = {
-        hdcWeeklyCurfewTimes: [
+        weeklyCurfewTimes: [
           {
             curfewTimesSequence: 0,
             fromDay: 'MONDAY',
@@ -934,7 +934,7 @@ describe('Licence API client tests', () => {
             untilTime: '00:00:01',
           },
         ],
-      } as HdcWeeklyCurfewTimesRequest
+      } as WeeklyCurfewTimesRequest
 
       await licenceApiClient.updateHdcWeeklyCurfewTimes(licenceId, request, user)
 
