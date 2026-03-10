@@ -26,9 +26,9 @@ export default class ApprovalViewPage extends Page {
 
   public curfewAddress = '.curfew-address'
 
-  public firstNightCurfewHours = '.hdc-first-night-curfew-hours'
+  public firstNightCurfewHours = '.first-night-curfew-hours'
 
-  public weeklyCurfewTimes = '.hdc-weekly-curfew-times'
+  public weeklyCurfewTimes = '.weekly-curfew-times'
 
   getHideAllSection = () => {
     return cy.get('.govuk-accordion__show-all-text')
