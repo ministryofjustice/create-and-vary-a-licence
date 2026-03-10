@@ -139,9 +139,9 @@ context('Approve a licence', () => {
     approvalViewPage
       .getValue(approvalViewPage.curfewAddress)
       .should('contain.text', '1 The Street, Avenue, Some Town, Some County, A1 2BC')
-    approvalViewPage.getValue(approvalViewPage.firstNightCurfewHours).should('contain.text', '5pm to 7am')
-    approvalViewPage.getValue(approvalViewPage.curfewHours).should('contain.text', 'Monday to Sunday')
-    approvalViewPage.getValue(approvalViewPage.curfewHours).should('contain.text', '5pm to 7am')
+    approvalViewPage.getValue(approvalViewPage.hdcFirstNightCurfewHours).should('contain.text', '5pm to 7am')
+    approvalViewPage.getValue(approvalViewPage.hdcWeeklyCurfewTimes).should('contain.text', 'Monday to Sunday')
+    approvalViewPage.getValue(approvalViewPage.hdcWeeklyCurfewTimes).should('contain.text', '5pm to 7am')
   })
 
   it('should display Approve licence and post sentence supervision order heading if licence is of type AP_PSS', () => {

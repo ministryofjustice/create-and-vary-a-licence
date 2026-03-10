@@ -9,21 +9,21 @@
         attributes: {'data-qa': 'hdc-curfew-details'},
         rows: [
             {
-                key: {text: 'Address'}, 
+                key: {text: 'Address'},
                 value: {
-                    html: "<p>" + hdcLicenceData.curfewAddress.addressLine1 | escape + ", " + 
-                          addressLine2Html + 
+                    html: "<p>" + hdcLicenceData.curfewAddress.addressLine1 | escape + ", " +
+                          addressLine2Html +
                           hdcLicenceData.curfewAddress.townOrCity | escape + ", " +
-                          countyHtml + 
+                          countyHtml +
                           hdcLicenceData.curfewAddress.postcode | escape + "</p>",
                     classes: "curfew-address"
                 }
             },
             {
-                key: { text: 'First night curfew hours' }, 
+                key: { text: 'First night curfew hours' },
                 value: {
-                    text: hdcLicenceData.firstNightCurfewHours.firstNightFrom | localTimeTo12h + " to " + hdcLicenceData.firstNightCurfewHours.firstNightUntil | localTimeTo12h,
-                    classes: "first-night-curfew-hours"
+                    text: hdcLicenceData.hdcFirstNightCurfewHours.firstNightFrom | localTimeTo12h + " to " + hdcLicenceData.hdcFirstNightCurfewHours.firstNightUntil | localTimeTo12h,
+                    classes: "hdc-first-night-curfew-hours"
                 }
             },
             {
@@ -32,9 +32,9 @@
                     text: 'Curfew hours'
                 },
                 value: {
-                    html: hdcLicenceData.curfewTimes[0].fromDay | titlecase | escape + " to " + hdcLicenceData.curfewTimes[6].fromDay | titlecase | escape + "<br>" + 
-                          hdcLicenceData.curfewTimes[0].fromTime  | localTimeTo12h + " to " + hdcLicenceData.curfewTimes[0].untilTime | localTimeTo12h,
-                    classes: "curfew-hours"
+                    html: hdcLicenceData.hdcWeeklyCurfewTimes[0].fromDay | titlecase | escape + " to " + hdcLicenceData.hdcWeeklyCurfewTimes[6].fromDay | titlecase | escape + "<br>" +
+                          hdcLicenceData.hdcWeeklyCurfewTimes[0].fromTime  | localTimeTo12h + " to " + hdcLicenceData.hdcWeeklyCurfewTimes[0].untilTime | localTimeTo12h,
+                    classes: "hdc-weekly-curfew-times"
                 }
             } if hdcLicenceData.allCurfewTimesEqual
         ]
@@ -42,12 +42,12 @@
 
     {% if not hdcLicenceData.allCurfewTimesEqual %}
         {% set curfewRows = []%}
-        {% for curfewTime in hdcLicenceData.curfewTimes %} 
+        {% for curfewTime in hdcLicenceData.hdcWeeklyCurfewTimes %}
             {% set curfewRows = (curfewRows.push(
                 {
                     key: {
                         text: curfewTime.fromDay | titlecase
-                    }, 
+                    },
                     value: {
                         text: curfewTime.fromTime | localTimeTo12h + " to " + curfewTime.untilTime | localTimeTo12h
                     }
