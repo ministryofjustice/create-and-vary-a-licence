@@ -15,7 +15,7 @@ repos:
         name: linting code
         language: system
         entry: ./node_modules/.bin/lint-staged
-        files: (\.(ts|js|css)$|^package-lock\.json$)
+        files: (\.(ts|js|mjs|css)$|^package(-lock)?\.json$)
         require_serial: true
         pass_filenames: false
       - id: typecheck
