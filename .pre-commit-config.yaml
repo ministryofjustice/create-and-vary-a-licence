@@ -22,7 +22,7 @@ repos:
         name: verify types
         language: system
         entry: npm run typecheck
-        files: (\.(ts)$|^package-lock\.json$)
+        files: (\.(ts)$|^package-lock\.json$|^tsconfig\.json$|^package\.json$)
         require_serial: true
         pass_filenames: false
   - repo: builtin
