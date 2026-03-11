@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 OUTPUT_FILE=server/@types/licenceApiImport/index.d.ts
 SWAGGER_ENDPOINT=/v3/api-docs
