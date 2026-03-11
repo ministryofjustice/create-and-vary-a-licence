@@ -5138,6 +5138,8 @@ export interface components {
        * @enum {string}
        */
       hardStopKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+
+      recallType?: 'FIXED_TERM' | 'STANDARD'
     }
     Prisoner: {
       /**
