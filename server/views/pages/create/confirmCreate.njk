@@ -7,13 +7,21 @@
 {% set pageTitle = applicationName + " - Create a licence - Are you sure?" %}
 {% set pageId = "confirm-create-page" %}
 {% set backLinkHref = backLink %}
-{% set recallStatusHtml %}
-    <span class="urgent-highlight">Fixed-term recall</span>
-    <span class="urgent-highlight urgent-highlight-message">
-        Check their previous licence conditions.<br>You should do this using
-        <a class="govuk-link--no-visited-state" href="{{ epf2Url }}">EPF 2</a>.
-    </span>
-{% endset %}
+
+{% if licence.kind == 'PRRD' %}
+    {% if licence.recallType == 'STANDARD' %}
+        {% set recallType = 'Standard' %}
+    {% else %}
+        {% set recallType = 'Fixed-term' %}
+    {% endif %}
+    {% set recallStatusHtml %}
+        <span class="urgent-highlight" data-qa="recall-type">{{ recallType }} recall</span>
+        <span class="urgent-highlight urgent-highlight-message">
+            Check their previous licence conditions.<br>You should do this using
+            <a class="govuk-link--no-visited-state" href="{{ epf2Url }}">EPF 2</a>.
+        </span>
+    {% endset %}
+{% endif %}
 
 {% block content %}
     <h1 class="govuk-heading-l">Are you sure you want to create this person's licence?</h1>
@@ -47,7 +55,8 @@
                             text: "Name"
                         },
                         value: {
-                            text: licence.forename + " " + licence.surname
+                            text: licence.forename + " " + licence.surname,
+                            classes: "offender-name"
                         }
                     },
                     {
@@ -55,7 +64,8 @@
                             text: "CRN"
                         },
                         value: {
-                            text: licence.crn
+                            text: licence.crn,
+                            classes: "offender-crn"
                         }
                     }
                 ), summaryRows) %}
