@@ -1,5 +1,5 @@
 import { User } from '../@types/CvlUserDetails'
-import { CurfewTimesRequest, HdcLicenceData } from '../@types/licenceApiClientTypes'
+import { HdcLicenceData, WeeklyCurfewTimesRequest } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import CurfewTimes from '../routes/initialAppointment/hdc/types/curfewTimes'
 import { SimpleTime } from '../routes/manageConditions/types'
@@ -12,29 +12,29 @@ export default class HdcService {
 
   async getHdcLicenceData(licenceId: number): Promise<CvlHdcLicenceData> {
     const hdcLicenceData = await this.licenceApiClient.getHdcLicenceData(licenceId)
-    const allCurfewTimesEqual = hdcLicenceData.curfewTimes.every(ct => {
+    const allCurfewTimesEqual = hdcLicenceData.weeklyCurfewTimes.every(ct => {
       return (
-        ct.fromTime === hdcLicenceData.curfewTimes[0].fromTime &&
-        ct.untilTime === hdcLicenceData.curfewTimes[0].untilTime
+        ct.fromTime === hdcLicenceData.weeklyCurfewTimes[0].fromTime &&
+        ct.untilTime === hdcLicenceData.weeklyCurfewTimes[0].untilTime
       )
     })
 
-    const { curfewAddress, firstNightCurfewHours, curfewTimes } = hdcLicenceData
+    const { curfewAddress, firstNightCurfewHours, weeklyCurfewTimes } = hdcLicenceData
 
     return {
       curfewAddress,
       firstNightCurfewHours,
-      curfewTimes,
+      weeklyCurfewTimes,
       allCurfewTimesEqual,
     }
   }
 
-  async updateCurfewTimes(licenceId: number, curfewTimes: CurfewTimes, user: User): Promise<void> {
-    const curfewTimesRequest = this.buildCurfewTimesRequest(curfewTimes.curfewStart, curfewTimes.curfewEnd)
-    return this.licenceApiClient.updateCurfewTimes(licenceId, curfewTimesRequest, user)
+  async updateWeeklyCurfewTimes(licenceId: number, curfewTimes: CurfewTimes, user: User): Promise<void> {
+    const curfewTimesRequest = this.buildWeeklyCurfewTimesRequest(curfewTimes.curfewStart, curfewTimes.curfewEnd)
+    return this.licenceApiClient.updateHdcWeeklyCurfewTimes(licenceId, curfewTimesRequest, user)
   }
 
-  buildCurfewTimesRequest = (start: SimpleTime, end: SimpleTime): CurfewTimesRequest => {
+  buildWeeklyCurfewTimesRequest = (start: SimpleTime, end: SimpleTime): WeeklyCurfewTimesRequest => {
     const startMinutes = simpleTimeToMinutes(start)
     const endMinutes = simpleTimeToMinutes(end)
 
@@ -43,7 +43,7 @@ export default class HdcService {
     const fromTime = simpleTimeTo24Hour(start)
     const untilTime = simpleTimeTo24Hour(end)
 
-    const curfewTimes = DAYS.map((fromDay, sequence) => {
+    const weeklyCurfewTimes = DAYS.map((fromDay, sequence) => {
       const nextDayIndex = (sequence + 1) % DAYS.length
       const untilDay = spansNextDay ? DAYS[nextDayIndex] : fromDay
 
@@ -56,6 +56,6 @@ export default class HdcService {
       }
     })
 
-    return { curfewTimes }
+    return { weeklyCurfewTimes }
   }
 }

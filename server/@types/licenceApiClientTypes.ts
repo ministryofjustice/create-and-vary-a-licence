@@ -94,4 +94,4 @@ export type TimeServedProbationConfirmContactRequest = components['schemas']['Ti
 export type TimeServedLicence = components['schemas']['TimeServedLicence']
 export type CheckCaseAccessRequest = components['schemas']['CheckCaseAccessRequest']
 export type CaseAccessDetails = components['schemas']['CaseAccessDetails']
-export type CurfewTimesRequest = components['schemas']['UpdateCurfewTimesRequest']
+export type WeeklyCurfewTimesRequest = components['schemas']['UpdateWeeklyCurfewTimesRequest']

@@ -27,7 +27,6 @@ import type {
   ContactNumberRequest,
   CreateLicenceResponse,
   CreateVariationResponse,
-  CurfewTimesRequest,
   EditLicenceResponse,
   EligibilityAssessment,
   ExternalTimeServedRecordRequest,
@@ -69,6 +68,7 @@ import type {
   VaryApproverCase,
   VaryApproverCaseloadSearchRequest,
   VaryApproverCaseloadSearchResponse,
+  WeeklyCurfewTimesRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -818,9 +818,9 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<void>
   }
 
-  async updateCurfewTimes(licenceId: number, request: CurfewTimesRequest, user: User): Promise<void> {
+  async updateHdcWeeklyCurfewTimes(licenceId: number, request: WeeklyCurfewTimesRequest, user: User): Promise<void> {
     return (await this.put(
-      { path: `/licence/id/${licenceId}/curfew-times`, data: request },
+      { path: `/licence/id/${licenceId}/hdc-weekly-curfew-times`, data: request },
       { username: user?.username },
     )) as Promise<void>
   }

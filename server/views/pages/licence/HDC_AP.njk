@@ -57,7 +57,7 @@
 
    <div id="home-detention-curfew" class="section">
       <p>
-         Your Home Detention Curfew starts on <span class="bold">{{ licence.homeDetentionCurfewActualDate | datetimeToDate }}</span>  and ends on <span class="bold">{{ licence.conditionalReleaseDate | datetimeToDate }}</span> 
+         Your Home Detention Curfew starts on <span class="bold">{{ licence.homeDetentionCurfewActualDate | datetimeToDate }}</span>  and ends on <span class="bold">{{ licence.conditionalReleaseDate | datetimeToDate }}</span>
       </p>
    </div>
 
@@ -66,7 +66,7 @@
          Your supervision starts on <span class="bold">{{ licence.homeDetentionCurfewActualDate | datetimeToDate }}</span> and ends on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span> unless this licence is revoked.
       </p>
    </div>
-   
+
    <div id="induction" class="section">
       <p>
          On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
@@ -105,7 +105,7 @@
 
    <div id="first-night" class="section">
       <p>
-         On the day of your release, you will be subject to curfew at your address from <span class="bold">{{ hdcLicenceData.firstNightCurfewHours.firstNightFrom | format24HourTimeTo12HourTime }}</span> 
+         On the day of your release, you will be subject to curfew at your address from <span class="bold">{{ hdcLicenceData.firstNightCurfewHours.firstNightFrom | format24HourTimeTo12HourTime }}</span>
          until <span class="bold">{{ hdcLicenceData.firstNightCurfewHours.firstNightUntil | format24HourTimeTo12HourTime }}</span>. The monitoring contractor will visit you at this address before
          midnight during this period in order to fit you with the tag. You must show the contractor this copy of the
          licence to confirm your identity. Your curfew will then run until the curfew finish time the following morning.
@@ -118,7 +118,7 @@
       <p>
          After your day of release, you are required to remain at your place of curfew during the following hours:<br><br>
          <table class="wide">
-         {% for ct in (hdcLicenceData.curfewTimes) %}
+         {% for ct in (hdcLicenceData.weeklyCurfewTimes) %}
             <tr>
                <td colspan="3">From</td>
                <td colspan="3"><span class="bold">{{ ct.fromTime | format24HourTimeTo12HourTime }}</span></td>
@@ -203,7 +203,7 @@
 
    <div class="section">
       <p>
-         You must place yourself under the supervision of whichever supervising officer or social worker is nominated for this purpose. 
+         You must place yourself under the supervision of whichever supervising officer or social worker is nominated for this purpose.
          You must also attend appointments with them from time to time.
       </p>
    </div>

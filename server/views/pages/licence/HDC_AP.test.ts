@@ -57,7 +57,7 @@ describe('Print a HDC AP licence', () => {
           firstNightFrom: '09:00',
           firstNightUntil: '17:00',
         },
-        curfewTimes: [
+        weeklyCurfewTimes: [
           {
             curfewTimesSequence: 1,
             fromDay: 'MONDAY',

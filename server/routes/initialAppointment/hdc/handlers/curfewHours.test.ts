@@ -48,7 +48,7 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
         curfewEnd: { hour: '10', minute: '30', ampm: 'am' },
       }
       await handler.POST(req, res)
-      expect(hdcService.updateCurfewTimes).toHaveBeenCalledWith(
+      expect(hdcService.updateWeeklyCurfewTimes).toHaveBeenCalledWith(
         1,
         { curfewStart: req.body.curfewStart, curfewEnd: req.body.curfewEnd },
         res.locals.user,
