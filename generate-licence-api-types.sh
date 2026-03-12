@@ -4,8 +4,7 @@ OUTPUT_FILE=server/@types/licenceApiImport/index.d.ts
 SWAGGER_ENDPOINT=/v3/api-docs
 
 if [[ $1 == "--local" ]]; then
-
-npx openapi-typescript "http://localhost:8089$SWAGGER_ENDPOINT" \
+    npx openapi-typescript "http://localhost:8089$SWAGGER_ENDPOINT" \
       | npx prettier --parser typescript --single-quote \
       > "$OUTPUT_FILE"
 else
