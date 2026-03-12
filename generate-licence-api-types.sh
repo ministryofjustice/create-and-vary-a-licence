@@ -4,9 +4,11 @@ OUTPUT_FILE=server/@types/licenceApiImport/index.d.ts
 SWAGGER_ENDPOINT=/v3/api-docs
 
 if [[ $1 == "--local" ]]; then
-    npx openapi-typescript "http://localhost:8089$SWAGGER_ENDPOINT" \
-      | npx prettier --parser typescript --single-quote \
-      > "$OUTPUT_FILE"
+
+npx openapi-typescript "http://localhost:8089$SWAGGER_ENDPOINT" \
+  | npx prettier --parser typescript --single-quote --no-semi \
+  > "$OUTPUT_FILE"
+
 else
     npx openapi-typescript "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk$SWAGGER_ENDPOINT" \
       | npx prettier --parser typescript --single-quote \
