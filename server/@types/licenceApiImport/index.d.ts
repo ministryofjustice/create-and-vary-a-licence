@@ -2741,6 +2741,12 @@ export interface components {
        * @example 06/06/2023
        */
       homeDetentionCurfewEndDate?: string
+      /**
+       * Format: date
+       * @description The person's home detention curfew eligibility date
+       * @example 06/06/2023
+       */
+      homeDetentionCurfewEligibilityDate?: string
       /** @description Reason for overriding the licence dates */
       reason: string
     }
@@ -2786,6 +2792,10 @@ export interface components {
     UpdateWeeklyCurfewTimesRequest: {
       /** @description The list of hdc licence curfew times from service configuration */
       weeklyCurfewTimes: components['schemas']['CurfewTimes'][]
+    }
+    UpdateFirstNightCurfewTimesRequest: {
+      /** @description The first night curfew times for the licence */
+      firstNightCurfewTimes: components['schemas']['CurfewTimes']
     }
     /** @description Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
@@ -5651,6 +5661,12 @@ export interface components {
        * @example 06/05/2023
        */
       homeDetentionCurfewEndDate?: string
+      /**
+       * Format: date
+       * @description The offender’s home detention curfew eligibility date
+       * @example 06/05/2023
+       */
+      homeDetentionCurfewEligibilityDate?: string
       /** @description The curfew times for this licence */
       weeklyCurfewTimes?: components['schemas']['CurfewTimes'][]
       /** @description The first night curfew time for this licence */
@@ -5724,6 +5740,12 @@ export interface components {
        * @example 06/05/2023
        */
       homeDetentionCurfewEndDate?: string
+      /**
+       * Format: date
+       * @description The offender’s home detention curfew eligibility date
+       * @example 06/05/2023
+       */
+      homeDetentionCurfewEligibilityDate?: string
       /**
        * @description Have you have discussed this variation request with your SPO?
        * @example Yes
