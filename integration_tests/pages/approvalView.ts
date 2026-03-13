@@ -26,7 +26,7 @@ export default class ApprovalViewPage extends Page {
 
   public curfewAddress = '.curfew-address'
 
-  public firstNightCurfewHours = '.first-night-curfew-hours'
+  public firstNightCurfewTimes = '.first-night-curfew-times'
 
   public weeklyCurfewTimes = '.weekly-curfew-times'
 
