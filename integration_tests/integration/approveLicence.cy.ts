@@ -139,7 +139,7 @@ context('Approve a licence', () => {
     approvalViewPage
       .getValue(approvalViewPage.curfewAddress)
       .should('contain.text', '1 The Street, Avenue, Some Town, Some County, A1 2BC')
-    approvalViewPage.getValue(approvalViewPage.firstNightCurfewHours).should('contain.text', '5pm to 7am')
+    approvalViewPage.getValue(approvalViewPage.firstNightCurfewTimes).should('contain.text', '5pm to 7am')
     approvalViewPage.getValue(approvalViewPage.weeklyCurfewTimes).should('contain.text', 'Monday to Sunday')
     approvalViewPage.getValue(approvalViewPage.weeklyCurfewTimes).should('contain.text', '5pm to 7am')
   })

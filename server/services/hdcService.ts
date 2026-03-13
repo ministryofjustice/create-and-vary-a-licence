@@ -19,11 +19,11 @@ export default class HdcService {
       )
     })
 
-    const { curfewAddress, firstNightCurfewHours, weeklyCurfewTimes } = hdcLicenceData
+    const { curfewAddress, firstNightCurfewTimes, weeklyCurfewTimes } = hdcLicenceData
 
     return {
       curfewAddress,
-      firstNightCurfewHours,
+      firstNightCurfewTimes,
       weeklyCurfewTimes,
       allCurfewTimesEqual,
     }
