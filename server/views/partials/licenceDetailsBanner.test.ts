@@ -1,6 +1,13 @@
 import { templateRenderer } from '../../utils/__testutils/templateTestUtils'
+import config from '../../config'
 
 describe('View Partials - Licence details banner', () => {
+  const existingConfig = config
+
+  afterEach(() => {
+    jest.resetAllMocks()
+    config.hdcEnabled = existingConfig.hdcEnabled
+  })
   const render = templateRenderer('{% include "partials/licenceDetailsBanner.njk" %}')
 
   it('should not render anything if licence is not available', () => {
@@ -50,5 +57,30 @@ describe('View Partials - Licence details banner', () => {
     })
 
     expect($('.pipe-separated__item:first').text()).toBe('Prison number: ABC')
+  })
+
+  it('should render hdcad instead of release date if hdc licence', () => {
+    config.hdcEnabled = true
+    const $ = render({
+      licence: {
+        kind: 'HDC',
+        homeDetentionCurfewActualDate: '01-05-2022',
+        homeDetentionCurfewEligibilityDate: '02-05-2022',
+      },
+    })
+
+    expect($('[data-qa="date"]').text()).toContain('HDCAD: 1 May 2022')
+  })
+
+  it('should render hdced instead of release date if hdc licence and hdcad not present', () => {
+    config.hdcEnabled = true
+    const $ = render({
+      licence: {
+        kind: 'HDC',
+        homeDetentionCurfewEligibilityDate: '02-05-2022',
+      },
+    })
+
+    expect($('[data-qa="date"]').text()).toContain('HDCED: 2 May 2022')
   })
 })
