@@ -39,6 +39,7 @@ import type {
   LicencePermissionsRequest,
   LicencePermissionsResponse,
   LicencePolicyResponse,
+  LicenceStatusResponse,
   LicenceSummary,
   NotifyRequest,
   OmuContact,
@@ -754,6 +755,12 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({
       path: `/cvl-report/upcoming-releases-with-monitoring`,
     })) as Promise<UpcomingReleasesWithMonitoringConditionsResponse[]>
+  }
+
+  async getLicenceStatusCases(): Promise<LicenceStatusResponse[]> {
+    return (await this.get({
+      path: `/cvl-report/licence-status-report`,
+    })) as Promise<LicenceStatusResponse[]>
   }
 
   async searchForOffenderOnPrisonCaseAdminCaseload(

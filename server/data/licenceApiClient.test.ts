@@ -960,4 +960,28 @@ describe('Licence API client tests', () => {
       )
     })
   })
+
+  describe('licence status report cases', () => {
+    it('should call the correct endpoint and return cases', async () => {
+      const aCase = {
+        probationRegion: 'North West',
+        prison: 'Leeds Prison',
+        crn: 'X123456',
+        nomisNumber: 'A1234BC',
+        prisonerName: 'John Smith',
+        status: 'IN_PROGRESS',
+      }
+      // Given
+      jest.mocked(get).mockResolvedValue([aCase])
+
+      // When
+      const result = await licenceApiClient.getLicenceStatusCases()
+
+      // Then
+      expect(get).toHaveBeenCalledWith({
+        path: '/cvl-report/licence-status',
+      })
+      expect(result).toEqual([aCase])
+    })
+  })
 })
