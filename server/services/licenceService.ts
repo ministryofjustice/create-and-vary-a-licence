@@ -23,6 +23,7 @@ import type {
   LastMinuteHandoverCaseResponse,
   Licence,
   LicenceConditionChange,
+  LicenceStatusResponse,
   LicenceSummary,
   NotifyRequest,
   PrisonerWithCvlFields,
@@ -468,6 +469,10 @@ export default class LicenceService {
 
   async getUpcomingReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
     return this.licenceApiClient.getUpcomingReleasesWithMonitoring()
+  }
+
+  async getLicenceStatusCases(): Promise<LicenceStatusResponse[]> {
+    return this.licenceApiClient.getLicenceStatusCases()
   }
 
   async updateElectronicMonitoringProgramme(
