@@ -964,11 +964,11 @@ describe('Licence API client tests', () => {
   describe('licence status report cases', () => {
     it('should call the correct endpoint and return cases', async () => {
       const aCase = {
-        probationRegion: 'North West',
-        prison: 'Leeds Prison',
+        probationRegion: 'Test Region',
+        prison: 'Test Prison',
         crn: 'X123456',
         nomisNumber: 'A1234BC',
-        prisonerName: 'John Smith',
+        prisonerName: 'Test Person',
         status: 'IN_PROGRESS',
       }
       // Given

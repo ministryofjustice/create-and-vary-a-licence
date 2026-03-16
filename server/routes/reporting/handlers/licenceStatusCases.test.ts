@@ -12,7 +12,7 @@ describe('LicenceStatusCasesRoutes', () => {
 
   const cases: Array<LicenceStatusResponse> = [
     {
-      probationRegion: 'South East Region',
+      probationRegion: 'Test Region',
       prison: 'Test Prison',
       crn: 'CRN123',
       nomisNumber: 'A1234BC',
@@ -42,7 +42,7 @@ describe('LicenceStatusCasesRoutes', () => {
       nomisNumber: 'A1234BC',
       prison: 'Test Prison',
       prisonerName: 'Test Person',
-      probationRegion: 'South East Region',
+      probationRegion: 'Test Region',
       status: 'SUBMITTED',
     }
 
@@ -72,7 +72,7 @@ describe('LicenceStatusCasesRoutes', () => {
       ',',
     )
 
-    const expectedRow = ['South East Region', 'Test Prison', 'CRN123', 'A1234BC', 'Test Person', 'SUBMITTED'].join(',')
+    const expectedRow = ['Test Region', 'Test Prison', 'CRN123', 'A1234BC', 'Test Person', 'SUBMITTED'].join(',')
 
     const sentBody = (res.send as jest.Mock).mock.calls[0][0]
     expect(sentBody).toBe(`${headerLine}\n${expectedRow}`)
