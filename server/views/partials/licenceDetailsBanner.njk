@@ -12,7 +12,7 @@
                     <span class="pipe-separated__item"  data-qa="date">
                         {% if isVaryJourney %}
                             {{ licence | dateToDisplay }}
-                        {% elseif hdcEnabled and licence.kind == 'HDC' %}
+                        {% elseif licence.kind == 'HDC' %}
                             {{ hdcDate }}
                         {% else %}
                             Release date: {{ licence.licenceStartDate | datetimeToDate }}
