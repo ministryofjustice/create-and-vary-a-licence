@@ -1,0 +1,130 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Licence Status Cases" %}
+{% set pageId = "licence-status-cases" %}
+{% set backLinkHref = "/reports" %}
+{% set noJsBackLink = true %}
+
+{% set results = [] %}
+
+{% for case in cases %}
+    {% set results = (results.push([
+        {
+            attributes: {
+                id: 'probation-region-' + loop.index,
+                "data-sort-value": case.probationRegion
+            },
+            text: case.probationRegion
+        },
+        {
+            attributes: {
+                id: 'prison-' + loop.index,
+                "data-sort-value": case.prison
+            },
+            text:  case.prison
+        },
+        {
+            attributes: {
+                id: 'crn-' + loop.index,
+                "data-sort-value": case.crn
+            },
+            text: case.crn
+        },
+        {
+            attributes: {
+                id: 'nomis-number-' + loop.index,
+                "data-sort-value": case.nomisNumber
+            },
+            text:  case.nomisNumber
+        },
+        {
+            attributes: {
+                id: 'prisonerName-' + loop.index,
+                "data-sort-value": case.prisonerName
+            },
+            classes: "max-width max-width-220",
+            text: case.prisonerName
+        },
+        {
+            attributes: {
+                id: 'status-' + loop.index,
+                "data-sort-value": case.status
+            },
+            text: case.status
+        }
+    ]), results) %}
+{% endfor %}
+
+{% block content %}
+    {% if cases.length == 1 %}
+        {% set countText = "There is 1 case with a LSD of today" %}
+    {% else %}
+        {% set countText = "There are "  + cases.length + " cases with a LSD of today" %}
+    {% endif %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-four-quarters">
+            <h1 class="govuk-heading-xl">Licence Status Cases</h1>
+            <h2 class="govuk-heading-s">{{ countText }}</h2>
+            <div class="govuk-button-group">
+                        {{ govukButton({
+                            text: "Download CSV",
+                            href: "/reports/licence-status-cases/download-csv",
+                            classes: "govuk-button--secondary"
+                        }) }}
+            </div>
+        </div>
+    </div>
+    {% if cases.length > 0 %}
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Caseload",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "Probation region",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Prison",
+                    attributes: {
+                        "aria-sort": "none"
+                     }
+                },
+                {
+                    text: "CRN",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Nomis number",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                                {
+                    text: "Prisoner name",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Licence status",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                }
+            ],
+            rows: results
+        }) }}
+    {% endif %}
+
+{% endblock %}

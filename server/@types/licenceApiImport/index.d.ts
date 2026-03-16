@@ -2252,9 +2252,29 @@ export interface paths {
     }
     /**
      * Retrieve list of upcoming cases with electronic monitoring conditions for FTR-56 report
-     * @description Returns a list of LastMinuteHandoverCaseResponse objects
+     * @description Returns a list of UpcomingReleasesWithMonitoringConditionsResponse objects
      */
     get: operations['getUpcomingReleasesWithMonitoringConditions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/cvl-report/licence-status-report': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve a list of cases providing all licences at all statuses today
+     * @description Returns a list of LicenceStatusResponse objects
+     */
+    get: operations['getLicenceStatusCases']
     put?: never
     post?: never
     delete?: never
@@ -6420,6 +6440,53 @@ export interface components {
        * @example Forename Surname
        */
       fullName?: string
+    }
+    /** @description Response representing a case with a licence status coming up for release */
+    LicenceStatusResponse: {
+      /**
+       * @description Name of the probation region handling the case
+       * @example Test Region
+       */
+      probationRegion?: string
+      /**
+       * @description The prison for the case
+       * @example Moorland (HMP & YOI)
+       */
+      prison?: string
+      /**
+       * @description Case reference number (CRN) from probation system
+       * @example X123456
+       */
+      crn?: string
+      /**
+       * @description The prison nomis number for the offender
+       * @example A1234AA
+       */
+      nomisNumber?: string
+      /**
+       * @description Full name of the prisoner
+       * @example Test Person
+       */
+      prisonerName: string
+      /**
+       * @description Current licence status of the case
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      status:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
     }
     /** @description Response representing a last-minute handover case */
     LastMinuteHandoverCaseResponse: {
@@ -15036,6 +15103,71 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['UpcomingReleasesWithMonitoringConditionsResponse'][]
+        }
+      }
+      /** @description Bad request, request parameters must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getLicenceStatusCases: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A list of licence status cases */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['LicenceStatusResponse'][]
         }
       }
       /** @description Bad request, request parameters must be valid */
