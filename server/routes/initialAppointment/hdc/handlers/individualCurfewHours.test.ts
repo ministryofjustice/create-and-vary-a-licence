@@ -5,7 +5,7 @@ import HdcService from '../../../../services/hdcService'
 import IndividualCurfewHoursRoutes from './individualCurfewHours'
 
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
-jest.mock('../../../services/hdcService')
+jest.mock('../../../../services/hdcService')
 
 describe('IndividualCurfewHoursRoutes', () => {
   let req: Request
