@@ -368,7 +368,14 @@ export default {
     })
   },
 
-  stubGetHdcLicence: (): SuperAgentRequest => {
+  stubGetHdcLicence: (
+    options: {
+      firstNightCurfewTimes?: {
+        fromTime?: string
+        untilTime?: string
+      }
+    } = {},
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -380,6 +387,7 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           kind: 'HDC',
+          firstNightCurfewTimes: options.firstNightCurfewTimes ?? null,
           homeDetentionCurfewActualDate: '01/03/2021',
         },
       },

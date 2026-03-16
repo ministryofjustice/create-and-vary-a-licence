@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import StandardCurfewHoursQuestionRoutes from './standardCurfewHoursQuestion'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import HdcService from '../../../../services/hdcService'
-import STANDARD_CURFEW_TIMES from '../curfewDefaults'
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../curfewDefaults'
 
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 jest.mock('../../../../services/hdcService')
@@ -59,7 +59,7 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
     it('when the answer is yes, it should send the standard curfew times to the licence API', async () => {
       req.body = { answer: YesOrNo.YES }
       await handler.POST(req, res)
-      expect(hdcService.updateWeeklyCurfewTimes).toHaveBeenCalledWith(1, STANDARD_CURFEW_TIMES, res.locals.user)
+      expect(hdcService.updateWeeklyCurfewTimes).toHaveBeenCalledWith(1, STANDARD_WEEKLY_CURFEW_TIMES, res.locals.user)
     })
   })
 })

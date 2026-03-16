@@ -5,7 +5,7 @@ import { AmPm } from '../routes/creatingLicences/types/time'
 import { SimpleTime } from '../routes/manageConditions/types'
 import { DAYS, simpleTimeTo24Hour } from '../utils/utils'
 import { User } from '../@types/CvlUserDetails'
-import STANDARD_CURFEW_TIMES from '../routes/initialAppointment/hdc/curfewDefaults'
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../routes/initialAppointment/hdc/curfewDefaults'
 
 jest.mock('../data/licenceApiClient')
 
@@ -87,10 +87,26 @@ describe('HDC Service', () => {
     const licenceId = 123
 
     it('should call to update the HDC curfew times', async () => {
-      await hdcService.updateWeeklyCurfewTimes(licenceId, STANDARD_CURFEW_TIMES, user)
+      await hdcService.updateWeeklyCurfewTimes(licenceId, STANDARD_WEEKLY_CURFEW_TIMES, user)
       const { weeklyCurfewTimes } = exampleHdcLicenceData
 
       expect(licenceApiClient.updateHdcWeeklyCurfewTimes).toHaveBeenCalledWith(licenceId, { weeklyCurfewTimes }, user)
+    })
+  })
+
+  describe('updateFirstNightCurfewTimes', () => {
+    const user = { username: 'joebloggs' } as User
+    const licenceId = 123
+    const request = {
+      firstNightCurfewTimes: {
+        fromTime: '19:00:00',
+        untilTime: '07:00:00',
+      },
+    }
+
+    it('should call to update the HDC first night curfew times', async () => {
+      await hdcService.updateFirstNightCurfewTimes(licenceId, request, user)
+      expect(licenceApiClient.updateHdcFirstNightCurfewTimes).toHaveBeenCalledWith(licenceId, request, user)
     })
   })
 
