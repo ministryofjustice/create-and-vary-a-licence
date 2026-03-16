@@ -1,5 +1,5 @@
 {% if licence and not hideLicenceBanner %}
-    {% set hdcDate = "HDCAD: " + (licence.homeDetentionCurfewActualDate | datetimeToDate) if licence.homeDetentionCurfewActualDate else "HDCED: " + (licence.homeDetentionCurfewEligibilityDate | datetimeToDate) %}
+    {% set hdcDateAndLabel = "HDCAD: " + (licence.homeDetentionCurfewActualDate | datetimeToDate) if licence.homeDetentionCurfewActualDate else "HDCED: " + (licence.homeDetentionCurfewEligibilityDate | datetimeToDate) %}
     <div class="govuk-grid-row govuk-!-margin-top-3" role="region" aria-label="Licence summary">
         <div class="govuk-grid-column-full border-bottom">
             <div class="govuk-caption-m">
@@ -13,7 +13,7 @@
                         {% if isVaryJourney %}
                             {{ licence | dateToDisplay }}
                         {% elseif licence.kind == 'HDC' %}
-                            {{ hdcDate }}
+                            {{ hdcDateAndLabel }}
                         {% else %}
                             Release date: {{ licence.licenceStartDate | datetimeToDate }}
                         {% endif %}
