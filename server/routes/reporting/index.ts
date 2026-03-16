@@ -11,7 +11,7 @@ import { Services } from '../../services'
 import ReportHomeRoutes from './handlers'
 import LastMinuteHandoverCasesRoutes from './handlers/lastMinuteHandoverCases'
 import UpcomingReleasesWithMonitoringRoutes from './handlers/upcomingReleasesWithMonitoring'
-import LicenceStatusProgressionRoutes from './handlers/licenceStatusProgressionCases'
+import LicenceStatusCasesRoutes from './handlers/licenceStatusCases'
 import { getSystemToken } from '../../data/systemToken'
 
 export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
@@ -35,7 +35,7 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   }
 
   {
-    const routes = new LicenceStatusProgressionRoutes(licenceService)
+    const routes = new LicenceStatusCasesRoutes(licenceService)
     get('/licence-status-cases', routes.GET)
     get('/licence-status-cases/download-csv', routes.GET_CSV)
   }

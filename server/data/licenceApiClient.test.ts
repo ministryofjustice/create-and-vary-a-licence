@@ -979,7 +979,7 @@ describe('Licence API client tests', () => {
 
       // Then
       expect(get).toHaveBeenCalledWith({
-        path: '/cvl-report/licence-status',
+        path: '/cvl-report/licence-status-cases',
       })
       expect(result).toEqual([aCase])
     })

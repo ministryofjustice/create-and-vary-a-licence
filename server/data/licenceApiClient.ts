@@ -759,7 +759,7 @@ export default class LicenceApiClient extends RestClient {
 
   async getLicenceStatusCases(): Promise<LicenceStatusResponse[]> {
     return (await this.get({
-      path: `/cvl-report/licence-status-report`,
+      path: `/cvl-report/licence-status-cases`,
     })) as Promise<LicenceStatusResponse[]>
   }
 

@@ -2,13 +2,13 @@ import { Request, Response } from 'express'
 import { format } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import { LicenceStatusResponse } from '../../../@types/licenceApiClientTypes'
-import LicenceStatusProgressionCasesRoutes from './licenceStatusProgressionCases'
+import LicenceStatusCasesRoutes from './licenceStatusCases'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
-describe('LicenceStatusProgressionCasesRoutes', () => {
-  const routes = new LicenceStatusProgressionCasesRoutes(licenceService)
+describe('LicenceStatusCasesRoutes', () => {
+  const routes = new LicenceStatusCasesRoutes(licenceService)
 
   const cases: Array<LicenceStatusResponse> = [
     {
@@ -26,7 +26,7 @@ describe('LicenceStatusProgressionCasesRoutes', () => {
     licenceService.getLicenceStatusCases.mockResolvedValue(cases)
   })
 
-  test('GET renders licenceStatusProgressionCases with mapped/escaped data', async () => {
+  test('GET renders licenceStatusCases with mapped/escaped data', async () => {
     const req = {} as Request
     const res = {
       locals: { user: { username: 'A User' } },
@@ -46,7 +46,7 @@ describe('LicenceStatusProgressionCasesRoutes', () => {
       status: 'SUBMITTED',
     }
 
-    expect(res.render).toHaveBeenCalledWith('pages/reports/licenceStatusProgressionCases', {
+    expect(res.render).toHaveBeenCalledWith('pages/reports/licenceStatusCases', {
       user: { username: 'A User' },
       cases: [expectedMappedRow],
     })
@@ -65,7 +65,7 @@ describe('LicenceStatusProgressionCasesRoutes', () => {
     expect(res.type).toHaveBeenCalledWith('text/csv')
     expect(res.setHeader).toHaveBeenCalledWith(
       'Content-disposition',
-      `attachment; filename=licences-progression-status-cases-report-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`,
+      `attachment; filename=licences-status-cases-report-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`,
     )
 
     const headerLine = ['Probation Region', 'Prison', 'CRN', 'Nomis Number', 'Prisoner Name', 'Licence Status'].join(
