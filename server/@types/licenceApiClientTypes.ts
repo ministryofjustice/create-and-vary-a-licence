@@ -51,7 +51,6 @@ export type LicenceConditionChange = components['schemas']['LicenceConditionChan
 export type OverrideLicenceDatesRequest = components['schemas']['OverrideLicenceDatesRequest']
 export type OverrideLicenceTypeRequest = components['schemas']['OverrideLicenceTypeRequest']
 export type OverrideLicencePrisonerDetailsRequest = components['schemas']['OverrideLicencePrisonerDetailsRequest']
-export type UpdateOffenderDetailsRequest = components['schemas']['UpdateOffenderDetailsRequest']
 export type ProbationSearchRequest = components['schemas']['ProbationUserSearchRequest']
 export type ComSearchResponse = components['schemas']['ComSearchResponse']
 export type FoundComCase = components['schemas']['FoundComCase']

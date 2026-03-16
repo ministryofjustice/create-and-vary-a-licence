@@ -40,7 +40,7 @@ import type {
   UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
 } from '../@types/licenceApiClientTypes'
-import { OmuContact, UpdateOffenderDetailsRequest } from '../@types/licenceApiClientTypes'
+import { OmuContact } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
@@ -428,10 +428,6 @@ export default class LicenceService {
         LicenceStatus.VARIATION_APPROVED,
       ],
     )
-  }
-
-  async updateOffenderDetails(nomisId: string, offenderDetails: UpdateOffenderDetailsRequest): Promise<void> {
-    return this.licenceApiClient.updateOffenderDetails(nomisId, offenderDetails)
   }
 
   async deactivateLicences(licences: LicenceSummary[]): Promise<void> {

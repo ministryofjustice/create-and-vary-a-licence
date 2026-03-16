@@ -92,54 +92,6 @@ context('Event handlers', () => {
         value: 'ACTIVE',
       })
     })
-
-    it('should listen to the offender updated event and call the prison API endpoint to update offender details', () => {
-      cy.task('stubGetPrisonerDetail')
-      cy.task('stubUpdateOffenderDetails')
-
-      cy.task(
-        'sendDomainEvent',
-        `{
-          "Message": "{\\"additionalInformation\\": {\\"nomsNumber\\":\\"G9786GC\\", \\"categoriesChanged\\":[\\"PERSONAL_DETAILS\\",\\"SOME_OTHER_CATEGORY\\"]}}",
-          "MessageAttributes": {
-            "eventType": {
-              "Type": "String",
-              "Value": "prisoner-offender-search.prisoner.updated"
-            }
-          }
-         }`,
-      )
-
-      cy.task('verifyEndpointCalled', {
-        verb: 'PUT',
-        path: '/licences-api/offender/nomisid/G9786GC/update-offender-details',
-        times: 1,
-      })
-    })
-
-    it('should ignore the offender updated event if the categoriesChanged does not include "PERSONAL_DETAILS"', () => {
-      cy.task('stubGetPrisonerDetail')
-      cy.task('stubUpdateOffenderDetails')
-
-      cy.task(
-        'sendDomainEvent',
-        `{
-          "Message": "{\\"additionalInformation\\": {\\"nomsNumber\\":\\"G9786GC\\", \\"categoriesChanged\\":[\\"SOME_OTHER_CATEGORY\\"]}}",
-          "MessageAttributes": {
-            "eventType": {
-              "Type": "String",
-              "Value": "prisoner-offender-search.prisoner.updated"
-            }
-          }
-         }`,
-      )
-
-      cy.task('verifyEndpointCalled', {
-        verb: 'PUT',
-        path: '/licences-api/offender/nomisid/G9786GC/update-offender-details',
-        times: 0,
-      })
-    })
   })
 
   describe('Prison events', () => {
