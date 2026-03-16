@@ -2,8 +2,10 @@ import { User } from '../@types/CvlUserDetails'
 import { HdcLicenceData, WeeklyCurfewTimesRequest } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import CurfewTimes from '../routes/initialAppointment/hdc/types/curfewTimes'
+import { DAYS } from '../enumeration/days'
+import DailyCurfewTime from '../routes/initialAppointment/hdc/types/dailyCurfewTime'
 import { SimpleTime } from '../routes/manageConditions/types'
-import { DAYS, simpleTimeTo24Hour, simpleTimeToMinutes } from '../utils/utils'
+import { simpleTimeTo24Hour, simpleTimeToMinutes } from '../utils/utils'
 
 export type CvlHdcLicenceData = HdcLicenceData & { allCurfewTimesEqual: boolean }
 
@@ -34,6 +36,11 @@ export default class HdcService {
     return this.licenceApiClient.updateHdcWeeklyCurfewTimes(licenceId, curfewTimesRequest, user)
   }
 
+  async updateDifferingCurfewTimes(licenceId: number, curfewTimes: DailyCurfewTime[], user: User): Promise<void> {
+    const curfewTimesRequest = this.buildDifferingCurfewTimesRequest(curfewTimes)
+    return this.licenceApiClient.updateHdcWeeklyCurfewTimes(licenceId, curfewTimesRequest, user)
+  }
+
   buildWeeklyCurfewTimesRequest = (start: SimpleTime, end: SimpleTime): WeeklyCurfewTimesRequest => {
     const startMinutes = simpleTimeToMinutes(start)
     const endMinutes = simpleTimeToMinutes(end)
@@ -57,5 +64,19 @@ export default class HdcService {
     })
 
     return { weeklyCurfewTimes }
+  }
+
+  buildDifferingCurfewTimesRequest = (curfewTimes: DailyCurfewTime[]): WeeklyCurfewTimesRequest => {
+    const requestObject = curfewTimes.map(curfew => {
+      return {
+        curfewTimesSequence: curfew.sequence,
+        fromDay: curfew.fromDay,
+        fromTime: simpleTimeTo24Hour(curfew.fromTime),
+        untilDay: curfew.untilDay,
+        untilTime: simpleTimeTo24Hour(curfew.untilTime),
+      }
+    })
+
+    return { weeklyCurfewTimes: requestObject }
   }
 }

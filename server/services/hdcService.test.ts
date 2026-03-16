@@ -3,9 +3,10 @@ import LicenceApiClient from '../data/licenceApiClient'
 import { HdcLicenceData } from '../@types/licenceApiClientTypes'
 import { AmPm } from '../routes/creatingLicences/types/time'
 import { SimpleTime } from '../routes/manageConditions/types'
-import { DAYS, simpleTimeTo24Hour } from '../utils/utils'
+import { simpleTimeTo24Hour } from '../utils/utils'
 import { User } from '../@types/CvlUserDetails'
 import STANDARD_CURFEW_TIMES from '../routes/initialAppointment/hdc/curfewDefaults'
+import { DAYS } from '../enumeration/days'
 
 jest.mock('../data/licenceApiClient')
 
