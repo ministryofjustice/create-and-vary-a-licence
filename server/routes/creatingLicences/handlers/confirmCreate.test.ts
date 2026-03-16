@@ -85,6 +85,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           surname: 'Person',
           isEligibleForEarlyRelease: true,
           kind: LicenceKind.CRD,
+          homeDetentionCurfewActualDate: '16/03/2026',
+          homeDetentionCurfewEligibilityDate: '16/03/2026',
         },
         backLink: req.session.returnToCase,
       })
@@ -109,6 +111,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           surname: 'Person',
           isEligibleForEarlyRelease: true,
           kind: LicenceKind.CRD,
+          homeDetentionCurfewActualDate: '16/03/2026',
+          homeDetentionCurfewEligibilityDate: '16/03/2026',
         },
         backLink: '/licence/create/caseload',
       })
