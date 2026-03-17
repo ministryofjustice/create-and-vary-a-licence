@@ -61,7 +61,7 @@ describe('View Partials - Licence details banner', () => {
       },
     })
 
-    expect($('[data-qa="date"]').text()).toContain('HDCAD: 1 May 2022')
+    expect($('[data-qa="date"]').text()).toContain('HDC actual date: 1 May 2022')
   })
 
   it('should render hdced instead of release date if hdc licence and hdcad not present', () => {
@@ -72,6 +72,6 @@ describe('View Partials - Licence details banner', () => {
       },
     })
 
-    expect($('[data-qa="date"]').text()).toContain('HDCED: 2 May 2022')
+    expect($('[data-qa="date"]').text()).toContain('HDC eligibility date: 2 May 2022')
   })
 })
