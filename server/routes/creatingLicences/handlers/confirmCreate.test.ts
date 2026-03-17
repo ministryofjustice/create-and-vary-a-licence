@@ -94,6 +94,42 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       })
     })
 
+    it('should handle null and undefined hdc dates', async () => {
+      licenceService.getPrisonerDetail.mockResolvedValue({
+        prisoner: {
+          confirmedReleaseDate: '2022-11-20',
+          conditionalReleaseDate: '2022-11-21',
+          dateOfBirth: '1960-11-10',
+          firstName: 'Test',
+          lastName: 'Person',
+          homeDetentionCurfewActualDate: null,
+          homeDetentionCurfewEligibilityDate: undefined,
+        } as CvlPrisoner,
+        cvl: {
+          isInHardStopPeriod: false,
+          isEligibleForEarlyRelease: true,
+          licenceStartDate: '19/11/2022',
+          licenceKind: LicenceKind.CRD,
+        },
+      } as PrisonerWithCvlFields)
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
+        licence: {
+          licenceStartDate: '19/11/2022',
+          crn: 'X1234',
+          dateOfBirth: '10/11/1960',
+          forename: 'Test',
+          surname: 'Person',
+          isEligibleForEarlyRelease: true,
+          kind: LicenceKind.CRD,
+          homeDetentionCurfewActualDate: null,
+          homeDetentionCurfewEligibilityDate: null,
+        },
+        backLink: req.session.returnToCase,
+      })
+    })
+
     it('should render default return to caseload link if no session state', async () => {
       const reqWithEmptySession = {
         params: {
