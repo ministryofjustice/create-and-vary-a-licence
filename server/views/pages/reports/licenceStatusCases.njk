@@ -4,8 +4,8 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set pageTitle = applicationName + " - Licence Status Cases" %}
-{% set pageId = "licence-status-cases" %}
+{% set pageTitle = applicationName + " - Licence Status Report" %}
+{% set pageId = "licence-status-report" %}
 {% set backLinkHref = "/reports" %}
 {% set noJsBackLink = true %}
 
@@ -61,13 +61,13 @@
 
 {% block content %}
     {% if cases.length == 1 %}
-        {% set countText = "There is 1 case with a LSD of today" %}
+        {% set countText = "There is 1 case with a licence start date of today" %}
     {% else %}
-        {% set countText = "There are "  + cases.length + " cases with a LSD of today" %}
+        {% set countText = "There are "  + cases.length + " cases with a licence start date of today" %}
     {% endif %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-four-quarters">
-            <h1 class="govuk-heading-xl">Licence Status Cases</h1>
+            <h1 class="govuk-heading-xl">Licence Status Report</h1>
             <h2 class="govuk-heading-s">{{ countText }}</h2>
             <div class="govuk-button-group">
                         {{ govukButton({
