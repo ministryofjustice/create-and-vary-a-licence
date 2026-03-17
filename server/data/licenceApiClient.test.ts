@@ -955,12 +955,10 @@ describe('Licence API client tests', () => {
 
     it('should call to update the HDC first night curfew times', async () => {
       const request = {
-        firstNightCurfewTimes: [
-          {
-            fromTime: '00:00:00',
-            untilTime: '00:00:01',
-          },
-        ],
+        firstNightCurfewTimes: {
+          fromTime: '00:00:00',
+          untilTime: '00:00:01',
+        },
       } as FirstNightCurfewTimesRequest
 
       await licenceApiClient.updateHdcFirstNightCurfewTimes(licenceId, request, user)

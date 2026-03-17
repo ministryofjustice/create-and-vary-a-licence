@@ -8,7 +8,7 @@ import { SimpleTime } from '../../../manageConditions/types'
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 jest.mock('../../../../services/hdcService')
 
-describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', () => {
+describe('Route Handlers - Create Licence - First Night Curfew Times', () => {
   let req: Request
   let res: Response
 

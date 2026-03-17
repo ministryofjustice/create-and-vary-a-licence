@@ -1,8 +1,6 @@
 import Page from './page'
 
 export default class FirstNightCurfewTimesPage extends Page {
-  private continueButtonId = '[data-qa=continue]'
-
   private readonly startPrefix = '#curfewStart'
 
   private readonly endPrefix = '#curfewEnd'
