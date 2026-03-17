@@ -35,6 +35,7 @@ import {
   CreateVariationResponse,
   EditLicenceResponse,
   WeeklyCurfewTimesRequest,
+  FirstNightCurfewTimesRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -919,7 +920,7 @@ describe('Licence API client tests', () => {
     })
   })
 
-  describe('updateHdcCurfewTimes', () => {
+  describe('updateHdcWeeklyCurfewTimes', () => {
     const user = { username: 'joebloggs' } as User
     const licenceId = 123
 
@@ -941,6 +942,30 @@ describe('Licence API client tests', () => {
       expect(put).toHaveBeenCalledWith(
         {
           path: `/licence/id/${licenceId}/hdc-weekly-curfew-times`,
+          data: request,
+        },
+        { username: 'joebloggs' },
+      )
+    })
+  })
+
+  describe('updateHdcFirstNightCurfewTimes', () => {
+    const user = { username: 'joebloggs' } as User
+    const licenceId = 123
+
+    it('should call to update the HDC first night curfew times', async () => {
+      const request = {
+        firstNightCurfewTimes: {
+          fromTime: '00:00:00',
+          untilTime: '00:00:01',
+        },
+      } as FirstNightCurfewTimesRequest
+
+      await licenceApiClient.updateHdcFirstNightCurfewTimes(licenceId, request, user)
+
+      expect(put).toHaveBeenCalledWith(
+        {
+          path: `/licence/id/${licenceId}/hdc-first-night-curfew-times`,
           data: request,
         },
         { username: 'joebloggs' },

@@ -5069,15 +5069,15 @@ export interface components {
        */
       dateLastUpdated?: string
       /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
        * @description The prison booking number for the person on this licence
        * @example F12333
        */
       bookingNo?: string
+      /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string
       /**
        * @description The criminal records office number (CRO) for the person on this licence
        * @example A/12444

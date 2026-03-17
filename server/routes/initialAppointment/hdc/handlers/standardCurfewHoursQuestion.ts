@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import HdcService from '../../../../services/hdcService'
-import STANDARD_CURFEW_TIMES from '../curfewDefaults'
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../curfewDefaults'
 
 export default class StandardCurfewHoursQuestionRoutes {
   constructor(private readonly hdcService: HdcService) {}
@@ -14,7 +14,7 @@ export default class StandardCurfewHoursQuestionRoutes {
     const { licence, user } = res.locals
     const { answer } = req.body
     if (answer === YesOrNo.YES) {
-      await this.hdcService.updateWeeklyCurfewTimes(licence.id, STANDARD_CURFEW_TIMES, user)
+      await this.hdcService.updateWeeklyCurfewTimes(licence.id, STANDARD_WEEKLY_CURFEW_TIMES, user)
       return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions-question`)
     }
     return res.redirect(`/licence/create/id/${licence.id}/hdc/do-hdc-curfew-hours-apply-daily`)

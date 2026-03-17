@@ -31,6 +31,7 @@ import type {
   EligibilityAssessment,
   ExternalTimeServedRecordRequest,
   ExternalTimeServedRecordResponse,
+  FirstNightCurfewTimesRequest,
   HdcLicenceData,
   LastMinuteHandoverCaseResponse,
   Licence,
@@ -821,6 +822,17 @@ export default class LicenceApiClient extends RestClient {
   ): Promise<void> {
     return (await this.put(
       { path: `/licences/time-served/${licenceId}/confirm/probation-contact`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
+  }
+
+  async updateHdcFirstNightCurfewTimes(
+    licenceId: number,
+    request: FirstNightCurfewTimesRequest,
+    user: User,
+  ): Promise<void> {
+    return (await this.put(
+      { path: `/licence/id/${licenceId}/hdc-first-night-curfew-times`, data: request },
       { username: user?.username },
     )) as Promise<void>
   }
