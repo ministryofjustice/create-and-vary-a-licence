@@ -53,6 +53,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         dateOfBirth: '1960-11-10',
         firstName: 'Test',
         lastName: 'Person',
+        homeDetentionCurfewActualDate: '2026-03-16',
+        homeDetentionCurfewEligibilityDate: '2026-03-16',
       } as CvlPrisoner,
       cvl: {
         isInHardStopPeriod: false,
