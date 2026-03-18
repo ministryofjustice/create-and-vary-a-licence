@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import STANDARD_CURFEW_TIMES from '../curfewDefaults'
 import HdcService from '../../../../services/hdcService'
 import DailyCurfewTime from '../types/dailyCurfewTime'
 import { SimpleTime } from '../../../manageConditions/types'
 import { type Day, DAYS } from '../../../../enumeration/days'
 import { CurfewTimes, HdcLicence } from '../../../../@types/licenceApiClientTypes'
 import { simpleTimeToMinutes } from '../../../../utils/utils'
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../curfewDefaults'
 
 export default class IndividualCurfewHoursRoutes {
   constructor(private readonly hdcService: HdcService) {}
@@ -30,16 +30,16 @@ export default class IndividualCurfewHoursRoutes {
   }
 
   buildStandardCurfewTimes = (): Record<string, DailyCurfewTime> => {
-    const curfewStartTimeMinutes = simpleTimeToMinutes(STANDARD_CURFEW_TIMES.curfewStart)
-    const curfewEndTimeMinutes = simpleTimeToMinutes(STANDARD_CURFEW_TIMES.curfewEnd)
+    const curfewStartTimeMinutes = simpleTimeToMinutes(STANDARD_WEEKLY_CURFEW_TIMES.curfewStart)
+    const curfewEndTimeMinutes = simpleTimeToMinutes(STANDARD_WEEKLY_CURFEW_TIMES.curfewEnd)
 
     const curfews = DAYS.map((day, index) => {
       return [
         index,
         {
-          fromTime: STANDARD_CURFEW_TIMES.curfewStart,
+          fromTime: STANDARD_WEEKLY_CURFEW_TIMES.curfewStart,
           fromDay: day as Day,
-          untilTime: STANDARD_CURFEW_TIMES.curfewEnd,
+          untilTime: STANDARD_WEEKLY_CURFEW_TIMES.curfewEnd,
           untilDay: (curfewEndTimeMinutes <= curfewStartTimeMinutes ? DAYS[(index + 1) % DAYS.length] : day) as Day,
           sequence: index,
         },
