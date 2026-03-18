@@ -26,7 +26,7 @@ context('Vary a licence - time served', () => {
   })
 
   afterEach(() => {
-    // cy.get('[data-qa=signOut]').click()
+    cy.get('[data-qa=signOut]').click()
   })
 
   it('review without varying timeserved licence with com', () => {
