@@ -35,6 +35,12 @@ export default class ConfirmCreateRoutes {
         surname: convertToTitleCase(nomisRecord.prisoner.lastName),
         isEligibleForEarlyRelease: nomisRecord.cvl.isEligibleForEarlyRelease,
         kind: nomisRecord.cvl.licenceKind,
+        homeDetentionCurfewActualDate: nomisRecord.prisoner.homeDetentionCurfewActualDate
+          ? moment(nomisRecord.prisoner.homeDetentionCurfewActualDate).format('DD/MM/YYYY')
+          : null,
+        homeDetentionCurfewEligibilityDate: nomisRecord.prisoner.homeDetentionCurfewEligibilityDate
+          ? moment(nomisRecord.prisoner.homeDetentionCurfewEligibilityDate).format('DD/MM/YYYY')
+          : null,
       },
       backLink,
     })

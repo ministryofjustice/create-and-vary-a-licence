@@ -31,6 +31,7 @@ import type {
   EligibilityAssessment,
   ExternalTimeServedRecordRequest,
   ExternalTimeServedRecordResponse,
+  FirstNightCurfewTimesRequest,
   HdcLicenceData,
   LastMinuteHandoverCaseResponse,
   Licence,
@@ -39,6 +40,7 @@ import type {
   LicencePermissionsRequest,
   LicencePermissionsResponse,
   LicencePolicyResponse,
+  LicenceStatusResponse,
   LicenceSummary,
   NotifyRequest,
   OmuContact,
@@ -756,6 +758,12 @@ export default class LicenceApiClient extends RestClient {
     })) as Promise<UpcomingReleasesWithMonitoringConditionsResponse[]>
   }
 
+  async getLicenceStatusCases(): Promise<LicenceStatusResponse[]> {
+    return (await this.get({
+      path: `/cvl-report/licence-status-cases`,
+    })) as Promise<LicenceStatusResponse[]>
+  }
+
   async searchForOffenderOnPrisonCaseAdminCaseload(
     searchRequest: PrisonUserSearchRequest,
   ): Promise<PrisonCaseAdminSearchResult> {
@@ -814,6 +822,17 @@ export default class LicenceApiClient extends RestClient {
   ): Promise<void> {
     return (await this.put(
       { path: `/licences/time-served/${licenceId}/confirm/probation-contact`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
+  }
+
+  async updateHdcFirstNightCurfewTimes(
+    licenceId: number,
+    request: FirstNightCurfewTimesRequest,
+    user: User,
+  ): Promise<void> {
+    return (await this.put(
+      { path: `/licence/id/${licenceId}/hdc-first-night-curfew-times`, data: request },
       { username: user?.username },
     )) as Promise<void>
   }

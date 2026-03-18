@@ -3,7 +3,7 @@ import Page from './page'
 import AdditionalConditionsQuestionPage from './additionalConditionsQuestion'
 import ViewALicencePage from './viewALicence'
 import PssConditionsQuestionPage from './pssConditionsQuestion'
-import StandardCurfewHoursQuestionPage from './standardCurfewHoursQuestionPage'
+import FirstNightCurfewTimesPage from './firstNightCurfewTimesPage'
 
 export default class AppointmentTimePage extends Page {
   private inductionDateId = '#date-calendarDate'
@@ -81,10 +81,10 @@ export default class AppointmentTimePage extends Page {
     return Page.verifyOnPage(ViewALicencePage)
   }
 
-  clickContinueToStandardCurfewHours = (): StandardCurfewHoursQuestionPage => {
+  clickContinueToFirstNightCurfewTimes = (): FirstNightCurfewTimesPage => {
     cy.task('stubPutAppointmentTime')
     cy.get(this.continueButtonId).click()
-    return Page.verifyOnPage(StandardCurfewHoursQuestionPage)
+    return Page.verifyOnPage(FirstNightCurfewTimesPage)
   }
 
   clickSkip = (): AdditionalConditionsQuestionPage => {

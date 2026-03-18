@@ -51,4 +51,27 @@ describe('View Partials - Licence details banner', () => {
 
     expect($('.pipe-separated__item:first').text()).toBe('Prison number: ABC')
   })
+
+  it('should render hdcad instead of release date if hdc licence', () => {
+    const $ = render({
+      licence: {
+        kind: 'HDC',
+        homeDetentionCurfewActualDate: '01-05-2022',
+        homeDetentionCurfewEligibilityDate: '02-05-2022',
+      },
+    })
+
+    expect($('[data-qa="date"]').text()).toContain('HDC actual date: 1 May 2022')
+  })
+
+  it('should render hdced instead of release date if hdc licence and hdcad not present', () => {
+    const $ = render({
+      licence: {
+        kind: 'HDC',
+        homeDetentionCurfewEligibilityDate: '02-05-2022',
+      },
+    })
+
+    expect($('[data-qa="date"]').text()).toContain('HDC eligibility date: 2 May 2022')
+  })
 })

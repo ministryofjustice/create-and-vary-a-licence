@@ -368,7 +368,14 @@ export default {
     })
   },
 
-  stubGetHdcLicence: (): SuperAgentRequest => {
+  stubGetHdcLicence: (
+    options: {
+      firstNightCurfewTimes?: {
+        fromTime?: string
+        untilTime?: string
+      }
+    } = {},
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -380,6 +387,7 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           kind: 'HDC',
+          firstNightCurfewTimes: options.firstNightCurfewTimes ?? null,
           homeDetentionCurfewActualDate: '01/03/2021',
         },
       },
@@ -3287,6 +3295,20 @@ export default {
       request: {
         method: 'PUT',
         urlPattern: `/licences-api/licence/id/(\\d)*/hdc-weekly-curfew-times`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubPutFirstNightCurfewTimes: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licences-api/licence/id/(\\d)*/hdc-first-night-curfew-times`,
       },
       response: {
         status: 200,

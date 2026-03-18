@@ -740,4 +740,11 @@ describe('Licence Service', () => {
       expect(licenceApiClient.createVariation).toHaveBeenCalledWith(licenceId, user)
     })
   })
+
+  describe('Licence Status Report', () => {
+    it('should get licence status report', async () => {
+      await licenceService.getLicenceStatusCases()
+      expect(licenceApiClient.getLicenceStatusCases).toHaveBeenCalledWith()
+    })
+  })
 })

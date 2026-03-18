@@ -11,6 +11,7 @@ import { Services } from '../../services'
 import ReportHomeRoutes from './handlers'
 import LastMinuteHandoverCasesRoutes from './handlers/lastMinuteHandoverCases'
 import UpcomingReleasesWithMonitoringRoutes from './handlers/upcomingReleasesWithMonitoring'
+import LicenceStatusCasesRoutes from './handlers/licenceStatusCases'
 import { getSystemToken } from '../../data/systemToken'
 
 export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
@@ -31,6 +32,12 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
     const routes = new UpcomingReleasesWithMonitoringRoutes(licenceService)
     get('/upcoming-releases-with-monitoring', routes.GET)
     get('/upcoming-releases-with-monitoring/download-csv', routes.GET_CSV)
+  }
+
+  {
+    const routes = new LicenceStatusCasesRoutes(licenceService)
+    get('/licence-status-cases', routes.GET)
+    get('/licence-status-cases/download-csv', routes.GET_CSV)
   }
 
   const dprUserMiddleware: RequestHandler = async (req, res, next) => {

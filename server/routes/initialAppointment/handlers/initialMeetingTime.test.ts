@@ -126,9 +126,7 @@ describe('Route - create licence - initial meeting date and time', () => {
       it('should redirect to the standard HDC curfew questions page if the licence kind is HDC', async () => {
         res.locals.licence.typeCode = 'AP_PSS'
         res.locals.licence.kind = 'HDC'
-        expect(handler.getNextPage(res.locals.licence, req)).toBe(
-          '/licence/create/id/1/hdc/standard-curfew-hours-question',
-        )
+        expect(handler.getNextPage(res.locals.licence, req)).toBe('/licence/create/id/1/hdc/first-night-curfew-hours')
       })
 
       it('should redirect to the check your answers page if fromReview flag is set', async () => {
