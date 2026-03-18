@@ -51,8 +51,11 @@ export default class FirstNightCurfewTimesPage extends Page {
   }
 
   private enterTime(prefix: string, time: { hour: string; minute: string; ampm: string }) {
+    cy.get(`${prefix}-hour`).clear()
     cy.get(`${prefix}-hour`).type(time.hour)
+    cy.get(`${prefix}-minute`).clear()
     cy.get(`${prefix}-minute`).type(time.minute)
+    cy.get(`${prefix}-ampm`).select('Choose am or pm')
     cy.get(`${prefix}-ampm`).select(time.ampm)
   }
 
