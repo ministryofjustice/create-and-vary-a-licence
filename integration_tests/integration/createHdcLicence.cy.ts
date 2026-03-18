@@ -53,7 +53,10 @@ context('Create an HDC licence', () => {
       const additionalConditionsPage = appointmentTimePage
         .enterDate(moment(appointmentDate))
         .enterTime(moment())
-        .clickContinueToStandardCurfewHours()
+        .clickContinueToFirstNightCurfewTimes()
+        .enterFirstNightCurfewStartTime({ hour: '06', minute: '00', ampm: 'pm' })
+        .enterFirstNightCurfewEndTime({ hour: '11', minute: '00', ampm: 'am' })
+        .clickContinue()
         .selectYes()
         .clickContinue()
         .selectYes()

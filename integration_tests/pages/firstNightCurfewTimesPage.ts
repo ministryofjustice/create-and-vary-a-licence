@@ -1,6 +1,9 @@
 import Page from './page'
+import StandardCurfewHoursQuestionPage from './standardCurfewHoursQuestionPage'
 
 export default class FirstNightCurfewTimesPage extends Page {
+  private continueButtonId = '[data-qa=continue]'
+
   private readonly startPrefix = '#curfewStart'
 
   private readonly endPrefix = '#curfewEnd'
@@ -45,5 +48,34 @@ export default class FirstNightCurfewTimesPage extends Page {
 
   getCurfewEndTime = (): Cypress.Chainable<string> => {
     return this.readTimeByPrefix(this.endPrefix)
+  }
+
+  private enterTime(prefix: string, time: { hour: string; minute: string; ampm: string }) {
+    const get = (field: string) => cy.get(`${prefix}-${field}`)
+
+    get('hour').clear()
+    get('hour').type(time.hour)
+
+    get('minute').clear()
+    get('minute').type(time.minute)
+
+    get('ampm').select('Choose am or pm')
+    get('ampm').select(time.ampm)
+  }
+
+  enterFirstNightCurfewStartTime(time: { hour: string; minute: string; ampm: string }): FirstNightCurfewTimesPage {
+    this.enterTime(this.startPrefix, time)
+    return this
+  }
+
+  enterFirstNightCurfewEndTime(time: { hour: string; minute: string; ampm: string }): FirstNightCurfewTimesPage {
+    this.enterTime(this.endPrefix, time)
+    return this
+  }
+
+  clickContinue = (): StandardCurfewHoursQuestionPage => {
+    cy.task('stubPutFirstNightCurfewTimes')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(StandardCurfewHoursQuestionPage)
   }
 }

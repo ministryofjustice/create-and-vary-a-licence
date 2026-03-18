@@ -143,6 +143,7 @@ export default defineConfig({
         stubGetComSearchResponsesWithLao: licence.stubSearchForOffenderOnStaffCaseloadWithLao,
         stubGetComSearchResponsesWithLaoOnProbation: licence.stubSearchForOffenderOnStaffCaseloadWithLaoOnProbation,
         stubGetStaffCreateCaseloadWithLao: licence.stubGetStaffCreateCaseloadWithLao,
+        stubPutFirstNightCurfewTimes: licence.stubPutFirstNightCurfewTimes,
         stubUpdateHdcWeeklyCurfewTimes: licence.stubUpdateHdcWeeklyCurfewTimes,
         stubGetStaffVaryCaseloadWithLao: licence.stubGetStaffVaryCaseloadWithLao,
         stubGetVaryApproverSearchResultsWithLao: licence.stubGetVaryApproverSearchResultsWithLao,
