@@ -3304,6 +3304,20 @@ export default {
     })
   },
 
+  stubPutFirstNightCurfewTimes: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licences-api/licence/id/(\\d)*/hdc-first-night-curfew-times`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
   stubGetCaseAccessDetails: (): SuperAgentRequest => {
     return stubFor({
       request: {
