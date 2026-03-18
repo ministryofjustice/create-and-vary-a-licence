@@ -96,3 +96,5 @@ export type CheckCaseAccessRequest = components['schemas']['CheckCaseAccessReque
 export type CaseAccessDetails = components['schemas']['CaseAccessDetails']
 export type WeeklyCurfewTimesRequest = components['schemas']['UpdateWeeklyCurfewTimesRequest']
 export type CurfewTimes = components['schemas']['CurfewTimes']
+export type FirstNightCurfewTimesRequest = components['schemas']['UpdateFirstNightCurfewTimesRequest']
+export type LicenceStatusResponse = components['schemas']['LicenceStatusResponse']

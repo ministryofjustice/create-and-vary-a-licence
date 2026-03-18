@@ -1,0 +1,56 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "partials/initialMeetingTimeInputs.njk" import initialMeetingTimeInputs %}
+{% from "partials/timePicker.njk" import timePicker %}
+{% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
+
+{% set pageTitle = applicationName + " - Create a licence - First night curfew times" %}
+{% set pageId = "first-night-curfew-times" %}
+{% set backLinkHref = "" %}
+{% macro renderTimePicker(id, labelText, formResponses) %}
+    {{ timePicker({
+        name: id,
+        id: id,
+        label: {
+        text: labelText,
+        classes: "govuk-!-font-weight-bold"
+        },
+        errorMessage: validationErrors | findError(id),
+        formResponses: formResponses[id] or firstNightCurfewTimes[id]
+    }) }}
+{% endmacro %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-2">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Enter first night curfew hours</h1>
+        </div>
+        <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-3">
+            <h2 class="govuk-hint govuk-!-font-size-18">Standard first night curfew hours are 3pm on the day of release to 7am the following day.</h2>
+        </div>
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-m govuk-!-margin-bottom-3">Hours starting on day of release</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+
+                {{ renderTimePicker('curfewStart', 'Start time', formResponses) }}
+                {{ renderTimePicker('curfewEnd', 'End time', formResponses) }}
+
+                <div class="govuk-!-margin-top-8 govuk-button-group">
+                    {{ govukButton({
+                        text: continueOrSave,
+                        type: "submit",
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

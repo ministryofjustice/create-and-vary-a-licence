@@ -4,6 +4,7 @@ import LicenceCreationType from '../../server/enumeration/licenceCreationType'
 import CurfewType from '../../server/enumeration/CurfewType'
 import DoHdcCurfewHoursApplyDailyPage from '../pages/doHdcCurfewHoursApplyDailyPage'
 import CurfewHoursPage from '../pages/curfewHoursPage'
+import FirstNightCurfewTimesPage from '../pages/firstNightCurfewTimesPage'
 
 context('Create an HDC licence', () => {
   const dates: string[] = []
@@ -185,6 +186,43 @@ context('Create an HDC licence', () => {
         .enterCurfewEndTime({ hour: '11', minute: '00', ampm: 'am' })
         .clickContinueWithError()
         .assertErrorSummaryMessage(['Start time must include an hour in 12-hour clock format'])
+    })
+
+    it('should fetch default first night curfew times on initial load of first night curfew times page', () => {
+      cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
+      const confirmCreatePage = new ConfirmCreatePage()
+      confirmCreatePage.clickContinue()
+
+      cy.visit('licence/create/id/1/hdc/first-night-curfew-hours')
+      const firstNightCurfewTimesPage = new FirstNightCurfewTimesPage()
+      firstNightCurfewTimesPage.getCurfewStartTime().then(time => {
+        expect(time).to.eq('03 00 pm')
+      })
+      firstNightCurfewTimesPage.getCurfewEndTime().then(time => {
+        expect(time).to.eq('07 00 am')
+      })
+    })
+
+    it('should fetch first night curfew times from licence when they exist on initial load of first night curfew times page', () => {
+      cy.task('stubGetHdcLicence', {
+        firstNightCurfewTimes: {
+          fromTime: '21:00',
+          untilTime: '07:00',
+        },
+      })
+
+      cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
+      const confirmCreatePage = new ConfirmCreatePage()
+      confirmCreatePage.clickContinue()
+
+      cy.visit('licence/create/id/1/hdc/first-night-curfew-hours')
+      const firstNightCurfewTimesPage = new FirstNightCurfewTimesPage()
+      firstNightCurfewTimesPage.getCurfewStartTime().then(time => {
+        expect(time).to.eq('09 00 pm')
+      })
+      firstNightCurfewTimesPage.getCurfewEndTime().then(time => {
+        expect(time).to.eq('07 00 am')
+      })
     })
   })
 })

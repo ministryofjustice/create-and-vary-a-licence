@@ -12,6 +12,7 @@ import DoHdcCurfewHoursApplyDailyRoutes from './handlers/doHdcCurfewHoursApplyDa
 import CurfewTimes from './types/curfewTimes'
 import IndividualCurfewHoursRoutes from './handlers/individualCurfewHours'
 import DailyCurfewTimes from './types/dailyCurfewTimes'
+import FirstNightCurfewTimesRoutes from './handlers/firstNightCurfewTimes'
 
 export default function Index(services: Services): Router {
   const router = Router()
@@ -51,6 +52,12 @@ export default function Index(services: Services): Router {
       validationMiddleware(conditionService, type),
       handler,
     )
+
+  {
+    const controller = new FirstNightCurfewTimesRoutes(hdcService)
+    get('/first-night-curfew-hours', controller.GET)
+    post('/first-night-curfew-hours', controller.POST, CurfewTimes)
+  }
 
   {
     const controller = new StandardCurfewHoursQuestionRoutes(hdcService)
