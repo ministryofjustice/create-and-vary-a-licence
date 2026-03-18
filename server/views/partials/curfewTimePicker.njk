@@ -1,15 +1,9 @@
 {% macro curfewTimePicker(params) %}
     <div class="govuk-form-group govuk-!-padding-top-2 border-bottom {% if params.errorMessage %}govuk-form-group--error{% endif %}">
-        <fieldset class="govuk-fieldset govuk-!-padding-bottom-9" role="group" aria-describedby="{{ params.hint.id }}">
+        <fieldset class="govuk-fieldset govuk-!-padding-bottom-9" role="group">
             <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">
                 Start Time
             </legend>
-            {% if params.errorMessage %}
-                <span id="curfews[{{ params.loopIndex }}]-error" class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>
-                    <span>{{ params.errorMessage.text }}</span>
-                </span>
-            {% endif %}
             <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][fromTime]">
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
@@ -114,7 +108,7 @@
                 </div>
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" for="curfews[{{params.loopIndex}}].untilDay">
+                        <label class="govuk-label govuk-date-input__label" for="curfews[{{params.loopIndex}}][untilDay]">
                             Day
                         </label>
                         <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"

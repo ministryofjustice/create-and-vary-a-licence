@@ -5,6 +5,7 @@ import DailyCurfewTime from '../types/dailyCurfewTime'
 import { SimpleTime } from '../../../manageConditions/types'
 import { type Day, DAYS } from '../../../../enumeration/days'
 import { CurfewTimes, HdcLicence } from '../../../../@types/licenceApiClientTypes'
+import { simpleTimeToMinutes } from '../../../../utils/utils'
 
 export default class IndividualCurfewHoursRoutes {
   constructor(private readonly hdcService: HdcService) {}
@@ -13,7 +14,9 @@ export default class IndividualCurfewHoursRoutes {
     const { licence }: { licence: HdcLicence } = res.locals
 
     const curfewTimes =
-      licence.curfewTimes.length > 0 ? this.buildCurfewTimes(licence.curfewTimes) : this.buildStandardCurfewTimes()
+      licence.weeklyCurfewTimes.length > 0
+        ? this.buildCurfewTimes(licence.weeklyCurfewTimes)
+        : this.buildStandardCurfewTimes()
 
     res.render('pages/hdc/individualCurfewHours', { days: DAYS, curfewTimes })
   }
@@ -27,36 +30,39 @@ export default class IndividualCurfewHoursRoutes {
   }
 
   buildStandardCurfewTimes = (): Record<string, DailyCurfewTime> => {
-    return DAYS.reduce(
-      (curfewTimes, day, index) => {
-        curfewTimes[index] = {
+    const curfewStartTimeMinutes = simpleTimeToMinutes(STANDARD_CURFEW_TIMES.curfewStart)
+    const curfewEndTimeMinutes = simpleTimeToMinutes(STANDARD_CURFEW_TIMES.curfewEnd)
+
+    const curfews = DAYS.map((day, index) => {
+      return [
+        index,
+        {
           fromTime: STANDARD_CURFEW_TIMES.curfewStart,
           fromDay: day as Day,
           untilTime: STANDARD_CURFEW_TIMES.curfewEnd,
-          untilDay: (STANDARD_CURFEW_TIMES.curfewEnd <= STANDARD_CURFEW_TIMES.curfewStart
-            ? DAYS[(index + 1) % DAYS.length]
-            : day) as Day,
+          untilDay: (curfewEndTimeMinutes <= curfewStartTimeMinutes ? DAYS[(index + 1) % DAYS.length] : day) as Day,
           sequence: index,
-        }
-        return curfewTimes
-      },
-      {} as Record<number, DailyCurfewTime>,
-    )
+        },
+      ]
+    })
+
+    return Object.fromEntries(curfews)
   }
 
   buildCurfewTimes = (curfewTimes: CurfewTimes[]): Record<string, DailyCurfewTime> => {
-    return curfewTimes.reduce(
-      (curfewTimes, curfew) => {
-        curfewTimes[curfew.curfewTimesSequence] = {
+    const curfews = curfewTimes.map(curfew => {
+      return [
+        curfew.curfewTimesSequence,
+        {
           fromTime: SimpleTime.from24HourString(curfew.fromTime),
           fromDay: curfew.fromDay as Day,
           untilTime: SimpleTime.from24HourString(curfew.untilTime),
           untilDay: curfew.untilDay as Day,
           sequence: curfew.curfewTimesSequence,
-        }
-        return curfewTimes
-      },
-      {} as Record<number, DailyCurfewTime>,
-    )
+        },
+      ]
+    })
+
+    return Object.fromEntries(curfews)
   }
 }

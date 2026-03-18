@@ -12,16 +12,11 @@
 {% set pageTitle = applicationName + " - Create a licence - Curfew Hours" %}
 {% set pageId = "curfew-hours" %}
 {% set backLinkHref = "" %}
+{% set curfewTimesToDisplay = formResponses.curfews or curfewTimes %}
+
 {% macro renderCurfewTimePicker(loopIndex, day, nextDay, curfewTimes) %}
     {{ curfewTimePicker({
         loopIndex: loopIndex,
-        label: {
-            text: labelText,
-            classes: "govuk-!-font-weight-bold"
-        },
-        hint: {
-            text: "For example, 9:30am or 2:55pm"
-        },
         day: day,
         nextDay: nextDay,
         errorMessage: validationErrors | findError(id),
@@ -30,6 +25,12 @@
 {% endmacro %}
 
 {% block content %}
+    {% if validationErrors %}
+        <span id="curfews-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span>
+            <span>{{ params.errorMessage.text }}</span>
+        </span>
+    {% endif %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l">Enter the curfew hours</h1>
@@ -46,7 +47,7 @@
                     {% set untilDayId = "untilDay-" + loop.index0 %}
                     <div class="govuk-form-group govuk-!-padding-top-5">
                         <h2 class="govuk-heading-m">Hours starting {{day | titlecase}}</h2>
-                        {{ renderCurfewTimePicker(loop.index0, day, nextDay, curfewTimes) }}
+                        {{ renderCurfewTimePicker(loop.index0, day, nextDay, curfewTimesToDisplay) }}
                     </div>
                 {% endfor %}
 

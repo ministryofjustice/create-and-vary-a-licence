@@ -16,7 +16,7 @@ describe('IndividualCurfewHoursRoutes', () => {
     eligibleKind: 'HDC',
     isInHardStopPeriod: false,
     isDueToBeReleasedInTheNextTwoWorkingDays: false,
-    curfewTimes: [
+    weeklyCurfewTimes: [
       {
         fromTime: '20:00:00',
         fromDay: 'MONDAY',

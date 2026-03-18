@@ -7,6 +7,7 @@ import { simpleTimeTo24Hour } from '../utils/utils'
 import { User } from '../@types/CvlUserDetails'
 import STANDARD_CURFEW_TIMES from '../routes/initialAppointment/hdc/curfewDefaults'
 import { DAYS } from '../enumeration/days'
+import DailyCurfewTime from '../routes/initialAppointment/hdc/types/dailyCurfewTime'
 
 jest.mock('../data/licenceApiClient')
 
@@ -79,6 +80,23 @@ describe('HDC Service', () => {
     ],
   } as HdcLicenceData
 
+  const differingCurfewTimes = [
+    {
+      sequence: 0,
+      fromDay: 'MONDAY',
+      fromTime: { hour: '08', minute: '00', ampm: 'pm' },
+      untilDay: 'TUESDAY',
+      untilTime: { hour: '06', minute: '00', ampm: 'am' },
+    },
+    {
+      sequence: 1,
+      fromDay: 'TUESDAY',
+      fromTime: { hour: '09', minute: '00', ampm: 'pm' },
+      untilDay: 'WEDNESDAY',
+      untilTime: { hour: '05', minute: '00', ampm: 'am' },
+    },
+  ] as DailyCurfewTime[]
+
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -131,6 +149,58 @@ describe('HDC Service', () => {
         const nextIdx = (idx + 1) % DAYS.length
         expect(row.untilDay).toBe(DAYS[nextIdx])
       })
+    })
+  })
+
+  describe('updateDifferingCurfewTimes', () => {
+    const user = { username: 'joebloggs' } as User
+    const licenceId = 123
+
+    it('should call to update the HDC curfew times with differing times', async () => {
+      await hdcService.updateDifferingCurfewTimes(licenceId, differingCurfewTimes, user)
+
+      const expectedRequest = {
+        weeklyCurfewTimes: [
+          {
+            curfewTimesSequence: 0,
+            fromDay: 'MONDAY',
+            fromTime: '20:00:00',
+            untilDay: 'TUESDAY',
+            untilTime: '06:00:00',
+          },
+          {
+            curfewTimesSequence: 1,
+            fromDay: 'TUESDAY',
+            fromTime: '21:00:00',
+            untilDay: 'WEDNESDAY',
+            untilTime: '05:00:00',
+          },
+        ],
+      }
+
+      expect(licenceApiClient.updateHdcWeeklyCurfewTimes).toHaveBeenCalledWith(licenceId, expectedRequest, user)
+    })
+  })
+
+  describe('buildDifferingCurfewTimesRequest', () => {
+    it('maps DailyCurfewTime array to WeeklyCurfewTimesRequest format', () => {
+      const result = hdcService.buildDifferingCurfewTimesRequest(differingCurfewTimes)
+      expect(result.weeklyCurfewTimes).toEqual([
+        {
+          curfewTimesSequence: 0,
+          fromDay: 'MONDAY',
+          fromTime: '20:00:00',
+          untilDay: 'TUESDAY',
+          untilTime: '06:00:00',
+        },
+        {
+          curfewTimesSequence: 1,
+          fromDay: 'TUESDAY',
+          fromTime: '21:00:00',
+          untilDay: 'WEDNESDAY',
+          untilTime: '05:00:00',
+        },
+      ])
     })
   })
 

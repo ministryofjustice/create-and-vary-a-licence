@@ -1,5 +1,5 @@
 import { Expose, Type } from 'class-transformer'
-import { IsNotEmpty, Validate } from 'class-validator'
+import { IsInt, IsNotEmpty, Validate } from 'class-validator'
 import ValidCurfewTime from '../../../../validators/curfewTimeValidator'
 import { SimpleTime } from '../../../manageConditions/types'
 import type { Day } from '../../../../enumeration/days'
@@ -24,6 +24,8 @@ class DailyCurfewTime {
   untilDay: Day
 
   @Expose()
+  @Type(() => Number)
+  @IsInt()
   @IsNotEmpty()
   sequence: number
 }
