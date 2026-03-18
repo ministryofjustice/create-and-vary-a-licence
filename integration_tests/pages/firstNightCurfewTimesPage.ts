@@ -50,21 +50,19 @@ export default class FirstNightCurfewTimesPage extends Page {
     return this.readTimeByPrefix(this.endPrefix)
   }
 
-  enterFirstNightCurfewStartTime = (time: {
-    hour: string
-    minute: string
-    ampm: string
-  }): FirstNightCurfewTimesPage => {
-    cy.get(`${this.startPrefix}-hour`).type(time.hour)
-    cy.get(`${this.startPrefix}-minute`).type(time.minute)
-    cy.get(`${this.startPrefix}-ampm`).select(time.ampm)
+  private enterTime(prefix: string, time: { hour: string; minute: string; ampm: string }) {
+    cy.get(`${prefix}-hour`).type(time.hour)
+    cy.get(`${prefix}-minute`).type(time.minute)
+    cy.get(`${prefix}-ampm`).select(time.ampm)
+  }
+
+  enterFirstNightCurfewStartTime(time: { hour: string; minute: string; ampm: string }): FirstNightCurfewTimesPage {
+    this.enterTime(this.startPrefix, time)
     return this
   }
 
-  enterFirstNightCurfewEndTime = (time: { hour: string; minute: string; ampm: string }): FirstNightCurfewTimesPage => {
-    cy.get(`${this.endPrefix}-hour`).type(time.hour)
-    cy.get(`${this.endPrefix}-minute`).type(time.minute)
-    cy.get(`${this.endPrefix}-ampm`).select(time.ampm)
+  enterFirstNightCurfewEndTime(time: { hour: string; minute: string; ampm: string }): FirstNightCurfewTimesPage {
+    this.enterTime(this.endPrefix, time)
     return this
   }
 
