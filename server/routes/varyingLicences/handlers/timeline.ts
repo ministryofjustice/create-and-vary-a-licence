@@ -64,7 +64,7 @@ export default class TimelineRoutes {
       showTimeServedImproveServiceBanner:
         showTimeServedImproveServiceBanner &&
         config.timeServed.enabled &&
-        config.timeServed.prisons.includes(licence.prisonCode) &&
+        (config.timeServed.prisons.includes(licence.prisonCode) || config.timeServed.prisons.includes('ALL_PRISONS')) &&
         licence.kind === LicenceKind.TIME_SERVED &&
         licence.statusCode === ACTIVE,
     })
