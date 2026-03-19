@@ -52,15 +52,17 @@ function parseChangelog(markdown) {
     // Everything after the heading line is the description
     const afterHeading = trimmed.slice(headingMatch[0].length).trim()
 
-    // Extract all PR numbers from links like [#123](...) or PR #123
+    // Extract all PR numbers and URLs from links like [#123](https://github.com/.../pull/123)
     const prNumbers = []
-    const prRegex = /\[#(\d+)\]\(https:\/\/github\.com\/ministryofjustice\/hmpps-template-typescript\/pull\/(\d+)\)/g
+    const prUrls = []
+    const prRegex = /\[#(\d+)\]\((https:\/\/github\.com\/ministryofjustice\/hmpps-template-typescript\/pull\/(\d+))\)/g
     let prMatch
     // eslint-disable-next-line no-cond-assign
     while ((prMatch = prRegex.exec(afterHeading)) !== null) {
       const prNum = parseInt(prMatch[1], 10)
       if (!prNumbers.includes(prNum)) {
         prNumbers.push(prNum)
+        prUrls.push(prMatch[2])
       }
     }
 
@@ -73,7 +75,7 @@ function parseChangelog(markdown) {
       .replace(/\n{3,}/g, '\n\n')
       .trim()
 
-    entries.push({ date, title, description, prNumbers })
+    entries.push({ date, title, description, prNumbers, prUrls })
   }
 
   return entries
