@@ -124,7 +124,7 @@ context('Postcode lookup', () => {
       cy.task('stubGetPrisonUserCaseloads', singleCaseload)
       cy.task('stubPutLicenceAppointmentPerson')
       cy.task('stubDeleteAppointmentAddress')
-      cy.task('stubGetProbationer')
+      cy.task('stubGetProbationCase')
       cy.signIn()
     })
 

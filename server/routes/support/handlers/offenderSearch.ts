@@ -35,7 +35,7 @@ export default class OffenderSearchRoutes {
     let deliusRecords: DeliusRecord[]
     let nomisRecords
     if (!_.isEmpty(crn)) {
-      deliusRecords = [await this.probationService.getProbationer(crn)]
+      deliusRecords = await this.probationService.getProbationers([crn])
       nomisRecords = await this.prisonerService
         .searchPrisoners(
           {

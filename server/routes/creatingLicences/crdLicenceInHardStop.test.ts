@@ -48,8 +48,11 @@ beforeEach(() => {
 
   conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([])
 
-  probationService.getProbationer.mockResolvedValue({
+  licenceService.getProbationCase.mockResolvedValue({
     crn: 'X12345',
+    prisonNumber: 'A1234BC',
+    croNumber: '29906/12J',
+    pncNumber: '12/394773H',
   })
   probationService.getResponsibleCommunityManager.mockResolvedValue({
     code: 'X12345',
