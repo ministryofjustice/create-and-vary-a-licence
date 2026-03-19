@@ -3440,4 +3440,20 @@ export default {
       },
     })
   },
+
+  stubGetProbationCase: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/caseload/probation-case/.+`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          crn: 'X2345',
+        },
+      },
+    })
+  },
 }

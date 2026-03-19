@@ -25,10 +25,6 @@ export default class DeliusClient extends RestClient {
     return (await this.post({ path: '/probation-case', data: crnOrNomisIds })) as Promise<DeliusRecord[]>
   }
 
-  async getCase(crnOrNomisId: string): Promise<DeliusRecord> {
-    return (await this.get({ path: `/probation-case/${crnOrNomisId}`, return404: true })) as Promise<DeliusRecord>
-  }
-
   async getResponsibleCommunityManager(crnOrNomisId: string): Promise<DeliusManager> {
     return (await this.get({
       path: `/probation-case/${crnOrNomisId}/responsible-community-manager`,
