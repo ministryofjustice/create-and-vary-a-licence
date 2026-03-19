@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express'
 import ChangeTeamRoutes from './changeTeam'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
+import { createRequestAndResponse, createProbationUser } from '../../../testUtils/handlerTestUtils'
 
 const comCaseloadService = new ComCaseloadService(null, null) as jest.Mocked<ComCaseloadService>
 
@@ -8,9 +8,6 @@ jest.mock('../../../services/lists/comCaseloadService')
 
 describe('Route Handlers - ChangeLocationRoutes', () => {
   const handler = new ChangeTeamRoutes(comCaseloadService, 'create')
-  let req: Request
-  let res: Response
-  let next: NextFunction
 
   const probationTeams = [
     { code: 'ABC', label: 'Team One', count: 0 },
@@ -19,25 +16,6 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
   ]
 
   beforeEach(() => {
-    res = {
-      locals: {
-        user: {
-          probationTeams,
-        },
-      },
-      render: jest.fn(),
-      redirect: jest.fn(),
-    } as unknown as Response
-
-    req = {
-      session: { teamSelection: null },
-      body: { teams: [] },
-      query: {},
-      route: {
-        path: '/licence/create/caseload/change-team',
-      },
-    } as unknown as Request
-
     comCaseloadService.getComReviewCount.mockResolvedValue({
       myCount: 1,
       teams: [
@@ -49,7 +27,16 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
 
   describe('GET', () => {
     it('Should list all teams with no selected team', async () => {
+      const { req, res, next } = createRequestAndResponse({
+        req: {
+          session: { teamSelection: null },
+          route: { path: '/licence/create/caseload/change-team' },
+        },
+        res: { user: createProbationUser({ probationTeams }) },
+      })
+
       await handler.GET()(req, res, next)
+
       expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
         probationTeamsWithCount: probationTeams,
         checked: null,
@@ -60,8 +47,16 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     })
 
     it('Should list all teams with active team', async () => {
-      req.session.teamSelection = ['ABCD']
+      const { req, res, next } = createRequestAndResponse({
+        req: {
+          session: { teamSelection: ['ABCD'] },
+          route: { path: '/licence/create/caseload/change-team' },
+        },
+        res: { user: createProbationUser({ probationTeams }) },
+      })
+
       await handler.GET()(req, res, next)
+
       expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
         backLinkHref: '/licence/create/caseload?view=team',
         probationTeamsWithCount: probationTeams,
@@ -72,8 +67,16 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     })
 
     it('Should redirect to caseload page if number of user teams is one', async () => {
-      res.locals.user.probationTeams = [{ code: 'ABC', label: 'Team One' }]
+      const { req, res, next } = createRequestAndResponse({
+        req: {
+          session: { teamSelection: null },
+          route: { path: '/licence/create/caseload/change-team' },
+        },
+        res: { user: createProbationUser({ probationTeams: [{ code: 'ABC', label: 'Team One' }] }) },
+      })
+
       await handler.GET()(req, res, next)
+
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/caseload')
     })
 
@@ -85,7 +88,17 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
           { teamCode: 'teamB', count: 1 },
         ],
       })
+
+      const { req, res, next } = createRequestAndResponse({
+        req: {
+          session: { teamSelection: null },
+          route: { path: '/licence/create/caseload/change-team' },
+        },
+        res: { user: createProbationUser({ probationTeams }) },
+      })
+
       await handler.GET()(req, res, next)
+
       expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
         probationTeamsWithCount: probationTeams,
         checked: null,
@@ -96,10 +109,17 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     })
 
     it('Should display team case count', async () => {
-      const handler = new ChangeTeamRoutes(comCaseloadService, 'vary')
-      req.route.path = '/licence/vary/caseload/change-team'
-      req.session.teamSelection = ['ABCD']
-      await handler.GET()(req, res, next)
+      const varyHandler = new ChangeTeamRoutes(comCaseloadService, 'vary')
+      const { req, res, next } = createRequestAndResponse({
+        req: {
+          session: { teamSelection: ['ABCD'] },
+          route: { path: '/licence/vary/caseload/change-team' },
+        },
+        res: { user: createProbationUser({ probationTeams }) },
+      })
+
+      await varyHandler.GET()(req, res, next)
+
       expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
         backLinkHref: '/licence/vary/caseload?view=team',
         probationTeamsWithCount: [
@@ -116,13 +136,30 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
 
   describe('POST', () => {
     it('Should accept valid Team Code and redirect to team caseload page', async () => {
-      req.body.teams = ['ABCDE']
+      const { req, res, next } = createRequestAndResponse({
+        req: {
+          session: { teamSelection: null },
+          body: { teams: ['ABCDE'] },
+          route: { path: '/licence/create/caseload/change-team' },
+        },
+        res: { user: createProbationUser({ probationTeams }) },
+      })
+
       await handler.POST()(req, res, next)
       expect(req.session.teamSelection).toEqual(['ABCDE'])
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/caseload?view=team')
     })
 
-    it('Should not accept invalid Team Code and display error message', async () => {
+    it('Should not accept missing Team Code and display error message', async () => {
+      const { req, res, next } = createRequestAndResponse({
+        req: {
+          session: { teamSelection: null },
+          body: { teams: [] },
+          route: { path: '/licence/create/caseload/change-team' },
+        },
+        res: { user: createProbationUser({ probationTeams }) },
+      })
+
       await handler.POST()(req, res, next)
       expect(req.session.teamSelection).toEqual(null)
       expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
