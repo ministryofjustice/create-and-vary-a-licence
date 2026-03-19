@@ -27,6 +27,7 @@ import type {
   LicenceSummary,
   NotifyRequest,
   PrisonerWithCvlFields,
+  ProbationCase,
   ReferVariationRequest,
   StatusUpdateRequest,
   UpcomingReleasesWithMonitoringConditionsResponse,
@@ -449,6 +450,10 @@ export default class LicenceService {
 
   async getPrisonerDetail(nomsId: string, user: User): Promise<PrisonerWithCvlFields> {
     return this.licenceApiClient.getPrisonerDetail(nomsId, user)
+  }
+
+  async getProbationCase(nomsId: string, user: User): Promise<ProbationCase> {
+    return this.licenceApiClient.getProbationCase(nomsId, user)
   }
 
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {

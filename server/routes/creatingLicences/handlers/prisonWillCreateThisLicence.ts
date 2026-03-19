@@ -2,13 +2,9 @@ import { Request, Response } from 'express'
 import moment from 'moment'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
-import ProbationService from '../../../services/probationService'
 
 export default class PrisonWillCreateThisLicenceRoutes {
-  constructor(
-    private readonly licenceService: LicenceService,
-    private readonly probationService: ProbationService,
-  ) {}
+  constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { nomisId } = req.params
@@ -22,7 +18,7 @@ export default class PrisonWillCreateThisLicenceRoutes {
       deliusRecord,
     ] = await Promise.all([
       this.licenceService.getPrisonerDetail(nomisId, user),
-      this.probationService.getProbationer(nomisId),
+      this.licenceService.getProbationCase(nomisId, user),
     ])
 
     const backLink = req.session.returnToCase || '/licence/create/caseload'

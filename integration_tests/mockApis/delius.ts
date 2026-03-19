@@ -3,22 +3,6 @@ import { stubFor } from '../wiremock'
 import { DeliusManager } from '../../server/@types/deliusClientTypes'
 
 export default {
-  stubGetProbationer: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/delius-api/probation-case/.*`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          crn: 'X2345',
-        },
-      },
-    })
-  },
-
   stubGetProbationers: (): SuperAgentRequest => {
     return stubFor({
       request: {

@@ -150,7 +150,7 @@ export default defineConfig({
 
         stubGetCaseAccessDetails: licence.stubGetCaseAccessDetails,
         stubCheckComCaseAccess: licence.stubCheckComCaseAccess,
-        stubGetProbationer: delius.stubGetProbationer,
+        stubGetProbationCase: licence.stubGetProbationCase,
         stubGetProbationers: delius.stubGetProbationers,
         stubGetStaffDetails: delius.stubGetStaffDetails,
         stubGetStaffDetailsByStaffCode: delius.stubGetStaffDetailsByStaffCode,

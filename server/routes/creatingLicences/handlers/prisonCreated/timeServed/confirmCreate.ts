@@ -25,7 +25,7 @@ export default class ConfirmCreateRoutes {
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
     try {
-      await this.probationService.getProbationer(nomisId)
+      await this.licenceService.getProbationCase(nomisId, user)
     } catch (e) {
       logger.info(`Probation record not found for nomisId ${nomisId}: ${e.message}`)
       return res.redirect(`/licence/time-served/create/nomisId/${nomisId}/ndelius-missing-error`)

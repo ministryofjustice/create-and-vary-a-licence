@@ -50,6 +50,7 @@ import type {
   PrisonCaseAdminSearchResult,
   PrisonerWithCvlFields,
   PrisonUserSearchRequest,
+  ProbationCase,
   ProbationSearchRequest,
   ReferVariationRequest,
   StatusUpdateRequest,
@@ -584,6 +585,13 @@ export default class LicenceApiClient extends RestClient {
       { path: `/prisoner-search/nomisid/${nomsId}` },
       { username: user.username },
     )) as Promise<PrisonerWithCvlFields>
+  }
+
+  async getProbationCase(nomsId: string, user: User): Promise<ProbationCase> {
+    return (await this.get(
+      { path: `/caseload/probation-case/${nomsId}` },
+      { username: user.username },
+    )) as Promise<ProbationCase>
   }
 
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {

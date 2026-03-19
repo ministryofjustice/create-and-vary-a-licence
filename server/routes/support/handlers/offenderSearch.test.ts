@@ -37,10 +37,12 @@ describe('Route Handlers - Offender search', () => {
         crn: 'X1234',
       }
 
-      probationService.getProbationer.mockResolvedValue({
-        crn: 'X1234',
-        nomisId: 'ABC123',
-      })
+      probationService.getProbationers.mockResolvedValue([
+        {
+          crn: 'X1234',
+          nomisId: 'ABC123',
+        },
+      ])
       prisonerService.searchPrisoners.mockResolvedValue([
         {
           prisonerNumber: 'ABC123',
