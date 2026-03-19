@@ -381,6 +381,33 @@ describe('Route Handlers - Timeline', () => {
         }),
       )
     })
+
+    it('should show the time served improve service banner when config contains ALL_PRISONS but licence prison code is not included', async () => {
+      config.timeServed.enabled = true
+      config.timeServed.prisons = ['LEI', 'ALL_PRISONS']
+      res = {
+        ...commonRes,
+        locals: {
+          licence: {
+            id: 1,
+            kind: LicenceKind.TIME_SERVED,
+            prisonCode: 'MDI',
+            statusCode: LicenceStatus.ACTIVE,
+            isReviewNeeded: false,
+          },
+          user: commonUser,
+        },
+      } as unknown as Response
+      ;(req.flash as jest.Mock).mockReturnValue(['true'])
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/vary/timeline',
+        expect.objectContaining({
+          showTimeServedImproveServiceBanner: true,
+        }),
+      )
+    })
   })
 
   describe('POST', () => {
