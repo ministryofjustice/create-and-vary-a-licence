@@ -1,8 +1,8 @@
-import { Request, Response } from 'express'
 import PrisonWillCreateThisLicenceRoutes from './prisonWillCreateThisLicence'
 import LicenceService from '../../../services/licenceService'
 import ProbationService from '../../../services/probationService'
 import { PrisonerWithCvlFields } from '../../../@types/licenceApiClientTypes'
+import { createRequestAndResponse, createUser } from '../../../testUtils/handlerTestUtils'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
@@ -11,31 +11,6 @@ jest.mock('../../../services/probationService')
 
 describe('Route Handlers - Create Licence - Prison will create licence', () => {
   const handler = new PrisonWillCreateThisLicenceRoutes(licenceService, probationService)
-  let req: Request
-  let res: Response
-
-  beforeEach(() => {
-    req = {
-      params: {
-        nomisId: 'ABC123',
-      },
-      session: {
-        returnToCase: 'some-back-link',
-      },
-      user: {
-        username: 'joebloggs',
-      },
-    } as unknown as Request
-
-    res = {
-      render: jest.fn(),
-      locals: {
-        user: {
-          username: 'joebloggs',
-        },
-      },
-    } as unknown as Response
-  })
 
   afterEach(() => {
     jest.resetAllMocks()
@@ -79,6 +54,11 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
     })
 
     it('should render view', async () => {
+      const { req, res } = createRequestAndResponse({
+        req: { params: { nomisId: 'ABC123' }, session: { returnToCase: 'some-back-link' } },
+        res: { user: createUser({ username: 'joebloggs' }) },
+      })
+
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/prisonWillCreateThisLicence', {
         licence: {
@@ -90,20 +70,18 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           hardStopKind: 'HARD_STOP',
         },
         omuEmail: 'moorland@prison.gov.uk',
-        backLink: req.session.returnToCase,
+        backLink: 'some-back-link',
         licenceType: 'AP',
       })
     })
 
     it('should render default return to caseload link if no session state', async () => {
-      const reqWithEmptySession = {
-        params: {
-          licenceId: '1',
-        },
-        session: {},
-      } as unknown as Request
+      const { req, res } = createRequestAndResponse({
+        req: { params: { nomisId: 'ABC123' }, session: {} },
+        res: { user: createUser({ username: 'joebloggs' }) },
+      })
 
-      await handler.GET(reqWithEmptySession, res)
+      await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/prisonWillCreateThisLicence', {
         licence: {
           licenceStartDate: '19/11/2022',
@@ -144,6 +122,11 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
         },
       } as PrisonerWithCvlFields)
 
+      const { req, res } = createRequestAndResponse({
+        req: { params: { nomisId: 'ABC123' }, session: { returnToCase: 'some-back-link' } },
+        res: { user: createUser({ username: 'joebloggs' }) },
+      })
+
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/prisonWillCreateThisLicence', {
         licence: {
@@ -155,7 +138,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           hardStopKind: 'TIME_SERVED',
         },
         omuEmail: 'moorland@prison.gov.uk',
-        backLink: req.session.returnToCase,
+        backLink: 'some-back-link',
         licenceType: 'AP',
       })
     })
