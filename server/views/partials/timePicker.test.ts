@@ -155,4 +155,26 @@ describe('View Partials - Time Picker', () => {
     expect($('#timePicker-minute').hasClass('govuk-input--error')).toBe(false)
     expect($('#timePicker-ampm').hasClass('govuk-select--error')).toBe(false)
   })
+
+  it('retrieves hour value without leading 0', () => {
+    const $ = render({
+      options: {
+        id: 'startTime',
+        formResponses: { hour: '09' },
+      },
+    })
+
+    expect($('#startTime-hour').val()).toEqual('9')
+  })
+
+  it('retrives hour value', () => {
+    const $ = render({
+      options: {
+        id: 'startTime',
+        formResponses: { hour: '10' },
+      },
+    })
+
+    expect($('#startTime-hour').val()).toEqual('10')
+  })
 })
