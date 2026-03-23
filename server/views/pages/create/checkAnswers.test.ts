@@ -568,4 +568,31 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
     expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
   })
+
+  it('should render Calculate release date label', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: '06/12/2026' },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('.hdcad').text()).toMatch('CALCULATE RELEASE DATE')
+  })
+
+  it('should not render Calculate release date label', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: null },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('.hdcad').text()).not.toMatch('CALCULATE RELEASE DATE')
+  })
+
+  it('should render HDC label', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('.curfew-address').text()).toMatch('HDC')
+  })
 })

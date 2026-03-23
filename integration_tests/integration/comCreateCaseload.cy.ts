@@ -13,6 +13,7 @@ context('View COM create caseload', () => {
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubFeComponents')
     cy.task('stubCheckComCaseAccess')
+    cy.task('stubGetProbationCase')
     cy.signIn()
   })
 

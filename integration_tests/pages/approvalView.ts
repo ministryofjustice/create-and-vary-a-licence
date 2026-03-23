@@ -30,6 +30,8 @@ export default class ApprovalViewPage extends Page {
 
   public weeklyCurfewTimes = '.weekly-curfew-times'
 
+  public homeDetentionCurfewActualDate = '.hdcad'
+
   getHideAllSection = () => {
     return cy.get('.govuk-accordion__show-all-text')
   }

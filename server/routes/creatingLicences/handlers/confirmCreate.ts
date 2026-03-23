@@ -18,7 +18,7 @@ export default class ConfirmCreateRoutes {
 
     const [nomisRecord, deliusRecord] = await Promise.all([
       this.licenceService.getPrisonerDetail(nomisId, user),
-      this.probationService.getProbationer(nomisId),
+      this.licenceService.getProbationCase(nomisId, user),
     ])
 
     if (nomisRecord.cvl.isInHardStopPeriod) {
