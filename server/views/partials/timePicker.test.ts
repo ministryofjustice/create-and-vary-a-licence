@@ -156,7 +156,7 @@ describe('View Partials - Time Picker', () => {
     expect($('#timePicker-ampm').hasClass('govuk-select--error')).toBe(false)
   })
 
-  it('retrieves hour value without leading 0', () => {
+  it('renders hour value without a leading zero', () => {
     const $ = render({
       options: {
         id: 'startTime',
@@ -167,7 +167,7 @@ describe('View Partials - Time Picker', () => {
     expect($('#startTime-hour').val()).toEqual('9')
   })
 
-  it('retrives hour value', () => {
+  it('renders hour value with a trailing zero', () => {
     const $ = render({
       options: {
         id: 'startTime',
