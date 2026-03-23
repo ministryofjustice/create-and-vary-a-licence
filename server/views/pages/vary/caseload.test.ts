@@ -2,9 +2,8 @@ import fs from 'fs'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 
-import config from '../../../config'
-
 const render = templateRenderer(fs.readFileSync('server/views/pages/vary/caseload.njk').toString())
+const nameLinkSelector = '#name-link-1'
 
 describe('Caseload', () => {
   it('should display Active badge', () => {
@@ -237,7 +236,6 @@ describe('Caseload', () => {
   })
 
   it('should render name as plain text for LAO users', () => {
-    config.laoEnabled = true
     const $ = render({
       caseload: [
         {
@@ -259,13 +257,12 @@ describe('Caseload', () => {
         ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
       },
     })
-    expect($('#name-link-1').length).toBe(0)
+    expect($(nameLinkSelector).length).toBe(0)
     expect($('#name-1').text()).toContain('Access restricted on NDelius')
     expect($('.govuk-hint').text()).toContain('CRN: A111111')
   })
 
   it('should render name as link for non-LAO users when LAO is enabled', () => {
-    config.laoEnabled = true
     const $ = render({
       caseload: [
         {
@@ -287,14 +284,12 @@ describe('Caseload', () => {
         ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
       },
     })
-    expect($('#name-link-1').attr('href')).toBe('/licence/vary/id/3/timeline')
-    expect($('#name-link-1').text()).toContain('Test Person')
+    expect($(nameLinkSelector).attr('href')).toBe('/licence/vary/id/3/timeline')
+    expect($(nameLinkSelector).text()).toContain('Test Person')
     expect($('.govuk-hint').text()).toContain('CRN: Z882661')
   })
 
   it('should apply redactIfLao filter to licence type for LAO cases', () => {
-    config.laoEnabled = true
-
     const $ = render({
       caseload: [
         {
@@ -320,7 +315,6 @@ describe('Caseload', () => {
   })
 
   it('should apply redactIfLao filter to probation practitioner for LAO cases', () => {
-    config.laoEnabled = true
     const $ = render({
       caseload: [
         {
@@ -346,8 +340,6 @@ describe('Caseload', () => {
   })
 
   it('should apply redactIfLao filter to release date for LAO cases', () => {
-    config.laoEnabled = true
-
     const $ = render({
       caseload: [
         {
@@ -373,8 +365,6 @@ describe('Caseload', () => {
   })
 
   it('should apply redactIfLao filter to licence status for LAO cases', () => {
-    config.laoEnabled = true
-
     const $ = render({
       caseload: [
         {
@@ -400,8 +390,6 @@ describe('Caseload', () => {
   })
 
   it('should not redact information for non-LAO cases', () => {
-    config.laoEnabled = true
-
     const $ = render({
       caseload: [
         {
@@ -430,7 +418,6 @@ describe('Caseload', () => {
   })
 
   it('should display multiple cases with mixed LAO and non-LAO offenders', () => {
-    config.laoEnabled = true
     const $ = render({
       caseload: [
         {
@@ -474,7 +461,7 @@ describe('Caseload', () => {
     expect($('tbody .govuk-table__row').length).toBe(2)
 
     expect($('#licence-type-1').text().trim()).toBe('Restricted')
-    expect($('#name-link-1').length).toBe(0)
+    expect($(nameLinkSelector).length).toBe(0)
     expect($('#name-1').text()).toContain('Access restricted on NDelius')
 
     expect($('#licence-type-2').text().trim()).not.toBe('Restricted')

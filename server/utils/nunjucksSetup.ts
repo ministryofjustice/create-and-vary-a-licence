@@ -450,7 +450,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('formatAddressTitleCase', (address, isMultiple) => formatAddressTitleCase(address, isMultiple))
 
   njkEnv.addFilter('redactIfLao', (value: string, offender: { isRestricted?: boolean }): string => {
-    if (config.laoEnabled && offender?.isRestricted) {
+    if (offender?.isRestricted) {
       return 'Restricted'
     }
     return value
@@ -467,7 +467,6 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('timeServedEnabled', config.timeServed.enabled)
   njkEnv.addGlobal('timeServedSurveyUrl', config.timeServed.surveyUrl)
   njkEnv.addGlobal('timeServedServiceNowUrl', config.timeServed.serviceNowUrl)
-  njkEnv.addGlobal('laoEnabled', config.laoEnabled)
 
   return njkEnv
 }

@@ -5,7 +5,6 @@ import statusConfig from '../../../../licences/licenceStatus'
 
 import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 import LicenceKind from '../../../../enumeration/LicenceKind'
-import config from '../../../../config'
 
 interface ProbationPractitioner {
   name: string
@@ -897,7 +896,6 @@ describe('View Probation Search Results', () => {
   })
 
   it('should display LAO offender with restricted information in people in prison tab', () => {
-    config.laoEnabled = true
     const $ = render({
       statusConfig,
       peopleInPrison: [
@@ -943,7 +941,6 @@ describe('View Probation Search Results', () => {
   })
 
   it('should display LAO offender with restricted information in people on probation tab', () => {
-    config.laoEnabled = true
     const $ = render({
       statusConfig,
       peopleInPrison: [],
@@ -988,7 +985,6 @@ describe('View Probation Search Results', () => {
   })
 
   it('should not display probation practitioner name as link when LAO and is on probation', () => {
-    config.laoEnabled = true
     const $ = render({
       statusConfig,
       peopleInPrison: [],
