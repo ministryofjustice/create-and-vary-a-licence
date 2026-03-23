@@ -1,13 +1,40 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "moj/components/badge/macro.njk" import mojBadge %}
 
-{% macro hdcCurfewTimes(hdcLicenceData) %}
+{% macro hdcCurfewTimes(licence, hdcLicenceData) %}
     {% set addressLine2Html = hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if hdcLicenceData.curfewAddress.addressLine2 | length%}
     {% set countyHtml = hdcLicenceData.curfewAddress.county | escape + ", " if hdcLicenceData.curfewAddress.county | length%}
+    {% set releaseDatesBadge %}
+        {{ mojBadge({
+            text: "CALCULATE RELEASE DATES",
+            classes: "moj-badge--black float-right"
+        }) }}
+    {% endset %}
+    {% set hdcBadge %}
+        {{ mojBadge({
+            text: "HDC",
+            classes: "moj-badge--black float-right"
+        }) }}
+    {% endset %}
 
+    {% set hdcad %}
+        {% if licence.homeDetentionCurfewActualDate %}
+            {{ licence.homeDetentionCurfewActualDate | datetimeToDate }} {{ releaseDatesBadge | safe }}
+        {% else %}
+            Not entered yet
+        {% endif %}
+    {% endset %}
 
     {{ govukSummaryList({
         attributes: {'data-qa': 'hdc-curfew-details'},
         rows: [
+            {
+                key: { text: 'HDCAD' },
+                value: {
+                    html: hdcad,
+                    classes: "hdcad"
+                }
+            },
             {
                 key: {text: 'Address'},
                 value: {
@@ -15,7 +42,7 @@
                           addressLine2Html +
                           hdcLicenceData.curfewAddress.townOrCity | escape + ", " +
                           countyHtml +
-                          hdcLicenceData.curfewAddress.postcode | escape + "</p>",
+                          hdcLicenceData.curfewAddress.postcode | escape + hdcBadge + "</p>",
                     classes: "curfew-address"
                 }
             },

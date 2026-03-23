@@ -27,7 +27,7 @@
                             maxlength="2"
                             id="{{ params.id }}-hour"
                             name="{{ params.id }}[hour]" type="text" pattern="[0-9]*" inputmode="numeric"
-                            value="{{ params.formResponses['hour'] }}">
+                            value="{% if params.formResponses['hour'] %}{{ params.formResponses['hour'] | int }}{% endif %}">
                     </div>
                 </div>
                 <div class="govuk-date-input__item">
