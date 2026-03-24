@@ -430,7 +430,6 @@ describe('Create a Licence Views - Caseload', () => {
   })
 
   it('should display LAO offender with restricted information and no clickable links', () => {
-    config.laoEnabled = true
     const $ = render({
       statusConfig,
       caseload: [
@@ -463,40 +462,7 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#licence-status-1').text().trim()).toBe('Restricted')
   })
 
-  it('should display normal offender information when laoEnabled is false', () => {
-    const $ = render({
-      statusConfig,
-      caseload: [
-        {
-          name: 'Test Person',
-          crnNumber: 'X111111',
-          prisonerNumber: 'ABC123',
-          releaseDate: '03 August 2022',
-          probationPractitioner: {
-            name: 'Joe Bloggs',
-            staffCode: 'ABC123',
-            allocated: true,
-          },
-          isClickable: true,
-          licenceStatus: LicenceStatus.IN_PROGRESS,
-          createLink: '/licence/create/id/1/check-your-answers',
-          licenceType: 'AP',
-          isRestricted: false,
-        },
-      ],
-    })
-
-    expect($('#name-1 > .caseload-offender-name > a').length).toBe(1)
-    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
-    expect($('#licence-type-1').text().trim()).toBe('Standard determinate')
-    expect($('#probation-practitioner-1 > a').length).toBe(1)
-    expect($('#licence-status-1 > .status-badge').length).toBe(1)
-    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
-  })
-
   it('should display normal offender information when isRestricted is false', () => {
-    config.laoEnabled = true
-
     const $ = render({
       statusConfig,
       caseload: [
@@ -529,7 +495,6 @@ describe('Create a Licence Views - Caseload', () => {
   })
 
   it('should handle mixed LAO and non-LAO offenders in the same caseload', () => {
-    config.laoEnabled = true
     const $ = render({
       statusConfig,
       caseload: [
