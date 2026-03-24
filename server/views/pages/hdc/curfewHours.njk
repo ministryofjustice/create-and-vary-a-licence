@@ -9,7 +9,8 @@
 
 {% set pageTitle = applicationName + " - Create a licence - Curfew Hours" %}
 {% set pageId = "curfew-hours" %}
-{% set backLinkHref = "" %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/hdc/do-hdc-curfew-hours-apply-daily" %}
+
 {% macro renderTimePicker(id, labelText, formResponses) %}
     {{ timePicker({
         name: id,
