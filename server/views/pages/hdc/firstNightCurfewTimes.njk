@@ -18,7 +18,7 @@
         id: id,
         label: {
         text: labelText,
-        classes: "govuk-!-font-weight-bold"
+        classes: "govuk-!-font-weight-bold govuk-!-margin-bottom-0"
         },
         errorMessage: validationErrors | findError(id),
         formResponses: formResponses[id] or firstNightCurfewTimes[id],
@@ -30,10 +30,10 @@
 
 {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-2">
+        <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Enter first night curfew hours</h1>
         </div>
-        <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-3">
+        <div class="govuk-grid-column-three-quarters govuk-!-margin-top-5 govuk-!-margin-bottom-5">
             <p class="govuk-hint govuk-!-font-size-18">Standard first night curfew hours are 3pm on the day of release to 7am the following day.</p>
         </div>
         <div class="govuk-grid-column-three-quarters">
