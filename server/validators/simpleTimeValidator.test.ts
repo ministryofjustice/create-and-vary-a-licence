@@ -61,6 +61,12 @@ describe('Validators - ValidSimpleTime', () => {
     expect(validator.defaultMessage()).toBe('Enter a minute between 00 and 59')
   })
 
+  it('should fail validation with an empty ampm', () => {
+    time.ampm = <AmPm>''
+    expect(validator.validate(time)).toBe(false)
+    expect(validator.defaultMessage()).toBe('Select either am or pm')
+  })
+
   it('should return null as default message', () => {
     validator.validate(time)
     expect(validator.defaultMessage()).toBe(null)
