@@ -670,7 +670,7 @@ export default class LicenceApiClient extends RestClient {
     const isAdminUser = user.userRoles.includes(authRole.SUPPORT)
     return (await this.get(
       {
-        path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load?isAdminUser=${isAdminUser}`,
+        path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load${isAdminUser ? '?isAdminUser=true' : ''}`,
       },
       { username: user.username },
     )) as Promise<ComCreateCase[]>
@@ -685,9 +685,10 @@ export default class LicenceApiClient extends RestClient {
 
   async getTeamCreateCaseload(teamCaseloadRequest: TeamCaseloadRequest, user: User): Promise<ComCreateCase[]> {
     const isAdminUser = user.userRoles.includes(authRole.SUPPORT)
+
     return (await this.post(
       {
-        path: `/caseload/com/team/create-case-load?isAdminUser=${isAdminUser}`,
+        path: `/caseload/com/team/create-case-load${isAdminUser ? '?isAdminUser=true' : ''}`,
         data: teamCaseloadRequest,
       },
       { username: user.username },
