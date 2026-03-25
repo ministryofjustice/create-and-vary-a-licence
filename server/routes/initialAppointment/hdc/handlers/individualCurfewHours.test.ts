@@ -51,16 +51,16 @@ describe('IndividualCurfewHoursRoutes', () => {
 
   const handler = new IndividualCurfewHoursRoutes(hdcService)
 
-    const curfewTimesDisplayObject = {
+  const curfewTimesDisplayObject = {
     0: {
-        fromTime: { hour: '08', minute: '00', ampm: 'pm' },
-        fromDay: 'MONDAY',
-        untilTime: { hour: '06', minute: '00', ampm: 'am' },
-        untilDay: 'TUESDAY',
-        sequence: 0,
-      } as DailyCurfewTime,
+      fromTime: { hour: '08', minute: '00', ampm: 'pm' },
+      fromDay: 'MONDAY',
+      untilTime: { hour: '06', minute: '00', ampm: 'am' },
+      untilDay: 'TUESDAY',
+      sequence: 0,
+    } as DailyCurfewTime,
   }
-  
+
   hdcService.buildCurfewTimesDisplayObject.mockReturnValue(curfewTimesDisplayObject)
 
   describe('GET', () => {
