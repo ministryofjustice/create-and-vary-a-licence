@@ -199,10 +199,10 @@ context('Create an HDC licence', () => {
       cy.visit('licence/create/id/1/hdc/first-night-curfew-hours')
       const firstNightCurfewTimesPage = new FirstNightCurfewTimesPage()
       firstNightCurfewTimesPage.getCurfewStartTime().then(time => {
-        expect(time).to.eq('03 00 pm')
+        expect(time).to.eq('3 00 pm')
       })
       firstNightCurfewTimesPage.getCurfewEndTime().then(time => {
-        expect(time).to.eq('07 00 am')
+        expect(time).to.eq('7 00 am')
       })
     })
 
@@ -221,10 +221,10 @@ context('Create an HDC licence', () => {
       cy.visit('licence/create/id/1/hdc/first-night-curfew-hours')
       const firstNightCurfewTimesPage = new FirstNightCurfewTimesPage()
       firstNightCurfewTimesPage.getCurfewStartTime().then(time => {
-        expect(time).to.eq('09 00 pm')
+        expect(time).to.eq('9 00 pm')
       })
       firstNightCurfewTimesPage.getCurfewEndTime().then(time => {
-        expect(time).to.eq('07 00 am')
+        expect(time).to.eq('7 00 am')
       })
     })
   })
