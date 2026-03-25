@@ -14,7 +14,7 @@ export default class ValidSimpleTime implements ValidatorConstraintInterface {
     if (this.isBlank()) return 'Enter a time'
     if (!this.isValidHour()) return 'Enter an hour between 1 and 12'
     if (!this.isValidMinute()) return 'Enter a minute between 00 and 59'
-    if (!this.isValidAmPm()) return 'Select either Am or Pm'
+    if (!this.isValidAmPm()) return 'Select either am or pm'
     return null
   }
 
