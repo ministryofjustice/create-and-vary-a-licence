@@ -80,6 +80,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
 import logger from '../../logger'
 import { isVariation } from '../utils/utils'
+import authRole from '../enumeration/authRole'
 
 export default class LicenceApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -666,9 +667,10 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async getStaffCreateCaseload(user: User): Promise<ComCreateCase[]> {
+    const isAdminUser = user.userRoles.includes(authRole.SUPPORT)
     return (await this.get(
       {
-        path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load`,
+        path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load?isAdminUser=${isAdminUser}`,
       },
       { username: user.username },
     )) as Promise<ComCreateCase[]>
@@ -682,9 +684,10 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async getTeamCreateCaseload(teamCaseloadRequest: TeamCaseloadRequest, user: User): Promise<ComCreateCase[]> {
+    const isAdminUser = user.userRoles.includes(authRole.SUPPORT)
     return (await this.post(
       {
-        path: `/caseload/com/team/create-case-load`,
+        path: `/caseload/com/team/create-case-load?isAdminUser=${isAdminUser}`,
         data: teamCaseloadRequest,
       },
       { username: user.username },
