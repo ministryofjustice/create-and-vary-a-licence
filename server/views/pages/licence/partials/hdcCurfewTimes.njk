@@ -1,5 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "moj/components/badge/macro.njk" import mojBadge %}
+{% from "./nonUniformCurfewTimesTable.njk" import nonUniformCurfewTimesTable %}
 
 {% macro hdcCurfewTimes(licence, hdcLicenceData) %}
     {% set addressLine2Html = hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if hdcLicenceData.curfewAddress.addressLine2 | length%}
@@ -68,25 +69,6 @@
     }) }}
 
     {% if not hdcLicenceData.allCurfewTimesEqual %}
-        {% set curfewRows = []%}
-        {% for curfewTime in hdcLicenceData.weeklyCurfewTimes %}
-            {% set curfewRows = (curfewRows.push(
-                {
-                    key: {
-                        text: curfewTime.fromDay | titlecase
-                    },
-                    value: {
-                        text: curfewTime.fromTime | localTimeTo12h + " to " + curfewTime.untilTime | localTimeTo12h
-                    }
-                }
-            ), curfewRows) %}
-        {% endfor %}
-
-        <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-7 govuk-heading-m">Curfew hours</h3>
-
-        {{ govukSummaryList({
-            attributes: {'data-qa': 'curfew-times-not-equal'},
-            rows: curfewRows
-        }) }}
+        {{ nonUniformCurfewTimesTable(hdcLicenceData.weeklyCurfewTimes) }}
     {% endif %}
 {% endmacro %}
