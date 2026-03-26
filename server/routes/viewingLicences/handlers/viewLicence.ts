@@ -16,6 +16,7 @@ import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
 import HdcService from '../../../services/hdcService'
 import { LicenceKind } from '../../../enumeration'
+import config from '../../../config'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(
@@ -106,6 +107,8 @@ export default class ViewAndPrintLicenceRoutes {
     }
     return res.redirect(`/licence/hard-stop/id/${licenceId}/confirmation`)
   }
+
+  CRDS_CLICK = async (req: Request, res: Response): Promise<void> => res.redirect(config.crdsUrl)
 
   getFormattedLicenceDate(licence: Licence): string {
     let licenceDate
