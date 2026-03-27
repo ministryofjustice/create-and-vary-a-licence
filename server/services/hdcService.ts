@@ -2,6 +2,7 @@ import { User } from '../@types/CvlUserDetails'
 import {
   CurfewTimes as ApiCurfewTimes,
   FirstNightCurfewTimesRequest,
+  HdcLicence,
   HdcLicenceData,
   WeeklyCurfewTimesRequest,
 } from '../@types/licenceApiClientTypes'
@@ -53,6 +54,13 @@ export default class HdcService {
   async updateDifferingCurfewTimes(licenceId: number, curfewTimes: DailyCurfewTime[], user: User): Promise<void> {
     const curfewTimesRequest = this.buildDifferingCurfewTimesRequest(curfewTimes)
     return this.licenceApiClient.updateHdcWeeklyCurfewTimes(licenceId, curfewTimesRequest, user)
+  }
+
+  getCurfewTimes(curfewTimes: ApiCurfewTimes[]): Record<string, DailyCurfewTime> {
+    if (curfewTimes.length === 0) {
+      return this.buildStandardCurfewTimesDisplayObject()
+    }
+    return this.buildCurfewTimesDisplayObject(curfewTimes)
   }
 
   buildWeeklyCurfewTimesRequest = (start: SimpleTime, end: SimpleTime): WeeklyCurfewTimesRequest => {

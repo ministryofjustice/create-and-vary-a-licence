@@ -61,7 +61,7 @@ describe('IndividualCurfewHoursRoutes', () => {
     } as DailyCurfewTime,
   }
 
-  hdcService.buildCurfewTimesDisplayObject.mockReturnValue(curfewTimesDisplayObject)
+  hdcService.getCurfewTimes.mockReturnValue(curfewTimesDisplayObject)
 
   describe('GET', () => {
     it('should render view with form responses', async () => {

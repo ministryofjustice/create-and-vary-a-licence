@@ -9,10 +9,7 @@ export default class IndividualCurfewHoursRoutes {
   GET = async (_req: Request, res: Response): Promise<void> => {
     const { licence }: { licence: HdcLicence } = res.locals
 
-    const curfewTimes =
-      licence.weeklyCurfewTimes.length > 0
-        ? this.hdcService.buildCurfewTimesDisplayObject(licence.weeklyCurfewTimes)
-        : this.hdcService.buildStandardCurfewTimesDisplayObject()
+    const curfewTimes = this.hdcService.getCurfewTimes(licence.weeklyCurfewTimes)
 
     res.render('pages/hdc/individualCurfewHours', { days: DAYS, curfewTimes })
   }

@@ -250,7 +250,7 @@ describe('HDC Service', () => {
     })
   })
 
-  describe('buildCurfewTimes', () => {
+  describe('buildCurfewTimesDisplayObject', () => {
     it('should build form response object from curfew times', () => {
       const curfewTimes = [
         {
@@ -303,7 +303,7 @@ describe('HDC Service', () => {
     })
   })
 
-  describe('buildStandardCurfewHours', () => {
+  describe('buildStandardCurfewTimesDisplayObject', () => {
     it('should build form response object from curfew times', () => {
       expect(hdcService.buildStandardCurfewTimesDisplayObject()).toEqual({
         0: {
@@ -356,6 +356,28 @@ describe('HDC Service', () => {
           sequence: 6,
         },
       })
+    })
+  })
+
+  describe('getCurfewTimes', () => {
+    it('should return standard curfew times display object if no curfew times provided', () => {
+      const result = hdcService.getCurfewTimes([])
+      expect(result).toEqual(hdcService.buildStandardCurfewTimesDisplayObject())
+    })
+
+    it('should return curfew times display object built from provided curfew times', () => {
+      const curfewTimes = [
+        {
+          fromTime: '20:00:00',
+          fromDay: 'MONDAY',
+          untilTime: '06:00:00',
+          untilDay: 'TUESDAY',
+          curfewTimesSequence: 0,
+        },
+      ] as ApiCurfewTimes[]
+
+      const result = hdcService.getCurfewTimes(curfewTimes)
+      expect(result).toEqual(hdcService.buildCurfewTimesDisplayObject(curfewTimes)) 
     })
   })
 })
