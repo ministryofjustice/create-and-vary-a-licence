@@ -69,11 +69,13 @@
         <div class="govuk-grid-column-four-quarters">
             <h1 class="govuk-heading-xl">Licence Status Report</h1>
             <h2 class="govuk-heading-s">{{ countText }}</h2>
+            <p class="govuk-warning-text">This report may take a long time to load. Do not try to download it more than once.</p>
             <div class="govuk-button-group">
                         {{ govukButton({
                             text: "Download CSV",
                             href: "/reports/licence-status-cases/download-csv",
-                            classes: "govuk-button--secondary"
+                            classes: "govuk-button--secondary",
+                            preventDoubleClick: true
                         }) }}
             </div>
         </div>
