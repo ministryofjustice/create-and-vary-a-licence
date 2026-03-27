@@ -28,11 +28,11 @@ generic-service:
 
     LICENCE_WATERMARK: "true"
     DPS_URL: "https://digital-dev.prison.service.justice.gov.uk"
+    CRDS_URL: "https://calculate-release-dates-dev.hmpps.service.justice.gov.uk"
 
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
     MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
-    TIME_SERVED_ENABLED_PRISONS: "MDI, BAI, BNI, WCI, EXI, WDI, IWI, EWI"
 
   namespace_secrets:
     create-and-vary-a-licence-prison-events-sqs-instance-output:

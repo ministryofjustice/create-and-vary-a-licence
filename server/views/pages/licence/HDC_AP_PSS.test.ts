@@ -68,9 +68,9 @@ describe('Print a HDC AP_PSS licence', () => {
           addressTown: 'addressTownOrCity',
           postCode: 'addressPostcode',
         },
-        firstNightCurfewHours: {
-          firstNightFrom: '09:00',
-          firstNightUntil: '17:00',
+        firstNightCurfewTimes: {
+          fromTime: '09:00',
+          untilTime: '17:00',
         },
         weeklyCurfewTimes: [
           {

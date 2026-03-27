@@ -35,6 +35,7 @@ import {
   CreateVariationResponse,
   EditLicenceResponse,
   WeeklyCurfewTimesRequest,
+  FirstNightCurfewTimesRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -543,6 +544,12 @@ describe('Licence API client tests', () => {
     expect(get).toHaveBeenCalledWith({ path: '/prisoner-search/nomisid/G4169UO' }, { username })
   })
 
+  it('should get probation case', async () => {
+    const username = 'admin-user'
+    await licenceApiClient.getProbationCase('G4169UO', { username } as User)
+    expect(get).toHaveBeenCalledWith({ path: '/caseload/probation-case/G4169UO' }, { username })
+  })
+
   describe('Exclusion zone file', () => {
     it('Upload an exclusion zone PDF file', async () => {
       const myUpload = { path: 'test-file' } as Express.Multer.File
@@ -919,7 +926,7 @@ describe('Licence API client tests', () => {
     })
   })
 
-  describe('updateHdcCurfewTimes', () => {
+  describe('updateHdcWeeklyCurfewTimes', () => {
     const user = { username: 'joebloggs' } as User
     const licenceId = 123
 
@@ -948,6 +955,30 @@ describe('Licence API client tests', () => {
     })
   })
 
+  describe('updateHdcFirstNightCurfewTimes', () => {
+    const user = { username: 'joebloggs' } as User
+    const licenceId = 123
+
+    it('should call to update the HDC first night curfew times', async () => {
+      const request = {
+        firstNightCurfewTimes: {
+          fromTime: '00:00:00',
+          untilTime: '00:00:01',
+        },
+      } as FirstNightCurfewTimesRequest
+
+      await licenceApiClient.updateHdcFirstNightCurfewTimes(licenceId, request, user)
+
+      expect(put).toHaveBeenCalledWith(
+        {
+          path: `/licence/id/${licenceId}/hdc-first-night-curfew-times`,
+          data: request,
+        },
+        { username: 'joebloggs' },
+      )
+    })
+  })
+
   describe('getStaffCreateCaseloadHdc', () => {
     const user = { username: 'joebloggs' } as User
 
@@ -958,6 +989,30 @@ describe('Licence API client tests', () => {
         { path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load/hdc` },
         { username: 'joebloggs' },
       )
+    })
+  })
+
+  describe('licence status report cases', () => {
+    it('should call the correct endpoint and return cases', async () => {
+      const aCase = {
+        probationRegion: 'Test Region',
+        prison: 'Test Prison',
+        crn: 'X123456',
+        nomisNumber: 'A1234BC',
+        prisonerName: 'Test Person',
+        status: 'IN_PROGRESS',
+      }
+      // Given
+      jest.mocked(get).mockResolvedValue([aCase])
+
+      // When
+      const result = await licenceApiClient.getLicenceStatusCases()
+
+      // Then
+      expect(get).toHaveBeenCalledWith({
+        path: '/cvl-report/licence-status-cases',
+      })
+      expect(result).toEqual([aCase])
     })
   })
 })

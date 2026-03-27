@@ -24,7 +24,7 @@ export default class IndexPage extends Page {
 
   clickCreateALicence = (isEligibleForEarlyRelease: boolean = false): CaseloadPage => {
     cy.task('stubGetCaseloadItem', { isEligibleForEarlyRelease })
-    cy.task('stubGetProbationer')
+    cy.task('stubGetProbationCase')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetResponsibleCommunityManager')
@@ -38,7 +38,7 @@ export default class IndexPage extends Page {
 
   clickCreateALicenceToEdit = (): CaseloadPage => {
     cy.task('stubGetCaseloadItem', { isEligibleForEarlyRelease: false })
-    cy.task('stubGetProbationer')
+    cy.task('stubGetProbationCase')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubSearchForAddresses')
@@ -56,7 +56,7 @@ export default class IndexPage extends Page {
 
   clickCreateALicenceInHardStop = (): CaseloadPage => {
     cy.task('stubGetCaseloadItemInHardStop')
-    cy.task('stubGetProbationer')
+    cy.task('stubGetProbationCase')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetResponsibleCommunityManager')
@@ -67,7 +67,7 @@ export default class IndexPage extends Page {
 
   clickCreateAPssLicence = (): CaseloadPage => {
     cy.task('stubGetPssCaseloadItem')
-    cy.task('stubGetProbationer')
+    cy.task('stubGetProbationCase')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetResponsibleCommunityManager')
@@ -81,7 +81,7 @@ export default class IndexPage extends Page {
 
   clickCreateALicenceWithLao = (): CaseloadPage => {
     cy.task('stubGetCaseloadItem', { isEligibleForEarlyRelease: false })
-    cy.task('stubGetProbationer')
+    cy.task('stubGetProbationCase')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetResponsibleCommunityManager')

@@ -124,7 +124,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
 
     it('should redirect to ndelius record missing page if Delius record is missing', async () => {
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
-      probationService.getProbationer.mockRejectedValue(new Error('Delius record not found'))
+      licenceService.getProbationCase.mockRejectedValue(new Error('Delius record not found'))
 
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith(

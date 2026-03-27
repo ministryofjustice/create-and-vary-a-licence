@@ -1,5 +1,5 @@
 import { User } from '../@types/CvlUserDetails'
-import { HdcLicenceData, WeeklyCurfewTimesRequest } from '../@types/licenceApiClientTypes'
+import { FirstNightCurfewTimesRequest, HdcLicenceData, WeeklyCurfewTimesRequest } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import CurfewTimes from '../routes/initialAppointment/hdc/types/curfewTimes'
 import { SimpleTime } from '../routes/manageConditions/types'
@@ -19,14 +19,22 @@ export default class HdcService {
       )
     })
 
-    const { curfewAddress, firstNightCurfewHours, weeklyCurfewTimes } = hdcLicenceData
+    const { curfewAddress, firstNightCurfewTimes, weeklyCurfewTimes } = hdcLicenceData
 
     return {
       curfewAddress,
-      firstNightCurfewHours,
+      firstNightCurfewTimes,
       weeklyCurfewTimes,
       allCurfewTimesEqual,
     }
+  }
+
+  async updateFirstNightCurfewTimes(
+    licenceId: number,
+    request: FirstNightCurfewTimesRequest,
+    user: User,
+  ): Promise<void> {
+    return this.licenceApiClient.updateHdcFirstNightCurfewTimes(licenceId, request, user)
   }
 
   async updateWeeklyCurfewTimes(licenceId: number, curfewTimes: CurfewTimes, user: User): Promise<void> {

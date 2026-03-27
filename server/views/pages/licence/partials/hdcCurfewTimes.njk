@@ -1,13 +1,41 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "moj/components/badge/macro.njk" import mojBadge %}
+{% from "./nonUniformCurfewTimesTable.njk" import nonUniformCurfewTimesTable %}
 
-{% macro hdcCurfewTimes(hdcLicenceData) %}
+{% macro hdcCurfewTimes(licence, hdcLicenceData) %}
     {% set addressLine2Html = hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if hdcLicenceData.curfewAddress.addressLine2 | length%}
     {% set countyHtml = hdcLicenceData.curfewAddress.county | escape + ", " if hdcLicenceData.curfewAddress.county | length%}
+    {% set releaseDatesBadge %}
+        {{ mojBadge({
+            text: "CALCULATE RELEASE DATES",
+            classes: "moj-badge--black float-right"
+        }) }}
+    {% endset %}
+    {% set hdcBadge %}
+        {{ mojBadge({
+            text: "HDC",
+            classes: "moj-badge--black float-right"
+        }) }}
+    {% endset %}
 
+    {% set hdcad %}
+        {% if licence.homeDetentionCurfewActualDate %}
+            {{ licence.homeDetentionCurfewActualDate | datetimeToDate }} {{ releaseDatesBadge | safe }}
+        {% else %}
+            Not entered yet
+        {% endif %}
+    {% endset %}
 
     {{ govukSummaryList({
         attributes: {'data-qa': 'hdc-curfew-details'},
         rows: [
+            {
+                key: { text: 'HDCAD' },
+                value: {
+                    html: hdcad,
+                    classes: "hdcad"
+                }
+            },
             {
                 key: {text: 'Address'},
                 value: {
@@ -15,15 +43,15 @@
                           addressLine2Html +
                           hdcLicenceData.curfewAddress.townOrCity | escape + ", " +
                           countyHtml +
-                          hdcLicenceData.curfewAddress.postcode | escape + "</p>",
+                          hdcLicenceData.curfewAddress.postcode | escape + hdcBadge + "</p>",
                     classes: "curfew-address"
                 }
             },
             {
                 key: { text: 'First night curfew hours' },
                 value: {
-                    text: hdcLicenceData.firstNightCurfewHours.firstNightFrom | localTimeTo12h + " to " + hdcLicenceData.firstNightCurfewHours.firstNightUntil | localTimeTo12h,
-                    classes: "first-night-curfew-hours"
+                    text: hdcLicenceData.firstNightCurfewTimes.fromTime | localTimeTo12h + " to " + hdcLicenceData.firstNightCurfewTimes.untilTime | localTimeTo12h,
+                    classes: "first-night-curfew-times"
                 }
             },
             {
@@ -41,25 +69,6 @@
     }) }}
 
     {% if not hdcLicenceData.allCurfewTimesEqual %}
-        {% set curfewRows = []%}
-        {% for curfewTime in hdcLicenceData.weeklyCurfewTimes %}
-            {% set curfewRows = (curfewRows.push(
-                {
-                    key: {
-                        text: curfewTime.fromDay | titlecase
-                    },
-                    value: {
-                        text: curfewTime.fromTime | localTimeTo12h + " to " + curfewTime.untilTime | localTimeTo12h
-                    }
-                }
-            ), curfewRows) %}
-        {% endfor %}
-
-        <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-7 govuk-heading-m">Curfew hours</h3>
-
-        {{ govukSummaryList({
-            attributes: {'data-qa': 'curfew-times-not-equal'},
-            rows: curfewRows
-        }) }}
+        {{ nonUniformCurfewTimesTable(hdcLicenceData.weeklyCurfewTimes) }}
     {% endif %}
 {% endmacro %}

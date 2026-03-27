@@ -368,7 +368,14 @@ export default {
     })
   },
 
-  stubGetHdcLicence: (): SuperAgentRequest => {
+  stubGetHdcLicence: (
+    options: {
+      firstNightCurfewTimes?: {
+        fromTime?: string
+        untilTime?: string
+      }
+    } = {},
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -380,6 +387,7 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           kind: 'HDC',
+          firstNightCurfewTimes: options.firstNightCurfewTimes ?? null,
           homeDetentionCurfewActualDate: '01/03/2021',
         },
       },
@@ -500,9 +508,9 @@ export default {
             county: 'Some County',
             postcode: 'A1 2BC',
           },
-          firstNightCurfewHours: {
-            firstNightFrom: '17:00',
-            firstNightUntil: '07:00',
+          firstNightCurfewTimes: {
+            fromTime: '17:00',
+            untilTime: '07:00',
           },
           weeklyCurfewTimes: [
             {
@@ -3296,6 +3304,20 @@ export default {
     })
   },
 
+  stubPutFirstNightCurfewTimes: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licences-api/licence/id/(\\d)*/hdc-first-night-curfew-times`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
   stubGetCaseAccessDetails: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -3414,6 +3436,22 @@ export default {
               isRestricted: false,
             },
           ],
+        },
+      },
+    })
+  },
+
+  stubGetProbationCase: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/caseload/probation-case/.+`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          crn: 'X2345',
         },
       },
     })

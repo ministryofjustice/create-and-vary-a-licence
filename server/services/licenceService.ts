@@ -23,9 +23,11 @@ import type {
   LastMinuteHandoverCaseResponse,
   Licence,
   LicenceConditionChange,
+  LicenceStatusResponse,
   LicenceSummary,
   NotifyRequest,
   PrisonerWithCvlFields,
+  ProbationCase,
   ReferVariationRequest,
   StatusUpdateRequest,
   UpcomingReleasesWithMonitoringConditionsResponse,
@@ -450,6 +452,10 @@ export default class LicenceService {
     return this.licenceApiClient.getPrisonerDetail(nomsId, user)
   }
 
+  async getProbationCase(nomsId: string, user: User): Promise<ProbationCase> {
+    return this.licenceApiClient.getProbationCase(nomsId, user)
+  }
+
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
     return this.licenceApiClient.deactivateActiveAndVariationLicences(licenceId, reason)
   }
@@ -468,6 +474,10 @@ export default class LicenceService {
 
   async getUpcomingReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
     return this.licenceApiClient.getUpcomingReleasesWithMonitoring()
+  }
+
+  async getLicenceStatusCases(): Promise<LicenceStatusResponse[]> {
+    return this.licenceApiClient.getLicenceStatusCases()
   }
 
   async updateElectronicMonitoringProgramme(

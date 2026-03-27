@@ -31,6 +31,7 @@ import type {
   EligibilityAssessment,
   ExternalTimeServedRecordRequest,
   ExternalTimeServedRecordResponse,
+  FirstNightCurfewTimesRequest,
   HdcLicenceData,
   LastMinuteHandoverCaseResponse,
   Licence,
@@ -39,6 +40,7 @@ import type {
   LicencePermissionsRequest,
   LicencePermissionsResponse,
   LicencePolicyResponse,
+  LicenceStatusResponse,
   LicenceSummary,
   NotifyRequest,
   OmuContact,
@@ -48,6 +50,7 @@ import type {
   PrisonCaseAdminSearchResult,
   PrisonerWithCvlFields,
   PrisonUserSearchRequest,
+  ProbationCase,
   ProbationSearchRequest,
   ReferVariationRequest,
   StatusUpdateRequest,
@@ -77,6 +80,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
 import logger from '../../logger'
 import { isVariation } from '../utils/utils'
+import authRole from '../enumeration/authRole'
 
 export default class LicenceApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -584,6 +588,13 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<PrisonerWithCvlFields>
   }
 
+  async getProbationCase(nomsId: string, user: User): Promise<ProbationCase> {
+    return (await this.get(
+      { path: `/caseload/probation-case/${nomsId}` },
+      { username: user.username },
+    )) as Promise<ProbationCase>
+  }
+
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
     await this.post({
       path: `/licence/id/${licenceId}/deactivate-licence-and-variations`,
@@ -656,9 +667,10 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async getStaffCreateCaseload(user: User): Promise<ComCreateCase[]> {
+    const isAdminUser = user.userRoles.includes(authRole.SUPPORT)
     return (await this.get(
       {
-        path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load`,
+        path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load${isAdminUser ? '?isAdminUser=true' : ''}`,
       },
       { username: user.username },
     )) as Promise<ComCreateCase[]>
@@ -672,9 +684,11 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async getTeamCreateCaseload(teamCaseloadRequest: TeamCaseloadRequest, user: User): Promise<ComCreateCase[]> {
+    const isAdminUser = user.userRoles.includes(authRole.SUPPORT)
+
     return (await this.post(
       {
-        path: `/caseload/com/team/create-case-load`,
+        path: `/caseload/com/team/create-case-load${isAdminUser ? '?isAdminUser=true' : ''}`,
         data: teamCaseloadRequest,
       },
       { username: user.username },
@@ -756,6 +770,12 @@ export default class LicenceApiClient extends RestClient {
     })) as Promise<UpcomingReleasesWithMonitoringConditionsResponse[]>
   }
 
+  async getLicenceStatusCases(): Promise<LicenceStatusResponse[]> {
+    return (await this.get({
+      path: `/cvl-report/licence-status-cases`,
+    })) as Promise<LicenceStatusResponse[]>
+  }
+
   async searchForOffenderOnPrisonCaseAdminCaseload(
     searchRequest: PrisonUserSearchRequest,
   ): Promise<PrisonCaseAdminSearchResult> {
@@ -814,6 +834,17 @@ export default class LicenceApiClient extends RestClient {
   ): Promise<void> {
     return (await this.put(
       { path: `/licences/time-served/${licenceId}/confirm/probation-contact`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
+  }
+
+  async updateHdcFirstNightCurfewTimes(
+    licenceId: number,
+    request: FirstNightCurfewTimesRequest,
+    user: User,
+  ): Promise<void> {
+    return (await this.put(
+      { path: `/licence/id/${licenceId}/hdc-first-night-curfew-times`, data: request },
       { username: user?.username },
     )) as Promise<void>
   }

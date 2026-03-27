@@ -7,7 +7,7 @@ import { parseCvlDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { nameToString } from '../../../data/deliusClient'
 
-export default class ProbationTeamRoutes {
+export default class ProbationStaffRoutes {
   constructor(
     private readonly comCaseloadService: ComCaseloadService,
     private readonly probationService: ProbationService,

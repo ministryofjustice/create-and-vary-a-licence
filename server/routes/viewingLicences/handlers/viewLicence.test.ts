@@ -6,6 +6,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
+import config from '../../../config'
 
 const username = 'joebloggs'
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
@@ -46,9 +47,9 @@ describe('Route - view and approve a licence', () => {
       county: 'county',
       postcode: 'addressPostcode',
     },
-    firstNightCurfewHours: {
-      firstNightFrom: '09:00',
-      firstNightUntil: '17:00',
+    firstNightCurfewTimes: {
+      fromTime: '09:00',
+      untilTime: '17:00',
     },
     curfewTimes: [
       {
@@ -527,6 +528,19 @@ describe('Route - view and approve a licence', () => {
         'validationErrors',
         '[{"field":"appointmentPerson","message":"Select \'Change\' to go back and add who to meet"}]',
       )
+    })
+  })
+
+  describe('CRDS_CLICK', () => {
+    it('should redirect to the CRDS URL', async () => {
+      res = {
+        redirect: jest.fn(),
+      } as unknown as Response
+
+      await handler.CRDS_CLICK(req, res)
+
+      expect(res.redirect).toHaveBeenCalledTimes(1)
+      expect(res.redirect).toHaveBeenCalledWith(config.crdsUrl)
     })
   })
 })

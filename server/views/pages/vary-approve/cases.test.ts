@@ -2,7 +2,6 @@ import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import LicenceType from '../../../enumeration/licenceType'
 import { VaryApproverCase } from '../../../@types/licenceApiClientTypes'
-import config from '../../../config'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/vary-approve/cases.njk').toString())
 
@@ -196,7 +195,6 @@ describe('View Vary Approver case list', () => {
   })
 
   it('should display LAO case name as link to restricted details page', () => {
-    config.laoEnabled = true
     const $ = render({
       caseload: laoCases,
       regionCases: false,
@@ -210,7 +208,6 @@ describe('View Vary Approver case list', () => {
   })
 
   it('should redact LAO case data', () => {
-    config.laoEnabled = true
     const $ = render({
       caseload: laoCases,
       regionCases: false,
@@ -223,7 +220,6 @@ describe('View Vary Approver case list', () => {
   })
 
   it('should handle mixed LAO and non-LAO cases correctly', () => {
-    config.laoEnabled = true
     const $ = render({
       caseload: pduCasesWithLao,
       regionCases: false,
