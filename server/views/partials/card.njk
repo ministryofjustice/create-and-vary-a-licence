@@ -10,5 +10,8 @@
     {%- if params.description %}
         <p class="govuk-body card__description">{{ params.description | safe }}</p>
     {%- endif %}
+    {%- if params.warning %}
+        <p class="govuk-warning-text">{{ params.warning | safe }}</p>
+    {%- endif %}
 </div>
 {% endmacro %}
