@@ -61,7 +61,6 @@ import type {
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
-  UpdateOffenderDetailsRequest,
   UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
   UpdateReasonForVariationRequest,
@@ -535,13 +534,6 @@ export default class LicenceApiClient extends RestClient {
       { path: `/licence/id/${licenceId}/override/prisoner-details`, data: request },
       { username: user?.username },
     )
-  }
-
-  async updateOffenderDetails(nomisId: string, offenderDetails: UpdateOffenderDetailsRequest) {
-    await this.put({
-      path: `/offender/nomisid/${nomisId}/update-offender-details`,
-      data: offenderDetails,
-    })
   }
 
   async searchForOffenderOnStaffCaseload(
