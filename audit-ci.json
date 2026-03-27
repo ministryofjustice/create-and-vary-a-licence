@@ -4,6 +4,7 @@
   "registry": "https://registry.npmjs.org",
   "allowlist": [
     "GHSA-5c6j-r48x-rmvq|mocha>serialize-javascript",
-    "GHSA-73rr-hh4g-fpgx|mocha>diff"
+    "GHSA-73rr-hh4g-fpgx|mocha>diff",
+    "GHSA-f886-m6hf-6m8v"
   ]
 }
