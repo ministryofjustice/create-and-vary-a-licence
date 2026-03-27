@@ -24,7 +24,6 @@ export default function Index({ licenceService, conditionService }: Services): R
     )
 
   {
-    // View map list / add new map condition
     const controller = new CurfewRoutes(licenceService, conditionService)
     get('/additional-licence-conditions/condition/:conditionCode/curfew', controller.GET)
     post('/additional-licence-conditions/condition/:conditionCode/curfew', controller.POST)
