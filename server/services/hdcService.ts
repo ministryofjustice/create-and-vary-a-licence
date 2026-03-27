@@ -2,7 +2,6 @@ import { User } from '../@types/CvlUserDetails'
 import {
   CurfewTimes as ApiCurfewTimes,
   FirstNightCurfewTimesRequest,
-  HdcLicence,
   HdcLicenceData,
   WeeklyCurfewTimesRequest,
 } from '../@types/licenceApiClientTypes'

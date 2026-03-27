@@ -377,7 +377,7 @@ describe('HDC Service', () => {
       ] as ApiCurfewTimes[]
 
       const result = hdcService.getCurfewTimes(curfewTimes)
-      expect(result).toEqual(hdcService.buildCurfewTimesDisplayObject(curfewTimes)) 
+      expect(result).toEqual(hdcService.buildCurfewTimesDisplayObject(curfewTimes))
     })
   })
 })
