@@ -4801,39 +4801,6 @@ export interface components {
        */
       comEmail?: string
       /**
-       * @description The middle names of the person on licence
-       * @example John Peter
-       */
-      middleNames?: string
-      /**
-       * Format: date
-       * @description The date of birth of the person on licence
-       * @example 12/05/1987
-       */
-      dateOfBirth?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       * @example 24/08/2022 09:30:33
-       */
-      dateCreated?: string
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      kind: string
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string
-      /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
@@ -5260,19 +5227,24 @@ export interface components {
        */
       licenceStartDate?: string
       /**
+       * @deprecated
        * @description The kind of licence this person should have based on their current dates
        * @example CRD
        * @enum {string}
        */
       licenceKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
       /**
+       * @description The kind of licence this person is eligible for based on their current dates
+       * @example CRD
+       * @enum {string}
+       */
+      eligibleKind?: 'CRD' | 'HDC' | 'FIXED_TERM' | 'STANDARD'
+      /**
        * @description Type of hardstop licence
        * @example TIME_SERVED
        * @enum {string}
        */
       hardStopKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
-
-      recallType?: 'FIXED_TERM' | 'STANDARD'
     }
     Prisoner: {
       /**
@@ -5513,16 +5485,16 @@ export interface components {
        */
       isEligible: boolean
       /**
-       * @description A combined list of all of the reasons for ineligibility
-       * @example ['A reason']
-       */
-      ineligibilityReasons: string[]
-      /**
        * @description The kind of licence that the case is eligible for. Null if ineligible.
        * @example CRD
        * @enum {string}
        */
-      eligibleKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      eligibleKind?: 'CRD' | 'HDC' | 'FIXED_TERM' | 'STANDARD'
+      /**
+       * @description A combined list of all of the reasons for ineligibility
+       * @example ['A reason']
+       */
+      ineligibilityReasons: string[]
     }
     /** @description Describes a CRD licence within this service */
     CrdLicence: Omit<
@@ -6574,7 +6546,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      kind?: 'CRD' | 'HDC' | 'FIXED_TERM' | 'STANDARD'
     }
     PromptComNotification: {
       email: string
@@ -7513,6 +7485,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -7823,6 +7804,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -8209,6 +8199,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -8606,6 +8605,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -9592,6 +9600,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9954,6 +9971,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -11458,6 +11484,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11793,6 +11828,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12067,6 +12111,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -13406,6 +13459,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14471,6 +14533,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -15774,6 +15845,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */

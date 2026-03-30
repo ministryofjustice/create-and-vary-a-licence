@@ -13,8 +13,7 @@ describe('View are you sure you to create this licence page', () => {
         forename: 'Forename',
         surname: 'Surname',
         isEligibleForEarlyRelease: false,
-        kind: 'PRRD',
-        recallType: 'STANDARD',
+        eligibleKind: 'STANDARD',
       },
       backLink: '/licence/create/caseload',
     })
@@ -36,8 +35,7 @@ describe('View are you sure you to create this licence page', () => {
         forename: 'Forename',
         surname: 'Surname',
         isEligibleForEarlyRelease: false,
-        kind: 'PRRD',
-        recallType: 'FIXED_TERM',
+        eligibleKind: 'FIXED_TERM',
       },
       backLink: '/licence/create/caseload',
     })

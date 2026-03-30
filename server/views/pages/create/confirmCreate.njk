@@ -8,12 +8,19 @@
 {% set pageId = "confirm-create-page" %}
 {% set backLinkHref = backLink %}
 
-{% if licence.kind == 'PRRD' %}
-    {% if licence.recallType == 'STANDARD' %}
-        {% set recallType = 'Standard' %}
-    {% else %}
-        {% set recallType = 'Fixed-term' %}
-    {% endif %}
+{% if licence.eligibleKind == 'STANDARD' or licence.eligibleKind == 'FIXED_TERM' %}
+    {% set isRecall = true %}
+{% else %}
+    {% set isRecall = false %}
+{% endif %}
+
+{% if licence.eligibleKind == 'STANDARD' %}
+    {% set recallType = 'Standard' %}
+{% elseif licence.eligibleKind == 'FIXED_TERM' %}
+    {% set recallType = 'Fixed-term' %}
+{% endif %}
+
+{% if isRecall %}
     {% set recallStatusHtml %}
         <span class="urgent-highlight" data-qa="recall-type">{{ recallType }} recall</span>
         <span class="urgent-highlight urgent-highlight-message">
@@ -70,7 +77,7 @@
                     }
                 ), summaryRows) %}
 
-                {% if licence.kind == 'PRRD' %}
+                {% if isRecall %}
                     {% set summaryRows = (summaryRows.push(
                         {
                             key: {
