@@ -5260,11 +5260,18 @@ export interface components {
        */
       licenceStartDate?: string
       /**
+       * @deprecated
        * @description The kind of licence this person should have based on their current dates
        * @example CRD
        * @enum {string}
        */
       licenceKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      /**
+       * @description The kind of licence this person is eligible for based on their current dates
+       * @example CRD
+       * @enum {string}
+       */
+      eligibleKind?: 'CRD' | 'HDC' | 'FIXED_TERM' | 'STANDARD'
       /**
        * @description Type of hardstop licence
        * @example TIME_SERVED
@@ -5511,16 +5518,20 @@ export interface components {
        */
       isEligible: boolean
       /**
-       * @description A combined list of all of the reasons for ineligibility
-       * @example ['A reason']
-       */
-      ineligibilityReasons: string[]
-      /**
        * @description The kind of licence that the case is eligible for. Null if ineligible.
        * @example CRD
        * @enum {string}
        */
-      eligibleKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      eligibleKind?:
+        | 'PRRD'
+        | 'CRD'
+        | 'VARIATION'
+        | 'HARD_STOP'
+        | 'HDC'
+        | 'HDC_VARIATION'
+        | 'TIME_SERVED'
+        | 'FIXED_TERM'
+        | 'STANDARD'
     }
     /** @description Describes a CRD licence within this service */
     CrdLicence: Omit<

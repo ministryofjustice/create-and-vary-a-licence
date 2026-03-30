@@ -123,7 +123,9 @@ describe('Route Handlers - Offender detail', () => {
       },
     } as DeliusManager)
 
-    licenceService.getIneligibilityReasons.mockResolvedValue({ ineligibilityReasons: [] } as EligibilityAssessment)
+    licenceService.getIneligibilityReasons.mockResolvedValue({
+      genericIneligibilityReasons: [],
+    } as EligibilityAssessment)
 
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
@@ -182,7 +184,7 @@ describe('Route Handlers - Offender detail', () => {
           region: 'Not found',
         },
         licence: licenceDatesNotFound,
-        ineligibilityReasons: { ineligibilityReasons: [] },
+        ineligibilityReasons: { genericIneligibilityReasons: [] },
         is91Status: 'No',
       })
     })
@@ -246,7 +248,7 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Not found',
       },
       licence: licenceDatesNotFound,
-      ineligibilityReasons: { ineligibilityReasons: [] },
+      ineligibilityReasons: { genericIneligibilityReasons: [] },
       is91Status: 'No',
     })
   })
@@ -321,7 +323,7 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Not found',
       },
       licence: licenceDatesNotFound,
-      ineligibilityReasons: { ineligibilityReasons: [] },
+      ineligibilityReasons: { genericIneligibilityReasons: [] },
       is91Status: 'No',
     })
   })
@@ -419,7 +421,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: '05 Jan 2022',
         prrd: 'Not found',
       },
-      ineligibilityReasons: { ineligibilityReasons: [] },
+      ineligibilityReasons: { genericIneligibilityReasons: [] },
       is91Status: 'No',
     })
   })
@@ -509,7 +511,7 @@ describe('Route Handlers - Offender detail', () => {
     } as Licence)
 
     licenceService.getIneligibilityReasons.mockResolvedValue({
-      ineligibilityReasons: ['Reason1', 'Reason2'],
+      genericIneligibilityReasons: ['Reason1', 'Reason2'],
     } as EligibilityAssessment)
 
     licenceService.getIS91Status.mockResolvedValue(false)
@@ -518,7 +520,7 @@ describe('Route Handlers - Offender detail', () => {
     expect(res.render).toHaveBeenCalledWith(
       'pages/support/offenderDetail',
       expect.objectContaining({
-        ineligibilityReasons: { ineligibilityReasons: ['Reason1', 'Reason2'] },
+        ineligibilityReasons: { genericIneligibilityReasons: ['Reason1', 'Reason2'] },
       }),
     )
   })

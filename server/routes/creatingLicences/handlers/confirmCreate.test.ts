@@ -61,6 +61,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         isEligibleForEarlyRelease: true,
         licenceStartDate: '19/11/2022',
         licenceKind: LicenceKind.CRD,
+        eligibleKind: LicenceKind.CRD,
       },
     } as PrisonerWithCvlFields)
   })
@@ -89,7 +90,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           forename: 'Test',
           surname: 'Person',
           isEligibleForEarlyRelease: true,
-          kind: LicenceKind.CRD,
+          eligibleKind: LicenceKind.CRD,
           homeDetentionCurfewActualDate: '16/03/2026',
           homeDetentionCurfewEligibilityDate: '16/03/2026',
         },
@@ -113,6 +114,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           isEligibleForEarlyRelease: true,
           licenceStartDate: '19/11/2022',
           licenceKind: LicenceKind.CRD,
+          eligibleKind: LicenceKind.CRD,
         },
       } as PrisonerWithCvlFields)
 
@@ -125,7 +127,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           forename: 'Test',
           surname: 'Person',
           isEligibleForEarlyRelease: true,
-          kind: LicenceKind.CRD,
+          eligibleKind: LicenceKind.CRD,
           homeDetentionCurfewActualDate: null,
           homeDetentionCurfewEligibilityDate: null,
         },
@@ -151,7 +153,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           forename: 'Test',
           surname: 'Person',
           isEligibleForEarlyRelease: true,
-          kind: LicenceKind.CRD,
+          eligibleKind: LicenceKind.CRD,
           homeDetentionCurfewActualDate: '16/03/2026',
           homeDetentionCurfewEligibilityDate: '16/03/2026',
         },
