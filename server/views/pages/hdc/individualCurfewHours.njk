@@ -1,0 +1,72 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "partials/initialMeetingTimeInputs.njk" import initialMeetingTimeInputs %}
+{% from "partials/curfewTimePicker.njk" import curfewTimePicker %}
+{% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
+
+{% set pageTitle = applicationName + " - Create a licence - Curfew Hours" %}
+{% set pageId = "curfew-hours" %}
+{% set backLinkHref = "" %}
+{% set curfewTimesToDisplay = formResponses.curfews or curfewTimes %}
+
+{% macro renderCurfewTimePicker(loopIndex, day, nextDay, curfewTimes) %}
+    {{ curfewTimePicker({
+        loopIndex: loopIndex,
+        day: day,
+        nextDay: nextDay,
+        errorMessage: validationErrors | findError(id),
+        curfewTimes: curfewTimes[loopIndex]
+    }) }}
+{% endmacro %}
+
+{% block content %}
+    {% if validationErrors %}
+        <span id="curfews-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span>
+            <span>{{ params.errorMessage.text }}</span>
+        </span>
+    {% endif %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Enter the curfew hours</h1>
+        </div>
+        <div class="govuk-grid-column-three-quarters">
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                {% for day in days %}
+                    {% set nextDay = days[(loop.index0 + 1) % days | length] %}
+                    {% set untilDayId = "untilDay-" + loop.index0 %}
+                    <div class="govuk-form-group govuk-!-padding-top-5">
+                        <h2 class="govuk-heading-m">Hours starting {{day | titlecase}}</h2>
+                        {{ renderCurfewTimePicker(loop.index0, day, nextDay, curfewTimesToDisplay) }}
+                    </div>
+                {% endfor %}
+
+                <div class="govuk-!-margin-top-8 govuk-button-group">
+                    {{ govukButton({
+                        text: continueOrSave,
+                        type: "submit",
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+                    {% if (canSkip)%}
+                        {{ govukButton({
+                            text: 'Skip this for now',
+                            href: skipUrl,
+                            classes: "govuk-button--secondary",
+                            attributes: { 'data-qa': 'skip' }
+                        }) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

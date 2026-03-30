@@ -22,7 +22,6 @@ const JSON_DATE_TIME = 'DD/MM/YYYY HH:mm'
 const SIMPLE_DATE_TIME = 'D/MM/YYYY HHmm'
 const TWELVE_HOUR_TIME = 'hh:mm a'
 const TWENTY_FOUR_HOUR_TIME = 'HH:mm:ss'
-const DAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'] as const
 
 interface FileMapInput {
   filename: string
@@ -355,7 +354,6 @@ export {
   lowercaseFirstLetter,
   isTimeServedLicence,
   mapToTargetField,
-  DAYS,
   simpleTimeTo24Hour,
   simpleTimeToMinutes,
 }
