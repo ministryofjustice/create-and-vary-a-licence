@@ -1,0 +1,14 @@
+{% macro timeInput(params) %}
+    <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="{{ params.id }}">
+                {{ params.label }}
+            </label>
+            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
+                maxlength="2"
+                id="{{ params.id }}"
+                name="{{ params.name }}" type="text" pattern="[0-9]*" inputmode="numeric"
+                value="{{ params.value }}">
+        </div>
+    </div>
+{% endmacro %}

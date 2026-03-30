@@ -10,6 +10,8 @@ import YesOrNoQuestion from '../../creatingLicences/types/yesOrNo'
 import CurfewHoursRoutes from './handlers/curfewHours'
 import DoHdcCurfewHoursApplyDailyRoutes from './handlers/doHdcCurfewHoursApplyDaily'
 import CurfewTimes from './types/curfewTimes'
+import IndividualCurfewHoursRoutes from './handlers/individualCurfewHours'
+import DailyCurfewTimes from './types/dailyCurfewTimes'
 import FirstNightCurfewTimesRoutes from './handlers/firstNightCurfewTimes'
 
 export default function Index(services: Services): Router {
@@ -73,6 +75,12 @@ export default function Index(services: Services): Router {
     const controller = new CurfewHoursRoutes(hdcService)
     get('/curfew-hours', controller.GET)
     post('/curfew-hours', controller.POST, CurfewTimes)
+  }
+
+  {
+    const controller = new IndividualCurfewHoursRoutes(hdcService)
+    get('/individual-curfew-hours', controller.GET)
+    post('/individual-curfew-hours', controller.POST, DailyCurfewTimes)
   }
 
   return router

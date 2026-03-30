@@ -1,0 +1,22 @@
+{% macro amPmInput(params) %}
+    <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-date-input__label" for="{{params.id}}">
+                am or pm
+            </label>
+            <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"
+                    id="{{params.id}}"
+                    name="{{params.name}}">
+                <option value="">
+                    Choose am or pm
+                </option>
+                <option value="am" {% if params.selected == 'am' %} selected {% endif %}>
+                    am
+                </option>
+                <option value="pm" {% if params.selected == 'pm' %} selected {% endif %}>
+                    pm
+                </option>
+            </select>
+        </div>
+    </div>
+{% endmacro %}
