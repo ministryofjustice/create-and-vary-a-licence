@@ -48,7 +48,7 @@ describe('Caseload', () => {
         licenceStatus: 'ACTIVE',
         probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
         postRecallReleaseDate: '2024-12-12',
-        eligibleKind: 'PRRD',
+        eligibleKind: 'FIXED_TERM',
       },
     })
     const element = $('[data-qa=prrd-warning]')
@@ -81,5 +81,26 @@ describe('Caseload', () => {
 
     const message = $('[data-qa="additional-message"]')
     expect(message.length).toBe(0)
+  })
+
+  it('should display warning if prisoner is recalled on a standard recall', () => {
+    const $ = render({
+      licence: {
+        licenceId: 3,
+        name: 'Biydaav Griya',
+        crnNumber: 'Z882661',
+        typeCode: 'PSS',
+        releaseDate: '13 Feb 2023',
+        licenceStatus: 'ACTIVE',
+        probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        postRecallReleaseDate: '2024-12-12',
+        eligibleKind: 'STANDARD',
+      },
+    })
+    const element = $('[data-qa=prrd-warning]')
+    expect(element.length).toBe(1)
+    expect(element.text()).toContain('Warning')
+    expect(element.text()).toContain('This person was released following a recall.')
+    expect(element.text()).toContain('Check their previous licence conditions. You should do this using EPF 2.')
   })
 })

@@ -17,12 +17,24 @@
             <h1 class="govuk-heading-l">
                 {{ "Does anything on this licence need changing?" }}
             </h1>
-            {% if licence.eligibleKind == 'PRRD' %}
+            {% if licence.eligibleKind == 'STANDARD' or licence.eligibleKind == 'FIXED_TERM' %}
+                {% set isRecall = true %}
+            {% else %}
+                {% set isRecall = false %}
+            {% endif %}
+
+            {% if licence.eligibleKind == 'FIXED_TERM'%}
+                {% set recallType = "fixed-term recall" %}
+            {% elseif licence.eligibleKind == 'STANDARD' %}
+                {% set recallType = "recall" %}
+            {% endif %}
+
+            {% if isRecall %}
                 <p class="govuk-body">
                     {{
                     govukWarningText({
                         iconFallbackText: "Warning",
-                        html: "This person was released following a fixed-term recall." +
+                        html: "This person was released following a " + recallType + "." +
                         "<br> Check their previous licence conditions. You should do this using " +
                         "<a class='govuk-link' href='https://epf.linkspace.uk/planning' target='_blank' rel='noreferrer noopener'>EPF 2</a>.",
                         attributes: { 'data-qa': 'prrd-warning' }
@@ -30,6 +42,7 @@
                     }}
                 </p>
             {% endif %}
+
         </div>
     </div>
 
@@ -77,10 +90,10 @@
 
     {% set licenceConditions = "This licence contains:<ul><li>standard conditions</li><li>the following additional condition:</li></ul>
                                     <p class='govuk-inset-text'>Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer.</p>"
-                                if licence.typeCode  === 'AP_PSS' or licence.typeCode === 'AP' else   
+                                if licence.typeCode  === 'AP_PSS' or licence.typeCode === 'AP' else
                                 "<p>This licence contains standard post sentence supervision requirements only by default.</p>" %}
 
-    {% set licenceContains = licenceConditions +"<br><a href="+ printLink + " target='_blank'>View or print this licence PDF</a>" 
+    {% set licenceContains = licenceConditions +"<br><a href="+ printLink + " target='_blank'>View or print this licence PDF</a>"
     %}
 
     {{ govukDetails({
