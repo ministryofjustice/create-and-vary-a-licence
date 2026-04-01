@@ -5,7 +5,7 @@ class PersonName {
   @Expose()
   @ValidateIf(o => o.appointmentPersonType === 'SPECIFIC_PERSON')
   @IsNotEmpty({ message: 'Enter a name or job title' })
-  @MaxLength(60, { message: 'Name or job title must be at most 100 characters' })
+  @MaxLength(100, { message: 'Name or job title must be at most 100 characters' })
   contactName: string
 
   @Expose()
