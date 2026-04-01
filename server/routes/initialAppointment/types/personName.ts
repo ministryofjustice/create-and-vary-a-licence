@@ -1,10 +1,11 @@
 import { Expose, Type } from 'class-transformer'
-import { IsNotEmpty, ValidateIf } from 'class-validator'
+import { IsNotEmpty, MaxLength, ValidateIf } from 'class-validator'
 
 class PersonName {
   @Expose()
   @ValidateIf(o => o.appointmentPersonType === 'SPECIFIC_PERSON')
   @IsNotEmpty({ message: 'Enter a name or job title' })
+  @MaxLength(60, { message: 'Name or job title must be at most 100 characters' })
   contactName: string
 
   @Expose()
