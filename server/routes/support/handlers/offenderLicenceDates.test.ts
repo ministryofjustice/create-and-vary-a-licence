@@ -122,7 +122,12 @@ describe('Route handlers - Licence dates override', () => {
 
       expect(overrideService.overrideDates).toHaveBeenCalledWith(
         1,
-        { ...licenceDates, reason: dateChangeReason },
+        {
+          ...licenceDates,
+          reason: dateChangeReason,
+          updatedEligibleKind: 'FIXED_TERM',
+          updatedLicenceKind: 'PRRD',
+        },
         {
           username: 'bob',
         },
