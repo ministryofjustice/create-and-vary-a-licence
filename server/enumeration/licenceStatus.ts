@@ -25,7 +25,7 @@ const selectableLicenceStatus = Object.values(LicenceStatus).filter(
       LicenceStatus.OOS_BOTUS,
       LicenceStatus.OOS_RECALL,
       LicenceStatus.NOT_IN_PILOT,
-      LicenceStatus.NOT_IN_PILOT,
+      LicenceStatus.NOMIS_LICENCE,
     ].includes(s),
 )
 
