@@ -59,7 +59,6 @@ describe('Route Handlers - Licence Status Override', () => {
         availableStatusCodes: [
           'APPROVED',
           'INACTIVE',
-          'NOMIS_LICENCE',
           'NOT_STARTED',
           'RECALLED',
           'REJECTED',
@@ -82,6 +81,7 @@ describe('Route Handlers - Licence Status Override', () => {
   describe('POST', () => {
     it('Update licence status from IN_PROGRESS to APPROVED', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
+      licenceService.getLicence.mockResolvedValue(mockLicences[0])
 
       const reason = 'Test Reason'
 
@@ -92,6 +92,26 @@ describe('Route Handlers - Licence Status Override', () => {
       expect(overrideService.overrideStatusCode).toHaveBeenCalledWith(1, LicenceStatus.APPROVED.toString(), reason, {
         username: 'bob',
       })
+
+      expect(res.redirect).toHaveBeenCalledWith(`/support/offender/ABC123/licences`)
+    })
+
+    it('Update licence status from INACTIVE to another status syncs COM allocation info', async () => {
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
+
+      const currentLicence = { id: 2, crn: 'X1234', statusCode: LicenceStatus.INACTIVE }
+      licenceService.getLicence.mockResolvedValue(currentLicence)
+
+      const reason = 'Activating licence'
+
+      req.body = { status: LicenceStatus.APPROVED.toString(), statusChangeReason: reason }
+
+      await handler.POST(req, res)
+
+      expect(overrideService.overrideStatusCode).toHaveBeenCalledWith(1, LicenceStatus.APPROVED.toString(), reason, {
+        username: 'bob',
+      })
+      expect(licenceService.syncComAllocation).toHaveBeenCalledWith(currentLicence.crn, res.locals.user)
 
       expect(res.redirect).toHaveBeenCalledWith(`/support/offender/ABC123/licences`)
     })
@@ -109,7 +129,6 @@ describe('Route Handlers - Licence Status Override', () => {
         availableStatusCodes: [
           'APPROVED',
           'INACTIVE',
-          'NOMIS_LICENCE',
           'NOT_STARTED',
           'RECALLED',
           'REJECTED',
@@ -146,7 +165,6 @@ describe('Route Handlers - Licence Status Override', () => {
         availableStatusCodes: [
           'APPROVED',
           'INACTIVE',
-          'NOMIS_LICENCE',
           'NOT_STARTED',
           'RECALLED',
           'REJECTED',
@@ -181,7 +199,6 @@ describe('Route Handlers - Licence Status Override', () => {
         availableStatusCodes: [
           'APPROVED',
           'INACTIVE',
-          'NOMIS_LICENCE',
           'NOT_STARTED',
           'RECALLED',
           'REJECTED',
