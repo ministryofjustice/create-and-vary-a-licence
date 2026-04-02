@@ -43,10 +43,10 @@
                     selected: (licence.kind == 'CRD' or licence.eligibleKind == 'CRD')
                 },
                 {
-                    value: "PRRD",
-                    text: "PRRD",
+                    value: "PRRD-FIXED",
+                    text: "PRRD FIXED TERM",
                     selected: (licence.kind == 'PRRD' or licence.eligibleKind == 'PRRD')
-                }
+                },
             ],
             errorMessage : validationErrors | findError('updatedKind')
         }) }}

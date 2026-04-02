@@ -31,10 +31,13 @@ export default class OffenderLicenceDatesRoutes {
     const { dateChangeReason, updatedKind } = req.body
     const updatedDates = await this.getDatesFromSimpleDates(req.body)
 
+    const updatedLicenceKind = updatedKind === 'CRD' ? 'CRD' : 'PRRD'
+    const updatedEligibleKind = updatedKind === 'CRD' ? 'CRD' : 'FIXED_TERM'
+
     if (updatedDates && dateChangeReason) {
       await this.licenceOverrideService.overrideDates(
         parseInt(licenceId, 10),
-        { updatedKind, ...updatedDates, reason: dateChangeReason },
+        { updatedLicenceKind, updatedEligibleKind, ...updatedDates, reason: dateChangeReason },
         user,
       )
       res.redirect(`/support/offender/${nomsId}/licences`)
