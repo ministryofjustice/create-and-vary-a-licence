@@ -2,23 +2,23 @@
 {% from "../customComponents/timeInput/amPmInput.njk" import amPmInput %}
 
 {% macro curfewTimePicker(params) %}
-    <div class="govuk-form-group govuk-!-padding-top-2 border-bottom {% if params.errorMessage %}govuk-form-group--error{% endif %}">
+    <div class="govuk-form-group govuk-!-padding-top-2 border-bottom govuk-!-margin-bottom-9 {% if params.errorMessage %}govuk-form-group--error{% endif %}">
         <fieldset class="govuk-fieldset govuk-!-padding-bottom-9" role="group">
             <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">
                 Start Time
             </legend>
             <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][fromTime]">
                 {{ timeInput({
-                    label: 'Hour', 
-                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-hour', 
-                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][hour]', 
+                    label: 'Hour',
+                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-hour',
+                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][hour]',
                     value: params.curfewTimes['fromTime']['hour'],
                     errorMessage: params.errorMessage
                 }) }}
                 {{ timeInput({
-                    label: 'Minute', 
-                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-minute', 
-                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][minute]', 
+                    label: 'Minute',
+                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-minute',
+                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][minute]',
                     value: params.curfewTimes['fromTime']['minute'],
                     errorMessage: params.errorMessage
                 }) }}
@@ -42,16 +42,16 @@
             </div>
             <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][untilTime]">
                 {{ timeInput({
-                    label: 'Hour', 
-                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-hour', 
-                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][hour]', 
+                    label: 'Hour',
+                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-hour',
+                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][hour]',
                     value: params.curfewTimes['untilTime']['hour'],
                     errorMessage: params.errorMessage
                 }) }}
                 {{ timeInput({
-                    label: 'Minute', 
-                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-minute', 
-                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][minute]', 
+                    label: 'Minute',
+                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-minute',
+                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][minute]',
                     value: params.curfewTimes['untilTime']['minute'],
                     errorMessage: params.errorMessage
                 }) }}
