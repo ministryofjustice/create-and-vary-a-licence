@@ -18,7 +18,7 @@ export default class ConfirmCreateRoutes {
 
     const [nomisRecord, deliusRecord] = await Promise.all([
       this.licenceService.getPrisonerDetail(nomisId, user),
-      this.probationService.getProbationer(nomisId),
+      this.licenceService.getProbationCase(nomisId, user),
     ])
 
     if (nomisRecord.cvl.isInHardStopPeriod) {
@@ -34,11 +34,13 @@ export default class ConfirmCreateRoutes {
         forename: convertToTitleCase(nomisRecord.prisoner.firstName),
         surname: convertToTitleCase(nomisRecord.prisoner.lastName),
         isEligibleForEarlyRelease: nomisRecord.cvl.isEligibleForEarlyRelease,
-        kind: nomisRecord.cvl.licenceKind,
-        homeDetentionCurfewActualDate: moment(nomisRecord.prisoner.homeDetentionCurfewActualDate).format('DD/MM/YYYY'),
-        homeDetentionCurfewEligibilityDate: moment(nomisRecord.prisoner.homeDetentionCurfewEligibilityDate).format(
-          'DD/MM/YYYY',
-        ),
+        eligibleKind: nomisRecord.cvl.eligibleKind,
+        homeDetentionCurfewActualDate: nomisRecord.prisoner.homeDetentionCurfewActualDate
+          ? moment(nomisRecord.prisoner.homeDetentionCurfewActualDate).format('DD/MM/YYYY')
+          : null,
+        homeDetentionCurfewEligibilityDate: nomisRecord.prisoner.homeDetentionCurfewEligibilityDate
+          ? moment(nomisRecord.prisoner.homeDetentionCurfewEligibilityDate).format('DD/MM/YYYY')
+          : null,
       },
       backLink,
     })

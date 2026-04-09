@@ -665,6 +665,20 @@ describe('Licence Service', () => {
     expect(callToGetPrisonerDetails).toEqual(prisonerDetails)
   })
 
+  it('get probation case', async () => {
+    const prisonNumber = 'A1234BC'
+    const probationCase = {
+      crn: 'X12345',
+      prisonNumber,
+      croNumber: '29906/12J',
+      pncNumber: '12/394773H',
+    }
+    licenceApiClient.getProbationCase.mockResolvedValue(probationCase)
+    const actualCase = await licenceService.getProbationCase(prisonNumber, user)
+    expect(licenceApiClient.getProbationCase).toHaveBeenCalledWith(prisonNumber, user)
+    expect(actualCase).toEqual(probationCase)
+  })
+
   it('Get IS-91 status', async () => {
     await licenceService.getIS91Status('ABC123')
     expect(licenceApiClient.getIS91Status).toHaveBeenCalledWith('ABC123')

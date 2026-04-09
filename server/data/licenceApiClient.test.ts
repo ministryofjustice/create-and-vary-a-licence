@@ -35,6 +35,7 @@ import {
   CreateVariationResponse,
   EditLicenceResponse,
   WeeklyCurfewTimesRequest,
+  FirstNightCurfewTimesRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -464,7 +465,8 @@ describe('Licence API client tests', () => {
 
   it('Override licence dates', async () => {
     const username = 'admin-user'
-    const updatedKind = 'PRRD'
+    const updatedLicenceKind = 'PRRD'
+    const updatedEligibleKind = 'FIXED_TERM'
     const dates = {
       conditionalReleaseDate: '01/01/2022',
       actualReleaseDate: '02/01/2022',
@@ -476,13 +478,22 @@ describe('Licence API client tests', () => {
       topupSupervisionExpiryDate: '07/01/2022',
     }
 
-    await licenceApiClient.overrideLicenceDates(1, { updatedKind, ...dates, reason: 'Test Reason' }, {
-      username,
-    } as User)
+    await licenceApiClient.overrideLicenceDates(
+      1,
+      {
+        updatedLicenceKind,
+        updatedEligibleKind,
+        ...dates,
+        reason: 'Test Reason',
+      },
+      {
+        username,
+      } as User,
+    )
     expect(put).toHaveBeenCalledWith(
       {
         path: `/licence/id/1/override/dates`,
-        data: { updatedKind, ...dates, reason: 'Test Reason' },
+        data: { updatedLicenceKind, updatedEligibleKind, ...dates, reason: 'Test Reason' },
       },
       { username },
     )
@@ -541,6 +552,12 @@ describe('Licence API client tests', () => {
     const username = 'admin-user'
     await licenceApiClient.getPrisonerDetail('G4169UO', { username } as User)
     expect(get).toHaveBeenCalledWith({ path: '/prisoner-search/nomisid/G4169UO' }, { username })
+  })
+
+  it('should get probation case', async () => {
+    const username = 'admin-user'
+    await licenceApiClient.getProbationCase('G4169UO', { username } as User)
+    expect(get).toHaveBeenCalledWith({ path: '/caseload/probation-case/G4169UO' }, { username })
   })
 
   describe('Exclusion zone file', () => {
@@ -919,7 +936,7 @@ describe('Licence API client tests', () => {
     })
   })
 
-  describe('updateHdcCurfewTimes', () => {
+  describe('updateHdcWeeklyCurfewTimes', () => {
     const user = { username: 'joebloggs' } as User
     const licenceId = 123
 
@@ -941,6 +958,30 @@ describe('Licence API client tests', () => {
       expect(put).toHaveBeenCalledWith(
         {
           path: `/licence/id/${licenceId}/hdc-weekly-curfew-times`,
+          data: request,
+        },
+        { username: 'joebloggs' },
+      )
+    })
+  })
+
+  describe('updateHdcFirstNightCurfewTimes', () => {
+    const user = { username: 'joebloggs' } as User
+    const licenceId = 123
+
+    it('should call to update the HDC first night curfew times', async () => {
+      const request = {
+        firstNightCurfewTimes: {
+          fromTime: '00:00:00',
+          untilTime: '00:00:01',
+        },
+      } as FirstNightCurfewTimesRequest
+
+      await licenceApiClient.updateHdcFirstNightCurfewTimes(licenceId, request, user)
+
+      expect(put).toHaveBeenCalledWith(
+        {
+          path: `/licence/id/${licenceId}/hdc-first-night-curfew-times`,
           data: request,
         },
         { username: 'joebloggs' },

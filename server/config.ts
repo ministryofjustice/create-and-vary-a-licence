@@ -34,6 +34,7 @@ export default {
   productId: get('PRODUCT_ID', 'UNASSIGNED', requiredInProduction),
   gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   dpsUrl: get('DPS_URL', 'http://localhost:3000', requiredInProduction),
+  crdsUrl: get('CRDS_URL', 'http://localhost:3000', requiredInProduction),
   serviceNowUrl: get('SERVICE_NOW_URL', 'http://localhost:3000', requiredInProduction),
   epf2Url: get('EPF2_URL', 'http://localhost:3000', requiredInProduction),
   serviceName: process.env.SERVICE_NAME || 'create-and-vary-a-licence',
@@ -209,5 +210,4 @@ export default {
       'https://mojprod.service-now.com/moj_sp?id=sc_cat_item&table=sc_cat_item&sys_id=e389e8931b8bc65025dc6351f54bcb82&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=e389e8931b8bc65025dc6351f54bcb82',
     ),
   },
-  laoEnabled: get('LAO_ENABLED', 'false', requiredInProduction) === 'true',
 }

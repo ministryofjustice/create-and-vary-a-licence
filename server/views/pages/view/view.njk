@@ -12,31 +12,42 @@
 {% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
 {% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
-{% if licence.statusCode === "APPROVED" or licence.statusCode === "ACTIVE" %}
-  {% set actionWord = "Print" %}
-  {% set isPrintable = true %}
-{% else %}
-  {% set actionWord = "View" %}
-  {% set isPrintable = false %}
+{% set isApprovedOrActive = licence.statusCode in ["APPROVED", "ACTIVE"] %}
+{% set isPrintable = isApprovedOrActive %}
+{% set showHdcAlert = (licence.kind == "HDC") and (not licence.homeDetentionCurfewActualDate) %}
+{% if showHdcAlert %}
+        {% set isPrintable = false %}
 {% endif %}
+{% set actionWord =  "Print" if isPrintable else "View" %}
+
 {% set prisonKinds = ['TIME_SERVED', 'HARD_STOP'] %}
 
 {% set inProgressHardStopOrTimeServedLicence = prisonKinds.includes(licence.kind) and licence.statusCode == 'IN_PROGRESS' %}
 {% set pageTitle = applicationName + " - " + "Check licence details" if inProgressHardStopOrTimeServedLicence else (actionWord + " a licence") %}
 {% set pageId = "print-view-page" %}
 {% set backLinkHref = "/licence/view/cases" %}
+{% set calculateReleaseDateUrl = '/licence/view/id/' + licence.id + '/crds-click' %}
 
 {% block content %}
+    {% if showHdcAlert %}
+        {{ mojAlert({
+            variant: "warning",
+            dismissible: false,
+            classes: "govuk-!-margin-bottom-8",
+            html: 'Add a HDCAD in <a href="' + calculateReleaseDateUrl + '" class="govuk-link" target="_blank" rel="noopener noreferrer">Calculate release dates</a> to be able to print this licence and change details of the initial appointment and first night curfew.'
+        }) }}
+    {% endif %}
     {% if initialApptUpdatedMessage | length > 0%}
         {{ mojBanner({
             type: 'success',
             html: initialApptUpdatedMessage,
             iconFallbackText: 'Success'
         }) }}
-    {% endif %}  
+    {% endif %}
     <form method="POST">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">  
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 {% if inProgressHardStopOrTimeServedLicence %}
@@ -69,7 +80,7 @@
 
                 {% if licence.kind === 'HDC' or licence.kind === 'HDC_VARIATION' %}
                     <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
-                    {{ hdcCurfewTimes(hdcLicenceData) }}
+                    {{ hdcCurfewTimes(licence, hdcLicenceData) }}
                     {{ govukDetails({
                         summaryText: "How do I change the HDC curfew details?",
                         html: "Email createandvaryalicence@digital.justice.gov.uk to change the HDC curfew details."

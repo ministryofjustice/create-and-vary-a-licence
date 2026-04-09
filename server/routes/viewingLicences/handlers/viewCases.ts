@@ -76,7 +76,9 @@ export default class ViewAndPrintCaseRoutes {
       probationView,
       hasSelectedNomisForTimeServedLicenceCreation,
       isTimeServedEnabled:
-        timeServedEnabled && timeServedEnabledPrisons.some(prison => prisonCaseloadToDisplay.includes(prison)),
+        timeServedEnabled &&
+        (timeServedEnabledPrisons.some(prison => prisonCaseloadToDisplay.includes(prison)) ||
+          timeServedEnabledPrisons.includes('ALL_PRISONS')),
     })
   }
 

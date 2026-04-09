@@ -228,6 +228,53 @@ describe('View and print - single licence view', () => {
     expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
     expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
   })
+
+  it('should render Calculate release date label', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: '06/12/2026' },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('.hdcad').text()).toMatch('CALCULATE RELEASE DATE')
+  })
+
+  it('should not render Calculate release date label', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: null },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('.hdcad').text()).not.toMatch('CALCULATE RELEASE DATE')
+  })
+
+  it('should render HDC label', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('.curfew-address').text()).toMatch('HDC')
+  })
+
+  it('should hide print button when licence is approved or active and is HDC with no HDCAD', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', statusCode: 'ACTIVE', homeDetentionCurfewActualDate: null },
+    })
+
+    expect($('[data-qa="print-licence"]').length).toBe(0)
+    expect($('h1').text()).toContain('View licence and post sentence supervision order for John Smith')
+    expect($('.moj-alert.moj-alert--warning').length).toBe(1)
+  })
+
+  it('should show print button when licence is approved or active and is HDC with HDCAD', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', statusCode: 'ACTIVE', homeDetentionCurfewActualDate: '06/08/2026' },
+    })
+
+    expect($('[data-qa="print-licence"]').length).toBe(1)
+    expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
+    expect($('.moj-alert.moj-alert--warning').length).toBe(0)
+  })
 })
 
 describe('View and print - single standard licence view', () => {

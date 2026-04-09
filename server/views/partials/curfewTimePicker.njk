@@ -1,0 +1,85 @@
+{% from "../customComponents/timeInput/timeInput.njk" import timeInput %}
+{% from "../customComponents/timeInput/amPmInput.njk" import amPmInput %}
+
+{% macro curfewTimePicker(params) %}
+    <div class="govuk-form-group govuk-!-padding-top-2 border-bottom {% if params.errorMessage %}govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset govuk-!-padding-bottom-9" role="group">
+            <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">
+                Start Time
+            </legend>
+            <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][fromTime]">
+                {{ timeInput({
+                    label: 'Hour', 
+                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-hour', 
+                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][hour]', 
+                    value: params.curfewTimes['fromTime']['hour'],
+                    errorMessage: params.errorMessage
+                }) }}
+                {{ timeInput({
+                    label: 'Minute', 
+                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-minute', 
+                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][minute]', 
+                    value: params.curfewTimes['fromTime']['minute'],
+                    errorMessage: params.errorMessage
+                }) }}
+                {{ amPmInput({
+                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-ampm',
+                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][ampm]',
+                    selected: params.curfewTimes['fromTime']['ampm'],
+                    errorMessage: params.errorMessage
+                }) }}
+                <div class="govuk-date-input__item govuk-!-padding-top-7">
+                    <div class="govuk-form-group">
+                        <input type="hidden" name="curfews[{{params.loopIndex}}][fromDay]" id="curfews[{{params.loopIndex}}][fromDay]" value="{{ params.day }}">
+                        <p class="govuk-!-margin-bottom-2">On {{ params.day | titlecase }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="govuk-!-padding-top-7">
+                <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">
+                    End Time
+                </legend>
+            </div>
+            <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][untilTime]">
+                {{ timeInput({
+                    label: 'Hour', 
+                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-hour', 
+                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][hour]', 
+                    value: params.curfewTimes['untilTime']['hour'],
+                    errorMessage: params.errorMessage
+                }) }}
+                {{ timeInput({
+                    label: 'Minute', 
+                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-minute', 
+                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][minute]', 
+                    value: params.curfewTimes['untilTime']['minute'],
+                    errorMessage: params.errorMessage
+                }) }}
+                {{ amPmInput({
+                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-ampm',
+                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][ampm]',
+                    selected: params.curfewTimes['untilTime']['ampm'],
+                    errorMessage: params.errorMessage
+                }) }}
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" for="curfews[{{params.loopIndex}}][untilDay]">
+                            Day
+                        </label>
+                        <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"
+                                id="curfews[{{params.loopIndex}}][untilDay]"
+                                name="curfews[{{params.loopIndex}}][untilDay]">
+                            <option value="{{params.day}}" {% if params.curfewTimes['untilDay'] == params.day %} selected {% endif %}>
+                                on {{ params.day | titlecase }}
+                            </option>
+                            <option value="{{params.nextDay}}" {% if params.curfewTimes['untilDay'] == params.nextDay %} selected {% endif %}>
+                                on {{ params.nextDay | titlecase }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="curfews[{{params.loopIndex}}][sequence]" id="curfews[{{params.loopIndex}}][sequence]" value="{{ params.curfewTimes['sequence'] }}">
+            </div>
+        </fieldset>
+    </div>
+{% endmacro %}

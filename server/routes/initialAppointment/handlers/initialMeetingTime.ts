@@ -45,7 +45,7 @@ export default class InitialMeetingTimeRoutes {
       return `/licence/create/id/${licence.id}/check-your-answers`
     }
     if (licence.kind === LicenceKind.HDC) {
-      return `/licence/create/id/${licence.id}/hdc/standard-curfew-hours-question`
+      return `/licence/create/id/${licence.id}/hdc/first-night-curfew-hours`
     }
     if (licence.typeCode === LicenceType.AP || licence.typeCode === LicenceType.AP_PSS) {
       return `/licence/create/id/${licence.id}/additional-licence-conditions-question`

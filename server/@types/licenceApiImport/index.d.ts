@@ -1170,7 +1170,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/jobs/isr-in-flight-ap-pss-licences': {
+  '/jobs/isr-licence-progression-job': {
     parameters: {
       query?: never
       header?: never
@@ -1181,52 +1181,11 @@ export interface paths {
     put?: never
     /**
      * Progress AP+PSS licences.
-     * @description Triggers a job to progress licences currently in one of the following states:
-     *                 IN_PROGRESS, SUBMITTED, or APPROVED.
-     *
-     *                 The job applies where:
-     *                 - The TUSSD (Top-Up Supervision Start Date) is on or after 30/04/2026
-     *                 - The licence type code is AP+PSS
-     *
-     *                 The licence will then be updated to:
-     *                 <ul>
-     *                   <li>Change the type code to AP</li>
-     *                   <li>Remove PSS standard conditions</li>
-     *                   <li>Remove PSS additional conditions</li>
-     *                 </ul>
+     * @description Triggers a job to progress licences types :
+     *                     a) PSS into inactive status
+     *                     b) AP_PSS into AP type and remove PSS conditions
      */
     post: operations['progressionOfTypeApPssLicences']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/jobs/isr-active-licences': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Progress AP_PSS & PSS Active/licences.
-     * @description Triggers a job to progress active licences
-     *
-     *                 The job applies where:
-     *                 - The current date is after 30/04/2026
-     *                 - The licence type code is PSS OR AP_PSS
-     *                 - The licence status is ACTIVE
-     *
-     *                 The licence will then be updated to:
-     *                 <ul>
-     *                   <li>INACTIVE status if PSS</li>
-     *                   <li>AP TYPE CODE if AP_PSS</li>
-     *                 </ul>
-     */
-    post: operations['progressionOfActiveLicences']
     delete?: never
     options?: never
     head?: never
@@ -1713,15 +1672,15 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/reports/{reportId}/{reportVariantId}/{fieldId}': {
+  '/reports/{reportId}/{reportVariantId}/download': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    /** @description Returns the dataset for the given report ID and report variant ID filtered by the filters provided in the query. */
-    get: operations['configuredApiDynamicFilter']
+    /** @description Streams the entire result set of the sync query execution as a csv file. */
+    get: operations['downloadCsv']
     put?: never
     post?: never
     delete?: never
@@ -2263,7 +2222,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/cvl-report/licence-status-report': {
+  '/cvl-report/licence-status-cases': {
     parameters: {
       query?: never
       header?: never
@@ -2335,6 +2294,26 @@ export interface paths {
      * @description Retrieve the individual and team count of cases that the probation practitioner needs to review. Requires ROLE_CVL_ADMIN.
      */
     get: operations['retrieveReviewCounts']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/caseload/probation-case/{nomsId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Returns a single probation case by prison number
+     * @description Returns a single probation case by prison number
+     */
+    get: operations['getProbationCase']
     put?: never
     post?: never
     delete?: never
@@ -2736,7 +2715,13 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      updatedKind: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      updatedLicenceKind: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      /**
+       * @description The updated eligible kind based on the current dates
+       * @example FIXED_TERM
+       * @enum {string}
+       */
+      updatedEligibleKind: 'CRD' | 'HDC' | 'FIXED_TERM'
       /**
        * Format: date
        * @description The conditional release date
@@ -2912,7 +2897,7 @@ export interface components {
       uprn?: string
       /**
        * @description The first line of the address
-       * @example 12
+       * @example 12 Cardiff Road
        */
       firstLine: string
       /**
@@ -4543,7 +4528,7 @@ export interface components {
       uprn: string
       /**
        * @description The address's first line
-       * @example 34
+       * @example 34 Maryport Street
        */
       firstLine: string
       /**
@@ -4647,7 +4632,7 @@ export interface components {
       uprn?: string
       /**
        * @description The first line of the address
-       * @example 12
+       * @example 12 Cardiff Road
        */
       firstLine: string
       /**
@@ -4814,9 +4799,14 @@ export interface components {
        * @example Smith
        */
       surname?: string
-      kind: string
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      kind: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn?: string
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
@@ -4891,6 +4881,18 @@ export interface components {
        */
       appointmentAddress?: string
       /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
+      bookingId?: number
+      /**
+       * Format: date
+       * @description The date that the licence will expire
+       * @example 13/09/2024
+       */
+      licenceExpiryDate?: string
+      /**
        * Format: date
        * @description The date when the post sentence supervision period ends, from prison services
        * @example 06/06/2023
@@ -4918,27 +4920,10 @@ export interface components {
        */
       postRecallReleaseDate?: string
       /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number
-      /**
-       * Format: date
-       * @description The date that the licence will expire
-       * @example 13/09/2024
-       */
-      licenceExpiryDate?: string
-      /**
        * @description The first name of the person on licence
        * @example Michael
        */
       forename?: string
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
@@ -5069,15 +5054,15 @@ export interface components {
        */
       dateLastUpdated?: string
       /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
        * @description The prison booking number for the person on this licence
        * @example F12333
        */
       bookingNo?: string
+      /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string
       /**
        * @description The criminal records office number (CRO) for the person on this licence
        * @example A/12444
@@ -5256,11 +5241,18 @@ export interface components {
        */
       licenceStartDate?: string
       /**
+       * @deprecated
        * @description The kind of licence this person should have based on their current dates
        * @example CRD
        * @enum {string}
        */
       licenceKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      /**
+       * @description The kind of licence this person is eligible for based on their current dates
+       * @example CRD
+       * @enum {string}
+       */
+      eligibleKind?: 'CRD' | 'HDC' | 'FIXED_TERM'
       /**
        * @description Type of hardstop licence
        * @example TIME_SERVED
@@ -5516,7 +5508,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      eligibleKind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      eligibleKind?: 'CRD' | 'HDC' | 'FIXED_TERM'
     }
     /** @description Describes a CRD licence within this service */
     CrdLicence: Omit<
@@ -5651,7 +5643,7 @@ export interface components {
       id?: number
       /**
        * @description The first line of the curfew address
-       * @example 1
+       * @example 1 Some Street
        */
       addressLine1?: string
       /**
@@ -6350,7 +6342,7 @@ export interface components {
     }
     DashboardSectionDefinition: {
       id: string
-      display?: string
+      display: string
       description?: string
       visualisations: components['schemas']['DashboardVisualisationDefinition'][]
     }
@@ -6384,7 +6376,7 @@ export interface components {
         | 'scorecard-group'
         | 'matrix-timeseries'
         | 'line-timeseries'
-      display?: string
+      display: string
       description?: string
       columns: components['schemas']['DashboardVisualisationColumnsDefinition']
       options?: components['schemas']['DashboardOptionDefinition']
@@ -6568,7 +6560,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind?: 'PRRD' | 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'HDC_VARIATION' | 'TIME_SERVED'
+      kind?: 'CRD' | 'HDC' | 'FIXED_TERM'
     }
     PromptComNotification: {
       email: string
@@ -6599,6 +6591,29 @@ export interface components {
        * @example 42
        */
       count: number
+    }
+    /** @description Describes the probation case details held for an offender */
+    ProbationCase: {
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn: string
+      /**
+       * @description Prisoner Number
+       * @example A1234AA
+       */
+      prisonNumber: string
+      /**
+       * @description CRO Number
+       * @example 29906/12J
+       */
+      croNumber?: string
+      /**
+       * @description PNC Number
+       * @example 12/394773H
+       */
+      pncNumber?: string
     }
   }
   responses: never
@@ -6664,6 +6679,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -6745,6 +6769,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -6796,6 +6829,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -6859,6 +6901,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -6910,6 +6961,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -6984,6 +7044,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -7049,6 +7118,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -7127,6 +7205,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -7198,6 +7285,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -7261,6 +7357,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -7337,6 +7442,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -7404,6 +7518,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -7484,6 +7607,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -7560,6 +7692,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -7640,6 +7781,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -7716,6 +7866,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -7796,6 +7955,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -7874,6 +8042,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -7946,6 +8123,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -8026,6 +8212,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -8104,6 +8299,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -8180,6 +8384,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -8267,6 +8480,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -8343,6 +8565,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -8423,6 +8654,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -8499,6 +8739,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -8579,6 +8828,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -8651,6 +8909,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -8731,6 +8998,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -8807,6 +9083,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -8887,6 +9172,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -8965,6 +9259,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9041,6 +9344,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -9122,6 +9434,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9196,6 +9517,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9263,6 +9593,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9328,6 +9667,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -9408,6 +9756,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9484,6 +9841,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -9563,6 +9929,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9634,6 +10009,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -9712,6 +10096,15 @@ export interface operations {
           'application/json': components['schemas']['EntityAlreadyExistsResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9788,6 +10181,15 @@ export interface operations {
           'application/json': components['schemas']['EntityAlreadyExistsResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9860,6 +10262,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9925,6 +10336,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -9999,6 +10419,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -10081,6 +10510,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -10157,6 +10595,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -10237,6 +10684,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -10313,6 +10769,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -10393,6 +10858,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -10467,6 +10941,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -10545,6 +11028,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -10627,6 +11119,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -10701,6 +11202,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -10784,6 +11294,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -10862,6 +11381,15 @@ export interface operations {
           'application/json': components['schemas']['EntityAlreadyExistsResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -10918,6 +11446,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -10988,6 +11525,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11044,6 +11590,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -11114,6 +11669,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11177,6 +11741,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11206,7 +11779,7 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description Progression of AP+PSS licences job executed. */
+      /** @description Progression of PSS and AP_PSS licences job executed. */
       200: {
         headers: {
           [name: string]: unknown
@@ -11240,62 +11813,8 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  progressionOfActiveLicences: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Progression of active licences job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -11366,6 +11885,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11422,6 +11950,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -11492,6 +12029,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11548,6 +12094,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -11628,6 +12183,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11697,6 +12261,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11762,6 +12335,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -11833,6 +12415,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11900,6 +12491,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -11971,6 +12571,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12038,6 +12647,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -12109,6 +12727,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12178,6 +12805,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12200,7 +12836,9 @@ export interface operations {
   }
   getTeamCreateCaseload: {
     parameters: {
-      query?: never
+      query?: {
+        isAdminUser?: boolean
+      }
       header?: never
       path?: never
       cookie?: never
@@ -12245,6 +12883,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -12316,6 +12963,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12383,6 +13039,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -12454,6 +13119,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12521,6 +13195,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -12592,6 +13275,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12659,6 +13351,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -12753,6 +13454,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12818,6 +13528,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12881,6 +13600,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -12958,6 +13686,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12991,11 +13728,10 @@ export interface operations {
       }
     }
   }
-  configuredApiDynamicFilter: {
+  downloadCsv: {
     parameters: {
       query: {
-        pageSize?: number
-        sortedAsc?: boolean
+        dataProductDefinitionsPath?: string
         /**
          * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
@@ -13010,32 +13746,27 @@ export interface operations {
         filters: {
           [key: string]: string
         }
-        /**
-         * @description The value to match the start of the fieldId
-         * @example Lond
-         */
-        prefix: string
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
+        /** @description List of column names to include in the generated report. If not provided all the columns will be returned. */
+        columns?: string[]
+        sortColumn?: string
+        sortedAsc?: boolean
       }
       header?: never
       path: {
         reportId: string
         reportVariantId: string
-        /**
-         * @description The name of the schema field which will be used as a dynamic filter.
-         * @example name
-         */
-        fieldId: string
       }
       cookie?: never
     }
     requestBody?: never
     responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
       /** @description Bad Request */
       400: {
         headers: {
@@ -13047,6 +13778,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -13070,17 +13810,6 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description default response */
-      default: {
-        headers: {
-          /** @description Provides additional information about why no data has been returned. */
-          'x-no-data-warning'?: string
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': string[]
         }
       }
     }
@@ -13129,6 +13858,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -13222,6 +13960,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -13288,6 +14035,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -13375,6 +14131,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -13440,6 +14205,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -13521,6 +14295,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -13598,6 +14381,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -13667,6 +14459,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -13740,6 +14541,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -13789,6 +14599,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -13851,6 +14670,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -13938,6 +14766,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14012,6 +14849,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -14090,6 +14936,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14164,6 +15019,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -14242,6 +15106,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14309,6 +15182,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14361,6 +15243,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -14435,6 +15326,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14507,6 +15407,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -14585,6 +15494,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14660,6 +15578,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -14754,6 +15681,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14815,6 +15751,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -14884,6 +15829,15 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
         headers: {
           [name: string]: unknown
         }
@@ -14979,6 +15933,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -15067,6 +16030,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -15130,6 +16102,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -15197,6 +16178,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -15262,6 +16252,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -15325,6 +16324,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -15394,6 +16402,100 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getProbationCase: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        nomsId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns the probation details associated with the prisoner */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProbationCase'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Could not find a probation case associated with prison number */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -15461,6 +16563,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -15483,7 +16594,9 @@ export interface operations {
   }
   getStaffCreateCaseload: {
     parameters: {
-      query?: never
+      query?: {
+        isAdminUser?: boolean
+      }
       header?: never
       path: {
         deliusStaffIdentifier: number
@@ -15526,6 +16639,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -15593,6 +16715,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -15669,6 +16800,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -15734,6 +16874,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -15810,6 +16959,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -15882,6 +17040,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */
@@ -15957,6 +17124,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Too Many Requests */

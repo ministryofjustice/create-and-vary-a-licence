@@ -557,6 +557,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
     expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
     expect($('.all-curfew-times-equal').length).toBe(1)
+    expect($('.curfew-times-not-equal').length).toBe(0)
   })
 
   it('should render the individual curfew times if any of the curfew times are different', () => {
@@ -567,5 +568,61 @@ describe('Create a Licence Views - Check Answers', () => {
 
     expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
     expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
+  })
+
+  it('should render Calculate release date label', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: '06/12/2026' },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('.hdcad').text()).toMatch('CALCULATE RELEASE DATE')
+  })
+
+  it('should not render Calculate release date label', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: null },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('.hdcad').text()).not.toMatch('CALCULATE RELEASE DATE')
+  })
+
+  it('should render HDC label', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('.curfew-address').text()).toMatch('HDC')
+  })
+
+  it('should render non uniform curfew hours', () => {
+    const weeklyCurfewTimes = [
+      { fromDay: 'monday', fromTime: '20:00', untilDay: 'tuesday', untilTime: '06:00' },
+      { fromDay: 'tuesday', fromTime: '20:00', untilDay: 'wednesday', untilTime: '06:00' },
+    ]
+
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      hdcLicenceData: { allCurfewTimesEqual: false, weeklyCurfewTimes },
+    })
+
+    expect($('table[data-qa="all-curfew-times-equal"]').length).toBe(0)
+    expect($('table[data-qa="curfew-times-not-equal"]').length).toBe(1)
+
+    expect($('caption.govuk-table__caption').text().trim()).toBe('Curfew hours')
+
+    const headers = $('th.govuk-table__header')
+    expect(headers.eq(0).text().trim()).toBe('Start time')
+    expect(headers.eq(1).text().trim()).toBe('End time')
+
+    const firstRow = $('tbody.govuk-table__body tr').eq(0).find('td')
+    expect(firstRow.eq(0).text().trim()).toBe('8pm on Monday')
+    expect(firstRow.eq(1).text().trim()).toBe('6am on Tuesday')
+
+    const secondRow = $('tbody.govuk-table__body tr').eq(1).find('td')
+    expect(secondRow.eq(0).text().trim()).toBe('8pm on Tuesday')
+    expect(secondRow.eq(1).text().trim()).toBe('6am on Wednesday')
   })
 })

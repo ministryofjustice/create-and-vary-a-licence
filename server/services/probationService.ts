@@ -17,12 +17,6 @@ export default class ProbationService {
     return this.deliusClient.getPduHeads(pduCode)
   }
 
-  async getProbationer(crnOrNomisId: string): Promise<DeliusRecord> {
-    const probationer = await this.deliusClient.getCase(crnOrNomisId)
-    if (!probationer || !probationer.crn) throw new Error(`No delius record found`)
-    return probationer
-  }
-
   async getProbationers(crnsOrNomisIds: string[]): Promise<DeliusRecord[]> {
     return (await Promise.all(_.chunk(crnsOrNomisIds, 500).map(chunk => this.deliusClient.getCases(chunk)))).flat()
   }

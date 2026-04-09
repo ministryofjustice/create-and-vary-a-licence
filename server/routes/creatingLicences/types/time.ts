@@ -39,6 +39,14 @@ class SimpleTime extends Stringable {
     const time = moment(value, 'hh:mm a', true)
     return new SimpleTime(time.format('hh'), time.format('mm'), <AmPm>time.format('a'))
   }
+
+  static from24HourString(value: string): SimpleTime {
+    if (!value) {
+      return undefined
+    }
+    const time = moment(value, 'HH:mm:ss', true)
+    return new SimpleTime(time.format('hh'), time.format('mm'), <AmPm>time.format('a'))
+  }
 }
 
 export default SimpleTime

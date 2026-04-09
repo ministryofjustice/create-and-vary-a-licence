@@ -2,7 +2,6 @@ import fs from 'fs'
 import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 import LicenceType from '../../../../enumeration/licenceType'
 import { VaryApproverCase } from '../../../../@types/licenceApiClientTypes'
-import config from '../../../../config'
 
 const render = templateRenderer(
   fs.readFileSync('server/views/pages/search/varyApproverSearch/varyApproverSearch.njk').toString(),
@@ -310,7 +309,6 @@ describe('View Vary Approver Search Results', () => {
   })
 
   it('should render name as plain text for LAO users', () => {
-    config.laoEnabled = true
     const $ = render({
       queryTerm: 'A111111',
       backLink: '/licence/vary-approve/list',
@@ -336,7 +334,6 @@ describe('View Vary Approver Search Results', () => {
   })
 
   it('should redact LAO cases in PDU tab', () => {
-    config.laoEnabled = true
     const $ = render({
       queryTerm: 'A111111',
       backLink: '/licence/vary-approve/list',
@@ -364,7 +361,6 @@ describe('View Vary Approver Search Results', () => {
   })
 
   it('should redact LAO cases in Region tab', () => {
-    config.laoEnabled = true
     const $ = render({
       queryTerm: 'A111111',
       backLink: '/licence/vary-approve/list',

@@ -53,12 +53,15 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         dateOfBirth: '1960-11-10',
         firstName: 'Test',
         lastName: 'Person',
+        homeDetentionCurfewActualDate: '2026-03-16',
+        homeDetentionCurfewEligibilityDate: '2026-03-16',
       } as CvlPrisoner,
       cvl: {
         isInHardStopPeriod: false,
         isEligibleForEarlyRelease: true,
         licenceStartDate: '19/11/2022',
         licenceKind: LicenceKind.CRD,
+        eligibleKind: LicenceKind.CRD,
       },
     } as PrisonerWithCvlFields)
   })
@@ -69,8 +72,11 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
 
   describe('GET', () => {
     beforeEach(() => {
-      probationService.getProbationer.mockResolvedValue({
+      licenceService.getProbationCase.mockResolvedValue({
         crn: 'X1234',
+        prisonNumber: 'A1234BC',
+        croNumber: '29906/12J',
+        pncNumber: '12/394773H',
       })
     })
 
@@ -84,9 +90,46 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           forename: 'Test',
           surname: 'Person',
           isEligibleForEarlyRelease: true,
-          kind: LicenceKind.CRD,
+          eligibleKind: LicenceKind.CRD,
           homeDetentionCurfewActualDate: '16/03/2026',
           homeDetentionCurfewEligibilityDate: '16/03/2026',
+        },
+        backLink: req.session.returnToCase,
+      })
+    })
+
+    it('should handle null and undefined hdc dates', async () => {
+      licenceService.getPrisonerDetail.mockResolvedValue({
+        prisoner: {
+          confirmedReleaseDate: '2022-11-20',
+          conditionalReleaseDate: '2022-11-21',
+          dateOfBirth: '1960-11-10',
+          firstName: 'Test',
+          lastName: 'Person',
+          homeDetentionCurfewActualDate: null,
+          homeDetentionCurfewEligibilityDate: undefined,
+        } as CvlPrisoner,
+        cvl: {
+          isInHardStopPeriod: false,
+          isEligibleForEarlyRelease: true,
+          licenceStartDate: '19/11/2022',
+          licenceKind: LicenceKind.CRD,
+          eligibleKind: LicenceKind.CRD,
+        },
+      } as PrisonerWithCvlFields)
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
+        licence: {
+          licenceStartDate: '19/11/2022',
+          crn: 'X1234',
+          dateOfBirth: '10/11/1960',
+          forename: 'Test',
+          surname: 'Person',
+          isEligibleForEarlyRelease: true,
+          eligibleKind: LicenceKind.CRD,
+          homeDetentionCurfewActualDate: null,
+          homeDetentionCurfewEligibilityDate: null,
         },
         backLink: req.session.returnToCase,
       })
@@ -110,7 +153,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           forename: 'Test',
           surname: 'Person',
           isEligibleForEarlyRelease: true,
-          kind: LicenceKind.CRD,
+          eligibleKind: LicenceKind.CRD,
           homeDetentionCurfewActualDate: '16/03/2026',
           homeDetentionCurfewEligibilityDate: '16/03/2026',
         },
