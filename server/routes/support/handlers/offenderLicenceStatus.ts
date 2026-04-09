@@ -4,6 +4,7 @@ import LicenceStatus, { selectableLicenceStatus } from '../../../enumeration/lic
 import statusConfig from '../../../licences/licenceStatus'
 import { User } from '../../../@types/CvlUserDetails'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 export default class OffenderLicenceStatusRoutes {
   constructor(
@@ -54,7 +55,12 @@ export default class OffenderLicenceStatusRoutes {
     const { status, statusChangeReason } = req.body
 
     if (status && statusChangeReason) {
+      const currentLicence: Licence = await this.licenceService.getLicence(parseInt(licenceId, 10), user)
       await this.licenceOverrideService.overrideStatusCode(parseInt(licenceId, 10), status, statusChangeReason, user)
+
+      if (currentLicence.statusCode === 'INACTIVE') {
+        await this.licenceService.syncComAllocation(currentLicence.crn, user)
+      }
       res.redirect(`/support/offender/${nomsId}/licences`)
       return
     }
