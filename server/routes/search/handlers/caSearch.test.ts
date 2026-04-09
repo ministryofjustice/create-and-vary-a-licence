@@ -1190,7 +1190,7 @@ describe('Route Handlers - Search - Ca Search', () => {
     })
   })
 
-  it('should return time-served creation link for TIMED_OUT licence with hardStopKind TIME_SERVED', async () => {
+  it('should return time-served creation link for TIMED_OUT licence', async () => {
     // Given
     const timeServedCase = createCase({
       kind: LicenceKind.TIME_SERVED,

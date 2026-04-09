@@ -4,12 +4,10 @@ import { Services } from '../../../services'
 import { DomainEventMessage } from '../../../@types/events'
 import ReleaseEventHandler from './releaseEventHandler'
 import TransferredEventHandler from './transferredEventHandler'
-import OffenderDetailsChangedEventHandler from './offenderDetailsChangedEventHandler'
 
 export default function buildEventHandler({ licenceService, prisonerService }: Services) {
   const releaseEventHandler = new ReleaseEventHandler(licenceService, prisonerService)
   const transferredEventHandler = new TransferredEventHandler(licenceService, prisonerService)
-  const offenderDetailsChangedEventHandler = new OffenderDetailsChangedEventHandler(licenceService, prisonerService)
 
   return async (messages: Message[]) => {
     messages.forEach(message => {
@@ -26,11 +24,6 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
           break
         case 'prison-offender-events.prisoner.received':
           transferredEventHandler.handle(eventMessage).catch(error => logger.error(error))
-          break
-        case 'prisoner-offender-search.prisoner.updated':
-          if (eventMessage.additionalInformation?.categoriesChanged?.includes('PERSONAL_DETAILS')) {
-            offenderDetailsChangedEventHandler.handle(eventMessage).catch(error => logger.error(error))
-          }
           break
         default: {
           // silently ignore
