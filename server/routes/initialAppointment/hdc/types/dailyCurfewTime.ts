@@ -28,10 +28,6 @@ class DailyCurfewTime {
   @IsInt()
   @IsNotEmpty()
   sequence: number
-
-  getSequencedFieldName(fieldName: string): string {
-    return `curfews[${this.sequence}][${fieldName}]`
-  }
 }
 
 export default DailyCurfewTime

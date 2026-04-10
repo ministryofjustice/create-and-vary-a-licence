@@ -2,8 +2,8 @@
 {% from "../customComponents/timeInput/amPmInput.njk" import amPmInput %}
 
 {% macro curfewTimePicker(params) %}
-    {% set startTimeError =  params.errorMessage | findError('curfews[' ~ params.loopIndex ~ '][startTime]')%}
-    {% set endTimeError =  params.errorMessage | findError('curfews[' ~ params.loopIndex ~ '][endTime]')%}
+    {% set startTimeError =  params.validationErrors | findError('curfews[' ~ params.loopIndex ~ '][startTime]')%}
+    {% set endTimeError =  params.validationErrors | findError('curfews[' ~ params.loopIndex ~ '][endTime]')%}
 
     <div class="govuk-form-group govuk-!-padding-top-2 border-bottom govuk-!-margin-bottom-9 {% if startTimeError or endTimeError %}govuk-form-group--error{% endif %}">
         <fieldset class="govuk-fieldset govuk-!-padding-bottom-9" role="group">
