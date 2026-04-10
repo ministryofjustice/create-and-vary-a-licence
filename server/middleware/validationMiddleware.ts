@@ -9,6 +9,8 @@ export type FieldValidationError = {
   summaryMessage?: string
 }
 
+type CvlValidationError = ValidationError & { target: { getSequencedFieldName: (fieldName: string) => string } }
+
 type ValidationContextValue = {
   summaryMessageBuilder: (message: string) => string
 }
@@ -61,7 +63,9 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         const summaryMessage = contexts?.[lastConstraintKey]?.summaryMessageBuilder?.(message) || message
 
         return {
-          field: error.property,
+          field: (error as CvlValidationError).target?.getSequencedFieldName
+            ? (error as CvlValidationError).target.getSequencedFieldName(error.property)
+            : error.property,
           message,
           summaryMessage,
         }

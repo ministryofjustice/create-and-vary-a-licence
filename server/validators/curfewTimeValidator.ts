@@ -17,7 +17,7 @@ export default class ValidCurfewTime implements ValidatorConstraintInterface {
     return error || ''
   }
 
-  private getError(time: SimpleTime, fieldName?: string): string | null {
+  protected getError(time: SimpleTime, fieldName?: string): string | null {
     const hour = Number(time?.hour)
     const minute = Number(time?.minute)
     const ampm = time?.ampm
