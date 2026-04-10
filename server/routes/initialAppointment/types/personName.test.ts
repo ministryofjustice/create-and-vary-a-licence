@@ -12,7 +12,7 @@ describe('personName validator test', () => {
     expect(errors.length).toBe(1)
     expect(errors[0].property).toBe('contactName')
     expect(errors[0].constraints).toEqual({
-      maxLength: 'Name or job title must be at most 100 characters',
+      maxLength: 'Name or job title must be 100 characters or less',
     })
   })
 })
