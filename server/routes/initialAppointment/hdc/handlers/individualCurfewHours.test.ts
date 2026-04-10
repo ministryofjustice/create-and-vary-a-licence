@@ -53,10 +53,10 @@ describe('IndividualCurfewHoursRoutes', () => {
 
   const curfewTimesDisplayObject = {
     0: {
-      fromTime: { hour: '08', minute: '00', ampm: 'pm' },
-      fromDay: 'MONDAY',
-      untilTime: { hour: '06', minute: '00', ampm: 'am' },
-      untilDay: 'TUESDAY',
+      startTime: { hour: '08', minute: '00', ampm: 'pm' },
+      startDay: 'MONDAY',
+      endTime: { hour: '06', minute: '00', ampm: 'am' },
+      endDay: 'TUESDAY',
       sequence: 0,
     } as DailyCurfewTime,
   }

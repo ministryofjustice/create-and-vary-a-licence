@@ -91,10 +91,10 @@ export default class HdcService {
     const requestObject = curfewTimes.map(curfew => {
       return {
         curfewTimesSequence: curfew.sequence,
-        fromDay: curfew.fromDay,
-        fromTime: simpleTimeTo24Hour(curfew.fromTime),
-        untilDay: curfew.untilDay,
-        untilTime: simpleTimeTo24Hour(curfew.untilTime),
+        fromDay: curfew.startDay,
+        fromTime: simpleTimeTo24Hour(curfew.startTime),
+        untilDay: curfew.endDay,
+        untilTime: simpleTimeTo24Hour(curfew.endTime),
       }
     })
 
@@ -106,10 +106,10 @@ export default class HdcService {
       return [
         curfew.curfewTimesSequence,
         {
-          fromTime: SimpleTime.from24HourString(curfew.fromTime),
-          fromDay: curfew.fromDay as Day,
-          untilTime: SimpleTime.from24HourString(curfew.untilTime),
-          untilDay: curfew.untilDay as Day,
+          startTime: SimpleTime.from24HourString(curfew.fromTime),
+          startDay: curfew.fromDay as Day,
+          endTime: SimpleTime.from24HourString(curfew.untilTime),
+          endDay: curfew.untilDay as Day,
           sequence: curfew.curfewTimesSequence,
         },
       ]
@@ -126,10 +126,10 @@ export default class HdcService {
       return [
         index,
         {
-          fromTime: STANDARD_WEEKLY_CURFEW_TIMES.curfewStart,
-          fromDay: day as Day,
-          untilTime: STANDARD_WEEKLY_CURFEW_TIMES.curfewEnd,
-          untilDay: (curfewEndTimeMinutes <= curfewStartTimeMinutes ? DAYS[(index + 1) % DAYS.length] : day) as Day,
+          startTime: STANDARD_WEEKLY_CURFEW_TIMES.curfewStart,
+          startDay: day as Day,
+          endTime: STANDARD_WEEKLY_CURFEW_TIMES.curfewEnd,
+          endDay: (curfewEndTimeMinutes <= curfewStartTimeMinutes ? DAYS[(index + 1) % DAYS.length] : day) as Day,
           sequence: index,
         },
       ]

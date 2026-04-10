@@ -1,33 +1,37 @@
 import { Expose, Type } from 'class-transformer'
 import { IsInt, IsNotEmpty, Validate } from 'class-validator'
-import ValidCurfewTime from '../../../../validators/curfewTimeValidator'
 import { SimpleTime } from '../../../manageConditions/types'
 import type { Day } from '../../../../enumeration/days'
+import ValidDailyCurfewTime from '../../../../validators/dailyCurfewTimeValidator'
 
 class DailyCurfewTime {
   @Expose()
   @Type(() => SimpleTime)
-  @Validate(ValidCurfewTime)
-  fromTime: SimpleTime
+  @Validate(ValidDailyCurfewTime)
+  startTime: SimpleTime
 
   @Expose()
   @IsNotEmpty()
-  fromDay: Day
+  startDay: Day
 
   @Expose()
   @Type(() => SimpleTime)
-  @Validate(ValidCurfewTime)
-  untilTime: SimpleTime
+  @Validate(ValidDailyCurfewTime)
+  endTime: SimpleTime
 
   @Expose()
   @IsNotEmpty()
-  untilDay: Day
+  endDay: Day
 
   @Expose()
   @Type(() => Number)
   @IsInt()
   @IsNotEmpty()
   sequence: number
+
+  getSequencedFieldName(fieldName: string): string {
+    return `curfews[${this.sequence}][${fieldName}]`
+  }
 }
 
 export default DailyCurfewTime
