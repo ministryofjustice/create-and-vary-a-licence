@@ -2,35 +2,38 @@
 {% from "../customComponents/timeInput/amPmInput.njk" import amPmInput %}
 
 {% macro curfewTimePicker(params) %}
-    <div class="govuk-form-group govuk-!-padding-top-2 border-bottom govuk-!-margin-bottom-9 {% if params.errorMessage %}govuk-form-group--error{% endif %}">
+    {% set startTimeError =  params.validationErrors | findError('curfews[' ~ params.loopIndex ~ '][startTime]')%}
+    {% set endTimeError =  params.validationErrors | findError('curfews[' ~ params.loopIndex ~ '][endTime]')%}
+
+    <div class="govuk-form-group govuk-!-padding-top-2 border-bottom govuk-!-margin-bottom-9 {% if startTimeError or endTimeError %}govuk-form-group--error{% endif %}">
         <fieldset class="govuk-fieldset govuk-!-padding-bottom-9" role="group">
             <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">
                 Start Time
             </legend>
-            <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][fromTime]">
+            <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][startTime]">
                 {{ timeInput({
                     label: 'Hour',
-                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-hour',
-                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][hour]',
-                    value: params.curfewTimes['fromTime']['hour'],
-                    errorMessage: params.errorMessage
+                    id: 'curfews[' ~ params.loopIndex ~ '][startTime]-hour',
+                    name: 'curfews[' ~ params.loopIndex ~ '][startTime][hour]',
+                    value: params.curfewTimes['startTime']['hour'],
+                    errorMessage: startTimeError
                 }) }}
                 {{ timeInput({
                     label: 'Minute',
-                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-minute',
-                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][minute]',
-                    value: params.curfewTimes['fromTime']['minute'],
-                    errorMessage: params.errorMessage
+                    id: 'curfews[' ~ params.loopIndex ~ '][startTime]-minute',
+                    name: 'curfews[' ~ params.loopIndex ~ '][startTime][minute]',
+                    value: params.curfewTimes['startTime']['minute'],
+                    errorMessage: startTimeError
                 }) }}
                 {{ amPmInput({
-                    id: 'curfews[' ~ params.loopIndex ~ '][fromTime]-ampm',
-                    name: 'curfews[' ~ params.loopIndex ~ '][fromTime][ampm]',
-                    selected: params.curfewTimes['fromTime']['ampm'],
-                    errorMessage: params.errorMessage
+                    id: 'curfews[' ~ params.loopIndex ~ '][startTime]-ampm',
+                    name: 'curfews[' ~ params.loopIndex ~ '][startTime][ampm]',
+                    selected: params.curfewTimes['startTime']['ampm'],
+                    errorMessage: startTimeError
                 }) }}
                 <div class="govuk-date-input__item govuk-!-padding-top-7">
                     <div class="govuk-form-group">
-                        <input type="hidden" name="curfews[{{params.loopIndex}}][fromDay]" id="curfews[{{params.loopIndex}}][fromDay]" value="{{ params.day }}">
+                        <input type="hidden" name="curfews[{{params.loopIndex}}][startDay]" id="curfews[{{params.loopIndex}}][startDay]" value="{{ params.day }}">
                         <p class="govuk-!-margin-bottom-2">On {{ params.day | titlecase }}</p>
                     </div>
                 </div>
@@ -40,39 +43,39 @@
                     End Time
                 </legend>
             </div>
-            <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][untilTime]">
+            <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][endTime]">
                 {{ timeInput({
                     label: 'Hour',
-                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-hour',
-                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][hour]',
-                    value: params.curfewTimes['untilTime']['hour'],
-                    errorMessage: params.errorMessage
+                    id: 'curfews[' ~ params.loopIndex ~ '][endTime]-hour',
+                    name: 'curfews[' ~ params.loopIndex ~ '][endTime][hour]',
+                    value: params.curfewTimes['endTime']['hour'],
+                    errorMessage: endTimeError
                 }) }}
                 {{ timeInput({
                     label: 'Minute',
-                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-minute',
-                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][minute]',
-                    value: params.curfewTimes['untilTime']['minute'],
-                    errorMessage: params.errorMessage
+                    id: 'curfews[' ~ params.loopIndex ~ '][endTime]-minute',
+                    name: 'curfews[' ~ params.loopIndex ~ '][endTime][minute]',
+                    value: params.curfewTimes['endTime']['minute'],
+                    errorMessage: endTimeError
                 }) }}
                 {{ amPmInput({
-                    id: 'curfews[' ~ params.loopIndex ~ '][untilTime]-ampm',
-                    name: 'curfews[' ~ params.loopIndex ~ '][untilTime][ampm]',
-                    selected: params.curfewTimes['untilTime']['ampm'],
-                    errorMessage: params.errorMessage
+                    id: 'curfews[' ~ params.loopIndex ~ '][endTime]-ampm',
+                    name: 'curfews[' ~ params.loopIndex ~ '][endTime][ampm]',
+                    selected: params.curfewTimes['endTime']['ampm'],
+                    errorMessage: endTimeError
                 }) }}
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" for="curfews[{{params.loopIndex}}][untilDay]">
+                        <label class="govuk-label govuk-date-input__label" for="curfews[{{params.loopIndex}}][endDay]">
                             Day
                         </label>
-                        <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"
-                                id="curfews[{{params.loopIndex}}][untilDay]"
-                                name="curfews[{{params.loopIndex}}][untilDay]">
-                            <option value="{{params.day}}" {% if params.curfewTimes['untilDay'] == params.day %} selected {% endif %}>
+                        <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if endTimeError %}govuk-select--error{% endif %}"
+                                id="curfews[{{params.loopIndex}}][endDay]"
+                                name="curfews[{{params.loopIndex}}][endDay]">
+                            <option value="{{params.day}}" {% if params.curfewTimes['endDay'] == params.day %} selected {% endif %}>
                                 on {{ params.day | titlecase }}
                             </option>
-                            <option value="{{params.nextDay}}" {% if params.curfewTimes['untilDay'] == params.nextDay %} selected {% endif %}>
+                            <option value="{{params.nextDay}}" {% if params.curfewTimes['endDay'] == params.nextDay %} selected {% endif %}>
                                 on {{ params.nextDay | titlecase }}
                             </option>
                         </select>

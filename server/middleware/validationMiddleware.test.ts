@@ -151,7 +151,7 @@ describe('validationMiddleware', () => {
       expect(next).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        JSON.stringify([{ field: 'name', message: notEmptyMessage, summaryMessage: notEmptyMessage }]),
+        JSON.stringify([{ field: 'child[name]', message: notEmptyMessage, summaryMessage: notEmptyMessage }]),
       )
     })
 
