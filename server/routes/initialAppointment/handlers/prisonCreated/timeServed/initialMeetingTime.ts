@@ -2,10 +2,10 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../../services/licenceService'
 import DateTime from '../../../types/dateTime'
 import UserType from '../../../../../enumeration/userType'
-import AppointmentTimeType from '../../../../../enumeration/appointmentTimeType'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import PathType from '../../../../../enumeration/pathType'
 import { getTimeServedEditPath } from './index'
+import appointmentTimeTypes from '../../../../../config/appointmentTimeType'
 
 export default class InitialMeetingTimeRoutes {
   constructor(
@@ -16,11 +16,10 @@ export default class InitialMeetingTimeRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
     const formDate = DateTime.toDateTime(licence.appointmentTime)
-    const appointmentTimeType: Record<string, string> = AppointmentTimeType
 
     return res.render('pages/initialAppointment/prisonCreated/initialMeetingTime', {
       formDate,
-      appointmentTimeType,
+      appointmentTimeTypes,
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
     })
   }

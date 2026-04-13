@@ -10,7 +10,6 @@
 {% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-
 {% set pageTitle = applicationName + " - Create a licence - When is the initial appointment?" %}
 {% set pageId = "appointment-time-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-contact" %}
@@ -21,8 +20,11 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-
+                <p id = "initial-appointment-hint-text" class="govuk-visually-hidden">
+                    You will be able to provide more information if you choose a specific date and time for this appointment
+                </p>
                 {% call govukFieldset({
+                    describedBy: "initial-appointment-hint-text",
                     legend: {
                         text: "When does this person need to go to their initial appointment?",
                         classes: "govuk-fieldset__legend--l",
@@ -35,8 +37,9 @@
                             legend: {
                                 text: "Date",
                                 classes: "govuk-visually-hidden",
-                                isPageHeading: false}
-                            }) %}
+                                isPageHeading: false
+                            }
+                        }) %}
 
                             {{ hmppsDatePicker({
                                 id: "date-calendarDate",
@@ -55,13 +58,12 @@
                         {% endcall %}
                         {% call govukFieldset({
                             classes:"govuk-!-margin-top-7",
-
                             legend: {
                                 text: "Time",
                                 classes: "govuk-visually-hidden",
                                 isPageHeading: false}
                             }) %}
-                        
+
                             {{ timePicker({
                                 id: "time",
                                 label: {
@@ -78,26 +80,28 @@
                     {% endset %}
 
                     {% set appointmentTimeTypeOptions = [] %}
-                    {% for value, text in appointmentTimeType %}
+                    {% for type in appointmentTimeTypes %}
                         {% set appointmentTimeTypeOptions = (appointmentTimeTypeOptions.push(
-                            {   value: value, 
-                                text: text,
+                            {   value: type.value,
+                                text: type.text,
+                                hint: {
+                                    html: type.hintText
+                                },
                                 conditional: {
-                                html: dateTimeHtml
-                                } if value === SPECIFIC_DATE_TIME
+                                    html: dateTimeHtml
+                                } if type.value === 'SPECIFIC_DATE_TIME'
                             }), appointmentTimeTypeOptions) %}
                     {% endfor %}
                     <br>
                     {{ govukRadios({
-                    id: "appointment-time-type",
-                    name: "appointmentTimeType",
-                    hint: {
-                        text: "Only enter a specific date and time if you have confirmed one with this person’s probation practitioner."
-                    },
-                    value: (formResponses.appointmentTimeType or licence.appointmentTimeType) or SPECIFIC_DATE_TIME,
-                    items: appointmentTimeTypeOptions
-                }) }}
-
+                        id: "appointment-time-type",
+                        name: "appointmentTimeType",
+                        hint: {
+                            text: "Only enter a specific date and time if you have confirmed one with this person’s probation practitioner."
+                        },
+                        value: (formResponses.appointmentTimeType or licence.appointmentTimeType) or SPECIFIC_DATE_TIME,
+                        items: appointmentTimeTypeOptions
+                    }) }}
                 {% endcall %}
                 <div class="govuk-button-group">
                     {{ govukButton({
@@ -114,4 +118,3 @@
 {% block pageScripts %}
    <script src="/assets/js/datepicker.js"></script>
 {% endblock %}
-
