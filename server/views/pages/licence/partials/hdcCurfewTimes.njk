@@ -2,9 +2,11 @@
 {% from "moj/components/badge/macro.njk" import mojBadge %}
 {% from "./nonUniformCurfewTimesTable.njk" import nonUniformCurfewTimesTable %}
 
-{% macro hdcCurfewTimes(licence, hdcLicenceData) %}
+{% macro hdcCurfewTimes(licence, hdcLicenceData, isEditable, isPrisonUser) %}
     {% set addressLine2Html = hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if hdcLicenceData.curfewAddress.addressLine2 | length%}
     {% set countyHtml = hdcLicenceData.curfewAddress.county | escape + ", " if hdcLicenceData.curfewAddress.county | length%}
+    {% set baseURL = "/licence/create/id/" + licence.id + "/hdc" %}
+    {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
     {% set releaseDatesBadge %}
         {{ mojBadge({
             text: "CALCULATE RELEASE DATES",
@@ -30,6 +32,7 @@
         attributes: {'data-qa': 'hdc-curfew-details'},
         rows: [
             {
+                classes: "hdcad-row",
                 key: { text: 'HDCAD' },
                 value: {
                     html: hdcad,
@@ -37,6 +40,7 @@
                 }
             },
             {
+                classes: "curfew-address-row",
                 key: {text: 'Address'},
                 value: {
                     html: "<p>" + hdcLicenceData.curfewAddress.addressLine1 | escape + ", " +
@@ -52,7 +56,17 @@
                 value: {
                     text: hdcLicenceData.firstNightCurfewTimes.fromTime | localTimeTo12h + " to " + hdcLicenceData.firstNightCurfewTimes.untilTime | localTimeTo12h,
                     classes: "first-night-curfew-times"
-                }
+                },
+                actions: {
+                    items: [
+                        {
+                            href: baseURL + "/first-night-curfew-hours" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "first night curfew hours",
+                            attributes: { "id": "first-night-curfew-hours", "data-qa": "first-night-curfew-hours-change-link" }
+                        }
+                    ]
+                } if isEditable
             },
             {
                 classes: 'all-curfew-times-equal',
@@ -63,12 +77,22 @@
                     html: hdcLicenceData.weeklyCurfewTimes[0].fromDay | titlecase | escape + " to " + hdcLicenceData.weeklyCurfewTimes[6].fromDay | titlecase | escape + "<br>" +
                           hdcLicenceData.weeklyCurfewTimes[0].fromTime  | localTimeTo12h + " to " + hdcLicenceData.weeklyCurfewTimes[0].untilTime | localTimeTo12h,
                     classes: "weekly-curfew-times"
-                }
+                },
+                actions: {
+                    items: [
+                        {
+                            href: baseURL + "/standard-curfew-hours-question" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "curfew hours",
+                            attributes: { "id": "curfew-hours", "data-qa": "curfew-hours-change-link" }
+                        }
+                    ]
+                } if isEditable
             } if hdcLicenceData.allCurfewTimesEqual
         ]
     }) }}
 
     {% if not hdcLicenceData.allCurfewTimesEqual %}
-        {{ nonUniformCurfewTimesTable(hdcLicenceData.weeklyCurfewTimes) }}
+        {{ nonUniformCurfewTimesTable(hdcLicenceData.weeklyCurfewTimes, isEditable, routeAppend, baseURL) }}
     {% endif %}
 {% endmacro %}

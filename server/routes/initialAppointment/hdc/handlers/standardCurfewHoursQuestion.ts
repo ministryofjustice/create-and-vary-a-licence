@@ -13,6 +13,13 @@ export default class StandardCurfewHoursQuestionRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     const { answer } = req.body
+    if (req.query?.fromReview) {
+      if (answer === YesOrNo.YES) {
+        await this.hdcService.updateWeeklyCurfewTimes(licence.id, STANDARD_WEEKLY_CURFEW_TIMES, user)
+        return res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
+      }
+      return res.redirect(`/licence/create/id/${licence.id}/hdc/do-hdc-curfew-hours-apply-daily?fromReview=true`)
+    }
     if (answer === YesOrNo.YES) {
       await this.hdcService.updateWeeklyCurfewTimes(licence.id, STANDARD_WEEKLY_CURFEW_TIMES, user)
       return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions-question`)

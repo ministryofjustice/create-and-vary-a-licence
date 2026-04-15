@@ -11,6 +11,9 @@ export default class CurfewHoursRoutes {
     const { licence, user } = res.locals
     const curfewTimes = req.body as CurfewTimes
     await this.hdcService.updateWeeklyCurfewTimes(licence.id, curfewTimes, user)
+    if (req.query?.fromReview) {
+      return res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
+    }
     return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions-question`)
   }
 }
