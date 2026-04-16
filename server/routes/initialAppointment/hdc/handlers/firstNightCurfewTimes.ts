@@ -34,10 +34,12 @@ export default class FirstNightCurfewTimesRoutes {
     const { licence, user } = res.locals
 
     await this.hdcService.updateFirstNightCurfewTimes(licence.id, this.mapToFirstNightCurfewRequest(req.body), user)
-    if (req.query?.fromReview) {
-      return res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
-    }
-    return res.redirect(`/licence/create/id/${licence.id}/hdc/standard-curfew-hours-question`)
+
+    const redirectPath = req.query?.fromReview
+      ? `/licence/create/id/${licence.id}/check-your-answers`
+      : `/licence/create/id/${licence.id}/hdc/standard-curfew-hours-question`
+
+    res.redirect(redirectPath)
   }
 
   mapToFirstNightCurfewRequest = (curfewTimes: CurfewTimes): FirstNightCurfewTimesRequest => ({

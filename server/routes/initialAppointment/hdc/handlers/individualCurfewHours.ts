@@ -16,12 +16,14 @@ export default class IndividualCurfewHoursRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
+    const { curfews } = req.body
 
-    const curfewTimes = req.body.curfews
-    await this.hdcService.updateDifferingCurfewTimes(licence.id, curfewTimes, user)
-    if (req.query?.fromReview) {
-      return res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
-    }
-    return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions-question`)
+    await this.hdcService.updateDifferingCurfewTimes(licence.id, curfews, user)
+
+    const redirectPath = req.query?.fromReview
+      ? `/licence/create/id/${licence.id}/check-your-answers`
+      : `/licence/create/id/${licence.id}/additional-licence-conditions-question`
+
+    res.redirect(redirectPath)
   }
 }
