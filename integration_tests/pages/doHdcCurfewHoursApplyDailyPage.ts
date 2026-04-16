@@ -17,7 +17,6 @@ export default class DoHdcCurfewHoursApplyDailyPage extends Page {
   }
 
   selectNo = (): DoHdcCurfewHoursApplyDailyPage => {
-    cy.task('stubGetHdcLicenceData')
     cy.get('[value=No]').click()
     return this
   }
@@ -28,9 +27,7 @@ export default class DoHdcCurfewHoursApplyDailyPage extends Page {
   }
 
   clickContinueToIndividualCurfewHoursPage = (): individualCurfewHoursPage => {
-    cy.task('stubGetHdcLicenceData')
     cy.get(this.continueButtonId).click()
-    cy.task('stubGetHdcLicenceData')
     return Page.verifyOnPage(individualCurfewHoursPage)
   }
 
