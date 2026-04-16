@@ -106,5 +106,13 @@ describe('IndividualCurfewHoursRoutes', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
     })
+
+    it('should redirect to the check your answers page if fromReview query param is present', async () => {
+      req.query = { fromReview: 'true' }
+
+      await handler.POST(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+    })
   })
 })

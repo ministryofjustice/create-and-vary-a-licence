@@ -5,6 +5,8 @@ import ReasonForVariationPage from './reasonForVariationPage'
 import DiscardPage from './discardPage'
 import CaseloadPage from './caseload'
 import AppointmentContactPage from './appointmentContact'
+import FirstNightCurfewTimesPage from './firstNightCurfewTimesPage'
+import StandardCurfewHoursQuestionPage from './standardCurfewHoursQuestionPage'
 
 export default class CheckAnswersPage extends Page {
   private sendLicenceConditionsButtonId = '[data-qa=send-licence-conditions]'
@@ -89,6 +91,16 @@ export default class CheckAnswersPage extends Page {
   clickChangeAlternativeTelephoneLink = (): AppointmentContactPage => {
     cy.get('[data-qa=alternative-telephone-change-link]').click()
     return Page.verifyOnPage(AppointmentContactPage)
+  }
+
+  clickChangeFirstNightCurfewHoursLink = (): FirstNightCurfewTimesPage => {
+    cy.get('[data-qa=first-night-curfew-hours-change-link]').click()
+    return Page.verifyOnPage(FirstNightCurfewTimesPage)
+  }
+
+  clickChangeCurfewHoursLink = (): StandardCurfewHoursQuestionPage => {
+    cy.get('[data-qa=curfew-hours-change-link]').click()
+    return Page.verifyOnPage(StandardCurfewHoursQuestionPage)
   }
 
   checkAlternativeTelephoneNotEntered() {

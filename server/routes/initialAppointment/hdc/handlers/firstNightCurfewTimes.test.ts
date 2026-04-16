@@ -84,5 +84,12 @@ describe('Route Handlers - Create Licence - First Night Curfew Times', () => {
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/hdc/standard-curfew-hours-question')
     })
+
+    it('should redirect to the check your answers page if fromReview query param is present', async () => {
+      req.query = { fromReview: 'true' }
+      req.body = { curfewStart: SimpleTime.fromString('07:00 pm'), curfewEnd: SimpleTime.fromString('07:00 am') }
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+    })
   })
 })

@@ -12,6 +12,7 @@ import policyV3_0 from './polices/v3-0'
 import policyV4_0 from './polices/v4-0'
 import LicenceCreationType from '../../server/enumeration/licenceCreationType'
 import {
+  CurfewTimes,
   AdditionalCondition,
   ElectronicMonitoringProvider,
   Licence,
@@ -697,6 +698,7 @@ export default {
     isReviewNeeded?: boolean | false
     comUsername?: string
     isReviewed?: boolean
+    weeklyCurfewTimes?: CurfewTimes[]
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -726,6 +728,7 @@ export default {
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate,
           homeDetentionCurfewEndDate: options.homeDetentionCurfewEndDate,
           additionalLicenceConditions: options.conditions || licenceConditions,
+          weeklyCurfewTimes: options.weeklyCurfewTimes || [],
           isReviewNeeded: options.isReviewNeeded,
           submittedByFullName: 'John Smith',
           bespokeConditions: [

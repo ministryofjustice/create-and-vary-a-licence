@@ -5,6 +5,7 @@ import CurfewType from '../../server/enumeration/CurfewType'
 import DoHdcCurfewHoursApplyDailyPage from '../pages/doHdcCurfewHoursApplyDailyPage'
 import CurfewHoursPage from '../pages/curfewHoursPage'
 import FirstNightCurfewTimesPage from '../pages/firstNightCurfewTimesPage'
+import { LicenceKind } from '../../server/enumeration'
 
 context('Create an HDC licence', () => {
   const dates: string[] = []
@@ -38,6 +39,7 @@ context('Create an HDC licence', () => {
 
   it('should click through the create a licence journey', () => {
     cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
+    cy.task('stubGetHdcLicenceData')
     const confirmCreatePage = new ConfirmCreatePage()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -115,7 +117,22 @@ context('Create an HDC licence', () => {
         .enterAddress()
         .nextInput()
         .enterAddress()
-        .clickContinue()
+        .clickContinue([], {}, undefined, LicenceKind.HDC)
+
+      const firstNightCurfewHoursPage = checkAnswersPage.clickChangeFirstNightCurfewHoursLink()
+      firstNightCurfewHoursPage
+        .enterFirstNightCurfewStartTime({ hour: '08', minute: '00', ampm: 'pm' })
+        .enterFirstNightCurfewEndTime({ hour: '10', minute: '00', ampm: 'am' })
+        .clickSave()
+      const standardCurfewHoursQuestionPage = checkAnswersPage.clickChangeCurfewHoursLink()
+      const sameCurfewHoursQuestionPage = standardCurfewHoursQuestionPage
+        .selectNo()
+        .clickContinueToSameCurfewHoursQuestionPage()
+      const individualCurfewHoursPage = sameCurfewHoursQuestionPage
+        .selectNo()
+        .clickContinueToIndividualCurfewHoursPage()
+
+      individualCurfewHoursPage.clickSave()
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
       cy.task('stubGetStaffCreateCaseload', {
