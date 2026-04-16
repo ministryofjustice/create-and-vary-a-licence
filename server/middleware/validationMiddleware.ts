@@ -51,9 +51,9 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       }
 
       const buildError = (
-        error: ValidationError,
         constraints: { [type: string]: string },
         contexts?: ValidationContext,
+        currentPath?: string,
       ): FieldValidationError => {
         const constraintKeys = Object.keys(constraints)
         const lastConstraintKey = constraintKeys[constraintKeys.length - 1]
@@ -61,19 +61,23 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         const summaryMessage = contexts?.[lastConstraintKey]?.summaryMessageBuilder?.(message) || message
 
         return {
-          field: error.property,
+          field: currentPath,
           message,
           summaryMessage,
         }
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const flattenErrors: any = (errorList: ValidationError[]) => {
+      const flattenErrors: any = (errorList: ValidationError[], parentPath: string = ''): FieldValidationError[] => {
         // Flat pack a list of errors with child errors into a 1-dimensional list of errors.
         return errorList.flatMap(error => {
-          return error.children.length > 0
-            ? flattenErrors(error.children)
-            : buildError(error, error.constraints, error?.contexts)
+          // Build the path with array indices for nested errors
+          const currentPath = parentPath ? `${parentPath}[${error.property}]` : error.property
+
+          if (error.children.length > 0) {
+            return flattenErrors(error.children, currentPath)
+          }
+          return buildError(error.constraints, error?.contexts, currentPath)
         })
       }
 
