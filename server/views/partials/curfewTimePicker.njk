@@ -5,10 +5,11 @@
     {% set startTimeError =  params.validationErrors | findError('curfews[' ~ params.loopIndex ~ '][startTime]')%}
     {% set endTimeError =  params.validationErrors | findError('curfews[' ~ params.loopIndex ~ '][endTime]')%}
 
-    <div class="govuk-form-group govuk-!-padding-top-2 border-bottom govuk-!-margin-bottom-9 {% if startTimeError or endTimeError %}govuk-form-group--error{% endif %}">
+    <div class="govuk-form-group govuk-!-padding-top-7 border-bottom govuk-!-margin-bottom-9 {% if startTimeError or endTimeError %}govuk-form-group--error{% endif %}">
+        <h2 class="govuk-heading-m">Hours starting {{params.day | titlecase}}</h2>
         <fieldset class="govuk-fieldset govuk-!-padding-bottom-9" role="group">
             <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">
-                Start Time
+                Start time
             </legend>
             <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][startTime]">
                 {{ timeInput({
@@ -34,13 +35,13 @@
                 <div class="govuk-date-input__item govuk-!-padding-top-7">
                     <div class="govuk-form-group">
                         <input type="hidden" name="curfews[{{params.loopIndex}}][startDay]" id="curfews[{{params.loopIndex}}][startDay]" value="{{ params.day }}">
-                        <p class="govuk-!-margin-bottom-2">On {{ params.day | titlecase }}</p>
+                        <p class="govuk-!-margin-bottom-2">on {{ params.day | titlecase }}</p>
                     </div>
                 </div>
             </div>
             <div class="govuk-!-padding-top-7">
                 <legend class="govuk-fieldset__legend govuk-!-font-weight-bold">
-                    End Time
+                    End time
                 </legend>
             </div>
             <div class="govuk-date-input" id="curfews[{{params.loopIndex}}][endTime]">
@@ -69,7 +70,7 @@
                         <label class="govuk-label govuk-date-input__label" for="curfews[{{params.loopIndex}}][endDay]">
                             Day
                         </label>
-                        <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if endTimeError %}govuk-select--error{% endif %}"
+                        <select class="govuk-select govuk-date-input__input govuk-input--width-2"
                                 id="curfews[{{params.loopIndex}}][endDay]"
                                 name="curfews[{{params.loopIndex}}][endDay]">
                             <option value="{{params.day}}" {% if params.curfewTimes['endDay'] == params.day %} selected {% endif %}>
