@@ -52,5 +52,18 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/hdc/individual-curfew-hours')
     })
+
+    it('should redirect to the curfew hours page', async () => {
+      req.body = { answer: 'Yes' }
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/hdc/curfew-hours')
+    })
+
+    it('should redirect to the curfew hours page with fromReview query param', async () => {
+      req.body = { answer: 'Yes' }
+      req.query = { fromReview: 'true' }
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/hdc/curfew-hours?fromReview=true')
+    })
   })
 })

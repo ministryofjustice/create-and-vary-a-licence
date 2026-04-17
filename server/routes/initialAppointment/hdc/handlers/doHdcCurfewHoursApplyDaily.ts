@@ -5,8 +5,13 @@ export default class DoHdcCurfewHoursApplyDailyRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const nextPath = req.body.answer === 'Yes' ? 'curfew-hours' : 'individual-curfew-hours'
+    const { answer } = req.body
+    const nextPath = answer === 'Yes' ? 'curfew-hours' : 'individual-curfew-hours'
 
-    res.redirect(`/licence/create/id/${licenceId}/hdc/${nextPath}`)
+    const redirectPath = `/licence/create/id/${licenceId}/hdc/${nextPath}${
+      req.query?.fromReview ? '?fromReview=true' : ''
+    }`
+
+    res.redirect(redirectPath)
   }
 }

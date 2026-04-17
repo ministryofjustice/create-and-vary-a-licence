@@ -1,3 +1,4 @@
+import CheckAnswersPage from './checkAnswers'
 import Page from './page'
 import StandardCurfewHoursQuestionPage from './standardCurfewHoursQuestionPage'
 
@@ -71,6 +72,12 @@ export default class FirstNightCurfewTimesPage extends Page {
   enterFirstNightCurfewEndTime(time: { hour: string; minute: string; ampm: string }): FirstNightCurfewTimesPage {
     this.enterTime(this.endPrefix, time)
     return this
+  }
+
+  clickSave = (): CheckAnswersPage => {
+    cy.task('stubPutFirstNightCurfewTimes')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(CheckAnswersPage)
   }
 
   clickContinue = (): StandardCurfewHoursQuestionPage => {

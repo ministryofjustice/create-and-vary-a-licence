@@ -21,6 +21,11 @@ export default class StandardCurfewHoursQuestionPage extends Page {
     return this
   }
 
+  clickContinueToSameCurfewHoursQuestionPage = (): DoHdcCurfewHoursApplyDailyPage => {
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(DoHdcCurfewHoursApplyDailyPage)
+  }
+
   clickContinue = (): AdditionalConditionsQuestionPage => {
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsQuestionPage)

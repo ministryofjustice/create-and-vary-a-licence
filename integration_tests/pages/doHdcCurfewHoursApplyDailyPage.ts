@@ -1,5 +1,6 @@
 import Page from './page'
 import CurfewHoursPage from './curfewHoursPage'
+import individualCurfewHoursPage from './individualCurfewHoursPage'
 
 export default class DoHdcCurfewHoursApplyDailyPage extends Page {
   private yesRadioButtonId = '[value=Yes]'
@@ -15,9 +16,19 @@ export default class DoHdcCurfewHoursApplyDailyPage extends Page {
     return this
   }
 
+  selectNo = (): DoHdcCurfewHoursApplyDailyPage => {
+    cy.get('[value=No]').click()
+    return this
+  }
+
   clickContinue = (): CurfewHoursPage => {
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CurfewHoursPage)
+  }
+
+  clickContinueToIndividualCurfewHoursPage = (): individualCurfewHoursPage => {
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(individualCurfewHoursPage)
   }
 
   clickContinueWithError = (): DoHdcCurfewHoursApplyDailyPage => {
