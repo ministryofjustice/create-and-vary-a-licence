@@ -44,11 +44,7 @@
             <div class="govuk-grid-column-two-thirds">
                 {% for day in days %}
                     {% set nextDay = days[(loop.index0 + 1) % days | length] %}
-                    {% set untilDayId = "untilDay-" + loop.index0 %}
-                    <div class="govuk-form-group govuk-!-padding-top-5">
-                        <h2 class="govuk-heading-m">Hours starting {{day | titlecase}}</h2>
-                        {{ renderCurfewTimePicker(loop.index0, day, nextDay, curfewTimesToDisplay) }}
-                    </div>
+                    {{ renderCurfewTimePicker(loop.index0, day, nextDay, curfewTimesToDisplay) }}
                 {% endfor %}
 
                 <div class="govuk-!-margin-top-8 govuk-button-group">
