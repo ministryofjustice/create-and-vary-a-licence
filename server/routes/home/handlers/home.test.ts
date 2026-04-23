@@ -10,6 +10,11 @@ describe('Route Handlers - Home', () => {
   beforeEach(() => {
     res = {
       render: jest.fn(),
+      locals: {
+        user: {
+          isProbationUser: false,
+        },
+      },
     } as unknown as Response
   })
 
@@ -27,6 +32,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
           shouldShowReportsCard: false,
+          isProbationUser: false,
         })
       })
 
@@ -42,6 +48,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
           shouldShowReportsCard: false,
+          isProbationUser: false,
         })
       })
     })
@@ -59,6 +66,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
           shouldShowReportsCard: false,
+          isProbationUser: false,
         })
       })
 
@@ -74,6 +82,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
           shouldShowReportsCard: false,
+          isProbationUser: false,
         })
       })
     })
@@ -90,6 +99,7 @@ describe('Route Handlers - Home', () => {
         shouldShowVaryApprovalCard: false,
         shouldShowSupportCard: false,
         shouldShowReportsCard: false,
+        isProbationUser: false,
       })
     })
 
@@ -106,6 +116,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
           shouldShowReportsCard: false,
+          isProbationUser: false,
         })
       })
 
@@ -121,6 +132,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
           shouldShowReportsCard: false,
+          isProbationUser: false,
         })
       })
     })
@@ -138,6 +150,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: true,
           shouldShowSupportCard: false,
           shouldShowReportsCard: false,
+          isProbationUser: false,
         })
       })
 
@@ -153,6 +166,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
           shouldShowReportsCard: false,
+          isProbationUser: false,
         })
       })
     })
@@ -169,6 +183,7 @@ describe('Route Handlers - Home', () => {
         shouldShowVaryApprovalCard: false,
         shouldShowSupportCard: true,
         shouldShowReportsCard: true,
+        isProbationUser: false,
       })
     })
 
@@ -185,6 +200,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: true,
           shouldShowReportsCard: true,
+          isProbationUser: false,
         })
       })
 
@@ -200,6 +216,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
           shouldShowReportsCard: true,
+          isProbationUser: false,
         })
       })
 
@@ -215,6 +232,7 @@ describe('Route Handlers - Home', () => {
           shouldShowVaryApprovalCard: false,
           shouldShowSupportCard: false,
           shouldShowReportsCard: false,
+          isProbationUser: false,
         })
       })
     })
