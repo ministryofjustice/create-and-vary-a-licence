@@ -18,17 +18,16 @@ describe('Whats new banner', () => {
     )
   })
 
-  it('Show whats new banner if showCommsBanner is true', () => {
+  it('Show whats new banner with probation staff message if isProbationStaff is true', () => {
     const $ = render({
       showCommsBanner: true,
       isProbationStaff: true,
     })
     expect($('body').text()).toContain("What's new")
     expect($('body').text()).toContain(
-      'From 28 April 2026, probation practitioners will be able to use this service to produce licences for people being released following a standard recall.')
-    expect($('body').text()).toContain(
-      'All licences must be submitted by 2 days before release.',
+      'From 28 April 2026, probation practitioners will be able to use this service to produce licences for people being released following a standard recall.',
     )
+    expect($('body').text()).toContain('All licences must be submitted by 2 days before release.')
   })
 
   it('Hide whats new banner if showCommsBanner is false', () => {
