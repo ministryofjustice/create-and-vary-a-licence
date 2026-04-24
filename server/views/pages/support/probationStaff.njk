@@ -8,7 +8,8 @@
 {% set pageId = "caseload-page" %}
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
-{% set showCommsBanner = false %}
+{% set showCommsBanner = showWhatsNewBanner %}
+{% set isProbationUser = true %}
 
 {% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isRestricted, index) %}
     <div class="caseload-offender-name">

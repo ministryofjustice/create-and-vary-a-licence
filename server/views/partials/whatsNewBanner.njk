@@ -1,7 +1,20 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
+
+{% if isProbationUser %}
+    {% set bannerText = 'From 28 April 2026, probation practitioners will be able to use this service to produce licences for people being released following a standard recall. All licences must be submitted by 2 days before release.' %}
+{% else %}
+    {% set bannerText = 'From 28 April 2026, this service can be used to produce licences for people being released following a standard recall and PD1s will no longer need to be sent for these cases. If no licence has been submitted by 2 days before release, the prison can generate one.' %}
+{% endif %}
 
 {% if showCommsBanner %}
-    <div class="govuk-inset-text govuk-grid-column-three-quarters">
-        <h2 class="govuk-heading-l govuk-!-margin-0 govuk-!-padding-bottom-4">What's new</h2>
+    <div class="govuk-!-margin-top-6">
+        {{ mojAlert({
+            variant: "information",
+            title: "What's new",
+            showTitleAsHeading: true,
+            dismissible: false,
+            html: bannerText
+        }) }}
     </div>
 {% endif %}
