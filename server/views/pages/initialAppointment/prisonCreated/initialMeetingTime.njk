@@ -6,7 +6,7 @@
   - formDate - is an object containing the current values from the API (if any) for inductionDate, inductionTime
 #}
 
-{% from "../../../partials/timePicker.njk" import timePicker %}
+{% from "partials/timePicker.njk" import timePicker %}
 {% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
@@ -29,7 +29,9 @@
                         isPageHeading: true
                     }
                     }) %}
-
+                    <p id="initial-appointment-sr-hint" class="govuk-visually-hidden">
+                        You will be able to provide more information if you choose a specific date and time for this appointment
+                    </p>
                     {% set dateTimeHtml %}
                         {% call govukFieldset({
                             legend: {
@@ -50,6 +52,7 @@
                                 },
                                 errorMessage: validationErrors | findError('date'),
                                 classes: 'hmpps-datepicker--fixed-width',
+                                calendarButtonSrText: "Select date from calendar",
                                 value: formResponses.date.calendarDate or formDate.date.calendarDate
                             }) }}
                         {% endcall %}
@@ -61,7 +64,7 @@
                                 classes: "govuk-visually-hidden",
                                 isPageHeading: false}
                             }) %}
-                        
+
                             {{ timePicker({
                                 id: "time",
                                 label: {
@@ -72,7 +75,8 @@
                                     text: "For example, 9:30am or 2:55pm"
                                 },
                                 errorMessage: validationErrors | findError('time'),
-                                formResponses: formResponses.time or formDate.time
+                                formResponses: formResponses.time or formDate.time,
+                                ampmSelectSrText: "Choose AM or PM"
                             }) }}
                         {% endcall %}
                     {% endset %}
@@ -80,17 +84,19 @@
                     {% set appointmentTimeTypeOptions = [] %}
                     {% for value, text in appointmentTimeType %}
                         {% set appointmentTimeTypeOptions = (appointmentTimeTypeOptions.push(
-                            {   value: value, 
+                            {   value: value,
                                 text: text,
                                 conditional: {
                                 html: dateTimeHtml
-                                } if value === SPECIFIC_DATE_TIME
+                                } if value === SPECIFIC_DATE_TIME,
+                                attributes: { 'aria-expanded': 'true' } if value === SPECIFIC_DATE_TIME else {}
                             }), appointmentTimeTypeOptions) %}
                     {% endfor %}
                     <br>
                     {{ govukRadios({
                     id: "appointment-time-type",
                     name: "appointmentTimeType",
+                    describedBy: "initial-appointment-sr-hint",
                     hint: {
                         text: "Only enter a specific date and time if you have confirmed one with this person’s probation practitioner."
                     },
@@ -114,4 +120,3 @@
 {% block pageScripts %}
    <script src="/assets/js/datepicker.js"></script>
 {% endblock %}
-

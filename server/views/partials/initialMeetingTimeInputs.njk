@@ -19,9 +19,10 @@
             },
             errorMessage: validationErrors | findError('date'),
             classes: 'hmpps-datepicker--fixed-width',
+            calendarButtonSrText: "Select date from calendar",
             value: formResponses.date.calendarDate or formDate.date.calendarDate
         }) }}
-        
+
         {{ timePicker({
             id: "time",
             label: {
@@ -32,24 +33,27 @@
                 text: "For example, 9:30am or 2:55pm"
             },
             errorMessage: validationErrors | findError('time'),
-            formResponses: formResponses.time or formDate.time
+            formResponses: formResponses.time or formDate.time,
+            ampmSelectSrText: "Choose AM or PM"
         }) }}
     {% endset %}
 
     {% set appointmentTimeTypeOptions = [] %}
     {% for value, text in appointmentTimeType %}
         {% set appointmentTimeTypeOptions = (appointmentTimeTypeOptions.push(
-            {   value: value, 
+            {   value: value,
                 text: text,
                 conditional: {
                 html: dateTimeHtml
-                } if value === SPECIFIC_DATE_TIME
+                } if value === SPECIFIC_DATE_TIME,
+                attributes: { 'aria-expanded': 'true' } if value === SPECIFIC_DATE_TIME else {}
             }), appointmentTimeTypeOptions) %}
     {% endfor %}
 
     {{ govukRadios({
         id: "appointment-time-type",
         name: "appointmentTimeType",
+        describedBy: "initial-appointment-sr-hint",
         value: (formResponses.appointmentTimeType or licence.appointmentTimeType) or SPECIFIC_DATE_TIME,
         items: appointmentTimeTypeOptions
     }) }}

@@ -49,7 +49,8 @@
                         </label>
                         <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"
                                 id="{{ params.id }}-ampm"
-                                name="{{ params.id }}[ampm]">
+                                name="{{ params.id }}[ampm]"
+                                aria-label="{{ params.ampmSelectSrText or 'Choose am or pm' }}">
                             <option value="">
                                 Choose am or pm
                             </option>
