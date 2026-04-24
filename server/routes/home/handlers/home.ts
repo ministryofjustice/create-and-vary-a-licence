@@ -17,7 +17,9 @@ export default class HomeRoutes {
       shouldShowVaryApprovalCard: hasRole(req.user, AuthRole.ASSISTANT_CHIEF) && hasAuthSource(req.user, 'delius'),
       shouldShowSupportCard: hasRole(req.user, AuthRole.SUPPORT),
       shouldShowReportsCard: hasRole(req.user, AuthRole.REPORTS) || hasRole(req.user, AuthRole.SUPPORT),
+      isProbationUser: res.locals.user.isProbationUser,
     }
+
     res.render('pages/index', viewContext)
   }
 }

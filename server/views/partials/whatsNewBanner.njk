@@ -1,7 +1,7 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 
-{% if isProbationStaff %}
+{% if isProbationUser %}
     {% set bannerText = 'From 28 April 2026, probation practitioners will be able to use this service to produce licences for people being released following a standard recall. All licences must be submitted by 2 days before release.' %}
 {% else %}
     {% set bannerText = 'From 28 April 2026, this service can be used to produce licences for people being released following a standard recall and PD1s will no longer need to be sent for these cases. If no licence has been submitted by 2 days before release, the prison can generate one.' %}

@@ -21,7 +21,7 @@ describe('Whats new banner', () => {
   it('Show whats new banner with probation staff message if isProbationStaff is true', () => {
     const $ = render({
       showCommsBanner: true,
-      isProbationStaff: true,
+      isProbationUser: true,
     })
     expect($('body').text()).toContain("What's new")
     expect($('body').text()).toContain(
