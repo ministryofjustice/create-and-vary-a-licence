@@ -49,7 +49,9 @@
       }
     }) }}
     <button class="hmpps-datepicker-button hmpps-js-datepicker-button" data-button="datepicker-{{ params.name }}-toggle">
-      <span class="govuk-visually-hidden">Choose date.</span>
+      <span class="govuk-visually-hidden">
+        {{ params.calendarButtonSrText or "Choose date." }}
+      </span>
       <svg focusable="false" class="hmpps-datepicker-icon" aria-hidden="true" role="img" viewBox="0 0 22 22">
         <path
           fill-rule="evenodd"

@@ -28,16 +28,18 @@
                         isPageHeading: true
                     }
                 }) %}
+                    {% if licence.kind != "HDC" and licence.isEligibleForEarlyRelease %}
+                        {{ govukWarningText({
+                        html: "This person is eligible for Friday or pre-bank holiday release scheme.<br />It may impact their initial appointment.",
+                        iconFallbackText: "Warning"
+                        }) }}
+                    {% endif %}
+                    <p id="initial-appointment-sr-hint" class="govuk-visually-hidden">
+                        You will be able to provide more information if you choose a specific date and time for this appointment
+                    </p>
                     {% if licence.kind == "HDC"%}
                         {{ hdcInitialMeetingTimeInputs(formResponses, formDate, validationErrors) }}
                     {% else %}
-                        {% if licence.isEligibleForEarlyRelease %}
-                            {{ govukWarningText({
-                                html: "This person is eligible for Friday or pre-bank holiday release scheme.<br />It may impact their initial appointment.",
-                                iconFallbackText: "Warning"
-                            }) }}
-                        {% endif %}
-
                         {{ initialMeetingTimeInputs(formResponses, formDate, licence, appointmentTimeType, validationErrors) }}
                     {% endif %}
                 {% endcall %}
@@ -64,4 +66,3 @@
 {% block pageScripts %}
    <script src="/assets/js/datepicker.js"></script>
 {% endblock %}
-
