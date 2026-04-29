@@ -3,7 +3,8 @@
   "package-manager": "auto",
   "registry": "https://registry.npmjs.org",
   "allowlist": [
-    "GHSA-5c6j-r48x-rmvq|mocha>serialize-javascript",
-    "GHSA-73rr-hh4g-fpgx|mocha>diff"
+    "GHSA-73rr-hh4g-fpgx|mocha>diff",
+    "GHSA-w5hq-g745-h8pq|cypress-axe>cypress>@cypress/request>uuid",
+    "GHSA-w5hq-g745-h8pq|jest-junit>uuid"
   ]
 }

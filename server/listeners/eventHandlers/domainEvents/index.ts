@@ -9,7 +9,7 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
   const releaseEventHandler = new ReleaseEventHandler(licenceService, prisonerService)
   const transferredEventHandler = new TransferredEventHandler(licenceService, prisonerService)
 
-  return async (messages: Message[]) => {
+  return async (messages: Message[]): Promise<Message[] | undefined> => {
     messages.forEach(message => {
       const event = JSON.parse(message.Body)
 
@@ -30,5 +30,6 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
         }
       }
     })
+    return messages
   }
 }
