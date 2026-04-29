@@ -327,7 +327,7 @@ describe('View and print a licence - case list', () => {
           releaseDateLabel: 'CRD',
           tabType: 'releasesInNextTwoWorkingDays',
           kind: LicenceKind.TIME_SERVED,
-          hardStopKind: LicenceKind.TIME_SERVED,
+          creationKind: LicenceKind.TIME_SERVED,
           probationPractitioner: {
             name: 'Not allocated',
             staffCode: null,
