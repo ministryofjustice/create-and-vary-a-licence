@@ -7,7 +7,7 @@ import { PrisonEventMessage } from '../../../@types/events'
 export default function buildEventHandler({ licenceService, prisonerService }: Services) {
   const datesChangedEventHandler = new DatesChangedEventHandler(licenceService, prisonerService)
 
-  return async (messages: Message[]) => {
+  return async (messages: Message[]): Promise<Message[] | undefined> => {
     messages.forEach(message => {
       const prisonEvent = JSON.parse(message.Body)
 
@@ -26,5 +26,6 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
         }
       }
     })
+    return messages
   }
 }
