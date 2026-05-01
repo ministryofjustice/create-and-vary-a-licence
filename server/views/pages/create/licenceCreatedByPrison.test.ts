@@ -37,7 +37,7 @@ describe('View print licence button', () => {
         statusCode: LicenceStatus.APPROVED,
         prisonDescription: 'prisonDescription',
         typeCode: LicenceType.AP,
-        creationKind: 'HARD_STOP',
+        isTimeServed: false,
       },
       omuEmail: 'jbloggs@justice.gov.uk',
       backLink: '/licence/create/caseload',

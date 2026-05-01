@@ -61,7 +61,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           hardStopDate: null,
           hardStopWarningDate: null,
           licenceStartDate: '19/11/2022',
-          creationKind: 'HARD_STOP',
+          isTimeServed: false,
         },
       } as PrisonerWithCvlFields)
       licenceService.getProbationCase.mockResolvedValue({
@@ -88,7 +88,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           dateOfBirth: '10/11/1960',
           forename: 'Test',
           surname: 'Person',
-          creationKind: 'HARD_STOP',
+          isTimeServed: false,
         },
         omuEmail: 'moorland@prison.gov.uk',
         backLink: req.session.returnToCase,
@@ -112,7 +112,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           dateOfBirth: '10/11/1960',
           forename: 'Test',
           surname: 'Person',
-          creationKind: 'HARD_STOP',
+          isTimeServed: false,
         },
         omuEmail: 'moorland@prison.gov.uk',
         backLink: '/licence/create/caseload',
@@ -120,7 +120,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
       })
     })
 
-    it('should render view with creationKind TIME_SERVED', async () => {
+    it('should render view with isTimeServed true', async () => {
       licenceService.getPrisonerDetail.mockResolvedValueOnce({
         prisoner: {
           prisonerNumber: 'G4169UO',
@@ -141,7 +141,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           hardStopDate: null,
           hardStopWarningDate: null,
           licenceStartDate: '19/11/2022',
-          creationKind: 'TIME_SERVED',
+          isTimeServed: true,
         },
       } as PrisonerWithCvlFields)
 
@@ -153,7 +153,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           dateOfBirth: '10/11/1960',
           forename: 'Test',
           surname: 'Person',
-          creationKind: 'TIME_SERVED',
+          isTimeServed: true,
         },
         omuEmail: 'moorland@prison.gov.uk',
         backLink: req.session.returnToCase,
