@@ -61,6 +61,7 @@ export default class OffenderDetailRoutes {
     const licence = licenceSummary ? await this.licenceService.getLicence(licenceSummary.licenceId, user) : null
     const ineligibilityReasons = await this.licenceService.getIneligibilityReasons(nomsId)
     const is91Status = await this.licenceService.getIS91Status(nomsId)
+    const recallDetails = await this.licenceService.getRecallSupportInfo(nomsId)
 
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -106,6 +107,7 @@ export default class OffenderDetailRoutes {
       licence: this.getLicenceDates(licence),
       ineligibilityReasons,
       is91Status: is91Status ? 'Yes' : 'No',
+      recallDetails,
     })
   }
 

@@ -28,6 +28,7 @@ import type {
   NotifyRequest,
   PrisonerWithCvlFields,
   ProbationCase,
+  RecallSupportInfo,
   ReferVariationRequest,
   StatusUpdateRequest,
   UpcomingReleasesWithMonitoringConditionsResponse,
@@ -462,6 +463,10 @@ export default class LicenceService {
 
   async getIS91Status(nomsId: string): Promise<boolean> {
     return this.licenceApiClient.getIS91Status(nomsId)
+  }
+
+  async getRecallSupportInfo(nomsId: string): Promise<RecallSupportInfo> {
+    return this.licenceApiClient.getRecallSupportInfo(nomsId)
   }
 
   async getLastMinuteCases(): Promise<LastMinuteHandoverCaseResponse[]> {
