@@ -52,6 +52,7 @@ import type {
   PrisonUserSearchRequest,
   ProbationCase,
   ProbationSearchRequest,
+  RecallSupportInfo,
   ReferVariationRequest,
   StatusUpdateRequest,
   TeamCaseloadRequest,
@@ -750,6 +751,12 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({
       path: `/offender/nomisid/${nomisId}/is-91-status`,
     })) as Promise<boolean>
+  }
+
+  async getRecallSupportInfo(nomisId: string): Promise<RecallSupportInfo> {
+    return (await this.get({
+      path: `/offender/nomisid/${nomisId}/recall-info`,
+    })) as Promise<RecallSupportInfo>
   }
 
   async getLastMinuteCases(): Promise<LastMinuteHandoverCaseResponse[]> {
