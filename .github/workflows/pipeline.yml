@@ -37,9 +37,12 @@ jobs:
     secrets: inherit
   node_integration_tests:
     name: node integration tests
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests.yml@v2 # WORKFLOW_VERSION
+    uses: ./.github/workflows/integration_tests.yml
     needs: [node_build]
     secrets: inherit
+    with: 
+      localstack_tag: 'community-archive'
+      redis_tag: '7.2'
   helm_lint:
     strategy:
       matrix:
