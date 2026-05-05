@@ -6,7 +6,7 @@ generic-service:
   productId: "DPS011"
 
   image:
-    repository: quay.io/hmpps/create-and-vary-a-licence
+    repository: ghcr.io/ministryofjustice/create-and-vary-a-licence
     tag: app_version # override at deployment time
     port: 3000
 
