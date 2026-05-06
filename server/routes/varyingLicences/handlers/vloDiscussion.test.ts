@@ -32,6 +32,9 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
         user: {
           username: 'joebloggs',
         },
+        licence: {
+          licenceStartDate: '17/05/2025',
+        },
       },
     } as unknown as Response
   })

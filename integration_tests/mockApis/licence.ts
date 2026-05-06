@@ -1538,7 +1538,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licences-api/licence-policy/active`,
+        urlPattern: `/licences-api/licence-policy/active.*`,
       },
       response: {
         status: 200,

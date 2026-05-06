@@ -8,9 +8,10 @@ export default class PolicyChangesNoticeRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
     const { licenceId } = req.params
 
-    const changedConditions = await this.licenceService.getPolicyChanges(licenceId)
+    const changedConditions = await this.licenceService.getPolicyChanges(parseInt(licenceId, 10), user)
 
     // If policy changes have all already been reviewed, no need to render the notice page
     if (changedConditions.length < 1) {

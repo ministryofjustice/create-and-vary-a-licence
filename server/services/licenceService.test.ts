@@ -17,6 +17,7 @@ import {
   AdditionalCondition,
   ContactNumberRequest,
   Licence,
+  LicenceConditionChange,
   LicenceSummary,
   PrisonerWithCvlFields,
   StandardCondition,
@@ -760,5 +761,31 @@ describe('Licence Service', () => {
       await licenceService.getLicenceStatusCases()
       expect(licenceApiClient.getLicenceStatusCases).toHaveBeenCalledWith()
     })
+  })
+
+  it('should get policy changes', async () => {
+    const licenceId = 1
+    const policyVersion = '4'
+    const policyChanges = [
+      {
+        changeType: 'TEXT_CHANGE',
+        code: 'code2',
+        sequence: 2,
+        previousText: 'Condition 2 previous text',
+        currentText: 'Condition 2 current text',
+        suggestions: [],
+      },
+    ] as LicenceConditionChange[]
+
+    licenceApiClient.getLicenceById.mockResolvedValue({
+      id: licenceId,
+      licenceStartDate: '13/05/2025',
+    } as Licence)
+    conditionService.getPolicyVersion.mockResolvedValue(policyVersion)
+    licenceApiClient.getPolicyChanges.mockResolvedValue(policyChanges)
+
+    const result = await licenceService.getPolicyChanges(licenceId, user)
+
+    expect(result).toEqual(policyChanges)
   })
 })

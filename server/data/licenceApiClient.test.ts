@@ -83,7 +83,7 @@ describe('Licence API client tests', () => {
     expect(result).toEqual({ licenceId: 1 })
   })
 
-  it('Create probation licence request when resouce already exists', async () => {
+  it('Create probation licence request when resource already exists', async () => {
     post.mockResolvedValue({ status: 409, existingResourceId: 3 })
 
     const nomsId = 'A1234AA'
@@ -1023,6 +1023,14 @@ describe('Licence API client tests', () => {
         path: '/cvl-report/licence-status-cases',
       })
       expect(result).toEqual([aCase])
+    })
+  })
+
+  it('Should get active policy version based on licence start date', async () => {
+    const licenceStartDate = '03/04/2026'
+    await licenceApiClient.getActiveLicencePolicy(licenceStartDate)
+    expect(get).toHaveBeenCalledWith({
+      path: `/licence-policy/active?licenceStartDate=${licenceStartDate}`,
     })
   })
 })
