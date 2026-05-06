@@ -40,7 +40,7 @@ jobs:
     uses: ./.github/workflows/integration_tests.yml
     needs: [node_build]
     secrets: inherit
-    with: 
+    with:
       localstack_tag: 'community-archive'
       redis_tag: '7.2'
   helm_lint:
@@ -101,6 +101,7 @@ jobs:
     with:
       environment: 'prod'
       app_version: '${{ needs.build.outputs.app_version }}'
+      slack_notification: true
   deploy_test1:
     name: Deploy to the test1 environment
     if: github.ref == 'refs/heads/main'
