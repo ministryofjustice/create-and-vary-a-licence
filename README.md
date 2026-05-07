@@ -32,7 +32,7 @@ Run `nvm install --latest-npm` within the repository folder to use the correct v
 
 Then:
 
-`$ npm install` - to pull and install dependent node modules.
+`$ npm ci` - to pull and install dependent node modules.
 
 `$ npm run build` - to compile SCSS files & populate the /dist folder.
 
