@@ -15,13 +15,13 @@ export default class VloDiscussionRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { answer } = req.body
-    const { user, licence } = res.locals
+    const { user } = res.locals
 
     await this.licenceService.updateVloDiscussion(licenceId, { vloDiscussion: answer }, user)
 
     if (
       (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version !==
-      (await this.conditionService.getPolicyVersion(licence.licenceStartDate))
+      (await this.conditionService.getPolicyVersion())
     ) {
       return res.redirect(`/licence/vary/id/${licenceId}/policy-changes`)
     }

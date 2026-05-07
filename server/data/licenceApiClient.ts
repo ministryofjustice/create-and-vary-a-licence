@@ -492,17 +492,15 @@ export default class LicenceApiClient extends RestClient {
     }
   }
 
-  async getActiveLicencePolicy(licenceStartDate: string): Promise<LicencePolicyResponse> {
+  async getActiveLicencePolicy(): Promise<LicencePolicyResponse> {
     try {
-      return (await this.get({
-        path: `/licence-policy/active?licenceStartDate=${licenceStartDate}`,
-      })) as Promise<LicencePolicyResponse>
+      return (await this.get({ path: `/licence-policy/active` })) as Promise<LicencePolicyResponse>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
     }
   }
 
-  async getPolicyChanges(licenceId: number, activePolicyVersion: string): Promise<LicenceConditionChange[]> {
+  async getPolicyChanges(licenceId: string, activePolicyVersion: string): Promise<LicenceConditionChange[]> {
     return (await this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` })) as Promise<
       LicenceConditionChange[]
     >

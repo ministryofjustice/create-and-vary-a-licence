@@ -30,7 +30,7 @@ export default class ConfirmAmendVariationRoutes {
        */
       if (
         (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version !==
-        (await this.conditionService.getPolicyVersion(licence.licenceStartDate))
+        (await this.conditionService.getPolicyVersion())
       ) {
         const newStdConditions = {
           standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode as LicenceType)

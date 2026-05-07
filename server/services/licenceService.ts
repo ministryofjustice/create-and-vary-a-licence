@@ -78,9 +78,8 @@ export default class LicenceService {
     return this.licenceApiClient.getLicenceById(id, user)
   }
 
-  async getPolicyChanges(id: number, user: User): Promise<LicenceConditionChange[]> {
-    const licence = await this.getLicence(id, user)
-    const activePolicyVersion = await this.conditionService.getPolicyVersion(licence.licenceStartDate)
+  async getPolicyChanges(id: string): Promise<LicenceConditionChange[]> {
+    const activePolicyVersion = await this.conditionService.getPolicyVersion()
     return this.licenceApiClient.getPolicyChanges(id, activePolicyVersion)
   }
 
