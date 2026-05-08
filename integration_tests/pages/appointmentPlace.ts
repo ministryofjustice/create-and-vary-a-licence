@@ -32,6 +32,11 @@ export default class AppointmentPlacePage extends Page {
     return Page.verifyOnPage(SelectAddressPage)
   }
 
+  findAddressWithErrors = (): AppointmentPlacePage => {
+    cy.get(this.searchAddressesButtonId).click()
+    return this
+  }
+
   findAddressForPrison = (): PrisonSelectAddressPage => {
     cy.get(this.searchAddressesButtonId).click()
     return Page.verifyOnPage(PrisonSelectAddressPage)
