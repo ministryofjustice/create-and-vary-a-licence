@@ -47,6 +47,7 @@ import type {
   OverrideLicenceDatesRequest,
   OverrideLicencePrisonerDetailsRequest,
   OverrideLicenceTypeRequest,
+  PolicyUpdateResponse,
   PrisonCaseAdminSearchResult,
   PrisonerWithCvlFields,
   PrisonUserSearchRequest,
@@ -66,7 +67,6 @@ import type {
   UpdatePrisonUserRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
-  UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
   VaryApproverCase,
   VaryApproverCaseloadSearchRequest,
@@ -264,17 +264,6 @@ export default class LicenceApiClient extends RestClient {
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/additional-conditions`, data: additionalConditions },
-      { username: user.username },
-    )
-  }
-
-  async updateStandardConditions(
-    licenceId: string,
-    standardConditions: UpdateStandardConditionDataRequest,
-    user: User,
-  ): Promise<void> {
-    await this.put(
-      { path: `/licence/id/${licenceId}/standard-conditions`, data: standardConditions },
       { username: user.username },
     )
   }
@@ -504,6 +493,10 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` })) as Promise<
       LicenceConditionChange[]
     >
+  }
+
+  async updatePolicy(licenceId: string): Promise<PolicyUpdateResponse> {
+    return (await this.post({ path: `/licence/id/${licenceId}/update-policy` })) as Promise<PolicyUpdateResponse>
   }
 
   async overrideStatusCode(licenceId: number, request: { reason: string; statusCode: LicenceStatus }, user: User) {

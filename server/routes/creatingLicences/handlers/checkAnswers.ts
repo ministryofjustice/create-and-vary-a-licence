@@ -5,7 +5,6 @@ import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
-import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy, isHdcLicence, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 import HdcService from '../../../services/hdcService'
@@ -63,27 +62,7 @@ export default class CheckAnswersRoutes {
       return res.redirect(referer)
     }
 
-    /**
-     * TODO
-     * replace when proper versioning functionality is ready.
-     * update the standard conditions to the current policy version if
-     * licence was created on a previous version.
-     */
-    if (
-      (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version !==
-      (await this.conditionService.getPolicyVersion())
-    ) {
-      const newStdConditions = {
-        standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode as LicenceType)
-          ? await this.conditionService.getStandardConditions(LicenceType.AP)
-          : [],
-        standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licence.typeCode as LicenceType)
-          ? await this.conditionService.getStandardConditions(LicenceType.PSS)
-          : [],
-      }
-      await this.licenceService.updateStandardConditions(licenceId, newStdConditions, user)
-    }
-
+    await this.licenceService.updatePolicy(licenceId)
     if (licence.kind === 'VARIATION' || licence.kind === 'HDC_VARIATION') {
       return res.redirect(`/licence/vary/id/${licence.id}/reason-for-variation`)
     }

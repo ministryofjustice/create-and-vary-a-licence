@@ -4,7 +4,6 @@ import LicenceService from '../../../services/licenceService'
 import ConfirmAmendVariationRoutes from './confirmAmendVariation'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
-import { Licence } from '../../../@types/licenceApiClientTypes'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -13,7 +12,7 @@ const conditionService = new ConditionService(null) as jest.Mocked<ConditionServ
 const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
-  const handler = new ConfirmAmendVariationRoutes(licenceService, conditionService)
+  const handler = new ConfirmAmendVariationRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -54,8 +53,8 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
   describe('POST', () => {
     it('should update status to in progress when answer is yes and the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
-      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getPolicyVersion.mockResolvedValue('2.0')
+      licenceService.updatePolicy.mockResolvedValue({ policyUpdated: true, policyVersion: '2.0' })
+
       await handler.POST(req, res)
 
       expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.VARIATION_IN_PROGRESS, {
@@ -66,16 +65,14 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
 
     it('should update status to in progress and update the standard conditions when answer is yes and the licence version is out of date', async () => {
       req.body = { answer: 'Yes' }
-      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
-      conditionService.getPolicyVersion.mockResolvedValue('2.0')
-      conditionService.getStandardConditions.mockResolvedValue([])
+      licenceService.updatePolicy.mockResolvedValue({ policyUpdated: true, policyVersion: '2.0' })
+
       await handler.POST(req, res)
 
       expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.VARIATION_IN_PROGRESS, {
         username: 'joebloggs',
       })
 
-      expect(licenceService.updateStandardConditions).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
 
