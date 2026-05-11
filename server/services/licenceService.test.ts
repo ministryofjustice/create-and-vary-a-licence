@@ -77,6 +77,11 @@ describe('Licence Service', () => {
     expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith(1, user)
   })
 
+  it('Update policy', async () => {
+    await licenceService.updatePolicy('1')
+    expect(licenceApiClient.updatePolicy).toHaveBeenCalledWith('1')
+  })
+
   it('Update appointment person with type SPECIFIC_PERSON', async () => {
     await licenceService.updateAppointmentPerson(
       '1',

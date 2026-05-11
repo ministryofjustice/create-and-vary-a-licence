@@ -1483,7 +1483,7 @@ export default {
     })
   },
 
-  stubUpdateStandardConditions: (): SuperAgentRequest => {
+  stubUpdatePolicy: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
