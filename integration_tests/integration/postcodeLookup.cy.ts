@@ -79,6 +79,22 @@ context('Postcode lookup', () => {
       appointmentPlacePage.useThisAddressBtnClick()
       appointmentPlacePage.errorListSummary().should('exist').and('contain.text', 'Select an address')
     })
+
+    it('should reject a search query longer than 200 characters', () => {
+      cy.task('stubGetStaffPreferredAddresses')
+      const indexPage = Page.verifyOnPage(IndexPage)
+      let caseloadPage = indexPage.clickCreateALicence()
+      const comDetailsPage = caseloadPage.clickComName()
+      caseloadPage = comDetailsPage.clickReturnToCaseload()
+      const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+
+      const appointmentPersonPage = confirmCreatePage.clickContinue()
+      appointmentPersonPage.selectAppointmentPersonType(2)
+      const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
+      appointmentPlacePage.enterAddressOrPostcode('A'.repeat(201))
+      appointmentPlacePage.findAddressWithErrors()
+      appointmentPlacePage.errorListSummary().should('contain.text', 'Address must be 200 characters or less')
+    })
   })
 
   describe('Postcode Lookup Hardstop - CA', () => {
@@ -188,6 +204,33 @@ context('Postcode lookup', () => {
         .findAddressForPrison()
       selectAddressPrisonPage.selectAddress()
       selectAddressPrisonPage.addPreferredAddressCheckbox().should('exist')
+    })
+
+    it('should reject a search query longer than 200 characters', () => {
+      cy.task('stubGetPrisonOmuCaseload', {
+        licenceId: null,
+        licenceStatus: LicenceStatus.TIMED_OUT,
+        tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+        kind: LicenceKind.TIME_SERVED,
+        hasNomisLicence: false,
+      })
+      cy.task('stubRecordAuditEvent')
+      cy.task('stubGetLicence', { licenceKind: LicenceKind.TIME_SERVED })
+      cy.task('stubSubmitStatus')
+      cy.task('stubAddTimeServedProbationConfirmContact')
+      cy.task('stubGetStaffNoPreferredAddresses')
+      cy.task('stubGetCaseloadItemInHardStop')
+      cy.task('stubPostProbationLicence')
+      const indexPage = Page.verifyOnPage(IndexPage)
+      const viewCasesList = indexPage.clickViewAndPrintALicence()
+      const confirmCreatePage = viewCasesList.clickATimeServedLicence()
+      confirmCreatePage.selectRadio('Yes')
+      const appointmentPersonPage = confirmCreatePage.clickContinue()
+      appointmentPersonPage.selectAppointmentPersonType(2)
+      const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
+      appointmentPlacePage.enterAddressOrPostcode('A'.repeat(201))
+      appointmentPlacePage.findAddressWithErrors()
+      appointmentPlacePage.errorListSummary().should('contain.text', 'Address must be 200 characters or less')
     })
   })
 

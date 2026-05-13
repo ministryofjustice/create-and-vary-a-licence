@@ -2,9 +2,13 @@ name: Security npm dependency check
 on:
   workflow_dispatch:
   schedule:
-    - cron: "51 9 * * MON-FRI" # Every weekday at 09:51 UTC
+    - cron: "50 4 * * MON-FRI" # Every weekday at 04:50 UTC
 jobs:
   security-npm-dependency-check:
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
     name: Project security npm dependency check
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/security_npm_dependency.yml@v2 # WORKFLOW_VERSION
     with:

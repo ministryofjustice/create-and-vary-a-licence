@@ -7,6 +7,7 @@ import type {
   Licence,
   PrisonerWithCvlFields,
   EligibilityAssessment,
+  RecallSupportInfo,
 } from '../../../@types/licenceApiClientTypes'
 import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
@@ -59,6 +60,7 @@ const prisonerDetail = {
     isInHardStopPeriod: false,
     hardStopDate: '03/02/2023',
     hardStopWarningDate: '01/02/2023',
+    eligibleKind: 'FIXED_TERM',
   },
 } as PrisonerWithCvlFields
 
@@ -75,6 +77,14 @@ const probationPractitioner = {
   telephone: '078929482994',
 }
 const emptyDate = undefined as string
+
+const defaultRecallDetails: RecallSupportInfo = {
+  recallType: 'FIXED_TERM',
+  recallName: 'Fixed Term Recall 28 days',
+  fixTermSentenceTypes: ['FTR_ORA'],
+  standardRecallSentenceTypes: [],
+  otherSentenceTypes: ['ADIMP_ORA'],
+}
 
 describe('Route Handlers - Offender detail', () => {
   const handler = new OffenderDetailRoutes(prisonerService, probationService, licenceService)
@@ -130,6 +140,8 @@ describe('Route Handlers - Offender detail', () => {
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
     } as LicenceSummary)
+
+    licenceService.getRecallSupportInfo.mockResolvedValue(defaultRecallDetails)
   })
 
   describe('GET', () => {
@@ -186,9 +198,95 @@ describe('Route Handlers - Offender detail', () => {
         licence: licenceDatesNotFound,
         ineligibilityReasons: { genericIneligibilityReasons: [] },
         is91Status: 'No',
+        recallDetails: {
+          recallType: 'FIXED_TERM',
+          recallName: 'Fixed Term Recall 28 days',
+          fixTermSentenceTypes: ['FTR_ORA'],
+          standardRecallSentenceTypes: [],
+          otherSentenceTypes: ['ADIMP_ORA'],
+        },
       })
     })
   })
+
+  it('Should render all offender information for standard recall', async () => {
+    licenceService.getPrisonerDetail.mockResolvedValue({
+      ...prisonerDetail,
+      cvl: {
+        ...prisonerDetail.cvl,
+        eligibleKind: 'STANDARD',
+      },
+    })
+
+    const standardRecallDetails: RecallSupportInfo = {
+      recallType: 'STANDARD',
+      recallName: 'Standard Recall',
+      fixTermSentenceTypes: [],
+      standardRecallSentenceTypes: ['LR'],
+      otherSentenceTypes: [],
+    }
+    licenceService.getRecallSupportInfo.mockResolvedValue(standardRecallDetails)
+
+    prisonerService.getHdcStatuses.mockResolvedValue([
+      {
+        bookingId: '1',
+        approvalStatus: 'PENDING',
+        checksPassed: true,
+      } as HdcStatus,
+    ])
+
+    licenceService.getIS91Status.mockResolvedValue(false)
+
+    await handler.GET(req, res)
+    expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
+      prisonerDetail: {
+        ...prisonerDetail.prisoner,
+        conditionalReleaseDate: '01 Jun 2022',
+        confirmedReleaseDate: '01 Jun 2022',
+        actualParoleDate: '21 Jun 2017',
+        crn: 'X1234',
+        determinate: 'Yes',
+        dob: '01 Jan 1970',
+        hdcStatus: 'PENDING',
+        hdced: '01 May 2022',
+        hdcad: '01 May 2022',
+        hdcEndDate: '01 May 2023',
+        licenceExpiryDate: '01 Jun 2022',
+        name: 'Joe Bloggs',
+        paroleEligibilityDate: '01 Jan 2022',
+        postRecallReleaseDate: '01 May 2022',
+        sentenceStartDate: '26 Mar 2015',
+        sentenceExpiryDate: '01 Jun 2022',
+        tused: '01 May 2023',
+        recall: 'Yes',
+        hardStop: {
+          cutoffDate: '03/02/2023',
+          isInHardStopPeriod: false,
+          warningDate: '01/02/2023',
+        },
+      },
+      probationPractitioner,
+      cvlCom: {
+        email: 'Not found',
+        username: 'Not found',
+        team: 'Not found',
+        lau: 'Not found',
+        pdu: 'Not found',
+        region: 'Not found',
+      },
+      licence: licenceDatesNotFound,
+      ineligibilityReasons: { genericIneligibilityReasons: [] },
+      is91Status: 'No',
+      recallDetails: {
+        recallType: 'STANDARD',
+        recallName: 'Standard Recall',
+        fixTermSentenceTypes: [],
+        standardRecallSentenceTypes: ['LR'],
+        otherSentenceTypes: [],
+      },
+    })
+  })
+
   it('Should render all offender information with eligible HDC licence', async () => {
     const expectedPrisonerDetail = {
       prisoner: {
@@ -196,8 +294,11 @@ describe('Route Handlers - Offender detail', () => {
         recall: false,
         dateOfBirth: '1970-01-01',
       },
-      cvl: prisonerDetail.cvl,
-    }
+      cvl: {
+        ...prisonerDetail.cvl,
+        eligibleKind: 'HDC',
+      },
+    } as PrisonerWithCvlFields
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
     prisonerService.getHdcStatuses.mockResolvedValue([
@@ -209,6 +310,16 @@ describe('Route Handlers - Offender detail', () => {
     ])
 
     licenceService.getIS91Status.mockResolvedValue(false)
+
+    const noRecallDetails: RecallSupportInfo = {
+      recallType: 'NONE',
+      recallName: 'None',
+      fixTermSentenceTypes: [],
+      standardRecallSentenceTypes: [],
+      otherSentenceTypes: ['ADIMP_ORA'],
+    }
+
+    licenceService.getRecallSupportInfo.mockResolvedValue(noRecallDetails)
 
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
@@ -250,6 +361,13 @@ describe('Route Handlers - Offender detail', () => {
       licence: licenceDatesNotFound,
       ineligibilityReasons: { genericIneligibilityReasons: [] },
       is91Status: 'No',
+      recallDetails: {
+        recallType: 'NONE',
+        recallName: 'None',
+        fixTermSentenceTypes: [],
+        standardRecallSentenceTypes: [],
+        otherSentenceTypes: ['ADIMP_ORA'],
+      },
     })
   })
   it('Should render all offender information with NULL sentence dates', async () => {
@@ -325,6 +443,13 @@ describe('Route Handlers - Offender detail', () => {
       licence: licenceDatesNotFound,
       ineligibilityReasons: { genericIneligibilityReasons: [] },
       is91Status: 'No',
+      recallDetails: {
+        recallType: 'FIXED_TERM',
+        recallName: 'Fixed Term Recall 28 days',
+        fixTermSentenceTypes: ['FTR_ORA'],
+        standardRecallSentenceTypes: [],
+        otherSentenceTypes: ['ADIMP_ORA'],
+      },
     })
   })
 
@@ -423,6 +548,13 @@ describe('Route Handlers - Offender detail', () => {
       },
       ineligibilityReasons: { genericIneligibilityReasons: [] },
       is91Status: 'No',
+      recallDetails: {
+        recallType: 'FIXED_TERM',
+        recallName: 'Fixed Term Recall 28 days',
+        fixTermSentenceTypes: ['FTR_ORA'],
+        standardRecallSentenceTypes: [],
+        otherSentenceTypes: ['ADIMP_ORA'],
+      },
     })
   })
 

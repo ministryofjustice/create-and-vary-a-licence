@@ -320,6 +320,62 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">Recall details</caption>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Recall Type</th>
+                    <td class="govuk-table__cell">{{ recallDetails.recallType }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Recall Name</th>
+                    <td class="govuk-table__cell">{{ recallDetails.recallName }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Fixed term recall sentence types</th>
+                    <td class="govuk-table__cell">
+                        {% if recallDetails.fixTermSentenceTypes %}
+                            {% for sentence in recallDetails.fixTermSentenceTypes %}
+                                <li>{{ sentence }}</li>
+                            {% endfor %}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Standard recall sentence types</th>
+                    <td class="govuk-table__cell">
+                        {% if recallDetails.standardRecallSentenceTypes %}
+                            {% for sentence in recallDetails.standardRecallSentenceTypes %}
+                                <li>{{ sentence }}</li>
+                            {% endfor %}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Other sentences types</th>
+                    <td class="govuk-table__cell">
+                        {% if recallDetails.otherSentenceTypes %}
+                            {% for sentence in recallDetails.otherSentenceTypes %}
+                                <li>{{ sentence }}</li>
+                            {% endfor %}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
                 <caption class="govuk-table__caption govuk-table__caption--m">Eligibility</caption>
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
