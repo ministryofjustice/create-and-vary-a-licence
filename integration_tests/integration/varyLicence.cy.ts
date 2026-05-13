@@ -22,7 +22,7 @@ context('Vary a licence', () => {
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetPolicyChanges')
-    cy.task('stubUpdateStandardConditions')
+    cy.task('stubUpdatePolicy')
     cy.task('stubFeComponents')
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubDeleteAdditionalConditionsByCode')
