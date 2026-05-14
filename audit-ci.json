@@ -4,7 +4,6 @@
   "registry": "https://registry.npmjs.org",
   "allowlist": [
     "GHSA-73rr-hh4g-fpgx|mocha>diff",
-    "GHSA-w5hq-g745-h8pq|cypress-axe>cypress>@cypress/request>uuid",
-    "GHSA-w5hq-g745-h8pq|jest-junit>uuid"
+    "GHSA-hvx9-hwr7-wjj9|systeminformation"
   ]
 }
