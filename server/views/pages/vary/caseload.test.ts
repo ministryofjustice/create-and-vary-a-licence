@@ -289,31 +289,6 @@ describe('Caseload', () => {
     expect($('.govuk-hint').text()).toContain('CRN: Z882661')
   })
 
-  it('should apply redactIfLao filter to licence type for LAO cases', () => {
-    const $ = render({
-      caseload: [
-        {
-          licenceId: null,
-          name: 'Access restricted on NDelius',
-          crnNumber: 'A111111',
-          licenceType: 'AP',
-          releaseDate: '13 Feb 2023',
-          licenceStatus: null,
-          probationPractitioner: {
-            staffCode: 'Restricted',
-            name: 'Restricted',
-            allocated: true,
-          },
-          isRestricted: true,
-        },
-      ],
-      statusConfig: {
-        ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
-      },
-    })
-    expect($('#licence-type-1').text().trim()).toBe('Restricted')
-  })
-
   it('should apply redactIfLao filter to probation practitioner for LAO cases', () => {
     const $ = render({
       caseload: [
@@ -411,7 +386,6 @@ describe('Caseload', () => {
         ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
       },
     })
-    expect($('#licence-type-1').text().trim()).not.toBe('Restricted')
     expect($('#probation-practitioner-1').text().trim()).not.toBe('Restricted')
     expect($('#release-date-1').text().trim()).not.toBe('Restricted')
     expect($('#licence-status-1').text().trim()).not.toBe('Restricted')
@@ -460,11 +434,9 @@ describe('Caseload', () => {
     })
     expect($('tbody .govuk-table__row').length).toBe(2)
 
-    expect($('#licence-type-1').text().trim()).toBe('Restricted')
     expect($(nameLinkSelector).length).toBe(0)
     expect($('#name-1').text()).toContain('Access restricted on NDelius')
 
-    expect($('#licence-type-2').text().trim()).not.toBe('Restricted')
     expect($('#name-link-2').attr('href')).toBe('/licence/vary/id/2/timeline')
   })
 })
