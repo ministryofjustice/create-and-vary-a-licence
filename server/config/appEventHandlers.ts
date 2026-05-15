@@ -6,7 +6,7 @@ const registerUncaughtExceptionMonitor = () => {
     logger.error({ err: error, origin }, 'uncaught exception')
     flush(
       {
-        isAppCrashing: true,
+        isAppCrashing: false,
         callback: () => process.exit(1),
       },
       'uncaught exception',
