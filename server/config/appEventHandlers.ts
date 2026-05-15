@@ -7,7 +7,7 @@ const registerUncaughtExceptionMonitor = () => {
     flush(
       {
         isAppCrashing: false,
-        callback: () => process.exit(1),
+        // callback: () => process.exit(1),
       },
       'uncaught exception',
     )
