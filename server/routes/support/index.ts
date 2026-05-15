@@ -28,6 +28,7 @@ import VaryApproverRegionCaseloadRoutes from './handlers/varyApproverRegionCasel
 import OffenderAllocationRoutes from './handlers/offenderAllocation'
 import PrrdCasesByPrisonRoutes from './handlers/prrdCasesByPrison'
 import TimeServedCaseByPrisonRoutes from './handlers/timeServedCasesByPrison'
+import ExceptionThrower from './handlers/exceptionThrower'
 
 export default function Index({
   probationService,
@@ -134,5 +135,8 @@ export default function Index({
   post('/time-served-cases/by-prison', timeServedCasesByPrisonHandler.POST)
   get('/time-served-cases/by-prison/:prisonCode', timeServedCasesByPrisonHandler.GET)
   get('/time-served-cases/by-prison/:prisonCode/download-csv', timeServedCasesByPrisonHandler.GET_CSV)
+
+  const exceptionThrower = new ExceptionThrower()
+  get('/exception', exceptionThrower.GET)
   return router
 }
