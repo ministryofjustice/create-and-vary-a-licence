@@ -31,7 +31,13 @@ describe('App event handlers', () => {
 
     handler(testError, 'uncaughtException')
 
-    expect(logger.error).toHaveBeenCalledWith(`uncaught exception: error: ${testError}, origin: uncaughtException`)
-    expect(azureAppInsights.flush).toHaveBeenCalledWith({}, 'uncaught exception')
+    expect(logger.error).toHaveBeenCalledWith({ err: testError, origin: 'uncaughtException' }, 'uncaught exception')
+    expect(azureAppInsights.flush).toHaveBeenCalledWith(
+      {
+        isAppCrashing: true,
+        callback: expect.any(Function),
+      },
+      'uncaught exception',
+    )
   })
 })
