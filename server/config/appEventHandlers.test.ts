@@ -35,7 +35,6 @@ describe('App event handlers', () => {
     expect(azureAppInsights.flush).toHaveBeenCalledWith(
       {
         isAppCrashing: false,
-        callback: expect.any(Function),
       },
       'uncaught exception',
     )
