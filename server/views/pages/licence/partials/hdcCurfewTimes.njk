@@ -47,7 +47,7 @@
                           addressLine2Html +
                           params.hdcLicenceData.curfewAddress.townOrCity | escape + ", " +
                           countyHtml +
-                          params.hdcLicenceData.curfewAddress.postcode | escape + hdcBadge + "</p>",
+                          params.hdcLicenceData.curfewAddress.postcode | escape + (hdcBadge if not params.isVaryJourney else "") + "</p>",
                     classes: "curfew-address"
                 }
             },

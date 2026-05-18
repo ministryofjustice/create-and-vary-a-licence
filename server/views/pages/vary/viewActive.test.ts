@@ -213,12 +213,12 @@ describe('ViewActive', () => {
     expect($('.hdcad').text()).not.toMatch('CALCULATE RELEASE DATES')
   })
 
-  it('should render HDC label', () => {
+  it('should notrender HDC label', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       hdcLicenceData: { allCurfewTimesEqual: false },
     })
 
-    expect($('.curfew-address').text()).toMatch('HDC')
+    expect($('.curfew-address').text()).not.toMatch('HDC')
   })
 })
