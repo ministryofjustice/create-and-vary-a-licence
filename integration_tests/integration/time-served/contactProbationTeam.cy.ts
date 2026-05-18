@@ -28,7 +28,7 @@ context('Time Served – Contact Probation Team', () => {
     cy.task('stubGetCompletedLicence', {
       statusCode: 'SUBMITTED',
       licenceStatus: 'TIMED_OUT',
-      hardStopKind: 'TIME_SERVED',
+      isTimeServed: true,
       kind: 'TIME_SERVED',
     })
     cy.task('stubUpdateTimeServedExternalRecord')
