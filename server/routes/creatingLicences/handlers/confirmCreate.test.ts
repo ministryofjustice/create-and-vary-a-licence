@@ -74,6 +74,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
     beforeEach(() => {
       licenceService.getProbationCase.mockResolvedValue({
         crn: 'X1234',
+        comAllocated: true,
         prisonNumber: 'A1234BC',
         croNumber: '29906/12J',
         pncNumber: '12/394773H',

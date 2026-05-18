@@ -1,0 +1,47 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Create and vary a licence – You cannot generate this licence yet" %}
+{% set pageId = "hard-stop-no-com-allocated" %}
+{% set backLinkHref = backLink %}
+
+{% block beforeContent %}
+    {{ super() }}
+    <div class="govuk-grid-row" role="region" aria-label="Licence summary">
+        <div class="govuk-grid-column-full border-bottom">
+            <div class="govuk-caption-m">
+                <span class="pipe-separated__item">Prison number: {{ nomisId }}</span>
+                <span class="pipe-separated__item" data-qa="date">
+                Release date: {{ licenceStartDate | datetimeToDate }}
+            </span>
+                <span class="pipe-separated__item">Date of birth: {{ dateOfBirth | datetimeToDate }}</span>
+            </div>
+            <span class="govuk-heading-m">{{ name }}</span>
+        </div>
+    </div>
+
+{% endblock %}
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-top-5">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+                You cannot generate this licence yet
+            </h1>
+            <p class="govuk-body">
+                Before you can generate a licence for this person, a community probation practitioner must be allocated to them.
+            </p>
+            <h2 class="govuk-heading-m govuk-!-margin-top-6">
+                What you need to do
+            </h2>
+            <p class="govuk-body">
+                Contact the community probation team to request an allocation.
+            </p>
+            {{ govukButton({
+                text: "Return to cases",
+                classes: "govuk-button--secondary govuk-!-margin-top-3",
+                href: backLink,
+                attributes: { 'data-qa': 'return-to-case-list' }
+            }) }}
+        </div>
+    </div>
+{% endblock %}

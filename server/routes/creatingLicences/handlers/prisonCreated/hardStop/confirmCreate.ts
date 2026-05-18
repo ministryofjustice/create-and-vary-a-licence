@@ -3,6 +3,7 @@ import moment from 'moment'
 import YesOrNo from '../../../../../enumeration/yesOrNo'
 import LicenceService from '../../../../../services/licenceService'
 import { convertToTitleCase } from '../../../../../utils/utils'
+import logger from '../../../../../../logger'
 
 export default class ConfirmCreateRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -15,6 +16,12 @@ export default class ConfirmCreateRoutes {
       cvl: { licenceType, isEligibleForEarlyRelease, licenceStartDate, licenceKind },
       prisoner: { dateOfBirth, firstName, lastName },
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
+
+    const probationCase = await this.licenceService.getProbationCase(nomisId, user)
+    if (!probationCase.comAllocated) {
+      logger.info(`no COM allocated for nomisId ${nomisId}`)
+      return res.redirect(`/licence/hard-stop/create/nomisId/${nomisId}/no-com-allocated`)
+    }
 
     return res.render('pages/create/prisonCreated/hardStop/confirmCreate', {
       licence: {
