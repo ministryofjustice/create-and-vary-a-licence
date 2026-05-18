@@ -35,8 +35,8 @@
     {% endif %}
 
     {% if licence.kind === 'HDC' or licence.kind === 'HDC_VARIATION' %}
-        <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
-        {{ hdcCurfewTimes(licence, hdcLicenceData) }}
+        <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m" data-qa="hdc-curfew-details">HDC curfew details</h2>
+        {{ hdcCurfewTimes({ licence: licence, hdcLicenceData: hdcLicenceData, isEditable: false, isPrisonUser: false, isVaryJourney: true }) }}
     {% endif %}
 
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
