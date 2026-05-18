@@ -38,7 +38,7 @@ context('Vary a HDC licence', () => {
     varyCasesPage.getValue(varyCasesPage.teamCount).should('contain.text', '5')
     const timelinePage = varyCasesPage.selectCase()
     const viewActiveLicencePage = timelinePage.checkTimelineContent().selectVary()
-    viewActiveLicencePage.getHdcCurfewDetails().should('contain.text', 'HDC curfew details')
+    viewActiveLicencePage.getHdcCurfewDetailsHeading().should('contain.text', 'HDC curfew details')
     viewActiveLicencePage.getHdcAdSection().should('not.exist')
     viewActiveLicencePage.getCurfewAddressSection().should('exist')
     viewActiveLicencePage.getFirstNightCurfewTimesSection().should('not.exist')

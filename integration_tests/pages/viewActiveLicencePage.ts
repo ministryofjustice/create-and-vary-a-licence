@@ -19,8 +19,8 @@ export default class ViewActiveLicencePage extends Page {
     return Page.verifyOnPage(ConfirmVariationPage)
   }
 
-  getHdcCurfewDetails = (): Cypress.Chainable<JQuery<HTMLElement>> => {
-    return cy.get('[data-qa=hdc-curfew-details]')
+  getHdcCurfewDetailsHeading = (): Cypress.Chainable<JQuery<HTMLElement>> => {
+    return cy.get('[data-qa=hdc-curfew-details-heading]')
   }
 
   getHdcAdSection = (): Cypress.Chainable<JQuery<HTMLElement>> => {

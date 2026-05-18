@@ -67,7 +67,7 @@
                             attributes: { "id": "first-night-curfew-hours", "data-qa": "first-night-curfew-hours-change-link" }
                         }
                     ]
-                } if isEditable
+                } if params.isEditable
             } if not params.isVaryJourney,
             {
                 classes: 'all-curfew-times-equal',
@@ -88,12 +88,12 @@
                             attributes: { "id": "curfew-hours", "data-qa": "curfew-hours-change-link" }
                         }
                     ]
-                } if isEditable
+                } if params.isEditable
             } if params.hdcLicenceData.allCurfewTimesEqual
         ]
     }) }}
 
     {% if not params.hdcLicenceData.allCurfewTimesEqual %}
-        {{ nonUniformCurfewTimesTable(params.hdcLicenceData.weeklyCurfewTimes, isEditable, routeAppend, baseURL) }}
+        {{ nonUniformCurfewTimesTable(params.hdcLicenceData.weeklyCurfewTimes, params.isEditable, routeAppend, baseURL) }}
     {% endif %}
 {% endmacro %}
