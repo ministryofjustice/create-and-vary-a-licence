@@ -2,11 +2,11 @@
 {% from "moj/components/badge/macro.njk" import mojBadge %}
 {% from "./nonUniformCurfewTimesTable.njk" import nonUniformCurfewTimesTable %}
 
-{% macro hdcCurfewTimes(licence, hdcLicenceData, isEditable, isPrisonUser) %}
-    {% set addressLine2Html = hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if hdcLicenceData.curfewAddress.addressLine2 | length%}
-    {% set countyHtml = hdcLicenceData.curfewAddress.county | escape + ", " if hdcLicenceData.curfewAddress.county | length%}
-    {% set baseURL = "/licence/create/id/" + licence.id + "/hdc" %}
-    {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
+{% macro hdcCurfewTimes(params) %}
+    {% set addressLine2Html = params.hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if params.hdcLicenceData.curfewAddress.addressLine2 | length%}
+    {% set countyHtml = params.hdcLicenceData.curfewAddress.county | escape + ", " if params.hdcLicenceData.curfewAddress.county | length%}
+    {% set baseURL = "/licence/create/id/" + params.licence.id + "/hdc" %}
+    {% set routeAppend = '?fromReview=true' if not params.isPrisonUser %}
     {% set releaseDatesBadge %}
         {{ mojBadge({
             text: "CALCULATE RELEASE DATES",
@@ -21,8 +21,8 @@
     {% endset %}
 
     {% set hdcad %}
-        {% if licence.homeDetentionCurfewActualDate %}
-            {{ licence.homeDetentionCurfewActualDate | datetimeToDate }} {{ releaseDatesBadge | safe }}
+        {% if params.licence.homeDetentionCurfewActualDate %}
+            {{ params.licence.homeDetentionCurfewActualDate | datetimeToDate }} {{ releaseDatesBadge | safe }}
         {% else %}
             Not entered yet
         {% endif %}
@@ -38,23 +38,24 @@
                     html: hdcad,
                     classes: "hdcad"
                 }
-            },
+            } if not params.isVaryJourney,
             {
                 classes: "curfew-address-row",
                 key: {text: 'Address'},
                 value: {
-                    html: "<p>" + hdcLicenceData.curfewAddress.addressLine1 | escape + ", " +
+                    html: "<p>" + params.hdcLicenceData.curfewAddress.addressLine1 | escape + ", " +
                           addressLine2Html +
-                          hdcLicenceData.curfewAddress.townOrCity | escape + ", " +
+                          params.hdcLicenceData.curfewAddress.townOrCity | escape + ", " +
                           countyHtml +
-                          hdcLicenceData.curfewAddress.postcode | escape + hdcBadge + "</p>",
+                          params.hdcLicenceData.curfewAddress.postcode | escape + (hdcBadge if not params.isVaryJourney else "") + "</p>",
                     classes: "curfew-address"
                 }
             },
             {
+                classes: "first-night-curfew-times-row",
                 key: { text: 'First night curfew hours' },
                 value: {
-                    text: hdcLicenceData.firstNightCurfewTimes.fromTime | localTimeTo12h + " to " + hdcLicenceData.firstNightCurfewTimes.untilTime | localTimeTo12h,
+                    text: params.hdcLicenceData.firstNightCurfewTimes.fromTime | localTimeTo12h + " to " + params.hdcLicenceData.firstNightCurfewTimes.untilTime | localTimeTo12h,
                     classes: "first-night-curfew-times"
                 },
                 actions: {
@@ -66,16 +67,16 @@
                             attributes: { "id": "first-night-curfew-hours", "data-qa": "first-night-curfew-hours-change-link" }
                         }
                     ]
-                } if isEditable
-            },
+                } if params.isEditable
+            } if not params.isVaryJourney,
             {
                 classes: 'all-curfew-times-equal',
                 key: {
                     text: 'Curfew hours'
                 },
                 value: {
-                    html: hdcLicenceData.weeklyCurfewTimes[0].fromDay | titlecase | escape + " to " + hdcLicenceData.weeklyCurfewTimes[6].fromDay | titlecase | escape + "<br>" +
-                          hdcLicenceData.weeklyCurfewTimes[0].fromTime  | localTimeTo12h + " to " + hdcLicenceData.weeklyCurfewTimes[0].untilTime | localTimeTo12h,
+                    html: params.hdcLicenceData.weeklyCurfewTimes[0].fromDay | titlecase | escape + " to " + params.hdcLicenceData.weeklyCurfewTimes[6].fromDay | titlecase | escape + "<br>" +
+                          params.hdcLicenceData.weeklyCurfewTimes[0].fromTime  | localTimeTo12h + " to " + params.hdcLicenceData.weeklyCurfewTimes[0].untilTime | localTimeTo12h,
                     classes: "weekly-curfew-times"
                 },
                 actions: {
@@ -87,12 +88,12 @@
                             attributes: { "id": "curfew-hours", "data-qa": "curfew-hours-change-link" }
                         }
                     ]
-                } if isEditable
-            } if hdcLicenceData.allCurfewTimesEqual
+                } if params.isEditable
+            } if params.hdcLicenceData.allCurfewTimesEqual
         ]
     }) }}
 
-    {% if not hdcLicenceData.allCurfewTimesEqual %}
-        {{ nonUniformCurfewTimesTable(hdcLicenceData.weeklyCurfewTimes, isEditable, routeAppend, baseURL) }}
+    {% if not params.hdcLicenceData.allCurfewTimesEqual %}
+        {{ nonUniformCurfewTimesTable(params.hdcLicenceData.weeklyCurfewTimes, params.isEditable, routeAppend, baseURL) }}
     {% endif %}
 {% endmacro %}

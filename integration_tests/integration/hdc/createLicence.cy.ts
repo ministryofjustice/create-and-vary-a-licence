@@ -1,11 +1,11 @@
 import moment from 'moment'
-import ConfirmCreatePage from '../pages/confirmCreate'
-import LicenceCreationType from '../../server/enumeration/licenceCreationType'
-import CurfewType from '../../server/enumeration/CurfewType'
-import DoHdcCurfewHoursApplyDailyPage from '../pages/doHdcCurfewHoursApplyDailyPage'
-import CurfewHoursPage from '../pages/curfewHoursPage'
-import FirstNightCurfewTimesPage from '../pages/firstNightCurfewTimesPage'
-import { LicenceKind } from '../../server/enumeration'
+import ConfirmCreatePage from '../../pages/confirmCreate'
+import LicenceCreationType from '../../../server/enumeration/licenceCreationType'
+import CurfewType from '../../../server/enumeration/CurfewType'
+import DoHdcCurfewHoursApplyDailyPage from '../../pages/doHdcCurfewHoursApplyDailyPage'
+import CurfewHoursPage from '../../pages/curfewHoursPage'
+import FirstNightCurfewTimesPage from '../../pages/firstNightCurfewTimesPage'
+import { LicenceKind } from '../../../server/enumeration'
 
 context('Create an HDC licence', () => {
   const dates: string[] = []

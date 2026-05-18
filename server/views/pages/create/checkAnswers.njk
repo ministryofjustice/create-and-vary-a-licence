@@ -101,7 +101,7 @@
 
             {% if licence.kind === 'HDC' or licence.kind === 'HDC_VARIATION' %}
                 <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
-                {{ hdcCurfewTimes(licence, hdcLicenceData, canEditInitialAppt) }}
+                {{ hdcCurfewTimes({ licence: licence, hdcLicenceData: hdcLicenceData, isEditable: canEditInitialAppt }) }}
             {% endif %}
 
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' )
