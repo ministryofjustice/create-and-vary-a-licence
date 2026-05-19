@@ -7,6 +7,7 @@ import { Services } from '../../../../../services'
 
 import ConfirmCreateRoutes from './confirmCreate'
 import YesOrNoQuestion from '../../../types/yesOrNo'
+import NoComAllocated from './noComAllocated'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
@@ -34,6 +35,11 @@ export default function Index({ licenceService, conditionService }: Services): R
     const controller = new ConfirmCreateRoutes(licenceService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)
     post('/create/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
+  }
+
+  {
+    const controller = new NoComAllocated(licenceService)
+    get('/create/nomisId/:nomisId/no-com-allocated', controller.GET)
   }
   return router
 }

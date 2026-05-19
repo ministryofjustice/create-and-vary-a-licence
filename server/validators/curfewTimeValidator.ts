@@ -13,7 +13,6 @@ export default class ValidCurfewTime implements ValidatorConstraintInterface {
     const fieldName = args.property
 
     const error = this.getError(simpleTime, fieldName)
-
     return error || ''
   }
 

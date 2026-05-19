@@ -669,6 +669,7 @@ describe('Licence Service', () => {
     const prisonNumber = 'A1234BC'
     const probationCase = {
       crn: 'X12345',
+      comAllocated: true,
       prisonNumber,
       croNumber: '29906/12J',
       pncNumber: '12/394773H',
