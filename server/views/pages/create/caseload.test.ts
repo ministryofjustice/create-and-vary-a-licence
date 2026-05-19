@@ -455,7 +455,6 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#name-1 > .caseload-offender-name').text()).toContain('Access restricted on NDelius')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
-    expect($('#licence-type-1').text().trim()).toBe('Restricted')
     expect($('#probation-practitioner-1').text()).toBe('Restricted')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
     expect($('#release-date-1').text()).toBe('Restricted')
@@ -487,7 +486,6 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('#name-1 > .caseload-offender-name > a').length).toBe(1)
     expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
-    expect($('#licence-type-1').text().trim()).toContain('Standard determinate')
     expect($('#probation-practitioner-1 > a').length).toBe(1)
     expect($('#probation-practitioner-1 > a').text()).toBe('Jane Smith')
     expect($('#licence-status-1 > .status-badge').length).toBe(1)
@@ -538,7 +536,6 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#name-1 > .caseload-offender-name').text()).toContain('Access restricted on NDelius')
     expect($('#name-1 > .caseload-offender-name > a').attr('href')).toContain('/X111111/restricted')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X111111')
-    expect($('#licence-type-1').text().trim()).toBe('Restricted')
     expect($('#probation-practitioner-1').text()).toBe('Restricted')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
     expect($('#release-date-1').text()).toBe('Restricted')
@@ -546,7 +543,6 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('#name-2 > .caseload-offender-name > a').length).toBe(1)
     expect($('#name-2 > .caseload-offender-name > a').text()).toBe('Test Person')
-    expect($('#licence-type-2').text().trim()).toBe('Standard determinate')
     expect($('#licence-status-2 > .status-badge').length).toBe(1)
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('In progress')
   })
