@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { templateRenderer } from '../../../../../utils/__testutils/templateTestUtils'
 
-describe('NDelius record missing', () => {
+describe('No COM allocated view', () => {
   const render = templateRenderer(
     fs.readFileSync('server/views/pages/create/prisonCreated/hardStop/noComAllocated.njk').toString(),
   )
