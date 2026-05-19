@@ -12,7 +12,7 @@ export default class PrisonWillCreateThisLicenceRoutes {
 
     const [
       {
-        cvl: { licenceType, licenceStartDate, hardStopKind },
+        cvl: { licenceType, licenceStartDate, isTimeServed },
         prisoner: { prisonId, dateOfBirth, firstName, lastName },
       },
       deliusRecord,
@@ -32,7 +32,7 @@ export default class PrisonWillCreateThisLicenceRoutes {
         dateOfBirth: moment(dateOfBirth).format('DD/MM/YYYY'),
         forename: convertToTitleCase(firstName),
         surname: convertToTitleCase(lastName),
-        hardStopKind,
+        isTimeServed,
       },
       omuEmail: email,
       backLink,

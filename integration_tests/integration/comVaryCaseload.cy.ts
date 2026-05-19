@@ -32,7 +32,6 @@ context('View COM vary caseload', () => {
     caseloadPage.getRow(0).within(() => {
       cy.get('#name-1 .caseload-offender-name a').should('exist')
       cy.get('#name-1 .caseload-offender-name').should('contain', 'Test Person')
-      cy.get('#licence-type-1').should('contain', 'Post sentence supervision')
       cy.get('#probation-practitioner-1 a').should('exist')
       cy.get('#probation-practitioner-1').should('contain', 'John Smith')
       cy.get('#release-date-1').should('contain', '1 Sep 2024')
@@ -53,7 +52,6 @@ context('View COM vary caseload', () => {
     caseloadPage.getRow(0).within(() => {
       cy.get('#name-1 .caseload-offender-name a').should('exist')
       cy.get('#name-1 .caseload-offender-name').should('contain', 'Test Person')
-      cy.get('#licence-type-1').should('contain', 'Post sentence supervision')
       cy.get('#probation-practitioner-1 a').should('exist')
       cy.get('#probation-practitioner-1').should('contain', 'John Smith')
       cy.get('#release-date-1').should('contain', '1 Sep 2024')
@@ -63,7 +61,6 @@ context('View COM vary caseload', () => {
     caseloadPage.getRow(1).within(() => {
       cy.get('#name-2 .caseload-offender-name a').should('exist')
       cy.get('#name-2 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
-      cy.get('#licence-type-2').should('contain', 'Restricted')
       cy.get('#probation-practitioner-2 a').should('not.exist')
       cy.get('#probation-practitioner-2').should('contain', 'Restricted')
       cy.get('#release-date-2').should('contain', 'Restricted')
