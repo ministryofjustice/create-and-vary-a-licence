@@ -1494,6 +1494,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           policyUpdated: false,
+          policyVersion: '3.0',
         },
       },
     })

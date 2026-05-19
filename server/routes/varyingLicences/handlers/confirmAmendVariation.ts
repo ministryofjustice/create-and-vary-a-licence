@@ -17,11 +17,8 @@ export default class ConfirmAmendVariationRoutes {
 
     if (answer === YesOrNo.YES) {
       await this.licenceService.updateStatus(parseInt(licenceId, 10), LicenceStatus.VARIATION_IN_PROGRESS, user)
-
-      const policyUpdateResponse = await this.licenceService.updatePolicy(licenceId)
-      if (policyUpdateResponse.policyUpdated) {
-        return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
-      }
+      await this.licenceService.updatePolicy(licenceId)
+      return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     }
 
     return res.redirect(`/licence/vary/id/${licenceId}/view`)
