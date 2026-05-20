@@ -22,6 +22,7 @@ context('Vary a licence - time served', () => {
     })
     cy.task('stubReviewWithOutVariation')
     cy.task('stubCheckComCaseAccess')
+    cy.task('stubUpdatePolicy')
     cy.signIn()
   })
 

@@ -36,6 +36,7 @@ import {
   EditLicenceResponse,
   WeeklyCurfewTimesRequest,
   FirstNightCurfewTimesRequest,
+  PolicyUpdateResponse,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -103,6 +104,16 @@ describe('Licence API client tests', () => {
 
     expect(get).toHaveBeenCalledWith({ path: '/licence/id/1' }, { username: 'joebloggs' })
     expect(result).toEqual({ id: 1, prisonCode: 'MDI' })
+  })
+
+  it('Update policy', async () => {
+    const response = { policyUpdated: true, policyVersion: '4.0' } as PolicyUpdateResponse
+    post.mockResolvedValue(response)
+
+    const result = await licenceApiClient.updatePolicy('1')
+
+    expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/update-policy' })
+    expect(result).toEqual(response)
   })
 
   it('Update appointment person', async () => {

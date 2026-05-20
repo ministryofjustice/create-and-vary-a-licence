@@ -1483,16 +1483,19 @@ export default {
     })
   },
 
-  stubUpdateStandardConditions: (): SuperAgentRequest => {
+  stubUpdatePolicy: (): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'PUT',
-        urlPattern: `/licences-api/licence/id/(\\d*)/standard-conditions`,
+        method: 'POST',
+        urlPattern: `/licences-api/licence/id/(\\d*)/update-policy`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
+        jsonBody: {
+          policyUpdated: false,
+          policyVersion: '3.0',
+        },
       },
     })
   },

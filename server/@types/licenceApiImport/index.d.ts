@@ -829,6 +829,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/licence/id/{licenceId}/update-policy': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Updates the standard conditions on a licence to the latest policy available for the licence
+     * @description Updates the standard conditions on a licence to the latest policy available for the licence. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['updateLicencePolicy']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/licence/id/{licenceId}/review-with-no-variation-required': {
     parameters: {
       query?: never
@@ -3797,6 +3817,19 @@ export interface components {
        */
       homeDetentionCurfewActualDate?: string | null
     }
+    /** @description Response to an update policy request */
+    PolicyUpdateResponse: {
+      /**
+       * @description Were the standard conditions on the licence updated
+       * @example true
+       */
+      policyUpdated: boolean
+      /**
+       * @description The current policy version of the licence
+       * @example 3.0
+       */
+      policyVersion: string
+    }
     /** @description Request object for checking what access a user has to a licence */
     LicencePermissionsRequest: {
       /**
@@ -5195,7 +5228,7 @@ export interface components {
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
-      appointmentPerson?: string | null
+      nomsId?: string | null
       /**
        * @description The type of appointment time of the initial appointment
        * @example SPECIFIC_DATE_TIME
@@ -5214,25 +5247,26 @@ export interface components {
        */
       appointmentAddress?: string | null
       /**
-       * @description The probation area code where this licence is supervised from
-       * @example N01
+       * @description Is a review of this licence is required
+       * @example true
        */
-      probationAreaCode?: string | null
+      isReviewNeeded: boolean
       /**
-       * @description The Probation Delivery Unit (PDU or borough) supervising this licence
-       * @example PDU01
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
        */
-      probationPduCode?: string | null
+      dateLastUpdated?: string | null
       /**
        * @description The Local Administrative Unit (LAU or district) supervising this licence
        * @example LAU01
        */
-      probationLauCode?: string | null
+      topupSupervisionStartDate?: string | null
       /**
        * @description The team code that is supervising this licence
        * @example Cardiff-A
        */
-      probationTeamCode?: string | null
+      postRecallReleaseDate?: string | null
       /**
        * Format: date
        * @description The date that the licence will start
@@ -5334,7 +5368,7 @@ export interface components {
        * @description The date and time that this licence was first created
        * @example 24/08/2022 09:30:33
        */
-      dateCreated?: string | null
+      licenceExpiryDate?: string | null
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
@@ -13069,6 +13103,91 @@ export interface operations {
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateLicencePolicy: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Standard conditions on the licence have been updated if required */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PolicyUpdateResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
         headers: {
           [name: string]: unknown
         }

@@ -82,7 +82,7 @@ export default function Index({
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)
   const spoDiscussionHandler = new SpoDiscussionRoutes(licenceService)
   const vloDiscussionHandler = new VloDiscussionRoutes(licenceService, conditionService)
-  const confirmAmendVariationHandler = new ConfirmAmendVariationRoutes(licenceService, conditionService)
+  const confirmAmendVariationHandler = new ConfirmAmendVariationRoutes(licenceService)
   const confirmDiscardVariationHandler = new ConfirmDiscardVariationRoutes(licenceService)
   const reviewLicenceHandler = new ReviewLicenceRoutes(licenceService)
   const reasonForVariationHandler = new ReasonForVariationRoutes(licenceService)
