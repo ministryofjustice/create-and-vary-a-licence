@@ -47,9 +47,10 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
 
   describe('GET', () => {
     it('should render view', async () => {
+      const prisonNumber = 'G4169UO'
       const prisonerDetails = {
         prisoner: {
-          prisonerNumber: 'G4169UO',
+          prisonerNumber: prisonNumber,
           firstName: 'TEST',
           lastName: 'PERSON',
           confirmedReleaseDate: '2024-07-19',
@@ -58,8 +59,16 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         },
         cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, licenceStartDate: '18/07/2024' },
       } as PrisonerWithCvlFields
+
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      licenceService.getProbationCase.mockResolvedValue({
+        crn: 'X123456',
+        comAllocated: true,
+        prisonNumber,
+      })
+
       await handler.GET(req, res)
+
       expect(res.render).toHaveBeenCalledWith('pages/create/prisonCreated/hardStop/confirmCreate', {
         licence: {
           nomsId: 'ABC123',
