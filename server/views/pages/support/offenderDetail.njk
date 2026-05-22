@@ -5,7 +5,6 @@
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% set pageTitle = applicationName + " - prisoner detail" %}
-{% set backLinkHref = "/support/offender-search" %}
 {% set hideLicenceBanner = true %}
 
 {% set redirectPath = "/prisoner/" + prisonerDetail.prisonerNumber %}
@@ -427,7 +426,6 @@
     <div class="govuk-button-group">
         {{ govukButton({
             text: "Return to search",
-            classes: 'js-backlink',
             href: '/support/offender-search'
         }) }}
         <a class="govuk-link" href="/">Create and vary a licence home</a>
