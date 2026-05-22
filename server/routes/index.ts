@@ -30,6 +30,7 @@ import staffRoutes from './staff'
 import hardStopStaffRoutes from './initialAppointment/handlers/prisonCreated/hardStop/staff'
 import createTimeServedLicenceRoutes from './creatingLicences/handlers/prisonCreated/timeServed'
 import hdcRoutes from './initialAppointment/hdc'
+import varyHdcLicenceRoutes from './varyingLicences/hdc'
 
 export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
   const router = Router({ mergeParams: true })
@@ -47,6 +48,7 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   router.use(createHdcLicenceRoutes(services))
   router.use(manageConditionRoutes(services))
   router.use(varyLicenceRoutes(services))
+  router.use(varyHdcLicenceRoutes(services))
   router.use(approveLicenceRoutes(services))
   router.use(viewLicenceRoutes(services))
   router.use(approveVariationsLicenceRoutes(services))

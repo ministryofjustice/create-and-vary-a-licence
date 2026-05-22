@@ -1,0 +1,50 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Create a licence - HDC Accommodation" %}
+{% set pageId = "accommodation-type-question-page" %}
+{% set backLinkHref = "/" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">What type of accommodation is the new curfew address?</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ govukRadios ({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "radio-option",
+                    name: "accommodationType",
+                    fieldset: {
+                        attributes: {
+                            id: 'accommodationType'
+                        }
+                    },
+                    errorMessage: validationErrors | findError('accommodationType'),
+                    items: [
+                        {
+                            value: "Residential",
+                            text: "Residential"
+                        },
+                        {
+                            value: "CAS",
+                            text: "CAS"
+                        }
+                    ]
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}
