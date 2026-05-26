@@ -91,7 +91,6 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToAction: 'EDIT',
-        showTimeServedImproveServiceBanner: false,
       })
     })
 
@@ -139,7 +138,6 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToAction: 'PRINT_TO_ACTIVATE',
-        showTimeServedImproveServiceBanner: false,
       })
     })
 
@@ -187,7 +185,6 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToAction: 'EDIT',
-        showTimeServedImproveServiceBanner: false,
       })
     })
 
@@ -227,7 +224,6 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToAction: 'REVIEW',
-        showTimeServedImproveServiceBanner: false,
       })
     })
 
@@ -268,7 +264,6 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToAction: 'VIEW_OR_VARY',
-        showTimeServedImproveServiceBanner: false,
       })
     })
 
@@ -309,7 +304,6 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToAction: 'VIEW_OR_VARY',
-        showTimeServedImproveServiceBanner: false,
       })
     })
 
@@ -351,62 +345,7 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToAction: 'VIEW',
-        showTimeServedImproveServiceBanner: false,
       })
-    })
-
-    it('should show the time served improve service banner when the flash is set', async () => {
-      config.timeServed.enabled = true
-      config.timeServed.prisons = ['MDI', 'LEI']
-      res = {
-        ...commonRes,
-        locals: {
-          licence: {
-            id: 1,
-            kind: LicenceKind.TIME_SERVED,
-            prisonCode: 'MDI',
-            statusCode: LicenceStatus.ACTIVE,
-            isReviewNeeded: false,
-          },
-          user: commonUser,
-        },
-      } as unknown as Response
-      ;(req.flash as jest.Mock).mockReturnValue(['true'])
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/vary/timeline',
-        expect.objectContaining({
-          showTimeServedImproveServiceBanner: true,
-        }),
-      )
-    })
-
-    it('should show the time served improve service banner when config contains ALL_PRISONS but licence prison code is not included', async () => {
-      config.timeServed.enabled = true
-      config.timeServed.prisons = ['LEI', 'ALL_PRISONS']
-      res = {
-        ...commonRes,
-        locals: {
-          licence: {
-            id: 1,
-            kind: LicenceKind.TIME_SERVED,
-            prisonCode: 'MDI',
-            statusCode: LicenceStatus.ACTIVE,
-            isReviewNeeded: false,
-          },
-          user: commonUser,
-        },
-      } as unknown as Response
-      ;(req.flash as jest.Mock).mockReturnValue(['true'])
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/vary/timeline',
-        expect.objectContaining({
-          showTimeServedImproveServiceBanner: true,
-        }),
-      )
     })
   })
 

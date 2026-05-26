@@ -18,7 +18,6 @@ export default class LicenceReviewRoutes {
       const newLicence = await this.licenceService.getOrCreateLicenceVariation(licence.nomsId, licenceId, user)
       return res.redirect(`/licence/vary/id/${newLicence.licenceId}/spo-discussion`)
     }
-    req.flash('showTimeServedImproveServiceBanner', 'true')
 
     await this.licenceService.reviewWithoutVariation(parseInt(licenceId, 10), user)
 
