@@ -1,6 +1,7 @@
 import { components } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
 import { CvlUserDetails } from '../CvlUserDetails'
 import { LicenceConditionChange, Licence } from '../licenceApiClientTypes'
+import CurfewAccommodationType from '../../enumeration/curfewAccommodationType'
 
 type ReportDefinitionSummary = components['schemas']['ReportDefinitionSummary']
 
@@ -17,6 +18,8 @@ declare module 'express-session' {
     changedConditionsCounter: number
     changedConditionsInputs: string[]
     changedConditionsInputsCounter: number
+    curfewAccommodationType: CurfewAccommodationType
+    curfewAddressChecksIncompleteReason: string
   }
 }
 

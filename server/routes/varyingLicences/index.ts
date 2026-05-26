@@ -29,7 +29,7 @@ import ReviewLicenceRoutes from './handlers/reviewLicence'
 import YesOrNotApplicableDto from '../creatingLicences/types/yesOrNotApplicable'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
-function alterResObject() {
+export function alterResObject() {
   return (req: Request, res: Response, next: NextFunction) => {
     res.locals.isVaryJourney = true
     next()
