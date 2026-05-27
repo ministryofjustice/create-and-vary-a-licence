@@ -11,6 +11,8 @@ import YesOrNoQuestion from '../../creatingLicences/types/yesOrNo'
 import ResidentialChecksIncompleteReasonRoutes from './handlers/residentialChecksIncompleteReason'
 import ReasonForIncompleteAddressChecks from '../types/reasonForIncompleteAddressChecks'
 import CurfewAccommodationTypeQuestion from '../types/curfewAccommodationType'
+import CurfewAddressRoutes from './handlers/curfewAddress'
+import PostcodeLookupInputValidation from '../../initialAppointment/types/PostcodeLookupInputValidation'
 
 export default function Index(services: Services): Router {
   const { conditionService, licenceService } = services
@@ -54,6 +56,12 @@ export default function Index(services: Services): Router {
     const controller = new ResidentialChecksIncompleteReasonRoutes()
     get('/residential-checks-incomplete', controller.GET)
     post('/residential-checks-incomplete', controller.POST, ReasonForIncompleteAddressChecks)
+  }
+
+  {
+    const controller = new CurfewAddressRoutes()
+    get('/curfew-address', controller.GET)
+    post('/curfew-address', controller.POST, PostcodeLookupInputValidation)
   }
 
   return router

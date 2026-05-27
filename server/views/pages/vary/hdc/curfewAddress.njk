@@ -1,0 +1,50 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Vary a licence - HDC Curfew Address" %}
+{% set pageId = "curfew-address-page" %}
+{% set backLinkHref = "/" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <h1 class="govuk-heading-l">Find the new curfew address</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row curfew-address">
+            <div class="moj-search govuk-grid-column-full govuk-!-margin-top-3">
+                {% call govukFieldset({
+                    legend: {
+                        text: "Curfew address",
+                        classes: "govuk-visually-hidden"
+                    }
+                }) %}
+                    {{ govukInput({
+                        label: {
+                            text: "Type an address or postcode",
+                            classes: "moj-search__label govuk-!-font-weight-bold"
+                        },
+                        classes: "moj-search__input",
+                        attributes: {
+                            "data-qa": "addressInput"
+                        },
+                        id: "searchQuery",
+                        name: "searchQuery",
+                        value: formResponses.searchQuery,
+                        errorMessage: validationErrors | findError('searchQuery')
+                    }) }}
+                    <button class="govuk-button moj-search__button" data-module="govuk-button" data-qa="searchAddresses">
+                        Find address
+                    </button>
+                    <p class="govuk-body govuk-!-margin-top-3">
+                        <a href={{ manualAddressEntryUrl }} class="govuk-link" data-qa="enterAddressManually">Enter address manually</a>
+                    </p>
+                {% endcall %}
+            </div>
+        </div>
+    </form>
+{% endblock %}
