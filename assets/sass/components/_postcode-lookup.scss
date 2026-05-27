@@ -1,7 +1,9 @@
+
 .moj-search .govuk-form-group {
-  width: 40%;
+  --form-width: 40%;
+  width: var(--form-width);
 }
 
-.curfew-address .moj-search .govuk-form-group {
-  width: 38%;
+.curfew-address {
+  --form-width: 38%;
 }
