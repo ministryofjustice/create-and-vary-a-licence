@@ -188,6 +188,7 @@
     "path-to-regexp": "^8.4.1",
     "mocha": {
       "serialize-javascript": "7.0.5"
-    }
+    },
+    "qs": "^6.15.2"
   }
 }
