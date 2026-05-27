@@ -13,6 +13,7 @@ import ReasonForIncompleteAddressChecks from '../types/reasonForIncompleteAddres
 import CurfewAccommodationTypeQuestion from '../types/curfewAccommodationType'
 import CurfewAddressRoutes from './handlers/curfewAddress'
 import PostcodeLookupInputValidation from '../../initialAppointment/types/PostcodeLookupInputValidation'
+import NoAddressFoundRoutes from './handlers/noAddressFound'
 
 export default function Index(services: Services): Router {
   const { conditionService, licenceService } = services
@@ -62,6 +63,11 @@ export default function Index(services: Services): Router {
     const controller = new CurfewAddressRoutes()
     get('/curfew-address', controller.GET)
     post('/curfew-address', controller.POST, PostcodeLookupInputValidation)
+  }
+
+  {
+    const controller = new NoAddressFoundRoutes()
+    get('/no-address-found', controller.GET)
   }
 
   return router
