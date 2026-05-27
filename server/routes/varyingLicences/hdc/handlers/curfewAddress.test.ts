@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import CurfewAddressRoutes from './curfewAddress'
 
-describe('Route Handlers - Vary Licence - Vlo discussion', () => {
+describe('Route Handlers - Vary Licence - Curfew Address', () => {
   const handler = new CurfewAddressRoutes()
   let req: Request
   let res: Response
