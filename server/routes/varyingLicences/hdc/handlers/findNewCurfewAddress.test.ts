@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import CurfewAddressRoutes from './curfewAddress'
+import FindNewCurfewAddressRoutes from './findNewCurfewAddress'
 
-describe('Route Handlers - Vary Licence - Curfew Address', () => {
-  const handler = new CurfewAddressRoutes()
+describe('Route Handlers - Vary Licence - Find New Curfew Address', () => {
+  const handler = new FindNewCurfewAddressRoutes()
   let req: Request
   let res: Response
 
@@ -30,7 +30,9 @@ describe('Route Handlers - Vary Licence - Curfew Address', () => {
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/vary/hdc/curfewAddress')
+      expect(res.render).toHaveBeenCalledWith('pages/vary/hdc/findNewCurfewAddress', {
+        manualAddressEntryUrl: `/licence/vary/id/${req.params.licenceId}/hdc/manual-curfew-address-entry`,
+      })
     })
   })
 })

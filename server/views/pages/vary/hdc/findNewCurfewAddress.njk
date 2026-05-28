@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set pageTitle = applicationName + " - Vary a licence - HDC Curfew Address" %}
+{% set pageTitle = applicationName + " - Vary a licence - Find the new curfew address" %}
 {% set pageId = "curfew-address-page" %}
 {% set backLinkHref = "/" %}
 
@@ -41,7 +41,7 @@
                         Find address
                     </button>
                     <p class="govuk-body govuk-!-margin-top-3">
-                        <a href={{ manualAddressEntryUrl }} class="govuk-link" data-qa="enterAddressManually">Enter address manually</a>
+                        <a data-qa="enterAddressManually" class="govuk-link" href="{{ manualAddressEntryUrl }}">Enter address manually</a>
                     </p>
                 {% endcall %}
             </div>

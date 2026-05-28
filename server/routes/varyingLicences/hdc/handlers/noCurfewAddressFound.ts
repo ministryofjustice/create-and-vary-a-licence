@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-export default class NoAddressFoundRoutes {
+export default class NoCurfewAddressFoundRoutes {
   constructor() {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -8,9 +8,9 @@ export default class NoAddressFoundRoutes {
     const { searchQuery } = req.query as { searchQuery?: string }
     const basePath = `/licence/vary/id/${licenceId}/hdc`
 
-    return res.render('pages/vary/hdc/noAddressFound', {
+    return res.render('pages/vary/hdc/noCurfewAddressFound', {
       searchQuery,
-      curfewAddressSearchUrl: `${basePath}/curfew-address`,
+      curfewAddressSearchUrl: `${basePath}/find-the-new-curfew-address`,
       manualAddressEntryUrl: `${basePath}/manual-curfew-address-entry`,
     })
   }
