@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import NoAddressFoundRoutes from './noAddressFound'
+import NoAddressFoundRoutes from './noCurfewAddressFound'
 
-describe('Route Handlers - Vary a licence - HDC No address found', () => {
+describe('Route Handlers - Vary a licence - No curfew address found', () => {
   let req: Request
   let res: Response
   const handler = new NoAddressFoundRoutes()
 
-  describe('No address found for probation vary journey', () => {
+  describe('No curfew address found for probation vary journey', () => {
     beforeEach(() => {
       req = {
         params: {
@@ -29,12 +29,12 @@ describe('Route Handlers - Vary a licence - HDC No address found', () => {
       } as unknown as Response
     })
     describe('GET', () => {
-      it('should render the no address page found page in vary flow', async () => {
+      it('should render the no curfew address page found page in vary flow', async () => {
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/vary/hdc/noAddressFound', {
+        expect(res.render).toHaveBeenCalledWith('pages/vary/hdc/noCurfewAddressFound', {
           searchQuery: req.query.searchQuery,
-          curfewAddressSearchUrl: `/licence/vary/id/${req.params.licenceId}/hdc/curfew-address`,
+          curfewAddressSearchUrl: `/licence/vary/id/${req.params.licenceId}/hdc/find-the-new-curfew-address`,
           manualAddressEntryUrl: `/licence/vary/id/${req.params.licenceId}/hdc/manual-curfew-address-entry`,
         })
       })
