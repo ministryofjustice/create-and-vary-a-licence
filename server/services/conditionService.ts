@@ -36,7 +36,6 @@ import {
   BespokeCondition,
   Licence,
   LicencePolicyResponse,
-  StandardCondition,
 } from '../@types/licenceApiClientTypes'
 
 import ElectronicTagPeriod from '../routes/manageConditions/types/additionalConditionInputs/electronicTagPeriod'
@@ -60,6 +59,7 @@ import RestrictionOfResidencyPolicyV3 from '../routes/manageConditions/types/add
 import UnsupervisedContactPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/unsupervisedContactPolicyV3'
 import WorkingWithChildrenPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/workingWithChildrenPolicyV3'
 import InBoundsRegion from '../routes/manageConditions/types/additionalConditionInputs/inBoundsRegion'
+import DrinkingEstablishment from '../routes/manageConditions/types/additionalConditionInputs/drinkingEstablishment'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -79,19 +79,6 @@ export default class ConditionService {
 
   async getPolicyVersion(): Promise<string> {
     return (await this.getLicencePolicy()).version
-  }
-
-  async getStandardConditions(
-    licenceType: LicenceType.AP | LicenceType.PSS,
-    version: string = null,
-  ): Promise<StandardCondition[]> {
-    const conditions = await this.getLicencePolicy(version)
-    return conditions.standardConditions[licenceType].map((condition: StandardCondition, index: number) => {
-      return {
-        ...condition,
-        sequence: index,
-      }
-    })
   }
 
   async getAdditionalConditions(version: string): Promise<AdditionalConditionsConfig> {
@@ -296,6 +283,9 @@ export default class ConditionService {
           break
         case 'InBoundsRegion':
           validator = InBoundsRegion
+          break
+        case 'DrinkingEstablishment':
+          validator = DrinkingEstablishment
           break
         default: {
           // silently ignore
