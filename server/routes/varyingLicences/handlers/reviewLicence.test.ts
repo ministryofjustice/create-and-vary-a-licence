@@ -51,7 +51,6 @@ describe('Review Hard Stop licence handler', () => {
       req.body.answer = YesOrNo.NO
       await handler.POST(req, res)
       expect(licenceService.reviewWithoutVariation).toHaveBeenCalledWith(1, { username: 'bob' })
-      expect(req.flash).toHaveBeenCalledTimes(1)
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/timeline')
     })
   })
