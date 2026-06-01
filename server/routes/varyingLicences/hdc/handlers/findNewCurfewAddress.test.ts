@@ -35,4 +35,22 @@ describe('Route Handlers - Vary Licence - Find New Curfew Address', () => {
       })
     })
   })
+
+  describe('POST', () => {
+    it('should redirect to select curfew address page with search query as a param', async () => {
+      req.body.searchQuery = 'search query'
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/vary/id/${req.params.licenceId}/hdc/select-curfew-address?searchQuery=search%20query`,
+      )
+    })
+
+    it('should not redirect to select curfew address page if search query is empty', async () => {
+      req.body.searchQuery = '   '
+      await handler.POST(req, res)
+      expect(res.redirect).not.toHaveBeenCalledWith(
+        `/licence/vary/id/${req.params.licenceId}/hdc/select-curfew-address?searchQuery=   `,
+      )
+    })
+  })
 })

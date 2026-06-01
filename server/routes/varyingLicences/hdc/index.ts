@@ -14,6 +14,7 @@ import CurfewAccommodationTypeQuestion from '../types/curfewAccommodationType'
 import PostcodeLookupInputValidation from '../../initialAppointment/types/PostcodeLookupInputValidation'
 import NoCurfewAddressFoundRoutes from './handlers/noCurfewAddressFound'
 import FindNewCurfewAddressRoutes from './handlers/findNewCurfewAddress'
+import SelectCurfewAddressRoutes from './handlers/selectCurfewAddress'
 
 export default function Index(services: Services): Router {
   const { conditionService, licenceService } = services
@@ -68,6 +69,12 @@ export default function Index(services: Services): Router {
   {
     const controller = new NoCurfewAddressFoundRoutes()
     get('/no-curfew-address-found', controller.GET)
+  }
+
+  {
+    const controller = new SelectCurfewAddressRoutes(services.addressService)
+    get('/select-curfew-address', controller.GET)
+    post('/select-curfew-address', controller.POST)
   }
 
   return router
