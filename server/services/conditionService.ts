@@ -60,6 +60,7 @@ import UnsupervisedContactPolicyV3 from '../routes/manageConditions/types/additi
 import WorkingWithChildrenPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/workingWithChildrenPolicyV3'
 import InBoundsRegion from '../routes/manageConditions/types/additionalConditionInputs/inBoundsRegion'
 import DrinkingEstablishment from '../routes/manageConditions/types/additionalConditionInputs/drinkingEstablishment'
+import PublicEvent from '../routes/manageConditions/types/additionalConditionInputs/publicEvent'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -286,6 +287,9 @@ export default class ConditionService {
           break
         case 'DrinkingEstablishment':
           validator = DrinkingEstablishment
+          break
+        case 'PublicEvent':
+          validator = PublicEvent
           break
         default: {
           // silently ignore
