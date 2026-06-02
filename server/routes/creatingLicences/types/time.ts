@@ -47,6 +47,10 @@ class SimpleTime extends Stringable {
     const time = moment(value, 'HH:mm:ss', true)
     return new SimpleTime(time.format('hh'), time.format('mm'), <AmPm>time.format('a'))
   }
+
+  static isEmptySimpleTime(value: SimpleTime): boolean {
+    return value.hour === '' && value.minute === '' && value.ampm !== AmPm.AM && value.ampm !== AmPm.PM
+  }
 }
 
 export default SimpleTime

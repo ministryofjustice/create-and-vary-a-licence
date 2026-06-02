@@ -918,10 +918,50 @@ const policy: LicencePolicyResponse = {
         requiresElectronicMonitoringResponse: false,
       },
       {
-        category: 'Freedom of movement',
         code: 'be16ee0b-a916-43ef-9319-b42a1dd418a3',
-        requiresInput: false,
-        text: 'DRINKING ESTABLISHMENT PLACEHOLDER',
+        category: 'Freedom of movement',
+        text: 'Not to enter a drinking establishment [AT ANY TIME / BETWEEN SPECIFIED TIMES] without the prior approval of your supervising officer. This means any location where you can buy alcohol without needing to buy food or stay overnight. It also means places that stay open past midnight for entertainment reasons (things like music or shows) and also serve alcohol.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: 'radio',
+            label: 'Select a time restriction',
+            name: 'timeRestriction',
+            options: [
+              {
+                value: 'At any time',
+              },
+              {
+                value: 'Between specified times',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'timePicker',
+                      label: 'Enter first start time',
+                      name: 'firstCurfewStart',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter first end time',
+                      name: 'firstCurfewEnd',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter second start time (optional)',
+                      name: 'secondCurfewStart',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter second end time (optional)',
+                      name: 'secondCurfewEnd',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+        type: 'DrinkingEstablishment',
         requiresElectronicMonitoringResponse: false,
       },
       {
