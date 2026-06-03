@@ -11,6 +11,6 @@ export default class ResidentialChecksIncompleteReasonRoutes {
 
     req.session.curfewAddressChecksIncompleteReason = reason
 
-    return res.redirect(`/licence/vary/id/${licenceId}/hdc/find-address`)
+    return res.redirect(`/licence/vary/id/${licenceId}/hdc/find-the-new-curfew-address`)
   }
 }
