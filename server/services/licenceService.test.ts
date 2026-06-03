@@ -19,7 +19,6 @@ import {
   Licence,
   LicenceSummary,
   PrisonerWithCvlFields,
-  StandardCondition,
   UpdateElectronicMonitoringProgrammeRequest,
   UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
@@ -38,12 +37,7 @@ describe('Licence Service', () => {
   const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
   const licenceService = new LicenceService(licenceApiClient, conditionService)
 
-  conditionService.getStandardConditions.mockResolvedValue({} as StandardCondition[])
   conditionService.getAdditionalConditions.mockResolvedValue({} as AdditionalConditionsConfig)
-
-  conditionService.getStandardConditions.mockResolvedValue([
-    { id: 1, text: 'fake standard condition', code: 'fake1', sequence: 1 },
-  ])
 
   const user = {
     username: 'joebloggs',
