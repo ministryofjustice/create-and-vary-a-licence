@@ -95,6 +95,7 @@
             {% endif %}
 
             {% if input.type == 'timePicker' %}
+                {% set hintText = '' if input.hideHintText else 'For example, 9:30am or 2:55pm' %}
                 {{ timePicker({
                     id: input.name,
                     label: {
@@ -102,7 +103,7 @@
                         classes: "govuk-!-font-weight-bold"
                     },
                     hint: {
-                        text: "For example, 9:30am or 2:55pm"
+                        text: hintText
                     },
                     errorMessage: validationError,
                     formResponses: formValues | getValuesFromSimpleTimes
