@@ -31,7 +31,7 @@
 
     {# Alter the form encoding to multi-part formdata and supply csrf token in query params for file upload conditions #}
     <div class="govuk-button-group">
-        <form method="POST">
+        <form method="POST" id="additionConditionInputs">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             <input type="hidden" name="code" value="{{ config.code }}">
 
@@ -78,5 +78,5 @@
 
 {% block pageScripts %}
     <script src="/assets/js/conditions/addAnother.js"></script>
+    <script src="/assets/js/conditions/disableHiddenConditionalInputs.js"></script>
 {% endblock %}
-

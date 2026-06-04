@@ -1,6 +1,6 @@
 window.onload = function () {
   function disableHiddenInputs() {
-    const hiddenInputs = document.querySelectorAll('.govuk-radios__conditional--hidden input')
+    const hiddenInputs = document.querySelectorAll('.govuk-radios__conditional--hidden input, .govuk-radios__conditional--hidden select')
     for (elem of hiddenInputs) {
       elem.disabled = true
     }
