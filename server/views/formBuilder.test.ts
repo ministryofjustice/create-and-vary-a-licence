@@ -265,6 +265,36 @@ describe('View Partials - Form builder', () => {
     expect($('#timePicker1').length).toBe(1)
     expect($('legend').text().trim()).toBe('Time Label')
     expect($('label').length).toBe(3)
+    expect($('.govuk-hint').text().trim()).toBe('For example, 9:30am or 2:55pm')
+    expect($('#timePicker1 > div:nth-child(1) > div > label').text().trim()).toBe('Hour')
+    expect($('#timePicker1 > div:nth-child(2) > div > label').text().trim()).toBe('Minute')
+    expect($('#timePicker1 > div:nth-child(3) > div > label').text().trim()).toBe('am or pm')
+  })
+
+  it('should build a time picker input without hint text correctly', () => {
+    const $ = render({
+      formResponses: [],
+      additionalCondition: {
+        data: [],
+      },
+      config: {
+        inputs: [
+          {
+            type: 'timePicker',
+            label: 'Time Label',
+            name: 'timePicker1',
+            hideHintText: true,
+          },
+        ],
+      },
+      csrfToken: 'not-real',
+    })
+
+    expect($('.govuk-date-input').length).toBe(1)
+    expect($('#timePicker1').length).toBe(1)
+    expect($('legend').text().trim()).toBe('Time Label')
+    expect($('label').length).toBe(3)
+    expect($('.govuk-hint').text().trim()).toBe('')
     expect($('#timePicker1 > div:nth-child(1) > div > label').text().trim()).toBe('Hour')
     expect($('#timePicker1 > div:nth-child(2) > div > label').text().trim()).toBe('Minute')
     expect($('#timePicker1 > div:nth-child(3) > div > label').text().trim()).toBe('am or pm')
