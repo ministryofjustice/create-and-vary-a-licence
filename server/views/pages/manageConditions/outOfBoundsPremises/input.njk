@@ -55,7 +55,7 @@
                             attributes: { 'data-qa': 'continue' },
                             preventDoubleClick: true
                         }) }}
-                        
+
                         {{ govukButton({
                             text: "Delete this condition",
                             href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/outofbounds-premises-delete" + fromReview + fromPolicyReviewQuery,
@@ -72,6 +72,5 @@
 
 {% block pageScripts %}
     <script src="/assets/js/conditions/addAnother.js"></script>
-    <script src="/assets/js/conditions/outofBoundsPremises.js"></script>
+    <script src="/assets/js/conditions/disableHiddenConditionalInputs.js"></script>
 {% endblock %}
-
