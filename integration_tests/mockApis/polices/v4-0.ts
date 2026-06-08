@@ -506,7 +506,7 @@ const policy: LicencePolicyResponse = {
       {
         code: '8e52e16e-1abf-4251-baca-2fabfcb243d0',
         category: 'Possession, ownership, control or inspection of specified items or documents',
-        text: 'Not to own or possess more than one mobile phone or SIM card without the prior approval of your supervising officer and to provide your supervising officer with details of that mobile telephone or one you have regular use of, including the IMEI number and the SIM card that you possess.',
+        text: 'Not to own or possess more than one mobile phone or SIM card, or install an e-sim, without the prior approval of your supervising officer and to provide your supervising officer with details of that mobile telephone or one you have regular use of, including the IMEI number and the SIM card that you possess.',
         requiresInput: false,
         categoryShort: 'Items and documents',
         skippable: false,
