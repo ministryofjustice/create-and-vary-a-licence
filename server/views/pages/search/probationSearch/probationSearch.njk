@@ -4,7 +4,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "partials/statusBadge.njk" import statusBadge %}
-{% from "partials/licenceDescription.njk" import licenceDescription %}
 {% set pageTitle = applicationName + " - Probation - Search" %}
 {% set pageId = "probation-search-page" %}
 {% set backLinkHref = backLink %}
@@ -87,9 +86,6 @@
                         }
                     },
                     {
-                        text: "Licence type"
-                    },
-                    {
                         text: "Probation practitioner",
                         attributes: {
                             "aria-sort": "none"
@@ -149,12 +145,6 @@
         },
         {
             attributes: {
-                id: 'licence-type-' + loop.index
-            },
-            html:licenceDescription(offender.licenceType) | redactIfLao(offender)
-        },
-        {
-            attributes: {
                 id: 'probation-practitioner-' + loop.index,
                 "data-sort-value": offender.probationPractitioner.name
             },
@@ -210,12 +200,6 @@
             },
             classes: "max-width max-width-220",
             html: offenderName(offender, loop.index)
-        },
-        {
-            attributes: {
-                id: 'licence-type-' + loop.index
-            },
-            html:licenceDescription(offender.licenceType) | redactIfLao(offender)
         },
         {
             attributes: {
