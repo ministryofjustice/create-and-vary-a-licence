@@ -30,8 +30,8 @@ export default class AdditionalLicenceConditionInputRoutes {
     const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code, licence.version)
 
     const policyReview = this.getPolicyReviewState(req)
-    const conditionConfg = getConfigForCondition(additionalCondition.code)
-    return res.render(conditionConfg.inputTemplate, { additionalCondition, config, policyReview })
+    const conditionConfig = getConfigForCondition(additionalCondition.code)
+    return res.render(conditionConfig.inputTemplate, { additionalCondition, config, policyReview })
   }
 
   private getPolicyReviewState = (req: Request) => {
