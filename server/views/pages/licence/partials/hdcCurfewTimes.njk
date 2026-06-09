@@ -3,8 +3,6 @@
 {% from "./nonUniformCurfewTimesTable.njk" import nonUniformCurfewTimesTable %}
 
 {% macro hdcCurfewTimes(params) %}
-    {% set secondLineHtml = params.hdcLicenceData.curfewAddress.secondLine | escape + ", " if params.hdcLicenceData.curfewAddress.secondLine | length %}
-    {% set countyHtml = params.hdcLicenceData.curfewAddress.county | escape + ", " if params.hdcLicenceData.curfewAddress.county | length %}
     {% set basePath = "/licence/vary/id/" if params.isVaryJourney else "/licence/create/id/" %}
     {% set baseURL = basePath + params.licence.id + "/hdc" %}
     {% set routeAppend = '?fromReview=true' if not params.isPrisonUser %}
@@ -29,6 +27,13 @@
         {% endif %}
     {% endset %}
 
+    {% set addressHtml %}
+        <p>
+            {{ params.hdcLicenceData.curfewAddress | formatAddressLine }}
+            {{ hdcBadge | safe if not params.isVaryJourney }}
+        </p>
+    {% endset %}
+
     {{ govukSummaryList({
         attributes: {'data-qa': 'hdc-curfew-details'},
         rows: [
@@ -44,11 +49,7 @@
                 classes: "curfew-address-row",
                 key: {text: 'Address'},
                 value: {
-                    html: "<p>" + params.hdcLicenceData.curfewAddress.firstLine | escape + ", " +
-                          secondLineHtml +
-                          params.hdcLicenceData.curfewAddress.townOrCity | escape + ", " +
-                          countyHtml +
-                          params.hdcLicenceData.curfewAddress.postcode | escape + (hdcBadge if not params.isVaryJourney else "") + "</p>",
+                    html: addressHtml,
                     classes: "curfew-address"
                 },
                 actions: {
