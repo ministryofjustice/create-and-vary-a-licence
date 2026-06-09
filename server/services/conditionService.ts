@@ -61,6 +61,7 @@ import WorkingWithChildrenPolicyV3 from '../routes/manageConditions/types/additi
 import InBoundsRegion from '../routes/manageConditions/types/additionalConditionInputs/inBoundsRegion'
 import DrinkingEstablishment from '../routes/manageConditions/types/additionalConditionInputs/drinkingEstablishment'
 import PublicEvent from '../routes/manageConditions/types/additionalConditionInputs/publicEvent'
+import CurfewTermsV4 from '../routes/manageConditions/types/additionalConditionInputs/curfewTermsV4'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -183,6 +184,9 @@ export default class ConditionService {
           break
         case 'IntimateRelationshipWithGender':
           validator = IntimateRelationshipWithGender
+          break
+        case 'CurfewTermsV4':
+          validator = CurfewTermsV4
           break
         case 'CurfewTerms':
           validator = CurfewTerms
