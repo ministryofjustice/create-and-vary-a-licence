@@ -63,6 +63,7 @@ import DrinkingEstablishment from '../routes/manageConditions/types/additionalCo
 import PublicEvent from '../routes/manageConditions/types/additionalConditionInputs/publicEvent'
 import CurfewTermsV4 from '../routes/manageConditions/types/additionalConditionInputs/curfewTermsV4'
 import ElectronicMonitoringTypesV4 from '../routes/manageConditions/types/additionalConditionInputs/electronicMonitoringTypesV4'
+import VehicleRestrictions from '../routes/manageConditions/types/additionalConditionInputs/vehicleRestrictions'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
