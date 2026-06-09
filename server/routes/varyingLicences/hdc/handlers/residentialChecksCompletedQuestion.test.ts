@@ -41,6 +41,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
       await handler.POST(req, res)
 
       expect(req.session.curfewAddressChecksIncompleteReason).toBeNull()
+      expect(req.session.curfewAddressChecksCompleted).toBeTruthy()
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/hdc/find-the-new-curfew-address')
     })
 
@@ -48,6 +49,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
       req.body = { answer: 'No' }
       await handler.POST(req, res)
 
+      expect(req.session.curfewAddressChecksCompleted).toBeFalsy()
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/hdc/residential-checks-incomplete')
     })
   })
