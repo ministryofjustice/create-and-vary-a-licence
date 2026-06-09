@@ -4,7 +4,7 @@ import ApprovalViewRoutes from './approvalView'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ProbationService from '../../../services/probationService'
-import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
+import HdcService, { CvlHdcLicenceData } from '../../../services/hdc/hdcService'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
@@ -16,7 +16,7 @@ const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
 
 jest.mock('../../../services/probationService')
-jest.mock('../../../services/hdcService')
+jest.mock('../../../services/hdc/hdcService')
 
 describe('Route - view and approve a licence', () => {
   const handler = new ApprovalViewRoutes(licenceService, deliusStaff, hdcService)
@@ -25,8 +25,8 @@ describe('Route - view and approve a licence', () => {
 
   const exampleHdcLicenceData = {
     curfewAddress: {
-      addressLine1: 'addressLineOne',
-      addressLine2: 'addressLineTwo',
+      firstLine: 'addressLineOne',
+      secondLine: 'addressLineTwo',
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',

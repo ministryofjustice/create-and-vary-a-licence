@@ -5,14 +5,14 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
+import HdcService, { CvlHdcLicenceData } from '../../../services/hdc/hdcService'
 import config from '../../../config'
 
 const username = 'joebloggs'
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/hdcService')
+jest.mock('../../../services/hdc/hdcService')
 
 describe('Route - view and approve a licence', () => {
   const handler = new ViewAndPrintLicenceRoutes(licenceService, hdcService)
@@ -41,8 +41,8 @@ describe('Route - view and approve a licence', () => {
 
   const exampleHdcLicenceData = {
     curfewAddress: {
-      addressLine1: 'addressLineOne',
-      addressLine2: 'addressLineTwo',
+      firstLine: 'addressLineOne',
+      secondLine: 'addressLineTwo',
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',

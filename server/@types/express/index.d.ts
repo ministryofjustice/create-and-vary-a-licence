@@ -19,6 +19,7 @@ declare module 'express-session' {
     changedConditionsInputs: string[]
     changedConditionsInputsCounter: number
     curfewAccommodationType: CurfewAccommodationType
+    curfewAddressChecksCompleted: boolean
     curfewAddressChecksIncompleteReason: string
   }
 }

@@ -6,11 +6,11 @@ import { Licence, OmuContact } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
+import HdcService, { CvlHdcLicenceData } from '../../../services/hdc/hdcService'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
-jest.mock('../../../services/hdcService')
+jest.mock('../../../services/hdc/hdcService')
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
@@ -23,8 +23,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
   const exampleHdcLicenceData = {
     curfewAddress: {
-      addressLine1: 'addressLineOne',
-      addressLine2: 'addressLineTwo',
+      firstLine: 'addressLineOne',
+      secondLine: 'addressLineTwo',
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',

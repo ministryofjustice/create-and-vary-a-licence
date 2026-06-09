@@ -5,7 +5,7 @@ import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { User } from '../../../@types/CvlUserDetails'
-import HdcService from '../../../services/hdcService'
+import HdcService from '../../../services/hdc/hdcService'
 import { isHdcLicence } from '../../../utils/utils'
 
 const pdfHeaderFooterStyle =

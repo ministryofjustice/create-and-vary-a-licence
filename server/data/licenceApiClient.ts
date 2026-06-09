@@ -3,6 +3,7 @@ import RestClient from './hmppsRestClient'
 import type {
   AddAdditionalConditionRequest,
   AddAddressRequest,
+  AddHdcCurfewAddressRequest,
   AdditionalCondition,
   AdditionalConditionsRequest,
   AddressResponse,
@@ -863,5 +864,12 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user.username },
     )) as CaseAccessDetails
+  }
+
+  async updateHdcCurfewAddress(licenceId: number, request: AddHdcCurfewAddressRequest, user: User): Promise<void> {
+    return (await this.put(
+      { path: `/licence/id/${licenceId}/hdc/curfew/address`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
   }
 }

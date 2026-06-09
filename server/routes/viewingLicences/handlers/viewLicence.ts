@@ -14,7 +14,7 @@ import {
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
-import HdcService from '../../../services/hdcService'
+import HdcService from '../../../services/hdc/hdcService'
 import { LicenceKind } from '../../../enumeration'
 import config from '../../../config'
 

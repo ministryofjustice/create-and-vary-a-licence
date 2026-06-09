@@ -5,7 +5,7 @@ import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import config from '../../../config'
-import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
+import HdcService, { CvlHdcLicenceData } from '../../../services/hdc/hdcService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -22,8 +22,8 @@ describe('Route - print a licence', () => {
 
   const exampleHdcLicenceData = {
     curfewAddress: {
-      addressLine1: 'addressLineOne',
-      addressLine2: 'addressLineTwo',
+      firstLine: 'addressLineOne',
+      secondLine: 'addressLineTwo',
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',

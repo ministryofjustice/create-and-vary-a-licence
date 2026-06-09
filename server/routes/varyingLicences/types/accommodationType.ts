@@ -4,11 +4,11 @@ import CurfewAccommodationType from '../../../enumeration/curfewAccommodationTyp
 
 const message = 'Select an accommodation type'
 
-class CurfewAccommodationTypeQuestion {
+class AccommodationTypeQuestion {
   @Expose()
   @IsNotEmpty({ message })
   @IsIn(Object.values(CurfewAccommodationType), { message })
   accommodationType: CurfewAccommodationType
 }
 
-export default CurfewAccommodationTypeQuestion
+export default AccommodationTypeQuestion

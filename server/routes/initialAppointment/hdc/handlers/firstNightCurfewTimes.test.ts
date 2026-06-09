@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import HdcService from '../../../../services/hdcService'
+import HdcService from '../../../../services/hdc/hdcService'
 import { STANDARD_FIRST_NIGHT_CURFEW_TIMES } from '../curfewDefaults'
 import FirstNightCurfewTimesRoutes from './firstNightCurfewTimes'
 import { json24HourTimeTo12HourTime } from '../../../../utils/utils'
 import { SimpleTime } from '../../../manageConditions/types'
 
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
-jest.mock('../../../../services/hdcService')
+jest.mock('../../../../services/hdc/hdcService')
 
 describe('Route Handlers - Create Licence - First Night Curfew Times', () => {
   let req: Request
