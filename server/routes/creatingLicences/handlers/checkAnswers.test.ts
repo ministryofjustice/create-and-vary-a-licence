@@ -28,6 +28,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',
+      source: 'MANUAL',
     },
     firstNightCurfewTimes: {
       fromTime: '09:00',

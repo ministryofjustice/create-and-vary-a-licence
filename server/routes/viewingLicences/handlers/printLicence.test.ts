@@ -27,6 +27,7 @@ describe('Route - print a licence', () => {
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',
+      source: 'MANUAL',
     },
     firstNightCurfewTimes: {
       fromTime: '09:00',

@@ -34,6 +34,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',
+      source: 'MANUAL',
     },
     firstNightCurfewTimes: {
       fromTime: '09:00',

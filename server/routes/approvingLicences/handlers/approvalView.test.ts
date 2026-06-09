@@ -30,6 +30,7 @@ describe('Route - view and approve a licence', () => {
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',
+      source: 'MANUAL',
     },
     firstNightCurfewTimes: {
       fromTime: '09:00',
