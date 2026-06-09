@@ -62,6 +62,7 @@ import InBoundsRegion from '../routes/manageConditions/types/additionalCondition
 import DrinkingEstablishment from '../routes/manageConditions/types/additionalConditionInputs/drinkingEstablishment'
 import PublicEvent from '../routes/manageConditions/types/additionalConditionInputs/publicEvent'
 import CurfewTermsV4 from '../routes/manageConditions/types/additionalConditionInputs/curfewTermsV4'
+import ElectronicMonitoringTypesV4 from '../routes/manageConditions/types/additionalConditionInputs/electronicMonitoringTypesV4'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -222,6 +223,9 @@ export default class ConditionService {
           break
         case 'ElectronicMonitoringTypes':
           validator = ElectronicMonitoringTypes
+          break
+        case 'ElectronicMonitoringTypesV4':
+          validator = ElectronicMonitoringTypesV4
           break
         case 'ElectronicMonitoringPeriod':
           validator = ElectronicMonitoringPeriod
