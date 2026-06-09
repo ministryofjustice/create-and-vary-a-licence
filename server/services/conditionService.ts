@@ -299,6 +299,9 @@ export default class ConditionService {
         case 'PublicEvent':
           validator = PublicEvent
           break
+        case 'VehicleRestrictions':
+          validator = VehicleRestrictions
+          break
         default: {
           // silently ignore
         }
