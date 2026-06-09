@@ -62,6 +62,7 @@ import InBoundsRegion from '../routes/manageConditions/types/additionalCondition
 import DrinkingEstablishment from '../routes/manageConditions/types/additionalConditionInputs/drinkingEstablishment'
 import PublicEvent from '../routes/manageConditions/types/additionalConditionInputs/publicEvent'
 import CurfewTermsV4 from '../routes/manageConditions/types/additionalConditionInputs/curfewTermsV4'
+import VehicleRestrictions from '../routes/manageConditions/types/additionalConditionInputs/vehicleRestrictions'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -294,6 +295,9 @@ export default class ConditionService {
           break
         case 'PublicEvent':
           validator = PublicEvent
+          break
+        case 'VehicleRestrictions':
+          validator = VehicleRestrictions
           break
         default: {
           // silently ignore
