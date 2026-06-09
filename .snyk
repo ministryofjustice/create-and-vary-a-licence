@@ -2,8 +2,8 @@
 version: v1.25.1
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-JS-SHELLQUOTE-16799355:
+    SNYK-JS-SHELLQUOTE-16799355:
     - '*':
         reason: Dev dependency
-        expires: 2026-06-05T00:00:00.000Z
+        expires: 2026-06-12T00:00:00.000Z
         created: 2026-06-05T07:17:54.699Z

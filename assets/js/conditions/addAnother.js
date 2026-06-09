@@ -1,67 +1,81 @@
-window.onload = () => {
+
+window.addEventListener('load', () => {
   (() => {
     const init = () => {
-      const AddAnotherProto = MOJFrontend.AddAnother.prototype
-      const oldButtonClick = AddAnotherProto.onAddButtonClick
-      const oldRemoveClick = AddAnotherProto.onRemoveButtonClick
+      const AddAnotherProto = MOJFrontend.AddAnother.prototype;
+      const oldButtonClick = AddAnotherProto.onAddButtonClick;
+      const oldRemoveClick = AddAnotherProto.onRemoveButtonClick;
 
       const addBackgroundToNewFieldset = () => {
-        const items = document.getElementsByClassName('govuk-fieldset moj-add-another__item')
-        if (!items || items.length === 0) return
+        const items = document.getElementsByClassName(
+            'govuk-fieldset moj-add-another__item'
+        );
+        if (!items || items.length === 0) return;
 
         if (items.length >= 2) {
-          items[items.length - 2].classList.remove('newest-fieldset')
+          items[items.length - 2].classList.remove('newest-fieldset');
         }
 
         if (items.length > 1) {
-          items[items.length - 1].classList.add('newest-fieldset')
+          items[items.length - 1].classList.add('newest-fieldset');
         }
-      }
+      };
 
       const removeBackgroundFromFieldset = () => {
-        const items = document.getElementsByClassName('govuk-fieldset moj-add-another__item')
-        if (!items || items.length === 0) return
-        items[items.length - 1].classList.remove('newest-fieldset')
-      }
+        const items = document.getElementsByClassName(
+            'govuk-fieldset moj-add-another__item'
+        );
+        if (!items || items.length === 0) return;
+
+        items[items.length - 1].classList.remove('newest-fieldset');
+      };
 
       AddAnotherProto.createRemoveButton = function (item) {
-        const btn = document.createElement('button')
-        btn.type = 'button'
-        btn.className = 'govuk-button govuk-button--warning moj-add-another__remove-button'
-        btn.textContent = 'Remove'
-        item.appendChild(btn)
-      }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className =
+            'govuk-button govuk-button--warning moj-add-another__remove-button';
+        btn.textContent = 'Remove';
+        item.appendChild(btn);
+      };
 
       AddAnotherProto.onAddButtonClick = function (e) {
-        oldButtonClick.call(this, e)
-        addBackgroundToNewFieldset()
-        changeDeleteButtonTextContent(this)
-      }
+        oldButtonClick.call(this, e);
+        addBackgroundToNewFieldset();
+        changeDeleteButtonTextContent(this);
+      };
 
       AddAnotherProto.onRemoveButtonClick = function (e) {
-        oldRemoveClick.call(this, e)
-        removeBackgroundFromFieldset()
-        changeDeleteButtonTextContent(this)
-      }
+        oldRemoveClick.call(this, e);
+        removeBackgroundFromFieldset();
+        changeDeleteButtonTextContent(this);
+      };
 
-      const roots = document.querySelectorAll('[data-module="moj-condition-add-another"]')
+      const roots = document.querySelectorAll(
+          '[data-module="moj-condition-add-another"]'
+      );
 
-      roots.forEach(el => {
+      roots.forEach((el) => {
         if (el && el.nodeType === 1) {
-          new MOJFrontend.AddAnother(el)
+          new MOJFrontend.AddAnother(el);
         }
-      })
+      });
 
       const changeDeleteButtonTextContent = (contextInstance) => {
-        const buttons = document.getElementsByClassName('delete-condition-button-pluralisable')
-        if (!buttons || buttons.length === 0) return
+        const buttons = document.getElementsByClassName(
+            'delete-condition-button-pluralisable'
+        );
+        if (!buttons || buttons.length === 0) return;
 
-        const totalItems = contextInstance?.getItems().length
-        const btn = buttons[0]
-        btn.textContent = totalItems > 1 ? 'Delete these conditions' : 'Delete this condition'
-      }
-    }
+        const totalItems = contextInstance?.getItems().length;
+        const btn = buttons[0];
+        btn.textContent =
+            totalItems > 1
+                ? 'Delete these conditions'
+                : 'Delete this condition';
+      };
+    };
 
-    init()
-  })()
-}
+    init();
+  })();
+});

@@ -35,7 +35,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -59,7 +58,6 @@ describe('View Probation Search Results', () => {
     expect($('#name-1 > .search-offender-name > a').text()).toBe('Test Person')
     expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
     expect($('#name-1 > .search-offender-name > a').attr('href').trim()).toBe('/licence/create/id/1/check-your-answers')
-    expect($('#licence-type-1').text().trim()).toBe('Standard determinate')
     expect($('#probation-practitioner-1').text()).toBe('Test Staff')
     expect($('#probation-practitioner-1 > .govuk-link').attr('href').trim()).toBe(
       '/licence/create/probation-practitioner/staffCode/3000',
@@ -85,7 +83,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -117,7 +114,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: true,
           releaseDateLabel: 'CRD',
@@ -149,7 +145,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
           kind: 'TIME_SERVED',
@@ -183,7 +178,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.TIMED_OUT,
           isOnProbation: false,
           kind: 'TIME_SERVED',
@@ -219,7 +213,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.NOT_STARTED,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -243,7 +236,6 @@ describe('View Probation Search Results', () => {
     expect($('#name-1 > .search-offender-name > a').text()).toBe('Test Person')
     expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
     expect($('#name-1 > .search-offender-name > a').attr('href').trim()).toBe('/licence/create/nomisId/A1234BC/confirm')
-    expect($('#licence-type-1').text().trim()).toBe('Standard determinate')
     expect($('#probation-practitioner-1').text()).toBe('Test Staff')
     expect($('#probation-practitioner-1 > .govuk-link').attr('href').trim()).toBe(
       '/licence/create/probation-practitioner/staffCode/3000',
@@ -271,7 +263,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.NOT_STARTED,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -294,7 +285,6 @@ describe('View Probation Search Results', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#name-1 > .search-offender-name > .govuk-heading-s').text()).toBe('Test Person')
     expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
-    expect($('#licence-type-1').text().trim()).toBe('Standard determinate')
     expect($('#probation-practitioner-1').text()).toBe('Not allocated')
 
     expect($('#team-name-1').text()).toBe('Test Team')
@@ -320,7 +310,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '',
           licenceId: null,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.NOT_STARTED,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -355,7 +344,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.NOT_STARTED,
           isOnProbation: false,
           releaseDateLabel: 'Confirmed release date',
@@ -390,7 +378,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.TIMED_OUT,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -426,7 +413,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.TIMED_OUT,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -462,7 +448,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -498,7 +483,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 2,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.ACTIVE,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -534,7 +518,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: null,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.NOT_STARTED,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -569,7 +552,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '16/08/2023',
           licenceId: 3,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.NOT_STARTED,
           isOnProbation: false,
           releaseDateLabel: 'CRD',
@@ -604,7 +586,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '20/12/2025',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
           releaseDateLabel: 'HDCAD',
@@ -644,7 +625,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '20/12/2025',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.ACTIVE,
           isOnProbation: true,
           releaseDateLabel: 'HDCAD',
@@ -684,7 +664,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '20/12/2025',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
           releaseDateLabel: 'HDCAD',
@@ -726,7 +705,6 @@ describe('View Probation Search Results', () => {
           teamName: 'Test Team',
           releaseDate: '20/12/2025',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.ACTIVE,
           isOnProbation: true,
           releaseDateLabel: 'HDCAD',
@@ -766,7 +744,6 @@ describe('View Probation Search Results', () => {
         allocated: true,
       },
       teamName: 'AAA',
-      licenceType: 'AP',
       licenceId: 1,
       licenceStatus: LicenceStatus.IN_PROGRESS,
       isOnProbation: false,
@@ -808,7 +785,6 @@ describe('View Probation Search Results', () => {
         allocated: true,
       },
       teamName: 'AAA',
-      licenceType: 'AP',
       licenceId: 1,
       licenceStatus: LicenceStatus.IN_PROGRESS,
       isOnProbation: false,
@@ -872,7 +848,6 @@ describe('View Probation Search Results', () => {
           } as ProbationPractitioner,
           teamName: 'Test Team',
           licenceId: 1,
-          licenceType: 'AP',
           licenceStatus: LicenceStatus.TIMED_OUT,
           isOnProbation: false,
           releaseDate: '16/08/2023',
@@ -908,7 +883,6 @@ describe('View Probation Search Results', () => {
             staffCode: 'Restricted',
             allocated: true,
           },
-          licenceType: null,
           teamName: 'Restricted',
           releaseDate: '16/08/2023',
           licenceId: 1,
@@ -932,7 +906,6 @@ describe('View Probation Search Results', () => {
     expect($('#name-1 > .search-offender-name').text()).toContain('Access restricted on NDelius')
     expect($('#name-1 > .search-offender-name > a').attr('href')).toContain('/A123456/restricted')
     expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
-    expect($('#licence-type-1').text().trim()).toBe('Restricted')
     expect($('#probation-practitioner-1').text()).toBe('Restricted')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
     expect($('#team-name-1').text()).toBe('Restricted')
@@ -954,7 +927,6 @@ describe('View Probation Search Results', () => {
             staffCode: 'Restricted',
             allocated: true,
           },
-          licenceType: null,
           teamName: 'Restricted',
           releaseDate: '16/08/2023',
           licenceId: 1,
@@ -976,7 +948,6 @@ describe('View Probation Search Results', () => {
     expect($('#name-1 > .search-offender-name').text()).toContain('Access restricted on NDelius')
     expect($('#name-1 > .search-offender-name > a').attr('href')).toContain('/A123456/restricted')
     expect($('#name-1 > .search-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
-    expect($('#licence-type-1').text().trim()).toBe('Restricted')
     expect($('#probation-practitioner-1').text()).toBe('Restricted')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
     expect($('#team-name-1').text()).toBe('Restricted')
@@ -998,7 +969,6 @@ describe('View Probation Search Results', () => {
             staffCode: 'Restricted',
             allocated: true,
           },
-          licenceType: null,
           teamName: 'Restricted',
           releaseDate: '16/08/2023',
           licenceId: 1,
