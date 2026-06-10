@@ -3,14 +3,14 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
 import ViewActiveLicenceRoutes from './viewActiveLicence'
-import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
+import HdcService, { CvlHdcLicenceData } from '../../../services/hdc/hdcService'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 jest.mock('../../../services/conditionService')
-jest.mock('../../../services/hdcService')
+jest.mock('../../../services/hdc/hdcService')
 
 describe('Route Handlers - Vary Licence - View active licence', () => {
   let req: Request
@@ -29,11 +29,12 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
 
   const exampleHdcLicenceData = {
     curfewAddress: {
-      addressLine1: 'addressLineOne',
-      addressLine2: 'addressLineTwo',
+      firstLine: 'addressLineOne',
+      secondLine: 'addressLineTwo',
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',
+      source: 'MANUAL',
     },
     firstNightCurfewTimes: {
       fromTime: '09:00',

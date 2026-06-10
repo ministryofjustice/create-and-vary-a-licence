@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import HdcService from '../../../../services/hdcService'
+import HdcService from '../../../../services/hdc/hdcService'
 import CurfewTimes from '../types/curfewTimes'
 
 export default class CurfewHoursRoutes {

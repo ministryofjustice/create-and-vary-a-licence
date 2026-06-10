@@ -37,6 +37,7 @@ import {
   WeeklyCurfewTimesRequest,
   FirstNightCurfewTimesRequest,
   PolicyUpdateResponse,
+  AddHdcCurfewAddressRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -44,6 +45,7 @@ import { User } from '../@types/CvlUserDetails'
 import LicenceEventType from '../enumeration/licenceEventType'
 import { InMemoryTokenStore } from './tokenStore'
 import logger from '../../logger'
+import CurfewAccommodationType from '../enumeration/curfewAccommodationType'
 
 const licenceApiClient = new LicenceApiClient(
   new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
@@ -1034,6 +1036,36 @@ describe('Licence API client tests', () => {
         path: '/cvl-report/licence-status-cases',
       })
       expect(result).toEqual([aCase])
+    })
+  })
+
+  describe('updateHdcCurfewAddress', () => {
+    const user = { username: 'joebloggs' } as User
+    const licenceId = 123
+
+    it('should call to update the HDC curfew address', async () => {
+      const request = {
+        address: {
+          firstLine: '123 Fake Street',
+          secondLine: 'Flat 1',
+          townOrCity: 'Faketown',
+          postcode: 'FK1 2AB',
+          county: 'Westshire',
+        },
+        accommodationType: CurfewAccommodationType.RESIDENTIAL,
+        postReleaseResidentialChecksCompleted: false,
+        postReleaseResidentialChecksNotCompletedReason: 'Reason not completed',
+      } as AddHdcCurfewAddressRequest
+
+      await licenceApiClient.updateHdcCurfewAddress(licenceId, request, user)
+
+      expect(put).toHaveBeenCalledWith(
+        {
+          path: `/licence/id/${licenceId}/hdc/curfew/address`,
+          data: request,
+        },
+        { username: 'joebloggs' },
+      )
     })
   })
 })

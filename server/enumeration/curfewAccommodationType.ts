@@ -1,5 +1,5 @@
 enum CurfewAccommodationType {
-  RESIDENTIAL = 'Residential',
+  RESIDENTIAL = 'RESIDENTIAL',
   CAS = 'CAS',
 }
 

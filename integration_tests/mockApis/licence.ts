@@ -503,8 +503,8 @@ export default {
         jsonBody: {
           licenceId: 1,
           curfewAddress: {
-            addressLine1: '1 The Street',
-            addressLine2: 'Avenue',
+            firstLine: '1 The Street',
+            secondLine: 'Avenue',
             townOrCity: 'Some Town',
             county: 'Some County',
             postcode: 'A1 2BC',

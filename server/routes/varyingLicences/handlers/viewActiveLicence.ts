@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy, isHdcLicence } from '../../../utils/utils'
-import HdcService from '../../../services/hdcService'
+import HdcService from '../../../services/hdc/hdcService'
 
 export default class ViewActiveLicenceRoutes {
   constructor(

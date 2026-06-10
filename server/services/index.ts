@@ -17,9 +17,10 @@ import ApproverCaseloadService from './lists/approverCaseloadService'
 import TimelineService from './timelineService'
 import CaCaseloadService from './lists/caCaseloadService'
 import ComCaseloadService from './lists/comCaseloadService'
-import HdcService from './hdcService'
+import HdcService from './hdc/hdcService'
 import AddressService from './addressService'
 import TimeServedService from './timeServedService'
+import HdcCurfewAddressService from './hdc/hdcCurfewAddressService'
 
 const {
   manageUsersApiClient,
@@ -59,6 +60,7 @@ const feComponentsService = new FeComponentsService(feComponentsClient)
 const hdcService = new HdcService(licenceApiClient)
 const addressService = new AddressService(licenceApiClient)
 const timeServedService = new TimeServedService(licenceApiClient)
+const hdcCurfewAddressService = new HdcCurfewAddressService(licenceApiClient)
 
 export const services = {
   userService,
@@ -82,6 +84,7 @@ export const services = {
   addressService,
   timeServedService,
   dprServices,
+  hdcCurfewAddressService,
 }
 
 export type Services = typeof services

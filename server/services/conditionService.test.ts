@@ -44,6 +44,7 @@ describe('ConditionService', () => {
             name: 'nameOfIndividual',
             listType: 'OR',
             case: 'capitalised',
+            hideHintText: true,
             addAnother: {
               label: 'Add another person',
             },

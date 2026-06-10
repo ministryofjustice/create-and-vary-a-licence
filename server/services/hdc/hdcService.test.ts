@@ -1,15 +1,15 @@
 import HdcService from './hdcService'
-import LicenceApiClient from '../data/licenceApiClient'
-import { CurfewTimes as ApiCurfewTimes, HdcLicenceData } from '../@types/licenceApiClientTypes'
-import { AmPm } from '../routes/creatingLicences/types/time'
-import { SimpleTime } from '../routes/manageConditions/types'
-import { simpleTimeTo24Hour } from '../utils/utils'
-import { User } from '../@types/CvlUserDetails'
-import { STANDARD_WEEKLY_CURFEW_TIMES } from '../routes/initialAppointment/hdc/curfewDefaults'
-import { DAYS } from '../enumeration/days'
-import DailyCurfewTime from '../routes/initialAppointment/hdc/types/dailyCurfewTime'
+import LicenceApiClient from '../../data/licenceApiClient'
+import { CurfewTimes as ApiCurfewTimes, HdcLicenceData } from '../../@types/licenceApiClientTypes'
+import { AmPm } from '../../routes/creatingLicences/types/time'
+import { SimpleTime } from '../../routes/manageConditions/types'
+import { simpleTimeTo24Hour } from '../../utils/utils'
+import { User } from '../../@types/CvlUserDetails'
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../routes/initialAppointment/hdc/curfewDefaults'
+import { DAYS } from '../../enumeration/days'
+import DailyCurfewTime from '../../routes/initialAppointment/hdc/types/dailyCurfewTime'
 
-jest.mock('../data/licenceApiClient')
+jest.mock('../../data/licenceApiClient')
 
 describe('HDC Service', () => {
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
@@ -17,8 +17,8 @@ describe('HDC Service', () => {
 
   const exampleHdcLicenceData = {
     curfewAddress: {
-      addressLine1: 'addressLineOne',
-      addressLine2: 'addressLineTwo',
+      firstLine: 'addressLineOne',
+      secondLine: 'addressLineTwo',
       townOrCity: 'addressTownOrCity',
       county: 'county',
       postcode: 'addressPostcode',

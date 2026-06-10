@@ -7,7 +7,7 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy, isHdcLicence, isInHardStopPeriod, isVariation } from '../../../utils/utils'
-import HdcService from '../../../services/hdcService'
+import HdcService from '../../../services/hdc/hdcService'
 
 export default class CheckAnswersRoutes {
   constructor(

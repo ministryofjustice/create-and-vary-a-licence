@@ -1,17 +1,17 @@
-import { User } from '../@types/CvlUserDetails'
+import { User } from '../../@types/CvlUserDetails'
 import {
   CurfewTimes as ApiCurfewTimes,
   FirstNightCurfewTimesRequest,
   HdcLicenceData,
   WeeklyCurfewTimesRequest,
-} from '../@types/licenceApiClientTypes'
-import LicenceApiClient from '../data/licenceApiClient'
-import CurfewTimes from '../routes/initialAppointment/hdc/types/curfewTimes'
-import { Day, DAYS } from '../enumeration/days'
-import DailyCurfewTime from '../routes/initialAppointment/hdc/types/dailyCurfewTime'
-import { SimpleTime } from '../routes/manageConditions/types'
-import { simpleTimeTo24Hour, simpleTimeToMinutes } from '../utils/utils'
-import { STANDARD_WEEKLY_CURFEW_TIMES } from '../routes/initialAppointment/hdc/curfewDefaults'
+} from '../../@types/licenceApiClientTypes'
+import LicenceApiClient from '../../data/licenceApiClient'
+import CurfewTimes from '../../routes/initialAppointment/hdc/types/curfewTimes'
+import { Day, DAYS } from '../../enumeration/days'
+import DailyCurfewTime from '../../routes/initialAppointment/hdc/types/dailyCurfewTime'
+import { SimpleTime } from '../../routes/manageConditions/types'
+import { simpleTimeTo24Hour, simpleTimeToMinutes } from '../../utils/utils'
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../routes/initialAppointment/hdc/curfewDefaults'
 
 export type CvlHdcLicenceData = HdcLicenceData & { allCurfewTimesEqual: boolean }
 

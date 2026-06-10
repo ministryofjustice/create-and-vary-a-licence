@@ -48,7 +48,9 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
       await handler.POST(req, res)
 
       expect(req.session.curfewAccommodationType).toEqual('CAS')
-      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/hdc/find-address')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/hdc/find-the-new-curfew-address')
+      expect(req.session.curfewAddressChecksIncompleteReason).toBeNull()
+      expect(req.session.curfewAddressChecksCompleted).toBeNull()
     })
   })
 })
