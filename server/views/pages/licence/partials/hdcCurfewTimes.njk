@@ -3,9 +3,8 @@
 {% from "./nonUniformCurfewTimesTable.njk" import nonUniformCurfewTimesTable %}
 
 {% macro hdcCurfewTimes(params) %}
-    {% set addressLine2Html = params.hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if params.hdcLicenceData.curfewAddress.addressLine2 | length%}
-    {% set countyHtml = params.hdcLicenceData.curfewAddress.county | escape + ", " if params.hdcLicenceData.curfewAddress.county | length%}
-    {% set baseURL = "/licence/create/id/" + params.licence.id + "/hdc" %}
+    {% set basePath = "/licence/vary/id/" if params.isVaryJourney else "/licence/create/id/" %}
+    {% set baseURL = basePath + params.licence.id + "/hdc" %}
     {% set routeAppend = '?fromReview=true' if not params.isPrisonUser %}
     {% set releaseDatesBadge %}
         {{ mojBadge({
@@ -28,6 +27,13 @@
         {% endif %}
     {% endset %}
 
+    {% set addressHtml %}
+        <p>
+            {{ params.hdcLicenceData.curfewAddress | formatAddressLine }}
+            {{ hdcBadge | safe if not params.isVaryJourney }}
+        </p>
+    {% endset %}
+
     {{ govukSummaryList({
         attributes: {'data-qa': 'hdc-curfew-details'},
         rows: [
@@ -43,13 +49,19 @@
                 classes: "curfew-address-row",
                 key: {text: 'Address'},
                 value: {
-                    html: "<p>" + params.hdcLicenceData.curfewAddress.addressLine1 | escape + ", " +
-                          addressLine2Html +
-                          params.hdcLicenceData.curfewAddress.townOrCity | escape + ", " +
-                          countyHtml +
-                          params.hdcLicenceData.curfewAddress.postcode | escape + (hdcBadge if not params.isVaryJourney else "") + "</p>",
+                    html: addressHtml,
                     classes: "curfew-address"
-                }
+                },
+                actions: {
+                    items: [
+                        {
+                            href: baseURL + "/accommodation-type-question" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "curfew address",
+                            attributes: { "id": "curfew-address", "data-qa": "curfew-address-change-link" }
+                        }
+                    ]
+                } if params.isEditable
             },
             {
                 classes: "first-night-curfew-times-row",

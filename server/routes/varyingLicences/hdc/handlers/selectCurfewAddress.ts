@@ -1,8 +1,13 @@
 import { Request, Response } from 'express'
 import AddressService from '../../../../services/addressService'
+import HdcCurfewAddressService from '../../../../services/hdc/hdcCurfewAddressService'
+import { AddAddressRequest, AddHdcCurfewAddressRequest } from '../../../../@types/licenceApiClientTypes'
 
 export default class SelectCurfewAddressRoutes {
-  constructor(private readonly addressService: AddressService) {}
+  constructor(
+    private readonly addressService: AddressService,
+    private readonly hdcCurfewAddressService: HdcCurfewAddressService,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
@@ -30,6 +35,31 @@ export default class SelectCurfewAddressRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
 
-    return res.redirect(`/licence/vary/id/${licenceId}/view-active`)
+    const { uprn, firstLine, secondLine, townOrCity, county, postcode } = JSON.parse(req.body?.selectedCurfewAddress)
+
+    const address = {
+      uprn,
+      firstLine,
+      secondLine,
+      townOrCity,
+      county,
+      postcode,
+      source: 'OS_PLACES',
+    } as AddAddressRequest
+
+    const addHdcCurfewAddressRequest = {
+      address,
+      accommodationType: req.session.curfewAccommodationType,
+      postReleaseResidentialChecksCompleted: req.session.curfewAddressChecksCompleted,
+      postReleaseResidentialChecksNotCompletedReason: req.session.curfewAddressChecksIncompleteReason,
+    } as AddHdcCurfewAddressRequest
+
+    await this.hdcCurfewAddressService.updateHdcCurfewAddress(
+      parseInt(licenceId, 10),
+      addHdcCurfewAddressRequest,
+      res.locals.user,
+    )
+
+    return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
   }
 }

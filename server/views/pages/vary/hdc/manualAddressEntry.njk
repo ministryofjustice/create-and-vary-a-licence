@@ -9,7 +9,7 @@
 {% set pageTitle = applicationName + " - Create a licence - Manual address entry" %}
 {% set pageId = "manual-address-entry-page" %}
 {% set backLinkHref = "/" %}
-{% set address = licence.licenceAppointmentAddress if licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL' %}
+{% set address = licence.curfewAddress if licence.curfewAddress and licence.curfewAddress.source == 'MANUAL' %}
 
 {% block content %}
     <div class="govuk-grid-row">

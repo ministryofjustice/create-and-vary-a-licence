@@ -14,7 +14,8 @@ export default class AccommodationTypeQuestionRoutes {
 
     if (accommodationType === CurfewAccommodationType.CAS) {
       req.session.curfewAddressChecksIncompleteReason = null
-      return res.redirect(`/licence/vary/id/${licenceId}/hdc/find-address`)
+      req.session.curfewAddressChecksCompleted = null
+      return res.redirect(`/licence/vary/id/${licenceId}/hdc/find-the-new-curfew-address`)
     }
 
     return res.redirect(`/licence/vary/id/${licenceId}/hdc/address-checks`)

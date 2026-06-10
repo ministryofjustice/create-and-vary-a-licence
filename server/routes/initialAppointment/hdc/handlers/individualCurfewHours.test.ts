@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import { HdcLicence } from '../../../../@types/licenceApiClientTypes'
 import { DAYS } from '../../../../enumeration/days'
-import HdcService from '../../../../services/hdcService'
+import HdcService from '../../../../services/hdc/hdcService'
 import IndividualCurfewHoursRoutes from './individualCurfewHours'
 import DailyCurfewTime from '../types/dailyCurfewTime'
 
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
-jest.mock('../../../../services/hdcService')
+jest.mock('../../../../services/hdc/hdcService')
 
 describe('IndividualCurfewHoursRoutes', () => {
   let req: Request

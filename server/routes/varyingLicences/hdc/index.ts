@@ -10,13 +10,13 @@ import ResidentialChecksCompletedQuestionRoutes from './handlers/residentialChec
 import YesOrNoQuestion from '../../creatingLicences/types/yesOrNo'
 import ResidentialChecksIncompleteReasonRoutes from './handlers/residentialChecksIncompleteReason'
 import ReasonForIncompleteAddressChecks from '../types/reasonForIncompleteAddressChecks'
-import CurfewAccommodationTypeQuestion from '../types/curfewAccommodationType'
 import PostcodeLookupInputValidation from '../../initialAppointment/types/PostcodeLookupInputValidation'
 import NoCurfewAddressFoundRoutes from './handlers/noCurfewAddressFound'
 import FindNewCurfewAddressRoutes from './handlers/findNewCurfewAddress'
 import SelectCurfewAddressRoutes from './handlers/selectCurfewAddress'
 import ManualAddressEntryRoutes from './handlers/manualAddressEntry'
 import ManualCurfewAddress from '../types/manualCurfewAddress'
+import CurfewAccommodationTypeQuestion from '../types/curfewAccommodationType'
 
 export default function Index(services: Services): Router {
   const { conditionService, licenceService } = services
@@ -74,13 +74,13 @@ export default function Index(services: Services): Router {
   }
 
   {
-    const controller = new SelectCurfewAddressRoutes(services.addressService)
+    const controller = new SelectCurfewAddressRoutes(services.addressService, services.hdcCurfewAddressService)
     get('/select-curfew-address', controller.GET)
     post('/select-curfew-address', controller.POST)
   }
 
   {
-    const controller = new ManualAddressEntryRoutes()
+    const controller = new ManualAddressEntryRoutes(services.hdcCurfewAddressService)
     get('/manual-curfew-address-entry', controller.GET)
     post('/manual-curfew-address-entry', controller.POST, ManualCurfewAddress)
   }

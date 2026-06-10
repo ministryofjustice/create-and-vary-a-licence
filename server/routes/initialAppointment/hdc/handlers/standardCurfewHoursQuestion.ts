@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import YesOrNo from '../../../../enumeration/yesOrNo'
-import HdcService from '../../../../services/hdcService'
+import HdcService from '../../../../services/hdc/hdcService'
 import { STANDARD_WEEKLY_CURFEW_TIMES } from '../curfewDefaults'
 
 export default class StandardCurfewHoursQuestionRoutes {
