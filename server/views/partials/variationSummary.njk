@@ -1,6 +1,11 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% macro variationSummary(licence, isEditable) %}
+
+    {% set isResidential = licence.curfewAddress and licence.curfewAddress.accommodationType == "RESIDENTIAL" %}
+    {% set checksCompleted = licence.curfewAddress.postReleaseResidentialChecksCompleted %}
+    {% set checksText = "Yes" if checksCompleted == true else "No" %}
+
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
             <h2 class="govuk-heading-m">Variation details</h2>
@@ -36,7 +41,31 @@
                         }
                     ]
                 } if isEditable
-            }
+            },
+            {
+                key: { text: "Have you completed the residential address checks?" },
+                value: { text: checksText },
+                actions: {
+                    items: [{
+                        href: "/licence/vary/id/" + licence.id + "/hdc/address-checks?fromReview=true",
+                        text: "Change",
+                        visuallyHiddenText: "Completed residential address checks"
+                    }]
+                } if isEditable
+            } if isResidential,
+            {
+                key: { text: "Enter a reason why address checks have not been completed" },
+                value: {
+                    text: licence.curfewAddress.postReleaseResidentialChecksNotCompletedReason
+                },
+                actions: {
+                    items: [{
+                        href: "/licence/vary/id/" + licence.id + "/hdc/residential-checks-incomplete?fromReview=true",
+                        text: "Change",
+                        visuallyHiddenText: "Reason address checks not completed"
+                    }]
+                } if isEditable
+            } if isResidential and checksCompleted == false
         ]
     }) }}
 {% endmacro %}
