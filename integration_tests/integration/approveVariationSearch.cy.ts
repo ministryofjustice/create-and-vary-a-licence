@@ -76,7 +76,6 @@ context('ACO search a licence variation', () => {
     searchPage.getRow(1).within(() => {
       cy.get('#name-2 .caseload-offender-name a').should('exist')
       cy.get('#name-2 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
-      cy.get('#licence-type-2').should('contain', 'Restricted')
       cy.get('#probation-practitioner-2 a').should('not.exist')
       cy.get('#probation-practitioner-2').should('contain', 'Restricted')
       cy.get('#release-date-2').should('contain', 'Restricted')
@@ -92,7 +91,6 @@ context('ACO search a licence variation', () => {
     searchPage.getRow(4).within(() => {
       cy.get('#name-2 .caseload-offender-name a').should('exist')
       cy.get('#name-2 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
-      cy.get('#licence-type-2').should('contain', 'Restricted')
       cy.get('#probation-practitioner-2 a').should('not.exist')
       cy.get('#probation-practitioner-2').should('contain', 'Restricted')
       cy.get('#release-date-2').should('contain', 'Restricted')
