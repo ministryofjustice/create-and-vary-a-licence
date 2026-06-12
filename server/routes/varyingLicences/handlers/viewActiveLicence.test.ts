@@ -142,6 +142,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
           licence: {
             ...licence,
             kind: LicenceKind.HDC,
+            isHdcMigration: false,
           },
         },
       } as unknown as Response
@@ -211,6 +212,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
           ],
         ],
         hdcLicenceData: exampleHdcLicenceData,
+        isMigratedHdcLicence: false,
       })
     })
   })
