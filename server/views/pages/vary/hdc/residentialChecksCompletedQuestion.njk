@@ -6,6 +6,13 @@
 {% set pageTitle = applicationName + " - Vary a licence - HDC Accommodation" %}
 {% set pageId = "residential-checks-completed-question-page" %}
 {% set backLinkHref = "/" %}
+{% if licence.curfewAddress.postReleaseResidentialChecksCompleted == true %}
+    {% set defaultAnswer = "Yes" %}
+{% elif licence.curfewAddress.postReleaseResidentialChecksCompleted == false %}
+    {% set defaultAnswer = "No" %}
+{% else %}
+    {% set defaultAnswer = "" %}
+{% endif %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -36,7 +43,8 @@
                             value: "No",
                             text: "No"
                         }
-                    ]
+                    ],
+                    value: formResponses.answer or defaultAnswer
                 }) }}
 
                 {{ govukButton({

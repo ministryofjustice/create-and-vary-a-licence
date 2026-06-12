@@ -51,13 +51,13 @@ export default function Index(services: Services): Router {
   }
 
   {
-    const contoller = new ResidentialChecksCompletedQuestionRoutes()
+    const contoller = new ResidentialChecksCompletedQuestionRoutes(services.hdcCurfewAddressService)
     get('/address-checks', contoller.GET)
     post('/address-checks', contoller.POST, YesOrNoQuestion)
   }
 
   {
-    const controller = new ResidentialChecksIncompleteReasonRoutes()
+    const controller = new ResidentialChecksIncompleteReasonRoutes(services.hdcCurfewAddressService)
     get('/residential-checks-incomplete', controller.GET)
     post('/residential-checks-incomplete', controller.POST, ReasonForIncompleteAddressChecks)
   }

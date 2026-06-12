@@ -23,7 +23,8 @@
                     hint: {
                         text: "Your PDU head will be able to review this before approving the variation."
                     },
-                    errorMessage: validationErrors | findError('reason')
+                    errorMessage: validationErrors | findError('reason'),
+                    value: formResponses.reason or licence.curfewAddress.postReleaseResidentialChecksNotCompletedReason
                 }) }}
 
                 {{ govukButton({
