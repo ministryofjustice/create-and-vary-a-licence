@@ -91,8 +91,17 @@
     {% include "pages/licence/partials/signatures.njk" %}
     {% include "pages/licence/partials/footer.njk" %}
 
-    {% if exclusionZoneMapData.length %}
-        {% include "pages/licence/partials/exclusionZoneAppendix.njk" %}
+    {% if isV4OrGreater %}
+        {% if exclusionZoneMapData.length %}
+            {% include "pages/licence/partials/exclusionZoneAppendixV4.njk" %}
+        {% endif %}
+        {% if restrictionZoneMapData.length %}
+            {% include "pages/licence/partials/restrictionZoneAppendixV4.njk" %}
+        {% endif %}
+    {% else %}
+        {% if exclusionZoneMapData.length %}
+            {% include "pages/licence/partials/exclusionZoneAppendix.njk" %}
+        {% endif %}
     {% endif %}
 {% endblock %}
 
