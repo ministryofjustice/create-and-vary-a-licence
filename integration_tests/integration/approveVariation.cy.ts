@@ -69,7 +69,6 @@ context('ACO review a licence variation', () => {
     varyApproveCasesPage.getRow(2).within(() => {
       cy.get('#name-3 .caseload-offender-name a').should('exist')
       cy.get('#name-3 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
-      cy.get('#licence-type-3').should('contain', 'Restricted')
       cy.get('#probation-practitioner-3 a').should('not.exist')
       cy.get('#probation-practitioner-3').should('contain', 'Restricted')
       cy.get('#release-date-3').should('contain', 'Restricted')

@@ -101,6 +101,9 @@ const allRegionCases = [
   },
 ]
 
+const nameLink1Selector = '#name-link-1'
+const nameLink2Selector = '#name-link-2'
+
 describe('View Vary Approver case list', () => {
   it('should display empty state correctly', () => {
     const $ = render({
@@ -123,9 +126,8 @@ describe('View Vary Approver case list', () => {
     expect($('#allRegions').text()).toContain('All cases in this region')
     expect($('tbody .govuk-table__row').length).toBe(1)
 
-    expect($('#name-link-1').text()).toBe('Test Person One')
-    expect($('#name-link-1').attr('href').trim()).toBe('/licence/vary-approve/id/1/view')
-    expect($('#licence-type-1').text()).toContain('Standard determinate')
+    expect($(nameLink1Selector).text()).toBe('Test Person One')
+    expect($(nameLink1Selector).attr('href').trim()).toBe('/licence/vary-approve/id/1/view')
     expect($('#probation-practitioner-1').text()).toBe('Com One')
     expect($('#probation-practitioner-1 > .govuk-link').attr('href').trim()).toBe(
       '/licence/vary-approve/id/1/probation-practitioner',
@@ -145,9 +147,8 @@ describe('View Vary Approver case list', () => {
     expect($('#allRegions').text()).toContain('All cases in this region')
     expect($('tbody .govuk-table__row').length).toBe(2)
 
-    expect($('#name-link-1').text()).toBe('Test Person One')
-    expect($('#name-link-1').attr('href').trim()).toBe('/licence/vary-approve/id/1/view')
-    expect($('#licence-type-1').text()).toContain('Standard determinate')
+    expect($(nameLink1Selector).text()).toBe('Test Person One')
+    expect($(nameLink1Selector).attr('href').trim()).toBe('/licence/vary-approve/id/1/view')
     expect($('#probation-practitioner-1').text()).toBe('Com One')
     expect($('#probation-practitioner-1 > .govuk-link').attr('href').trim()).toBe(
       '/licence/vary-approve/id/1/probation-practitioner',
@@ -156,10 +157,9 @@ describe('View Vary Approver case list', () => {
     expect($('#variation-request-date-1').text()).toBe('3 Jun 2024')
     expect($('#release-date-1').text()).toBe('1 May 2024')
 
-    expect($('#name-link-2').text()).toBe('Test Person Two')
-    expect($('#name-link-2').attr('href').trim()).toBe('/licence/vary-approve/id/2/view')
+    expect($(nameLink2Selector).text()).toBe('Test Person Two')
+    expect($(nameLink2Selector).attr('href').trim()).toBe('/licence/vary-approve/id/2/view')
 
-    expect($('#licence-type-2').text()).toContain('Standard determinate')
     expect($('#probation-practitioner-2').text()).toBe('Com Four')
     expect($('#probation-practitioner-2 > .govuk-link').attr('href').trim()).toBe(
       '/licence/vary-approve/id/2/probation-practitioner',
@@ -200,9 +200,9 @@ describe('View Vary Approver case list', () => {
       regionCases: false,
     })
 
-    expect($('#name-1').text()).toContain('Access restricted on NDelius')
+    expect($(nameLink1Selector).text()).toContain('Access restricted on NDelius')
     expect($('#name-1 .caseload-offender-name').text()).toContain('Access restricted on NDelius')
-    expect($('#name-link-1').length).toBe(1)
+    expect($(nameLink1Selector).length).toBe(1)
     expect($('#name-1 a').length).toBe(1)
     expect($('#name-link-1').attr('href').trim()).toBe('/X99999/restricted')
   })
@@ -213,7 +213,6 @@ describe('View Vary Approver case list', () => {
       regionCases: false,
     })
 
-    expect($('#licence-type-1').text()).toContain('Restricted')
     expect($('#probation-practitioner-1').text()).toContain('Restricted')
     expect($('#variation-request-date-1').text()).toContain('Restricted')
     expect($('#release-date-1').text()).toContain('Restricted')
@@ -225,15 +224,13 @@ describe('View Vary Approver case list', () => {
       regionCases: false,
     })
 
-    expect($('#name-link-1').text()).toBe('Test Person One')
-    expect($('#name-link-1').attr('href').trim()).toBe('/licence/vary-approve/id/1/view')
-    expect($('#licence-type-1').text()).toContain('Standard determinate')
+    expect($(nameLink1Selector).text()).toBe('Test Person One')
+    expect($(nameLink1Selector).attr('href').trim()).toBe('/licence/vary-approve/id/1/view')
     expect($('#probation-practitioner-1').text()).toBe('Com One')
 
     expect($('#name-2').text()).toContain('Access restricted on NDelius')
-    expect($('#name-link-2').length).toBe(1)
-    expect($('#name-link-2').attr('href').trim()).toBe('/A123456/restricted')
-    expect($('#licence-type-2').text()).toContain('Restricted')
+    expect($(nameLink2Selector).length).toBe(1)
+    expect($(nameLink2Selector).attr('href').trim()).toBe('/A123456/restricted')
     expect($('#probation-practitioner-2').text()).toContain('Restricted')
   })
 })
