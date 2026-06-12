@@ -2873,8 +2873,7 @@ export interface components {
     }
     /** @description Request to add HDC curfew address with post-release checks */
     AddHdcCurfewAddressRequest: {
-      /** @description The address to be added as the HDC curfew address */
-      address: components['schemas']['AddAddressRequest']
+      address?: components['schemas']['AddAddressRequest'] | null
       /**
        * @description The type of accommodation for the HDC curfew address
        * @example RESIDENTIAL
@@ -6800,6 +6799,8 @@ export interface components {
        * @example 98987
        */
       id?: number | null
+      /** @description The address's Unique Property Reference Number */
+      uprn?: string | null
       /**
        * @description The first line of the curfew address
        * @example 1 Some Street
@@ -6831,6 +6832,22 @@ export interface components {
        * @enum {string}
        */
       source: 'MANUAL' | 'OS_PLACES' | 'MANUAL_MIGRATED'
+      /**
+       * @description Accommodation types of the curfew address
+       * @example RESIDENTIAL
+       * @enum {string|null}
+       */
+      accommodationType?: 'CAS' | 'RESIDENTIAL' | null
+      /**
+       * @description Post release residential checks completed for this curfew address
+       * @example true
+       */
+      postReleaseResidentialChecksCompleted?: boolean | null
+      /**
+       * @description Reason for not completing post release residential checks
+       * @example some reason
+       */
+      postReleaseResidentialChecksNotCompletedReason?: string | null
     }
     /** @description Describes a HDC licence within this service */
     HdcLicence: Omit<

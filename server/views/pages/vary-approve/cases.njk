@@ -36,12 +36,6 @@
         },
         {
             attributes: {
-                id: 'licence-type-' + loop.index
-            },
-            html: licenceDescription(offender.licenceType) | redactIfLao(offender)
-        },
-        {
-            attributes: {
                 id: 'probation-practitioner-' + loop.index,
                 "data-sort-value": offender.probationPractitioner.name
             },
@@ -115,9 +109,6 @@
                     attributes: {
                         "aria-sort": "none"
                     }
-                },
-                {
-                    text: "Licence type"
                 },
                 {
                     text: "Probation practitioner",
