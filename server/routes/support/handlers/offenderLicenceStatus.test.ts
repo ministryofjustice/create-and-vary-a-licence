@@ -3,7 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
 import OffenderLicenceStatusRoutes from './offenderLicenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import { Licence, LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
@@ -81,7 +81,7 @@ describe('Route Handlers - Licence Status Override', () => {
   describe('POST', () => {
     it('Update licence status from IN_PROGRESS to APPROVED', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
-      licenceService.getLicence.mockResolvedValue(mockLicences[0])
+      licenceService.getLicence.mockResolvedValue({ id: 1 } as Licence)
 
       const reason = 'Test Reason'
 
@@ -99,7 +99,7 @@ describe('Route Handlers - Licence Status Override', () => {
     it('Update licence status from INACTIVE to another status syncs COM allocation info', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
 
-      const currentLicence = { id: 2, crn: 'X1234', statusCode: LicenceStatus.INACTIVE }
+      const currentLicence = { id: 2, crn: 'X1234', statusCode: LicenceStatus.INACTIVE } as Licence
       licenceService.getLicence.mockResolvedValue(currentLicence)
 
       const reason = 'Activating licence'

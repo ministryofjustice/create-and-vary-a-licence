@@ -1,5 +1,6 @@
 import { isDefined } from 'class-validator'
 import { format, isValid } from 'date-fns'
+import { expectTypeOf } from 'expect-type'
 import {
   addressObjectToString,
   convertDateFormat,
@@ -30,13 +31,15 @@ import {
   escapeCsv,
   isTimeServedLicence,
   mapToTargetField,
+  assertIsHdcLicence,
+  assertIsVariation,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/initialAppointment/types/address'
-import type { Licence } from '../@types/licenceApiClientTypes'
+import type { HdcLicence, HdcVariationLicence, Licence, VariationLicence } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceKind from '../enumeration/LicenceKind'
 
@@ -693,6 +696,48 @@ describe('isTimeServedLicence', () => {
   it('returns false when the licence kind is not TIME_SERVED', () => {
     const licence = { kind: LicenceKind.CRD } as Licence
     expect(isTimeServedLicence(licence)).toBe(false)
+  })
+})
+
+describe('assertIsHdcLicence', () => {
+  it('narrows to HdcLicence | HdcVariationLicence', () => {
+    const licence = { kind: LicenceKind.HDC, curfewAddress: { postcode: 'AB12 3C' } } as Licence
+
+    expect(() => {
+      assertIsHdcLicence(licence)
+
+      expect(licence.curfewAddress?.postcode).toStrictEqual('AB12 3C')
+      expectTypeOf(licence).toEqualTypeOf<HdcLicence | HdcVariationLicence>()
+    }).not.toThrow()
+
+    // @ts-expect-error curfewAddress is not accessible on the unnarrowed Licence union
+    expect(licence.curfewAddress).toBeDefined()
+  })
+
+  it('throws for non-HDC licences', () => {
+    const licence = { kind: LicenceKind.CRD } as Licence
+    expect(() => assertIsHdcLicence(licence)).toThrow('Licence must be HDC or HDC Variation')
+  })
+})
+
+describe('assertIsVariation', () => {
+  it('narrows to VariationLicence | HdcVariationLicence', () => {
+    const licence = { kind: LicenceKind.VARIATION, variationOf: 1 } as Licence
+
+    expect(() => {
+      assertIsVariation(licence)
+
+      expect(licence.variationOf).toStrictEqual(1)
+      expectTypeOf(licence).toEqualTypeOf<VariationLicence | HdcVariationLicence>()
+    }).not.toThrow()
+
+    // @ts-expect-error variationOf is not accessible on the unnarrowed Licence union
+    expect(licence.variationOf).toBeDefined()
+  })
+
+  it('throws for non-variation licences', () => {
+    const licence = { kind: LicenceKind.CRD } as Licence
+    expect(() => assertIsVariation(licence)).toThrow('Licence must be Variation or HDC Variation')
   })
 })
 

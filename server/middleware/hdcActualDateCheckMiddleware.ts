@@ -7,7 +7,7 @@ export default function hdcActualDateCheckMiddleware(): RequestHandler {
     const { licence } = res.locals
 
     const isHDC = licence.kind === LicenceKind.HDC
-    const noActualDate = !licence.homeDetentionCurfewActualDate
+    const noActualDate = isHDC && !licence.homeDetentionCurfewActualDate
 
     if (isHDC && noActualDate) {
       logger.error(`Access denied: HDC licence missing homeDetentionCurfewActualDate (licenceId=${licence.id})`)
