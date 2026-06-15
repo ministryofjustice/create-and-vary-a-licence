@@ -18,47 +18,40 @@
     </div>
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
+            <p class="govuk-!-margin-bottom-2">Add a short explanation for everything you want to vary. Include:
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>why the changes are being made now and why they're necessary to manage risk</li>
+                    <li>who you have consulted about the variations and if they support your decision</li>
+                </ul>
+            </p>
 
-                {{ variationDetails(licence, conversation) }}
+            {{ govukDetails({
+                summaryText: "View variation details",
+                html: variedConditions(conditionComparison)
+            }) }}
 
-                <div class="govuk-hint">Add a short explanation for everything you want to vary. You should include:
-                    <ul class="govuk-list govuk-list--bullet govuk-hint">
-                        <li>why the changes are being made now and why they are necessary to manage current risk</li>
-                        <li>who you have consulted about the variations and if they support your decision</li>
-                    </ul>
-                </div>
+            {{ govukTextarea({
+                id: 'reasonForVariation',
+                name: 'reasonForVariation',
+                label: {
+                    text: 'Reason for variation',
+                    classes: 'govuk-visually-hidden'
+                },
+                errorMessage: validationErrors | findError('reasonForVariation'),
+                value: formResponses.reasonForVariation
+            }) }}
 
-                {{ govukDetails({
-                    summaryText: "View variation details",
-                    html: variedConditions(conditionComparison)
+            <div class="govuk-button-group">
+                {{ govukButton({
+                    text: "Continue",
+                    attributes: { 'data-qa': 'continue' }
                 }) }}
-
-                {{ govukTextarea({
-                    id: 'reasonForVariation',
-                    name: 'reasonForVariation',
-                    label: {
-                        text: 'Reason for variation',
-                        classes: 'govuk-visually-hidden'
-                    },
-                    errorMessage: validationErrors | findError('reasonForVariation'),
-                    value: formResponses.reasonForVariation
+                {{ govukButton({
+                    text: "Discard changes",
+                    classes: "govuk-button--secondary",
+                    attributes: { 'data-qa': 'discard' },
+                    href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
                 }) }}
-
-                <div class="govuk-button-group">
-                    {{ govukButton({
-                        text: "Continue",
-                        attributes: { 'data-qa': 'continue' }
-                    }) }}
-                    {{ govukButton({
-                        text: "Discard changes",
-                        classes: "govuk-button--secondary",
-                        attributes: { 'data-qa': 'discard' },
-                        href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
-                    }) }}
-                </div>
             </div>
-        </div>
     </form>
 {% endblock %}
