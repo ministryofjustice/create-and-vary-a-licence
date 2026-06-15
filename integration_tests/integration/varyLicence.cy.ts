@@ -43,6 +43,7 @@ context('Vary a licence', () => {
     const checkAnswersPage = vloDiscussionPage.selectYes().clickContinue()
     const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
     const variationSummaryPage = reasonForVariationPage
+      .verifyGuidanceText()
       .enterReason('In December Mr Person failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
       .clickContinue()
     const confirmationPage = variationSummaryPage.clickSendForApproval()
