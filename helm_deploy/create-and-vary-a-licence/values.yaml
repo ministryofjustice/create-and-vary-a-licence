@@ -68,8 +68,6 @@ generic-service:
       REDIS_AUTH_TOKEN: 'auth_token'
 
   allowlist:
-    hmp-parc-1: 217.161.76.162/32
-    hmp-parc-2: 217.161.76.154/32
     groups:
       - internal
       - prisons

@@ -23,7 +23,7 @@ import NoAddressFoundRoutes from './noAddressFound'
 import ManualAddressPostcodeLookupRoutes from './manualAddressPostcodeLookup'
 import ManualAddress from '../../../types/manualAddress'
 
-export default function Index({ licenceService, conditionService, hdcService, addressService }: Services): Router {
+export default function Index({ licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hard-stop${path}`
@@ -116,7 +116,7 @@ export default function Index({ licenceService, conditionService, hdcService, ad
     post('/edit/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }
   {
-    const controller = new ViewAndPrintLicenceRoutes(licenceService, hdcService)
+    const controller = new ViewAndPrintLicenceRoutes(licenceService)
     get('/id/:licenceId/check-your-answers', controller.GET)
     post('/id/:licenceId/check-your-answers', controller.POST)
   }
