@@ -6,6 +6,7 @@
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/varyCallToActions.njk" import activeCta %}
 {% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% set pageTitle = applicationName + " - Vary a licence - Active licence" %}
 {% set isInVariation = licence.statusCode == 'VARIATION_IN_PROGRESS' or licence.statusCode == 'VARIATION_SUBMITTED'
@@ -14,6 +15,16 @@
 {% set backLinkHref = "/licence/vary/caseload" %}
 
 {% block content %}
+    {% if isMigratedHdcLicence %}
+        {{ mojAlert({
+            variant: "information",
+            title: "Licence moved from HDC service",
+            showTitleAsHeading: true,
+            dismissible: false,
+            html: "Any additional conditions from the HDC service are shown as bespoke conditions in this service. This is because many additional conditions from the HDC service no longer match current policy."
+        }) }}
+    {% endif %}
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if licence.typeCode === 'AP' %}
