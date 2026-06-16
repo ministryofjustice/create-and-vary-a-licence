@@ -30,12 +30,11 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       postcode: 'addressPostcode',
       source: 'MANUAL',
     },
-    weeklyCurfewTimes: [],
     firstNightCurfewTimes: {
       fromTime: '09:00',
       untilTime: '17:00',
     },
-    curfewTimes: [
+    weeklyCurfewTimes: [
       {
         curfewTimesSequence: 1,
         fromDay: 'MONDAY',
