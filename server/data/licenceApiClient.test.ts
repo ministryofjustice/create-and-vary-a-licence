@@ -1,4 +1,6 @@
 import { Readable } from 'stream'
+import { expectTypeOf } from 'expect-type'
+
 import { Buffer } from 'buffer'
 import LicenceApiClient from './licenceApiClient'
 import {
@@ -71,6 +73,23 @@ describe('Licence API client tests', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
+  })
+
+  it('check Licence type resolve', () => {
+    expectTypeOf<Licence>().not.toBeNever()
+
+    // if this fails to compile it means that a recursive type has been introduced
+    /* Delete the following from the `Licence` type in licenceApImportTypes:
+     & (
+      | components['schemas']['PrrdLicenceResponse']
+      | components['schemas']['CrdLicence']
+      | components['schemas']['VariationLicence']
+      | components['schemas']['HardStopLicence']
+      | components['schemas']['HdcLicence']
+      | components['schemas']['HdcVariationLicence']
+      | components['schemas']['TimeServedLicence']
+    ); */
+    expectTypeOf<Licence>().not.toBeAny()
   })
 
   it('Create probation licence request', async () => {

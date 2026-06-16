@@ -73,7 +73,7 @@ export default class InitialMeetingPlaceRoutes {
       source: parsed.source,
       isPreferredAddress: false,
     }
-    await this.addressService.addAppointmentAddress(licence.id, appointmentAddress, user)
+    await this.addressService.addAppointmentAddress(licence.id.toString(), appointmentAddress, user)
   }
 
   private getRedirectPath(licence: Licence): string {

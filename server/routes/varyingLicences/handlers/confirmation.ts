@@ -2,12 +2,15 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import { assertIsVariation } from '../../../utils/utils'
 
 export default class ConfirmationRoutes {
   constructor(private licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
+
+    assertIsVariation(licence)
     const backLink = req.session.returnToCase || '/licence/vary/caseload'
     const parentLicence = await this.licenceService.getLicence(licence.variationOf, res.locals.user)
     const isTimeServedVariation = parentLicence.kind === LicenceKind.TIME_SERVED

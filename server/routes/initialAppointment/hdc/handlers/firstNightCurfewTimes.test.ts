@@ -4,6 +4,7 @@ import { STANDARD_FIRST_NIGHT_CURFEW_TIMES } from '../curfewDefaults'
 import FirstNightCurfewTimesRoutes from './firstNightCurfewTimes'
 import { json24HourTimeTo12HourTime } from '../../../../utils/utils'
 import { SimpleTime } from '../../../manageConditions/types'
+import { HdcLicence } from '../../../../@types/licenceApiClientTypes'
 
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 jest.mock('../../../../services/hdc/hdcService')
@@ -29,6 +30,7 @@ describe('Route Handlers - Create Licence - First Night Curfew Times', () => {
           username: 'joebloggs',
         },
         licence: {
+          kind: 'HDC',
           id: 1,
         },
       },
@@ -51,11 +53,12 @@ describe('Route Handlers - Create Licence - First Night Curfew Times', () => {
     it('should render view with curfew times from licence when they exist', async () => {
       const licence = {
         id: 1,
+        kind: 'HDC',
         firstNightCurfewTimes: {
           fromTime: '21:00',
           untilTime: '07:00',
         },
-      }
+      } as HdcLicence
       res.locals.licence = licence
 
       await handler.GET(req, res)

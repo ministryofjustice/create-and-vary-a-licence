@@ -1,13 +1,15 @@
 import { Request, Response } from 'express'
 import HdcService from '../../../../services/hdc/hdcService'
 import { DAYS } from '../../../../enumeration/days'
-import { HdcLicence } from '../../../../@types/licenceApiClientTypes'
+import { assertIsHdcLicence } from '../../../../utils/utils'
 
 export default class IndividualCurfewHoursRoutes {
   constructor(private readonly hdcService: HdcService) {}
 
   GET = async (_req: Request, res: Response): Promise<void> => {
-    const { licence }: { licence: HdcLicence } = res.locals
+    const { licence } = res.locals
+
+    assertIsHdcLicence(licence)
 
     const curfewTimes = this.hdcService.getCurfewTimes(licence.weeklyCurfewTimes)
 

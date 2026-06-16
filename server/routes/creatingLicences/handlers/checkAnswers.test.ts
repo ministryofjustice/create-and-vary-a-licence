@@ -30,6 +30,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       postcode: 'addressPostcode',
       source: 'MANUAL',
     },
+    weeklyCurfewTimes: [],
     firstNightCurfewTimes: {
       fromTime: '09:00',
       untilTime: '17:00',
@@ -186,7 +187,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should not allow PPs to edit initial appointment details for variations', async () => {
-      res.locals.licence = { ...res.locals.licence, kind: LicenceKind.VARIATION, isVariation: true }
+      res.locals.licence = { ...res.locals.licence, kind: LicenceKind.VARIATION, isVariation: true } as Licence
 
       await handler.GET(req, res)
 

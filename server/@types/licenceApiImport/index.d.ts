@@ -5169,21 +5169,27 @@ export interface components {
     Licence: {
       /**
        * Format: int64
-       * @description Unique identifier for this licence within the service
-       * @example 99999
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
        */
-      id: number
+      comStaffId?: number | null
       /**
-       * @description The licence type code
-       * @example AP
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string | null
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
        * @enum {string}
        */
-      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
       /**
-       * @description The version number used for standard and additional conditions
-       * @example 1.4
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
        */
-      version?: string | null
+      supersededDate?: string | null
       /**
        * @description The current status code for this licence
        * @example IN_PROGRESS
@@ -5205,60 +5211,6 @@ export interface components {
         | 'TIMED_OUT'
         | null
       /**
-       * @description The family name of the person on licence
-       * @example Smith
-       */
-      surname?: string | null
-      kind: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       * @example 24/08/2022 11:30:33
-       */
-      supersededDate?: string | null
-      /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
-       */
-      updatedByUsername?: string | null
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean | null
-      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
-      /**
-       * @deprecated
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentContact?: string | null
-      /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentTelephoneNumber?: string | null
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string | null
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string | null
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string | null
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
-      /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
        * @example 989898
@@ -5269,18 +5221,11 @@ export interface components {
        * @example 1.3
        */
       licenceVersion?: string | null
-      /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * @description The agency code of the detaining prison
        * @example LEI
        */
       prisonCode?: string | null
-      /**
-       * @description The username who approved the licence on behalf of the prison governor
-       * @example X33221
-       */
-      approvedByUsername?: string | null
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
@@ -5312,6 +5257,11 @@ export interface components {
        */
       middleNames?: string | null
       /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string | null
+      /**
        * Format: date
        * @description The date of birth of the person on licence
        * @example 12/05/1987
@@ -5319,16 +5269,118 @@ export interface components {
       dateOfBirth?: string | null
       /**
        * Format: date
-       * @description The sentence start date
-       * @example 13/09/2019
-       */
-      sentenceStartDate?: string | null
-      /**
-       * Format: date
        * @description The sentence end date
        * @example 13/09/2022
        */
       sentenceEndDate?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       * @example 24/08/2022 09:30:33
+       */
+      dateCreated?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was submitted for approval
+       * @example 24/08/2022 11:30:33
+       */
+      submittedDate?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this prison approved this licence
+       * @example 24/08/2022 11:30:33
+       */
+      approvedDate?: string | null
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
+       */
+      appointmentTime?: string | null
+      eligibleKind?: string | null
+      /**
+       * @description The full name of the person who approved the licence on behalf of the prison governor
+       * @example John Smith
+       */
+      approvedByName?: string | null
+      /**
+       * @description The telephone number to contact the prison
+       * @example 0161 234 4747
+       */
+      prisonTelephone?: string | null
+      /** @deprecated */
+      isVariation: boolean
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
+      isInPssPeriod?: boolean | null
+      /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string | null
+      /**
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
+       */
+      comUsername?: string | null
+      /**
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
+       */
+      dateLastUpdated?: string | null
+      kind: string
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string | null
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string | null
+      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string | null
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentTelephoneNumber?: string | null
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
+      /**
+       * @description The username who approved the licence on behalf of the prison governor
+       * @example X33221
+       */
+      approvedByUsername?: string | null
+      /**
+       * Format: date
+       * @description The sentence start date
+       * @example 13/09/2019
+       */
+      sentenceStartDate?: string | null
       /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
@@ -5366,29 +5418,6 @@ export interface components {
        */
       licenceExpiryDate?: string | null
       /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       * @example 24/08/2022 09:30:33
-       */
-      dateCreated?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was submitted for approval
-       * @example 24/08/2022 11:30:33
-       */
-      submittedDate?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time that this prison approved this licence
-       * @example 24/08/2022 11:30:33
-       */
-      approvedDate?: string | null
-      /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
-       */
-      nomsId?: string | null
-      /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
        * @enum {string|null}
@@ -5405,12 +5434,6 @@ export interface components {
        * @enum {string|null}
        */
       appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
-      /**
-       * Format: date-time
-       * @description The date and time of the initial appointment
-       * @example 23/08/2022 12:12
-       */
-      appointmentTime?: string | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -5464,56 +5487,26 @@ export interface components {
        * @example 13/09/2022
        */
       licenceStartDate?: string | null
-      eligibleKind?: string | null
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
       earliestReleaseDate?: string | null
       /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
+       * @description The agency description of the detaining prison
+       * @example Leeds (HMP)
        */
-      comEmail?: string | null
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string | null
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string | null
+      prisonDescription?: string | null
       /**
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
        */
       submittedByFullName?: string | null
       /**
-       * @description The full name of the person who approved the licence on behalf of the prison governor
-       * @example John Smith
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
        */
-      approvedByName?: string | null
-      /**
-       * @description The agency description of the detaining prison
-       * @example Leeds (HMP)
-       */
-      prisonDescription?: string | null
-      /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
-       */
-      prisonTelephone?: string | null
-      /** @deprecated */
-      isVariation: boolean
-      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
-      isInPssPeriod?: boolean | null
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
+      updatedByFullName?: string | null
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
       /** @description The list of standard post sentence supervision conditions on this licence */
@@ -5521,31 +5514,30 @@ export interface components {
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       * @example 24/08/2022 09:30:33
+       * @description The username of the person who last updated this licence
+       * @example X34433
        */
-      dateLastUpdated?: string | null
+      updatedByUsername?: string | null
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean | null
       /**
        * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
+       * @description Unique identifier for this licence within the service
+       * @example 99999
        */
-      comStaffId?: number | null
+      id: number
       /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
        */
-      responsibleComFullName?: string | null
-    } & (
-      | components['schemas']['PrrdLicenceResponse']
-      | components['schemas']['CrdLicence']
-      | components['schemas']['VariationLicence']
-      | components['schemas']['HardStopLicence']
-      | components['schemas']['HdcLicence']
-      | components['schemas']['HdcVariationLicence']
-      | components['schemas']['TimeServedLicence']
-    )
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * @description The version number used for standard and additional conditions
+       * @example 1.4
+       */
+      version?: string | null
+    }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
       /**
@@ -7253,6 +7245,8 @@ export interface components {
       submittedByFullName?: string | null
       curfewAddress?: components['schemas']['HdcCurfewAddress'] | null
       electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider'] | null
+      /** @description Are all curfew times equal across the week */
+      allCurfewTimesEqual?: boolean | null
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -7662,12 +7656,14 @@ export interface components {
        */
       submittedByFullName?: string | null
       curfewAddress?: components['schemas']['HdcCurfewAddress'] | null
+      /** @description Are all curfew times equal across the week */
+      allCurfewTimesEqual?: boolean | null
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
        * @enum {string}
        */
-      kind: 'HdcVariationLicence'
+      kind: 'HDC_VARIATION'
     }
     /** @description Describes a PRRD licence within this service */
     PrrdLicenceResponse: Omit<
@@ -8964,7 +8960,7 @@ export interface components {
       curfewAddress?: components['schemas']['HdcCurfewAddress'] | null
       firstNightCurfewTimes?: components['schemas']['CurfewTimes'] | null
       /** @description Weekly curfew schedule for the licence */
-      weeklyCurfewTimes?: components['schemas']['CurfewTimes'][] | null
+      weeklyCurfewTimes: components['schemas']['CurfewTimes'][]
     }
     /** @description Describes an event that was related to a licence */
     LicenceEvent: {

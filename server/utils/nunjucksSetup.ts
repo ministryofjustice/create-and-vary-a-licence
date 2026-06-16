@@ -260,7 +260,7 @@ export function registerNunjucks(app?: express.Express): Environment {
               fromReview: true,
             })
           : getDeleteConditionHref({
-              licenceId: licence.id,
+              licenceId: licence.id.toString(),
               conditionId: id,
               fromReview: true,
             })

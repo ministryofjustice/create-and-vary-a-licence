@@ -29,6 +29,7 @@ describe('Route - print a licence', () => {
       postcode: 'addressPostcode',
       source: 'MANUAL',
     },
+    weeklyCurfewTimes: [],
     firstNightCurfewTimes: {
       fromTime: '09:00',
       untilTime: '17:00',
@@ -251,7 +252,7 @@ describe('Route - print a licence', () => {
         {
           id: 1,
           code: 'code',
-          uploadSummary: [{ id: 1, description: 'Some words', fileSize: 0, uploadedTime: '', uploadDetailId: 0 }],
+          uploadSummary: [{ id: 1, description: 'Some words', fileSize: 0, uploadedTime: '' }],
           data: [{ field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true }],
         },
       ]
@@ -294,7 +295,6 @@ describe('Route - print a licence', () => {
                   id: 1,
                   fileSize: 0,
                   uploadedTime: '',
-                  uploadDetailId: 0,
                 },
               ],
             },

@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import HdcService from '../../../../services/hdc/hdcService'
 import { STANDARD_FIRST_NIGHT_CURFEW_TIMES } from '../curfewDefaults'
 import { FirstNightCurfewTimesRequest } from '../../../../@types/licenceApiClientTypes'
-import { simpleTimeTo24Hour, json24HourTimeTo12HourTime } from '../../../../utils/utils'
+import { simpleTimeTo24Hour, json24HourTimeTo12HourTime, assertIsHdcLicence } from '../../../../utils/utils'
 import CurfewTimes from '../types/curfewTimes'
 import { SimpleTime } from '../../../manageConditions/types'
 
@@ -11,6 +11,8 @@ export default class FirstNightCurfewTimesRoutes {
 
   GET = async (_req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
+
+    assertIsHdcLicence(licence)
 
     const defaults = STANDARD_FIRST_NIGHT_CURFEW_TIMES
     const licenceFirstNightCurfewTimes = licence.firstNightCurfewTimes

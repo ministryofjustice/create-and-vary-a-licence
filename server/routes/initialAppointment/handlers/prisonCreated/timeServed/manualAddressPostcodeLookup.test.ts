@@ -4,6 +4,7 @@ import AddressService from '../../../../../services/addressService'
 import ManualAddressPostcodeLookupRoutes from './manualAddressPostcodeLookup'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
+import { Licence } from '../../../../../@types/licenceApiClientTypes'
 
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 jest.mock('../../initialMeetingUpdatedFlashMessage')
@@ -67,11 +68,11 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
     })
 
     describe('POST /manual-address', () => {
-      const licenceId = '123'
+      const licenceId = 123
       const user = { username: 'joebloggs' }
 
       beforeEach(() => {
-        req.params.licenceId = licenceId
+        req.params.licenceId = licenceId.toString()
         req.body = {
           firstLine: '123 Test Street',
           secondLine: 'Flat 4B',
@@ -81,7 +82,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           isPreferredAddress: '',
         }
         addressService.addAppointmentAddress = jest.fn()
-        res.locals.licence = { id: licenceId }
+        res.locals.licence = { id: licenceId } as Licence
       })
 
       it('should call addAppointmentAddress with correct data and redirect to initial meeting contact in create flow', async () => {
@@ -93,7 +94,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
 
         // Then
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
-          licenceId,
+          licenceId.toString(),
           {
             ...req.body,
             isPreferredAddress: false,
@@ -115,7 +116,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
 
         // Then
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
-          licenceId,
+          licenceId.toString(),
           {
             ...req.body,
             isPreferredAddress: true,

@@ -40,6 +40,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
       fromTime: '09:00',
       untilTime: '17:00',
     },
+    weeklyCurfewTimes: [],
     curfewTimes: [
       {
         curfewTimesSequence: 1,

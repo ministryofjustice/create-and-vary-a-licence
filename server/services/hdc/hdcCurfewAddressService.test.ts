@@ -38,7 +38,8 @@ describe('HDC Curfew Address Service', () => {
   describe('updateResidentialChecks', () => {
     it('should map values and call updateHdcCurfewAddress', async () => {
       const licence = {
-        id: '123',
+        id: 123,
+        kind: 'HDC',
         curfewAddress: {
           accommodationType: CurfewAccommodationType.RESIDENTIAL,
         },
