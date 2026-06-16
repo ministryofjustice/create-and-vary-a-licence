@@ -46,7 +46,15 @@ context('Vary a licence', () => {
       .verifyGuidanceText()
       .enterReason('In December Mr Person failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
       .clickContinue()
-    const confirmationPage = variationSummaryPage.clickSendForApproval()
+    const confirmationPage = variationSummaryPage
+      .verifyPageHeading()
+      .verifyVariationDetailsSection()
+      .verifySpoAnswer('Yes')
+      .verifyVloAnswer('Yes')
+      .verifyReasonForVariation('Reason varied')
+      .verifyFeedbackFromApprover('Reason rejected')
+      .verifyActionButtons()
+      .clickSendForApproval()
 
     confirmationPage.signOut().click()
   })
