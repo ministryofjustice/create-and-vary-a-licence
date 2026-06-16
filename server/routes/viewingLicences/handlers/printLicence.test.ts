@@ -136,9 +136,11 @@ describe('Route - print a licence', () => {
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
+        restrictionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
         hdcLicenceData: null,
+        isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
@@ -155,9 +157,11 @@ describe('Route - print a licence', () => {
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
+        restrictionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
         hdcLicenceData: null,
+        isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
@@ -188,7 +192,9 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
+          restrictionZoneMapData: [],
           hdcLicenceData: null,
+          isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
@@ -227,7 +233,9 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
+          restrictionZoneMapData: [],
           hdcLicenceData: null,
+          isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
@@ -251,7 +259,8 @@ describe('Route - print a licence', () => {
       res.locals.licence.additionalLicenceConditions = [
         {
           id: 1,
-          code: 'code',
+          code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
+          text: 'some text',
           uploadSummary: [{ id: 1, description: 'Some words', fileSize: 0, uploadedTime: '' }],
           data: [{ field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true }],
         },
@@ -279,7 +288,7 @@ describe('Route - print a licence', () => {
           watermark,
           singleItemConditions: [
             {
-              code: 'code',
+              code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
               data: [
                 {
                   field: 'outOfBoundArea',
@@ -289,6 +298,7 @@ describe('Route - print a licence', () => {
                 },
               ],
               id: 1,
+              text: 'some text',
               uploadSummary: [
                 {
                   description: 'Some words',
@@ -310,9 +320,177 @@ describe('Route - print a licence', () => {
               },
               description: 'Some words',
               mapData: 'base64 data',
+              text: 'some text',
+            },
+          ],
+          restrictionZoneMapData: [],
+          hdcLicenceData: null,
+          isV4OrGreater: false,
+          prisonTelephone: '0114 2345232334',
+          monitoringSupplierTelephone,
+        },
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
+      )
+
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
+    })
+
+    it('should render a PDF view of an AP licence with two exclusion zones and a restriction zone', async () => {
+      res.locals.licence.additionalLicenceConditions = [
+        {
+          id: 1,
+          code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
+          text: 'some text',
+          uploadSummary: [{ id: 1, description: 'Some words', fileSize: 0, uploadedTime: '' }],
+          data: [{ field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true }],
+        },
+        {
+          id: 2,
+          code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
+          text: 'some text',
+          uploadSummary: [{ id: 2, description: 'Some more words', fileSize: 0, uploadedTime: '' }],
+          data: [{ field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true }],
+        },
+        {
+          id: 3,
+          code: '005d70e4-a247-4f82-b8b3-6d294a0f5051',
+          text: 'this is a restriction',
+          uploadSummary: [{ id: 3, description: 'Some words about a restriction', fileSize: 0, uploadedTime: '' }],
+          data: [{ field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true }],
+        },
+      ]
+
+      res.locals.licence.version = '4.0'
+
+      const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+      const { monitoringSupplierTelephone } = config
+
+      const filename = `${res.locals.licence.nomsId}.pdf`
+      const footerHtml = handler.getPdfFooter(res.locals.licence)
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
+      prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
+      licenceService.getExclusionZoneImageData.mockResolvedValue('base64 data')
+
+      await handler.renderPdf(req, res)
+
+      expect(res.renderPDF).toHaveBeenCalledWith(
+        'pages/licence/AP',
+        {
+          licencesUrl,
+          imageData: '-- base64 image data --',
+          qrCode: null,
+          htmlPrint: false,
+          watermark,
+          singleItemConditions: [
+            {
+              code: '005d70e4-a247-4f82-b8b3-6d294a0f5051',
+              data: [
+                {
+                  contributesToLicence: true,
+                  field: 'outOfBoundArea',
+                  id: 0,
+                  sequence: 0,
+                },
+              ],
+              id: 3,
+              text: 'this is a restriction',
+              uploadSummary: [
+                {
+                  description: 'Some words about a restriction',
+                  fileSize: 0,
+                  id: 3,
+                  uploadedTime: '',
+                },
+              ],
+            },
+          ],
+          multipleItemConditions: [
+            [
+              {
+                code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
+                data: [
+                  {
+                    field: 'outOfBoundArea',
+                    id: 0,
+                    sequence: 0,
+                    contributesToLicence: true,
+                  },
+                ],
+                id: 1,
+                text: 'some text',
+                uploadSummary: [
+                  {
+                    description: 'Some words',
+                    id: 1,
+                    fileSize: 0,
+                    uploadedTime: '',
+                  },
+                ],
+              },
+              {
+                code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
+                data: [
+                  {
+                    field: 'outOfBoundArea',
+                    id: 0,
+                    sequence: 0,
+                    contributesToLicence: true,
+                  },
+                ],
+                id: 2,
+                text: 'some text',
+                uploadSummary: [
+                  {
+                    description: 'Some more words',
+                    id: 2,
+                    fileSize: 0,
+                    uploadedTime: '',
+                  },
+                ],
+              },
+            ],
+          ],
+          exclusionZoneMapData: [
+            {
+              dataValue: {
+                field: 'outOfBoundArea',
+                contributesToLicence: true,
+                id: 0,
+                sequence: 0,
+              },
+              description: 'Some words',
+              mapData: 'base64 data',
+              text: 'some text',
+            },
+            {
+              dataValue: {
+                field: 'outOfBoundArea',
+                contributesToLicence: true,
+                id: 0,
+                sequence: 0,
+              },
+              description: 'Some more words',
+              mapData: 'base64 data',
+              text: 'some text',
+            },
+          ],
+          restrictionZoneMapData: [
+            {
+              dataValue: {
+                contributesToLicence: true,
+                field: 'outOfBoundArea',
+                id: 0,
+                sequence: 0,
+              },
+              description: 'Some words about a restriction',
+              mapData: 'base64 data',
+              text: 'this is a restriction',
             },
           ],
           hdcLicenceData: null,
+          isV4OrGreater: true,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
@@ -349,7 +527,9 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
+          restrictionZoneMapData: [],
           hdcLicenceData: null,
+          isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
@@ -375,7 +555,9 @@ describe('Route - print a licence', () => {
         exclusionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
+        restrictionZoneMapData: [],
         hdcLicenceData: exampleHdcLicenceData,
+        isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
@@ -409,7 +591,9 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
+          restrictionZoneMapData: [],
           hdcLicenceData: exampleHdcLicenceData,
+          isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
@@ -435,9 +619,11 @@ describe('Route - print a licence', () => {
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
+        restrictionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
         hdcLicenceData: exampleHdcLicenceData,
+        isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
@@ -471,9 +657,11 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
+          restrictionZoneMapData: [],
           hdcLicenceData: exampleHdcLicenceData,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
+          isV4OrGreater: false,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
@@ -497,9 +685,11 @@ describe('Route - print a licence', () => {
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
+        restrictionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
         hdcLicenceData: exampleHdcLicenceData,
+        isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
@@ -533,7 +723,9 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
+          restrictionZoneMapData: [],
           hdcLicenceData: exampleHdcLicenceData,
+          isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
