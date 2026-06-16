@@ -7,7 +7,7 @@ describe('Time served path helpers', () => {
     it('should return check-your-answers path when licence status is IN_PROGRESS', () => {
       // Given
       const licence: Licence = {
-        id: '123',
+        id: 123,
         statusCode: 'IN_PROGRESS',
       } as Licence
 
@@ -21,7 +21,7 @@ describe('Time served path helpers', () => {
     it('should return check-your-answers path when licence status is not IN_PROGRESS', () => {
       // Given
       const licence: Licence = {
-        id: '456',
+        id: 456,
         statusCode: 'APPROVED',
       } as Licence
 

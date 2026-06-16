@@ -42,7 +42,7 @@ export default class CurfewRoutes {
     )
 
     const getFieldValue = (fieldName: string): CurfewType =>
-      additionalCondition.data.find((data: { field: string; value: string }) => data.field === fieldName)?.value
+      additionalCondition.data.find(data => data.field === fieldName)?.value as CurfewType
 
     return res.render('pages/manageConditions/curfew/input', {
       additionalConditionCode: additionalCondition.code,

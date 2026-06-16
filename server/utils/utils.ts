@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { parse, format } from 'date-fns'
+import assert from 'assert'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -295,6 +296,20 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
   return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
 }
 
+function assertIsHdcLicence(licence: Licence): asserts licence is HdcLicence | HdcVariationLicence {
+  assert(
+    licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION,
+    'Licence must be HDC or HDC Variation',
+  )
+}
+
+function assertIsVariation(licence: Licence): asserts licence is VariationLicence | HdcVariationLicence {
+  assert(
+    licence.kind === LicenceKind.VARIATION || licence.kind === LicenceKind.HDC_VARIATION,
+    'Licence must be Variation or HDC Variation',
+  )
+}
+
 function isTimeServedLicence(licence: Licence): licence is TimeServedLicence {
   return licence.kind === LicenceKind.TIME_SERVED
 }
@@ -349,6 +364,8 @@ export {
   cvlDateToDateShort,
   isVariation,
   isHdcLicence,
+  assertIsHdcLicence,
+  assertIsVariation,
   formatAddressTitleCase,
   formatAddressLine,
   lowercaseFirstLetter,

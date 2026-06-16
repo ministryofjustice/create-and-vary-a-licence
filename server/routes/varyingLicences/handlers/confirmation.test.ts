@@ -15,7 +15,7 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
 
   const licence = {
     nomsId: 'A1234BC',
-    kind: LicenceKind.CRD,
+    kind: LicenceKind.VARIATION,
     id: 1,
     statusCode: 'ACTIVE',
     version: '3.0',
@@ -35,6 +35,7 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
       render: jest.fn(),
       locals: {
         licence: {
+          kind: 'VARIATION',
           forename: 'Joe',
           surname: 'Bloggs',
         },

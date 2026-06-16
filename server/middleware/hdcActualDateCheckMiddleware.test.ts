@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Licence } from '../@types/licenceApiClientTypes'
+import { HdcLicence, Licence } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import hdcActualDateCheckMiddleware from './hdcActualDateCheckMiddleware'
 import logger from '../../logger'
@@ -28,7 +28,7 @@ beforeEach(() => {
 
 describe('hdcActualDateCheckMiddleware', () => {
   it('should redirect when licence kind is HDC and homeDetentionCurfewActualDate is null', () => {
-    res.locals.licence.homeDetentionCurfewActualDate = null
+    ;(res.locals.licence as HdcLicence).homeDetentionCurfewActualDate = null
 
     hdcActualDateCheckMiddleware()(req, res, next)
 
@@ -40,7 +40,7 @@ describe('hdcActualDateCheckMiddleware', () => {
   })
 
   it('should allow HDC when homeDetentionCurfewActualDate is present', () => {
-    res.locals.licence.homeDetentionCurfewActualDate = '2024-01-10'
+    ;(res.locals.licence as HdcLicence).homeDetentionCurfewActualDate = '2024-01-10'
 
     hdcActualDateCheckMiddleware()(req, res, next)
 
@@ -50,7 +50,7 @@ describe('hdcActualDateCheckMiddleware', () => {
 
   it('should not block non-HDC licences regardless of date', () => {
     res.locals.licence.kind = LicenceKind.CRD
-    res.locals.licence.homeDetentionCurfewActualDate = null
+    ;(res.locals.licence as HdcLicence).homeDetentionCurfewActualDate = '2024-01-10'
 
     hdcActualDateCheckMiddleware()(req, res, next)
 

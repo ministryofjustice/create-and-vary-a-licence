@@ -36,7 +36,8 @@ describe('Route - view and approve a licence', () => {
       fromTime: '09:00',
       untilTime: '17:00',
     },
-    weeklyCurfewTimes: [
+    weeklyCurfewTimes: [],
+    curfewTimes: [
       {
         curfewTimesSequence: 1,
         fromDay: 'MONDAY',
