@@ -356,9 +356,7 @@ describe('Route - print a licence', () => {
           id: 3,
           code: '005d70e4-a247-4f82-b8b3-6d294a0f5051',
           text: 'this is a restriction',
-          uploadSummary: [
-            { id: 3, description: 'Some words about a restriction', fileSize: 0, uploadedTime: '' },
-          ],
+          uploadSummary: [{ id: 3, description: 'Some words about a restriction', fileSize: 0, uploadedTime: '' }],
           data: [{ field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true }],
         },
       ]
