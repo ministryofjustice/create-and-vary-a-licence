@@ -7,6 +7,7 @@ import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTy
 import { User } from '../../../@types/CvlUserDetails'
 import HdcService from '../../../services/hdc/hdcService'
 import { isHdcLicence } from '../../../utils/utils'
+import { MEZ_CONDITION_CODE, RESTRICTION_ZONE_CONDITION_CODE } from '../../../utils/conditionRoutes'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
@@ -30,8 +31,8 @@ export default class PrintLicenceRoutes {
     const { qrCodesEnabled } = res.locals
     const htmlPrint = true
     const qrCode = qrCodesEnabled ? await this.qrCodeService.getQrCode(licence) : null
-    const additionalConditionsWithUploads = this.getConditionsWithUploads(licence.additionalLicenceConditions)
-    const exclusionZoneMapData = await this.getExclusionZones(licence, additionalConditionsWithUploads, user)
+    const { exclusionZoneMapData, restrictionZoneMapData } = await this.splitUploadConditions(licence, user)
+    const isV4OrGreater = this.isLicenceV4OrGreater(licence)
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
@@ -52,7 +53,9 @@ export default class PrintLicenceRoutes {
       singleItemConditions,
       multipleItemConditions,
       exclusionZoneMapData,
+      restrictionZoneMapData,
       hdcLicenceData,
+      isV4OrGreater,
     }
 
     res.render(`pages/licence/${this.getTemplateForLicence(licence)}`, licenceToPrint)
@@ -66,8 +69,8 @@ export default class PrintLicenceRoutes {
     const imageData = await this.prisonerService.getPrisonerImageData(licence.nomsId, user)
     const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.surname}.pdf`
     const footerHtml = this.getPdfFooter(licence)
-    const additionalConditionsWithUploads = this.getConditionsWithUploads(licence.additionalLicenceConditions)
-    const exclusionZoneMapData = await this.getExclusionZones(licence, additionalConditionsWithUploads, user)
+    const { exclusionZoneMapData, restrictionZoneMapData } = await this.splitUploadConditions(licence, user)
+    const isV4OrGreater = this.isLicenceV4OrGreater(licence)
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
@@ -95,9 +98,11 @@ export default class PrintLicenceRoutes {
       singleItemConditions,
       multipleItemConditions,
       exclusionZoneMapData,
+      restrictionZoneMapData,
       hdcLicenceData,
       prisonTelephone,
       monitoringSupplierTelephone,
+      isV4OrGreater,
     }
 
     res.renderPDF(`pages/licence/${this.getTemplateForLicence(licence)}`, licenceToPrint, {
@@ -112,6 +117,22 @@ export default class PrintLicenceRoutes {
     const singleItemConditions = additionalConditions.filter(v => v.conditions.length === 1).flatMap(v => v.conditions)
     const multipleItemConditions = additionalConditions.filter(v => v.conditions.length > 1).map(v => v.conditions)
     return { singleItemConditions, multipleItemConditions }
+  }
+
+  private async splitUploadConditions(licence: Licence, user: User) {
+    const additionalConditionsWithUploads = this.getConditionsWithUploads(licence.additionalLicenceConditions)
+
+    const exclusionZoneMapData = await this.getExclusionZones(
+      licence,
+      additionalConditionsWithUploads.filter(condition => condition.code === MEZ_CONDITION_CODE),
+      user,
+    )
+    const restrictionZoneMapData = await this.getExclusionZones(
+      licence,
+      additionalConditionsWithUploads.filter(condition => condition.code === RESTRICTION_ZONE_CONDITION_CODE),
+      user,
+    )
+    return { exclusionZoneMapData, restrictionZoneMapData }
   }
 
   getPdfFooter = (licence: Licence): string => {
@@ -149,12 +170,14 @@ export default class PrintLicenceRoutes {
     return Promise.all(
       conditionsWithUploads.map(async c => {
         const mapData = await this.licenceService.getExclusionZoneImageData(licence.id.toString(), `${c.id}`, user)
-        const description = c.uploadSummary[0]?.description
+        const description = c.uploadSummary[0]?.description.trim()
         const dataValue = c.data.find(d => d.field === 'outOfBoundArea')
+        const { text } = c
         return {
           mapData,
           description,
           dataValue,
+          text,
         }
       }),
     )
@@ -172,6 +195,10 @@ export default class PrintLicenceRoutes {
       }
     })
     return map
+  }
+
+  isLicenceV4OrGreater(licence: Licence): boolean {
+    return !['1.0', '2.0', '2.1', '3.0'].includes(licence.version)
   }
 
   getTemplateForLicence(licence: Licence): string {

@@ -13,7 +13,7 @@ export default class ReasonForVariationPage extends Page {
   verifyGuidanceText = (): ReasonForVariationPage => {
     cy.contains('Add a short explanation for everything you want to vary').should('be.visible')
     cy.contains("why the changes are being made now and why they're necessary to manage risk").should('be.visible')
-    cy.contains('who you have consulted about the variations and if they support your decision').should('be.visible')
+    cy.contains('who you have consulted about the changes and if they support your decision').should('be.visible')
     return this
   }
 
