@@ -50,6 +50,17 @@ export default class VariationSummaryPage extends Page {
     return this
   }
 
+  verifyAddedByAndOn = (addedBy: string, addedOn: string): VariationSummaryPage => {
+    cy.contains('Reasons for the variation')
+      .parent()
+      .within(() => {
+        cy.contains(`Added by ${addedBy}`).should('be.visible')
+        cy.contains(`Added on ${addedOn}`).should('be.visible')
+      })
+
+    return this
+  }
+
   clickSendForApproval = (): ConfirmationPage => {
     cy.task('stubGetPduHeads')
     cy.task('stubSubmitStatus')

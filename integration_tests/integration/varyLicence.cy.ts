@@ -53,6 +53,7 @@ context('Vary a licence', () => {
       .verifyVloAnswer('Yes')
       .verifyReasonForVariation('Reason varied')
       .verifyFeedbackFromApprover('Reason rejected')
+      .verifyAddedByAndOn('Test Com', '12 June 2021')
       .verifyActionButtons()
       .clickSendForApproval()
 
