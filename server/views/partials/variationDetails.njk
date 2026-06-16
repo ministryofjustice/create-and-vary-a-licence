@@ -3,30 +3,39 @@
 {% macro variationDetails(licence, conversation) %}
     {% set comments = [] %}
 
+    {% set comments = (comments.push({
+        key: { text: "Have you discussed this variation request with your SPO?" },
+        value: { text: licence.spoDiscussion }
+    }), comments) %}
+
+    {% set comments = (comments.push({
+        key: { text: "Have you consulted with the victim liaison officer (VLO) for this case?" },
+        value: { text: licence.vloDiscussion }
+    }), comments) %}
+
     {% for comment in conversation %}
         {% set comments = (comments.push({
-            key: { text: "Reasons for the variation" if comment.role === "COM" else "Feedback from approver" },
-            value: { html: comment.comment },
-            extraDetail: {
-                items: [
-                    { text: "By " + comment.who | title },
-                    { text: comment.when | datetimeToDate }
-                ]
+            key: {
+                text: "Reasons for the variation" if comment.role === "COM" else "Feedback from approver",
+                classes: "align-content-start"
+            },
+            value: {
+                html: "
+                    <div class='govuk-grid-row'>
+                        <div class='govuk-grid-column-two-thirds '>
+                            " + comment.comment + "
+                        </div>
+                        <div class='govuk-grid-column-one-third'>
+                            <span class='govuk-body-s'>
+                                By " + (comment.who | title)  + "," + (comment.when | datetimeToDate) + "
+                            </span>
+                        </div>
+                    </div>
+                "
             }
         }), comments) %}
     {% endfor %}
 
-    {% set comments = (comments.push({
-        key: { text: "SPO consultation" },
-        value: { text: "Have you discussed this variation request with your SPO?" },
-        extraDetail: { items: [{ text: licence.spoDiscussion }] }
-    }), comments) %}
-
-    {% set comments = (comments.push({
-        key: { text: "VLO consultation" },
-        value: { text: "Have you consulted with the victim liaison officer (VLO) for this case?" },
-        extraDetail: { items: [{ text: licence.vloDiscussion }] }
-    }), comments) %}
 
     {{ summaryCard({
         classes: "govuk-!-margin-bottom-6",
