@@ -3,6 +3,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy, isHdcLicence } from '../../../utils/utils'
 import HdcService from '../../../services/hdc/hdcService'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ViewActiveLicenceRoutes {
   constructor(
@@ -25,12 +26,14 @@ export default class ViewActiveLicenceRoutes {
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
 
     const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
+    const isMigratedHdcLicence = licence.kind === LicenceKind.HDC && licence.isHdcMigration
 
     return res.render('pages/vary/viewActive', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
       callToActions: { shouldShowVaryButton },
       hdcLicenceData,
+      isMigratedHdcLicence,
     })
   }
 }

@@ -48,12 +48,11 @@ describe('Route - view and approve a licence', () => {
       postcode: 'addressPostcode',
       source: 'MANUAL',
     },
-    weeklyCurfewTimes: [],
     firstNightCurfewTimes: {
       fromTime: '09:00',
       untilTime: '17:00',
     },
-    curfewTimes: [
+    weeklyCurfewTimes: [
       {
         curfewTimesSequence: 1,
         fromDay: 'MONDAY',

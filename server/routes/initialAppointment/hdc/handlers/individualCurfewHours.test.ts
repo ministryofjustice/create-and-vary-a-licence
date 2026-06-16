@@ -26,6 +26,7 @@ describe('IndividualCurfewHoursRoutes', () => {
         curfewTimesSequence: 0,
       },
     ],
+    isHdcMigration: false,
   } as HdcLicence
 
   beforeEach(() => {
