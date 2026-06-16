@@ -38,7 +38,7 @@
   {% else %}
     {% set releaseDate = offender.releaseDate %}
   {% endif %}
-  {% set offenders = (offenders.push([
+  {% set row = [
         {
             attributes: {
                 id: 'name-' + loop.index,
@@ -46,15 +46,19 @@
             },
             classes: "max-width max-width-220",
             html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, offender.licenceId, offender.isClickable, loop.index, offender.createLink, offender.isRestricted)
-        },
-        {
+        }
+  ] %}
+  {% if view == 'team' %}
+    {% set row = (row.push({
             attributes: {
                 id: 'probation-practitioner-' + loop.index,
                 "data-sort-value": offender.probationPractitioner.name
             },
             classes: "max-width max-width-200",
             html: comDetailsHtml | redactIfLao(offender)
-        },
+    }), row) %}
+  {% endif %}
+  {% set row = (row.push(
         {
             attributes: {
                 id: 'release-date-' + loop.index,
@@ -69,7 +73,8 @@
             },
             html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig) | redactIfLao(offender)
         }
-    ]), offenders) %}
+  ), row) %}
+  {% set offenders = (offenders.push(row), offenders) %}
 {% endfor %}
 {% block content %}
   <div class="govuk-grid-row">
@@ -122,6 +127,36 @@
           </p>
         </div>
       {% endif %}
+      {% set tableHeaders = [
+          {
+              text: "Name",
+              attributes: {
+                  "aria-sort": "none"
+              }
+          }
+      ] %}
+      {% if view == 'team' %}
+        {% set tableHeaders = (tableHeaders.push({
+            text: "Probation practitioner",
+            attributes: {
+                "aria-sort": "none"
+            }
+        }), tableHeaders) %}
+      {% endif %}
+      {% set tableHeaders = (tableHeaders.push(
+          {
+              text: "Release date",
+              attributes: {
+                  "aria-sort": "ascending"
+              }
+          },
+          {
+              text: "Status",
+              attributes: {
+                  "aria-sort": "none"
+              }
+          }
+      ), tableHeaders) %}
       {% if caseload.length > 0 %}
         <form method="POST">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -131,32 +166,7 @@
                 },
                 caption: "Caseload",
                 captionClasses: "govuk-visually-hidden",
-                head: [
-                    {
-                        text: "Name",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    },
-                    {
-                        text: "Probation practitioner",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    },
-                    {
-                        text: "Release date",
-                        attributes: {
-                            "aria-sort": "ascending"
-                        }
-                    },
-                    {
-                        text: "Status",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    }
-                ],
+                head: tableHeaders,
                 rows: offenders
             }) }}
           </form>

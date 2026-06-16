@@ -93,7 +93,7 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('.moj-sub-navigation__link').text()).not.toContain('My HDC cases')
   })
 
-  it('should display probation practitioner in the table or unallocated', () => {
+  it('should display probation practitioner in the table or unallocated for the team view', () => {
     const $ = render({
       caseload: [
         {
@@ -134,6 +134,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
       ],
+      view: 'team',
     })
 
     expect($('tbody .govuk-table__row').length).toBe(3)
@@ -425,7 +426,6 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#release-date-1').text()).toBe('20 December 2025Time-served release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Time-served release')
-    expect($('#probation-practitioner-1').text()).toBe('Not allocated')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Timed out')
   })
 
@@ -455,8 +455,6 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#name-1 > .caseload-offender-name').text()).toContain('Access restricted on NDelius')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: A123456')
-    expect($('#probation-practitioner-1').text()).toBe('Restricted')
-    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
     expect($('#release-date-1').text()).toBe('Restricted')
     expect($('#licence-status-1').text().trim()).toBe('Restricted')
   })
@@ -486,8 +484,6 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('#name-1 > .caseload-offender-name > a').length).toBe(1)
     expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Test Person')
-    expect($('#probation-practitioner-1 > a').length).toBe(1)
-    expect($('#probation-practitioner-1 > a').text()).toBe('Jane Smith')
     expect($('#licence-status-1 > .status-badge').length).toBe(1)
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Submitted')
   })
@@ -536,8 +532,6 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#name-1 > .caseload-offender-name').text()).toContain('Access restricted on NDelius')
     expect($('#name-1 > .caseload-offender-name > a').attr('href')).toContain('/X111111/restricted')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X111111')
-    expect($('#probation-practitioner-1').text()).toBe('Restricted')
-    expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
     expect($('#release-date-1').text()).toBe('Restricted')
     expect($('#licence-status-1').text().trim()).toBe('Restricted')
 

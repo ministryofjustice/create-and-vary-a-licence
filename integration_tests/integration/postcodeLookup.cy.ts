@@ -24,9 +24,7 @@ context('Postcode lookup', () => {
     it('should display the postcode lookup search page with a preferred address available', () => {
       cy.task('stubGetStaffPreferredAddresses')
       const indexPage = Page.verifyOnPage(IndexPage)
-      let caseloadPage = indexPage.clickCreateALicence()
-      const comDetailsPage = caseloadPage.clickComName()
-      caseloadPage = comDetailsPage.clickReturnToCaseload()
+      const caseloadPage = indexPage.clickCreateALicence()
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -46,9 +44,7 @@ context('Postcode lookup', () => {
     it('should display the postcode lookup search page without a preferred address', () => {
       cy.task('stubGetStaffNoPreferredAddresses')
       const indexPage = Page.verifyOnPage(IndexPage)
-      let caseloadPage = indexPage.clickCreateALicence()
-      const comDetailsPage = caseloadPage.clickComName()
-      caseloadPage = comDetailsPage.clickReturnToCaseload()
+      const caseloadPage = indexPage.clickCreateALicence()
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -65,9 +61,7 @@ context('Postcode lookup', () => {
     it('should display Select an address error message', () => {
       cy.task('stubGetStaffPreferredAddresses')
       const indexPage = Page.verifyOnPage(IndexPage)
-      let caseloadPage = indexPage.clickCreateALicence()
-      const comDetailsPage = caseloadPage.clickComName()
-      caseloadPage = comDetailsPage.clickReturnToCaseload()
+      const caseloadPage = indexPage.clickCreateALicence()
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -83,9 +77,7 @@ context('Postcode lookup', () => {
     it('should reject a search query longer than 200 characters', () => {
       cy.task('stubGetStaffPreferredAddresses')
       const indexPage = Page.verifyOnPage(IndexPage)
-      let caseloadPage = indexPage.clickCreateALicence()
-      const comDetailsPage = caseloadPage.clickComName()
-      caseloadPage = comDetailsPage.clickReturnToCaseload()
+      const caseloadPage = indexPage.clickCreateALicence()
       const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
       const appointmentPersonPage = confirmCreatePage.clickContinue()

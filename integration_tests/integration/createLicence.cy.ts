@@ -40,9 +40,7 @@ context('Create a licence', () => {
       }),
     ] as AdditionalCondition[]
 
-    let caseloadPage = indexPage.clickCreateALicence(true)
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence(true)
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
     const releaseDateRow = confirmCreatePage.getReleaseDateStatus()
     releaseDateRow.should('contain', 'Friday 19 July 2024')
@@ -426,9 +424,7 @@ context('Create a licence', () => {
 
   it('should select specific date time option default on initial appointment details', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
