@@ -6,15 +6,18 @@ import { Licence, OmuContact } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import HdcService from '../../../services/hdc/hdcService'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
+jest.mock('../../../services/hdc/hdcService')
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
+const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 describe('Route Handlers - Create Licence - Check Answers', () => {
-  const handler = new CheckAnswersRoutes(licenceService, conditionService)
+  const handler = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
   let req: Request
   let res: Response
 
@@ -66,6 +69,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
     conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([])
     conditionService.getbespokeConditionsForSummaryAndPdf.mockResolvedValue(res.locals.licence.bespokeConditions)
+    hdcService.isVariationOfHdcMigration.mockResolvedValue(false)
   })
 
   describe('GET', () => {
@@ -173,8 +177,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should pass through isVariationOfHdcMigration flag for variations of migrated HDC licences', async () => {
-      res.locals.licence.kind = LicenceKind.HDC_VARIATION
-      licenceService.getLicence.mockResolvedValue({ kind: LicenceKind.HDC, isHdcMigration: true } as Licence)
+      hdcService.isVariationOfHdcMigration.mockResolvedValue(true)
 
       await handler.GET(req, res)
 
