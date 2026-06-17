@@ -4,25 +4,15 @@ import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
-import {
-  groupingBy,
-  isHdcLicence,
-  isInHardStopPeriod,
-  isTimeServedLicence,
-  parseCvlDateTime,
-} from '../../../utils/utils'
+import { groupingBy, isInHardStopPeriod, isTimeServedLicence, parseCvlDateTime } from '../../../utils/utils'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
-import HdcService from '../../../services/hdc/hdcService'
 import { LicenceKind } from '../../../enumeration'
 import config from '../../../config'
 
 export default class ViewAndPrintLicenceRoutes {
-  constructor(
-    private readonly licenceService: LicenceService,
-    private readonly hdcService: HdcService,
-  ) {}
+  constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -73,8 +63,6 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
-      const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
-
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions as AdditionalCondition[], 'code'),
         warningMessage,
@@ -82,7 +70,6 @@ export default class ViewAndPrintLicenceRoutes {
           licence.statusCode !== LicenceStatus.ACTIVE && (isTimeServedLicence(licence) || isInHardStopPeriod(licence)),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
-        hdcLicenceData,
       })
     } else {
       res.redirect(`/licence/view/cases`)

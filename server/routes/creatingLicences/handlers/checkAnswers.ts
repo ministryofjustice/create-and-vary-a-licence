@@ -6,14 +6,12 @@ import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import ConditionService from '../../../services/conditionService'
-import { groupingBy, isHdcLicence, isInHardStopPeriod, isVariation } from '../../../utils/utils'
-import HdcService from '../../../services/hdc/hdcService'
+import { groupingBy, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 
 export default class CheckAnswersRoutes {
   constructor(
     private readonly licenceService: LicenceService,
     private readonly conditionService: ConditionService,
-    private readonly hdcService: HdcService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -36,8 +34,6 @@ export default class CheckAnswersRoutes {
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
-    const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
-
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
@@ -47,7 +43,6 @@ export default class CheckAnswersRoutes {
       statusCode: licence.statusCode,
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
-      hdcLicenceData,
     })
   }
 

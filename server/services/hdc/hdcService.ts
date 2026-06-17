@@ -2,7 +2,6 @@ import { User } from '../../@types/CvlUserDetails'
 import {
   CurfewTimes as ApiCurfewTimes,
   FirstNightCurfewTimesRequest,
-  HdcLicenceData,
   WeeklyCurfewTimesRequest,
 } from '../../@types/licenceApiClientTypes'
 import LicenceApiClient from '../../data/licenceApiClient'
@@ -13,29 +12,8 @@ import { SimpleTime } from '../../routes/manageConditions/types'
 import { simpleTimeTo24Hour, simpleTimeToMinutes } from '../../utils/utils'
 import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../routes/initialAppointment/hdc/curfewDefaults'
 
-export type CvlHdcLicenceData = HdcLicenceData & { allCurfewTimesEqual: boolean }
-
 export default class HdcService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
-
-  async getHdcLicenceData(licenceId: number): Promise<CvlHdcLicenceData> {
-    const hdcLicenceData = await this.licenceApiClient.getHdcLicenceData(licenceId)
-    const allCurfewTimesEqual = hdcLicenceData.weeklyCurfewTimes.every(ct => {
-      return (
-        ct.fromTime === hdcLicenceData.weeklyCurfewTimes[0].fromTime &&
-        ct.untilTime === hdcLicenceData.weeklyCurfewTimes[0].untilTime
-      )
-    })
-
-    const { curfewAddress, firstNightCurfewTimes, weeklyCurfewTimes } = hdcLicenceData
-
-    return {
-      curfewAddress,
-      firstNightCurfewTimes,
-      weeklyCurfewTimes,
-      allCurfewTimesEqual,
-    }
-  }
 
   async updateFirstNightCurfewTimes(
     licenceId: number,

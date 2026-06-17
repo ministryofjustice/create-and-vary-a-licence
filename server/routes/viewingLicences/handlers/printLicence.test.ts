@@ -5,87 +5,18 @@ import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import config from '../../../config'
-import HdcService, { CvlHdcLicenceData } from '../../../services/hdc/hdcService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const qrCodeService = new QrCodeService() as jest.Mocked<QrCodeService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 const username = 'joebloggs'
 
 describe('Route - print a licence', () => {
-  const handler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService, hdcService)
+  const handler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService)
   let req: Request
   let res: Response
-
-  const exampleHdcLicenceData = {
-    curfewAddress: {
-      firstLine: 'addressLineOne',
-      secondLine: 'addressLineTwo',
-      townOrCity: 'addressTownOrCity',
-      county: 'county',
-      postcode: 'addressPostcode',
-      source: 'MANUAL',
-    },
-    firstNightCurfewTimes: {
-      fromTime: '09:00',
-      untilTime: '17:00',
-    },
-    weeklyCurfewTimes: [
-      {
-        curfewTimesSequence: 1,
-        fromDay: 'MONDAY',
-        fromTime: '17:00:00',
-        untilDay: 'TUESDAY',
-        untilTime: '09:00:00',
-      },
-      {
-        curfewTimesSequence: 2,
-        fromDay: 'TUESDAY',
-        fromTime: '17:00:00',
-        untilDay: 'WEDNESDAY',
-        untilTime: '09:00:00',
-      },
-      {
-        curfewTimesSequence: 3,
-        fromDay: 'WEDNESDAY',
-        fromTime: '17:00:00',
-        untilDay: 'THURSDAY',
-        untilTime: '09:00:00',
-      },
-      {
-        curfewTimesSequence: 4,
-        fromDay: 'THURSDAY',
-        fromTime: '17:00:00',
-        untilDay: 'FRIDAY',
-        untilTime: '09:00:00',
-      },
-      {
-        curfewTimesSequence: 5,
-        fromDay: 'FRIDAY',
-        fromTime: '17:00:00',
-        untilDay: 'SATURDAY',
-        untilTime: '09:00:00',
-      },
-      {
-        curfewTimesSequence: 6,
-        fromDay: 'SATURDAY',
-        fromTime: '17:00:00',
-        untilDay: 'SUNDAY',
-        untilTime: '09:00:00',
-      },
-      {
-        curfewTimesSequence: 7,
-        fromDay: 'MONDAY',
-        fromTime: '17:00:00',
-        untilDay: 'SUNDAY',
-        untilTime: '09:00:00',
-      },
-    ],
-    allCurfewTimesEqual: true,
-  } as CvlHdcLicenceData
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -94,7 +25,6 @@ describe('Route - print a licence', () => {
     qrCodeService.getQrCode = jest.fn()
     licenceService.getExclusionZoneImageData = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
-    hdcService.getHdcLicenceData = jest.fn()
 
     res = {
       render: jest.fn(),
@@ -134,11 +64,11 @@ describe('Route - print a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/licence/AP', {
         qrCode: null,
         htmlPrint: true,
+        licence: res.locals.licence,
         exclusionZoneMapData: [],
         restrictionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
-        hdcLicenceData: null,
         isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -154,12 +84,12 @@ describe('Route - print a licence', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', {
         qrCode: null,
+        licence: res.locals.licence,
         htmlPrint: true,
         exclusionZoneMapData: [],
         restrictionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
-        hdcLicenceData: null,
         isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -184,6 +114,7 @@ describe('Route - print a licence', () => {
         'pages/licence/AP',
         {
           licencesUrl,
+          licence: res.locals.licence,
           imageData: '-- base64 image data --',
           qrCode: null,
           htmlPrint: false,
@@ -192,7 +123,6 @@ describe('Route - print a licence', () => {
           multipleItemConditions: [],
           exclusionZoneMapData: [],
           restrictionZoneMapData: [],
-          hdcLicenceData: null,
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
@@ -225,6 +155,7 @@ describe('Route - print a licence', () => {
         'pages/licence/AP',
         {
           licencesUrl,
+          licence: res.locals.licence,
           imageData: '-- base64 image data --',
           qrCode: null,
           htmlPrint: false,
@@ -233,7 +164,6 @@ describe('Route - print a licence', () => {
           multipleItemConditions: [],
           exclusionZoneMapData: [],
           restrictionZoneMapData: [],
-          hdcLicenceData: null,
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
@@ -284,6 +214,7 @@ describe('Route - print a licence', () => {
           imageData: '-- base64 image data --',
           qrCode: null,
           htmlPrint: false,
+          licence: res.locals.licence,
           watermark,
           singleItemConditions: [
             {
@@ -323,7 +254,6 @@ describe('Route - print a licence', () => {
             },
           ],
           restrictionZoneMapData: [],
-          hdcLicenceData: null,
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
@@ -382,6 +312,7 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
+          licence: res.locals.licence,
           singleItemConditions: [
             {
               code: '005d70e4-a247-4f82-b8b3-6d294a0f5051',
@@ -488,7 +419,6 @@ describe('Route - print a licence', () => {
               text: 'this is a restriction',
             },
           ],
-          hdcLicenceData: null,
           isV4OrGreater: true,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
@@ -519,6 +449,7 @@ describe('Route - print a licence', () => {
         'pages/licence/AP',
         {
           licencesUrl,
+          licence: res.locals.licence,
           imageData: '-- base64 image data --',
           qrCode: 'a QR code',
           htmlPrint: false,
@@ -527,7 +458,6 @@ describe('Route - print a licence', () => {
           multipleItemConditions: [],
           exclusionZoneMapData: [],
           restrictionZoneMapData: [],
-          hdcLicenceData: null,
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
@@ -544,22 +474,20 @@ describe('Route - print a licence', () => {
       res.locals.licence.typeCode = 'AP'
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
-      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       await handler.preview(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/licence/HDC_AP', {
         qrCode: null,
+        licence: res.locals.licence,
         htmlPrint: true,
         exclusionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
         restrictionZoneMapData: [],
-        hdcLicenceData: exampleHdcLicenceData,
         isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
@@ -575,7 +503,6 @@ describe('Route - print a licence', () => {
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
-      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       await handler.renderPdf(req, res)
 
@@ -583,6 +510,7 @@ describe('Route - print a licence', () => {
         'pages/licence/HDC_AP',
         {
           licencesUrl,
+          licence: res.locals.licence,
           imageData: '-- base64 image data --',
           qrCode: null,
           htmlPrint: false,
@@ -591,7 +519,6 @@ describe('Route - print a licence', () => {
           multipleItemConditions: [],
           exclusionZoneMapData: [],
           restrictionZoneMapData: [],
-          hdcLicenceData: exampleHdcLicenceData,
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
@@ -600,7 +527,6 @@ describe('Route - print a licence', () => {
       )
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
       expect(footerHtml).toMatch(/Version No:.+1.4/)
     })
@@ -610,22 +536,20 @@ describe('Route - print a licence', () => {
       res.locals.licence.typeCode = 'AP_PSS'
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
-      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       await handler.preview(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/licence/HDC_AP_PSS', {
+        licence: res.locals.licence,
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
         restrictionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
-        hdcLicenceData: exampleHdcLicenceData,
         isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
@@ -641,7 +565,6 @@ describe('Route - print a licence', () => {
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
-      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       await handler.renderPdf(req, res)
 
@@ -657,7 +580,7 @@ describe('Route - print a licence', () => {
           multipleItemConditions: [],
           exclusionZoneMapData: [],
           restrictionZoneMapData: [],
-          hdcLicenceData: exampleHdcLicenceData,
+          licence: res.locals.licence,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
           isV4OrGreater: false,
@@ -666,7 +589,6 @@ describe('Route - print a licence', () => {
       )
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
       expect(footerHtml).toMatch(/Version No:.+1.4/)
     })
@@ -676,7 +598,6 @@ describe('Route - print a licence', () => {
       res.locals.licence.typeCode = 'AP_PSS'
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
-      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       await handler.preview(req, res)
 
@@ -687,11 +608,10 @@ describe('Route - print a licence', () => {
         restrictionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
-        hdcLicenceData: exampleHdcLicenceData,
+        licence: res.locals.licence,
         isV4OrGreater: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
@@ -707,7 +627,6 @@ describe('Route - print a licence', () => {
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
-      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       await handler.renderPdf(req, res)
 
@@ -723,7 +642,7 @@ describe('Route - print a licence', () => {
           multipleItemConditions: [],
           exclusionZoneMapData: [],
           restrictionZoneMapData: [],
-          hdcLicenceData: exampleHdcLicenceData,
+          licence: res.locals.licence,
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
@@ -732,7 +651,6 @@ describe('Route - print a licence', () => {
       )
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
       expect(footerHtml).toMatch(/Version No:.+1.4/)
     })

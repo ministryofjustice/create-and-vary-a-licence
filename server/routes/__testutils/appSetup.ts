@@ -6,7 +6,6 @@ import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import type { Services } from '../../services'
-import AuthRole from '../../enumeration/authRole'
 import { User } from '../../@types/CvlUserDetails'
 import type { ApplicationInfo } from '../../applicationInfo'
 import setUpHealthChecks from '../../middleware/setUpHealthChecks'
@@ -30,13 +29,15 @@ const signedCookiesProvider = jest.fn()
 
 export const flashProvider = jest.fn()
 
-function appSetup(services: Services, userSupplier: () => User): Express {
+function appSetup(services: Services, userSupplier: () => User, enableHealthChecks: boolean): Express {
   const app = express()
 
   app.set('view engine', 'njk')
 
   const nunjucksEnvironment = nunjucksSetup(app, testAppInfo)
-  app.use(setUpHealthChecks(testAppInfo))
+  if (enableHealthChecks) {
+    app.use(setUpHealthChecks(testAppInfo))
+  }
   app.use((req, res, next) => {
     req.user = userSupplier()
     req.flash = flashProvider
@@ -57,14 +58,13 @@ function appSetup(services: Services, userSupplier: () => User): Express {
 export function appWithAllRoutes({
   services = {},
   userSupplier = () => user as User,
+  enableHealthChecks = false,
 }: {
-  production?: boolean
   services?: Partial<Services>
   userSupplier?: () => User
-  roles?: AuthRole[]
-  signedCookies?: () => Record<string, Record<string, string>>
+  enableHealthChecks?: boolean
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
   const overrideServices = { dprServices: { downloadPermissionService: { enabled: true } }, ...services } as Services
-  return appSetup(overrideServices, userSupplier)
+  return appSetup(overrideServices, userSupplier, enableHealthChecks)
 }
