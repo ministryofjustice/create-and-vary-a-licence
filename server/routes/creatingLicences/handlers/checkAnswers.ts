@@ -34,6 +34,10 @@ export default class CheckAnswersRoutes {
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
+    const hdcVariationParent =
+      licence.kind === 'HDC_VARIATION' ? await this.licenceService.getLicence(licence.variationOf, user) : null
+    const isVariationOfHdcMigration = hdcVariationParent?.kind === 'HDC' && hdcVariationParent?.isHdcMigration
+
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
@@ -43,6 +47,7 @@ export default class CheckAnswersRoutes {
       statusCode: licence.statusCode,
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
+      isVariationOfHdcMigration,
     })
   }
 

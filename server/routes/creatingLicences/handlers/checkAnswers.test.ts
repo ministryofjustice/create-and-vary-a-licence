@@ -79,6 +79,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -100,6 +101,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
       })
     })
 
@@ -125,6 +127,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -142,6 +145,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
       })
     })
 
@@ -158,6 +162,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: false,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
       })
     })
 
@@ -165,6 +170,24 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       await handler.GET(req, res)
 
       expect(req.flash).toHaveBeenCalledWith('initialApptUpdated')
+    })
+
+    it('should pass through isVariationOfHdcMigration flag for variations of migrated HDC licences', async () => {
+      res.locals.licence.kind = LicenceKind.HDC_VARIATION
+      licenceService.getLicence.mockResolvedValue({ kind: LicenceKind.HDC, isHdcMigration: true } as Licence)
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: true,
+      })
     })
 
     describe('when hard stop is enabled', () => {
@@ -181,6 +204,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           canEditInitialAppt: true,
           isInHardStopPeriod: false,
           statusCode: 'IN_PROGRESS',
+          isVariationOfHdcMigration: false,
         })
       })
 
@@ -197,6 +221,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           canEditInitialAppt: false,
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
+          isVariationOfHdcMigration: false,
         })
       })
 
@@ -215,6 +240,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
           omuEmail: 'test@test.test',
+          isVariationOfHdcMigration: false,
         })
       })
     })
