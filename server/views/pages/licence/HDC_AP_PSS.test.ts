@@ -20,53 +20,11 @@ describe('Print a HDC AP_PSS licence', () => {
         appointmentPerson: 'Jack Frost',
         appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
         comTelephone: '07878 234566',
-        standardLicenceConditions: [
-          { code: '1', text: 'Standard 1' },
-          { code: '2', text: 'Standard 2' },
-          { code: '3', text: 'Standard 3' },
-          { code: '4', text: 'Standard 4' },
-          { code: '5', text: 'Standard 5' },
-          { code: '6', text: 'Standard 6' },
-          { code: '7', text: 'Standard 7' },
-        ],
-        additionalLicenceConditions: [
-          {
-            expandedText:
-              'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohol problems.',
-          },
-        ],
-        bespokeConditions: [{ text: 'Bespoke condition 1' }],
-        standardPssConditions: [
-          { code: '1', text: 'Standard 1' },
-          { code: '2', text: 'Standard 2' },
-          { code: '3', text: 'Standard 3' },
-          { code: '4', text: 'Standard 4' },
-          { code: '5', text: 'Standard 5' },
-          { code: '6', text: 'Standard 6' },
-          { code: '7', text: 'Standard 7' },
-          { code: '8', text: 'STandard 8' },
-        ],
-        additionalPssConditions: [
-          {
-            expandedText: 'Additional PSS Condition',
-          },
-        ],
-      },
-      qrCodesEnabled: false,
-      singleItemConditions: [
-        {
-          expandedText:
-            'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohol problems.',
-          uploadSummary: [],
-        },
-      ],
-      multipleItemConditions: [],
-      hdcLicenceData: {
         curfewAddress: {
-          addressLine1: 'addressLineOne',
-          addressLine2: 'addressLineTwo',
-          addressTown: 'addressTownOrCity',
-          postCode: 'addressPostcode',
+          firstLine: 'addressLineOne',
+          secondLine: 'addressLineTwo',
+          townOrCity: 'addressTownOrCity',
+          postcode: 'addressPostcode',
         },
         firstNightCurfewTimes: {
           fromTime: '09:00',
@@ -123,7 +81,47 @@ describe('Print a HDC AP_PSS licence', () => {
             untilTime: '09:00:00',
           },
         ],
+        standardLicenceConditions: [
+          { code: '1', text: 'Standard 1' },
+          { code: '2', text: 'Standard 2' },
+          { code: '3', text: 'Standard 3' },
+          { code: '4', text: 'Standard 4' },
+          { code: '5', text: 'Standard 5' },
+          { code: '6', text: 'Standard 6' },
+          { code: '7', text: 'Standard 7' },
+        ],
+        additionalLicenceConditions: [
+          {
+            expandedText:
+              'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohol problems.',
+          },
+        ],
+        bespokeConditions: [{ text: 'Bespoke condition 1' }],
+        standardPssConditions: [
+          { code: '1', text: 'Standard 1' },
+          { code: '2', text: 'Standard 2' },
+          { code: '3', text: 'Standard 3' },
+          { code: '4', text: 'Standard 4' },
+          { code: '5', text: 'Standard 5' },
+          { code: '6', text: 'Standard 6' },
+          { code: '7', text: 'Standard 7' },
+          { code: '8', text: 'STandard 8' },
+        ],
+        additionalPssConditions: [
+          {
+            expandedText: 'Additional PSS Condition',
+          },
+        ],
       },
+      qrCodesEnabled: false,
+      singleItemConditions: [
+        {
+          expandedText:
+            'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohol problems.',
+          uploadSummary: [],
+        },
+      ],
+      multipleItemConditions: [],
     })
 
     // Check the page title contains the offender name

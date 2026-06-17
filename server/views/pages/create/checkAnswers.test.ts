@@ -551,8 +551,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should render the curfew time summary if all the curfew times are equal', () => {
     const $ = render({
-      licence: { ...licence, kind: 'HDC' },
-      hdcLicenceData: { allCurfewTimesEqual: true },
+      licence: { ...licence, kind: 'HDC', allCurfewTimesEqual: true },
     })
 
     expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
@@ -562,8 +561,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should render the individual curfew times if any of the curfew times are different', () => {
     const $ = render({
-      licence: { ...licence, kind: 'HDC' },
-      hdcLicenceData: { allCurfewTimesEqual: false },
+      licence: { ...licence, kind: 'HDC', allCurfewTimesEqual: false },
     })
 
     expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
@@ -572,8 +570,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should render Calculate release date label', () => {
     const $ = render({
-      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: '06/12/2026' },
-      hdcLicenceData: { allCurfewTimesEqual: false },
+      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: '06/12/2026', allCurfewTimesEqual: false },
     })
 
     expect($('.hdcad').text()).toMatch('CALCULATE RELEASE DATE')
@@ -581,8 +578,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should not render Calculate release date label', () => {
     const $ = render({
-      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: null },
-      hdcLicenceData: { allCurfewTimesEqual: false },
+      licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: null, allCurfewTimesEqual: false },
     })
 
     expect($('.hdcad').text()).not.toMatch('CALCULATE RELEASE DATE')
@@ -590,8 +586,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should render HDC label', () => {
     const $ = render({
-      licence: { ...licence, kind: 'HDC' },
-      hdcLicenceData: { allCurfewTimesEqual: false },
+      licence: { ...licence, kind: 'HDC', allCurfewTimesEqual: false },
     })
 
     expect($('.curfew-address').text()).toMatch('HDC')
@@ -604,8 +599,7 @@ describe('Create a Licence Views - Check Answers', () => {
     ]
 
     const $ = render({
-      licence: { ...licence, kind: 'HDC' },
-      hdcLicenceData: { allCurfewTimesEqual: false, weeklyCurfewTimes },
+      licence: { ...licence, kind: 'HDC', allCurfewTimesEqual: false, weeklyCurfewTimes },
     })
 
     expect($('table[data-qa="all-curfew-times-equal"]').length).toBe(0)

@@ -30,7 +30,7 @@ export const getTimeServedEditPath = (licence: Licence): string => {
   return `/licence/time-served/id/${licence.id}/check-your-answers`
 }
 
-export default function Index({ licenceService, conditionService, hdcService, addressService }: Services): Router {
+export default function Index({ licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/time-served${path}`
@@ -130,7 +130,7 @@ export default function Index({ licenceService, conditionService, hdcService, ad
     post('/edit/id/:licenceId/initial-meeting-time', controller.POST, UserType.PRISON, DateTime)
   }
   {
-    const controller = new ViewAndPrintLicenceRoutes(licenceService, hdcService)
+    const controller = new ViewAndPrintLicenceRoutes(licenceService)
     get('/id/:licenceId/check-your-answers', controller.GET, UserType.PRISON)
     post('/id/:licenceId/check-your-answers', controller.POST, UserType.PRISON)
   }

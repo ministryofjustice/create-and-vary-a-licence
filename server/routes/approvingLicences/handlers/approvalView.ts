@@ -2,9 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ProbationService from '../../../services/probationService'
-import HdcService from '../../../services/hdc/hdcService'
 import { groupingBy } from '../../../utils/utils'
-import LicenceKind from '../../../enumeration/LicenceKind'
 import { nameToString } from '../../../data/deliusClient'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 
@@ -12,7 +10,6 @@ export default class ApprovalViewRoutes {
   constructor(
     private readonly licenceService: LicenceService,
     private readonly probationService: ProbationService,
-    private readonly hdcService: HdcService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -30,9 +27,6 @@ export default class ApprovalViewRoutes {
         user,
       )
 
-      const hdcLicenceData =
-        licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
-
       const comDetails = comUsername ? await this.probationService.getStaffDetailByUsername(comUsername) : null
 
       const returnPath = encodeURIComponent(`/licence/approve/id/${licence.id}/view`)
@@ -47,7 +41,6 @@ export default class ApprovalViewRoutes {
             }
           : null,
         returnPath,
-        hdcLicenceData,
       })
     } else {
       res.redirect(`/licence/approve/cases`)

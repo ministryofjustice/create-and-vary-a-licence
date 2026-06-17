@@ -1,6 +1,7 @@
 import ComDetailsPage from './comDetails'
 import Page from './page'
 import TimelinePage from './timelinePage'
+import RestrictedDetailsPage from './restrictedDetails'
 
 export default class VaryCasesPage extends Page {
   private varyLicenceLinkId = '#name-link-1'
@@ -10,6 +11,8 @@ export default class VaryCasesPage extends Page {
   private licenceStatusId = '#licence-status-'
 
   private probationPractitionerId = '#probation-practitioner-'
+
+  private restrictedLinkId = '#name-button-2'
 
   public myCount = '#my-count'
 
@@ -42,5 +45,10 @@ export default class VaryCasesPage extends Page {
     cy.task('stubGetStaffDetailsByStaffCode')
     this.getProbationPractitioner(index).find('a').click()
     return Page.verifyOnPage(ComDetailsPage)
+  }
+
+  clickRestrictedOffenderName = (): RestrictedDetailsPage => {
+    cy.get(this.restrictedLinkId).click()
+    return Page.verifyOnPage(RestrictedDetailsPage)
   }
 }

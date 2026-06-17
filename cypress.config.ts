@@ -57,7 +57,6 @@ export default defineConfig({
         stubGetStaffPreferredAddresses: licence.stubGetStaffPreferredAddresses,
         stubGetStaffNoPreferredAddresses: licence.stubGetStaffNoPreferredAddresses,
         stubPutLicenceAppointmentPerson: licence.stubPutLicenceAppointmentPerson,
-        stubGetHdcLicenceData: licence.stubGetHdcLicenceData,
         stubGetEmptyLicence: licence.stubGetEmptyLicence,
         stubGetPssLicence: licence.stubGetPssLicence,
         stubPostPrisonLicence: licence.stubPostPrisonLicence,

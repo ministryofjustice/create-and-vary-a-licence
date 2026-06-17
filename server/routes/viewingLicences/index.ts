@@ -16,7 +16,6 @@ export default function Index({
   probationService,
   caCaseloadService,
   qrCodeService,
-  hdcService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/view${path}`
@@ -41,8 +40,8 @@ export default function Index({
     )
 
   const viewCasesHandler = new ViewAndPrintCaseRoutes(caCaseloadService, prisonerService)
-  const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService, hdcService)
-  const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService, hdcService)
+  const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService)
+  const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService)
   const comDetailsHandler = new ComDetailsRoutes(probationService)
 
   get('/cases', viewCasesHandler.GET)
