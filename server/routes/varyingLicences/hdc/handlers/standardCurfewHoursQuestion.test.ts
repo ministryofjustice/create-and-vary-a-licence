@@ -7,7 +7,7 @@ import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../../../utils/curfewDefaults'
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 jest.mock('../../../../services/hdc/hdcService')
 
-describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', () => {
+describe('Route Handlers - Vary Licence - Do HDC Curfew Hours Apply Daily', () => {
   let req: Request
   let res: Response
 
@@ -47,13 +47,13 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
     it('when the answer is no, it should redirect to the do hdc curfew hours apply daily page', async () => {
       req.body = { answer: YesOrNo.NO }
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/hdc/do-hdc-curfew-hours-apply-daily')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/hdc/do-hdc-curfew-hours-apply-daily')
     })
 
-    it('when the answer is yes, it should redirect to the additional licence conditions question page', async () => {
+    it('when the answer is yes, it should redirect to the check your answers page', async () => {
       req.body = { answer: YesOrNo.YES }
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
 
     it('when the answer is yes, it should send the standard curfew times to the licence API', async () => {
@@ -67,15 +67,15 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
       req.query = { fromReview: 'true' }
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/hdc/do-hdc-curfew-hours-apply-daily?fromReview=true',
+        '/licence/vary/id/1/hdc/do-hdc-curfew-hours-apply-daily?fromReview=true',
       )
     })
 
-    it('when the answer is yes and fromReview query param is present, it should redirect to the check your answers page', async () => {
-      req.body = { answer: YesOrNo.YES }
-      req.query = { fromReview: 'true' }
+    it('when the answer is no and fromReview query param is not present, it should redirect to the do hdc curfew hours apply daily page with out fromReview query param', async () => {
+      req.body = { answer: YesOrNo.NO }
+      req.query = {}
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/hdc/do-hdc-curfew-hours-apply-daily')
     })
   })
 })

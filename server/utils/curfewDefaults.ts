@@ -1,5 +1,5 @@
-import { SimpleTime } from '../../manageConditions/types'
-import CurfewTimes from './types/curfewTimes'
+import { SimpleTime } from '../routes/manageConditions/types'
+import CurfewTimes from '../routes/initialAppointment/hdc/types/curfewTimes'
 
 export const STANDARD_WEEKLY_CURFEW_TIMES: CurfewTimes = {
   curfewStart: SimpleTime.fromString('07:00 pm'),
