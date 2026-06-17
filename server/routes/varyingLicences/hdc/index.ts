@@ -17,6 +17,7 @@ import SelectCurfewAddressRoutes from './handlers/selectCurfewAddress'
 import ManualAddressEntryRoutes from './handlers/manualAddressEntry'
 import ManualCurfewAddress from '../types/manualCurfewAddress'
 import CurfewAccommodationTypeQuestion from '../types/curfewAccommodationType'
+import StandardCurfewHoursQuestionRoutes from './handlers/standardCurfewHoursQuestion'
 
 export default function Index(services: Services): Router {
   const { conditionService, licenceService } = services
@@ -83,6 +84,12 @@ export default function Index(services: Services): Router {
     const controller = new ManualAddressEntryRoutes(services.hdcCurfewAddressService)
     get('/manual-curfew-address-entry', controller.GET)
     post('/manual-curfew-address-entry', controller.POST, ManualCurfewAddress)
+  }
+
+  {
+    const controller = new StandardCurfewHoursQuestionRoutes(services.hdcService)
+    get('/standard-curfew-hours-question', controller.GET)
+    post('/standard-curfew-hours-question', controller.POST, YesOrNoQuestion)
   }
 
   return router

@@ -5,7 +5,7 @@ import { AmPm } from '../../routes/creatingLicences/types/time'
 import { SimpleTime } from '../../routes/manageConditions/types'
 import { simpleTimeTo24Hour } from '../../utils/utils'
 import { User } from '../../@types/CvlUserDetails'
-import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../routes/initialAppointment/hdc/curfewDefaults'
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../utils/curfewDefaults'
 import { DAYS } from '../../enumeration/days'
 import DailyCurfewTime from '../../routes/initialAppointment/hdc/types/dailyCurfewTime'
 
