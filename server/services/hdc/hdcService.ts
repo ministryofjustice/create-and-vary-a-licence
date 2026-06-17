@@ -10,7 +10,7 @@ import { Day, DAYS } from '../../enumeration/days'
 import DailyCurfewTime from '../../routes/initialAppointment/hdc/types/dailyCurfewTime'
 import { SimpleTime } from '../../routes/manageConditions/types'
 import { simpleTimeTo24Hour, simpleTimeToMinutes } from '../../utils/utils'
-import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../routes/initialAppointment/hdc/curfewDefaults'
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../utils/curfewDefaults'
 
 export default class HdcService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}

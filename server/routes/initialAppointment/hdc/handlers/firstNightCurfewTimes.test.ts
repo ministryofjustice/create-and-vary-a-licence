@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import HdcService from '../../../../services/hdc/hdcService'
-import { STANDARD_FIRST_NIGHT_CURFEW_TIMES } from '../curfewDefaults'
+import { STANDARD_FIRST_NIGHT_CURFEW_TIMES } from '../../../../utils/curfewDefaults'
 import FirstNightCurfewTimesRoutes from './firstNightCurfewTimes'
 import { json24HourTimeTo12HourTime } from '../../../../utils/utils'
 import { SimpleTime } from '../../../manageConditions/types'
