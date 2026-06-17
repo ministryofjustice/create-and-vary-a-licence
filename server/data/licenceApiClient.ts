@@ -33,7 +33,6 @@ import type {
   ExternalTimeServedRecordRequest,
   ExternalTimeServedRecordResponse,
   FirstNightCurfewTimesRequest,
-  HdcLicenceData,
   LastMinuteHandoverCaseResponse,
   Licence,
   LicenceConditionChange,
@@ -725,12 +724,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user.username },
     )) as Promise<VaryApproverCaseloadSearchResponse>
-  }
-
-  async getHdcLicenceData(licenceId: number): Promise<HdcLicenceData> {
-    return (await this.get({
-      path: `/hdc/curfew/licenceId/${licenceId}`,
-    })) as Promise<HdcLicenceData>
   }
 
   async getIneligibilityReasons(nomisId: string): Promise<EligibilityAssessment> {

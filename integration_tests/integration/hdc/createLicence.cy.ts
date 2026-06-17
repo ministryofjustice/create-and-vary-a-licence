@@ -18,7 +18,12 @@ context('Create an HDC licence', () => {
     cy.task('stubSearchForAddresses')
     cy.task('stubGetStaffPreferredAddresses')
     cy.task('stubPutLicenceAppointmentPerson')
-    cy.task('stubGetHdcLicence')
+    cy.task('stubGetHdcLicence', {
+      firstNightCurfewTimes: {
+        fromTime: '17:00:00',
+        untilTime: '07:00:00',
+      },
+    })
     cy.task('stubGetProbationCase')
     cy.task('stubGetResponsibleCommunityManager')
     cy.task('searchPrisonersByBookingIds', '2024-07-09')
@@ -39,7 +44,6 @@ context('Create an HDC licence', () => {
 
   it('should click through the create a licence journey', () => {
     cy.visit('/licence/hdc/create/nomisId/G9786GC/confirm')
-    cy.task('stubGetHdcLicenceData')
     const confirmCreatePage = new ConfirmCreatePage()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -119,15 +123,24 @@ context('Create an HDC licence', () => {
         .enterAddress()
         .clickContinue([], {}, undefined, LicenceKind.HDC)
 
+      cy.task('stubGetHdcLicence', {
+        firstNightCurfewTimes: {
+          fromTime: '21:00:00',
+          untilTime: '07:00:00',
+        },
+        allCurfewTimesEqual: true,
+      })
       const firstNightCurfewHoursPage = checkAnswersPage.clickChangeFirstNightCurfewHoursLink()
       firstNightCurfewHoursPage
         .enterFirstNightCurfewStartTime({ hour: '08', minute: '00', ampm: 'pm' })
         .enterFirstNightCurfewEndTime({ hour: '10', minute: '00', ampm: 'am' })
         .clickSave()
+
       const standardCurfewHoursQuestionPage = checkAnswersPage.clickChangeCurfewHoursLink()
       const sameCurfewHoursQuestionPage = standardCurfewHoursQuestionPage
         .selectNo()
         .clickContinueToSameCurfewHoursQuestionPage()
+
       const individualCurfewHoursPage = sameCurfewHoursQuestionPage
         .selectNo()
         .clickContinueToIndividualCurfewHoursPage()
@@ -213,6 +226,9 @@ context('Create an HDC licence', () => {
       const confirmCreatePage = new ConfirmCreatePage()
       confirmCreatePage.clickContinue()
 
+      cy.task('stubGetHdcLicence', {
+        allCurfewTimesEqual: true,
+      })
       cy.visit('licence/create/id/1/hdc/first-night-curfew-hours')
       const firstNightCurfewTimesPage = new FirstNightCurfewTimesPage()
       firstNightCurfewTimesPage.getCurfewStartTime().then(time => {

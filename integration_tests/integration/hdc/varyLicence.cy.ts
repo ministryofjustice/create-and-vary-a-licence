@@ -11,7 +11,6 @@ context('Vary a HDC licence', () => {
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'HDC', status: 'ACTIVE' })
-    cy.task('stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP', kind: 'HDC' })
     cy.task('stubGetStaffVaryCaseloadWithLao', {
       licenceId: 1,
       licenceStatus: LicenceStatus.ACTIVE,
@@ -27,11 +26,21 @@ context('Vary a HDC licence', () => {
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubDeleteAdditionalConditionsByCode')
     cy.task('stubCheckComCaseAccess')
-    cy.task('stubGetHdcLicenceData')
     cy.signIn()
   })
 
   it('should click through vary a HDC licence journey', () => {
+    cy.task('stubGetHdcLicence', {
+      statusCode: 'ACTIVE',
+      typeCode: 'AP',
+      homeDetentionCurfewActualDate: '09/09/2023',
+      homeDetentionCurfewEndDate: '12/03/2021',
+      firstNightCurfewTimes: {
+        fromTime: '17:00:00',
+        untilTime: '07:00:00',
+      },
+      allCurfewTimesEqual: true,
+    })
     const indexPage = Page.verifyOnPage(IndexPage)
     const varyCasesPage = indexPage.clickVaryALicence()
     varyCasesPage.getValue(varyCasesPage.myCount).should('contain.text', '1')

@@ -74,7 +74,10 @@ const licencePlaceholder: Licence = {
   createdByUsername: 'X12345',
   createdByFullName: 'John Smith',
   appointmentTelephoneNumber: '01234567890',
+  appointmentPersonType: 'DUTY_OFFICER',
+  appointmentTimeType: 'SPECIFIC_DATE_TIME',
   appointmentAlternativeTelephoneNumber: '01234567891',
+  appointmentAddress: '123 Fake Street, Faketown, Fakeshire, FA11KE',
   licenceAppointmentAddress: {
     reference: '1234',
     uprn: '10000000001',
@@ -349,6 +352,7 @@ export default {
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
     responsibleComFullName?: string
     isEligibleForEarlyRelease: boolean
+    hasAppointmentTimeType?: string
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -360,6 +364,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
+          appointmentTimeType: options.hasAppointmentTimeType ? licencePlaceholder.appointmentTimeType : undefined,
           kind: options.licenceKind || LicenceKind.CRD,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
           responsibleComFullName: options.responsibleComFullName || null,
@@ -375,6 +380,12 @@ export default {
         fromTime?: string
         untilTime?: string
       }
+      allCurfewTimesEqual?: boolean
+      statusCode?: string
+      typeCode?: 'AP_PSS' | 'AP' | 'PSS'
+      homeDetentionCurfewActualDate?: string | null
+      homeDetentionCurfewEndDate?: string | null
+      weeklyCurfewTimes?: CurfewTimes[]
     } = {},
   ): SuperAgentRequest => {
     return stubFor({
@@ -387,9 +398,78 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
+          statusCode: options.statusCode ?? licencePlaceholder.statusCode,
+          typeCode: options.typeCode ?? licencePlaceholder.typeCode,
+          homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate ?? '01/03/2021',
+          homeDetentionCurfewEndDate: options.homeDetentionCurfewEndDate,
           kind: 'HDC',
           firstNightCurfewTimes: options.firstNightCurfewTimes ?? null,
-          homeDetentionCurfewActualDate: '01/03/2021',
+          curfewAddress: {
+            firstLine: '1 The Street',
+            secondLine: 'Avenue',
+            townOrCity: 'Some Town',
+            county: 'Some County',
+            postcode: 'A1 2BC',
+          },
+          weeklyCurfewTimes: [
+            {
+              id: 1,
+              curfewTimesSequence: 0,
+              fromDay: 'MONDAY',
+              fromTime: '17:00:00',
+              untilDay: 'TUESDAY',
+              untilTime: '07:00:00',
+            },
+            {
+              id: 2,
+              curfewTimesSequence: 1,
+              fromDay: 'TUESDAY',
+              fromTime: '17:00:00',
+              untilDay: 'WEDNESDAY',
+              untilTime: '07:00:00',
+            },
+            {
+              id: 3,
+              curfewTimesSequence: 2,
+              fromDay: 'WEDNESDAY',
+              fromTime: '17:00:00',
+              untilDay: 'THURSDAY',
+              untilTime: '07:00:00',
+            },
+            {
+              id: 4,
+              curfewTimesSequence: 3,
+              fromDay: 'THURSDAY',
+              fromTime: '17:00:00',
+              untilDay: 'FRIDAY',
+              untilTime: '07:00:00',
+            },
+            {
+              id: 5,
+              curfewTimesSequence: 4,
+              fromDay: 'FRIDAY',
+              fromTime: '17:00:00',
+              untilDay: 'SATURDAY',
+              untilTime: '07:00:00',
+            },
+            {
+              id: 6,
+              curfewTimesSequence: 5,
+              fromDay: 'SATURDAY',
+              fromTime: '17:00:00',
+              untilDay: 'SUNDAY',
+              untilTime: '07:00:00',
+            },
+            {
+              id: 7,
+              curfewTimesSequence: 6,
+              fromDay: 'SUNDAY',
+              fromTime: '17:00:00',
+              untilDay: 'MONDAY',
+              untilTime: '07:00:00',
+            },
+          ],
+          allCurfewTimesEqual: true,
         },
       },
     })
@@ -487,91 +567,6 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [],
-      },
-    })
-  },
-
-  stubGetHdcLicenceData: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/hdc/curfew/licenceId/(\\d)*`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          licenceId: 1,
-          curfewAddress: {
-            firstLine: '1 The Street',
-            secondLine: 'Avenue',
-            townOrCity: 'Some Town',
-            county: 'Some County',
-            postcode: 'A1 2BC',
-          },
-          firstNightCurfewTimes: {
-            fromTime: '17:00',
-            untilTime: '07:00',
-          },
-          weeklyCurfewTimes: [
-            {
-              id: 1,
-              curfewTimesSequence: 1,
-              fromDay: 'MONDAY',
-              fromTime: '17:00',
-              untilDay: 'TUESDAY',
-              untilTime: '07:00',
-            },
-            {
-              id: 1,
-              curfewTimesSequence: 2,
-              fromDay: 'TUESDAY',
-              fromTime: '17:00',
-              untilDay: 'WEDNESDAY',
-              untilTime: '07:00',
-            },
-            {
-              id: 1,
-              curfewTimesSequence: 3,
-              fromDay: 'WEDNESDAY',
-              fromTime: '17:00',
-              untilDay: 'THURSDAY',
-              untilTime: '07:00',
-            },
-            {
-              id: 1,
-              curfewTimesSequence: 4,
-              fromDay: 'THURSDAY',
-              fromTime: '17:00',
-              untilDay: 'FRIDAY',
-              untilTime: '07:00',
-            },
-            {
-              id: 1,
-              curfewTimesSequence: 5,
-              fromDay: 'FRIDAY',
-              fromTime: '17:00',
-              untilDay: 'SATURDAY',
-              untilTime: '07:00',
-            },
-            {
-              id: 1,
-              curfewTimesSequence: 6,
-              fromDay: 'SATURDAY',
-              fromTime: '17:00',
-              untilDay: 'SUNDAY',
-              untilTime: '07:00',
-            },
-            {
-              id: 1,
-              curfewTimesSequence: 7,
-              fromDay: 'SUNDAY',
-              fromTime: '17:00',
-              untilDay: 'MONDAY',
-              untilTime: '07:00',
-            },
-          ],
-        },
       },
     })
   },
@@ -720,8 +715,8 @@ export default {
           appointmentTelephoneNumber: options.appointmentTelephoneNumber,
           appointmentAlternativeTelephoneNumber: options.appointmentAlternativeTelephoneNumber,
           appointmentTime: '01/12/2021 12:34',
-          appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
-          isInHardStopPeriod: options.isInHardStopPeriod || false,
+          appointmentTimeType: options.appointmentTimeType ?? 'SPECIFIC_DATE_TIME',
+          isInHardStopPeriod: options.isInHardStopPeriod ?? false,
           hardStopDate: options.isInHardStopPeriod
             ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
             : format(addDays(new Date(), 1), 'dd/MM/yyyy'),

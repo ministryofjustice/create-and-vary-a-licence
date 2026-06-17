@@ -4,57 +4,20 @@ import ApprovalViewRoutes from './approvalView'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ProbationService from '../../../services/probationService'
-import HdcService, { CvlHdcLicenceData } from '../../../services/hdc/hdcService'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const deliusStaff = new ProbationService(null) as jest.Mocked<ProbationService>
-const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
 
 jest.mock('../../../services/probationService')
-jest.mock('../../../services/hdc/hdcService')
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ApprovalViewRoutes(licenceService, deliusStaff, hdcService)
+  const handler = new ApprovalViewRoutes(licenceService, deliusStaff)
   let req: Request
   let res: Response
-
-  const exampleHdcLicenceData = {
-    curfewAddress: {
-      firstLine: 'addressLineOne',
-      secondLine: 'addressLineTwo',
-      townOrCity: 'addressTownOrCity',
-      county: 'county',
-      postcode: 'addressPostcode',
-      source: 'MANUAL',
-    },
-    firstNightCurfewTimes: {
-      fromTime: '09:00',
-      untilTime: '17:00',
-    },
-    weeklyCurfewTimes: [],
-    curfewTimes: [
-      {
-        curfewTimesSequence: 1,
-        fromDay: 'MONDAY',
-        fromTime: '17:00:00',
-        untilDay: 'TUESDAY',
-        untilTime: '09:00:00',
-      },
-      {
-        curfewTimesSequence: 2,
-        fromDay: 'TUESDAY',
-        fromTime: '17:00:00',
-        untilDay: 'WEDNESDAY',
-        untilTime: '09:00:00',
-      },
-    ],
-    allCurfewTimesEqual: true,
-  } as CvlHdcLicenceData
 
   beforeEach(() => {
     req = {
@@ -65,7 +28,6 @@ describe('Route - view and approve a licence', () => {
 
     licenceService.updateStatus = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
-    hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
   })
 
   describe('GET', () => {
@@ -136,7 +98,6 @@ describe('Route - view and approve a licence', () => {
           telephone: '07777777777',
         },
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
-        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(deliusStaff.getStaffDetailByUsername).toHaveBeenCalled()
@@ -168,42 +129,6 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         staffDetails: null,
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
-        hdcLicenceData: null,
-      })
-    })
-
-    it('should pass through HDC licence data for HDC licences', async () => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: { username, displayName },
-          licence: {
-            id: 1,
-            statusCode: LicenceStatus.SUBMITTED,
-            kind: LicenceKind.HDC,
-            surname: 'Bobson',
-            forename: 'Bob',
-            appointmentTime: '12/12/2022 14:16',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
-            bespokeConditions: [],
-            comUsername: 'joebloggs',
-          },
-        },
-      } as unknown as Response
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
-        additionalConditions: [],
-        staffDetails: {
-          email: 'joebloggs@probation.gov.uk',
-          name: 'Joe Bloggs',
-          telephone: '07777777777',
-        },
-        returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
-        hdcLicenceData: exampleHdcLicenceData,
       })
     })
   })

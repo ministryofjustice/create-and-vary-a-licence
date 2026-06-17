@@ -1,15 +1,11 @@
 import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
-import { groupingBy, isHdcLicence } from '../../../utils/utils'
-import HdcService from '../../../services/hdc/hdcService'
-import LicenceKind from '../../../enumeration/LicenceKind'
+import { groupingBy } from '../../../utils/utils'
+import { LicenceKind } from '../../../enumeration'
 
 export default class ViewActiveLicenceRoutes {
-  constructor(
-    private readonly conditionService: ConditionService,
-    private readonly hdcService: HdcService,
-  ) {}
+  constructor(private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -25,14 +21,12 @@ export default class ViewActiveLicenceRoutes {
 
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
 
-    const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
     const isMigratedHdcLicence = licence.kind === LicenceKind.HDC && licence.isHdcMigration
 
     return res.render('pages/vary/viewActive', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
       callToActions: { shouldShowVaryButton },
-      hdcLicenceData,
       isMigratedHdcLicence,
     })
   }

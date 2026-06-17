@@ -31,7 +31,6 @@ export default function Index({
   comCaseloadService,
   probationService,
   conditionService,
-  hdcService,
 }: Services): Router {
   const router = Router()
 
@@ -134,7 +133,7 @@ export default function Index({
   }
 
   {
-    const controller = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
+    const controller = new CheckAnswersRoutes(licenceService, conditionService)
     get('/id/:licenceId/check-your-answers', controller.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }

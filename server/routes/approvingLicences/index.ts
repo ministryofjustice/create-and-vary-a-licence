@@ -17,7 +17,6 @@ export default function Index({
   probationService,
   prisonerService,
   conditionService,
-  hdcService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/approve${path}`
@@ -36,7 +35,7 @@ export default function Index({
 
   const comDetailsHandler = new ComDetailsRoutes(probationService)
   const approvalCasesHandler = new ApprovalCaseRoutes(approvedCaseloadService, prisonerService)
-  const approvalViewHandler = new ApprovalViewRoutes(licenceService, probationService, hdcService)
+  const approvalViewHandler = new ApprovalViewRoutes(licenceService, probationService)
   const approvalConfirmedHandler = new ConfirmApprovedRoutes(probationService)
   const approvalRejectedHandler = new ConfirmRejectedRoutes()
 

@@ -29,7 +29,7 @@
 
     {% set addressHtml %}
         <p>
-            {{ params.hdcLicenceData.curfewAddress | formatAddressLine }}
+            {{ params.licence.curfewAddress | formatAddressLine }}
             {{ hdcBadge | safe if not params.isVaryJourney }}
         </p>
     {% endset %}
@@ -67,7 +67,7 @@
                 classes: "first-night-curfew-times-row",
                 key: { text: 'First night curfew hours' },
                 value: {
-                    text: params.hdcLicenceData.firstNightCurfewTimes.fromTime | localTimeTo12h + " to " + params.hdcLicenceData.firstNightCurfewTimes.untilTime | localTimeTo12h,
+                    text: params.licence.firstNightCurfewTimes.fromTime | localTimeTo12h + " to " + params.licence.firstNightCurfewTimes.untilTime | localTimeTo12h,
                     classes: "first-night-curfew-times"
                 },
                 actions: {
@@ -87,8 +87,8 @@
                     text: 'Curfew hours'
                 },
                 value: {
-                    html: params.hdcLicenceData.weeklyCurfewTimes[0].fromDay | titlecase | escape + " to " + params.hdcLicenceData.weeklyCurfewTimes[6].fromDay | titlecase | escape + "<br>" +
-                          params.hdcLicenceData.weeklyCurfewTimes[0].fromTime  | localTimeTo12h + " to " + params.hdcLicenceData.weeklyCurfewTimes[0].untilTime | localTimeTo12h,
+                    html: params.licence.weeklyCurfewTimes[0].fromDay | titlecase | escape + " to " + params.licence.weeklyCurfewTimes[6].fromDay | titlecase | escape + "<br>" +
+                          params.licence.weeklyCurfewTimes[0].fromTime  | localTimeTo12h + " to " + params.licence.weeklyCurfewTimes[0].untilTime | localTimeTo12h,
                     classes: "weekly-curfew-times"
                 },
                 actions: {
@@ -101,11 +101,11 @@
                         }
                     ]
                 } if params.isEditable
-            } if params.hdcLicenceData.allCurfewTimesEqual
+            } if params.licence.allCurfewTimesEqual
         ]
     }) }}
 
-    {% if not params.hdcLicenceData.allCurfewTimesEqual %}
-        {{ nonUniformCurfewTimesTable(params.hdcLicenceData.weeklyCurfewTimes, params.isEditable, routeAppend, baseURL) }}
+    {% if not params.licence.allCurfewTimesEqual %}
+        {{ nonUniformCurfewTimesTable(params.licence.weeklyCurfewTimes, params.isEditable, routeAppend, baseURL) }}
     {% endif %}
 {% endmacro %}
