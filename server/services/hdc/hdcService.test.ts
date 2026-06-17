@@ -1,6 +1,6 @@
 import HdcService from './hdcService'
 import LicenceApiClient from '../../data/licenceApiClient'
-import { CurfewTimes as ApiCurfewTimes } from '../../@types/licenceApiClientTypes'
+import { CurfewTimes as ApiCurfewTimes, Licence } from '../../@types/licenceApiClientTypes'
 import { AmPm } from '../../routes/creatingLicences/types/time'
 import { SimpleTime } from '../../routes/manageConditions/types'
 import { simpleTimeTo24Hour } from '../../utils/utils'
@@ -332,6 +332,34 @@ describe('HDC Service', () => {
 
       const result = hdcService.getCurfewTimes(curfewTimes)
       expect(result).toEqual(hdcService.buildCurfewTimesDisplayObject(curfewTimes))
+    })
+  })
+
+  describe('isVariationOfHdcMigration', () => {
+    const user = { username: 'joebloggs' } as User
+    const licenceId = 123
+
+    it('should return false if the licence is not an HDC variation', async () => {
+      const result = await hdcService.isVariationOfHdcMigration({ id: licenceId, kind: 'VARIATION' } as Licence, user)
+      expect(result).toBe(false)
+    })
+
+    it('should return true if the licence is a variation of a migrated HDC licence', async () => {
+      licenceApiClient.getLicenceById.mockResolvedValue({ kind: 'HDC', isHdcMigration: true } as Licence)
+      const result = await hdcService.isVariationOfHdcMigration(
+        { id: licenceId, kind: 'HDC_VARIATION' } as Licence,
+        user,
+      )
+      expect(result).toBe(true)
+    })
+
+    it('should return false if the licence is not a variation of a migrated HDC licence', async () => {
+      licenceApiClient.getLicenceById.mockResolvedValue({ kind: 'HDC', isHdcMigration: false } as Licence)
+      const result = await hdcService.isVariationOfHdcMigration(
+        { id: licenceId, kind: 'HDC_VARIATION' } as Licence,
+        user,
+      )
+      expect(result).toBe(false)
     })
   })
 })
