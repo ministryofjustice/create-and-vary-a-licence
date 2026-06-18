@@ -8,6 +8,7 @@ import ConditionService from '../../services/conditionService'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
 import { DeliusManager } from '../../@types/deliusClientTypes'
 import { User } from '../../@types/CvlUserDetails'
+import HdcService from '../../services/hdc/hdcService'
 
 let app: Express
 
@@ -16,10 +17,12 @@ const conditionService = new ConditionService(null) as jest.Mocked<ConditionServ
 const bankHolidayRetriever: BankHolidayRetriever = async () => []
 const ukBankHolidayFeedService = new UkBankHolidayFeedService(bankHolidayRetriever)
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
+const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 jest.mock('../../services/licenceService')
 jest.mock('../../services/conditionService')
 jest.mock('../../services/probationService')
+jest.mock('../../services/hdc/hdcService')
 
 const licence = {
   nomsId: 'A1234BC',
@@ -39,7 +42,7 @@ const user = {
 
 beforeEach(() => {
   app = appWithAllRoutes({
-    services: { licenceService, conditionService, ukBankHolidayFeedService, probationService },
+    services: { licenceService, conditionService, ukBankHolidayFeedService, probationService, hdcService },
     userSupplier: () => user,
   })
   licenceService.getOmuEmail.mockResolvedValue({ email: 'test@test.test' } as OmuContact)
@@ -81,6 +84,8 @@ beforeEach(() => {
       },
     },
   } as DeliusManager)
+
+  hdcService.isVariationOfHdcMigration.mockResolvedValue(false)
 })
 
 afterEach(() => {

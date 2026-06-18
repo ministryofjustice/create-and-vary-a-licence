@@ -7,11 +7,13 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy, isInHardStopPeriod, isVariation } from '../../../utils/utils'
+import HdcService from '../../../services/hdc/hdcService'
 
 export default class CheckAnswersRoutes {
   constructor(
     private readonly licenceService: LicenceService,
     private readonly conditionService: ConditionService,
+    private readonly hdcService: HdcService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -34,6 +36,8 @@ export default class CheckAnswersRoutes {
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
+    const isVariationOfHdcMigration = await this.hdcService.isVariationOfHdcMigration(licence, user)
+
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
@@ -43,6 +47,7 @@ export default class CheckAnswersRoutes {
       statusCode: licence.statusCode,
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
+      isVariationOfHdcMigration,
     })
   }
 

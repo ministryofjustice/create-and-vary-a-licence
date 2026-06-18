@@ -2,6 +2,7 @@ import { User } from '../../@types/CvlUserDetails'
 import {
   CurfewTimes as ApiCurfewTimes,
   FirstNightCurfewTimesRequest,
+  Licence,
   WeeklyCurfewTimesRequest,
 } from '../../@types/licenceApiClientTypes'
 import LicenceApiClient from '../../data/licenceApiClient'
@@ -38,6 +39,15 @@ export default class HdcService {
       return this.buildStandardCurfewTimesDisplayObject()
     }
     return this.buildCurfewTimesDisplayObject(curfewTimes)
+  }
+
+  async isVariationOfHdcMigration(licence: Licence, user: User): Promise<boolean> {
+    if (licence.kind !== 'HDC_VARIATION') {
+      return false
+    }
+    const hdcVariationParent = await this.licenceApiClient.getLicenceById(licence.variationOf, user)
+
+    return hdcVariationParent.kind === 'HDC' && hdcVariationParent.isHdcMigration
   }
 
   buildWeeklyCurfewTimesRequest = (start: SimpleTime, end: SimpleTime): WeeklyCurfewTimesRequest => {
