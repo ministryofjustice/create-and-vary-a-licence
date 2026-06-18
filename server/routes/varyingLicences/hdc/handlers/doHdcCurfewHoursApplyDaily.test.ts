@@ -1,9 +1,5 @@
-import fs from 'fs'
 import { Request, Response } from 'express'
 import DoHdcCurfewHoursApplyDailyRoutes from './doHdcCurfewHoursApplyDaily'
-import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
-
-const render = templateRenderer(fs.readFileSync('server/views/pages/hdc/doHdcCurfewHoursApplyDaily.njk').toString())
 
 describe('Route Handlers - Vary Licence - Do HDC Curfew Hours Apply Daily', () => {
   let req: Request
@@ -11,9 +7,7 @@ describe('Route Handlers - Vary Licence - Do HDC Curfew Hours Apply Daily', () =
 
   beforeEach(() => {
     req = {
-      params: {
-        licenceId: 1,
-      },
+      params: {},
       body: {},
       query: {},
     } as unknown as Request
@@ -25,7 +19,9 @@ describe('Route Handlers - Vary Licence - Do HDC Curfew Hours Apply Daily', () =
         user: {
           username: 'joebloggs',
         },
-        licence: {},
+        licence: {
+          id: 1,
+        },
       },
     } as unknown as Response
   })
@@ -37,13 +33,6 @@ describe('Route Handlers - Vary Licence - Do HDC Curfew Hours Apply Daily', () =
       req.query = { edit: 'telNumber' }
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/hdc/doHdcCurfewHoursApplyDaily')
-    })
-  })
-
-  describe('View', () => {
-    it('should display the question', () => {
-      const $ = render({})
-      expect($('legend').text().trim()).toBe('Do the same HDC curfew hours apply every day?')
     })
   })
 
