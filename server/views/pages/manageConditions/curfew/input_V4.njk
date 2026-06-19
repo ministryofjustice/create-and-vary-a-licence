@@ -48,7 +48,7 @@
 
                 {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
 
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition is required!</h2>
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
 
                 {{ govukDetails({
                     summaryText: "If curfews are longer than 12 hours",
@@ -87,4 +87,3 @@
 {% block pageScripts %}
     <script src="/assets/js/conditions/addAnother.js"></script>
 {% endblock %}
-
