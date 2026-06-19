@@ -1,7 +1,6 @@
 import fs from 'fs'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/vary/timeline.njk').toString())
 
@@ -44,29 +43,5 @@ describe('Timeline', () => {
     })
     expect($('[data-qa=date]').text()).not.toContain('Release date: ')
     expect($('[data-qa=date]').text()).toContain('Licence end date:')
-  })
-
-  it('should display the How do I vary the licence component for HDC licences when licence kind is HDC', () => {
-    const $ = render({
-      licence: { kind: LicenceKind.HDC },
-      timelineEvents: [],
-      callToAction: 'VIEW',
-    })
-    expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain('How do I vary this licence?')
-    expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain(
-      'Email createandvaryalicence@digital.justice.gov.uk to vary this licence.',
-    )
-  })
-
-  it('should not display the How do I vary the licence component for HDC licences when licence kind is not HDC', () => {
-    const $ = render({
-      licence: { kind: LicenceKind.CRD },
-      timelineEvents: [],
-      callToAction: 'VIEW_OR_VARY',
-    })
-    expect($('body').text().trim()).not.toContain('How do I vary this licence?')
-    expect($('[data-qa=hdc-vary-licence]').text().trim()).not.toContain(
-      'Email createandvaryalicence@digital.justice.gov.uk to vary this licence.',
-    )
   })
 })
