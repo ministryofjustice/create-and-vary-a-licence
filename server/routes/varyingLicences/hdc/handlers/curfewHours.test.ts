@@ -1,0 +1,57 @@
+import { Request, Response } from 'express'
+import CurfewHoursRoutes from './curfewHours'
+import HdcService from '../../../../services/hdc/hdcService'
+
+const hdcService = new HdcService(null) as jest.Mocked<HdcService>
+jest.mock('../../../../services/hdc/hdcService')
+
+describe('Route Handlers - Vary Licence - Do HDC Curfew Hours Apply Daily', () => {
+  let req: Request
+  let res: Response
+
+  beforeEach(() => {
+    req = {
+      params: {},
+      body: {},
+      query: {},
+    } as unknown as Request
+
+    res = {
+      render: jest.fn(),
+      redirect: jest.fn(),
+      locals: {
+        user: {
+          username: 'joebloggs',
+        },
+        licence: {
+          id: 1,
+        },
+      },
+    } as unknown as Response
+  })
+
+  const handler = new CurfewHoursRoutes(hdcService)
+
+  describe('GET', () => {
+    it('should render view', async () => {
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/hdc/curfewHours')
+    })
+  })
+
+  describe('POST', () => {
+    it('should update curfew times and redirect to check your answers page when clicked continue', async () => {
+      req.body = {
+        curfewStart: { hour: '05', minute: '00', ampm: 'pm' },
+        curfewEnd: { hour: '10', minute: '30', ampm: 'am' },
+      }
+      await handler.POST(req, res)
+      expect(hdcService.updateWeeklyCurfewTimes).toHaveBeenCalledWith(
+        1,
+        { curfewStart: req.body.curfewStart, curfewEnd: req.body.curfewEnd },
+        res.locals.user,
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+    })
+  })
+})
