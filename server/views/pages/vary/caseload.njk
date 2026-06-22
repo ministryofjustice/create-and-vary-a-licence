@@ -23,13 +23,13 @@
 {% set licences = [] %}
 {% for offender in caseload %}
   {% if offender.kind === 'HDC' or offender.kind === 'HDC_VARIATION' %}
-    {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate
+    {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
   {% elseif offender.licenceStatus === "REVIEW_NEEDED" %}
     {% set releaseMessage = 'Time-served release' if offender.kind === 'TIME_SERVED' else 'Timed out' %}
-    {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">' + releaseMessage + '</span>' %}
+    {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' +  offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">' + releaseMessage + '</span>' %}
   {% else %}
-    {% set releaseDate = offender.releaseDate %}
+    {% set releaseDate = offender.releaseDateLabel + ': <br>' + offender.releaseDate %}
   {% endif %}
   {% if offender.probationPractitioner.allocated %}
     {% set practitionerHtml = '<a class="govuk-link" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>' %}
