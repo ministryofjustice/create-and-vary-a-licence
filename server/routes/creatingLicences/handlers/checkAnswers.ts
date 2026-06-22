@@ -37,6 +37,7 @@ export default class CheckAnswersRoutes {
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
     const isVariationOfHdcMigration = await this.hdcService.isVariationOfHdcMigration(licence, user)
+
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
