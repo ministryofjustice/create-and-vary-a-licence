@@ -17,7 +17,7 @@ class VehicleRestrictions {
   typesOfMotorVehicle: string
 
   @Expose()
-  @IsNotEmpty({ message: 'Time restriction' })
+  @IsNotEmpty({ message: 'Select a time restriction' })
   timeRestriction: string
 
   @Expose()
@@ -61,7 +61,7 @@ class VehicleRestrictions {
   @Transform(({ obj, value }) => {
     return obj.locationRestriction === 'In specified locations' ? value : undefined
   })
-  @ValidateIf(o => o.eventType === 'In specified locations')
+  @ValidateIf(o => o.locationRestriction === 'In specified locations')
   @IsNotEmpty({ message: 'Enter at least one location' })
   locations: string
 }

@@ -17,7 +17,7 @@ class PublicEvent {
   publicEventType: string
 
   @Expose()
-  @IsNotEmpty({ message: 'Time restriction' })
+  @IsNotEmpty({ message: 'Select a time restriction' })
   timeRestriction: string
 
   @Expose()

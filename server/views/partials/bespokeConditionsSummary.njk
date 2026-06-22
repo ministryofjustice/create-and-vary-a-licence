@@ -45,7 +45,7 @@
         }), bespokeConditionRows) %}
     {% endfor %}
 
-    {% if isVariationOfHdcMigration %}
+    {% if isVariationOfHdcMigration and bespokeConditions.length %}
         {% set hdcMigrationWarning = "Additional conditions from the HDC service are shown as bespoke conditions in this service.<br>You can delete these bespoke conditions and replace them with alternative additional conditions<br>so the licence uses the most up-to-date wording." %}
         {{ govukInsetText({
             id: 'hdc-migration-bespoke-conditions-warning',

@@ -265,6 +265,14 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#hdc-migration-bespoke-conditions-warning').length).toBe(1)
   })
 
+  it('should not display the HDC migration warning message above bespoke conditions for variations of HDC migrations when there are no bespoke conditions', () => {
+    const $ = render({
+      licence: { ...licence, typeCode: 'AP', bespokeConditions: [] },
+      isVariationOfHdcMigration: true,
+    })
+    expect($('#hdc-migration-bespoke-conditions-warning').length).toBe(0)
+  })
+
   it('should show change links and submit button when licence status is IN_PROGRESS and canEditInitialAppt is true', () => {
     const $ = render({
       licence,
