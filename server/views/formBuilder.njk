@@ -65,50 +65,58 @@
                     }), options) %}
                 {% endfor %}
 
-                {{ govukRadios({
-                    idPrefix: input.name,
-                    name: input.name,
-                    fieldset: {
-                        legend: {
-                            text: input.label,
-                            classes: "govuk-fieldset__legend govuk-fieldset__legend--m radio-" + input.name + "-legend"
-                        }
-                    },
-                    items: options,
-                    errorMessage: validationError
-                }) }}
+                <div class="govuk-!-margin-top-4">
+                    {{ govukRadios({
+                        idPrefix: input.name,
+                        name: input.name,
+                        fieldset: {
+                            legend: {
+                                text: input.label,
+                                classes: "govuk-fieldset__legend govuk-fieldset__legend--s radio-" + input.name + "-legend"
+                            }
+                        },
+                        items: options,
+                        errorMessage: validationError
+                    }) }}
+                </div>
             {% endif %}
 
             {% if input.type == 'datePicker' %}
-                {{ datePicker({
-                    id: input.name,
-                    label: {
-                        text: input.label,
-                        classes: "govuk-!-font-weight-bold"
-                    },
-                    hint: {
-                        text: "For example, 12 11 2022"
-                    },
-                    errorMessage: validationError,
-                    formResponses: formValues | getValuesFromSimpleDates
-                }) }}
+                <div class="govuk-!-margin-top-8">
+
+                    {{ datePicker({
+                        id: input.name,
+                        label: {
+                            text: input.label,
+                            classes: "govuk-!-font-weight-bold"
+                        },
+                        hint: {
+                            text: "For example, 12 11 2022"
+                        },
+                        errorMessage: validationError,
+                        formResponses: formValues | getValuesFromSimpleDates
+                    }) }}
+
+                </div>
             {% endif %}
 
             {% if input.type == 'timePicker' %}
                 {% set hintText = '' if input.hideHintText else 'For example, 9:30am or 2:55pm' %}
-                {{ timePicker({
-                    id: input.name,
-                    label: {
-                        text: input.label,
-                        classes: "govuk-!-font-weight-bold"
-                    },
-                    hint: {
-                        text: hintText
-                    },
-                    errorMessage: validationError,
-                    formResponses: formValues | getValuesFromSimpleTimes
-                }) }}
-                <br/>
+                    <div class="govuk-!-margin-top-4">
+                        {{ timePicker({
+                        id: input.name,
+                        label: {
+                            text: input.label,
+                            classes: "govuk-!-font-weight-bold"
+                        },
+                        hint: {
+                            text: hintText
+                        },
+                        errorMessage: validationError,
+                        formResponses: formValues | getValuesFromSimpleTimes
+                        }) }}
+                        <br/>
+                    </div
             {% endif %}
 
             {% if input.type == 'address' %}
@@ -193,18 +201,22 @@
                     }), options) %}
                 {% endfor %}
 
-                {{ govukCheckboxes({
-                    idPrefix: input.name,
-                    name: input.name,
-                    fieldset: {
-                        legend: {
-                            text: input.label,
-                            classes: "govuk-!-font-weight-bold"
-                        }
-                    },
-                    errorMessage: validationError,
-                    items: options
-                }) }}
+                <div class="govuk-!-margin-top-4">
+
+                    {{ govukCheckboxes({
+                        idPrefix: input.name,
+                        name: input.name,
+                        fieldset: {
+                            legend: {
+                                text: input.label,
+                                classes: "govuk-!-font-weight-bold"
+                            }
+                        },
+                        errorMessage: validationError,
+                        items: options
+                    }) }}
+
+                </div>
             {% endif %}
 
             {% if input.type === 'fileUpload' %}
