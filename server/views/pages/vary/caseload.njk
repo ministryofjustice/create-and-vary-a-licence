@@ -36,7 +36,7 @@
   {% else %}
     {% set practitionerHtml = offender.probationPractitioner.name %}
   {% endif %}
-  {% set licences = (licences.push([
+  {% set row = [
         {
             attributes: {
                 id: 'name-' + loop.index,
@@ -44,15 +44,19 @@
             },
             classes: "max-width max-width-220",
             html: offenderName(offender.name, offender.crnNumber, offender.licenceId, loop.index, offender.isRestricted)
-        },
-        {
+        }
+  ] %}
+  {% if teamView %}
+    {% set row = (row.push({
             attributes: {
                 id: 'probation-practitioner-' + loop.index,
                 "data-sort-value": offender.probationPractitioner.name
             },
             classes: "max-width max-width-200",
             html: practitionerHtml | redactIfLao(offender)
-        },
+    }), row) %}
+  {% endif %}
+  {% set row = (row.push(
         {
             attributes: {
                 id: 'release-date-' + loop.index,
@@ -68,7 +72,8 @@
             },
             html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig) | redactIfLao(offender)
         }
-    ]), licences) %}
+  ), row) %}
+  {% set licences = (licences.push(row), licences) %}
 {% endfor %}
 {% block content %}
   <div class="govuk-grid-row">
@@ -128,38 +133,43 @@
       {{ 'none' if hasCustomSorting else 'ascending' }}
       {% endset %}
       {% if caseload.length > 0 %}
+        {% set tableHead = [
+            {
+                text: "Name",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            }
+        ] %}
+        {% if teamView %}
+          {% set tableHead = (tableHead.push({
+              text: "Probation practitioner",
+              attributes: {
+                  "aria-sort": "none"
+              }
+          }), tableHead) %}
+        {% endif %}
+        {% set tableHead = (tableHead.push(
+            {
+                text: "Release date",
+                attributes: {
+                    "aria-sort": sortOrder | trim
+                }
+            },
+            {
+                text: "Status",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            }
+        ), tableHead) %}
         {{ govukTable({
             attributes: {
                 'data-module': 'moj-sortable-table'
             },
             caption: "Caseload",
             captionClasses: "govuk-visually-hidden",
-            head: [
-                {
-                    text: "Name",
-                    attributes: {
-                        "aria-sort": "none"
-                    }
-                },
-                {
-                    text: "Probation practitioner",
-                    attributes: {
-                        "aria-sort": "none"
-                    }
-                },
-                {
-                    text: "Release date",
-                    attributes: {
-                        "aria-sort": sortOrder | trim
-                    }
-                },
-                {
-                    text: "Status",
-                    attributes: {
-                        "aria-sort": "none"
-                    }
-                }
-            ],
+            head: tableHead,
             rows: licences
         }) }}
       {% else %}

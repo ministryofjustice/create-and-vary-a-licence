@@ -17,9 +17,15 @@ import SelectCurfewAddressRoutes from './handlers/selectCurfewAddress'
 import ManualAddressEntryRoutes from './handlers/manualAddressEntry'
 import ManualCurfewAddress from '../types/manualCurfewAddress'
 import CurfewAccommodationTypeQuestion from '../types/curfewAccommodationType'
+import StandardCurfewHoursQuestionRoutes from './handlers/standardCurfewHoursQuestion'
+import DoHdcCurfewHoursApplyDailyRoutes from './handlers/doHdcCurfewHoursApplyDaily'
+import CurfewHoursRoutes from './handlers/curfewHours'
+import CurfewTimes from '../../initialAppointment/hdc/types/curfewTimes'
+import IndividualCurfewHoursRoutes from './handlers/individualCurfewHours'
+import DailyCurfewTimes from '../../initialAppointment/hdc/types/dailyCurfewTimes'
 
 export default function Index(services: Services): Router {
-  const { conditionService, licenceService } = services
+  const { conditionService, licenceService, hdcCurfewAddressService, hdcService, addressService } = services
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/vary/id/:licenceId/hdc${path}`
@@ -51,13 +57,13 @@ export default function Index(services: Services): Router {
   }
 
   {
-    const contoller = new ResidentialChecksCompletedQuestionRoutes(services.hdcCurfewAddressService)
+    const contoller = new ResidentialChecksCompletedQuestionRoutes(hdcCurfewAddressService)
     get('/address-checks', contoller.GET)
     post('/address-checks', contoller.POST, YesOrNoQuestion)
   }
 
   {
-    const controller = new ResidentialChecksIncompleteReasonRoutes(services.hdcCurfewAddressService)
+    const controller = new ResidentialChecksIncompleteReasonRoutes(hdcCurfewAddressService)
     get('/residential-checks-incomplete', controller.GET)
     post('/residential-checks-incomplete', controller.POST, ReasonForIncompleteAddressChecks)
   }
@@ -74,15 +80,39 @@ export default function Index(services: Services): Router {
   }
 
   {
-    const controller = new SelectCurfewAddressRoutes(services.addressService, services.hdcCurfewAddressService)
+    const controller = new SelectCurfewAddressRoutes(addressService, hdcCurfewAddressService)
     get('/select-curfew-address', controller.GET)
     post('/select-curfew-address', controller.POST)
   }
 
   {
-    const controller = new ManualAddressEntryRoutes(services.hdcCurfewAddressService)
+    const controller = new ManualAddressEntryRoutes(hdcCurfewAddressService)
     get('/manual-curfew-address-entry', controller.GET)
     post('/manual-curfew-address-entry', controller.POST, ManualCurfewAddress)
+  }
+
+  {
+    const controller = new StandardCurfewHoursQuestionRoutes(hdcService)
+    get('/standard-curfew-hours-question', controller.GET)
+    post('/standard-curfew-hours-question', controller.POST, YesOrNoQuestion)
+  }
+
+  {
+    const controller = new DoHdcCurfewHoursApplyDailyRoutes()
+    get('/do-hdc-curfew-hours-apply-daily', controller.GET)
+    post('/do-hdc-curfew-hours-apply-daily', controller.POST, YesOrNoQuestion)
+  }
+
+  {
+    const controller = new IndividualCurfewHoursRoutes(hdcService)
+    get('/individual-curfew-hours', controller.GET)
+    post('/individual-curfew-hours', controller.POST, DailyCurfewTimes)
+  }
+
+  {
+    const controller = new CurfewHoursRoutes(hdcService)
+    get('/curfew-hours', controller.GET)
+    post('/curfew-hours', controller.POST, CurfewTimes)
   }
 
   return router

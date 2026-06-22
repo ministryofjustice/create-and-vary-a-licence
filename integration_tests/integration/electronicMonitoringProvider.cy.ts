@@ -29,9 +29,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
   it('should throw an error if the licence is submitted with out answering the pathfinder or programme question', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -119,9 +117,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
   it('should not throw error if the licence is submitted with answering the pathfinder or programme question', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -212,9 +208,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
   it('should not load electronic monitoring provider section when electronicMonitoringProviderStatus is NOT_NEEDED', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -294,9 +288,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
   it('should load electronic monitoring provider section if electronicMonitoringProviderStaus is NOT_STARTED', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -394,9 +386,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
   it("should throw an error if neither 'Yes' nor 'No' is selected", () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -436,9 +426,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
   it("should throw an error if 'Yes' is selected and pathfinder/programme name is not provided", () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -478,9 +466,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
   it("should continue licence creation flow if 'Yes' is selected and pathfinder/programme name is provided", () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()
@@ -555,9 +541,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
   it("should continue licence creation flow if 'No' is selected", () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicence()
-    const comDetailsPage = caseloadPage.clickComName()
-    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.clickContinue()

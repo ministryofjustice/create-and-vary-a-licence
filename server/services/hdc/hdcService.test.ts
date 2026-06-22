@@ -1,11 +1,11 @@
 import HdcService from './hdcService'
 import LicenceApiClient from '../../data/licenceApiClient'
-import { CurfewTimes as ApiCurfewTimes, HdcLicenceData } from '../../@types/licenceApiClientTypes'
+import { CurfewTimes as ApiCurfewTimes, Licence } from '../../@types/licenceApiClientTypes'
 import { AmPm } from '../../routes/creatingLicences/types/time'
 import { SimpleTime } from '../../routes/manageConditions/types'
 import { simpleTimeTo24Hour } from '../../utils/utils'
 import { User } from '../../@types/CvlUserDetails'
-import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../routes/initialAppointment/hdc/curfewDefaults'
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../utils/curfewDefaults'
 import { DAYS } from '../../enumeration/days'
 import DailyCurfewTime from '../../routes/initialAppointment/hdc/types/dailyCurfewTime'
 
@@ -15,70 +15,57 @@ describe('HDC Service', () => {
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const hdcService = new HdcService(licenceApiClient)
 
-  const exampleHdcLicenceData = {
-    curfewAddress: {
-      firstLine: 'addressLineOne',
-      secondLine: 'addressLineTwo',
-      townOrCity: 'addressTownOrCity',
-      county: 'county',
-      postcode: 'addressPostcode',
+  const weeklyCurfewTimes = [
+    {
+      curfewTimesSequence: 0,
+      fromDay: 'MONDAY',
+      fromTime: '19:00:00',
+      untilDay: 'TUESDAY',
+      untilTime: '07:00:00',
     },
-    firstNightCurfewTimes: {
-      fromTime: '09:00',
-      untilTime: '17:00',
+    {
+      curfewTimesSequence: 1,
+      fromDay: 'TUESDAY',
+      fromTime: '19:00:00',
+      untilDay: 'WEDNESDAY',
+      untilTime: '07:00:00',
     },
-    weeklyCurfewTimes: [
-      {
-        curfewTimesSequence: 0,
-        fromDay: 'MONDAY',
-        fromTime: '19:00:00',
-        untilDay: 'TUESDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 1,
-        fromDay: 'TUESDAY',
-        fromTime: '19:00:00',
-        untilDay: 'WEDNESDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 2,
-        fromDay: 'WEDNESDAY',
-        fromTime: '19:00:00',
-        untilDay: 'THURSDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 3,
-        fromDay: 'THURSDAY',
-        fromTime: '19:00:00',
-        untilDay: 'FRIDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 4,
-        fromDay: 'FRIDAY',
-        fromTime: '19:00:00',
-        untilDay: 'SATURDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 5,
-        fromDay: 'SATURDAY',
-        fromTime: '19:00:00',
-        untilDay: 'SUNDAY',
-        untilTime: '07:00:00',
-      },
-      {
-        curfewTimesSequence: 6,
-        fromDay: 'SUNDAY',
-        fromTime: '19:00:00',
-        untilDay: 'MONDAY',
-        untilTime: '07:00:00',
-      },
-    ],
-  } as HdcLicenceData
+    {
+      curfewTimesSequence: 2,
+      fromDay: 'WEDNESDAY',
+      fromTime: '19:00:00',
+      untilDay: 'THURSDAY',
+      untilTime: '07:00:00',
+    },
+    {
+      curfewTimesSequence: 3,
+      fromDay: 'THURSDAY',
+      fromTime: '19:00:00',
+      untilDay: 'FRIDAY',
+      untilTime: '07:00:00',
+    },
+    {
+      curfewTimesSequence: 4,
+      fromDay: 'FRIDAY',
+      fromTime: '19:00:00',
+      untilDay: 'SATURDAY',
+      untilTime: '07:00:00',
+    },
+    {
+      curfewTimesSequence: 5,
+      fromDay: 'SATURDAY',
+      fromTime: '19:00:00',
+      untilDay: 'SUNDAY',
+      untilTime: '07:00:00',
+    },
+    {
+      curfewTimesSequence: 6,
+      fromDay: 'SUNDAY',
+      fromTime: '19:00:00',
+      untilDay: 'MONDAY',
+      untilTime: '07:00:00',
+    },
+  ]
 
   const differingCurfewTimes = [
     {
@@ -107,8 +94,6 @@ describe('HDC Service', () => {
 
     it('should call to update the HDC curfew times', async () => {
       await hdcService.updateWeeklyCurfewTimes(licenceId, STANDARD_WEEKLY_CURFEW_TIMES, user)
-      const { weeklyCurfewTimes } = exampleHdcLicenceData
-
       expect(licenceApiClient.updateHdcWeeklyCurfewTimes).toHaveBeenCalledWith(licenceId, { weeklyCurfewTimes }, user)
     })
   })
@@ -149,7 +134,6 @@ describe('HDC Service', () => {
     it('builds correct HDC-style next-day curfew schedule', () => {
       const start = new SimpleTime('07', '00', AmPm.PM)
       const end = new SimpleTime('07', '00', AmPm.AM)
-      const { weeklyCurfewTimes } = exampleHdcLicenceData
 
       const result = hdcService.buildWeeklyCurfewTimesRequest(start, end)
 
@@ -217,36 +201,6 @@ describe('HDC Service', () => {
           untilTime: '05:00:00',
         },
       ])
-    })
-  })
-
-  describe('Get HDC information', () => {
-    it('Should retrieve HDC information', async () => {
-      licenceApiClient.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
-
-      await hdcService.getHdcLicenceData(1)
-      expect(licenceApiClient.getHdcLicenceData).toHaveBeenCalledWith(1)
-    })
-
-    it('Should set allCurfewTimesEqual to true when all curfew times are the same', async () => {
-      licenceApiClient.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
-
-      const result = await hdcService.getHdcLicenceData(1)
-      expect(result).toEqual({
-        ...exampleHdcLicenceData,
-        allCurfewTimesEqual: true,
-      })
-    })
-
-    it('Should set allCurfewTimesEqual to false when curfew times are different', async () => {
-      exampleHdcLicenceData.weeklyCurfewTimes[0].fromTime = '18:00:00'
-      licenceApiClient.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
-
-      const result = await hdcService.getHdcLicenceData(1)
-      expect(result).toEqual({
-        ...exampleHdcLicenceData,
-        allCurfewTimesEqual: false,
-      })
     })
   })
 
@@ -378,6 +332,34 @@ describe('HDC Service', () => {
 
       const result = hdcService.getCurfewTimes(curfewTimes)
       expect(result).toEqual(hdcService.buildCurfewTimesDisplayObject(curfewTimes))
+    })
+  })
+
+  describe('isVariationOfHdcMigration', () => {
+    const user = { username: 'joebloggs' } as User
+    const licenceId = 123
+
+    it('should return false if the licence is not an HDC variation', async () => {
+      const result = await hdcService.isVariationOfHdcMigration({ id: licenceId, kind: 'VARIATION' } as Licence, user)
+      expect(result).toBe(false)
+    })
+
+    it('should return true if the licence is a variation of a migrated HDC licence', async () => {
+      licenceApiClient.getLicenceById.mockResolvedValue({ kind: 'HDC', isHdcMigration: true } as Licence)
+      const result = await hdcService.isVariationOfHdcMigration(
+        { id: licenceId, kind: 'HDC_VARIATION' } as Licence,
+        user,
+      )
+      expect(result).toBe(true)
+    })
+
+    it('should return false if the licence is not a variation of a migrated HDC licence', async () => {
+      licenceApiClient.getLicenceById.mockResolvedValue({ kind: 'HDC', isHdcMigration: false } as Licence)
+      const result = await hdcService.isVariationOfHdcMigration(
+        { id: licenceId, kind: 'HDC_VARIATION' } as Licence,
+        user,
+      )
+      expect(result).toBe(false)
     })
   })
 })

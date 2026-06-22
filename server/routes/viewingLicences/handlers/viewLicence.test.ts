@@ -5,17 +5,14 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import HdcService, { CvlHdcLicenceData } from '../../../services/hdc/hdcService'
 import config from '../../../config'
 
 const username = 'joebloggs'
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/hdc/hdcService')
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ViewAndPrintLicenceRoutes(licenceService, hdcService)
+  const handler = new ViewAndPrintLicenceRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -39,38 +36,6 @@ describe('Route - view and approve a licence', () => {
     authSource: 'nomis',
   }
 
-  const exampleHdcLicenceData = {
-    curfewAddress: {
-      firstLine: 'addressLineOne',
-      secondLine: 'addressLineTwo',
-      townOrCity: 'addressTownOrCity',
-      county: 'county',
-      postcode: 'addressPostcode',
-      source: 'MANUAL',
-    },
-    firstNightCurfewTimes: {
-      fromTime: '09:00',
-      untilTime: '17:00',
-    },
-    weeklyCurfewTimes: [
-      {
-        curfewTimesSequence: 1,
-        fromDay: 'MONDAY',
-        fromTime: '17:00:00',
-        untilDay: 'TUESDAY',
-        untilTime: '09:00:00',
-      },
-      {
-        curfewTimesSequence: 2,
-        fromDay: 'TUESDAY',
-        fromTime: '17:00:00',
-        untilDay: 'WEDNESDAY',
-        untilTime: '09:00:00',
-      },
-    ],
-    allCurfewTimesEqual: true,
-  } as CvlHdcLicenceData
-
   beforeEach(() => {
     req = {
       body: {
@@ -80,7 +45,6 @@ describe('Route - view and approve a licence', () => {
       flash: jest.fn(),
     } as unknown as Request
     licenceService.recordAuditEvent = jest.fn()
-    hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
   })
 
   describe('GET', () => {
@@ -100,7 +64,6 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         isEditableByPrison: false,
         isPrisonUser: true,
-        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -121,7 +84,6 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         isEditableByPrison: false,
         isPrisonUser: true,
-        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -167,7 +129,6 @@ describe('Route - view and approve a licence', () => {
         warningMessage:
           "This is the last approved version of this person's licence.<br />Another version was started on 15 December 2022.<br />" +
           'You can print the most recent version once it has been approved.',
-        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -204,7 +165,6 @@ describe('Route - view and approve a licence', () => {
           'This is the most recent version of this licence that was submitted on 15 June 2012.<br />' +
           'Once this version is approved, you can print it.<br /><a href="/licence/view/id/1/pdf-print" target="_blank">' +
           'You can also view and print the last approved version of this licence</a>.',
-        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -241,7 +201,6 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: true,
           isPrisonUser: true,
-          hdcLicenceData: null,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -262,7 +221,6 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: false,
           isPrisonUser: true,
-          hdcLicenceData: null,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -283,7 +241,6 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: false,
           isPrisonUser: true,
-          hdcLicenceData: null,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -332,7 +289,6 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: true,
           isPrisonUser: true,
-          hdcLicenceData: null,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -353,7 +309,6 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: false,
           isPrisonUser: true,
-          hdcLicenceData: null,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -375,49 +330,6 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         isEditableByPrison: false,
         isPrisonUser: false,
-        hdcLicenceData: null,
-      })
-      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
-    })
-
-    it('should pass through the HDC licence data when it is a HDC licence', async () => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user,
-          licence: { ...licence, kind: LicenceKind.HDC },
-        },
-      } as unknown as Response
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
-        additionalConditions: [],
-        isEditableByPrison: false,
-        isPrisonUser: true,
-        hdcLicenceData: exampleHdcLicenceData,
-      })
-      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
-    })
-
-    it('should pass through the HDC licence data when it is a HDC variation', async () => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user,
-          licence: { ...licence, kind: LicenceKind.HDC_VARIATION },
-        },
-      } as unknown as Response
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
-        additionalConditions: [],
-        isEditableByPrison: false,
-        isPrisonUser: true,
-        hdcLicenceData: exampleHdcLicenceData,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })

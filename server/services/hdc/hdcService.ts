@@ -2,7 +2,7 @@ import { User } from '../../@types/CvlUserDetails'
 import {
   CurfewTimes as ApiCurfewTimes,
   FirstNightCurfewTimesRequest,
-  HdcLicenceData,
+  Licence,
   WeeklyCurfewTimesRequest,
 } from '../../@types/licenceApiClientTypes'
 import LicenceApiClient from '../../data/licenceApiClient'
@@ -11,31 +11,10 @@ import { Day, DAYS } from '../../enumeration/days'
 import DailyCurfewTime from '../../routes/initialAppointment/hdc/types/dailyCurfewTime'
 import { SimpleTime } from '../../routes/manageConditions/types'
 import { simpleTimeTo24Hour, simpleTimeToMinutes } from '../../utils/utils'
-import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../routes/initialAppointment/hdc/curfewDefaults'
-
-export type CvlHdcLicenceData = HdcLicenceData & { allCurfewTimesEqual: boolean }
+import { STANDARD_WEEKLY_CURFEW_TIMES } from '../../utils/curfewDefaults'
 
 export default class HdcService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
-
-  async getHdcLicenceData(licenceId: number): Promise<CvlHdcLicenceData> {
-    const hdcLicenceData = await this.licenceApiClient.getHdcLicenceData(licenceId)
-    const allCurfewTimesEqual = hdcLicenceData.weeklyCurfewTimes.every(ct => {
-      return (
-        ct.fromTime === hdcLicenceData.weeklyCurfewTimes[0].fromTime &&
-        ct.untilTime === hdcLicenceData.weeklyCurfewTimes[0].untilTime
-      )
-    })
-
-    const { curfewAddress, firstNightCurfewTimes, weeklyCurfewTimes } = hdcLicenceData
-
-    return {
-      curfewAddress,
-      firstNightCurfewTimes,
-      weeklyCurfewTimes,
-      allCurfewTimesEqual,
-    }
-  }
 
   async updateFirstNightCurfewTimes(
     licenceId: number,
@@ -60,6 +39,15 @@ export default class HdcService {
       return this.buildStandardCurfewTimesDisplayObject()
     }
     return this.buildCurfewTimesDisplayObject(curfewTimes)
+  }
+
+  async isVariationOfHdcMigration(licence: Licence, user: User): Promise<boolean> {
+    if (licence.kind !== 'HDC_VARIATION') {
+      return false
+    }
+    const hdcVariationParent = await this.licenceApiClient.getLicenceById(licence.variationOf, user)
+
+    return hdcVariationParent.kind === 'HDC' && hdcVariationParent.isHdcMigration
   }
 
   buildWeeklyCurfewTimesRequest = (start: SimpleTime, end: SimpleTime): WeeklyCurfewTimesRequest => {

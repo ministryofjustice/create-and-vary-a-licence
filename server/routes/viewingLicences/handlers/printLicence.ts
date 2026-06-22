@@ -5,7 +5,6 @@ import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { User } from '../../../@types/CvlUserDetails'
-import HdcService from '../../../services/hdc/hdcService'
 import { isHdcLicence } from '../../../utils/utils'
 import { MEZ_CONDITION_CODE, RESTRICTION_ZONE_CONDITION_CODE } from '../../../utils/conditionRoutes'
 
@@ -23,7 +22,6 @@ export default class PrintLicenceRoutes {
     private readonly prisonerService: PrisonerService,
     private readonly qrCodeService: QrCodeService,
     private readonly licenceService: LicenceService,
-    private readonly hdcService: HdcService,
   ) {}
 
   preview = async (req: Request, res: Response): Promise<void> => {
@@ -45,16 +43,14 @@ export default class PrintLicenceRoutes {
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
 
-    const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
-
     const licenceToPrint = {
       qrCode,
+      licence,
       htmlPrint,
       singleItemConditions,
       multipleItemConditions,
       exclusionZoneMapData,
       restrictionZoneMapData,
-      hdcLicenceData,
       isV4OrGreater,
     }
 
@@ -83,14 +79,13 @@ export default class PrintLicenceRoutes {
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
 
-    const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
-
     const { monitoringSupplierTelephone } = config
 
     const { prisonTelephone } = licence
 
     const licenceToPrint = {
       licencesUrl,
+      licence,
       imageData,
       qrCode,
       htmlPrint: false,
@@ -99,7 +94,6 @@ export default class PrintLicenceRoutes {
       multipleItemConditions,
       exclusionZoneMapData,
       restrictionZoneMapData,
-      hdcLicenceData,
       prisonTelephone,
       monitoringSupplierTelephone,
       isV4OrGreater,

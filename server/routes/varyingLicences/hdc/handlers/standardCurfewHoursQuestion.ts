@@ -18,17 +18,11 @@ export default class StandardCurfewHoursQuestionRoutes {
     if (answer === YesOrNo.YES) {
       await this.hdcService.updateWeeklyCurfewTimes(licence.id, STANDARD_WEEKLY_CURFEW_TIMES, user)
 
-      const successRedirect = fromReview
-        ? `/licence/create/id/${licence.id}/check-your-answers`
-        : `/licence/create/id/${licence.id}/additional-licence-conditions-question`
-
-      return res.redirect(successRedirect)
+      res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
+      return
     }
 
-    const noRedirect = fromReview
-      ? `/licence/create/id/${licence.id}/hdc/do-hdc-curfew-hours-apply-daily?fromReview=true`
-      : `/licence/create/id/${licence.id}/hdc/do-hdc-curfew-hours-apply-daily`
-
-    return res.redirect(noRedirect)
+    const query = fromReview ? '?fromReview=true' : ''
+    res.redirect(`/licence/vary/id/${licence.id}/hdc/do-hdc-curfew-hours-apply-daily${query}`)
   }
 }

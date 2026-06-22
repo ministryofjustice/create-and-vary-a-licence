@@ -6,7 +6,7 @@ import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import ConditionService from '../../../services/conditionService'
-import { groupingBy, isHdcLicence, isInHardStopPeriod, isVariation } from '../../../utils/utils'
+import { groupingBy, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 import HdcService from '../../../services/hdc/hdcService'
 
 export default class CheckAnswersRoutes {
@@ -36,7 +36,7 @@ export default class CheckAnswersRoutes {
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
-    const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
+    const isVariationOfHdcMigration = await this.hdcService.isVariationOfHdcMigration(licence, user)
 
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
@@ -47,7 +47,7 @@ export default class CheckAnswersRoutes {
       statusCode: licence.statusCode,
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
-      hdcLicenceData,
+      isVariationOfHdcMigration,
     })
   }
 

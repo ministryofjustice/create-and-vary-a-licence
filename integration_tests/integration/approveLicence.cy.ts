@@ -117,18 +117,21 @@ context('Approve a licence', () => {
   })
 
   it('should display HDC content if licence kind is HDC', () => {
-    cy.task('stubGetCompletedLicence', {
-      statusCode: 'SUBMITTED',
-      typeCode: 'AP',
-      kind: 'HDC',
-      homeDetentionCurfewActualDate: '09/09/2023',
-      homeDetentionCurfewEndDate: '12/03/2021',
-    })
-    cy.task('stubGetHdcLicenceData')
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
+    cy.task('stubGetHdcLicence', {
+      statusCode: 'SUBMITTED',
+      typeCode: 'AP',
+      homeDetentionCurfewActualDate: '09/09/2023',
+      homeDetentionCurfewEndDate: '12/03/2021',
+      firstNightCurfewTimes: {
+        fromTime: '17:00:00',
+        untilTime: '07:00:00',
+      },
+      allCurfewTimesEqual: true,
+    })
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
     approvalViewPage.getValue(approvalViewPage.approveLicenceId).should('have.text', 'Approve licence')
     approvalViewPage.getValue(approvalViewPage.accordionSectionHeading).should('contain.text', 'HDC and licence dates')

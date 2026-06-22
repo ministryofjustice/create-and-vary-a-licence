@@ -38,7 +38,6 @@ describe('Caseload', () => {
     })
     expect($('.status-badge').text().toString()).toContain('Active')
     expect($('.urgent-highlight-message').text().toString()).toEqual('')
-    expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
   it('should display badge', () => {
@@ -73,7 +72,6 @@ describe('Caseload', () => {
     })
     expect($('.status-badge').text().toString()).toContain('Variation in progress')
     expect($('.urgent-highlight-message').text().toString()).toEqual('')
-    expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
   it('should display Review needed badge', () => {
@@ -110,6 +108,46 @@ describe('Caseload', () => {
           colour: 'red',
         },
       },
+    })
+    expect($('.status-badge').text().toString()).toContain('Review needed')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('Timed out')
+  })
+
+  it('should display probation practitioner if in team view', () => {
+    const $ = render({
+      caseload: [
+        {
+          licenceId: 3,
+          name: 'Test Person',
+          crnNumber: 'Z882661',
+          licenceType: 'AP',
+          releaseDate: '13 Feb 2023',
+          licenceStatus: 'REVIEW_NEEDED',
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+            allocated: true,
+          },
+        },
+      ],
+      statusConfig: {
+        ACTIVE: {
+          label: 'Active',
+          description: 'Approved by the prison and is now the currently active licence',
+          colour: 'turquoise',
+        },
+        VARIATION_IN_PROGRESS: {
+          label: 'Variation in progress',
+          description: 'Variation in progress',
+          colour: 'blue',
+        },
+        REVIEW_NEEDED: {
+          label: 'Review needed',
+          description: 'Review needed',
+          colour: 'red',
+        },
+      },
+      teamView: true,
     })
     expect($('.status-badge').text().toString()).toContain('Review needed')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Timed out')
@@ -151,7 +189,6 @@ describe('Caseload', () => {
     expect($('.status-badge').text().toString()).toContain('Active')
     expect($('#release-date-1').text()).toBe('13 Feb 2023HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
-    expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
   it('should highlight a HDC variation with a HDC release warning label', () => {
@@ -189,7 +226,6 @@ describe('Caseload', () => {
     expect($('.status-badge').text().toString()).toContain('Active')
     expect($('#release-date-1').text()).toBe('13 Feb 2023HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
-    expect($('#probation-practitioner-1').text().toString()).toBe('CVL COM')
   })
 
   it('should highlight Not allocated label if licence has no probation practitioner and highlight a Time-served release warning label when licence is time-served', () => {
@@ -232,7 +268,6 @@ describe('Caseload', () => {
     expect($('.status-badge').text().toString()).toContain('Review needed')
     expect($('#release-date-1').text()).toBe('13 Feb 2023Time-served release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Time-served release')
-    expect($('#probation-practitioner-1').text().toString()).toBe('Not allocated')
   })
 
   it('should render name as plain text for LAO users', () => {
@@ -289,7 +324,7 @@ describe('Caseload', () => {
     expect($('.govuk-hint').text()).toContain('CRN: Z882661')
   })
 
-  it('should apply redactIfLao filter to probation practitioner for LAO cases', () => {
+  it('should apply redactIfLao filter to probation practitioner for LAO cases if viewing the team cases', () => {
     const $ = render({
       caseload: [
         {
@@ -310,6 +345,7 @@ describe('Caseload', () => {
       statusConfig: {
         ACTIVE: { label: 'Active', description: 'Active', colour: 'turquoise' },
       },
+      teamView: true,
     })
     expect($('#probation-practitioner-1').text().trim()).toBe('Restricted')
   })

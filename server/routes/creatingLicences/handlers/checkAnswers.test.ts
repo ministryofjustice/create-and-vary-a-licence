@@ -6,7 +6,7 @@ import { Licence, OmuContact } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import HdcService, { CvlHdcLicenceData } from '../../../services/hdc/hdcService'
+import HdcService from '../../../services/hdc/hdcService'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -20,38 +20,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   const handler = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
   let req: Request
   let res: Response
-
-  const exampleHdcLicenceData = {
-    curfewAddress: {
-      firstLine: 'addressLineOne',
-      secondLine: 'addressLineTwo',
-      townOrCity: 'addressTownOrCity',
-      county: 'county',
-      postcode: 'addressPostcode',
-      source: 'MANUAL',
-    },
-    firstNightCurfewTimes: {
-      fromTime: '09:00',
-      untilTime: '17:00',
-    },
-    weeklyCurfewTimes: [
-      {
-        curfewTimesSequence: 1,
-        fromDay: 'MONDAY',
-        fromTime: '17:00:00',
-        untilDay: 'TUESDAY',
-        untilTime: '09:00:00',
-      },
-      {
-        curfewTimesSequence: 2,
-        fromDay: 'TUESDAY',
-        fromTime: '17:00:00',
-        untilDay: 'WEDNESDAY',
-        untilTime: '09:00:00',
-      },
-    ],
-    allCurfewTimesEqual: true,
-  } as CvlHdcLicenceData
 
   afterEach(() => {
     jest.resetAllMocks()
@@ -101,7 +69,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
     conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([])
     conditionService.getbespokeConditionsForSummaryAndPdf.mockResolvedValue(res.locals.licence.bespokeConditions)
-    hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
+    hdcService.isVariationOfHdcMigration.mockResolvedValue(false)
   })
 
   describe('GET', () => {
@@ -115,7 +83,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
-        hdcLicenceData: null,
+        isVariationOfHdcMigration: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -137,7 +105,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
-        hdcLicenceData: null,
+        isVariationOfHdcMigration: false,
       })
     })
 
@@ -163,7 +131,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
-        hdcLicenceData: null,
+        isVariationOfHdcMigration: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -181,7 +149,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
-        hdcLicenceData: null,
+        isVariationOfHdcMigration: false,
       })
     })
 
@@ -198,7 +166,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: false,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
-        hdcLicenceData: null,
+        isVariationOfHdcMigration: false,
       })
     })
 
@@ -208,8 +176,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(req.flash).toHaveBeenCalledWith('initialApptUpdated')
     })
 
-    it('should pass through HDC licence data for HDC licences', async () => {
-      res.locals.licence.kind = LicenceKind.HDC
+    it('should pass through isVariationOfHdcMigration flag for variations of migrated HDC licences', async () => {
+      hdcService.isVariationOfHdcMigration.mockResolvedValue(true)
 
       await handler.GET(req, res)
 
@@ -221,24 +189,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
-        hdcLicenceData: exampleHdcLicenceData,
-      })
-    })
-
-    it('should pass through HDC licence data for HDC variations', async () => {
-      res.locals.licence.kind = LicenceKind.HDC_VARIATION
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        additionalConditions: [],
-        bespokeConditionsToDisplay: [],
-        backLink: req.session.returnToCase,
-        initialApptUpdatedMessage: undefined,
-        canEditInitialAppt: true,
-        isInHardStopPeriod: false,
-        statusCode: 'IN_PROGRESS',
-        hdcLicenceData: exampleHdcLicenceData,
+        isVariationOfHdcMigration: true,
       })
     })
 
@@ -256,7 +207,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           canEditInitialAppt: true,
           isInHardStopPeriod: false,
           statusCode: 'IN_PROGRESS',
-          hdcLicenceData: null,
+          isVariationOfHdcMigration: false,
         })
       })
 
@@ -273,7 +224,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           canEditInitialAppt: false,
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
-          hdcLicenceData: null,
+          isVariationOfHdcMigration: false,
         })
       })
 
@@ -292,7 +243,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
           omuEmail: 'test@test.test',
-          hdcLicenceData: null,
+          isVariationOfHdcMigration: false,
         })
       })
     })

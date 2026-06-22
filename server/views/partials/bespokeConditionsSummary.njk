@@ -1,7 +1,8 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-{%  macro bespokeConditions(licenceId, isEditable, title, hideHeading, bespokeConditions) %}
+{%  macro bespokeConditions(licenceId, isEditable, title, hideHeading, bespokeConditions, isVariationOfHdcMigration) %}
     {% set bespokeConditionRows = [] %}
     {% set conditionCount = bespokeConditions.length or 0 %}
     {% set buttonText = "Add or remove conditions" if conditionCount else "Add conditions" %}
@@ -44,6 +45,13 @@
         }), bespokeConditionRows) %}
     {% endfor %}
 
+    {% if isVariationOfHdcMigration and bespokeConditions.length %}
+        {% set hdcMigrationWarning = "Additional conditions from the HDC service are shown as bespoke conditions in this service.<br>You can delete these bespoke conditions and replace them with alternative additional conditions<br>so the licence uses the most up-to-date wording." %}
+        {{ govukInsetText({
+            id: 'hdc-migration-bespoke-conditions-warning',
+            html: hdcMigrationWarning
+        }) }}
+    {% endif %}
 
     {{ govukSummaryList({
         attributes: { id: 'bespoke-conditions-details' },

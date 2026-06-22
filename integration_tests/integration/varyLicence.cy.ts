@@ -63,11 +63,13 @@ context('Vary a licence', () => {
   it('LAO entry should render with correct links', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const varyCasesPage = indexPage.clickVaryALicence()
+
+    cy.get('#probation-practitioner-1').should('not.exist')
+
     varyCasesPage.getRow(1).within(() => {
       cy.get('#name-2 .caseload-offender-name a').should('exist')
       cy.get('#name-2 .caseload-offender-name').should('contain', 'Access Restricted in NDelius')
       cy.get('#probation-practitioner-2 a').should('not.exist')
-      cy.get('#probation-practitioner-2').should('contain', 'Restricted')
       cy.get('#release-date-2').should('contain', 'Restricted')
     })
   })
