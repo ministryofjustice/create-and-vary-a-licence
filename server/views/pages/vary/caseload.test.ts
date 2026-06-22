@@ -163,6 +163,7 @@ describe('Caseload', () => {
           crnNumber: 'Z882661',
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
+          releaseDateLabel: 'HDC eligible date',
           licenceStatus: 'ACTIVE',
           probationPractitioner: {
             staffCode: 'X12342',
@@ -187,7 +188,7 @@ describe('Caseload', () => {
     })
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('.status-badge').text().toString()).toContain('Active')
-    expect($('#release-date-1').text()).toBe('13 Feb 2023HDC release')
+    expect($('#release-date-1').text()).toBe('HDC eligible date: 13 Feb 2023HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
 
@@ -200,6 +201,7 @@ describe('Caseload', () => {
           crnNumber: 'Z882661',
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
+          releaseDateLabel: 'HDC actual date',
           licenceStatus: 'ACTIVE',
           probationPractitioner: {
             staffCode: 'X12342',
@@ -224,7 +226,7 @@ describe('Caseload', () => {
     })
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('.status-badge').text().toString()).toContain('Active')
-    expect($('#release-date-1').text()).toBe('13 Feb 2023HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 13 Feb 2023HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
 
@@ -237,6 +239,7 @@ describe('Caseload', () => {
           crnNumber: 'Z882661',
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
+          releaseDateLabel: 'Confirmed release date',
           licenceStatus: 'REVIEW_NEEDED',
           probationPractitioner: {
             name: 'Not allocated',
@@ -266,7 +269,7 @@ describe('Caseload', () => {
     })
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('.status-badge').text().toString()).toContain('Review needed')
-    expect($('#release-date-1').text()).toBe('13 Feb 2023Time-served release')
+    expect($('#release-date-1').text()).toBe('Confirmed release date: 13 Feb 2023Time-served release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Time-served release')
   })
 
@@ -474,5 +477,71 @@ describe('Caseload', () => {
     expect($('#name-1').text()).toContain('Access restricted on NDelius')
 
     expect($('#name-link-2').attr('href')).toBe('/licence/vary/id/2/timeline')
+  })
+
+  it.each([
+    {
+      kind: 'CRD',
+      releaseDateLabel: 'CRD',
+      releaseDate: '20 Dec 2026',
+      licenseStatus: 'ACTIVE',
+      expected: 'CRD: 20 Dec 2026',
+    },
+    {
+      kind: 'CRD',
+      releaseDateLabel: 'Confirmed release date',
+      releaseDate: '21 Dec 2026',
+      licenseStatus: 'REVIEW_NEEDED',
+      expected: 'Confirmed release date: 21 Dec 2026',
+    },
+    {
+      kind: 'PRRD',
+      releaseDateLabel: 'Post-recall release date (PRRD)',
+      releaseDate: '22 Dec 2026',
+      licenseStatus: 'ACTIVE',
+      expected: 'Post-recall release date (PRRD): 22 Dec 2026',
+    },
+    {
+      kind: 'HDC',
+      releaseDateLabel: 'HDC eligible date',
+      releaseDate: '23 Dec 2026',
+      licenseStatus: 'ACTIVE',
+      expected: 'HDC eligible date: 23 Dec 2026HDC release',
+    },
+    {
+      kind: 'HDC VARIATION',
+      releaseDateLabel: 'HDC actual date',
+      releaseDate: '24 Dec 2026',
+      licenseStatus: 'ACTIVE',
+      expected: 'HDC actual date: 24 Dec 2026',
+    },
+  ])('should display "$releaseDateLabel" release date label', ({ kind, releaseDateLabel, releaseDate, expected }) => {
+    const $ = render({
+      caseload: [
+        {
+          licenceId: 3,
+          kind,
+          name: 'Test Person',
+          crnNumber: 'Z882661',
+          licenceType: 'AP',
+          releaseDate,
+          releaseDateLabel,
+          licenceStatus: 'ACTIVE',
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+            allocated: true,
+          },
+        },
+      ],
+      statusConfig: {
+        ACTIVE: {
+          label: 'Active',
+          description: 'Approved by the prison and is now the currently active licence',
+          colour: 'turquoise',
+        },
+      },
+    })
+    expect($('#release-date-1').text()).toBe(expected)
   })
 })
