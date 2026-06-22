@@ -30,9 +30,7 @@ export default class HdcService {
   }
 
   async updateDifferingCurfewTimes(licenceId: number, curfewTimes: DailyCurfewTime[], user: User): Promise<void> {
-    console.log('curfewTimes', curfewTimes)
     const curfewTimesRequest = this.buildDifferingCurfewTimesRequest(curfewTimes)
-    console.log('curfewTimesRequest-->', curfewTimesRequest)
     return this.licenceApiClient.updateHdcWeeklyCurfewTimes(licenceId, curfewTimesRequest, user)
   }
 
