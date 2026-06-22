@@ -436,15 +436,23 @@ export function registerNunjucks(app?: express.Express): Environment {
   )
 
   njkEnv.addFilter('localTimeTo12h', (time: string): string => {
-    if (!time) {
-      return undefined
-    }
+    if (!time) return undefined
+
     const [hour, minute] = time.split(':')
-    const hourInt = parseInt(hour, 10)
-    if (hourInt > 12) {
-      return `${hourInt - 12}${minute === '00' ? '' : `:${minute}`}pm`
+    let hourInt = parseInt(hour, 10)
+
+    let suffix = 'am'
+
+    if (hourInt === 0) {
+      hourInt = 12
+    } else if (hourInt === 12) {
+      suffix = 'pm'
+    } else if (hourInt > 12) {
+      hourInt -= 12
+      suffix = 'pm'
     }
-    return `${hourInt}${minute === '00' ? '' : `:${minute}`}am`
+
+    return `${hourInt}${minute === '00' ? '' : `:${minute}`}${suffix}`
   })
 
   njkEnv.addFilter('formatAddressTitleCase', (address, isMultiple) => formatAddressTitleCase(address, isMultiple))
