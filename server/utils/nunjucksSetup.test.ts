@@ -855,4 +855,39 @@ describe('Nunjucks Filters', () => {
       })
     })
   })
+
+  describe('localTimeTo12h filter', () => {
+    test('returns undefined for empty input', () => {
+      expect(registerNunjucks().getFilter('localTimeTo12h')(undefined)).toBeUndefined()
+      expect(registerNunjucks().getFilter('localTimeTo12h')(null)).toBeUndefined()
+      expect(registerNunjucks().getFilter('localTimeTo12h')('')).toBeUndefined()
+    })
+
+    test('converts midnight correctly (00:00 → 12am)', () => {
+      expect(registerNunjucks().getFilter('localTimeTo12h')('00:00:00')).toBe('12am')
+    })
+
+    test('converts early morning correctly', () => {
+      expect(registerNunjucks().getFilter('localTimeTo12h')('01:00:00')).toBe('1am')
+      expect(registerNunjucks().getFilter('localTimeTo12h')('09:15:00')).toBe('9:15am')
+    })
+
+    test('converts noon correctly (12:00 → 12pm)', () => {
+      expect(registerNunjucks().getFilter('localTimeTo12h')('12:00:00')).toBe('12pm')
+    })
+
+    test('converts afternoon times correctly', () => {
+      expect(registerNunjucks().getFilter('localTimeTo12h')('13:00:00')).toBe('1pm')
+      expect(registerNunjucks().getFilter('localTimeTo12h')('15:04:00')).toBe('3:04pm')
+    })
+
+    test('handles minutes properly', () => {
+      expect(registerNunjucks().getFilter('localTimeTo12h')('10:20:00')).toBe('10:20am')
+      expect(registerNunjucks().getFilter('localTimeTo12h')('12:30:00')).toBe('12:30pm')
+    })
+
+    test('handles edge case just before midnight', () => {
+      expect(registerNunjucks().getFilter('localTimeTo12h')('23:59:00')).toBe('11:59pm')
+    })
+  })
 })
