@@ -2,7 +2,6 @@
 
 {% macro variationDetails(licence, conversation) %}
     {% set comments = [] %}
-    {{ licence | dump }}
 
     {% set comments = (comments.push({
         key: { text: "Have you discussed this variation request with your SPO?" },
