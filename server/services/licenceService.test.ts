@@ -16,6 +16,8 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import {
   AdditionalCondition,
   ContactNumberRequest,
+  HdcLicence,
+  HdcVariationLicence,
   Licence,
   LicenceSummary,
   PrisonerWithCvlFields,
@@ -504,8 +506,10 @@ describe('Licence Service', () => {
     expect(licenceApiClient.referVariation).toHaveBeenCalledWith('1', { reasonForReferral: 'Reason' }, user)
   })
 
-  it('should compare variation with its original licence', async () => {
-    const licenceCompatatorSpy = jest.spyOn(licenceComparator, 'default').mockReturnValue({} as VariedConditions)
+  it('should fetch the licence condition changes when comparing variations', async () => {
+    const licenceCompatatorSpy = jest
+      .spyOn(licenceComparator, 'compareLicenceConditions')
+      .mockReturnValue({} as VariedConditions)
     licenceApiClient.getLicenceById.mockResolvedValue({
       id: 1,
     } as Licence)
@@ -521,6 +525,47 @@ describe('Licence Service', () => {
       },
       { id: 2, kind: 'VARIATION', variationOf: 1, isVariation: true },
     )
+  })
+
+  it('should set HDC fields to false when comparing variations of non-HDC licences', async () => {
+    jest.spyOn(licenceComparator, 'compareLicenceConditions').mockReturnValue({} as VariedConditions)
+    const curfewAddressSpy = jest.spyOn(licenceComparator, 'hasUpdatedCurfewAddress').mockReturnValue(false)
+    const curfewHoursSpy = jest.spyOn(licenceComparator, 'hasUpdatedCurfewHours').mockReturnValue(false)
+
+    licenceApiClient.getLicenceById.mockResolvedValue({
+      id: 1,
+      kind: 'CRD',
+    } as Licence)
+
+    const result = await licenceService.compareVariationToOriginal(
+      { id: 2, kind: 'VARIATION', variationOf: 1, isVariation: true } as Licence,
+      user,
+    )
+
+    expect(curfewAddressSpy).not.toHaveBeenCalled()
+    expect(curfewHoursSpy).not.toHaveBeenCalled()
+    expect(result.hasUpdatedCurfewAddress).toBe(false)
+    expect(result.hasUpdatedCurfewHours).toBe(false)
+  })
+
+  it('should set HDC fields appropriately when comparing variations of HDC licences', async () => {
+    jest.spyOn(licenceComparator, 'compareLicenceConditions').mockReturnValue({} as VariedConditions)
+    const curfewAddressSpy = jest.spyOn(licenceComparator, 'hasUpdatedCurfewAddress').mockReturnValue(true)
+    const curfewHoursSpy = jest.spyOn(licenceComparator, 'hasUpdatedCurfewHours').mockReturnValue(false)
+    licenceApiClient.getLicenceById.mockResolvedValue({
+      id: 1,
+      kind: 'HDC',
+    } as HdcLicence)
+
+    const result = await licenceService.compareVariationToOriginal(
+      { id: 2, kind: 'HDC_VARIATION', variationOf: 1, isVariation: true } as HdcVariationLicence,
+      user,
+    )
+
+    expect(curfewAddressSpy).toHaveBeenCalledTimes(1)
+    expect(curfewHoursSpy).toHaveBeenCalledTimes(1)
+    expect(result.hasUpdatedCurfewAddress).toBe(true)
+    expect(result.hasUpdatedCurfewHours).toBe(false)
   })
 
   it('should get variation approval conversation', async () => {

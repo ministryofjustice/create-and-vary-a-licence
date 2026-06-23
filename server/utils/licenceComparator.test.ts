@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import compareLicenceConditions from './licenceComparator'
-import { Licence } from '../@types/licenceApiClientTypes'
+import { compareLicenceConditions, hasUpdatedCurfewAddress, hasUpdatedCurfewHours } from './licenceComparator'
+import { CurfewTimes, HdcCurfewAddress, Licence } from '../@types/licenceApiClientTypes'
 
 const licenceTemplate = {
   additionalLicenceConditions: [],
@@ -260,6 +260,250 @@ describe('Licence Comparator', () => {
         ],
         pssConditionsRemoved: [],
       })
+    })
+  })
+
+  describe('hasUpdatedCurfewAddress', () => {
+    it('should return true if the first line of the curfew address has changed', () => {
+      const originalAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      const variedAddress = {
+        firstLine: 'Fake Flat',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      expect(hasUpdatedCurfewAddress(originalAddress, variedAddress)).toBe(true)
+    })
+
+    it('should be true if the second line of the curfew address has changed', () => {
+      const originalAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      const variedAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Avenue',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      expect(hasUpdatedCurfewAddress(originalAddress, variedAddress)).toBe(true)
+    })
+
+    it('should be true if the town or city of the curfew address has changed', () => {
+      const originalAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      const variedAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Fakeshire',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      expect(hasUpdatedCurfewAddress(originalAddress, variedAddress)).toBe(true)
+    })
+
+    it('should be true if the county of the curfew address has changed', () => {
+      const originalAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      const variedAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fakeshire',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      expect(hasUpdatedCurfewAddress(originalAddress, variedAddress)).toBe(true)
+    })
+
+    it('should be true if the postcode of the curfew address has changed', () => {
+      const originalAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      const variedAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 2KE',
+      } as HdcCurfewAddress
+
+      expect(hasUpdatedCurfewAddress(originalAddress, variedAddress)).toBe(true)
+    })
+
+    it('should be false if the curfew address has not changed', () => {
+      const originalAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      const variedAddress = {
+        firstLine: 'Fake House',
+        secondLine: 'Fake Street',
+        townOrCity: 'Faketown',
+        county: 'Fake County',
+        postcode: 'FA1 1KE',
+      } as HdcCurfewAddress
+
+      expect(hasUpdatedCurfewAddress(originalAddress, variedAddress)).toBe(false)
+    })
+  })
+
+  describe('hasUpdatedCurfewHours', () => {
+    it('should return true if the fromTime of one of the curfews has changed', () => {
+      const originalCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '07:00',
+          fromDay: 'MONDAY',
+          untilDay: 'TUESDAY',
+        },
+      ] as CurfewTimes[]
+
+      const variedCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '06:00',
+          fromDay: 'MONDAY',
+          untilDay: 'TUESDAY',
+        },
+      ] as CurfewTimes[]
+
+      expect(hasUpdatedCurfewHours(originalCurfewHours, variedCurfewHours)).toBe(true)
+    })
+
+    it('should return true if the untilTime of one of the curfews has changed', () => {
+      const originalCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '07:00',
+          fromDay: 'MONDAY',
+          untilDay: 'TUESDAY',
+        },
+      ] as CurfewTimes[]
+
+      const variedCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '08:00',
+          fromDay: 'MONDAY',
+          untilDay: 'TUESDAY',
+        },
+      ] as CurfewTimes[]
+
+      expect(hasUpdatedCurfewHours(originalCurfewHours, variedCurfewHours)).toBe(true)
+    })
+
+    it('should return true if the fromDay of one of the curfews has changed', () => {
+      const originalCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '07:00',
+          fromDay: 'MONDAY',
+          untilDay: 'TUESDAY',
+        },
+      ] as CurfewTimes[]
+
+      const variedCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '07:00',
+          fromDay: 'TUESDAY',
+          untilDay: 'TUESDAY',
+        },
+      ] as CurfewTimes[]
+
+      expect(hasUpdatedCurfewHours(originalCurfewHours, variedCurfewHours)).toBe(true)
+    })
+
+    it('should return true if the untilDay of one of the curfews has changed', () => {
+      const originalCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '07:00',
+          fromDay: 'MONDAY',
+          untilDay: 'TUESDAY',
+        },
+      ] as CurfewTimes[]
+
+      const variedCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '07:00',
+          fromDay: 'MONDAY',
+          untilDay: 'WEDNESDAY',
+        },
+      ] as CurfewTimes[]
+
+      expect(hasUpdatedCurfewHours(originalCurfewHours, variedCurfewHours)).toBe(true)
+    })
+
+    it('should return false if the curfew hours have not changed', () => {
+      const originalCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '07:00',
+          fromDay: 'MONDAY',
+          untilDay: 'TUESDAY',
+        },
+      ] as CurfewTimes[]
+
+      const variedCurfewHours = [
+        {
+          curfewTimesSequence: 1,
+          fromTime: '19:00',
+          untilTime: '07:00',
+          fromDay: 'MONDAY',
+          untilDay: 'TUESDAY',
+        },
+      ] as CurfewTimes[]
+
+      expect(hasUpdatedCurfewHours(originalCurfewHours, variedCurfewHours)).toBe(false)
     })
   })
 

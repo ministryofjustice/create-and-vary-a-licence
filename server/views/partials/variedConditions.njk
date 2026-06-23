@@ -1,6 +1,17 @@
 {% from "customComponents/summaryCard/macro.njk" import summaryCard %}
+{% from "../pages/licence/partials/nonUniformCurfewTimesTable.njk" import nonUniformCurfewTimesTable %}
 
-{% macro variedConditions(conditionComparison) %}
+{% macro variedConditions(conditionComparison, licence) %}
+    {% if(licence.allCurfewTimesEqual) %}
+        {%  set curfewTimesHtml =  licence.weeklyCurfewTimes[0].fromDay | titlecase | escape + " to " + licence.weeklyCurfewTimes[6].fromDay | titlecase | escape + "<br>" +
+                licence.weeklyCurfewTimes[0].fromTime  | localTimeTo12h + " to " + licence.weeklyCurfewTimes[0].untilTime | localTimeTo12h
+        %}
+    {% else %}
+        {% set isEditable = false %}
+        {% set hideCaption = true %}
+        {% set curfewTimesHtml = nonUniformCurfewTimesTable(licence.weeklyCurfewTimes, isEditable, null, null, hideCaption) %}
+    {% endif %}
+
     {% macro includeExclusionZoneImage(uploadSummary) %}
         <div id="exclusion-zone" class="govuk-!-margin-top-4">
             <div class="upload-thumbnail">
@@ -55,5 +66,25 @@
     {% endif %}
     {% if conditionComparison.pssConditionsAmended.length > 0 %}
         {{ buildConditionsSummaryCard('Post sentence supervision requirement amended', conditionComparison.pssConditionsAmended) }}
+    {% endif %}
+
+    {# The "if licence" section of this condition is a temporary check to prevent an empty table appearing for pages that haven't been updated yet. It should be removed once all pages are displaying HDC variation information.#}
+    {% if licence and (conditionComparison.hasUpdatedCurfewAddress or conditionComparison.hasUpdatedCurfewHours) %}
+        {{ summaryCard({
+            classes: "govuk-!-margin-bottom-6",
+            titleText: "HDC curfew details amended",
+            rows: [
+                ({
+                    key: {  text: "Address" },
+                    value: { text: licence.curfewAddress | formatAddressLine },
+                    classes: "curfew-address"
+                }) if conditionComparison.hasUpdatedCurfewAddress,
+                ({
+                    key: {  text: "Curfew hours" },
+                    value: { html: curfewTimesHtml },
+                    classes: "weekly-curfew-times"
+                }) if conditionComparison.hasUpdatedCurfewHours
+            ]
+        }) }}
     {% endif %}
 {% endmacro %}

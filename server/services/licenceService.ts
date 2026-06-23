@@ -48,14 +48,19 @@ import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
 import TelephoneNumbers from '../routes/initialAppointment/types/telephoneNumbers'
 import Address from '../routes/initialAppointment/types/address'
-import { addressObjectToString, isVariation, objectIsEmpty } from '../utils/utils'
+import { addressObjectToString, isHdcLicence, isVariation, objectIsEmpty } from '../utils/utils'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
 import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
-import compareLicenceConditions, { VariedConditions } from '../utils/licenceComparator'
+import {
+  compareLicenceConditions,
+  hasUpdatedCurfewAddress,
+  hasUpdatedCurfewHours,
+  VariationChanges,
+} from '../utils/licenceComparator'
 import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
@@ -374,12 +379,23 @@ export default class LicenceService {
     return this.licenceApiClient.referVariation(licenceId, referVariationRequest, user)
   }
 
-  async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
+  async compareVariationToOriginal(variation: Licence, user: User): Promise<VariationChanges> {
     if (isVariation(variation)) {
       const originalLicence = await this.getLicence(variation.variationOf, user)
-      return compareLicenceConditions(originalLicence, variation)
+      const variedConditions = compareLicenceConditions(originalLicence, variation)
+      let updatedCurfewAddress = false
+      let updatedCurfewHours = false
+      if (isHdcLicence(variation) && isHdcLicence(originalLicence)) {
+        updatedCurfewAddress = hasUpdatedCurfewAddress(originalLicence.curfewAddress, variation.curfewAddress)
+        updatedCurfewHours = hasUpdatedCurfewHours(originalLicence.weeklyCurfewTimes, variation.weeklyCurfewTimes)
+      }
+      return {
+        ...variedConditions,
+        hasUpdatedCurfewAddress: updatedCurfewAddress,
+        hasUpdatedCurfewHours: updatedCurfewHours,
+      } as VariationChanges
     }
-    return {} as VariedConditions
+    return {} as VariationChanges
   }
 
   async getApprovalConversation(variation: Licence, user: User): Promise<ApprovalComment[]> {

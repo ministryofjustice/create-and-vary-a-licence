@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import LicenceService from '../../../services/licenceService'
 import ReasonForVariationRoutes from './reasonForVariation'
-import { VariedConditions } from '../../../utils/licenceComparator'
+import { VariationChanges } from '../../../utils/licenceComparator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
@@ -41,7 +41,9 @@ describe('Route Handlers - Vary Licence - Reason for variation', () => {
     it('should render view', async () => {
       licenceService.compareVariationToOriginal.mockResolvedValue({
         licenceConditionsAdded: [],
-      } as VariedConditions)
+        hasUpdatedCurfewAddress: false,
+        hasUpdatedCurfewHours: false,
+      } as VariationChanges)
 
       await handler.GET(req, res)
 
@@ -50,8 +52,10 @@ describe('Route Handlers - Vary Licence - Reason for variation', () => {
         { username: 'joebloggs' },
       )
       expect(res.render).toHaveBeenCalledWith('pages/vary/reasonForVariation', {
-        conditionComparison: {
+        variationChanges: {
           licenceConditionsAdded: [],
+          hasUpdatedCurfewAddress: false,
+          hasUpdatedCurfewHours: false,
         },
       })
     })
