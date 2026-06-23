@@ -125,6 +125,7 @@ describe('Create a Licence Views - Caseload', () => {
           name: 'Zohn Smith',
           crnNumber: 'X123456',
           releaseDate: '01 September 2022',
+          releaseDateLabel: 'Conditional release date',
           probationPractitioner: {
             name: 'Not allocated',
             staffCode: null,
@@ -149,7 +150,7 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#probation-practitioner-2').text()).toBe('Not allocated')
 
     expect($('#name-3 > .caseload-offender-name > a').text()).toBe('Zohn Smith')
-    expect($('#release-date-3').text()).toBe('01 September 2022Time-served release')
+    expect($('#release-date-3').text()).toBe('Conditional release date: 01 September 2022Time-served release')
     expect($('#probation-practitioner-3').text()).toBe('Not allocated')
   })
 
@@ -349,6 +350,7 @@ describe('Create a Licence Views - Caseload', () => {
           crnNumber: 'A123456',
           prisonerNumber: 'ABC123',
           releaseDate: '20 December 2025',
+          releaseDateLabel: 'HDC actual date',
           probationPractitioner: {
             name: 'Joe Bloggs',
             staffCode: 'ABC123',
@@ -364,7 +366,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
-    expect($('#release-date-1').text()).toBe('20 December 2025HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 20 December 2025HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
 
@@ -377,6 +379,7 @@ describe('Create a Licence Views - Caseload', () => {
           crnNumber: 'A123456',
           prisonerNumber: 'ABC123',
           releaseDate: '20 December 2025',
+          releaseDateLabel: 'HDC eligibility date',
           probationPractitioner: {
             name: 'Joe Bloggs',
             staffCode: 'ABC123',
@@ -392,7 +395,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
-    expect($('#release-date-1').text()).toBe('20 December 2025HDC release')
+    expect($('#release-date-1').text()).toBe('HDC eligibility date: 20 December 2025HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
 
@@ -404,6 +407,7 @@ describe('Create a Licence Views - Caseload', () => {
         crnNumber: 'A123456',
         prisonerNumber: 'ABC123',
         releaseDate: '20 December 2025',
+        releaseDateLabel: 'Confirmed release date',
         probationPractitioner: {
           name: 'Not allocated',
           staffCode: null,
@@ -424,7 +428,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     // Then
     expect($('tbody .govuk-table__row').length).toBe(1)
-    expect($('#release-date-1').text()).toBe('20 December 2025Time-served release')
+    expect($('#release-date-1').text()).toBe('Confirmed release date: 20 December 2025Time-served release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Time-served release')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Timed out')
   })
