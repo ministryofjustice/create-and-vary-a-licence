@@ -33,7 +33,7 @@ export default class VariationSummaryPage extends Page {
   }
 
   verifyReasonForVariation = (expected: string): VariationSummaryPage => {
-    cy.contains('Reasons for the variation').parent().should('contain.text', expected)
+    cy.contains('Add reasons for the variation').parent().should('contain.text', expected)
     return this
   }
 
@@ -51,7 +51,7 @@ export default class VariationSummaryPage extends Page {
   }
 
   verifyAddedByAndOn = (addedBy: string, addedOn: string): VariationSummaryPage => {
-    cy.contains('Reasons for the variation')
+    cy.contains('Add reasons for the variation')
       .parent()
       .within(() => {
         cy.contains(`Added by ${addedBy}`).should('be.visible')
