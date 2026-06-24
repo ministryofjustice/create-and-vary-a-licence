@@ -95,7 +95,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.1005.0",
     "@ministryofjustice/frontend": "8.0.0",
-    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^5.7.0",
+    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^6.7.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
