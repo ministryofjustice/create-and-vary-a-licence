@@ -99,3 +99,4 @@ export type FirstNightCurfewTimesRequest = components['schemas']['UpdateFirstNig
 export type LicenceStatusResponse = components['schemas']['LicenceStatusResponse']
 export type RecallSupportInfo = components['schemas']['RecallSupportInfo']
 export type PolicyUpdateResponse = components['schemas']['PolicyUpdateResponse']
+export type HdcCurfewAddress = components['schemas']['HdcCurfewAddress']

@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import VaryApproveViewRoutes from './varyApproveView'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { VariedConditions } from '../../../utils/licenceComparator'
+import { VariationChanges } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
@@ -51,7 +51,7 @@ describe('Route - view and approve a licence variation', () => {
 
       licenceService.compareVariationToOriginal.mockResolvedValue({
         licenceConditionsAdded: [],
-      } as VariedConditions)
+      } as VariationChanges)
 
       licenceService.getApprovalConversation.mockResolvedValue([
         { who: 'X', when: '12/02/2022 11:05:00', comment: 'Reason', role: 'COM' },
