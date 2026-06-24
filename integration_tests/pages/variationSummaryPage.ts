@@ -54,8 +54,8 @@ export default class VariationSummaryPage extends Page {
     cy.contains('Add reasons for the variation')
       .parent()
       .within(() => {
-        cy.contains(`Added by ${addedBy}`).should('be.visible')
-        cy.contains(`Added on ${addedOn}`).should('be.visible')
+        cy.contains(`By ${addedBy}`).should('be.visible')
+        cy.contains(`, ${addedOn}`).should('be.visible')
       })
 
     return this

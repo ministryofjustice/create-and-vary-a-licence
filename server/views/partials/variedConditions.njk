@@ -1,6 +1,7 @@
 {% from "customComponents/summaryCard/macro.njk" import summaryCard %}
+{% from "partials/variationDetails.njk" import variationDetails %}
 
-{% macro variedConditions(conditionComparison) %}
+{% macro variedConditions(conditionComparison, licence, conversation) %}
     {% macro includeExclusionZoneImage(uploadSummary) %}
         <div id="exclusion-zone" class="govuk-!-margin-top-4">
             <div class="upload-thumbnail">
@@ -37,6 +38,10 @@
             rows: rows
         }) }}
     {% endmacro %}
+
+    {% if conversation %}
+        {{ variationDetails(licence, conversation) }}
+    {% endif %}
 
     {% if conditionComparison.licenceConditionsAdded.length > 0 %}
         {{ buildConditionsSummaryCard('Licence conditions added', conditionComparison.licenceConditionsAdded) }}
