@@ -4,7 +4,7 @@ import ViewVariationRoutes from './viewVariation'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceService from '../../../services/licenceService'
-import { VariedConditions } from '../../../utils/licenceComparator'
+import { VariationChanges } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
 import ConditionService from '../../../services/conditionService'
 import { LicenceApiClient } from '../../../data'
@@ -37,7 +37,7 @@ describe('Route - Vary - View variation', () => {
 
   const conditionComparison = {
     licenceConditionsAdded: [],
-  } as VariedConditions
+  } as VariationChanges
 
   beforeEach(() => {
     req = {

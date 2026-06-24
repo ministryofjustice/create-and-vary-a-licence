@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import VariationSummaryRoutes from './variationSummary'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { VariedConditions } from '../../../utils/licenceComparator'
+import { VariationChanges } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
 import ProbationService from '../../../services/probationService'
 
@@ -44,7 +44,7 @@ describe('Route Handlers - Vary Licence - Variation summary', () => {
     it('should render view', async () => {
       licenceService.compareVariationToOriginal.mockResolvedValue({
         licenceConditionsAdded: [],
-      } as VariedConditions)
+      } as VariationChanges)
 
       licenceService.getApprovalConversation.mockResolvedValue([
         { who: 'X', when: '12/02/2022 11:05:00', comment: 'Reason', role: 'COM' },

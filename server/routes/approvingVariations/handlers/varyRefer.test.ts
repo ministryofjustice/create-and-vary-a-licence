@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import VaryReferRoutes from './varyRefer'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { VariedConditions } from '../../../utils/licenceComparator'
+import { VariationChanges } from '../../../utils/licenceComparator'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const username = 'joebloggs'
@@ -44,7 +44,7 @@ describe('Route - refer a licence variation', () => {
 
       licenceService.compareVariationToOriginal.mockResolvedValue({
         licenceConditionsAdded: [],
-      } as VariedConditions)
+      } as VariationChanges)
 
       await handler.GET(req, res)
 
