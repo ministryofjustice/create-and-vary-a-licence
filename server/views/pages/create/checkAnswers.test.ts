@@ -643,4 +643,26 @@ describe('Create a Licence Views - Check Answers', () => {
     expect(secondRow.eq(0).text().trim()).toBe('8pm on Tuesday')
     expect(secondRow.eq(1).text().trim()).toBe('6am on Wednesday')
   })
+
+  it('should not show the curfew address change link for HDC licences that are not variations', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', allCurfewTimesEqual: true },
+      canEditInitialAppt: true,
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    expect($('[data-qa=curfew-address-change-link]').length).toBe(0)
+  })
+
+  it('should show the curfew address change link for HDC_VARIATION licences', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC_VARIATION', allCurfewTimesEqual: true },
+      canEditInitialAppt: true,
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    expect($('[data-qa=curfew-address-change-link]').length).toBe(1)
+  })
 })
