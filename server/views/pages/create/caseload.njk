@@ -36,7 +36,7 @@
   {% elseif offender.kind == "TIME_SERVED" %}
     {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
   {% else %}
-    {% set releaseDate = offender.releaseDate %}
+      {% set releaseDate = offender.releaseDateLabel + ': <br>' + offender.releaseDate %}
   {% endif %}
   {% set row = [
         {
