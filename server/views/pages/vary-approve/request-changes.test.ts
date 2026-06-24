@@ -40,7 +40,7 @@ describe('Request changes', () => {
     expect($('.govuk-summary-list__row:nth-of-type(2) .govuk-summary-list__value').text()).toContain('No')
 
     expect($('.govuk-summary-list__row:nth-of-type(3) .govuk-summary-list__key').text()).toContain(
-      'Reasons for the variation',
+      'Add reasons for the variation',
     )
     expect($('.govuk-summary-list__row:nth-of-type(3) .govuk-summary-list__value').text()).toContain(
       'something needed changing',
