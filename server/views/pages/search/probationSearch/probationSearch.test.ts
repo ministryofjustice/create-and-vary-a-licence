@@ -989,4 +989,88 @@ describe('View Probation Search Results', () => {
     expect($('#probation-practitioner-1').text()).toBe('Restricted')
     expect($('#probation-practitioner-1 > .govuk-link').length).toBe(0)
   })
+
+  it.each([
+    {
+      kind: 'CRD',
+      releaseDateLabel: 'CRD',
+      releaseDate: '20/12/2026',
+      expected: 'CRD: 20 Dec 2026',
+    },
+    {
+      kind: 'CRD',
+      releaseDateLabel: 'Confirmed release date',
+      releaseDate: '21/12/2026',
+      expected: 'Confirmed release date: 21 Dec 2026',
+    },
+    {
+      kind: 'HARD_STOP',
+      releaseDateLabel: 'Confirmed release date',
+      releaseDate: '22/12/2026',
+      expected: 'Confirmed release date: 22 Dec 2026',
+    },
+    {
+      kind: 'TIME_SERVED',
+      releaseDateLabel: 'Confirmed release date',
+      releaseDate: '23/12/2026',
+      expected: 'Confirmed release date: 23 Dec 2026Time-served release',
+    },
+    {
+      kind: 'VARIATION',
+      releaseDateLabel: 'Confirmed release date',
+      releaseDate: '24/12/2026',
+      expected: 'Confirmed release date: 24 Dec 2026',
+    },
+    {
+      kind: 'PRRD',
+      releaseDateLabel: 'Post-recall release date',
+      releaseDate: '25/12/2026',
+      expected: 'Post-recall release date: 25 Dec 2026',
+    },
+    {
+      kind: 'HDC',
+      releaseDateLabel: 'HDC eligible date',
+      releaseDate: '26/12/2026',
+      expected: 'HDC eligible date: 26 Dec 2026HDC release',
+    },
+    {
+      kind: 'HDC_VARIATION',
+      releaseDateLabel: 'HDC actual date',
+      releaseDate: '27/12/2026',
+      expected: 'HDC actual date: 27 Dec 2026HDC release',
+    },
+  ])('should display "$releaseDateLabel" release date label', ({ kind, releaseDateLabel, releaseDate, expected }) => {
+    const $ = render({
+      statusConfig,
+      peopleInPrison: [
+        {
+          name: 'Test Person',
+          kind,
+          crn: 'A123456',
+          nomisId: 'A1234BC',
+          comName: 'Test Staff',
+          comStaffCode: '3000',
+          probationPractitioner: {
+            name: 'Test Staff',
+            staffCode: '3000',
+            allocated: true,
+          },
+          teamName: 'Test Team',
+          releaseDate,
+          licenceId: 1,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          isOnProbation: false,
+          releaseDateLabel,
+        },
+      ],
+      peopleOnProbation: [],
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'Test',
+    })
+    expect($('#release-date-1').text()).toBe(expected)
+  })
 })

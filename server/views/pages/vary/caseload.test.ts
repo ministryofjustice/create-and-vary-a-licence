@@ -496,10 +496,10 @@ describe('Caseload', () => {
     },
     {
       kind: 'PRRD',
-      releaseDateLabel: 'Post-recall release date (PRRD)',
+      releaseDateLabel: 'Post-recall release date',
       releaseDate: '22 Dec 2026',
       licenseStatus: 'ACTIVE',
-      expected: 'Post-recall release date (PRRD): 22 Dec 2026',
+      expected: 'Post-recall release date: 22 Dec 2026',
     },
     {
       kind: 'HDC',
