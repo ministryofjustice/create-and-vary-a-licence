@@ -60,7 +60,7 @@
                             visuallyHiddenText: "curfew address",
                             attributes: { "id": "curfew-address", "data-qa": "curfew-address-change-link" }
                         }
-                    ]
+                    ] if params.isVaryJourney else []
                 } if params.isEditable
             },
             {

@@ -1,5 +1,11 @@
 import _ from 'lodash'
-import { AdditionalCondition, BespokeCondition, Licence } from '../@types/licenceApiClientTypes'
+import {
+  AdditionalCondition,
+  BespokeCondition,
+  CurfewTimes,
+  HdcCurfewAddress,
+  Licence,
+} from '../@types/licenceApiClientTypes'
 import ConditionType from '../enumeration/conditionType'
 import { groupingBy } from './utils'
 
@@ -34,6 +40,11 @@ export type VariedConditions = {
   pssConditionsAdded: Condition[]
   pssConditionsRemoved: Condition[]
   pssConditionsAmended: Condition[]
+}
+
+export type VariationChanges = VariedConditions & {
+  hasUpdatedCurfewAddress: boolean
+  hasUpdatedCurfewHours: boolean
 }
 
 const compareLicenceConditions = (originalLicence: Licence, variation: Licence): VariedConditions => {
@@ -201,6 +212,28 @@ const sortBespokeConditionSet = (conditionSet: BespokeCondition[]) => {
   })
 }
 
+const hasUpdatedCurfewAddress = (originalAddress: HdcCurfewAddress, variedAddress: HdcCurfewAddress) => {
+  return (
+    originalAddress.firstLine !== variedAddress.firstLine ||
+    originalAddress.secondLine !== variedAddress.secondLine ||
+    originalAddress.county !== variedAddress.county ||
+    originalAddress.postcode !== variedAddress.postcode ||
+    originalAddress.townOrCity !== variedAddress.townOrCity
+  )
+}
+
+const hasUpdatedCurfewHours = (originalCurfewHours: CurfewTimes[], variedCurfewHours: CurfewTimes[]) => {
+  return originalCurfewHours.some(curfew => {
+    const variedCurfew = variedCurfewHours.find(v => v.curfewTimesSequence === curfew.curfewTimesSequence)
+    return (
+      curfew.fromTime !== variedCurfew.fromTime ||
+      curfew.untilTime !== variedCurfew.untilTime ||
+      curfew.fromDay !== variedCurfew.fromDay ||
+      curfew.untilDay !== variedCurfew.untilDay
+    )
+  })
+}
+
 class VariedConditionsBuilder {
   constructor(private readonly conditionType: ConditionType) {}
 
@@ -238,4 +271,4 @@ class VariedConditionsBuilder {
   }
 }
 
-export default compareLicenceConditions
+export { compareLicenceConditions, hasUpdatedCurfewAddress, hasUpdatedCurfewHours }
