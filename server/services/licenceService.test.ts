@@ -4,8 +4,7 @@ import { User } from '../@types/CvlUserDetails'
 import LicenceApiClient from '../data/licenceApiClient'
 import LicenceService from './licenceService'
 import * as utils from '../utils/utils'
-import * as licenceComparator from '../utils/licenceComparator'
-import { VariedConditions } from '../utils/licenceComparator'
+import { VariationChanges } from '../utils/licenceComparator'
 import DateTime from '../routes/initialAppointment/types/dateTime'
 import Address from '../routes/initialAppointment/types/address'
 import LicenceType from '../enumeration/licenceType'
@@ -32,7 +31,6 @@ import TelephoneNumbers from '../routes/initialAppointment/types/telephoneNumber
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./conditionService')
-jest.spyOn(utils, 'convertDateFormat').mockImplementation((value: string) => value)
 
 describe('Licence Service', () => {
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
@@ -127,7 +125,6 @@ describe('Licence Service', () => {
   })
 
   it('Update appointment time when appointment time type is SPECIFIC_DATE_TIME', async () => {
-    const timeConverter = jest.spyOn(DateTime, 'toJson').mockReturnValue('22/12/2022 12:20')
     await licenceService.updateAppointmentTime(
       '1',
       {
@@ -142,15 +139,9 @@ describe('Licence Service', () => {
       { appointmentTime: '22/12/2022 12:20', appointmentTimeType: 'SPECIFIC_DATE_TIME' },
       user,
     )
-    expect(timeConverter).toHaveBeenCalledWith({
-      date: { calendarDate: '22/12/2022' },
-      time: { hour: '12', minute: '20', ampm: 'pm' },
-      appointmentTimeType: 'SPECIFIC_DATE_TIME',
-    } as DateTime)
   })
 
   it('Update appointment time when appointment time type is IMMEDIATE_UPON_RELEASE', async () => {
-    const timeConverter = jest.spyOn(DateTime, 'toJson').mockReturnValue('22/12/2022 12:20')
     await licenceService.updateAppointmentTime(
       '1',
       {
@@ -165,11 +156,9 @@ describe('Licence Service', () => {
       { appointmentTime: null, appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' },
       user,
     )
-    expect(timeConverter).not.toHaveBeenCalled()
   })
 
   it('Update appointment address', async () => {
-    const addressConverter = jest.spyOn(utils, 'addressObjectToString').mockReturnValue('123 Fake Street, Fakestown')
     await licenceService.updateAppointmentAddress(
       '1',
       {
@@ -183,10 +172,6 @@ describe('Licence Service', () => {
       { appointmentAddress: '123 Fake Street, Fakestown' },
       user,
     )
-    expect(addressConverter).toHaveBeenCalledWith({
-      addressLine1: '123 Fake Street',
-      addressTown: 'Fakestown',
-    } as Address)
   })
 
   it('Update contact number', async () => {
@@ -507,63 +492,113 @@ describe('Licence Service', () => {
   })
 
   it('should fetch the licence condition changes when comparing variations', async () => {
-    const licenceCompatatorSpy = jest
-      .spyOn(licenceComparator, 'compareLicenceConditions')
-      .mockReturnValue({} as VariedConditions)
     licenceApiClient.getLicenceById.mockResolvedValue({
       id: 1,
-    } as Licence)
-
-    await licenceService.compareVariationToOriginal(
-      { id: 2, kind: 'VARIATION', variationOf: 1, isVariation: true } as Licence,
-      user,
-    )
-
-    expect(licenceCompatatorSpy).toHaveBeenCalledWith(
-      {
-        id: 1,
-      },
-      { id: 2, kind: 'VARIATION', variationOf: 1, isVariation: true },
-    )
-  })
-
-  it('should set HDC fields to false when comparing variations of non-HDC licences', async () => {
-    jest.spyOn(licenceComparator, 'compareLicenceConditions').mockReturnValue({} as VariedConditions)
-    const curfewAddressSpy = jest.spyOn(licenceComparator, 'hasUpdatedCurfewAddress').mockReturnValue(false)
-    const curfewHoursSpy = jest.spyOn(licenceComparator, 'hasUpdatedCurfewHours').mockReturnValue(false)
-
-    licenceApiClient.getLicenceById.mockResolvedValue({
-      id: 1,
-      kind: 'CRD',
+      additionalLicenceConditions: [],
+      additionalPssConditions: [],
+      bespokeConditions: [],
     } as Licence)
 
     const result = await licenceService.compareVariationToOriginal(
-      { id: 2, kind: 'VARIATION', variationOf: 1, isVariation: true } as Licence,
+      {
+        id: 2,
+        kind: 'VARIATION',
+        variationOf: 1,
+        isVariation: true,
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
+        bespokeConditions: [],
+      } as Licence,
       user,
     )
 
-    expect(curfewAddressSpy).not.toHaveBeenCalled()
-    expect(curfewHoursSpy).not.toHaveBeenCalled()
+    expect(result).toEqual({
+      licenceConditionsAdded: [],
+      licenceConditionsRemoved: [],
+      licenceConditionsAmended: [],
+      pssConditionsAdded: [],
+      pssConditionsRemoved: [],
+      pssConditionsAmended: [],
+      hasUpdatedCurfewAddress: false,
+      hasUpdatedCurfewHours: false,
+    } as VariationChanges)
+  })
+
+  it('should set HDC fields to false when comparing variations of non-HDC licences', async () => {
+    licenceApiClient.getLicenceById.mockResolvedValue({
+      id: 1,
+      additionalLicenceConditions: [],
+      additionalPssConditions: [],
+      bespokeConditions: [],
+    } as Licence)
+
+    const result = await licenceService.compareVariationToOriginal(
+      {
+        id: 2,
+        kind: 'VARIATION',
+        variationOf: 1,
+        isVariation: true,
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
+        bespokeConditions: [],
+      } as Licence,
+      user,
+    )
+
     expect(result.hasUpdatedCurfewAddress).toBe(false)
     expect(result.hasUpdatedCurfewHours).toBe(false)
   })
 
   it('should set HDC fields appropriately when comparing variations of HDC licences', async () => {
-    jest.spyOn(licenceComparator, 'compareLicenceConditions').mockReturnValue({} as VariedConditions)
-    const curfewAddressSpy = jest.spyOn(licenceComparator, 'hasUpdatedCurfewAddress').mockReturnValue(true)
-    const curfewHoursSpy = jest.spyOn(licenceComparator, 'hasUpdatedCurfewHours').mockReturnValue(false)
     licenceApiClient.getLicenceById.mockResolvedValue({
       id: 1,
       kind: 'HDC',
+      additionalLicenceConditions: [],
+      additionalPssConditions: [],
+      bespokeConditions: [],
+      curfewAddress: {
+        firstLine: '1 Fake Street',
+        townOrCity: 'Faketown',
+        postcode: 'AB1 2CD',
+      },
+      weeklyCurfewTimes: [
+        {
+          fromDay: 'MONDAY',
+          untilDay: 'FRIDAY',
+          fromTime: '20:00',
+          untilTime: '06:00',
+        },
+      ],
     } as HdcLicence)
 
     const result = await licenceService.compareVariationToOriginal(
-      { id: 2, kind: 'HDC_VARIATION', variationOf: 1, isVariation: true } as HdcVariationLicence,
+      {
+        id: 2,
+        kind: 'HDC_VARIATION',
+        variationOf: 1,
+        isVariation: true,
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
+        bespokeConditions: [],
+        curfewAddress: {
+          firstLine: '1 Fake Street',
+          secondLine: 'Fakestone',
+          townOrCity: 'Faketown',
+          county: 'Fakefordshire',
+          postcode: 'AB1 2CD',
+        },
+        weeklyCurfewTimes: [
+          {
+            fromDay: 'MONDAY',
+            untilDay: 'FRIDAY',
+            fromTime: '20:00',
+            untilTime: '06:00',
+          },
+        ],
+      } as HdcVariationLicence,
       user,
     )
 
-    expect(curfewAddressSpy).toHaveBeenCalledTimes(1)
-    expect(curfewHoursSpy).toHaveBeenCalledTimes(1)
     expect(result.hasUpdatedCurfewAddress).toBe(true)
     expect(result.hasUpdatedCurfewHours).toBe(false)
   })
