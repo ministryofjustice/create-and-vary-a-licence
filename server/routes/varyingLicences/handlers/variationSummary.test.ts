@@ -44,6 +44,8 @@ describe('Route Handlers - Vary Licence - Variation summary', () => {
     it('should render view', async () => {
       licenceService.compareVariationToOriginal.mockResolvedValue({
         licenceConditionsAdded: [],
+        hasUpdatedCurfewAddress: false,
+        hasUpdatedCurfewHours: false,
       } as VariationChanges)
 
       licenceService.getApprovalConversation.mockResolvedValue([
@@ -68,8 +70,10 @@ describe('Route Handlers - Vary Licence - Variation summary', () => {
           { who: 'X', when: '12/02/2022 11:05:00', comment: 'Reason', role: 'COM' },
           { who: 'Y', when: '13/02/2022 10:00:00', comment: 'Reason', role: 'APPROVER' },
         ],
-        conditionComparison: {
+        variationChanges: {
           licenceConditionsAdded: [],
+          hasUpdatedCurfewAddress: false,
+          hasUpdatedCurfewHours: false,
         },
       })
     })
