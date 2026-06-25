@@ -17,6 +17,7 @@ import {
   ElectronicMonitoringProvider,
   Licence,
   LicencePolicyResponse,
+  HdcCurfewAddress,
 } from '../../server/@types/licenceApiClientTypes'
 import LicenceKind from '../../server/enumeration/LicenceKind'
 import LicenceType from '../../server/enumeration/licenceType'
@@ -684,7 +685,7 @@ export default {
     isInHardStopPeriod: boolean
     homeDetentionCurfewActualDate: string | null
     homeDetentionCurfewEndDate: string | null
-    kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'TIME_SERVED'
+    kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC' | 'TIME_SERVED' | 'HDC_VARIATION'
     conditions: AdditionalCondition[]
     electronicMonitoringProvider?: ElectronicMonitoringProvider
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
@@ -694,6 +695,7 @@ export default {
     comUsername?: string
     isReviewed?: boolean
     weeklyCurfewTimes?: CurfewTimes[]
+    curfewAddress?: HdcCurfewAddress
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -777,6 +779,7 @@ export default {
           electronicMonitoringProvider: options.electronicMonitoringProvider,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
           reviewDate: options.isReviewed ? format(new Date(), 'dd/MM/yyyy hh:mm a') : null,
+          curfewAddress: options.curfewAddress,
         },
       },
     })
@@ -2109,7 +2112,7 @@ export default {
       licenceId: 1,
       licenceStatus: 'APPROVED',
       tabType: 'FUTURE_RELEASES',
-      kind: null,
+      kind: '',
       hasNomisLicence: false,
     },
   ): SuperAgentRequest => {

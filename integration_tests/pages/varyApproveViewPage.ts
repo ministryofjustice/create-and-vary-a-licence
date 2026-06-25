@@ -27,4 +27,10 @@ export default class VaryApproveViewPage extends Page {
     cy.get('.govuk-back-link').click()
     return Page.verifyOnPage(VaryApprovalSearchPage)
   }
+
+  checkResidentialChecksNotCompleted(reason: string) {
+    cy.contains('Have you completed the residential address checks?').parent().should('contain.text', 'No')
+
+    cy.contains('Enter a reason why address checks have not been completed').parent().should('contain.text', reason)
+  }
 }
