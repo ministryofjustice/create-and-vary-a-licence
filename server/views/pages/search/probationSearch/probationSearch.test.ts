@@ -763,7 +763,7 @@ describe('View Probation Search Results', () => {
     })
 
     // Then
-    expect($('#release-date-1').text()).toBe('1 Jul 2025Time-served release')
+    expect($('#release-date-1').text()).toBe('CRD: 1 Jul 2025Time-served release')
   })
 
   it('renders release date for time-served when people people on probation', () => {
@@ -804,7 +804,7 @@ describe('View Probation Search Results', () => {
     })
 
     // Then
-    expect($('#release-date-1').text()).toBe('1 Jul 2025Time-served release')
+    expect($('#release-date-1').text()).toBe('CRD: 1 Jul 2025Time-served release')
   })
 
   it('should correctly show tab counts result counts', () => {
