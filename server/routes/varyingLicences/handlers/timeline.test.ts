@@ -368,6 +368,27 @@ describe('Route Handlers - Timeline', () => {
       await handler.POST(req, res)
 
       expect(licenceService.activateVariation).toHaveBeenCalledWith(2, { username: 'joebloggs' })
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/timeline')
+    })
+
+    it('should redirect to other agencies page for approved HDC variations', async () => {
+      res = {
+        ...commonRes,
+        locals: {
+          licence: {
+            id: 2,
+            kind: 'HDC_VARIATION',
+            statusCode: LicenceStatus.VARIATION_APPROVED,
+            variationOf: 1,
+            isVariation: true,
+          },
+          user: commonUser,
+        },
+      } as unknown as Response
+
+      await handler.POST(req, res)
+
+      expect(licenceService.activateVariation).toHaveBeenCalledWith(2, { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/other-agencies')
     })
   })
