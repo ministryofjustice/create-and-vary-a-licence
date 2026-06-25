@@ -22,13 +22,11 @@
             value: {
                 html: "
                     <div class='govuk-grid-row'>
-                        <div class='govuk-grid-column-two-thirds '>
+                        <div class='govuk-grid-column-one-half'>
                             " + comment.comment + "
                         </div>
-                        <div class='govuk-grid-column-one-third'>
-                            <span class='govuk-body-s'>
-                                Added by " + (comment.who | title)  +" <br> Added on " + (comment.when | datetimeToDate) + "
-                            </span>
+                        <div class='govuk-grid-column-one-half'>
+                            By " + (comment.who | title)  +", " + (comment.when | datetimeToDate) + "
                         </div>
                     </div>
                 "
