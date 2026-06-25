@@ -368,7 +368,7 @@ describe('Route Handlers - Timeline', () => {
       await handler.POST(req, res)
 
       expect(licenceService.activateVariation).toHaveBeenCalledWith(2, { username: 'joebloggs' })
-      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/timeline')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/other-agencies')
     })
   })
 })
