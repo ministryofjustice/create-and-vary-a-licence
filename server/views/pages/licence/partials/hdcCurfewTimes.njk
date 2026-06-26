@@ -30,7 +30,7 @@
     {% set addressHtml %}
         <p>
             {{ params.licence.curfewAddress | formatAddressLine }}
-            {{ hdcBadge | safe if not params.isVaryJourney }}
+            <span>{{ hdcBadge | safe if not params.isVaryJourney }}</span>
         </p>
     {% endset %}
 
