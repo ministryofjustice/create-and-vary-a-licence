@@ -385,6 +385,10 @@ export default class LicenceService {
       const variedConditions = compareLicenceConditions(originalLicence, variation)
       let updatedCurfewAddress = false
       let updatedCurfewHours = false
+      console.log('originalLicence----->', originalLicence)
+      console.log('variedConditions----->', variedConditions)
+      console.log('isHdcLicence(variation)', isHdcLicence(variation))
+      console.log('isHdcLicence(originalLicence)', isHdcLicence(originalLicence))
       if (isHdcLicence(variation) && isHdcLicence(originalLicence)) {
         updatedCurfewAddress = hasUpdatedCurfewAddress(originalLicence.curfewAddress, variation.curfewAddress)
         updatedCurfewHours = hasUpdatedCurfewHours(originalLicence.weeklyCurfewTimes, variation.weeklyCurfewTimes)

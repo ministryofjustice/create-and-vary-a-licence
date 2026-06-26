@@ -155,6 +155,65 @@ const licencePlaceholder: Licence = {
   additionalPssConditions: [],
 }
 
+const defaultWeeklyCurfewTimes = [
+  {
+    id: 1,
+    curfewTimesSequence: 0,
+    fromDay: 'MONDAY',
+    fromTime: '17:00:00',
+    untilDay: 'TUESDAY',
+    untilTime: '07:00:00',
+  },
+  {
+    id: 2,
+    curfewTimesSequence: 1,
+    fromDay: 'TUESDAY',
+    fromTime: '17:00:00',
+    untilDay: 'WEDNESDAY',
+    untilTime: '07:00:00',
+  },
+  {
+    id: 3,
+    curfewTimesSequence: 2,
+    fromDay: 'WEDNESDAY',
+    fromTime: '17:00:00',
+    untilDay: 'THURSDAY',
+    untilTime: '07:00:00',
+  },
+  {
+    id: 4,
+    curfewTimesSequence: 3,
+    fromDay: 'THURSDAY',
+    fromTime: '17:00:00',
+    untilDay: 'FRIDAY',
+    untilTime: '07:00:00',
+  },
+  {
+    id: 5,
+    curfewTimesSequence: 4,
+    fromDay: 'FRIDAY',
+    fromTime: '17:00:00',
+    untilDay: 'SATURDAY',
+    untilTime: '07:00:00',
+  },
+  {
+    id: 6,
+    curfewTimesSequence: 5,
+    fromDay: 'SATURDAY',
+    fromTime: '17:00:00',
+    untilDay: 'SUNDAY',
+    untilTime: '07:00:00',
+  },
+  {
+    id: 7,
+    curfewTimesSequence: 6,
+    fromDay: 'SUNDAY',
+    fromTime: '17:00:00',
+    untilDay: 'MONDAY',
+    untilTime: '07:00:00',
+  },
+]
+
 export const licenceConditions: AdditionalCondition[] = [
   {
     id: 1,
@@ -349,128 +408,89 @@ export default {
   },
 
   stubGetLicence: (options: {
+    licenceId?: string
     licenceKind?: LicenceKind
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
     responsibleComFullName?: string
     isEligibleForEarlyRelease: boolean
     hasAppointmentTimeType?: string
+    curfewAddress?: HdcCurfewAddress
   }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licences-api/licence/id/(\\d)*`,
+        ...(options.licenceId
+          ? { url: `/licences-api/licence/id/${options.licenceId}` }
+          : { urlPattern: `/licences-api/licence/id/(\\d)*` }),
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
+          id: options.licenceId || '1',
           appointmentTimeType: options.hasAppointmentTimeType ? licencePlaceholder.appointmentTimeType : undefined,
           kind: options.licenceKind || LicenceKind.CRD,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
           responsibleComFullName: options.responsibleComFullName || null,
           isEligibleForEarlyRelease: options.isEligibleForEarlyRelease || false,
+          curfewAddress: options.curfewAddress,
         },
       },
     })
   },
 
-  stubGetHdcLicence: (
-    options: {
-      firstNightCurfewTimes?: {
-        fromTime?: string
-        untilTime?: string
-      }
-      allCurfewTimesEqual?: boolean
-      statusCode?: string
-      typeCode?: 'AP_PSS' | 'AP' | 'PSS'
-      homeDetentionCurfewActualDate?: string | null
-      homeDetentionCurfewEndDate?: string | null
-      weeklyCurfewTimes?: CurfewTimes[]
-    } = {},
-  ): SuperAgentRequest => {
+  stubGetHdcLicence: (options: {
+    licenceId?: string
+    firstNightCurfewTimes?: {
+      fromTime?: string
+      untilTime?: string
+    }
+    allCurfewTimesEqual?: boolean
+    statusCode?: string
+    typeCode?: 'AP_PSS' | 'AP' | 'PSS'
+    kind: 'HDC' | 'HDC_VARIATION'
+    homeDetentionCurfewActualDate?: string | null
+    homeDetentionCurfewEndDate?: string | null
+    weeklyCurfewTimes?: CurfewTimes[]
+    variationOf?: string
+    isVariation?: boolean
+    curfewAddress?: HdcCurfewAddress
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licences-api/licence/id/(\\d)*`,
+        ...(options.licenceId
+          ? { url: `/licences-api/licence/id/${options.licenceId}` }
+          : { urlPattern: `/licences-api/licence/id/(\\d)*` }),
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
+          kind: options.kind ?? LicenceKind.HDC,
           statusCode: options.statusCode ?? licencePlaceholder.statusCode,
           typeCode: options.typeCode ?? licencePlaceholder.typeCode,
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate ?? '01/03/2021',
           homeDetentionCurfewEndDate: options.homeDetentionCurfewEndDate,
-          kind: 'HDC',
           firstNightCurfewTimes: options.firstNightCurfewTimes ?? null,
-          curfewAddress: {
+          weeklyCurfewTimes: options.weeklyCurfewTimes
+            ? defaultWeeklyCurfewTimes.map(day => {
+                const override = options.weeklyCurfewTimes?.find(o => o.curfewTimesSequence === day.curfewTimesSequence)
+                return override ? { ...day, ...override } : day
+              })
+            : defaultWeeklyCurfewTimes,
+          allCurfewTimesEqual: true,
+          variationOf: options.variationOf || null,
+          isVariation: options.isVariation || false,
+          curfewAddress: options.curfewAddress || {
             firstLine: '1 The Street',
             secondLine: 'Avenue',
             townOrCity: 'Some Town',
             county: 'Some County',
             postcode: 'A1 2BC',
           },
-          weeklyCurfewTimes: [
-            {
-              id: 1,
-              curfewTimesSequence: 0,
-              fromDay: 'MONDAY',
-              fromTime: '17:00:00',
-              untilDay: 'TUESDAY',
-              untilTime: '07:00:00',
-            },
-            {
-              id: 2,
-              curfewTimesSequence: 1,
-              fromDay: 'TUESDAY',
-              fromTime: '17:00:00',
-              untilDay: 'WEDNESDAY',
-              untilTime: '07:00:00',
-            },
-            {
-              id: 3,
-              curfewTimesSequence: 2,
-              fromDay: 'WEDNESDAY',
-              fromTime: '17:00:00',
-              untilDay: 'THURSDAY',
-              untilTime: '07:00:00',
-            },
-            {
-              id: 4,
-              curfewTimesSequence: 3,
-              fromDay: 'THURSDAY',
-              fromTime: '17:00:00',
-              untilDay: 'FRIDAY',
-              untilTime: '07:00:00',
-            },
-            {
-              id: 5,
-              curfewTimesSequence: 4,
-              fromDay: 'FRIDAY',
-              fromTime: '17:00:00',
-              untilDay: 'SATURDAY',
-              untilTime: '07:00:00',
-            },
-            {
-              id: 6,
-              curfewTimesSequence: 5,
-              fromDay: 'SATURDAY',
-              fromTime: '17:00:00',
-              untilDay: 'SUNDAY',
-              untilTime: '07:00:00',
-            },
-            {
-              id: 7,
-              curfewTimesSequence: 6,
-              fromDay: 'SUNDAY',
-              fromTime: '17:00:00',
-              untilDay: 'MONDAY',
-              untilTime: '07:00:00',
-            },
-          ],
-          allCurfewTimesEqual: true,
         },
       },
     })
@@ -758,6 +778,7 @@ export default {
                 },
               ],
               readyToSubmit: true,
+              uploadSummary: [],
             },
             {
               id: 2,
@@ -774,6 +795,7 @@ export default {
                 },
               ],
               readyToSubmit: true,
+              uploadSummary: [],
             },
           ],
           electronicMonitoringProvider: options.electronicMonitoringProvider,
