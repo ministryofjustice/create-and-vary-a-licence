@@ -54,7 +54,7 @@ describe('Route - refer a licence variation', () => {
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/vary-approve/request-changes', {
-        conditionComparison: {
+        variationChanges: {
           licenceConditionsAdded: [],
         },
       })

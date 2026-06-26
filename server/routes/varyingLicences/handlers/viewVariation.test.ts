@@ -35,8 +35,10 @@ describe('Route - Vary - View variation', () => {
 
   const conversation = [] as ApprovalComment[]
 
-  const conditionComparison = {
+  const variationChanges = {
     licenceConditionsAdded: [],
+    hasUpdatedCurfewAddress: false,
+    hasUpdatedCurfewHours: false,
   } as VariationChanges
 
   beforeEach(() => {
@@ -47,7 +49,7 @@ describe('Route - Vary - View variation', () => {
     } as unknown as Request
 
     licenceService.getApprovalConversation.mockResolvedValue(conversation)
-    licenceService.compareVariationToOriginal.mockResolvedValue(conditionComparison)
+    licenceService.compareVariationToOriginal.mockResolvedValue(variationChanges)
   })
 
   describe('GET', () => {
@@ -70,7 +72,7 @@ describe('Route - Vary - View variation', () => {
         callToActions: {
           shouldShowEditAndDiscardButton: false,
         },
-        conditionComparison,
+        variationChanges,
         conversation,
       })
     })
@@ -92,7 +94,7 @@ describe('Route - Vary - View variation', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewSubmitted', {
         conversation,
-        conditionComparison,
+        variationChanges,
         callToActions: {
           shouldShowEditAndDiscardButton: true,
         },
@@ -116,7 +118,7 @@ describe('Route - Vary - View variation', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewSubmitted', {
         conversation,
-        conditionComparison,
+        variationChanges,
         callToActions: {
           shouldShowEditAndDiscardButton: true,
         },
@@ -140,7 +142,7 @@ describe('Route - Vary - View variation', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewSubmitted', {
         conversation,
-        conditionComparison,
+        variationChanges,
         callToActions: {
           shouldShowEditAndDiscardButton: false,
         },
