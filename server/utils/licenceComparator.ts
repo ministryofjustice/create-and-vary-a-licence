@@ -92,9 +92,6 @@ const compareAdditionalConditionSet = (
 ): VariedConditions => {
   const variedConditionsBuilder = new VariedConditionsBuilder(conditionType)
 
-  console.log('originalConditionSet', originalConditionSet)
-  console.log('variedConditionSet', variedConditionSet)
-
   const originalConditions: ConditionAndImageUploads[] = groupingBy(originalConditionSet, 'code').map(
     ([first, ...rest]) => {
       const texts = [first.expandedText, ...rest.map(r => r.expandedText)]
@@ -119,11 +116,8 @@ const compareAdditionalConditionSet = (
     }
   })
 
-  console.log('originalConditions', originalConditions)
   const sortedOriginalConditions: ConditionAndImageUploads[] = sortConditionSet(Object.values(originalConditions))
   const sortedVariedConditions = sortConditionSet(Object.values(variedConditions))
-
-  console.log('sortedVariedConditions', sortedVariedConditions)
 
   let originalCondition: ConditionAndImageUploads = sortedOriginalConditions.shift()
   let variedCondition = sortedVariedConditions.shift()
@@ -219,8 +213,6 @@ const sortBespokeConditionSet = (conditionSet: BespokeCondition[]) => {
 }
 
 const hasUpdatedCurfewAddress = (originalAddress: HdcCurfewAddress, variedAddress: HdcCurfewAddress) => {
-  console.log('originalAddress', originalAddress)
-  console.log('variedAddress', variedAddress)
   return (
     originalAddress.firstLine !== variedAddress.firstLine ||
     originalAddress.secondLine !== variedAddress.secondLine ||

@@ -408,33 +408,27 @@ export default {
   },
 
   stubGetLicence: (options: {
-    licenceId?: string
     licenceKind?: LicenceKind
     electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
     responsibleComFullName?: string
     isEligibleForEarlyRelease: boolean
     hasAppointmentTimeType?: string
-    curfewAddress?: HdcCurfewAddress
   }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        ...(options.licenceId
-          ? { url: `/licences-api/licence/id/${options.licenceId}` }
-          : { urlPattern: `/licences-api/licence/id/(\\d)*` }),
+        urlPattern: `/licences-api/licence/id/(\\d)*`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
-          id: options.licenceId || '1',
           appointmentTimeType: options.hasAppointmentTimeType ? licencePlaceholder.appointmentTimeType : undefined,
           kind: options.licenceKind || LicenceKind.CRD,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
           responsibleComFullName: options.responsibleComFullName || null,
           isEligibleForEarlyRelease: options.isEligibleForEarlyRelease || false,
-          curfewAddress: options.curfewAddress,
         },
       },
     })

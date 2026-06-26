@@ -23,7 +23,6 @@ export default class VaryApproveViewRoutes {
         this.licenceService.getApprovalConversation(licence, user),
         this.licenceService.compareVariationToOriginal(licence, user),
       ])
-      console.log('conditionComparison', conditionComparison)
 
       res.render('pages/vary-approve/view', {
         conversation,
