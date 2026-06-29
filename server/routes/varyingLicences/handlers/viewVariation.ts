@@ -30,7 +30,7 @@ export default class ViewVariationRoutes {
     ].includes(<LicenceStatus>licence.statusCode)
 
     // Get the ACO/COM approval conversation
-    const [conversation, conditionComparison] = await Promise.all([
+    const [conversation, variationChanges] = await Promise.all([
       this.licenceService.getApprovalConversation(licence, user),
       this.licenceService.compareVariationToOriginal(licence, user),
     ])
@@ -38,7 +38,7 @@ export default class ViewVariationRoutes {
     // Show the variation
     return res.render(`pages/vary/viewSubmitted`, {
       conversation,
-      conditionComparison,
+      variationChanges,
       callToActions: { shouldShowEditAndDiscardButton },
     })
   }
