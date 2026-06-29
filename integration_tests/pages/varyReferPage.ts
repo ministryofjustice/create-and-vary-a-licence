@@ -18,4 +18,23 @@ export default class VaryReferPage extends Page {
     cy.get(this.referButtonId).click()
     return Page.verifyOnPage(VaryReferConfirmPage)
   }
+
+  expandVariationDetails = (): VaryReferPage => {
+    cy.get('.govuk-details__summary').contains('View variation details').click()
+
+    return this
+  }
+
+  checkHdcCurfewDetails = (address?: string, expectHours: boolean = false): VaryReferPage => {
+    cy.contains('HDC curfew details amended').should('be.visible')
+
+    if (address) {
+      cy.get('.curfew-address').should('contain.text', address)
+    }
+
+    if (expectHours) {
+      cy.get('.weekly-curfew-times').should('exist').and('not.be.empty')
+    }
+    return this
+  }
 }
