@@ -33,4 +33,16 @@ export default class VaryApproveViewPage extends Page {
 
     cy.contains('Enter a reason why address checks have not been completed').parent().should('contain.text', reason)
   }
+
+  checkHdcCurfewDetails(address?: string, expectHours: boolean = true) {
+    cy.contains('HDC curfew details amended').should('be.visible')
+
+    if (address) {
+      cy.get('.curfew-address').should('contain.text', address)
+    }
+
+    if (expectHours) {
+      cy.get('.weekly-curfew-times').should('exist').and('not.be.empty')
+    }
+  }
 }
