@@ -54,25 +54,6 @@
         {{ variationDetails(licence, conversation) }}
     {% endif %}
 
-    {% if conditionComparison.licenceConditionsAdded.length > 0 %}
-        {{ buildConditionsSummaryCard('Licence conditions added', conditionComparison.licenceConditionsAdded) }}
-    {% endif %}
-    {% if conditionComparison.licenceConditionsRemoved.length > 0 %}
-        {{ buildConditionsSummaryCard('Licence conditions removed', conditionComparison.licenceConditionsRemoved) }}
-    {% endif %}
-    {% if conditionComparison.licenceConditionsAmended.length > 0 %}
-        {{ buildConditionsSummaryCard('Licence conditions amended', conditionComparison.licenceConditionsAmended) }}
-    {% endif %}
-    {% if conditionComparison.pssConditionsAdded.length > 0 %}
-        {{ buildConditionsSummaryCard('Post sentence supervision requirement added', conditionComparison.pssConditionsAdded) }}
-    {% endif %}
-    {% if conditionComparison.pssConditionsRemoved.length > 0 %}
-        {{ buildConditionsSummaryCard('Post sentence supervision requirement removed', conditionComparison.pssConditionsRemoved) }}
-    {% endif %}
-    {% if conditionComparison.pssConditionsAmended.length > 0 %}
-        {{ buildConditionsSummaryCard('Post sentence supervision requirement amended', conditionComparison.pssConditionsAmended) }}
-    {% endif %}
-
     {# The "if licence" section of this condition is a temporary check to prevent an empty table appearing for pages that haven't been updated yet. It should be removed once all pages are displaying HDC variation information.#}
     {% if licence and (conditionComparison.hasUpdatedCurfewAddress or conditionComparison.hasUpdatedCurfewHours) %}
         {{ summaryCard({
@@ -91,5 +72,24 @@
                 }) if conditionComparison.hasUpdatedCurfewHours
             ]
         }) }}
+    {% endif %}
+
+    {% if conditionComparison.licenceConditionsAdded.length > 0 %}
+        {{ buildConditionsSummaryCard('Licence conditions added', conditionComparison.licenceConditionsAdded) }}
+    {% endif %}
+    {% if conditionComparison.licenceConditionsRemoved.length > 0 %}
+        {{ buildConditionsSummaryCard('Licence conditions removed', conditionComparison.licenceConditionsRemoved) }}
+    {% endif %}
+    {% if conditionComparison.licenceConditionsAmended.length > 0 %}
+        {{ buildConditionsSummaryCard('Licence conditions amended', conditionComparison.licenceConditionsAmended) }}
+    {% endif %}
+    {% if conditionComparison.pssConditionsAdded.length > 0 %}
+        {{ buildConditionsSummaryCard('Post sentence supervision requirement added', conditionComparison.pssConditionsAdded) }}
+    {% endif %}
+    {% if conditionComparison.pssConditionsRemoved.length > 0 %}
+        {{ buildConditionsSummaryCard('Post sentence supervision requirement removed', conditionComparison.pssConditionsRemoved) }}
+    {% endif %}
+    {% if conditionComparison.pssConditionsAmended.length > 0 %}
+        {{ buildConditionsSummaryCard('Post sentence supervision requirement amended', conditionComparison.pssConditionsAmended) }}
     {% endif %}
 {% endmacro %}

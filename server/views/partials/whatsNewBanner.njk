@@ -2,13 +2,4 @@
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% if showCommsBanner %}
-    <div class="govuk-!-margin-top-6">
-        {{ mojAlert({
-            variant: "information",
-            title: "What's new",
-            showTitleAsHeading: true,
-            dismissible: false,
-            html: "From 1 June 2026, licences for people who are detained in a secure hospital can be created and managed using this service."
-        }) }}
-    </div>
 {% endif %}
