@@ -28,6 +28,7 @@ import PolicyConfirmDeleteRoutes from './handlers/policyConfirmDelete'
 import ReviewLicenceRoutes from './handlers/reviewLicence'
 import YesOrNotApplicableDto from '../creatingLicences/types/yesOrNotApplicable'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
+import OtherAgenciesRoutes from './handlers/otherAgencies'
 
 export function alterResObject() {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -92,6 +93,7 @@ export default function Index({
   const policyChangeHandler = new PolicyChangeRoutes(licenceService, conditionService)
   const policyConfirmDeleteHandler = new PolicyConfirmDeleteRoutes()
   const policyChangeInputCallbackHandler = new PolicyChangesInputCallbackRoutes(conditionService)
+  const otherAgenciesHandler = new OtherAgenciesRoutes()
 
   get('/caseload', caseloadHandler.GET)
   get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
@@ -124,6 +126,7 @@ export default function Index({
   post('/id/:licenceId/policy-changes/condition/:changeCounter/delete', policyChangeHandler.DELETE)
   get('/id/:licenceId/policy-changes/condition/:changeCounter/delete', policyConfirmDeleteHandler.GET)
   get('/id/:licenceId/policy-changes/input/callback/:changeCounter', policyChangeInputCallbackHandler.GET)
+  get('/id/:licenceId/other-agencies', otherAgenciesHandler.GET)
 
   return router
 }
