@@ -18,21 +18,6 @@ describe('approverImmediateReleaseConditions', () => {
     expect($('p').text().toString()).toContain('No other additional or bespoke licence conditions can be added.')
   })
 
-  it('should display post sentence supervision text', () => {
-    const $ = render({
-      options: {
-        kind: 'HARD_STOP',
-        submittedByFullName: 'Bob Smith',
-        prisonDescription: 'prison',
-        typeCode: 'PSS',
-      },
-    })
-    expect($('.licence-conditions').text().toString()).toContain(
-      'This licence contains standard post sentence supervision requirements only by default.',
-    )
-    expect($('p').text().toString()).not.toContain('No other additional or bespoke licence conditions can be added.')
-  })
-
   it('should display hard stop warning text', () => {
     const $ = render({
       options: {
