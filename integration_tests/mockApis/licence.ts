@@ -31,7 +31,7 @@ const licencePlaceholder: Licence = {
   isReviewNeeded: false,
   isVariation: false,
   id: 1,
-  typeCode: 'AP_PSS',
+  typeCode: 'AP',
   kind: 'CRD',
   version: ACTIVE_POLICY_VERSION,
   statusCode: 'IN_PROGRESS',

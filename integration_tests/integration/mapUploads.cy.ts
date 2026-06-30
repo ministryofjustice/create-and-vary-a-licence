@@ -73,9 +73,7 @@ context('Create a licence', () => {
         .selectNo()
         .clickContinue()
 
-      const pssConditionsQuestionPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
-
-      const checkAnswersPage = pssConditionsQuestionPage.selectNo().clickContinueAfterNo()
+      const checkAnswersPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
       const caseloadPageExit = confirmationPage.clickReturn()
@@ -157,9 +155,7 @@ context('Create a licence', () => {
         .selectNo()
         .clickContinue()
 
-      const pssConditionsQuestionPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
-
-      const checkAnswersPage = pssConditionsQuestionPage.selectNo().clickContinueAfterNo()
+      const checkAnswersPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
       const caseloadPageExit = confirmationPage.clickReturn()
@@ -266,10 +262,7 @@ context('Create a licence', () => {
       })
 
       const bespokeConditionsQuestionPage = exclusionZoneMapList.selectNo().clickContinue()
-
-      const pssConditionsQuestionPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
-
-      const checkAnswersPage = pssConditionsQuestionPage.selectNo().clickContinueAfterNo()
+      const checkAnswersPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
       const caseloadPageExit = confirmationPage.clickReturn()
@@ -360,10 +353,7 @@ context('Create a licence', () => {
         appointmentAlternativeTelephoneNumber: '01234567892',
       })
 
-      const pssConditionsQuestionPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
-
-      const checkAnswersPage = pssConditionsQuestionPage.selectNo().clickContinueAfterNo()
-
+      const checkAnswersPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
       const caseloadPageExit = confirmationPage.clickReturn()
       caseloadPageExit.signOut().click()

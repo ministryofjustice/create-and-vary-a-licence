@@ -1,6 +1,6 @@
 import Page from './page'
 import BespokeConditionsPage from './bespokeConditions'
-import PssConditionsQuestionPage from './pssConditionsQuestion'
+import CheckAnswersPage from './checkAnswers'
 
 export default class BespokeConditionsQuestionPage extends Page {
   private yesRadioButtonId = '[value=Yes]'
@@ -24,12 +24,13 @@ export default class BespokeConditionsQuestionPage extends Page {
   }
 
   clickContinue = (): BespokeConditionsPage => {
+    // cy.task('stubPutAdditionalConditionData')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(BespokeConditionsPage)
   }
 
-  clickContinueAfterNo = (): PssConditionsQuestionPage => {
+  clickContinueAfterNo = (): CheckAnswersPage => {
     cy.get(this.continueButtonId).click()
-    return Page.verifyOnPage(PssConditionsQuestionPage)
+    return Page.verifyOnPage(CheckAnswersPage)
   }
 }
