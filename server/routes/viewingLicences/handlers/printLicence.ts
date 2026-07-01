@@ -17,6 +17,8 @@ const pdfHeaderFooterStyle =
   'text-align: center; ' +
   'padding: 20px;'
 
+const EVENT_EXCLUSION_ZONE_CONDITION_CODE = '99195049-f355-46fb-b7d8-aef87a1b19c5'
+
 export default class PrintLicenceRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
@@ -29,7 +31,8 @@ export default class PrintLicenceRoutes {
     const { qrCodesEnabled } = res.locals
     const htmlPrint = true
     const qrCode = qrCodesEnabled ? await this.qrCodeService.getQrCode(licence) : null
-    const { exclusionZoneMapData, restrictionZoneMapData } = await this.splitUploadConditions(licence, user)
+    const { exclusionZoneMapData, restrictionZoneMapData, eventExclusionZoneMapData } =
+      await this.splitUploadConditions(licence, user)
     const isV4OrGreater = this.isLicenceV4OrGreater(licence)
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
@@ -51,6 +54,7 @@ export default class PrintLicenceRoutes {
       multipleItemConditions,
       exclusionZoneMapData,
       restrictionZoneMapData,
+      eventExclusionZoneMapData,
       isV4OrGreater,
     }
 
@@ -65,7 +69,8 @@ export default class PrintLicenceRoutes {
     const imageData = await this.prisonerService.getPrisonerImageData(licence.nomsId, user)
     const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.surname}.pdf`
     const footerHtml = this.getPdfFooter(licence)
-    const { exclusionZoneMapData, restrictionZoneMapData } = await this.splitUploadConditions(licence, user)
+    const { exclusionZoneMapData, restrictionZoneMapData, eventExclusionZoneMapData } =
+      await this.splitUploadConditions(licence, user)
     const isV4OrGreater = this.isLicenceV4OrGreater(licence)
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
@@ -94,6 +99,7 @@ export default class PrintLicenceRoutes {
       multipleItemConditions,
       exclusionZoneMapData,
       restrictionZoneMapData,
+      eventExclusionZoneMapData,
       prisonTelephone,
       monitoringSupplierTelephone,
       isV4OrGreater,
@@ -116,17 +122,20 @@ export default class PrintLicenceRoutes {
   private async splitUploadConditions(licence: Licence, user: User) {
     const additionalConditionsWithUploads = this.getConditionsWithUploads(licence.additionalLicenceConditions)
 
-    const exclusionZoneMapData = await this.getExclusionZones(
-      licence,
-      additionalConditionsWithUploads.filter(condition => condition.code === MEZ_CONDITION_CODE),
-      user,
-    )
-    const restrictionZoneMapData = await this.getExclusionZones(
-      licence,
-      additionalConditionsWithUploads.filter(condition => condition.code === RESTRICTION_ZONE_CONDITION_CODE),
-      user,
-    )
-    return { exclusionZoneMapData, restrictionZoneMapData }
+    const byConditionCode = (code: string) =>
+      this.getExclusionZones(
+        licence,
+        additionalConditionsWithUploads.filter(condition => condition.code === code),
+        user,
+      )
+
+    const [exclusionZoneMapData, restrictionZoneMapData, eventExclusionZoneMapData] = await Promise.all([
+      byConditionCode(MEZ_CONDITION_CODE),
+      byConditionCode(RESTRICTION_ZONE_CONDITION_CODE),
+      byConditionCode(EVENT_EXCLUSION_ZONE_CONDITION_CODE),
+    ])
+
+    return { exclusionZoneMapData, restrictionZoneMapData, eventExclusionZoneMapData }
   }
 
   getPdfFooter = (licence: Licence): string => {
