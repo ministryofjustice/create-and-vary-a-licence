@@ -65,20 +65,6 @@ export default class IndexPage extends Page {
     return Page.verifyOnPage(CaseloadPage)
   }
 
-  clickCreateAPssLicence = (): CaseloadPage => {
-    cy.task('stubGetPssCaseloadItem')
-    cy.task('stubGetProbationCase')
-    cy.task('stubGetPrisonInformation')
-    cy.task('stubGetHdcStatus')
-    cy.task('stubGetResponsibleCommunityManager')
-    cy.task('stubGetStaffCreateCaseload', {
-      licenceStatus: LicenceStatus.NOT_STARTED,
-      licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,
-    })
-    cy.get(this.createLicenceTileId).click()
-    return Page.verifyOnPage(CaseloadPage)
-  }
-
   clickCreateALicenceWithLao = (): CaseloadPage => {
     cy.task('stubGetCaseloadItem', { isEligibleForEarlyRelease: false })
     cy.task('stubGetProbationCase')
