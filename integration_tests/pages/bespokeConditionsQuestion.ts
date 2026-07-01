@@ -24,7 +24,6 @@ export default class BespokeConditionsQuestionPage extends Page {
   }
 
   clickContinue = (): BespokeConditionsPage => {
-    // cy.task('stubPutAdditionalConditionData')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(BespokeConditionsPage)
   }

@@ -1,4 +1,3 @@
-import moment from 'moment'
 import Page from './page'
 import ConfirmationPage from './confirmation'
 import EditLicenceQuestionPage from './editLicenceQuestion'
@@ -79,11 +78,6 @@ export default class CheckAnswersPage extends Page {
     return this
   }
 
-  checkIfDeleteLinkVisible = (code: string) => {
-    cy.get(`[data-qa="condition-action-${code}"]`).should('contain.text', 'Delete')
-    return this
-  }
-
   clickChangeTelephoneLink = (): AppointmentContactPage => {
     cy.get('[data-qa=telephone-change-link]').click()
     return Page.verifyOnPage(AppointmentContactPage)
@@ -134,33 +128,5 @@ export default class CheckAnswersPage extends Page {
 
   checkAlternativeTelephoneLinkDoesExist() {
     cy.get('[data-qa=alternative-telephone-change-link]').should('exist')
-  }
-
-  enterTime = (hour = '11', minute = '30', fieldId?: string): CheckAnswersPage => {
-    if (fieldId) {
-      cy.get(`#${fieldId}-hour`).type(hour)
-      cy.get(`#${fieldId}-minute`).type(minute)
-      cy.get(`#${fieldId}-ampm`).select('am')
-    } else {
-      cy.get("input[name*='hour']").type(hour)
-      cy.get("input[name*='minute']").type(minute)
-      cy.get("select[name*='ampm']").select('am')
-    }
-    return this
-  }
-
-  enterDate = (): CheckAnswersPage => {
-    cy.get("input[name*='day']").type('11')
-    cy.get("input[name*='month']").type('12')
-    cy.get("input[name*='year']").type(moment().add(1, 'year').format('YYYY'))
-    return this
-  }
-
-  enterAddress = (): CheckAnswersPage => {
-    cy.get("input[name*='addressLine1']").type('123 Fake Street')
-    cy.get("input[name*='addressTown']").type('Fakestown')
-    cy.get("input[name*='addressCounty']").type('Fakeshire')
-    cy.get("input[name*='addressPostcode']").type('FA1 1KE')
-    return this
   }
 }
