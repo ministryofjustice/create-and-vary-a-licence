@@ -2,7 +2,6 @@ import Page from './page'
 import LicenceKind from '../../server/enumeration/LicenceKind'
 import CheckAnswersPage from './checkAnswers'
 import { AdditionalCondition, ElectronicMonitoringProvider } from '../../server/@types/licenceApiClientTypes'
-import PssConditionsQuestionPage from './pssConditionsQuestion'
 
 export default class BespokeConditionsPage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -57,19 +56,9 @@ export default class BespokeConditionsPage extends Page {
   ): CheckAnswersPage => {
     cy.task('stubPutAdditionalConditionData')
     cy.task('stubPutBespokeConditions')
-    // cy.task('stubGetLicence', { licenceKind })
     cy.task('stubGetCompletedLicence', {
       statusCode: 'IN_PROGRESS',
-      typeCode: 'AP', // cy.task('stubGetCompletedLicence', {
-      //   statusCode: 'IN_PROGRESS',
-      //   typeCode: 'AP',
-      //   kind: licenceKind,
-      //   electronicMonitoringProvider,
-      //   electronicMonitoringProviderStatus,
-      //   conditions,
-      //   appointmentTelephoneNumber: '01234567890',
-      //   appointmentAlternativeTelephoneNumber: '09876543210',
-      // })
+      typeCode: 'AP',
       kind: licenceKind,
       electronicMonitoringProvider,
       electronicMonitoringProviderStatus,
@@ -79,12 +68,5 @@ export default class BespokeConditionsPage extends Page {
     })
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
-  }
-
-  clickContinueGet = (licenceKind: LicenceKind = LicenceKind.PRRD): PssConditionsQuestionPage => {
-    cy.task('stubPutBespokeConditions')
-    cy.task('stubGetLicence', { licenceKind })
-    cy.get(this.continueButtonId).click()
-    return Page.verifyOnPage(PssConditionsQuestionPage)
   }
 }

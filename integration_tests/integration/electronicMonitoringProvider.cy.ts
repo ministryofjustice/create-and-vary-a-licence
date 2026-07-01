@@ -95,28 +95,6 @@ context('Create a licence that needs pathfinder or programme question', () => {
           'NOT_STARTED',
         )
 
-      // const pssConditionsPage = pssConditionsQuestionPage
-
-      // const pssConditionsInputPage = pssConditionsPage
-      // .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
-      // .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
-      // .clickContinue()
-
-      // const checkAnswersPage = pssConditionsQuestionPage
-      // .withContext(pssConditionsPage.getContext())
-      // .enterTime()
-      // .enterDate()
-      // .enterAddress()
-      // .nextInput()
-      // .enterAddress()
-      // .clickContinueEM(
-      //           null,
-      //           {
-      //             isToBeTaggedForProgramme: null,
-      //             programmeName: '',
-      //           },
-      //           'NOT_STARTED',
-      //         )
       checkAnswersPage.checkIfElectronicMonitoringProviderExists()
       checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
     })

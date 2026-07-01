@@ -2,7 +2,6 @@ import { Moment } from 'moment'
 import Page from './page'
 import AdditionalConditionsQuestionPage from './additionalConditionsQuestion'
 import ViewALicencePage from './viewALicence'
-import PssConditionsQuestionPage from './pssConditionsQuestion'
 import FirstNightCurfewTimesPage from './firstNightCurfewTimesPage'
 
 export default class AppointmentTimePage extends Page {
@@ -23,13 +22,7 @@ export default class AppointmentTimePage extends Page {
   }
 
   selectType = (value: string): AppointmentTimePage => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'IN_PROGRESS', typeCode: 'AP_PSS', appointmentTimeType: value })
-    cy.get(`input[value="${value}"]`).click()
-    return this
-  }
-
-  selectTypePss = (value: string): AppointmentTimePage => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'IN_PROGRESS', typeCode: 'PSS', appointmentTimeType: value })
+    cy.task('stubGetCompletedLicence', { statusCode: 'IN_PROGRESS', typeCode: 'AP', appointmentTimeType: value })
     cy.get(`input[value="${value}"]`).click()
     return this
   }
@@ -37,7 +30,7 @@ export default class AppointmentTimePage extends Page {
   selectTypeInHardStop = (value: string): AppointmentTimePage => {
     cy.task('stubGetCompletedLicence', {
       statusCode: 'IN_PROGRESS',
-      typeCode: 'AP_PSS',
+      typeCode: 'AP',
       appointmentTimeType: value,
       isInHardStopPeriod: true,
       kind: 'TIME_SERVED',
@@ -67,12 +60,6 @@ export default class AppointmentTimePage extends Page {
     cy.task('stubPutAppointmentTime')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsQuestionPage)
-  }
-
-  clickContinueToPss = (): PssConditionsQuestionPage => {
-    cy.task('stubPutAppointmentTime')
-    cy.get(this.continueButtonId).click()
-    return Page.verifyOnPage(PssConditionsQuestionPage)
   }
 
   clickContinueToReturn = (): ViewALicencePage => {
