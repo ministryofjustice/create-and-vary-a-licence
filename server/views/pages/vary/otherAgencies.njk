@@ -1,0 +1,26 @@
+{% extends "layout.njk" %}
+
+{%- from "moj/components/interruption-card/macro.njk" import interruptionCard -%}
+
+{% set pageTitle = applicationName + " - Vary a licence - licence history" %}
+{% set pageId = "view-timeline-page" %}
+{% set backLinkHref = "/licence/vary/caseload" %}
+
+{% block content %}
+    {% set licenceHistoryLink = '/licence/vary/id/' + licence.id + '/timeline' %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% call interruptionCard({
+                heading: "Send the new licence to other agencies",
+                primaryAction: {
+                    text: "Back to licence history",
+                    href: licenceHistoryLink
+                }
+            }) -%}
+                <p>You must now send a copy of the new licence to the police and the Electronic Monitoring Service (EMS).</p>
+                <p>The service does not do this automatically.</p>
+            {%- endcall %}
+        </div>
+    </div>
+
+{% endblock %}

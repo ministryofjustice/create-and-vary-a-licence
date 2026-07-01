@@ -70,6 +70,9 @@ export default class TimelineRoutes {
     // The POST is the trigger to set the approved variation to ACTIVE and varied licence to INACTIVE
     if (isVariation(licence) && licence.statusCode === LicenceStatus.VARIATION_APPROVED) {
       await this.licenceService.activateVariation(licence.id, user)
+      if (licence.kind === 'HDC_VARIATION') {
+        return res.redirect(`/licence/vary/id/${licenceId}/other-agencies`)
+      }
     }
 
     return res.redirect(`/licence/vary/id/${licenceId}/timeline`)

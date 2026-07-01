@@ -14,14 +14,14 @@
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-grid-column-full">
                 <h1 class="govuk-heading-l">Add reasons for declining the variation request</h1>
 
                 <div class="govuk-hint">Add a short explanation for why it's necessary for amendments to be made to the licence variation.</div>
 
                 {{ govukDetails({
                     summaryText: "View variation details",
-                    html: variedConditions(conditionComparison, licence, conversation)
+                    html: variedConditions(variationChanges, licence, conversation)
                 }) }}
 
                 {{ govukTextarea({
