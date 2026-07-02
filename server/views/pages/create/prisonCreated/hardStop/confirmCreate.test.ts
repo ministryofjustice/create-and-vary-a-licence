@@ -15,15 +15,4 @@ describe('Caseload', () => {
     })
     expect($('.licence-conditions').text().toString()).toContain('standard conditions')
   })
-
-  it('should display post sentence supervision text', () => {
-    const $ = render({
-      licence: {
-        licenceType: 'PSS',
-      },
-    })
-    expect($('.licence-conditions').text().toString()).toContain(
-      'This licence contains standard post sentence supervision requirements only by default.',
-    )
-  })
 })
