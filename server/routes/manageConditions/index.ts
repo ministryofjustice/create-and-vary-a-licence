@@ -14,9 +14,6 @@ import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceC
 import fileUploadRoutes from './handlers/fileUploads'
 import outOfBoundsPremisesRoutes from './handlers/outofboundsPremises'
 import curfewRoutes from './handlers/curfew'
-import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
-import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
-import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
 import DeleteConditionsByCodeRoutes from './handlers/deleteConditionsByCodeHandler'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
@@ -73,25 +70,6 @@ export default function Index(services: Services): Router {
   {
     const controller = new DeleteConditionsByCodeRoutes(licenceService)
     get('/additional-licence-conditions/condition/code/:conditionCode/delete', controller.DELETE)
-  }
-
-  {
-    const controller = new AdditionalPssConditionsRoutes(licenceService, conditionService)
-    get('/additional-pss-conditions', controller.GET)
-    post('/additional-pss-conditions', controller.POST, AdditionalConditions)
-  }
-
-  {
-    const controller = new AdditionalPssConditionsCallbackRoutes(conditionService)
-    get('/additional-pss-conditions/callback', controller.GET)
-  }
-
-  {
-    const controller = new AdditionalPssConditionInputRoutes(licenceService, conditionService)
-    get('/additional-pss-conditions/condition/:conditionId', controller.GET)
-    post('/additional-pss-conditions/condition/:conditionId', controller.POST)
-    post('/additional-pss-conditions/condition/:conditionId/delete', controller.DELETE)
-    get('/additional-licence-conditions/condition/:conditionId/skip', controller.SKIP)
   }
 
   {

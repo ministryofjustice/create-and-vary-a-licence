@@ -14,9 +14,7 @@ import YesOrNoQuestion from './types/yesOrNo'
 import ConfirmCreateRoutes from './handlers/confirmCreate'
 import AdditionalLicenceConditionsQuestionRoutes from './handlers/additionalLicenceConditionsQuestion'
 import AdditionalConditionsYesOrNo from './types/additionalConditionsYesOrNo'
-import AdditionalPssConditionsQuestionRoutes from './handlers/additionalPssConditionsQuestion'
 import BespokeConditionsQuestionRoutes from './handlers/bespokeConditionsQuestion'
-import PssConditionsYesOrNo from './types/pssConditionsYesOrNo'
 import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
 import PrisonWillCreateThisLicenceRoutes from './handlers/prisonWillCreateThisLicence'
 import LicenceCreatedByPrisonRoutes from './handlers/licenceCreatedByPrison'
@@ -119,12 +117,6 @@ export default function Index({
       controller.POST,
       AdditionalConditionsYesOrNo,
     )
-  }
-
-  {
-    const controller = new AdditionalPssConditionsQuestionRoutes()
-    getWithHardStopCheck('/id/:licenceId/additional-pss-conditions-question', controller.GET)
-    postWithHardStopCheck('/id/:licenceId/additional-pss-conditions-question', controller.POST, PssConditionsYesOrNo)
   }
 
   {

@@ -1,6 +1,7 @@
 import Page from './page'
-import PssConditionsQuestionPage from './pssConditionsQuestion'
 import LicenceKind from '../../server/enumeration/LicenceKind'
+import CheckAnswersPage from './checkAnswers'
+import { AdditionalCondition, ElectronicMonitoringProvider } from '../../server/@types/licenceApiClientTypes'
 
 export default class BespokeConditionsPage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -32,10 +33,40 @@ export default class BespokeConditionsPage extends Page {
     return this
   }
 
-  clickContinue = (licenceKind: LicenceKind = LicenceKind.PRRD): PssConditionsQuestionPage => {
+  clickContinue = (conditions?: AdditionalCondition[]): CheckAnswersPage => {
     cy.task('stubPutBespokeConditions')
-    cy.task('stubGetLicence', { licenceKind })
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'IN_PROGRESS',
+      typeCode: 'AP',
+      kind: LicenceKind.CRD,
+      appointmentTelephoneNumber: '01234567890',
+      appointmentAlternativeTelephoneNumber: '09876543210',
+      conditions,
+    })
+
     cy.get(this.continueButtonId).click()
-    return Page.verifyOnPage(PssConditionsQuestionPage)
+    return Page.verifyOnPage(CheckAnswersPage)
+  }
+
+  clickContinueEM = (
+    conditions?: AdditionalCondition[],
+    electronicMonitoringProvider?: ElectronicMonitoringProvider,
+    electronicMonitoringProviderStatus?: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE',
+    licenceKind: LicenceKind = LicenceKind.CRD,
+  ): CheckAnswersPage => {
+    cy.task('stubPutAdditionalConditionData')
+    cy.task('stubPutBespokeConditions')
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'IN_PROGRESS',
+      typeCode: 'AP',
+      kind: licenceKind,
+      electronicMonitoringProvider,
+      electronicMonitoringProviderStatus,
+      conditions,
+      appointmentTelephoneNumber: '01234567890',
+      appointmentAlternativeTelephoneNumber: '09876543210',
+    })
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(CheckAnswersPage)
   }
 }

@@ -114,13 +114,6 @@ describe('createLicenceRoutes', () => {
           .expect('Location', '/access-denied')
       })
 
-      it('should redirect to access-denied when trying to access the additional PSS conditions question', () => {
-        return request(app)
-          .get('/licence/create/id/1/additional-pss-conditions-question')
-          .expect(302)
-          .expect('Location', '/access-denied')
-      })
-
       it('should redirect to access-denied when trying to access the bespoke conditions question', () => {
         return request(app)
           .get('/licence/create/id/1/bespoke-conditions-question')
@@ -149,14 +142,6 @@ describe('createLicenceRoutes', () => {
       it('should redirect to access-denied when trying to answer the additional licence conditions question', () => {
         return request(app)
           .post('/licence/create/id/1/additional-licence-conditions-question')
-          .send({ answer: 'Yes' })
-          .expect(302)
-          .expect('Location', '/access-denied')
-      })
-
-      it('should redirect to access-denied when trying to answer the additional PSS conditions question', () => {
-        return request(app)
-          .post('/licence/create/id/1/additional-pss-conditions-question')
           .send({ answer: 'Yes' })
           .expect(302)
           .expect('Location', '/access-denied')
@@ -222,10 +207,6 @@ describe('createLicenceRoutes', () => {
         return request(app).get('/licence/create/id/1/additional-licence-conditions-question').expect(200)
       })
 
-      it('should allow access the additional PSS conditions question', () => {
-        return request(app).get('/licence/create/id/1/additional-pss-conditions-question').expect(200)
-      })
-
       it('should allow access the bespoke conditions question', () => {
         return request(app).get('/licence/create/id/1/bespoke-conditions-question').expect(200)
       })
@@ -263,14 +244,6 @@ describe('createLicenceRoutes', () => {
           .send({ answer: 'Yes' })
           .expect(302)
           .expect('Location', '/licence/create/id/1/additional-licence-conditions')
-      })
-
-      it('should redirect to PSS condition selection page when answering the additional PSS conditions question', () => {
-        return request(app)
-          .post('/licence/create/id/1/additional-pss-conditions-question')
-          .send({ answer: 'Yes' })
-          .expect(302)
-          .expect('Location', '/licence/create/id/1/additional-pss-conditions')
       })
 
       it('should redirect to bespoke condition entry page when answering the bespoke conditions question', () => {
