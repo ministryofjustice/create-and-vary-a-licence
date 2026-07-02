@@ -188,8 +188,8 @@ describe('Caseload', () => {
     })
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('.status-badge').text().toString()).toContain('Active')
-    expect($('#release-date-1').text()).toBe('HDC eligible date: 13 Feb 2023HDC release')
-    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    expect($('#release-date-1').text()).toBe('HDC eligible date: 13 Feb 2023')
+    expect($('.urgent-highlight-message').length).toBe(0)
   })
 
   it('should highlight a HDC variation with a HDC release warning label', () => {
@@ -226,8 +226,8 @@ describe('Caseload', () => {
     })
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('.status-badge').text().toString()).toContain('Active')
-    expect($('#release-date-1').text()).toBe('HDC actual date: 13 Feb 2023HDC release')
-    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 13 Feb 2023')
+    expect($('.urgent-highlight-message').length).toBe(0)
   })
 
   it('should highlight Not allocated label if licence has no probation practitioner and highlight a Time-served release warning label when licence is time-served', () => {
@@ -506,7 +506,7 @@ describe('Caseload', () => {
       releaseDateLabel: 'HDC eligible date',
       releaseDate: '23 Dec 2026',
       licenseStatus: 'ACTIVE',
-      expected: 'HDC eligible date: 23 Dec 2026HDC release',
+      expected: 'HDC eligible date: 23 Dec 2026',
     },
     {
       kind: 'HDC VARIATION',
