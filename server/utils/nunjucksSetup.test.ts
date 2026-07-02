@@ -355,6 +355,22 @@ describe('Nunjucks Filters', () => {
     })
   })
 
+  describe('convertToTitleCase', () => {
+    it('should convert each word to title case', () => {
+      expect(registerNunjucks().getFilter('convertToTitleCase')('RobeRT SMiTH')).toEqual('Robert Smith')
+    })
+
+    it('should convert Hale Draven corvath to title case', () => {
+      expect(registerNunjucks().getFilter('convertToTitleCase')('Hale Draven corvath')).toEqual('Hale Draven Corvath')
+    })
+
+    it('should convert hyphenated names to title case', () => {
+      expect(registerNunjucks().getFilter('convertToTitleCase')('Robert-John SmiTH-jONes-WILSON')).toEqual(
+        'Robert-John Smith-Jones-Wilson',
+      )
+    })
+  })
+
   describe('getlicenceStatusForSearchResults', () => {
     it('should return REVIEW_NEEDED status', () => {
       expect(

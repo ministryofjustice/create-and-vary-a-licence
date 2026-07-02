@@ -74,4 +74,25 @@ describe('View Partials - Licence details banner', () => {
 
     expect($('[data-qa="date"]').text()).toContain('HDC eligibility date: 2 May 2022')
   })
+
+  it('should render offender name in title case', () => {
+    const $ = render({
+      licence: {
+        forename: 'Hale',
+        surname: 'corvath deml',
+      },
+    })
+
+    expect($('.govuk-heading-m').text()).toBe('Hale Corvath Deml')
+  })
+
+  it('should render offender name without undefined when surname is missing', () => {
+    const $ = render({
+      licence: {
+        forename: 'hale',
+      },
+    })
+
+    expect($('.govuk-heading-m').text()).toBe('Hale')
+  })
 })
