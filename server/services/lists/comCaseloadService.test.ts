@@ -25,7 +25,6 @@ describe('COM Caseload Service', () => {
     licenceApiClient.getTeamCreateCaseload = jest.fn().mockResolvedValue([])
     licenceApiClient.getStaffVaryCaseload = jest.fn().mockResolvedValue([])
     licenceApiClient.getTeamVaryCaseload = jest.fn().mockResolvedValue([])
-    licenceApiClient.getStaffCreateCaseloadHdc = jest.fn().mockResolvedValue([])
   })
 
   afterEach(() => {
@@ -163,52 +162,6 @@ describe('COM Caseload Service', () => {
 
     const result = await serviceUnderTest.getTeamVaryCaseload(user, ['teamA'])
 
-    expect(result).toStrictEqual(comCaseload)
-  })
-
-  it('build the staff create caseload for HDC', async () => {
-    const comCaseload = [
-      {
-        crnNumber: 'X12348',
-        prisonerNumber: 'AB1234E',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'AP',
-        probationPractitioner: {
-          name: 'Joe Bloggs',
-          staffCode: 'X1234',
-        },
-        isReviewNeeded: false,
-        hdcStatus: 'APPROVED',
-      },
-      {
-        crnNumber: 'X12351',
-        prisonerNumber: 'AB1234H',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
-        isReviewNeeded: false,
-        hdcStatus: 'APPROVED',
-      },
-      {
-        crnNumber: 'X12352',
-        prisonerNumber: 'AB1234I',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceId: 1,
-        licenceStatus: 'SUBMITTED',
-        licenceType: 'AP_PSS',
-        probationPractitioner: {
-          staffCode: 'X54321',
-          name: 'Test Com',
-        },
-        isReviewNeeded: false,
-        hdcStatus: 'APPROVED',
-      },
-    ] as ComCreateCase[]
-
-    licenceApiClient.getStaffCreateCaseloadHdc.mockResolvedValue(comCaseload)
-
-    const result = await serviceUnderTest.getStaffCreateCaseloadHdc(user)
     expect(result).toStrictEqual(comCaseload)
   })
 })

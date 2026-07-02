@@ -12,7 +12,7 @@ export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const view = (req.query?.view as string) || 'me'
+    const view = req.query?.view === 'team' ? 'team' : 'me'
     const teamView = view === 'team'
 
     const { user } = res.locals
@@ -40,17 +40,10 @@ export default class CaseloadRoutes {
       req.session.returnToCase = '/licence/create/caseload'
     }
 
-    let comCaseload
-    switch (view) {
-      case 'team':
-        comCaseload = await this.comCaseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
-        break
-      case 'hdc':
-        comCaseload = await this.comCaseloadService.getStaffCreateCaseloadHdc(user)
-        break
-      default:
-        comCaseload = await this.comCaseloadService.getStaffCreateCaseload(user)
-    }
+    const comCaseload =
+      view === 'team'
+        ? await this.comCaseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
+        : await this.comCaseloadService.getStaffCreateCaseload(user)
 
     const viewModelCaseload = comCaseload.map(comCase => {
       return {

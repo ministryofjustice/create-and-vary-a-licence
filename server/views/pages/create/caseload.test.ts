@@ -5,7 +5,6 @@ import statusConfig from '../../../licences/licenceStatus'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import config from '../../../config'
 
 interface ProbationPractitioner {
   name: string
@@ -16,11 +15,8 @@ interface ProbationPractitioner {
 const render = templateRenderer(fs.readFileSync('server/views/pages/create/caseload.njk').toString())
 
 describe('Create a Licence Views - Caseload', () => {
-  const existingConfig = config
-
   afterEach(() => {
     jest.resetAllMocks()
-    config.hdcEnabled = existingConfig.hdcEnabled
   })
 
   it('should display a table containing the caseload', () => {
@@ -74,25 +70,6 @@ describe('Create a Licence Views - Caseload', () => {
       view: 'team',
     })
     expect($('.moj-sub-navigation__link[aria-current="page"]').text()).toBe('Team cases')
-  })
-
-  it('should select My HDC cases when view=hdc is passed as a query parameter', () => {
-    config.hdcEnabled = true
-    const $ = render({
-      caseload: [],
-      statusConfig,
-      teamName: null,
-      multipleTeams: false,
-      view: 'hdc',
-    })
-    expect($('.moj-sub-navigation__link[aria-current="page"]').text()).toBe('My HDC cases')
-  })
-
-  it('should not show My HDC cases tab when HDC is not enabled', () => {
-    config.hdcEnabled = false
-    const $ = render({})
-    expect($('.moj-sub-navigation__link').length).toBe(2)
-    expect($('.moj-sub-navigation__link').text()).not.toContain('My HDC cases')
   })
 
   it('should display probation practitioner in the table or unallocated for the team view', () => {
