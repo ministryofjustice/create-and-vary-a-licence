@@ -1021,19 +1021,6 @@ describe('Licence API client tests', () => {
     })
   })
 
-  describe('getStaffCreateCaseloadHdc', () => {
-    const user = { username: 'joebloggs' } as User
-
-    it('should call to get the staff create caseload for HDC', async () => {
-      await licenceApiClient.getStaffCreateCaseloadHdc(user)
-
-      expect(get).toHaveBeenCalledWith(
-        { path: `/caseload/com/staff/${user?.deliusStaffIdentifier}/create-case-load/hdc` },
-        { username: 'joebloggs' },
-      )
-    })
-  })
-
   describe('licence status report cases', () => {
     it('should call the correct endpoint and return cases', async () => {
       const aCase = {
