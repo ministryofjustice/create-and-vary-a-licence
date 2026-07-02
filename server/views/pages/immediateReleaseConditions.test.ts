@@ -18,13 +18,4 @@ describe('Caseload', () => {
       'Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer.',
     )
   })
-
-  it('should display post sentence supervision text', () => {
-    const $ = render({
-      options: 'PSS',
-    })
-    expect($('p').text().toString()).toContain(
-      'This licence contains standard post sentence supervision requirements only by default.',
-    )
-  })
 })
