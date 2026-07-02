@@ -1210,6 +1210,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/jobs/migrate-standard-conditions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Migrates standard conditions on in flight licences the requested policy version.
+     * @description Updates the standard conditions for in flight licences to the requested policy version conditions
+     */
+    post: operations['migrateStandardConditions']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/jobs/isr-licence-progression-job': {
     parameters: {
       query?: never
@@ -2133,26 +2153,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/hdc/curfew/licenceId/{licenceId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get curfew details from HDC.
-     * @description Get curfew details from HDC. Requires ROLE_CVL_ADMIN.
-     */
-    get: operations['getHdcLicenceData']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/full-size-image': {
     parameters: {
       query?: never
@@ -3019,6 +3019,11 @@ export interface components {
        * @example You must not enter the location [DESCRIPTION]
        */
       text: string
+      /**
+       * @description The textual value for this additional condition if it can be grouped in a plural form
+       * @example You must not enter the locations
+       */
+      textPlural?: string | null
     }
     /** @description Request object for updating the list of additional conditions on a licence */
     AdditionalConditionsRequest: {
@@ -4028,6 +4033,11 @@ export interface components {
        */
       conditionText: string
       /**
+       * @description The textual value for this additional condition if multiple items are present and can be grouped
+       * @example You must not enter the locations
+       */
+      conditionTextPlural?: string | null
+      /**
        * @description The condition text with the users data inserted into the template
        * @example You must not enter the location Tesco Superstore
        */
@@ -4067,6 +4077,11 @@ export interface components {
        * @example You must not enter the location [DESCRIPTION]
        */
       text?: string | null
+      /**
+       * @description The textual value for this additional condition if it can be grouped in a plural form
+       * @example You must not enter the locations
+       */
+      textPlural?: string | null
       /**
        * @description The condition text with the users data inserted into the template
        * @example You must not enter the location Tesco Superstore
@@ -5168,22 +5183,16 @@ export interface components {
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
       /**
-       * Format: int64
-       * @description Unique identifier for this licence within the service
-       * @example 99999
-       */
-      id: number
-      /**
-       * @description The licence type code
-       * @example AP
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
        * @enum {string}
        */
-      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
       /**
-       * @description The version number used for standard and additional conditions
-       * @example 1.4
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
        */
-      version?: string | null
+      appointmentAlternativeTelephoneNumber?: string | null
       /**
        * @description The current status code for this licence
        * @example IN_PROGRESS
@@ -5205,25 +5214,6 @@ export interface components {
         | 'TIMED_OUT'
         | null
       /**
-       * @description The family name of the person on licence
-       * @example Smith
-       */
-      surname?: string | null
-      kind: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       * @example 24/08/2022 11:30:33
-       */
-      supersededDate?: string | null
-      /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
-       */
-      updatedByUsername?: string | null
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean | null
-      /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
        * @example 989898
@@ -5234,18 +5224,11 @@ export interface components {
        * @example 1.3
        */
       licenceVersion?: string | null
-      /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * @description The agency code of the detaining prison
        * @example LEI
        */
       prisonCode?: string | null
-      /**
-       * @description The username who approved the licence on behalf of the prison governor
-       * @example X33221
-       */
-      approvedByUsername?: string | null
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
@@ -5277,6 +5260,11 @@ export interface components {
        */
       middleNames?: string | null
       /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string | null
+      /**
        * Format: date
        * @description The date of birth of the person on licence
        * @example 12/05/1987
@@ -5284,16 +5272,46 @@ export interface components {
       dateOfBirth?: string | null
       /**
        * Format: date
-       * @description The sentence start date
-       * @example 13/09/2019
-       */
-      sentenceStartDate?: string | null
-      /**
-       * Format: date
        * @description The sentence end date
        * @example 13/09/2022
        */
       sentenceEndDate?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       * @example 24/08/2022 09:30:33
+       */
+      dateCreated?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was submitted for approval
+       * @example 24/08/2022 11:30:33
+       */
+      submittedDate?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this prison approved this licence
+       * @example 24/08/2022 11:30:33
+       */
+      approvedDate?: string | null
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
+      /**
+       * @description The username who approved the licence on behalf of the prison governor
+       * @example X33221
+       */
+      approvedByUsername?: string | null
+      /**
+       * Format: date
+       * @description The sentence start date
+       * @example 13/09/2019
+       */
+      sentenceStartDate?: string | null
       /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
@@ -5331,29 +5349,6 @@ export interface components {
        */
       licenceExpiryDate?: string | null
       /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       * @example 24/08/2022 09:30:33
-       */
-      dateCreated?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was submitted for approval
-       * @example 24/08/2022 11:30:33
-       */
-      submittedDate?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time that this prison approved this licence
-       * @example 24/08/2022 11:30:33
-       */
-      approvedDate?: string | null
-      /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
-       */
-      nomsId?: string | null
-      /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
        * @enum {string|null}
@@ -5370,12 +5365,6 @@ export interface components {
        * @enum {string|null}
        */
       appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
-      /**
-       * Format: date-time
-       * @description The date and time of the initial appointment
-       * @example 23/08/2022 12:12
-       */
-      appointmentTime?: string | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -5429,22 +5418,18 @@ export interface components {
        * @example 13/09/2022
        */
       licenceStartDate?: string | null
-      eligibleKind?: string | null
       /**
-       * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
        */
-      earliestReleaseDate?: string | null
+      appointmentTime?: string | null
+      eligibleKind?: string | null
       /**
        * @description The full name of the person who approved the licence on behalf of the prison governor
        * @example John Smith
        */
       approvedByName?: string | null
-      /**
-       * @description The agency description of the detaining prison
-       * @example Leeds (HMP)
-       */
-      prisonDescription?: string | null
       /**
        * @description The telephone number to contact the prison
        * @example 0161 234 4747
@@ -5460,20 +5445,30 @@ export interface components {
        */
       comEmail?: string | null
       /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
-      comUsername?: string | null
+      earliestReleaseDate?: string | null
+      /**
+       * @description The agency description of the detaining prison
+       * @example Leeds (HMP)
+       */
+      prisonDescription?: string | null
+      /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
+       */
+      submittedByFullName?: string | null
       /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
       updatedByFullName?: string | null
       /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
        */
-      submittedByFullName?: string | null
+      comUsername?: string | null
       /**
        * @description Is a review of this licence is required
        * @example true
@@ -5491,6 +5486,20 @@ export interface components {
        * @example 24/08/2022 09:30:33
        */
       dateLastUpdated?: string | null
+      kind: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
+       */
+      supersededDate?: string | null
+      /**
+       * @description The username of the person who last updated this licence
+       * @example X34433
+       */
+      updatedByUsername?: string | null
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean | null
       /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
@@ -5515,11 +5524,6 @@ export interface components {
        */
       appointmentTelephoneNumber?: string | null
       /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string | null
-      /**
        * @description The username which created this licence
        * @example X12333
        */
@@ -5532,11 +5536,22 @@ export interface components {
        */
       createdByFullName?: string | null
       /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      id: number
+      /**
+       * @description The licence type code
+       * @example AP
        * @enum {string}
        */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * @description The version number used for standard and additional conditions
+       * @example 1.4
+       */
+      version?: string | null
     }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
@@ -5563,7 +5578,7 @@ export interface components {
        * @example V2_1
        * @enum {string}
        */
-      policyVersion: 'V1_0' | 'V2_0' | 'V2_1' | 'V3_0'
+      policyVersion: 'V1_0' | 'V2_0' | 'V2_1' | 'V3_0' | 'V4_0'
       /**
        * @description The version of this specific licence, this is unique within the context of a booking
        * @example 1.4
@@ -8845,6 +8860,7 @@ export interface components {
       code: string
       category: string
       text: string
+      textPlural?: string | null
       tpl?: string | null
       requiresInput: boolean
       inputs?: components['schemas']['Input'][] | null
@@ -8953,19 +8969,6 @@ export interface components {
     SuggestedCondition: {
       code: string
       currentText: string
-    }
-    /** @description Home Detention Curfew licence data */
-    HdcLicenceDataResponse: {
-      /**
-       * Format: int64
-       * @description Unique identifier of the HDC licence
-       * @example 12345
-       */
-      licenceId?: number | null
-      curfewAddress?: components['schemas']['HdcCurfewAddress'] | null
-      firstNightCurfewTimes?: components['schemas']['CurfewTimes'] | null
-      /** @description Weekly curfew schedule for the licence */
-      weeklyCurfewTimes: components['schemas']['CurfewTimes'][]
     }
     /** @description Describes an event that was related to a licence */
     LicenceEvent: {
@@ -14799,6 +14802,80 @@ export interface operations {
       }
     }
   }
+  migrateStandardConditions: {
+    parameters: {
+      query: {
+        policyVersion: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The job ran successfully */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   progressionOfTypeApPssLicences: {
     parameters: {
       query?: never
@@ -18515,91 +18592,6 @@ export interface operations {
         }
       }
       /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Gone */
-      410: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Internal Server Error */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getHdcLicenceData: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description The HDC curfew information was retrieved */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HdcLicenceDataResponse']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The curfew details for this licence ID were not found. */
       404: {
         headers: {
           [name: string]: unknown

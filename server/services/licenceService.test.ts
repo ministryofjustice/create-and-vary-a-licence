@@ -208,12 +208,14 @@ describe('Licence Service', () => {
           categoryShort: 'Short category name',
           category: 'Longer category name',
           text: 'Condition 1',
+          textPlural: 'Plural text',
           code: 'CON1,',
           requiresInput: false,
         })
         .mockResolvedValueOnce({
           category: 'Longer category name',
           text: 'Condition 2',
+          textPlural: 'Plural text 2',
           code: 'CON2',
           requiresInput: false,
         })
@@ -234,12 +236,14 @@ describe('Licence Service', () => {
               sequence: 0,
               category: 'Short category name',
               text: 'Condition 1',
+              textPlural: 'Plural text',
             },
             {
               code: 'code2',
               sequence: 1,
               category: 'Longer category name',
               text: 'Condition 2',
+              textPlural: 'Plural text 2',
             },
           ],
           conditionType: 'AP',

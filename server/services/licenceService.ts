@@ -157,6 +157,7 @@ export default class LicenceService {
           sequence: index,
           category: additionalConditionConfig?.categoryShort || additionalConditionConfig?.category,
           text: additionalConditionConfig?.text,
+          textPlural: 'textPlural' in additionalConditionConfig ? additionalConditionConfig.textPlural : null,
         }
       }) || []
 
