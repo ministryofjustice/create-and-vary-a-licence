@@ -81,6 +81,7 @@ export default class FileUploadListRoutes {
       conditionCode,
       conditionCategory: condition?.categoryShort || condition?.category,
       conditionText: condition.text,
+      conditionTextPlural: 'textPlural' in condition ? condition.textPlural : null,
       conditionType: type,
       expandedText: condition.tpl,
       sequence,

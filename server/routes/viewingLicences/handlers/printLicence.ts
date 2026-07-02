@@ -6,7 +6,11 @@ import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { User } from '../../../@types/CvlUserDetails'
 import { isHdcLicence } from '../../../utils/utils'
-import { MEZ_CONDITION_CODE, RESTRICTION_ZONE_CONDITION_CODE } from '../../../utils/conditionRoutes'
+import {
+  MEZ_CONDITION_CODE,
+  RESTRICTION_ZONE_CONDITION_CODE,
+  EVENT_RESTRICTION_CONDITION_CODE,
+} from '../../../utils/conditionRoutes'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
@@ -16,8 +20,6 @@ const pdfHeaderFooterStyle =
   'height: 55px; ' +
   'text-align: center; ' +
   'padding: 20px;'
-
-const EVENT_EXCLUSION_ZONE_CONDITION_CODE = '99195049-f355-46fb-b7d8-aef87a1b19c5'
 
 export default class PrintLicenceRoutes {
   constructor(
@@ -132,7 +134,7 @@ export default class PrintLicenceRoutes {
     const [exclusionZoneMapData, restrictionZoneMapData, eventExclusionZoneMapData] = await Promise.all([
       byConditionCode(MEZ_CONDITION_CODE),
       byConditionCode(RESTRICTION_ZONE_CONDITION_CODE),
-      byConditionCode(EVENT_EXCLUSION_ZONE_CONDITION_CODE),
+      byConditionCode(EVENT_RESTRICTION_CONDITION_CODE),
     ])
 
     return { exclusionZoneMapData, restrictionZoneMapData, eventExclusionZoneMapData }
