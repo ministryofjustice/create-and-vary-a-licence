@@ -108,11 +108,6 @@
           <li class="moj-sub-navigation__item">
             <a class="moj-sub-navigation__link" {% if view == 'team' %} aria-current="page" {% endif %} href="?view=team">Team cases</a>
           </li>
-          {% if hdcEnabled %}
-            <li class="moj-sub-navigation__item">
-              <a class="moj-sub-navigation__link" {% if view == 'hdc' %} aria-current="page" {% endif %} href="?view=hdc">My HDC cases</a>
-            </li>
-          {% endif %}
         </ul>
       </nav>
       {% if multipleTeams %}
