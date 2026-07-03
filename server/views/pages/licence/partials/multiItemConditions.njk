@@ -1,7 +1,7 @@
 {% macro multiItemConditions(multipleItemConditions) %}
     {% if multipleItemConditions.length %}
         {% for condition in multipleItemConditions %}
-            {% if condition[0].textPlural %}
+            {% if condition.length > 1 and condition[0].textPlural %}
                 <div class="condition">
                     <span>{{ condition[0].textPlural }}</span>
                 </div>

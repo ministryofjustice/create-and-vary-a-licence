@@ -220,30 +220,32 @@ describe('Route - print a licence', () => {
           htmlPrint: false,
           licence: res.locals.licence,
           watermark,
-          singleItemConditions: [
-            {
-              code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
-              data: [
-                {
-                  field: 'outOfBoundArea',
-                  id: 0,
-                  sequence: 0,
-                  contributesToLicence: true,
-                },
-              ],
-              id: 1,
-              text: 'some text',
-              uploadSummary: [
-                {
-                  description: 'Some words',
-                  id: 1,
-                  fileSize: 0,
-                  uploadedTime: '',
-                },
-              ],
-            },
+          singleItemConditions: [],
+          multipleItemConditions: [
+            [
+              {
+                code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
+                data: [
+                  {
+                    field: 'outOfBoundArea',
+                    id: 0,
+                    sequence: 0,
+                    contributesToLicence: true,
+                  },
+                ],
+                id: 1,
+                text: 'some text',
+                uploadSummary: [
+                  {
+                    description: 'Some words',
+                    id: 1,
+                    fileSize: 0,
+                    uploadedTime: '',
+                  },
+                ],
+              },
+            ],
           ],
-          multipleItemConditions: [],
           exclusionZoneMapData: [
             {
               dataValue: {
@@ -327,27 +329,6 @@ describe('Route - print a licence', () => {
           licence: res.locals.licence,
           singleItemConditions: [
             {
-              code: '005d70e4-a247-4f82-b8b3-6d294a0f5051',
-              data: [
-                {
-                  contributesToLicence: true,
-                  field: 'outOfBoundArea',
-                  id: 0,
-                  sequence: 0,
-                },
-              ],
-              id: 3,
-              text: 'this is a restriction',
-              uploadSummary: [
-                {
-                  description: 'Some words about a restriction',
-                  fileSize: 0,
-                  id: 3,
-                  uploadedTime: '',
-                },
-              ],
-            },
-            {
               code: '99195049-f355-46fb-b7d8-aef87a1b19c5',
               data: [
                 {
@@ -409,6 +390,29 @@ describe('Route - print a licence', () => {
                     description: 'Some more words',
                     id: 2,
                     fileSize: 0,
+                    uploadedTime: '',
+                  },
+                ],
+              },
+            ],
+            [
+              {
+                code: '005d70e4-a247-4f82-b8b3-6d294a0f5051',
+                data: [
+                  {
+                    contributesToLicence: true,
+                    field: 'outOfBoundArea',
+                    id: 0,
+                    sequence: 0,
+                  },
+                ],
+                id: 3,
+                text: 'this is a restriction',
+                uploadSummary: [
+                  {
+                    description: 'Some words about a restriction',
+                    fileSize: 0,
+                    id: 3,
                     uploadedTime: '',
                   },
                 ],

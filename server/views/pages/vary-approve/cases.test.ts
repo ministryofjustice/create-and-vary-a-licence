@@ -19,6 +19,7 @@ const pduCases = [
       allocated: true,
     },
     isRestricted: false,
+    releaseDateLabel: 'CRD',
   },
 ]
 
@@ -84,6 +85,7 @@ const allRegionCases = [
       allocated: true,
     },
     isRestricted: false,
+    releaseDateLabel: 'CRD',
   },
   {
     licenceId: 2,
@@ -98,6 +100,7 @@ const allRegionCases = [
       allocated: true,
     },
     isRestricted: false,
+    releaseDateLabel: 'CRD',
   },
 ]
 
@@ -134,7 +137,7 @@ describe('View Vary Approver case list', () => {
     )
 
     expect($('#variation-request-date-1').text()).toBe('3 Jun 2024')
-    expect($('#release-date-1').text()).toBe('1 May 2024')
+    expect($('#release-date-1').text()).toBe('CRD: 1 May 2024')
   })
 
   it('should display all region cases in a table with links to the licence and COM details page', () => {
@@ -155,7 +158,7 @@ describe('View Vary Approver case list', () => {
     )
 
     expect($('#variation-request-date-1').text()).toBe('3 Jun 2024')
-    expect($('#release-date-1').text()).toBe('1 May 2024')
+    expect($('#release-date-1').text()).toBe('CRD: 1 May 2024')
 
     expect($(nameLink2Selector).text()).toBe('Test Person Two')
     expect($(nameLink2Selector).attr('href').trim()).toBe('/licence/vary-approve/id/2/view')
@@ -165,7 +168,7 @@ describe('View Vary Approver case list', () => {
       '/licence/vary-approve/id/2/probation-practitioner',
     )
     expect($('#variation-request-date-2').text()).toBe('1 Aug 2024')
-    expect($('#release-date-2').text()).toBe('2 Nov 2022')
+    expect($('#release-date-2').text()).toBe('CRD: 2 Nov 2022')
   })
 
   it('should display probation practitioner as Not allocated', () => {
