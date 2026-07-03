@@ -8,6 +8,7 @@ import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
 import type { ApplicationInfo } from '../applicationInfo'
 import {
+  convertToTitleCase,
   formatAddress,
   jsonDtTo12HourTime,
   json24HourTimeTo12HourTime,
@@ -376,6 +377,10 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('titlecase', (word: string) => {
     if (!word) return word
     return word[0].toUpperCase() + word.substring(1).toLowerCase()
+  })
+
+  njkEnv.addFilter('convertToTitleCase', (sentence: string) => {
+    return convertToTitleCase(sentence)
   })
 
   njkEnv.addFilter('createOffenderLink', (foundComCase: FoundComCase): string => {
