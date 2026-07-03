@@ -20,7 +20,7 @@
                     </span>
                 <span class="pipe-separated__item">Date of birth: {{ licence.dateOfBirth | datetimeToDate }}</span>
             </div>
-            <span class="govuk-heading-m">{{ licence.forename }} {{ licence.surname }}</span>
+            <span class="govuk-heading-m">{{ ((licence.forename or '') ~ ' ' ~ (licence.surname or '')) | trim | convertToTitleCase }}</span>
         </div>
     </div>
 {% endif %}
