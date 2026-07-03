@@ -21,6 +21,8 @@ const pdfHeaderFooterStyle =
   'text-align: center; ' +
   'padding: 20px;'
 
+const multipleUploadMapConditionCodes = [MEZ_CONDITION_CODE, RESTRICTION_ZONE_CONDITION_CODE]
+
 export default class PrintLicenceRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
@@ -116,9 +118,13 @@ export default class PrintLicenceRoutes {
   private groupConditions(licence: Licence) {
     const groupedAdditionalConditions: Map<string, AdditionalCondition[]> = this.getGroupedAdditionalConditions(licence)
     const additionalConditions = Array.from(groupedAdditionalConditions, ([code, conditions]) => ({ code, conditions }))
-    const singleItemConditions = additionalConditions.filter(v => v.conditions.length === 1).flatMap(v => v.conditions)
-    const multipleItemConditions = additionalConditions.filter(v => v.conditions.length > 1).map(v => v.conditions)
-    return { singleItemConditions, multipleItemConditions }
+    const singleItemConditions = additionalConditions
+      .filter(v => v.conditions.length === 1 && !multipleUploadMapConditionCodes.includes(v.code))
+      .flatMap(v => v.conditions)
+    const multipleItemMapConditions = additionalConditions
+      .filter(v => v.conditions.length > 1 || multipleUploadMapConditionCodes.includes(v.code))
+      .map(v => v.conditions)
+    return { singleItemConditions, multipleItemConditions: multipleItemMapConditions }
   }
 
   private async splitUploadConditions(licence: Licence, user: User) {
