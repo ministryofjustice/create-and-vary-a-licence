@@ -55,7 +55,7 @@ export default class ExclusionZoneConditionInputPage extends AdditionalCondition
   clickContinueForMez = (conditions: AdditionalCondition[]): ExclusionZoneConditionInputPage => {
     cy.task('stubGetCompletedLicence', {
       statusCode: 'IN_PROGRESS',
-      typeCode: 'AP_PSS',
+      typeCode: 'AP',
       isInHardStopPeriod: false,
       kind: 'CRD',
       conditions,

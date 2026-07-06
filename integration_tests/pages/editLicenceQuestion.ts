@@ -25,7 +25,7 @@ export default class EditLicenceQuestionPage extends Page {
     cy.task('stubUpdateLicenceStatus')
     cy.task('stubGetCompletedLicence', {
       statusCode: 'IN_PROGRESS',
-      typeCode: 'AP_PSS',
+      typeCode: 'AP',
       appointmentTelephoneNumber,
       appointmentAlternativeTelephoneNumber,
     })

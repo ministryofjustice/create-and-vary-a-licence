@@ -41,21 +41,9 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION' %}
-                {% if licence.typeCode === 'AP' %}
-                    <h1 class="govuk-heading-l">Vary licence details</h1>
-                {% elseif licence.typeCode === 'AP_PSS' %}
-                    <h1 class="govuk-heading-l">Vary licence and post sentence supervision order details</h1>
-                {% elseif licence.typeCode === 'PSS' %}
-                    <h1 class="govuk-heading-l">Vary post sentence supervision order details</h1>
-                {% endif %}
+                <h1 class="govuk-heading-l">Vary licence details</h1>
             {% else %}
-                {% if licence.typeCode === 'AP' %}
-                    <h1 class="govuk-heading-l">Check licence details</h1>
-                {% elseif not licence.isInPssPeriod and licence.typeCode === 'AP_PSS' %}
-                    <h1 class="govuk-heading-l">Check licence and post sentence supervision order details</h1>
-                {% elseif (licence.isInPssPeriod and licence.typeCode === 'AP_PSS') or licence.typeCode === 'PSS' %}
-                    <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
-                {% endif %}
+                <h1 class="govuk-heading-l">Check licence details</h1>
 
                 {% if isInHardStopPeriod %}
                     <p class='govuk-body'>You cannot work on a licence from 2 days before someone's release date.<br>This is so the prison can complete their final release checks.</p>
@@ -109,10 +97,6 @@
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, isInProgress, validationErrors) }}
                 {{ bespokeConditions(licence.id, isInProgress, null, null, licence.bespokeConditions, isVariationOfHdcMigration) }}
-            {% endif %}
-
-            {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
             {% endif %}
 
             {% if licence.typeCode === 'AP_PSS' and licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod)
