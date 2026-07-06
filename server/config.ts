@@ -198,6 +198,7 @@ export default {
   ),
   monitoringSupplierTelephone: get('MONITORING_SUPPLIER_TELEPHONE', '0800 137 291', requiredInProduction),
   hdcEnabled: get('HDC_ENABLED', 'false', requiredInProduction) === 'true',
+  finalThirdEnabled: get('FINAL_THIRD_ENABLED', 'false', requiredInProduction) === 'true',
   postcodeLookupEnabled: get('POSTCODE_LOOKUP_ENABLED', 'false', requiredInProduction) === 'true',
   timeServed: {
     enabled: get('TIME_SERVED_ENABLED', 'false', requiredInProduction) === 'true',
