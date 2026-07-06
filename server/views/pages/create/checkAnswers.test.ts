@@ -53,44 +53,6 @@ describe('Create a Licence Views - Check Answers', () => {
         ],
       },
     ],
-    additionalPssConditions: [
-      {
-        code: 'condition1',
-        category: 'Category 1',
-        expandedText: 'Template 1',
-        uploadSummary: [],
-        data: [
-          {
-            field: 'field1',
-            value: 'Data 1',
-            contributesToLicence: true,
-          },
-        ],
-      },
-      {
-        code: 'condition2',
-        category: 'Category 2',
-        expandedText: 'Template 2',
-        uploadSummary: [],
-        data: [
-          {
-            field: 'field2',
-            value: 'Data 2A',
-            contributesToLicence: true,
-          },
-          {
-            field: 'field2',
-            value: 'Data 2B',
-            contributesToLicence: true,
-          },
-          {
-            field: 'field3',
-            value: 'Data 2C',
-            contributesToLicence: true,
-          },
-        ],
-      },
-    ],
     bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
     electronicMonitoringProviderStatus: 'NOT_NEEDED',
     appointmentTelephoneNumber: '01632960901',
@@ -189,47 +151,9 @@ describe('Create a Licence Views - Check Answers', () => {
     ).not.toBe('Data 2C')
   })
 
-  it('should display additional PSS conditions section if licence type is PSS', () => {
-    const $ = render({
-      licence: { ...licence, typeCode: 'PSS' },
-    })
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements (2)')
-    expect($('#additional-pss-conditions-heading + p').length).toBe(0)
-  })
-
-  it('should display additional PSS conditions section if licence type is AP_PSS', () => {
-    const $ = render({
-      licence,
-    })
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements (2)')
-    expect($('#additional-pss-conditions-heading + p').length).toBe(0)
-  })
-
   it('should not display additional PSS licence conditions section if licence type is AP', () => {
     const $ = render({ licence: { ...licence, typeCode: 'AP' } })
     expect($('#additional-pss-conditions-heading').length).toBe(0)
-  })
-
-  it('should display a table containing the additional PSS conditions', () => {
-    const $ = render({
-      licence: { ...licence, typeCode: 'PSS' },
-    })
-
-    expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(2)
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements (2)')
-
-    expect($('#additionalPssConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
-    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe('Template 1')
-    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
-
-    expect($('#additionalPssConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
-    expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe('Template 2')
-    expect(
-      $('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim(),
-    ).toBe('Data 2A, Data 2B')
-    expect(
-      $('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim(),
-    ).toBe('Data 2C')
   })
 
   it('should display a table containing the bespoke conditions for AP licences', () => {
@@ -323,7 +247,7 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: false,
     })
 
-    expect($('.govuk-summary-list__actions').length).toBe(12)
+    expect($('.govuk-summary-list__actions').length).toBe(10)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
 
     const $2 = render({
@@ -375,7 +299,7 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: false,
     })
 
-    expect($2('.govuk-summary-list__actions').length).toBe(11)
+    expect($2('.govuk-summary-list__actions').length).toBe(9)
     expect($2('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 
@@ -429,7 +353,7 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: false,
     })
 
-    expect($('.govuk-summary-list__actions').length).toBe(6)
+    expect($('.govuk-summary-list__actions').length).toBe(4)
   })
 
   it('should hide edit licence button when status is IN_PROGRESS', () => {
