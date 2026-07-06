@@ -21,8 +21,8 @@ describe('Route Handlers - Confirmation', () => {
       render: jest.fn(),
       locals: {
         licence: {
-          forename: 'Test',
-          surname: 'Person',
+          forename: 'tESt',
+          surname: 'pERsOn',
           prisonDescription: `Leeds (HMP)`,
         },
       },

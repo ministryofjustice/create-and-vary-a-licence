@@ -36,8 +36,8 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
       locals: {
         licence: {
           kind: 'VARIATION',
-          forename: 'Joe',
-          surname: 'Bloggs',
+          forename: 'jOE',
+          surname: 'bLoGGs',
         },
       },
     } as unknown as Response

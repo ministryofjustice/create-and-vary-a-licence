@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceType from '../../../enumeration/licenceType'
 import ProbationService from '../../../services/probationService'
+import { convertToTitleCase } from '../../../utils/utils'
 
 export default class ConfirmApprovedRoutes {
   constructor(private readonly probationService: ProbationService) {}
@@ -12,19 +13,20 @@ export default class ConfirmApprovedRoutes {
 
     let titleText
     let confirmationMessage
+    const fullName = convertToTitleCase(`${licence.forename || ''} ${licence.surname || ''}`.trim())
 
     switch (licence.typeCode) {
       case LicenceType.AP_PSS:
         titleText = `Licence and post sentence supervision order approved`
-        confirmationMessage = `A case administrator can now print the licence and post sentence supervision order for ${licence.forename} ${licence.surname}.`
+        confirmationMessage = `A case administrator can now print the licence and post sentence supervision order for ${fullName}.`
         break
       case LicenceType.AP:
         titleText = `Licence approved`
-        confirmationMessage = `A case administrator can now print the licence for ${licence.forename} ${licence.surname}.`
+        confirmationMessage = `A case administrator can now print the licence for ${fullName}.`
         break
       case LicenceType.PSS:
         titleText = `Post sentence supervision order approved`
-        confirmationMessage = `A case administrator can now print the post sentence supervision order for ${licence.forename} ${licence.surname}.`
+        confirmationMessage = `A case administrator can now print the post sentence supervision order for ${fullName}.`
         break
       default: {
         // silently ignore
