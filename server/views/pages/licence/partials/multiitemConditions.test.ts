@@ -28,6 +28,18 @@ describe('multiItemConditions check plural text is correctly selected', () => {
     expect($('.condition').length).toBe(2)
   })
 
+  it('Single conditions should be rendered with the singular text', () => {
+    const $ = render({
+      multipleItemConditions: [
+        [{ textPlural: 'You must not enter the following areas:', text: 'You must not enter the following area:' }],
+        [{ textPlural: 'You must not leave the following areas:', text: 'You must not leave the following area:' }],
+      ],
+    })
+    expect($('.condition:nth-of-type(1) span').text()).toBe('You must not enter the following area:')
+    expect($('.condition:nth-of-type(2) span').text()).toBe('You must not leave the following area:')
+    expect($('.condition').length).toBe(2)
+  })
+
   it('should render the plural form when condition textPlural is present and display both texts if pluralText is not present', () => {
     const $ = render({
       multipleItemConditions: [
