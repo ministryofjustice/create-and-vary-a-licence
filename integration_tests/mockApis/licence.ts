@@ -31,7 +31,7 @@ const licencePlaceholder: Licence = {
   isReviewNeeded: false,
   isVariation: false,
   id: 1,
-  typeCode: 'AP_PSS',
+  typeCode: 'AP',
   kind: 'CRD',
   version: ACTIVE_POLICY_VERSION,
   statusCode: 'IN_PROGRESS',
@@ -603,20 +603,6 @@ export default {
     })
   },
 
-  stubGetPssLicence: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/licence/id/(\\d)*`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { ...licencePlaceholder, typeCode: 'PSS' },
-      },
-    })
-  },
-
   stubGetPolicyChanges: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -933,45 +919,6 @@ export default {
     })
   },
 
-  stubGetPssLicencesForOffender: (options: {
-    kind: 'CRD' | 'VARIATION' | 'HARD_STOP'
-    nomisId: string
-    status: string
-    bookingId: number
-    isInHardStopPeriod: boolean
-  }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPathPattern: `/licences-api/licence/match`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            kind: options.kind || 'CRD',
-            licenceId: 1,
-            nomisId: options.nomisId,
-            licenceStatus: options.status,
-            forename: 'Test',
-            surname: 'Person',
-            crn: 'X12345',
-            licenceType: 'PSS',
-            actualReleaseDate: '23/03/2022',
-            comUsername: 'jsmith',
-            bookingId: options.bookingId,
-            dateCreated: '01/03/2021 10:15',
-            hardStopDate: options.isInHardStopPeriod
-              ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
-              : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-            hardStopWarningDate: '03/12/2023',
-          },
-        ],
-      },
-    })
-  },
-
   stubPutAppointmentPerson: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -1072,29 +1019,6 @@ export default {
             {
               id: 1,
               code: options.code,
-              data: [],
-            },
-          ],
-        },
-      },
-    })
-  },
-
-  stubGetLicenceWithPssConditionToComplete: (code: string): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/licence/id/(\\d)*`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          ...licencePlaceholder,
-          additionalPssConditions: [
-            {
-              id: 1,
-              code,
               data: [],
             },
           ],
@@ -1911,42 +1835,6 @@ export default {
             hardStopWarningDate: null,
             isInHardStopPeriod: false,
             isEligibleForEarlyRelease: options.isEligibleForEarlyRelease,
-          },
-        },
-      },
-    }),
-
-  stubGetPssCaseloadItem: () =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/prisoner-search/nomisid/.*`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          prisoner: {
-            prisonerNumber: 'G4169UO',
-            firstName: 'Test',
-            lastName: 'Person',
-            dateOfBirth: '1960-11-10',
-            status: 'ACTIVE IN',
-            prisonId: 'BAI',
-            sentenceStartDate: '2017-03-01',
-            releaseDate: '2024-07-19',
-            confirmedReleaseDate: '2022-11-10',
-            sentenceExpiryDate: '2028-08-31',
-            topupSupervisoryStartDate: '2022-11-10',
-            topupSupervisoryEndDate: '2028-08-31',
-            conditionalReleaseDate: '2022-11-10',
-          },
-          cvl: {
-            licenceType: 'PSS',
-            licenceStartDate: '19/07/2024',
-            hardStopDate: null,
-            hardStopWarningDate: null,
-            isInHardStopPeriod: false,
           },
         },
       },

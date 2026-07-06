@@ -62,14 +62,13 @@ context('Create a licence', () => {
         .enterTime('12', '40', 'secondCurfewStart')
         .clickContinue()
 
-      const pssConditionsQuestionPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
-      const checkAnswersPage = pssConditionsQuestionPage.selectNo().clickContinueAfterNo()
-
       cy.task('stubGetCompletedLicence', {
         statusCode: 'IN_PROGRESS',
         typeCode: 'AP',
         appointmentTelephoneNumber: '0114 2345232334',
       })
+
+      const checkAnswersPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
       const caseloadPageExit = confirmationPage.clickReturn()
       caseloadPageExit.signOut().click()

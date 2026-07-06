@@ -78,11 +78,6 @@ export default class CheckAnswersPage extends Page {
     return this
   }
 
-  checkIfDeleteLinkVisible = (code: string) => {
-    cy.get(`[data-qa="condition-action-${code}"]`).should('contain.text', 'Delete')
-    return this
-  }
-
   clickChangeTelephoneLink = (): AppointmentContactPage => {
     cy.get('[data-qa=telephone-change-link]').click()
     return Page.verifyOnPage(AppointmentContactPage)

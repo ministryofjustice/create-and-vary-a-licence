@@ -96,7 +96,7 @@ context('Create an HDC licence', () => {
 
       const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
 
-      const pssConditionsQuestionPage = bespokeConditionsPage
+      const checkAnswersPage = bespokeConditionsPage
         .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
         .checkDeleteThisCondition() // for single Bespoke Condition
         .clickAddAnother()
@@ -105,23 +105,7 @@ context('Create an HDC licence', () => {
         .clickAddAnother()
         .enterBespokeCondition(2, 'A final third bespoke condition')
         .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinue()
-
-      const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
-
-      const pssConditionsInputPage = pssConditionsPage
-        .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
-        .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
-        .clickContinue()
-
-      const checkAnswersPage = pssConditionsInputPage
-        .withContext(pssConditionsPage.getContext())
-        .enterTime()
-        .enterDate()
-        .enterAddress()
-        .nextInput()
-        .enterAddress()
-        .clickContinue([], {}, undefined, LicenceKind.HDC)
+        .clickContinueEM([], {}, undefined, LicenceKind.HDC)
 
       cy.task('stubGetHdcLicence', {
         firstNightCurfewTimes: {

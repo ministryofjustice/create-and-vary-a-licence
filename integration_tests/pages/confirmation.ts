@@ -13,7 +13,6 @@ export default class ConfirmationPage extends Page {
   }
 
   clickReturn = (): CaseloadPage => {
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'SUBMITTED' })
     cy.get(this.returnButtonId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
@@ -28,12 +27,6 @@ export default class ConfirmationPage extends Page {
     })
     cy.get(this.returnButtonId).click()
     return Page.verifyOnPage(ViewCasesPage)
-  }
-
-  clickReturnPss = (): CaseloadPage => {
-    cy.task('stubGetPssLicencesForOffender', { nomisId: 'G9786GC', status: 'SUBMITTED' })
-    cy.get(this.returnButtonId).click()
-    return Page.verifyOnPage(CaseloadPage)
   }
 
   getApprovedMessage = () => cy.get(this.messageId)
