@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import { assertIsVariation } from '../../../utils/utils'
+import { assertIsVariation, convertToTitleCase } from '../../../utils/utils'
 
 export default class ConfirmationRoutes {
   constructor(private licenceService: LicenceService) {}
@@ -17,19 +17,20 @@ export default class ConfirmationRoutes {
 
     let titleText
     let licenceType
+    const fullName = convertToTitleCase(`${licence.forename || ''} ${licence.surname || ''}`.trim())
 
     switch (licence.typeCode) {
       case LicenceType.AP_PSS:
         licenceType = 'licence and post sentence supervision order'
-        titleText = `Licence conditions variation for ${licence.forename} ${licence.surname} sent`
+        titleText = `Licence conditions variation for ${fullName} sent`
         break
       case LicenceType.AP:
         licenceType = 'licence'
-        titleText = `Licence variation for ${licence.forename} ${licence.surname} sent`
+        titleText = `Licence variation for ${fullName} sent`
         break
       case LicenceType.PSS:
         licenceType = 'post sentence supervision order'
-        titleText = `Post sentence supervision order variation for ${licence.forename} ${licence.surname} sent`
+        titleText = `Post sentence supervision order variation for ${fullName} sent`
         break
       default: {
         // silently ignore

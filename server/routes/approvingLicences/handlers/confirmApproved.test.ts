@@ -22,8 +22,8 @@ describe('Route - approve licence', () => {
       render: jest.fn(),
       locals: {
         licence: {
-          forename: 'Joe',
-          surname: 'Bloggs',
+          forename: 'jOE',
+          surname: 'bLoGGs',
           typeCode: 'PSS',
         },
       },
