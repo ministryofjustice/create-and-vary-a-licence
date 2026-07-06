@@ -2113,7 +2113,7 @@ export default {
             releaseDate: '01/09/2024',
             licenceId: options.licenceId,
             licenceStatus: options.licenceStatus,
-            licenceType: 'PSS',
+            licenceType: 'AP',
             probationPractitioner: {
               staffCode: 'X12345',
               name: 'John Smith',

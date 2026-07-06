@@ -240,7 +240,7 @@ context('Create a licence', () => {
 
       cy.task('stubGetCompletedLicence', {
         statusCode: 'IN_PROGRESS',
-        typeCode: 'AP_PSS',
+        typeCode: 'AP',
         isInHardStopPeriod: false,
         kind: 'CRD',
         appointmentTelephoneNumber: '01234567890',
@@ -345,7 +345,7 @@ context('Create a licence', () => {
 
       cy.task('stubGetCompletedLicence', {
         statusCode: 'IN_PROGRESS',
-        typeCode: 'AP_PSS',
+        typeCode: 'AP',
         isInHardStopPeriod: false,
         kind: 'CRD',
         conditions: [],
