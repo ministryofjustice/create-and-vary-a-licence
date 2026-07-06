@@ -46,19 +46,6 @@
         ), dateRows) %}
     {% endif %}
 
-    {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'PSS' %}
-        {% set dateRows = (dateRows.push(
-                {
-                    key: { text: "Post sentence supervision order start date" },
-                    value: { text: licence.topupSupervisionStartDate | datetimeToDate }
-                },
-                {
-                    key: { text: "Post sentence supervision order end date" },
-                    value: { text: licence.topupSupervisionExpiryDate | datetimeToDate }
-                }
-        ), dateRows) %}
-    {% endif %}
-
     {{ govukSummaryList({
         attributes: { id: 'key-dates' },
         rows: dateRows
