@@ -48,7 +48,7 @@ context('Create a licence', () => {
       'contain',
       'Check this date with the prison. It may change because it is on or just before a weekend or bank holiday. This may affect the initial appointment.',
     )
-    cy.task('stubGetLicence', { isEligibleForEarlyRelease: true })
+    cy.task('stubGetLicence', { isEligibleForEarlyRelease: true, hasAppointmentTimeType: 'IMMEDIATE_UPON_RELEASE' })
     const appointmentPersonPage = confirmCreatePage.clickContinue()
     appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
@@ -94,7 +94,7 @@ context('Create a licence', () => {
 
       const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
 
-      const pssConditionsQuestionPage = bespokeConditionsPage
+      const checkAnswersPage = bespokeConditionsPage
         .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
         .checkDeleteThisCondition() // for single Bespoke Condition
         .clickAddAnother()
@@ -103,70 +103,13 @@ context('Create a licence', () => {
         .clickAddAnother()
         .enterBespokeCondition(2, 'A final third bespoke condition')
         .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinue()
-
-      const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
-
-      const pssConditionsInputPage = pssConditionsPage
-        .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
-        .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
-        .clickContinue()
-
-      const checkAnswersPage = pssConditionsInputPage
-        .withContext(pssConditionsPage.getContext())
-        .enterTime()
-        .enterDate()
-        .enterAddress()
-        .nextInput()
-        .enterAddress()
         .clickContinue(conditions)
+
+      const confirmationPage = checkAnswersPage
         .checkIfChangeLinkVisible('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
-        .checkIfDeleteLinkVisible('9ae2a336-3491-4667-aaed-dd852b09b4b9')
+        .clickSendLicenceConditionsToPrison()
 
-      const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
       const caseloadPageExit = confirmationPage.clickReturn()
-      caseloadPageExit.signOut().click()
-    })
-  })
-
-  it('should click through the create a licence journey for a PSS-only licence', () => {
-    cy.task('stubGetPssLicence')
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateAPssLicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
-    const appointmentPersonPage = confirmCreatePage.clickContinue()
-    appointmentPersonPage.selectAppointmentPersonType(3)
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
-
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
-
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const pssConditionsQuestionPage = appointmentTimePage
-        .selectTypePss('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinueToPss()
-
-      const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
-
-      const pssConditionsInputPage = pssConditionsPage
-        .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
-        .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
-        .clickContinue()
-
-      const checkAnswersPage = pssConditionsInputPage
-        .withContext(pssConditionsPage.getContext())
-        .enterTime()
-        .enterDate()
-        .enterAddress()
-        .nextInput()
-        .enterAddress()
-        .clickContinue()
-
-      const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
-      const caseloadPageExit = confirmationPage.clickReturnPss()
       caseloadPageExit.signOut().click()
     })
   })
@@ -187,8 +130,6 @@ context('Create a licence', () => {
     cy.task('getNextWorkingDay', dates).then(() => {
       const checkAnswersPage = appointmentTimePage
         .clickSkip()
-        .selectNo()
-        .clickContinueAfterNo()
         .selectNo()
         .clickContinueAfterNo()
         .selectNo()
@@ -230,11 +171,7 @@ context('Create a licence', () => {
 
       cy.task('stubGetLicenceWithSkippedInputs')
 
-      const checkAnswersPage = bespokeConditionsQuestionPage
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
+      const checkAnswersPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
 
       checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
     })
@@ -288,7 +225,7 @@ context('Create a licence', () => {
 
       const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
 
-      const pssConditionsQuestionPage = bespokeConditionsPage
+      const checkAnswersPage = bespokeConditionsPage
         .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
         .checkDeleteThisCondition() // for single Bespoke Condition
         .clickAddAnother()
@@ -297,22 +234,6 @@ context('Create a licence', () => {
         .clickAddAnother()
         .enterBespokeCondition(2, 'A final third bespoke condition')
         .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinue()
-
-      const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
-
-      const pssConditionsInputPage = pssConditionsPage
-        .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
-        .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
-        .clickContinue()
-
-      const checkAnswersPage = pssConditionsInputPage
-        .withContext(pssConditionsPage.getContext())
-        .enterTime()
-        .enterDate()
-        .enterAddress()
-        .nextInput()
-        .enterAddress()
         .clickContinue()
 
       const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
@@ -342,8 +263,6 @@ context('Create a licence', () => {
         .clickContinueAfterNo()
         .selectNo()
         .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
 
       checkAnswersPage.dateTimeField().should('contain.text', 'Date/time')
     })
@@ -368,8 +287,6 @@ context('Create a licence', () => {
         .enterDate(moment(appointmentDate))
         .enterTime(moment())
         .clickContinue()
-        .selectNo()
-        .clickContinueAfterNo()
         .selectNo()
         .clickContinueAfterNo()
         .selectNo()
@@ -412,12 +329,7 @@ context('Create a licence', () => {
 
       cy.task('stubGetLicenceWithSkippedInputs')
 
-      const checkAnswersPage = bespokeConditionsQuestionPage
-        .selectNo()
-        .clickContinueAfterNo()
-        .selectNo()
-        .clickContinueAfterNo()
-
+      const checkAnswersPage = bespokeConditionsQuestionPage.selectNo().clickContinueAfterNo()
       checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
     })
   })

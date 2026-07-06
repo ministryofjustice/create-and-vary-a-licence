@@ -8,7 +8,7 @@ context('Approve a licence', () => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
     cy.task('stubGetPrisonUserDetails')
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
+    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' })
     cy.task('stubGetApprovalCaseload')
     cy.task('stubUpdateLicenceStatus', 1)
     cy.task('stubRecordAuditEvent')
@@ -148,36 +148,6 @@ context('Approve a licence', () => {
     approvalViewPage.getValue(approvalViewPage.firstNightCurfewTimes).should('contain.text', '5pm to 7am')
     approvalViewPage.getValue(approvalViewPage.weeklyCurfewTimes).should('contain.text', 'Monday to Sunday')
     approvalViewPage.getValue(approvalViewPage.weeklyCurfewTimes).should('contain.text', '5pm to 7am')
-  })
-
-  it('should display Approve licence and post sentence supervision order heading if licence is of type AP_PSS', () => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
-    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const approvalCasesPage = indexPage.clickApproveALicence()
-    const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage
-      .getValue(approvalViewPage.approveLicenceAndPssId)
-      .should('have.text', 'Approve licence and post sentence supervision order')
-    approvalViewPage
-      .getValue(approvalViewPage.accordionSectionHeading)
-      .should('contain.text', 'Additional licence conditions')
-  })
-
-  it('should display Approve post sentence supervision order heading if licence is of type PSS', () => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'PSS' })
-    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const approvalCasesPage = indexPage.clickApproveALicence()
-    const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage
-      .getValue(approvalViewPage.approvePssId)
-      .should('have.text', 'Approve post sentence supervision order')
-    approvalViewPage
-      .getValue(approvalViewPage.accordionSectionHeading)
-      .should('contain.text', 'Additional post sentence supervision requirements')
   })
 
   it('should get prisoner image', () => {

@@ -121,24 +121,6 @@
                                 }
                         ), items) %}
                     {% endif %}
-
-                    {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'PSS' %}
-                        {% set items = (items.push(
-                                {
-                                    heading: {
-                                        text: "Additional post sentence supervision requirements (" +  licence.additionalPssConditions.length + ")",
-                                        visuallyHiddenText: "test"
-                                    },
-                                    content: {
-                                        html:
-                                                additionalPssConditions(licence, null, [], null, true)
-                                                if licence.additionalPssConditions.length else
-                                                "<p>No additional post sentence supervision requirements added</p>"
-                                    },
-                                    expanded: true
-                                }
-                        ), items) %}
-                    {% endif %}
                 {% endif %}
 
                 {{
