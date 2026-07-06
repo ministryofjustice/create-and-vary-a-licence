@@ -11,12 +11,12 @@
     <div class="govuk-grid-row govuk-body">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
-                titleText: "Variation for " + licence.forename + " " + licence.surname + " declined"
+                titleText: "Variation for " + ((licence.forename or '') ~ ' ' ~ (licence.surname or '')) | trim | convertToTitleCase + " declined"
             }) }}
 
             <h2 class="govuk-heading-m">What happens next</h2>
             <p>
-                The variation for {{ licence.forename }} {{licence.surname}} has been declined.
+                The variation for {{ ((licence.forename or '') ~ ' ' ~ (licence.surname or '')) | trim | convertToTitleCase }} has been declined.
             </p>
             <p>
                 We have sent an email to the probation practitioner to notify them.

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceType from '../../../enumeration/licenceType'
+import { convertToTitleCase } from '../../../utils/utils'
 
 export default class ConfirmationRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -9,10 +10,11 @@ export default class ConfirmationRoutes {
     let confirmationMessage
     const backLink = req.session.returnToCase || '/licence/create/caseload'
     const { kind } = licence
+    const fullName = convertToTitleCase(`${licence.forename || ''} ${licence.surname || ''}`.trim())
 
     switch (licence.typeCode) {
       case LicenceType.AP:
-        titleText = `Licence conditions for ${licence.forename} ${licence.surname} sent`
+        titleText = `Licence conditions for ${fullName} sent`
         confirmationMessage = `We have sent the licence to ${licence.prisonDescription} for approval.`
         break
       default: {
