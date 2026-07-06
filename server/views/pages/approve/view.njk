@@ -21,15 +21,7 @@
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-padding-left-3">
-        {% if licence.typeCode === 'AP' %}
-            <h1 class="govuk-heading-xl" id="approve-licence-heading">Approve licence</h1>
-        {% elseif licence.typeCode === 'AP_PSS' %}
-            <h1 class="govuk-heading-xl" id="approve-licence-and-pss-heading">Approve licence and post sentence supervision order</h1>
-        {% elseif licence.typeCode === 'PSS' %}
-            <h1 class="govuk-heading-xl" id="approve-pss-heading">Approve post sentence supervision order</h1>
-        {% else %}
-            <h1 class="govuk-heading-xl">Approve licence type {{ licence.typeCode }}</h1>
-        {% endif %}
+        <h1 class="govuk-heading-xl" id="approve-licence-heading">Approve licence</h1>
     </div>
 
     <div class="govuk-grid-column-two-thirds-from-desktop float-none">
