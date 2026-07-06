@@ -29,7 +29,7 @@ export default class CaseloadPage extends Page {
   clickNameToEditLicence(): CheckAnswersPage {
     cy.task('stubGetCompletedLicence', {
       statusCode: 'APPROVED',
-      typeCode: 'AP_PSS',
+      typeCode: 'AP',
       appointmentTelephoneNumber: '01234567890',
       appointmentAlternativeTelephoneNumber: '09876543210',
     })
