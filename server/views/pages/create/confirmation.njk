@@ -11,12 +11,12 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
-              titleText: titleText
+              titleText: 'Licence conditions for ' + fullName + ' sent'
             }) }}
 
             <h2 class="govuk-heading-m">What happens next</h2>
             <p class="govuk-body" id="sent-to">
-                {{ confirmationMessage }}
+                We have sent the licence to {{ prisonDescription }} for approval.
             </p>
             <p class="govuk-body">
                 They will contact you if they need more information.

@@ -134,22 +134,20 @@ describe('Approval confirmation page', () => {
 
     it('should display what happens next section', () => {
       const $ = render({
-        licence: { kind: 'AP_PSS' },
-        titleText: 'Licence approved',
-        confirmationMessage: 'The licence has been approved',
+        licence: { kind: 'AP' },
+        fullName: 'Joe Bloggs',
         isComEmailAvailable: true,
         applicationName: 'Create and vary a licence',
       })
 
       expect($('h2').text()).toContain('What happens next')
-      expect($('p').text()).toContain('The licence has been approved')
+      expect($('p').text()).toContain('A case administrator can now print the licence for Joe Bloggs')
     })
 
     it('should display return to case list button', () => {
       const $ = render({
-        licence: { kind: 'AP_PSS' },
-        titleText: 'Licence approved',
-        confirmationMessage: 'The licence has been approved',
+        licence: { kind: 'AP' },
+        fullName: 'Joe Bloggs',
         isComEmailAvailable: true,
         applicationName: 'Create and vary a licence',
       })
@@ -160,9 +158,8 @@ describe('Approval confirmation page', () => {
 
     it('should display if changes are made section heading', () => {
       const $ = render({
-        licence: { kind: 'AP_PSS' },
-        titleText: 'Licence approved',
-        confirmationMessage: 'The licence has been approved',
+        licence: { kind: 'AP' },
+        fullName: 'Joe Bloggs',
         isComEmailAvailable: true,
         applicationName: 'Create and vary a licence',
       })
@@ -171,8 +168,8 @@ describe('Approval confirmation page', () => {
     })
   })
 
-  describe('AP_PSS licence (standard flow)', () => {
-    it('should display standard change message for AP_PSS', () => {
+  describe('AP licence (standard flow)', () => {
+    it('should display standard change message for AP', () => {
       const $ = render({
         licence: { kind: 'AP_PSS' },
         titleText: 'Licence approved',

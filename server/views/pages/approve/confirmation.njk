@@ -34,14 +34,14 @@
         <div class="govuk-grid-column-two-thirds">
             <div data-qa="approval-title-panel">
                 {{ govukPanel({
-                    titleText: titleText,
+                    titleText: 'Licence approved',
                     html: timeServedBannerMessage
                 }) }}
             </div>
 
             <h2 class="govuk-heading-m">What happens next</h2>
             <p class="govuk-body govuk-!-margin-bottom-6">
-                {{ confirmationMessage }}
+                A case administrator can now print the licence for {{ fullName }}
             </p>
 
             <p class="govuk-body govuk-!-margin-bottom-6" data-qa="email-message-text">
