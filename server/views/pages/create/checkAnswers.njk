@@ -51,10 +51,6 @@
             {% else %}
                 {% if licence.typeCode === 'AP' %}
                     <h1 class="govuk-heading-l">Check licence details</h1>
-                {% elseif not licence.isInPssPeriod and licence.typeCode === 'AP_PSS' %}
-                    <h1 class="govuk-heading-l">Check licence and post sentence supervision order details</h1>
-                {% elseif (licence.isInPssPeriod and licence.typeCode === 'AP_PSS') or licence.typeCode === 'PSS' %}
-                    <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
                 {% endif %}
 
                 {% if isInHardStopPeriod %}
@@ -109,10 +105,6 @@
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, isInProgress, validationErrors) }}
                 {{ bespokeConditions(licence.id, isInProgress, null, null, licence.bespokeConditions, isVariationOfHdcMigration) }}
-            {% endif %}
-
-            {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
             {% endif %}
 
             {% if licence.typeCode === 'AP_PSS' and licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod)

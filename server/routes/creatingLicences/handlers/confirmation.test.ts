@@ -31,18 +31,6 @@ describe('Route Handlers - Confirmation', () => {
 
   describe('Create CRD Licence', () => {
     describe('GET', () => {
-      it('should render view for AP_PSS licence type', async () => {
-        res.locals.licence.typeCode = 'AP_PSS'
-
-        await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
-          confirmationMessage:
-            'We have sent the licence and post sentence supervision order to Leeds (HMP) for approval.',
-          titleText: 'Licence and post sentence supervision order for Test Person sent',
-          backLink: req.session.returnToCase,
-        })
-      })
-
       it('should render default return to caseload link if no session state', async () => {
         const reqWithEmptySession = {
           params: {
@@ -52,13 +40,12 @@ describe('Route Handlers - Confirmation', () => {
           flash: jest.fn(),
         } as unknown as Request
 
-        res.locals.licence.typeCode = 'AP_PSS'
+        res.locals.licence.typeCode = 'AP'
 
         await handler.GET(reqWithEmptySession, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
-          confirmationMessage:
-            'We have sent the licence and post sentence supervision order to Leeds (HMP) for approval.',
-          titleText: 'Licence and post sentence supervision order for Test Person sent',
+          confirmationMessage: 'We have sent the licence to Leeds (HMP) for approval.',
+          titleText: 'Licence conditions for Test Person sent',
           backLink: '/licence/create/caseload',
         })
       })
@@ -70,17 +57,6 @@ describe('Route Handlers - Confirmation', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
           confirmationMessage: 'We have sent the licence to Leeds (HMP) for approval.',
           titleText: 'Licence conditions for Test Person sent',
-          backLink: req.session.returnToCase,
-        })
-      })
-
-      it('should render view for PSS licence type', async () => {
-        res.locals.licence.typeCode = 'PSS'
-
-        await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
-          confirmationMessage: 'We have sent the post sentence supervision order to Leeds (HMP) for approval.',
-          titleText: 'Post sentence supervision order for Test Person sent',
           backLink: req.session.returnToCase,
         })
       })
