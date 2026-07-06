@@ -25,6 +25,7 @@
   {% else %}
     {% set probationHtml = offender.probationPractitioner.name %}
   {% endif %}
+  {% set formattedReleaseDate = offender.releaseDate | cvlDateToDateShort | redactIfLao(offender)%}
   {% set licences = (licences.push([
         {
             attributes: {
@@ -56,7 +57,7 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": offender.releaseDate | cvlDateToDateShort | dateToUnix
             },
-            text: offender.releaseDate | cvlDateToDateShort | redactIfLao(offender)
+            html: offender.releaseDateLabel + ': <br>' + formattedReleaseDate
         }
     ]), licences) %}
 {% endfor %}
