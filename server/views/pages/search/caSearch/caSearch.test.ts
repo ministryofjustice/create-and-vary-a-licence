@@ -561,7 +561,7 @@ describe('View CA Search Results', () => {
             allocated: true,
           },
           releaseDate: '03/08/2022',
-          releaseDateLabel: 'HDCAD',
+          releaseDateLabel: 'HDC actual date',
           licenceStatus: LicenceStatus.APPROVED,
           tabType: 'ATTENTION_NEEDED',
           nomisLegalStatus: 'SENTENCED',
@@ -582,6 +582,64 @@ describe('View CA Search Results', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#name-button-1').text()).toBe('Test Person 1')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
-    expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022')
+    expect($('.urgent-highlight-message').length).toBe(0)
+  })
+
+  it('should show HDCAD release date without red highlight in people on probation tab', () => {
+    const $ = render({
+      queryTerm: 'Test',
+      backLink: '/licence/view/cases',
+      statusConfig,
+      tabParameters: {
+        activeTab: '#people-on-probation',
+        prison: {
+          resultsCount: 0,
+          tabHeading: 'People in prison (0 results)',
+          tabId: 'tab-heading-prison',
+        },
+        probation: {
+          resultsCount: 1,
+          tabHeading: 'People on probation (1 result)',
+          tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
+      },
+      inPrisonResults: [],
+      onProbationResults: [
+        {
+          kind: LicenceKind.HDC,
+          licenceId: 1,
+          name: 'Test Person 1',
+          prisonerNumber: 'A1234AA',
+          probationPractitioner: {
+            name: 'Test Com 1',
+            staffCode: 'ABC123',
+            allocated: true,
+          },
+          releaseDate: '03/08/2022',
+          releaseDateLabel: 'HDC actual date',
+          licenceStatus: LicenceStatus.ACTIVE,
+          tabType: CaViewCasesTab.FUTURE_RELEASES,
+          nomisLegalStatus: 'SENTENCED',
+          lastWorkedOnBy: 'Test Updater',
+          isInHardStopPeriod: false,
+          prisonCode: 'MDI',
+          prisonDescription: 'Moorland (HMP)',
+          link: '/test1',
+        },
+      ],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasSelectedMultiplePrisonCaseloads: false,
+      isSearchPageView: true,
+    })
+
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022')
+    expect($('.urgent-highlight-message').length).toBe(0)
   })
 })

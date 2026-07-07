@@ -588,7 +588,7 @@ describe('View Probation Search Results', () => {
           licenceId: 1,
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
-          releaseDateLabel: 'HDCAD',
+          releaseDateLabel: 'HDC actual date',
           kind: LicenceKind.HDC,
         },
       ],
@@ -603,8 +603,8 @@ describe('View Probation Search Results', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
-    expect($('#release-date-1').text()).toBe('HDCAD: 20 Dec 2025HDC release')
-    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 20 Dec 2025')
+    expect($('.urgent-highlight-message').length).toBe(0)
   })
 
   it('should highlight a HDC licence with a HDC release warning label in the people on probation tab', () => {
@@ -627,7 +627,7 @@ describe('View Probation Search Results', () => {
           licenceId: 1,
           licenceStatus: LicenceStatus.ACTIVE,
           isOnProbation: true,
-          releaseDateLabel: 'HDCAD',
+          releaseDateLabel: 'HDC actual date',
           kind: LicenceKind.HDC,
         },
       ],
@@ -642,8 +642,8 @@ describe('View Probation Search Results', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Active')
-    expect($('#release-date-1').text()).toBe('HDCAD: 20 Dec 2025HDC release')
-    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 20 Dec 2025')
+    expect($('.urgent-highlight-message').length).toBe(0)
   })
 
   it('should highlight a HDC variation with a HDC release warning label in the people in prison tab', () => {
@@ -666,7 +666,7 @@ describe('View Probation Search Results', () => {
           licenceId: 1,
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isOnProbation: false,
-          releaseDateLabel: 'HDCAD',
+          releaseDateLabel: 'HDC actual date',
           kind: LicenceKind.HDC_VARIATION,
         },
       ],
@@ -682,8 +682,8 @@ describe('View Probation Search Results', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
-    expect($('#release-date-1').text()).toBe('HDCAD: 20 Dec 2025HDC release')
-    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 20 Dec 2025')
+    expect($('.urgent-highlight-message').length).toBe(0)
   })
 
   it('should highlight a HDC variation with a HDC release warning label in the people on probation tab', () => {
@@ -707,7 +707,7 @@ describe('View Probation Search Results', () => {
           licenceId: 1,
           licenceStatus: LicenceStatus.ACTIVE,
           isOnProbation: true,
-          releaseDateLabel: 'HDCAD',
+          releaseDateLabel: 'HDC actual date',
           kind: LicenceKind.HDC_VARIATION,
         },
       ],
@@ -721,8 +721,8 @@ describe('View Probation Search Results', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Active')
-    expect($('#release-date-1').text()).toBe('HDCAD: 20 Dec 2025HDC release')
-    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 20 Dec 2025')
+    expect($('.urgent-highlight-message').length).toBe(0)
   })
 
   it('renders release date for time-served when people in prison', () => {
@@ -1031,13 +1031,13 @@ describe('View Probation Search Results', () => {
       kind: 'HDC',
       releaseDateLabel: 'HDC eligible date',
       releaseDate: '26/12/2026',
-      expected: 'HDC eligible date: 26 Dec 2026HDC release',
+      expected: 'HDC eligible date: 26 Dec 2026',
     },
     {
       kind: 'HDC_VARIATION',
       releaseDateLabel: 'HDC actual date',
       releaseDate: '27/12/2026',
-      expected: 'HDC actual date: 27 Dec 2026HDC release',
+      expected: 'HDC actual date: 27 Dec 2026',
     },
   ])('should display "$releaseDateLabel" release date label', ({ kind, releaseDateLabel, releaseDate, expected }) => {
     const $ = render({
