@@ -11,11 +11,7 @@
 
     {% set isTimeServed = (licence.kind == "TIME_SERVED") %}
 
-    {% set timeServedBannerMessage %}
-        {% if isTimeServed %}
-            Check a case administrator has contacted the probation team
-        {% endif %}
-    {% endset %}
+    {% set timeServedBannerMessage = "Check a case administrator has contacted the probation team" %}
 
     {% set emailMessage %}
         {% if isTimeServed %}
@@ -35,7 +31,7 @@
             <div data-qa="approval-title-panel">
                 {{ govukPanel({
                     titleText: 'Licence approved',
-                    html: timeServedBannerMessage
+                    html: timeServedBannerMessage if isTimeServed
                 }) }}
             </div>
 
