@@ -20,7 +20,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   let req: Request
   let res: Response
 
-  const existingConfig = config
+  const existingConfig = { ...config }
 
   beforeEach(() => {
     config.hdcEnabled = true

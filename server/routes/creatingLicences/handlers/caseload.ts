@@ -1,12 +1,13 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { format } from 'date-fns'
+import { format, isBefore } from 'date-fns'
 import statusConfig from '../../../licences/licenceStatus'
 import logger from '../../../../logger'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
-import { cvlDateToDateShort, parseCvlDate } from '../../../utils/utils'
+import { cvlDateToDateShort, parseCvlDate, parseIsoDate } from '../../../utils/utils'
 import LicenceCreationType from '../../../enumeration/licenceCreationType'
 import { LicenceKind } from '../../../enumeration'
+import config from '../../../config'
 
 export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
@@ -52,6 +53,7 @@ export default class CaseloadRoutes {
           comCase.licenceCreationType,
           comCase.licenceId,
           comCase.prisonerNumber,
+          comCase.releaseDate,
         ),
         releaseDate: comCase.releaseDate && cvlDateToDateShort(comCase.releaseDate),
         hardStopDate: comCase.hardStopDate && format(parseCvlDate(comCase.hardStopDate), 'dd/MM/yyyy'),
@@ -76,7 +78,12 @@ export default class CaseloadRoutes {
     })
   }
 
-  findCreateLinkToDisplay = (licenceCreationType: string, licenceId: number, prisonerNumber: string): string => {
+  findCreateLinkToDisplay = (
+    licenceCreationType: string,
+    licenceId: number,
+    prisonerNumber: string,
+    releaseDate: string,
+  ): string => {
     if (licenceCreationType === LicenceCreationType.LICENCE_CHANGES_NOT_APPROVED_IN_TIME) {
       return `/licence/create/id/${licenceId}/licence-changes-not-approved-in-time`
     }
@@ -90,6 +97,13 @@ export default class CaseloadRoutes {
     }
 
     if (licenceCreationType === LicenceCreationType.LICENCE_NOT_STARTED) {
+      if (
+        config.policyV4GoLiveDate &&
+        isBefore(Date.now(), config.policyV4CreationDate) &&
+        !isBefore(parseCvlDate(releaseDate), parseIsoDate(config.policyV4GoLiveDate))
+      ) {
+        return `/licence/create/nomisId/${prisonerNumber}/create-from-27-july`
+      }
       return `/licence/create/nomisId/${prisonerNumber}/confirm`
     }
 

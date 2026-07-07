@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { format, addDays } from 'date-fns'
 import CaseloadRoutes from './caseload'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
@@ -7,6 +8,7 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { ComCreateCase } from '../../../@types/licenceApiClientTypes'
 import { parseIsoDate } from '../../../utils/utils'
+import config from '../../../config'
 
 const comCaseloadService = new ComCaseloadService(null, null) as jest.Mocked<ComCaseloadService>
 
@@ -16,6 +18,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
   const handler = new CaseloadRoutes(comCaseloadService)
   let req: Request
   let res: Response
+
+  const existingConfig = { ...config }
 
   beforeEach(() => {
     comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
@@ -164,6 +168,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
+    config.policyV4CreationDate = existingConfig.policyV4CreationDate
+    config.policyV4GoLiveDate = existingConfig.policyV4GoLiveDate
   })
 
   describe('GET', () => {
@@ -495,6 +501,186 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         }),
       )
       expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+    })
+
+    it('should redirect to create-from-27-july if the licence is NOT_STARTED with a release date on or after policy v4 go-live date and the current date is before policy v4 creation date', async () => {
+      config.policyV4CreationDate = format(addDays(new Date(), 1), 'yyyy-MM-dd')
+      config.policyV4GoLiveDate = '2027-01-01'
+      comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
+        {
+          crnNumber: 'X381306',
+          name: 'Test Person',
+          releaseDate: '01/01/2027',
+          prisonerNumber: '123',
+          licenceId: 1,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          hardStopDate: '10/10/2022',
+          hardStopWarningDate: '10/10/2022',
+          kind: LicenceKind.CRD,
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffCode: 'X6789',
+            allocated: true,
+          },
+          isRestricted: false,
+          hdcStatus: 'NOT_A_HDC_RELEASE',
+          licenceCreationType: 'LICENCE_NOT_STARTED',
+        },
+      ] as unknown as ComCreateCase[])
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Test Person',
+            crnNumber: 'X381306',
+            releaseDate: '1 Jan 2027',
+            hardStopDate: '10/10/2022',
+            hardStopWarningDate: '10/10/2022',
+            kind: 'CRD',
+            prisonerNumber: '123',
+            licenceId: 1,
+            licenceStatus: LicenceStatus.NOT_STARTED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Joe Bloggs',
+              staffCode: 'X6789',
+              allocated: true,
+            },
+            sortDate: parseIsoDate('2027-01-01'),
+            createLink: '/licence/create/nomisId/123/create-from-27-july',
+            isClickable: true,
+            isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
+            licenceCreationType: 'LICENCE_NOT_STARTED',
+          },
+        ],
+        multipleTeams: false,
+        statusConfig,
+        teamName: null,
+        view: 'me',
+      })
+    })
+
+    it('should not redirect to create-from-27-july if the licence is NOT_STARTED with a release date before policy v4 go-live date', async () => {
+      config.policyV4CreationDate = format(addDays(new Date(), 1), 'yyyy-MM-dd')
+      config.policyV4GoLiveDate = '2027-01-01'
+      comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
+        {
+          crnNumber: 'X381306',
+          name: 'Test Person',
+          releaseDate: '01/12/2026',
+          prisonerNumber: '123',
+          licenceId: 1,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          hardStopDate: '10/10/2022',
+          hardStopWarningDate: '10/10/2022',
+          kind: LicenceKind.CRD,
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffCode: 'X6789',
+            allocated: true,
+          },
+          isRestricted: false,
+          hdcStatus: 'NOT_A_HDC_RELEASE',
+          licenceCreationType: 'LICENCE_NOT_STARTED',
+        },
+      ] as unknown as ComCreateCase[])
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Test Person',
+            crnNumber: 'X381306',
+            releaseDate: '1 Dec 2026',
+            hardStopDate: '10/10/2022',
+            hardStopWarningDate: '10/10/2022',
+            kind: 'CRD',
+            prisonerNumber: '123',
+            licenceId: 1,
+            licenceStatus: LicenceStatus.NOT_STARTED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Joe Bloggs',
+              staffCode: 'X6789',
+              allocated: true,
+            },
+            sortDate: parseIsoDate('2026-12-01'),
+            createLink: '/licence/create/nomisId/123/confirm',
+            isClickable: true,
+            isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
+            licenceCreationType: 'LICENCE_NOT_STARTED',
+          },
+        ],
+        multipleTeams: false,
+        statusConfig,
+        teamName: null,
+        view: 'me',
+      })
+    })
+
+    it('should not redirect to create-from-27-july if the licence is NOT_STARTED and the current date is on or after policy v4 creation date', async () => {
+      config.policyV4CreationDate = format(new Date(), 'yyyy-MM-dd')
+      config.policyV4GoLiveDate = '2027-01-01'
+      comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
+        {
+          crnNumber: 'X381306',
+          name: 'Test Person',
+          releaseDate: '01/01/2027',
+          prisonerNumber: '123',
+          licenceId: 1,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          hardStopDate: '10/10/2022',
+          hardStopWarningDate: '10/10/2022',
+          kind: LicenceKind.CRD,
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffCode: 'X6789',
+            allocated: true,
+          },
+          isRestricted: false,
+          hdcStatus: 'NOT_A_HDC_RELEASE',
+          licenceCreationType: 'LICENCE_NOT_STARTED',
+        },
+      ] as unknown as ComCreateCase[])
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Test Person',
+            crnNumber: 'X381306',
+            releaseDate: '1 Jan 2027',
+            hardStopDate: '10/10/2022',
+            hardStopWarningDate: '10/10/2022',
+            kind: 'CRD',
+            prisonerNumber: '123',
+            licenceId: 1,
+            licenceStatus: LicenceStatus.NOT_STARTED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Joe Bloggs',
+              staffCode: 'X6789',
+              allocated: true,
+            },
+            sortDate: parseIsoDate('2027-01-01'),
+            createLink: '/licence/create/nomisId/123/confirm',
+            isClickable: true,
+            isRestricted: false,
+            hdcStatus: 'NOT_A_HDC_RELEASE',
+            licenceCreationType: 'LICENCE_NOT_STARTED',
+          },
+        ],
+        multipleTeams: false,
+        statusConfig,
+        teamName: null,
+        view: 'me',
+      })
     })
   })
 })

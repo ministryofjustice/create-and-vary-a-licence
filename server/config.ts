@@ -210,4 +210,6 @@ export default {
       'https://mojprod.service-now.com/moj_sp?id=sc_cat_item&table=sc_cat_item&sys_id=e389e8931b8bc65025dc6351f54bcb82&recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&sysparm_id=e389e8931b8bc65025dc6351f54bcb82',
     ),
   },
+  policyV4CreationDate: get('POLICY_V4_CREATION_DATE', null, requiredInProduction),
+  policyV4GoLiveDate: get('POLICY_V4_GO_LIVE_DATE', null, requiredInProduction),
 }

@@ -1,0 +1,26 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Create a licence - Create from 27 July" %}
+{% set pageId = "create-from-27-july-page" %}
+{% set backLinkHref = "/" %}
+
+{% block content %}
+    <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-l">Create this licence from 27 July 2026</h1>
+        <p class="govuk-body">Standard and additional licence conditions are changing for people being released on or after 2 September 2026.</p>
+        <p class="govuk-body">The new conditions will not be available in this service until 27 July 2026.</p>
+        <p class="govuk-body">To ensure this person is released on a licence that reflects the most up-to-date policy, you can only create this licence from 27 July.</p>
+
+        <div class="govuk-button-group" id="button-group">
+            {{ govukButton({
+                text: "Return to cases",
+                classes: "govuk-button--secondary govuk-!-margin-top-3 js-backlink",
+                href: '/licence/create/caseload',
+                attributes: { 'data-qa': 'return-to-cases' }
+            }) }}
+        </div>
+    </div>
+{% endblock %}
