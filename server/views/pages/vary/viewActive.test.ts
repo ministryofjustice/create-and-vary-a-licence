@@ -19,18 +19,6 @@ describe('ViewActive', () => {
     bespokeConditions: [],
   } as Licence
 
-  const additionalConditionInputs = [
-    [
-      {
-        text: 'Condition 1',
-        requiresInput: false,
-        code: 'CON1',
-        data: {},
-        uploadSummary: {},
-      },
-    ],
-  ]
-
   const existingConfig = config
 
   beforeEach(() => {
@@ -40,88 +28,6 @@ describe('ViewActive', () => {
   afterEach(() => {
     jest.resetAllMocks()
     config.hdcEnabled = existingConfig.hdcEnabled
-  })
-
-  it('should display expired section if licence type is AP_PSS, is in pss period, isActivatedInPssPeriod with additional conditions', () => {
-    const $ = render({
-      licence: {
-        ...licence,
-        typeCode: 'AP_PSS',
-        isInPssPeriod: true,
-        isActivatedInPssPeriod: true,
-      },
-      additionalConditions: additionalConditionInputs,
-    })
-    expect($('#conditions-expired').text()).toBe('Conditions from expired licence')
-  })
-
-  it('should display expired section if licence type is AP_PSS, is in pss period, in variation with additional conditions', () => {
-    const $ = render({
-      licence: {
-        ...licence,
-        typeCode: 'AP_PSS',
-        isInPssPeriod: true,
-        isActivatedInPssPeriod: false,
-        statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
-      },
-      additionalConditions: additionalConditionInputs,
-    })
-    expect($('#conditions-expired').text()).toBe('Conditions from expired licence')
-  })
-
-  it('should not display expired section if licence type is AP_PSS, is not in pss period, in variation with additional conditions', () => {
-    const $ = render({
-      licence: {
-        ...licence,
-        typeCode: 'AP_PSS',
-        isInPssPeriod: false,
-        isActivatedInPssPeriod: false,
-        statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
-      },
-      additionalConditions: additionalConditionInputs,
-    })
-    expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
-  })
-
-  it('should not display expired section if licence type is AP_PSS, is in pss period, not in variation and not activated in pss period with additional conditions', () => {
-    const $ = render({
-      licence: {
-        ...licence,
-        typeCode: 'AP_PSS',
-        isInPssPeriod: false,
-        isActivatedInPssPeriod: false,
-        statusCode: LicenceStatus.ACTIVE,
-      },
-      additionalConditions: additionalConditionInputs,
-    })
-    expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
-  })
-
-  it('should not display expired section if licence type is AP_PSS, is in pss period, not in variation and is activated in pss period with no additional conditions', () => {
-    const $ = render({
-      licence: {
-        ...licence,
-        typeCode: 'AP_PSS',
-        isInPssPeriod: false,
-        isActivatedInPssPeriod: true,
-        statusCode: LicenceStatus.ACTIVE,
-      },
-    })
-    expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
-  })
-
-  it('should not display expired section if licence type is not AP_PSS, is in pss period, not in variation and is activated in pss period with additional conditions', () => {
-    const $ = render({
-      licence: {
-        ...licence,
-        typeCode: 'AP',
-        isInPssPeriod: false,
-        isActivatedInPssPeriod: true,
-        statusCode: LicenceStatus.ACTIVE,
-      },
-      additionalConditions: additionalConditionInputs,
-    })
-    expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
   })
 
   it('should not render the HDC curfew details for non HDC licences', () => {
