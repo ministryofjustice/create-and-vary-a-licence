@@ -44,8 +44,8 @@ describe('Route Handlers - Confirmation', () => {
 
         await handler.GET(reqWithEmptySession, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
-          confirmationMessage: 'We have sent the licence to Leeds (HMP) for approval.',
-          titleText: 'Licence conditions for Test Person sent',
+          fullName: 'Test Person',
+          prisonDescription: 'Leeds (HMP)',
           backLink: '/licence/create/caseload',
         })
       })
@@ -55,8 +55,8 @@ describe('Route Handlers - Confirmation', () => {
 
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
-          confirmationMessage: 'We have sent the licence to Leeds (HMP) for approval.',
-          titleText: 'Licence conditions for Test Person sent',
+          fullName: 'Test Person',
+          prisonDescription: 'Leeds (HMP)',
           backLink: req.session.returnToCase,
         })
       })

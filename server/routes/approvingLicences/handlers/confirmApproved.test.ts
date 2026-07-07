@@ -45,8 +45,7 @@ describe('Route - approve licence', () => {
       res.locals.licence.typeCode = 'AP'
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
-        titleText: 'Licence approved',
-        confirmationMessage: 'A case administrator can now print the licence for Joe Bloggs.',
+        fullName: 'Joe Bloggs',
         isComEmailAvailable: true,
       })
     })
@@ -64,8 +63,7 @@ describe('Route - approve licence', () => {
       res.locals.licence.typeCode = 'AP'
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
-        titleText: 'Licence approved',
-        confirmationMessage: 'A case administrator can now print the licence for Joe Bloggs.',
+        fullName: 'Joe Bloggs',
         isComEmailAvailable: false,
       })
     })
