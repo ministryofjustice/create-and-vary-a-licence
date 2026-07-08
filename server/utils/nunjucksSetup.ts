@@ -478,7 +478,6 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('hdcEnabled', config.hdcEnabled)
   njkEnv.addGlobal('finalThirdEnabled', config.finalThirdEnabled)
   njkEnv.addGlobal('postcodeLookupEnabled', config.postcodeLookupEnabled)
-  njkEnv.addGlobal('timeServedEnabled', config.timeServed.enabled)
   njkEnv.addGlobal('timeServedServiceNowUrl', config.timeServed.serviceNowUrl)
 
   return njkEnv

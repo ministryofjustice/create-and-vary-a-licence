@@ -4,7 +4,6 @@ import statusConfig from '../../../licences/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../enumeration'
-import config from '../../../config'
 
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import { CaCase } from '../../../@types/licenceApiClientTypes'
@@ -288,7 +287,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -364,7 +362,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -454,7 +451,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -530,7 +526,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -567,7 +562,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -605,7 +599,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -681,7 +674,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -771,7 +763,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -815,7 +806,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -893,7 +883,6 @@ describe('Route handlers - View and print case list', () => {
         search: '',
         statusConfig,
         hasSelectedNomisForTimeServedLicenceCreation: false,
-        isTimeServedEnabled: false,
       })
     })
 
@@ -916,42 +905,6 @@ describe('Route handlers - View and print case list', () => {
       await handler.GET(req, res)
 
       expect(req.flash).toHaveBeenCalledWith('hasSelectedNomisForTimeServedLicenceCreation')
-    })
-
-    it('should return isTimeServedEnabled as true when time served feature is enabled and prisonCaseloadToDisplay includes any of timeServedEnabledPrisons', async () => {
-      config.timeServed.prisons = ['BAI', 'MDI']
-      config.timeServed.enabled = true
-
-      caseloadService.getPrisonOmuCaseload.mockResolvedValue(prisonCaseload)
-      res.locals.user.prisonCaseload = ['BAI']
-      req.query.view = 'prison'
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/view/cases',
-        expect.objectContaining({
-          isTimeServedEnabled: true,
-        }),
-      )
-    })
-
-    it('should return isTimeServedEnabled as true when time served feature is enabled and timeServedEnabledPrisons includes ALL_PRISONS', async () => {
-      config.timeServed.prisons = ['BAI', 'MDI', 'ALL_PRISONS']
-      config.timeServed.enabled = true
-
-      caseloadService.getPrisonOmuCaseload.mockResolvedValue(prisonCaseload)
-      res.locals.user.prisonCaseload = ['ABC']
-      req.query.view = 'prison'
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/view/cases',
-        expect.objectContaining({
-          isTimeServedEnabled: true,
-        }),
-      )
     })
 
     it('should link to time served check-your-answers when in progress and not in hard stop period', async () => {
