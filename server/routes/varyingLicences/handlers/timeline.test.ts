@@ -27,7 +27,7 @@ describe('Route Handlers - Timeline', () => {
 
   const commonUser = { username: 'joebloggs' }
 
-  const existingConfig = config
+  const existingConfig = { ...config }
 
   beforeEach(() => {
     config.hdcEnabled = true

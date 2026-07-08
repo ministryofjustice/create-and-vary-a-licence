@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 
-export default class PrisonWillCreateThisLicenceRoutes {
+export default class LicenceCreatedByPrisonRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

@@ -19,7 +19,7 @@ describe('ViewActive', () => {
     bespokeConditions: [],
   } as Licence
 
-  const existingConfig = config
+  const existingConfig = { ...config }
 
   beforeEach(() => {
     config.hdcEnabled = true
