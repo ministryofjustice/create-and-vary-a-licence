@@ -183,12 +183,13 @@ export default class PrintLicenceRoutes {
         const mapData = await this.licenceService.getExclusionZoneImageData(licence.id.toString(), `${c.id}`, user)
         const description = c.uploadSummary[0]?.description.trim()
         const dataValue = c.data.find(d => d.field === 'outOfBoundArea')
-        const { text } = c
+        const { text, expandedText } = c
         return {
           mapData,
           description,
           dataValue,
           text,
+          expandedText,
         }
       }),
     )
