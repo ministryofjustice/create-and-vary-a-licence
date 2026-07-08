@@ -299,6 +299,7 @@ describe('Route - print a licence', () => {
           id: 4,
           code: '99195049-f355-46fb-b7d8-aef87a1b19c5',
           text: 'this is an event exclusion',
+          expandedText: 'this is an event exclusion with expanded text',
           uploadSummary: [{ id: 4, description: 'Some words about an event exclusion', fileSize: 0, uploadedTime: '' }],
           data: [{ field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true }],
         },
@@ -340,6 +341,7 @@ describe('Route - print a licence', () => {
               ],
               id: 4,
               text: 'this is an event exclusion',
+              expandedText: 'this is an event exclusion with expanded text',
               uploadSummary: [
                 {
                   description: 'Some words about an event exclusion',
@@ -467,6 +469,7 @@ describe('Route - print a licence', () => {
               description: 'Some words about an event exclusion',
               mapData: 'base64 data',
               text: 'this is an event exclusion',
+              expandedText: 'this is an event exclusion with expanded text',
             },
           ],
           isV4OrGreater: true,
