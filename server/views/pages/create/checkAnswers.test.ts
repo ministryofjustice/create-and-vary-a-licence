@@ -562,10 +562,14 @@ describe('Create a Licence Views - Check Answers', () => {
     const firstRow = $('tbody.govuk-table__body tr').eq(0).find('td')
     expect(firstRow.eq(0).text().trim()).toBe('8pm on Monday')
     expect(firstRow.eq(1).text().trim()).toBe('6am on Tuesday')
+    expect(firstRow.eq(0).hasClass('white-space-nowrap')).toBe(true)
+    expect(firstRow.eq(1).hasClass('white-space-nowrap')).toBe(true)
 
     const secondRow = $('tbody.govuk-table__body tr').eq(1).find('td')
     expect(secondRow.eq(0).text().trim()).toBe('8pm on Tuesday')
     expect(secondRow.eq(1).text().trim()).toBe('6am on Wednesday')
+    expect(secondRow.eq(0).hasClass('white-space-nowrap')).toBe(true)
+    expect(secondRow.eq(1).hasClass('white-space-nowrap')).toBe(true)
   })
 
   it('should not show the curfew address change link for HDC licences that are not variations', () => {
