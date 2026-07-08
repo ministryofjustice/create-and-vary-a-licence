@@ -25,7 +25,6 @@ context('ACO review a HDC licence variation', () => {
       kind: 'HDC_VARIATION',
       curfewAddress,
       variationOf: '120',
-      isVariation: true,
     })
     cy.task('stubRecordAuditEvent')
     cy.task('stubMatchLicenceEvents')

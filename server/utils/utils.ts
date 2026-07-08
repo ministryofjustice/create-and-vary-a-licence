@@ -289,7 +289,7 @@ const isInHardStopPeriod = (licence: Licence): boolean => {
 }
 
 function isVariation(licence: Licence): licence is VariationLicence | HdcVariationLicence {
-  return licence.isVariation
+  return licence.kind === LicenceKind.VARIATION || licence.kind === LicenceKind.HDC_VARIATION
 }
 
 function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLicence {
@@ -297,17 +297,11 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
 }
 
 function assertIsHdcLicence(licence: Licence): asserts licence is HdcLicence | HdcVariationLicence {
-  assert(
-    licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION,
-    'Licence must be HDC or HDC Variation',
-  )
+  assert(isHdcLicence(licence), 'Licence must be HDC or HDC Variation')
 }
 
 function assertIsVariation(licence: Licence): asserts licence is VariationLicence | HdcVariationLicence {
-  assert(
-    licence.kind === LicenceKind.VARIATION || licence.kind === LicenceKind.HDC_VARIATION,
-    'Licence must be Variation or HDC Variation',
-  )
+  assert(isVariation(licence), 'Licence must be Variation or HDC Variation')
 }
 
 function isTimeServedLicence(licence: Licence): licence is TimeServedLicence {
