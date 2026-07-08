@@ -36,6 +36,9 @@ generic-service:
     MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
     HDC_ENABLED: "true"
 
+    POLICY_V4_CREATION_DATE: "2026-07-27"
+    POLICY_V4_GO_LIVE_DATE: "2030-09-02"
+
   namespace_secrets:
     create-and-vary-a-licence-prison-events-sqs-instance-output:
       SQS_PRISON_EVENTS_QUEUE_URL: 'sqs_id'
