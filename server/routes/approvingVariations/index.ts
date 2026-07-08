@@ -11,6 +11,7 @@ import VaryReferConfirmRoutes from './handlers/varyReferConfirm'
 import ComDetailsRoutes from './handlers/comDetails'
 import ReasonForReferral from '../creatingLicences/types/reasonForReferral'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
+import { alterResObject } from '../varyingLicences'
 
 export default function Index({
   licenceService,
@@ -33,6 +34,7 @@ export default function Index({
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_ACO']),
+      alterResObject(),
       checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
       handler,
