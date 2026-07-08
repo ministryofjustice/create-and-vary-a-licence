@@ -51,6 +51,9 @@ export AWS_ACCESS_KEY_ID=foo
 export AWS_SECRET_ACCESS_KEY=bar
 export SERVICE_NAME=create-and-vary-a-licence
 
+export POLICY_V4_CREATION_DATE=2026-07-27
+export POLICY_V4_GO_LIVE_DATE=2026-09-02
+
 # Write to .env grouped by value type
 cat <<EOF > $fileToAddVars
 # === Dynamic secrets ===
@@ -88,6 +91,8 @@ cat <<EOF > $fileToAddVars
   AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
   AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   SERVICE_NAME=$SERVICE_NAME
+  POLICY_V4_CREATION_DATE=$POLICY_V4_CREATION_DATE
+  POLICY_V4_GO_LIVE_DATE=$POLICY_V4_GO_LIVE_DATE
 EOF
 
 echo ".env file created successfully."

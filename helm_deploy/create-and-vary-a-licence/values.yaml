@@ -44,6 +44,8 @@ generic-service:
     EPF2_URL: "https://epf.linkspace.uk/planning"
     HDC_ENABLED: "false"
     FINAL_THIRD_ENABLED: "false"
+    POLICY_V4_CREATION_DATE: "2026-07-27"
+    POLICY_V4_GO_LIVE_DATE: "2026-09-02"
 
     # HDC
     MONITORING_SUPPLIER_TELEPHONE: "0800 137 291"
