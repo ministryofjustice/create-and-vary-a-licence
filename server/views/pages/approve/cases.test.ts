@@ -19,7 +19,7 @@ describe('View and print a licence - case list', () => {
           name: 'John Smith',
           prisonerNumber: 'A1234AB',
           releaseDate: '1 Sep 2022',
-          releaseDateLabel: 'CRD',
+          releaseDateLabel: 'Conditional release date',
         },
       ],
       approvalNeededView: true,
@@ -28,10 +28,10 @@ describe('View and print a licence - case list', () => {
     expect($('tbody .govuk-table__row').length).toBe(2)
     expect($('#name-1').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
-    expect($('#release-date-1').text()).toBe('3 Aug 2022')
+    expect($('#release-date-1').text()).toBe('Confirmed release date: 3 Aug 2022')
     expect($('#name-2').text()).toBe('John Smith')
     expect($('#nomis-id-2').text()).toBe('A1234AB')
-    expect($('#release-date-2').text()).toBe('1 Sep 2022')
+    expect($('#release-date-2').text()).toBe('Conditional release date: 1 Sep 2022')
   })
 
   it('should display HDC release warning label when kind is HDC and approval is needed', () => {
@@ -41,12 +41,13 @@ describe('View and print a licence - case list', () => {
           name: 'John Smith',
           prisonerNumber: 'A1234AC',
           releaseDate: '3 Aug 2022',
+          releaseDateLabel: 'HDC actual date',
           kind: LicenceKind.HDC,
         },
       ],
       approvalNeededView: true,
     })
-    expect($('#release-date-1').text()).toBe('3 Aug 2022HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022HDC release')
   })
 
   it('should display HDC release warning label when kind is HDC and recently approved', () => {
@@ -56,12 +57,13 @@ describe('View and print a licence - case list', () => {
           name: 'John Smith',
           prisonerNumber: 'A1234AC',
           releaseDate: '3 Aug 2022',
+          releaseDateLabel: 'HDC eligible date',
           kind: LicenceKind.HDC,
         },
       ],
       approvalNeededView: false,
     })
-    expect($('#release-date-1').text()).toBe('3 Aug 2022HDC release')
+    expect($('#release-date-1').text()).toBe('HDC eligible date: 3 Aug 2022HDC release')
   })
 
   it('should display the urgent approval label if the case requires urgent approval', () => {

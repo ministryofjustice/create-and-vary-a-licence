@@ -13,13 +13,13 @@
 
 {% for case in cases %}
     {% if case.urgentApproval and approvalNeededView %}
-        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
+        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">Urgent approval required for<br>upcoming release</span>' %}
     {% elseif case.kind == 'HDC' %}
-        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
+        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
     {% else %}
-        {% set releaseDate = case.releaseDate %}
+        {% set releaseDate = case.releaseDateLabel + ': <br>' + case.releaseDate %}
     {% endif %}
 
     {% if approvalNeededView %}
