@@ -94,6 +94,9 @@
     {% if isV4OrGreater %}
         {% if exclusionZoneMapData.length %}
             {% include "pages/licence/partials/exclusionZoneAppendixV4.njk" %}
+            {% if eventExclusionZoneMapData.length or restrictionZoneMapData.length %}
+                <div style="page-break-before: always;"></div>
+            {% endif %}
         {% endif %}
         {% if eventExclusionZoneMapData.length %}
             {% include "pages/licence/partials/eventExclusionZoneAppendixV4.njk" %}
