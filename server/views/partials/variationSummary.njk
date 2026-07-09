@@ -52,7 +52,7 @@
                         visuallyHiddenText: "Completed residential address checks"
                     }]
                 } if isEditable
-            } if isResidential,
+            } if isResidential and (checksCompleted == true or checksCompleted == false),
             {
                 key: { text: "Enter a reason why address checks have not been completed" },
                 value: {
@@ -65,7 +65,7 @@
                         visuallyHiddenText: "Reason address checks not completed"
                     }]
                 } if isEditable
-            } if isResidential and checksCompleted == false
+            } if isResidential and (checksCompleted == true or checksCompleted == false) and checksCompleted == false
         ]
     }) }}
 {% endmacro %}
