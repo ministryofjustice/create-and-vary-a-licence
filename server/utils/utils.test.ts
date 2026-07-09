@@ -569,12 +569,32 @@ describe('isInHardStopPeriod', () => {
 
 describe('isVariation', () => {
   it('returns true if isVariation is set to true', () => {
-    const licence = { isVariation: true } as Licence
+    const licence = { kind: LicenceKind.VARIATION } as Licence
+    expect(isVariation(licence)).toBe(true)
+  })
+  it('returns true if isVariation is set to true', () => {
+    const licence = { kind: LicenceKind.HDC_VARIATION } as Licence
     expect(isVariation(licence)).toBe(true)
   })
 
-  it('returns false if isVariation is set to false', () => {
-    const licence = { isVariation: false } as Licence
+  it.each([
+    {
+      kind: 'CRD',
+    },
+    {
+      kind: 'HARD_STOP',
+    },
+    {
+      kind: 'TIME_SERVED',
+    },
+    {
+      kind: 'PRRD',
+    },
+    {
+      kind: 'HDC',
+    },
+  ])('should return false for non-variation kinds', ({ kind }) => {
+    const licence = { kind } as Licence
     expect(isVariation(licence)).toBe(false)
   })
 })

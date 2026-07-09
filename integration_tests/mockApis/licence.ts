@@ -448,7 +448,6 @@ export default {
     homeDetentionCurfewEndDate?: string | null
     weeklyCurfewTimes?: CurfewTimes[]
     variationOf?: string
-    isVariation?: boolean
     curfewAddress?: HdcCurfewAddress
   }): SuperAgentRequest => {
     return stubFor({
@@ -477,7 +476,7 @@ export default {
             : defaultWeeklyCurfewTimes,
           allCurfewTimesEqual: true,
           variationOf: options.variationOf || null,
-          isVariation: options.isVariation || false,
+          isVariation: false,
           curfewAddress: options.curfewAddress || {
             firstLine: '1 The Street',
             secondLine: 'Avenue',
