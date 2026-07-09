@@ -20,6 +20,7 @@ const pduCases = [
     crnNumber: 'X12345',
     licenceType: LicenceType.AP,
     releaseDate: '01/05/2024',
+    releaseDateLabel: 'Confirmed Release Date',
     variationRequestDate: '03/06/2024',
     probationPractitioner: {
       staffCode: 'X1231',
@@ -175,7 +176,7 @@ describe('View Vary Approver Search Results', () => {
     )
 
     expect($('#variation-request-date-1').text()).toBe('3 Jun 2024')
-    expect($('#release-date-1').text()).toBe('1 May 2024')
+    expect($('#release-date-1').text()).toBe('Confirmed Release Date: 1 May 2024')
   })
 
   it('should display the results in a table with links to the licence and COM details page for the region cases tab', () => {

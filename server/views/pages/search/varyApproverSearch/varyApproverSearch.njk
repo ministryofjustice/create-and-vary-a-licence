@@ -102,6 +102,7 @@
     }
 ] %}
 {% for case in pduCases %}
+  {% set formattedReleaseDate = case.releaseDate | cvlDateToDateShort | redactIfLao(case) %}
   {% set result = [
         {
             attributes: {
@@ -139,7 +140,7 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": case.releaseDate | cvlDateToDateShort | dateToUnix
             },
-            text: case.releaseDate | cvlDateToDateShort | redactIfLao(case)
+            html: case.releaseDateLabel + ': <br>' + formattedReleaseDate
         }
     ] %}
   {% set pduResults = (pduResults.push(result), pduResults) %}
