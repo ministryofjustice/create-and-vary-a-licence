@@ -16,7 +16,7 @@
         value: { text: licence.vloDiscussion }
     }), comments) %}
 
-    {% if isResidential and (checksCompleted == true or checksCompleted == false) %}
+    {% if isResidential and (checksCompleted === true or checksCompleted === false) %}
         {% set comments = (comments.push({
             key: { text: "Have you completed the residential address checks?" },
             value: { text: checksText }
