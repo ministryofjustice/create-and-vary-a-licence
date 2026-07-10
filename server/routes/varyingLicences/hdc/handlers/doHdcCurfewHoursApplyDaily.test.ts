@@ -1,5 +1,9 @@
+import fs from 'fs'
 import { Request, Response } from 'express'
 import DoHdcCurfewHoursApplyDailyRoutes from './doHdcCurfewHoursApplyDaily'
+import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(fs.readFileSync('server/views/pages/hdc/doHdcCurfewHoursApplyDaily.njk').toString())
 
 describe('Route Handlers - Vary Licence - Do HDC Curfew Hours Apply Daily', () => {
   let req: Request
@@ -33,6 +37,14 @@ describe('Route Handlers - Vary Licence - Do HDC Curfew Hours Apply Daily', () =
       req.query = { edit: 'telNumber' }
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/hdc/doHdcCurfewHoursApplyDaily')
+    })
+  })
+
+  describe('View', () => {
+    it('should show the vary journey page title when called from the vary journey', () => {
+      const $ = render({ isVaryJourney: true })
+
+      expect($('title').text()).toContain('Vary a licence - Do the same HDC curfew hours apply every day')
     })
   })
 
