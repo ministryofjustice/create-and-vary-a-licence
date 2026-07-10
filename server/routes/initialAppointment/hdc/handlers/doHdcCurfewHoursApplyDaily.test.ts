@@ -45,6 +45,12 @@ describe('Route Handlers - Create Licence - Do HDC Curfew Hours Apply Daily', ()
       const $ = render({})
       expect($('legend').text().trim()).toBe('Do the same HDC curfew hours apply every day?')
     })
+
+    it('should show the create journey page title by default', () => {
+      const $ = render({})
+
+      expect($('title').text()).toContain('Create a licence - Do the same HDC curfew hours apply every day')
+    })
   })
 
   describe('POST', () => {

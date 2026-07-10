@@ -1,9 +1,13 @@
+import fs from 'fs'
 import { Request, Response } from 'express'
 import { HdcLicence } from '../../../../@types/licenceApiClientTypes'
 import { DAYS } from '../../../../enumeration/days'
 import HdcService from '../../../../services/hdc/hdcService'
 import IndividualCurfewHoursRoutes from './individualCurfewHours'
 import DailyCurfewTime from '../types/dailyCurfewTime'
+import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(fs.readFileSync('server/views/pages/hdc/individualCurfewHours.njk').toString())
 
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 jest.mock('../../../../services/hdc/hdcService')
@@ -72,6 +76,12 @@ describe('IndividualCurfewHoursRoutes', () => {
         days: DAYS,
         curfewTimes: curfewTimesDisplayObject,
       })
+    })
+
+    it('should show the create journey page title by default', () => {
+      const $ = render({})
+
+      expect($('title').text()).toContain('Create a licence - Enter the curfew hours')
     })
   })
 
