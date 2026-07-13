@@ -18,9 +18,9 @@
 {% macro offenderName(offenderName, link, index) %}
     <div class="search-offender-name">
         {% if link %}
-            <a id="name-button-{{ index }}"  href={{ link }} class="govuk-link govuk-heading-s search-highlight">{{ offenderName }}</a>
+            <a id="name-button-{{ index }}"  href={{ link }} class="govuk-link govuk-heading-s search-highlight">{{ offenderName | convertToTitleCase }}</a>
         {% else %}
-            <span id="name-button-{{ index }}" class="govuk-heading-s search-highlight">{{ offenderName }}</span>
+            <span id="name-button-{{ index }}" class="govuk-heading-s search-highlight">{{ offenderName | convertToTitleCase }}</span>
         {% endif %}
     </div>
 {% endmacro %}

@@ -3,6 +3,7 @@
 {% from "./nonUniformCurfewTimesTable.njk" import nonUniformCurfewTimesTable %}
 
 {% macro hdcCurfewTimes(params) %}
+    {% set showBadges = not params.hideBadges %}
     {% set basePath = "/licence/vary/id/" if params.isVaryJourney else "/licence/create/id/" %}
     {% set baseURL = basePath + params.licence.id + "/hdc" %}
     {% set routeAppend = '?fromReview=true' if not params.isPrisonUser %}
@@ -21,7 +22,7 @@
 
     {% set hdcad %}
         {% if params.licence.homeDetentionCurfewActualDate %}
-            {{ params.licence.homeDetentionCurfewActualDate | datetimeToDate }} {{ releaseDatesBadge | safe }}
+            {{ params.licence.homeDetentionCurfewActualDate | datetimeToDate }}{{ (' ' + (releaseDatesBadge | safe)) if showBadges }}
         {% else %}
             Not entered yet
         {% endif %}
@@ -30,7 +31,7 @@
     {% set addressHtml %}
         <p>
             {{ params.licence.curfewAddress | formatAddressLine }}
-            <span>{{ hdcBadge | safe if not params.isVaryJourney }}</span>
+            <span>{{ hdcBadge | safe if not params.isVaryJourney and showBadges }}</span>
         </p>
     {% endset %}
 
@@ -39,7 +40,7 @@
         rows: [
             {
                 classes: "hdcad-row",
-                key: { text: 'HDCAD' },
+                key: { text: 'HDC actual date' },
                 value: {
                     html: hdcad,
                     classes: "hdcad"
