@@ -642,4 +642,84 @@ describe('View CA Search Results', () => {
     expect($('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022')
     expect($('.urgent-highlight-message').length).toBe(0)
   })
+
+  it('should display offender name in title case with a link when a link is present', () => {
+    const $ = render({
+      queryTerm: 'Test',
+      backLink: '/licence/view/cases',
+      statusConfig,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prison: {
+          resultsCount: 1,
+          tabHeading: 'People in prison (1 result)',
+          tabId: 'tab-heading-prison',
+        },
+        probation: {
+          resultsCount: 0,
+          tabHeading: 'People on probation (0 results)',
+          tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
+      },
+      inPrisonResults: [
+        {
+          ...inPrisonResults[0],
+          name: 'JOHN SMITH',
+          link: '/test1',
+        },
+      ],
+      onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasSelectedMultiplePrisonCaseloads: false,
+      isSearchPageView: true,
+    })
+
+    expect($('#name-button-1').text()).toBe('John Smith')
+    expect($('#name-button-1').is('a')).toBe(true)
+  })
+
+  it('should display offender name in title case without a link when no link is present', () => {
+    const $ = render({
+      queryTerm: 'Test',
+      backLink: '/licence/view/cases',
+      statusConfig,
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prison: {
+          resultsCount: 1,
+          tabHeading: 'People in prison (1 result)',
+          tabId: 'tab-heading-prison',
+        },
+        probation: {
+          resultsCount: 0,
+          tabHeading: 'People on probation (0 results)',
+          tabId: 'tab-heading-probation',
+        },
+        attentionNeeded: {
+          resultsCount: 0,
+        },
+      },
+      inPrisonResults: [
+        {
+          ...inPrisonResults[0],
+          name: 'JANE DOE',
+          link: null,
+        },
+      ],
+      onProbationResults: [],
+      attentionNeededResults: [],
+      CaViewCasesTab,
+      showAttentionNeededTab: false,
+      hasSelectedMultiplePrisonCaseloads: false,
+      isSearchPageView: true,
+    })
+
+    expect($('#name-button-1').text()).toBe('Jane Doe')
+    expect($('#name-button-1').is('span')).toBe(true)
+  })
 })

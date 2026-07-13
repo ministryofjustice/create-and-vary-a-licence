@@ -53,13 +53,13 @@
                 {% if inProgressHardStopOrTimeServedLicence %}
                   <h1 class="govuk-heading-l">Check licence details</h1>
                 {% elseif licence.typeCode === 'AP' %}
-                  <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ licence.forename }} {{ licence.surname }}</h1>
+                  <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ (licence.forename + ' ' + licence.surname) | convertToTitleCase }}</h1>
                 {% elseif licence.typeCode === 'AP_PSS' %}
-                    <h1 class="govuk-heading-l">{{ actionWord }} licence and post sentence supervision order for {{ licence.forename }} {{ licence.surname }}</h1>
+                    <h1 class="govuk-heading-l">{{ actionWord }} licence and post sentence supervision order for {{ (licence.forename + ' ' + licence.surname) | convertToTitleCase }}</h1>
                 {% elseif licence.typeCode === 'PSS' %}
-                    <h1 class="govuk-heading-l">{{ actionWord }} post sentence supervision order for {{ licence.forename }} {{ licence.surname }}</h1>
+                    <h1 class="govuk-heading-l">{{ actionWord }} post sentence supervision order for {{ (licence.forename + ' ' + licence.surname) | convertToTitleCase }}</h1>
                 {% else %}
-                    <h1 class="govuk-heading-l">{{ actionWord }} licence type {{ licence.typeCode }} for {{ licence.forename }} {{ licence.surname }}</h1>
+                    <h1 class="govuk-heading-l">{{ actionWord }} licence type {{ licence.typeCode }} for {{ (licence.forename + ' ' + licence.surname) | convertToTitleCase }}</h1>
                 {% endif %}
             </div>
         </div>
@@ -80,11 +80,7 @@
 
                 {% if licence.kind === 'HDC' or licence.kind === 'HDC_VARIATION' %}
                     <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
-                    {{ hdcCurfewTimes({ licence: licence }) }}
-                    {{ govukDetails({
-                        summaryText: "How do I change the HDC curfew details?",
-                        html: "Email createandvaryalicence@digital.justice.gov.uk to change the HDC curfew details."
-                    }) }}
+                    {{ hdcCurfewTimes({ licence: licence, hideBadges: true }) }}
                 {% endif %}
 
                 {% if prisonKinds.includes(licence.kind) %}

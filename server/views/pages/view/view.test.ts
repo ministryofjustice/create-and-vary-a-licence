@@ -228,13 +228,13 @@ describe('View and print - single licence view', () => {
     expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
   })
 
-  it('should render Calculate release date label', () => {
+  it('should not render Calculate release date label on the view page', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC', homeDetentionCurfewActualDate: '06/12/2026' },
       hdcLicenceData: { allCurfewTimesEqual: false },
     })
 
-    expect($('.hdcad').text()).toMatch('CALCULATE RELEASE DATE')
+    expect($('.hdcad').text()).not.toMatch('CALCULATE RELEASE DATES')
   })
 
   it('should not render Calculate release date label', () => {
@@ -246,13 +246,13 @@ describe('View and print - single licence view', () => {
     expect($('.hdcad').text()).not.toMatch('CALCULATE RELEASE DATE')
   })
 
-  it('should render HDC label', () => {
+  it('should not render HDC label on the view page', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       hdcLicenceData: { allCurfewTimesEqual: false },
     })
 
-    expect($('.curfew-address').text()).toMatch('HDC')
+    expect($('.curfew-address').text()).not.toMatch('HDC')
   })
 
   it('should hide print button when licence is approved or active and is HDC with no HDCAD', () => {
