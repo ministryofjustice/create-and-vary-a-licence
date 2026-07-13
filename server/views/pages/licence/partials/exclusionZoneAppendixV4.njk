@@ -5,12 +5,13 @@
         <p>{{ data.text }}</p>
         <p><strong>What this means for you</strong></p>
         <p>Do not enter the highlighted area shown in the following map.</p>
-        <div>
+        <div class="map-page">
             <div class="bold">{{ data.dataValue.value }}</div>
-            <img alt="Exclusion zone" src="data:image/jpeg;charset-utf8;base64,{{ data.mapData }}" width="547.5px"
-                 height="730px" />
+            <div class="map-frame">
+                <img alt="Exclusion zone" src="data:image/jpeg;charset-utf8;base64,{{ data.mapData }}" class="map-image" />
+            </div>
+            <div style="page-break-before: always;"></div>
             {% if data.description %}
-                <div style="page-break-before: always;"></div>
                 <p><strong>Description of the area shown in the map</strong></p>
                 <p> {{ data.description | striptags(false) | trim | escape }}  </p>
                 {% if not loop.last %}

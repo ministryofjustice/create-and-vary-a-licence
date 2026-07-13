@@ -33,6 +33,26 @@ body {
   line-height: normal;
 }
 
+.map-page {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.map-frame {
+  width: 100%;
+  height: 680px;
+  max-height: 680px;
+  overflow: hidden;
+}
+
+.map-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: top left;
+}
+
 .offender {
   display: flex;
   margin-bottom: 50px;
