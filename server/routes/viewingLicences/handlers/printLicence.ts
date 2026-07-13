@@ -21,7 +21,7 @@ const pdfHeaderFooterStyle =
   'text-align: center; ' +
   'padding: 20px;'
 
-const multipleUploadMapConditionCodes = [MEZ_CONDITION_CODE, RESTRICTION_ZONE_CONDITION_CODE]
+const mapUploadConditions = [MEZ_CONDITION_CODE, RESTRICTION_ZONE_CONDITION_CODE, EVENT_RESTRICTION_CONDITION_CODE]
 
 export default class PrintLicenceRoutes {
   constructor(
@@ -119,10 +119,10 @@ export default class PrintLicenceRoutes {
     const groupedAdditionalConditions: Map<string, AdditionalCondition[]> = this.getGroupedAdditionalConditions(licence)
     const additionalConditions = Array.from(groupedAdditionalConditions, ([code, conditions]) => ({ code, conditions }))
     const singleItemConditions = additionalConditions
-      .filter(v => v.conditions.length === 1 && !multipleUploadMapConditionCodes.includes(v.code))
+      .filter(v => v.conditions.length === 1 && !mapUploadConditions.includes(v.code))
       .flatMap(v => v.conditions)
     const multipleItemMapConditions = additionalConditions
-      .filter(v => v.conditions.length > 1 || multipleUploadMapConditionCodes.includes(v.code))
+      .filter(v => v.conditions.length > 1 || mapUploadConditions.includes(v.code))
       .map(v => v.conditions)
     return { singleItemConditions, multipleItemConditions: multipleItemMapConditions }
   }

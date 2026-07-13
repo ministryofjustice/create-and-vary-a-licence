@@ -328,30 +328,7 @@ describe('Route - print a licence', () => {
           htmlPrint: false,
           watermark,
           licence: res.locals.licence,
-          singleItemConditions: [
-            {
-              code: '99195049-f355-46fb-b7d8-aef87a1b19c5',
-              data: [
-                {
-                  contributesToLicence: true,
-                  field: 'outOfBoundArea',
-                  id: 0,
-                  sequence: 0,
-                },
-              ],
-              id: 4,
-              text: 'this is an event exclusion',
-              expandedText: 'this is an event exclusion with expanded text',
-              uploadSummary: [
-                {
-                  description: 'Some words about an event exclusion',
-                  fileSize: 0,
-                  id: 4,
-                  uploadedTime: '',
-                },
-              ],
-            },
-          ],
+          singleItemConditions: [],
           multipleItemConditions: [
             [
               {
@@ -415,6 +392,30 @@ describe('Route - print a licence', () => {
                     description: 'Some words about a restriction',
                     fileSize: 0,
                     id: 3,
+                    uploadedTime: '',
+                  },
+                ],
+              },
+            ],
+            [
+              {
+                code: '99195049-f355-46fb-b7d8-aef87a1b19c5',
+                data: [
+                  {
+                    contributesToLicence: true,
+                    field: 'outOfBoundArea',
+                    id: 0,
+                    sequence: 0,
+                  },
+                ],
+                id: 4,
+                text: 'this is an event exclusion',
+                expandedText: 'this is an event exclusion with expanded text',
+                uploadSummary: [
+                  {
+                    description: 'Some words about an event exclusion',
+                    fileSize: 0,
+                    id: 4,
                     uploadedTime: '',
                   },
                 ],
