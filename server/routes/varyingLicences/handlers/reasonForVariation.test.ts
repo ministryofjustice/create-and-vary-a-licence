@@ -4,13 +4,14 @@ import LicenceService from '../../../services/licenceService'
 import ReasonForVariationRoutes from './reasonForVariation'
 import { VariationChanges } from '../../../utils/licenceComparator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Vary Licence - Reason for variation', () => {
   const handler = new ReasonForVariationRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -20,7 +21,7 @@ describe('Route Handlers - Vary Licence - Reason for variation', () => {
       },
       body: {},
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

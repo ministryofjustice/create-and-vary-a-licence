@@ -2,11 +2,12 @@ import { Request, Response } from 'express'
 import PathType from '../../../../../enumeration/pathType'
 import SelectAddressRoutes from './selectAddress'
 import AddressService from '../../../../../services/addressService'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
 describe('Route Handlers - Create a licence - Select an address', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   describe('Hardstop licence select address for prison user journey', () => {
@@ -19,7 +20,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
         query: {
           searchQuery: '12345',
         },
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       res = {
         render: jest.fn(),

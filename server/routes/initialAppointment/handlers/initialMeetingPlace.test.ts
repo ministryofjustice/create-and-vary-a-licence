@@ -8,6 +8,7 @@ import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 import config from '../../../config'
 import AddressService from '../../../services/addressService'
 import { AddressResponse } from '../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('./initialMeetingUpdatedFlashMessage')
 jest.mock('../../../services/licenceService')
@@ -17,7 +18,7 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   let formAddress: Address
   const preferredAddresses: AddressResponse[] = [
@@ -49,7 +50,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       body: formAddress,
       query: {},
       flash: jest.fn(),
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),
@@ -155,7 +156,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           query: {
             fromReview: 'true',
           },
-        } as unknown as Request
+        } as unknown as Request<LicenceIdParams>
 
         await handler.POST(req, res)
 
@@ -176,7 +177,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
             searchQuery: 'SW1A 1AA',
           },
           query: {},
-        } as unknown as Request
+        } as unknown as Request<LicenceIdParams>
 
         await handler.POST(req, res)
 
@@ -196,7 +197,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           source: 'test-source',
         }
 
-        req = { ...req, body: { preferredAddress: JSON.stringify(preferredAddress) }, query: {} } as unknown as Request
+        req = {
+          ...req,
+          body: { preferredAddress: JSON.stringify(preferredAddress) },
+          query: {},
+        } as unknown as Request<LicenceIdParams>
 
         config.postcodeLookupEnabled = true
         const mockAddAppointmentAddress = jest.fn()

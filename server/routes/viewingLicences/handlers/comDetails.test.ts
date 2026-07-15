@@ -3,13 +3,14 @@ import { Request, Response } from 'express'
 import ComDetailsRoutes from './comDetails'
 import ProbationService from '../../../services/probationService'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
+import { StaffCodeParams } from '../../types/routeParams'
 
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 jest.mock('../../../services/probationService')
 
 describe('Route Handlers - COM Details', () => {
   const handler = new ComDetailsRoutes(probationService)
-  let req: Request
+  let req: Request<StaffCodeParams>
   let res: Response
 
   beforeEach(() => {
@@ -17,7 +18,7 @@ describe('Route Handlers - COM Details', () => {
       params: {
         staffCode: 'X12345',
       },
-    } as unknown as Request
+    } as unknown as Request<StaffCodeParams>
     res = {
       render: jest.fn(),
       locals: {},
@@ -53,7 +54,7 @@ describe('Route Handlers - COM Details', () => {
         query: {
           activeTab: 'future-releases',
         },
-      } as unknown as Request
+      } as unknown as Request<StaffCodeParams>
       probationService.getStaffDetailByStaffCode.mockResolvedValue({
         name: {
           forename: 'Joe',

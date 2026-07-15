@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import OutOfBoundsPremisesInputRoutes from './outOfBoundsPremisesInputRoutes'
 import LicenceService from '../../../../services/licenceService'
 import type { Licence } from '../../../../@types/licenceApiClientTypes'
+import { ConditionIdParams, LicenceIdParams } from '../../../types/routeParams'
 
 jest.mock('../../../../services/licenceService')
 
@@ -10,7 +11,7 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 
 describe('Route Handlers - Create Licence - file upload input routes', () => {
   const handler = new OutOfBoundsPremisesInputRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams & ConditionIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       },
       query: {},
       body: { nameOfPremises: 'name of premises' },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams & ConditionIdParams>
 
     res = {
       render: jest.fn(),

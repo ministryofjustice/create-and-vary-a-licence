@@ -4,13 +4,14 @@ import ConditionService from '../../../services/conditionService'
 import AdditionalLicenceConditionsCallbackRoutes from './additionalLicenceConditionsCallback'
 import type { Licence } from '../../../@types/licenceApiClientTypes'
 import { CURFEW_CONDITION_CODE } from '../../../utils/conditionRoutes'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
 
 describe('Route Handlers - Create Licence - Additional Conditions Callback', () => {
   const handler = new AdditionalLicenceConditionsCallbackRoutes(conditionService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -23,7 +24,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       user: {
         username: 'joebloggs',
       },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

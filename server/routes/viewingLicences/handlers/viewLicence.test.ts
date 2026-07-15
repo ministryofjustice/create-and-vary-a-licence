@@ -6,6 +6,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import config from '../../../config'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const username = 'joebloggs'
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
@@ -13,7 +14,7 @@ jest.mock('../../../services/licenceService')
 
 describe('Route - view and approve a licence', () => {
   const handler = new ViewAndPrintLicenceRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   const licence = {
@@ -38,12 +39,15 @@ describe('Route - view and approve a licence', () => {
 
   beforeEach(() => {
     req = {
+      params: {
+        licenceId: '1',
+      },
       body: {
         licenceId: '1',
       },
       query: {},
       flash: jest.fn(),
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
     licenceService.recordAuditEvent = jest.fn()
   })
 
@@ -339,11 +343,11 @@ describe('Route - view and approve a licence', () => {
     it('should submit the licence response and redirect to the confirmation page', async () => {
       req = {
         params: {
-          licenceId: 1,
+          licenceId: '1',
         },
         flash: jest.fn(),
         query: {},
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       res = {
         render: jest.fn(),
@@ -367,19 +371,19 @@ describe('Route - view and approve a licence', () => {
 
       await handler.POST(req, res)
 
-      expect(licenceService.submitLicence).toHaveBeenCalledWith(1, { username: 'joebloggs' })
+      expect(licenceService.submitLicence).toHaveBeenCalledWith(req.params.licenceId, { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/confirmation')
     })
 
     it('should fail to process due to validation issues', async () => {
       req = {
         params: {
-          licenceId: 1,
+          licenceId: '1',
         },
         flash: jest.fn(),
         query: {},
         get: jest.fn().mockReturnValue('/previous-page'),
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       res = {
         render: jest.fn(),
@@ -407,12 +411,12 @@ describe('Route - view and approve a licence', () => {
     it('should redirect back with error messages in flash if appointment person field is empty', async () => {
       req = {
         params: {
-          licenceId: 1,
+          licenceId: '1',
         },
         flash: jest.fn(),
         query: {},
         get: jest.fn().mockReturnValue(undefined), // Simulate no referer
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       res = {
         render: jest.fn(),

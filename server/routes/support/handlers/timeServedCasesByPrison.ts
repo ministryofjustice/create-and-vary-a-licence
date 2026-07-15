@@ -6,6 +6,7 @@ import UserService from '../../../services/userService'
 import ProbationService from '../../../services/probationService'
 import { TimeServedCase } from '../../../@types/licenceApiClientTypes'
 import { DeliusManager } from '../../../@types/deliusClientTypes'
+import { PrisonCodeParams } from '../../types/routeParams'
 
 export default class TimeServedCasesByPrisonRoutes {
   constructor(
@@ -14,7 +15,7 @@ export default class TimeServedCasesByPrisonRoutes {
     private readonly userService: UserService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<PrisonCodeParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonCode } = req.params || {}
 
@@ -34,7 +35,7 @@ export default class TimeServedCasesByPrisonRoutes {
     return res.render('pages/support/timeServedCasesByPrison', { caseload, user, prisons, prisonCode })
   }
 
-  GET_CSV = async (req: Request, res: Response): Promise<void> => {
+  GET_CSV = async (req: Request<PrisonCodeParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonCode } = req.params || {}
 

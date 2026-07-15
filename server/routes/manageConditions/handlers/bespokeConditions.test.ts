@@ -3,12 +3,13 @@ import { Request, Response } from 'express'
 import BespokeConditions from '../types/bespokeConditions'
 import BespokeConditionsRoutes from './bespokeConditions'
 import LicenceService from '../../../services/licenceService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
   const handler = new BespokeConditionsRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   let formBespokeConditions: BespokeConditions
 
@@ -23,7 +24,7 @@ describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
       },
       query: {},
       body: formBespokeConditions,
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

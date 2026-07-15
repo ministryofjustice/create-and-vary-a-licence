@@ -2,13 +2,14 @@ import { Request, Response } from 'express'
 
 import LicenceService from '../../../services/licenceService'
 import ConfirmDiscardVariationRoutes from './confirmDiscardVariation'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Vary Licence - Confirm discard variation', () => {
   const handler = new ConfirmDiscardVariationRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('Route Handlers - Vary Licence - Confirm discard variation', () => {
       session: {
         returnToCase: '/licence/vary/caseload',
       },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),
@@ -70,7 +71,7 @@ describe('Route Handlers - Vary Licence - Confirm discard variation', () => {
         body: { answer: 'Yes' },
         session: {},
         flash: jest.fn(),
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       await handler.POST(reqWithEmptySession, res)
 

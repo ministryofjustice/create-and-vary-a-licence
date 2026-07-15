@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import ProbationService from '../../../services/probationService'
 import ComDetailsRoutes from './comDetails'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
+import { StaffCodeParams } from '../../types/routeParams'
 
 const deliusService = new ProbationService(null) as jest.Mocked<ProbationService>
 
@@ -9,7 +10,7 @@ jest.mock('../../../services/probationService')
 
 describe('Route Handlers - Create Licence - Com Details', () => {
   const handler = new ComDetailsRoutes(deliusService)
-  let req: Request
+  let req: Request<StaffCodeParams>
   let res: Response
 
   describe('GET', () => {
@@ -21,7 +22,7 @@ describe('Route Handlers - Create Licence - Com Details', () => {
         session: {
           returnToCase: '/licence/create/caseload',
         },
-      } as unknown as Request
+      } as unknown as Request<StaffCodeParams>
 
       res = {
         redirect: jest.fn(),

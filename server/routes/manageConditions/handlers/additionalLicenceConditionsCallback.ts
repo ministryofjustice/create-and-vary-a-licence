@@ -2,11 +2,12 @@ import { Request, Response } from 'express'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
 import { getConditionCallbackHref } from '../../../utils/conditionRoutes'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class AdditionalLicenceConditionsCallbackRoutes {
   constructor(private readonly conditionService: ConditionService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { licence } = res.locals
 

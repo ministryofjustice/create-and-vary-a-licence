@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class ConfirmVaryActionRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -9,7 +10,7 @@ export default class ConfirmVaryActionRoutes {
     res.render('pages/vary/confirmVaryQuestion')
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { answer } = req.body
     const { user, licence } = res.locals

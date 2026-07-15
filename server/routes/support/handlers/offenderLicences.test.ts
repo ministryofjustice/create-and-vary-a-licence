@@ -3,6 +3,7 @@ import OffenderLicencesRoutes from './offenderLicences'
 import LicenceService from '../../../services/licenceService'
 import type { CvlFields, CvlPrisoner, LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../../../utils/utils'
+import { LicenceIdParams, NomsIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
@@ -11,7 +12,7 @@ jest.mock('../../../utils/urlAccessByStatus', () => jest.fn().mockReturnValue(tr
 describe('Route Handlers - Offender licences', () => {
   const handler = new OffenderLicencesRoutes(licenceService)
 
-  let req: Request
+  let req: Request<LicenceIdParams & NomsIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('Route Handlers - Offender licences', () => {
       },
       render: jest.fn(),
     } as unknown as Response
-    req = {} as Request
+    req = {} as Request<LicenceIdParams & NomsIdParams>
   })
 
   describe('GET', () => {

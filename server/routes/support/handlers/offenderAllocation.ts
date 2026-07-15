@@ -4,6 +4,7 @@ import ProbationService from '../../../services/probationService'
 import { nameToString } from '../../../data/deliusClient'
 import { convertToTitleCase } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import { NomsIdParams } from '../../types/routeParams'
 
 type CvlCom = {
   email: string
@@ -20,7 +21,7 @@ export default class OffenderAllocationRoutes {
     private readonly probationService: ProbationService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<NomsIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { nomsId } = req.params
 
@@ -49,7 +50,7 @@ export default class OffenderAllocationRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<NomsIdParams>, res: Response): Promise<void> => {
     const { nomsId } = req.params
     const { user } = res.locals
 

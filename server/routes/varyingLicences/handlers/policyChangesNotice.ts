@@ -3,11 +3,12 @@ import Converter from 'number-to-words'
 import { LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
 import LicenceService from '../../../services/licenceService'
 import { convertToTitleCase } from '../../../utils/utils'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class PolicyChangesNoticeRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
 
     const changedConditions = await this.licenceService.getPolicyChanges(licenceId)

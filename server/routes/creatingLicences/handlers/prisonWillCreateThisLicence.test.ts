@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import PrisonWillCreateThisLicenceRoutes from './prisonWillCreateThisLicence'
 import LicenceService from '../../../services/licenceService'
 import { PrisonerWithCvlFields } from '../../../@types/licenceApiClientTypes'
+import { NomisIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
@@ -9,7 +10,7 @@ jest.mock('../../../services/probationService')
 
 describe('Route Handlers - Create Licence - Prison will create licence', () => {
   const handler = new PrisonWillCreateThisLicenceRoutes(licenceService)
-  let req: Request
+  let req: Request<NomisIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -23,7 +24,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
       user: {
         username: 'joebloggs',
       },
-    } as unknown as Request
+    } as unknown as Request<NomisIdParams>
 
     res = {
       render: jest.fn(),
@@ -103,7 +104,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           licenceId: '1',
         },
         session: {},
-      } as unknown as Request
+      } as unknown as Request<NomisIdParams>
 
       await handler.GET(reqWithEmptySession, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/prisonWillCreateThisLicence', {

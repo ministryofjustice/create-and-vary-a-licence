@@ -3,6 +3,7 @@ import LicenceService from '../../../../services/licenceService'
 import { AddAdditionalConditionRequest, AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import ConditionService from '../../../../services/conditionService'
+import { ConditionCodeParams, LicenceIdParams } from '../../../types/routeParams'
 
 export default class FileUploadListRoutes {
   constructor(
@@ -10,7 +11,7 @@ export default class FileUploadListRoutes {
     private readonly conditionService: ConditionService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams & ConditionCodeParams>, res: Response): Promise<void> => {
     const { licenceId, conditionCode } = req.params
     const { licence } = res.locals
 
@@ -36,7 +37,7 @@ export default class FileUploadListRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
     const { uploadFile, conditionCode } = req.body

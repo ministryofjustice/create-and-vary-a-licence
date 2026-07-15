@@ -5,12 +5,13 @@ import ManualAddressPostcodeLookupRoutes from './manualAddressPostcodeLookup'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
 import { Licence } from '../../../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
 describe('Route Handlers - Create a licence - Manual address entry', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   describe('TimeServed licence prison user journey', () => {
@@ -19,7 +20,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
         params: { licenceId: 1 },
         body: {},
         query: {},
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       res = {
         render: jest.fn(),

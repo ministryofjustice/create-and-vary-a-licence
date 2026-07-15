@@ -7,6 +7,7 @@ import { convertToTitleCase, isHdcLicence } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import { nameToString } from '../../../data/deliusClient'
+import { NomsIdParams } from '../../types/routeParams'
 
 type LicenceDates = {
   crd: string
@@ -38,7 +39,7 @@ export default class OffenderDetailRoutes {
     private readonly licenceService: LicenceService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<NomsIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { nomsId } = req.params
     const { prisoner: prisonerDetail, cvl: hardStopDetails } = await this.licenceService.getPrisonerDetail(nomsId, user)

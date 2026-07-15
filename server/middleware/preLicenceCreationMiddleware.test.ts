@@ -2,10 +2,11 @@ import { Request, Response } from 'express'
 import ProbationService from '../services/probationService'
 import preLicenceCreationMiddleware from './preLicenceCreationMiddleware'
 import { DeliusManager } from '../@types/deliusClientTypes'
+import { NomisIdParams } from '../routes/types/routeParams'
 
 jest.mock('../services/probationService')
 
-let req: Request
+let req: Request<NomisIdParams>
 let res: Response
 const next = jest.fn()
 
@@ -20,7 +21,7 @@ beforeEach(() => {
       nomisId: 'A1234BC',
     },
     path: '/licence/create/nomisId/A1234BC/confirm',
-  } as unknown as Request
+  } as unknown as Request<NomisIdParams>
 
   res = {
     locals: {
@@ -39,7 +40,7 @@ beforeEach(() => {
 
 describe('preLicenceCreationMiddleware', () => {
   it('should not run pre licence creation check if nomisId is not populated', async () => {
-    req.params = {}
+    req.params = {} as NomisIdParams
     await expect(middleware(req, res, next)).rejects.toThrow('No nomisId has been provided')
   })
 

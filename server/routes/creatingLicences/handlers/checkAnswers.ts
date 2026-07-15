@@ -8,6 +8,7 @@ import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 import HdcService from '../../../services/hdc/hdcService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class CheckAnswersRoutes {
   constructor(
@@ -51,7 +52,7 @@ export default class CheckAnswersRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { licence, user } = res.locals
 

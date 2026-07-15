@@ -5,6 +5,7 @@ import statusConfig from '../../../licences/licenceStatus'
 import { User } from '../../../@types/CvlUserDetails'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import { LicenceIdParams, NomsIdParams } from '../../types/routeParams'
 
 export default class OffenderLicenceStatusRoutes {
   constructor(
@@ -33,7 +34,7 @@ export default class OffenderLicenceStatusRoutes {
    * Exclude all status codes currently in use, other than the current status code for the selected
    * licence, or any with the INACTIVE status. INACTIVE can be assigned to multiple licences.
    */
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<NomsIdParams & LicenceIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId, nomsId } = req.params
 
@@ -49,7 +50,7 @@ export default class OffenderLicenceStatusRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams & NomsIdParams>, res: Response): Promise<void> => {
     const { licenceId, nomsId } = req.params
     const { user } = res.locals
     const { status, statusChangeReason } = req.body

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class SpoDiscussionRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -8,7 +9,7 @@ export default class SpoDiscussionRoutes {
     res.render('pages/vary/spoDiscussion')
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { answer } = req.body
     const { user } = res.locals

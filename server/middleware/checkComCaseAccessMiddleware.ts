@@ -2,8 +2,11 @@ import { RequestHandler } from 'express'
 import LicenceService from '../services/licenceService'
 import logger from '../../logger'
 import { CheckCaseAccessRequest } from '../@types/licenceApiClientTypes'
+import { CrnParams, LicenceIdParams, NomisIdParams } from '../routes/types/routeParams'
 
-export default function checkComCaseAccessMiddleware(licenceService: LicenceService): RequestHandler {
+export default function checkComCaseAccessMiddleware(
+  licenceService: LicenceService,
+): RequestHandler<LicenceIdParams & NomisIdParams & CrnParams> {
   return async (req, res, next) => {
     const { user, isVaryJourney } = res.locals
 

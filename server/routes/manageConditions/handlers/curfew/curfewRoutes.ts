@@ -5,6 +5,7 @@ import { AddAdditionalConditionRequest, AdditionalCondition, Licence } from '../
 import { SimpleTime } from '../../types'
 import { User } from '../../../../@types/CvlUserDetails'
 import CurfewType from '../../../../enumeration/CurfewType'
+import { ConditionCodeParams } from '../../../types/routeParams'
 
 export default class CurfewRoutes {
   constructor(
@@ -12,7 +13,7 @@ export default class CurfewRoutes {
     private readonly conditionService: ConditionService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<ConditionCodeParams>, res: Response): Promise<void> => {
     const { conditionCode } = req.params
     const { licence } = res.locals
 
@@ -55,7 +56,7 @@ export default class CurfewRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<ConditionCodeParams>, res: Response): Promise<void> => {
     const { conditionCode } = req.params
     const { user, licence } = res.locals
     const inputs = req.body

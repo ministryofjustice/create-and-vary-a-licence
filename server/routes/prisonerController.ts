@@ -2,13 +2,14 @@ import path from 'path'
 import type { RequestHandler } from 'express'
 
 import PrisonerService from '../services/prisonerService'
+import { NomsIdParams } from './types/routeParams'
 
 export default class PrisonerController {
   public constructor(private readonly prisonerService: PrisonerService) {}
 
   placeHolderImage = path.join(process.cwd(), '/assets/images/image-missing.png')
 
-  public getImage(): RequestHandler {
+  public getImage(): RequestHandler<NomsIdParams> {
     return async (req, res) => {
       const { nomsId } = req.params
       const { user } = res.locals

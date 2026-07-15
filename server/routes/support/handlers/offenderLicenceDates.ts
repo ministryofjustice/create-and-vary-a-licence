@@ -6,6 +6,7 @@ import { dateStringToSimpleDate, isHdcLicence } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import SimpleDate from '../../creatingLicences/types/date'
 import LicenceDatesAndReason from '../types/licenceDatesAndReason'
+import { LicenceIdParams, NomsIdParams } from '../../types/routeParams'
 
 export default class OffenderLicenceDatesRoutes {
   constructor(
@@ -13,7 +14,7 @@ export default class OffenderLicenceDatesRoutes {
     private licenceOverrideService: LicenceOverrideService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId } = req.params
     // TODO, get licence from res.locals?
@@ -25,7 +26,7 @@ export default class OffenderLicenceDatesRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams & NomsIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId, nomsId } = req.params
     const { dateChangeReason, updatedKind } = req.body

@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
 import ProbationService from '../../../services/probationService'
 import { nameToString } from '../../../data/deliusClient'
+import { StaffCodeParams } from '../../types/routeParams'
 
 export default class ComDetailsRoutes {
   constructor(private readonly probationService: ProbationService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<StaffCodeParams>, res: Response): Promise<void> => {
     const { staffCode } = req.params
     const staffDetails = await this.probationService.getStaffDetailByStaffCode(staffCode)
     const activeTabToRedirect = req.query?.activeTab ? `#${req.query?.activeTab}` : ''

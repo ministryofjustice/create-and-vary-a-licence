@@ -7,6 +7,7 @@ import config from '../../../../../config'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
 import { AddressResponse, Licence } from '../../../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
@@ -88,7 +89,7 @@ describe('InitialMeetingPlaceRoutes', () => {
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
 
       // When
-      await handler.GET(req as Request, res as Response)
+      await handler.GET(req as Request<LicenceIdParams>, res as Response)
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPlace', {
@@ -105,7 +106,7 @@ describe('InitialMeetingPlaceRoutes', () => {
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
 
       // When
-      await handler.GET(req as Request, res as Response)
+      await handler.GET(req as Request<LicenceIdParams>, res as Response)
 
       // Then
       expect(res.render).toHaveBeenCalledWith(
@@ -127,7 +128,7 @@ describe('InitialMeetingPlaceRoutes', () => {
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
 
       // When
-      await handler.GET(req as Request, res as Response)
+      await handler.GET(req as Request<LicenceIdParams>, res as Response)
 
       // Then
       expect(addressService.getPreferredAddresses).toHaveBeenCalledWith(user)
@@ -150,7 +151,7 @@ describe('InitialMeetingPlaceRoutes', () => {
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
       const flash = req.flash as jest.Mock
       flash.mockReturnValueOnce(['Address removed'])
-      await handler.GET(req as Request, res as Response)
+      await handler.GET(req as Request<LicenceIdParams>, res as Response)
       expect(req.flash).toHaveBeenCalledWith('addressRemovedMessage')
       expect(res.render).toHaveBeenCalledWith(
         'pages/initialAppointment/prisonCreated/initialMeetingPlace',
@@ -172,7 +173,7 @@ describe('InitialMeetingPlaceRoutes', () => {
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
 
       // When
-      await handler.POST(req as Request, res as Response)
+      await handler.POST(req as Request<LicenceIdParams>, res as Response)
 
       // Then
       expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, user)
@@ -186,7 +187,7 @@ describe('InitialMeetingPlaceRoutes', () => {
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
 
       // When
-      await handler.POST(req as Request, res as Response)
+      await handler.POST(req as Request<LicenceIdParams>, res as Response)
 
       // Then
       expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
@@ -200,7 +201,7 @@ describe('InitialMeetingPlaceRoutes', () => {
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
 
       // When
-      await handler.POST(req as Request, res as Response)
+      await handler.POST(req as Request<LicenceIdParams>, res as Response)
 
       // Then
       expect(res.redirect).toHaveBeenCalledWith(
@@ -226,7 +227,7 @@ describe('InitialMeetingPlaceRoutes', () => {
       const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
 
       // When
-      await handler.POST(req as Request, res as Response)
+      await handler.POST(req as Request<LicenceIdParams>, res as Response)
 
       // Then
       expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(

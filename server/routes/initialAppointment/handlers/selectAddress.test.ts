@@ -4,12 +4,13 @@ import UserType from '../../../enumeration/userType'
 import SelectAddressRoutes from './selectAddress'
 import { AddressSearchResponse } from '../../../@types/licenceApiClientTypes'
 import { LicenceApiClient } from '../../../data'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
 const addressService = new AddressService(licenceApiClient) as jest.Mocked<AddressService>
 
 describe('Route Handlers - Create Licence - Select an address', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('Route Handlers - Create Licence - Select an address', () => {
       },
       body: {},
       query: { searchQuery: '123 Fake Street' },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

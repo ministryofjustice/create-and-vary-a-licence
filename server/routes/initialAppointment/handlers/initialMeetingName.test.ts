@@ -4,13 +4,14 @@ import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
+import { LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('./initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Name - Probation users', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -20,7 +21,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
       },
       body: {},
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

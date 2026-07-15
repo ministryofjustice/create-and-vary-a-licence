@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import HdcCurfewAddressService from '../../../../services/hdc/hdcCurfewAddressService'
 import { AddAddressRequest, AddHdcCurfewAddressRequest } from '../../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../../types/routeParams'
 
 export default class ManualAddressEntryRoutes {
   constructor(private readonly hdcCurfewAddressService: HdcCurfewAddressService) {}
@@ -15,7 +16,7 @@ export default class ManualAddressEntryRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const addHdcCurfewAddressRequest = {
       address: { ...req.body, source: 'MANUAL' } as AddAddressRequest,

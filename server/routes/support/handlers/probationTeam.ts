@@ -4,11 +4,12 @@ import statusConfig from '../../../licences/licenceStatus'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { parseCvlDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { TeamCodeParams } from '../../types/routeParams'
 
 export default class ProbationTeamRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<TeamCodeParams>, res: Response): Promise<void> => {
     const view = req.query?.view as string
     const { teamCode } = req.params
 

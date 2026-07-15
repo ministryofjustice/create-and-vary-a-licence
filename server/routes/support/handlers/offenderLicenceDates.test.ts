@@ -5,6 +5,7 @@ import type { Licence } from '../../../@types/licenceApiClientTypes'
 import OffenderLicenceDatesRoutes from './offenderLicenceDates'
 import { dateStringToSimpleDate } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import { LicenceIdParams, NomsIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const overrideService = new LicenceOverrideService(null) as jest.Mocked<LicenceOverrideService>
@@ -13,7 +14,7 @@ jest.mock('../../../services/licenceOverrideService')
 
 describe('Route handlers - Licence dates override', () => {
   const handler = new OffenderLicenceDatesRoutes(licenceService, overrideService)
-  let req: Request
+  let req: Request<LicenceIdParams & NomsIdParams>
   let res: Response
 
   const licenceDates = {
@@ -70,7 +71,7 @@ describe('Route handlers - Licence dates override', () => {
       render: jest.fn(),
       redirect: jest.fn(),
     } as unknown as Response
-    req = {} as Request
+    req = {} as Request<LicenceIdParams & NomsIdParams>
   })
 
   describe('GET', () => {

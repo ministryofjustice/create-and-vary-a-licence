@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import fetchLicence from './fetchLicenceMiddleware'
 import LicenceService from '../services/licenceService'
 import { Licence } from '../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../routes/types/routeParams'
 
 jest.mock('../services/licenceService')
 jest.mock('../services/userService')
@@ -9,7 +10,7 @@ jest.mock('../services/userService')
 let res = {} as unknown as Response
 const req = {
   path: '/licence/create/id/1/check-your-answers',
-} as Request
+} as Request<LicenceIdParams>
 const next = jest.fn()
 
 const prisonRes = {
@@ -63,7 +64,7 @@ afterEach(() => {
 
 describe('fetchLicenceMiddleware', () => {
   it('should not read from licence api if route params does not contain licenceId', async () => {
-    req.params = {}
+    req.params = {} as LicenceIdParams
     await middleware(req, res, next)
     expect(res.locals.licence).toBeUndefined()
     expect(licenceService.getLicence).not.toHaveBeenCalled()

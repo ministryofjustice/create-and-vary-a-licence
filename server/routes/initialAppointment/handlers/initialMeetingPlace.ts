@@ -7,6 +7,7 @@ import config from '../../../config'
 import AddressService from '../../../services/addressService'
 import { AddAddressRequest, AddressResponse } from '../../../@types/licenceApiClientTypes'
 import { User } from '../../../@types/CvlUserDetails'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class InitialMeetingPlaceRoutes {
   constructor(
@@ -34,7 +35,7 @@ export default class InitialMeetingPlaceRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
     const { searchQuery, preferredAddress } = req.body

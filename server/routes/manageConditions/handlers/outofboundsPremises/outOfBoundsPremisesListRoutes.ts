@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import { AddAdditionalConditionRequest, AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../../types/routeParams'
 import conditionType from '../../../../enumeration/conditionType'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import ConditionService from '../../../../services/conditionService'
@@ -39,7 +40,7 @@ export default class OutOfBoundsPremisesListRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
     const { addAnotherLocation, conditionCode } = req.body

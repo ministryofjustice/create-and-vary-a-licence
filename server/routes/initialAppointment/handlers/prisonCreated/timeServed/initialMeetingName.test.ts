@@ -6,13 +6,14 @@ import { AppointmentPersonRequest } from '../../../../../@types/licenceApiClient
 import PathType from '../../../../../enumeration/pathType'
 import flashInitialApptUpdatedFlashMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   const contactPerson = {
     appointmentPersonType: 'SPECIFIC_PERSON',
@@ -24,7 +25,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       params: { licenceId: '1' },
       body: contactPerson,
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

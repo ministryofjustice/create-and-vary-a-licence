@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import PrisonRegisterService from '../../../services/prisonRegisterService'
 
 import { User } from '../../../@types/CvlUserDetails'
+import { PrisonIdParams } from '../../types/routeParams'
 
 export default class OmuEmailAddressRoutes {
   constructor(
@@ -22,7 +23,7 @@ export default class OmuEmailAddressRoutes {
     })
   }
 
-  GET_IN_CONTEXT = async (req: Request, res: Response): Promise<void> => {
+  GET_IN_CONTEXT = async (req: Request<PrisonIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonId } = req.params
 

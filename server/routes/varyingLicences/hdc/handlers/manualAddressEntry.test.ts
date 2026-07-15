@@ -2,13 +2,14 @@ import { Request, Response } from 'express'
 import ManualAddressEntryRoutes from './manualAddressEntry'
 import HdcCurfewAddressService from '../../../../services/hdc/hdcCurfewAddressService'
 import CurfewAccommodationType from '../../../../enumeration/curfewAccommodationType'
+import { LicenceIdParams } from '../../../types/routeParams'
 
 jest.mock('../../../../services/hdc/hdcCurfewAddressService')
 
 const hdcCurfewAddressService = new HdcCurfewAddressService(null) as jest.Mocked<HdcCurfewAddressService>
 
 describe('Route Handlers - Create a licence - Manual address entry', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   const handler = new ManualAddressEntryRoutes(hdcCurfewAddressService)
 
@@ -21,7 +22,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
         body: {},
         query: {},
         session: {},
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       res = {
         render: jest.fn(),

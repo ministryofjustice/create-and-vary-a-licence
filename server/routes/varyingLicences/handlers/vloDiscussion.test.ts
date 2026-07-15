@@ -4,6 +4,7 @@ import ConditionService from '../../../services/conditionService'
 
 import LicenceService from '../../../services/licenceService'
 import VloDiscussionRoutes from './vloDiscussion'
+import { LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -13,7 +14,7 @@ const licenceService = new LicenceService(null, conditionService) as jest.Mocked
 
 describe('Route Handlers - Vary Licence - Vlo discussion', () => {
   const handler = new VloDiscussionRoutes(licenceService, conditionService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -23,7 +24,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
       },
       body: {},
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

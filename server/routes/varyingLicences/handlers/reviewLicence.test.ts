@@ -3,13 +3,14 @@ import LicenceReviewRoutes from './reviewLicence'
 import LicenceService from '../../../services/licenceService'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('../../../services/licenceService')
 
 describe('Review Hard Stop licence handler', () => {
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
   const handler = new LicenceReviewRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('Review Hard Stop licence handler', () => {
       },
       body: {},
       flash: jest.fn(),
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
     res = {
       licence: {
         id: 1,

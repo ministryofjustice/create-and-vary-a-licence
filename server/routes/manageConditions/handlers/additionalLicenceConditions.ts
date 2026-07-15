@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class AdditionalLicenceConditionsRoutes {
   constructor(
@@ -18,7 +19,7 @@ export default class AdditionalLicenceConditionsRoutes {
     return res.render('pages/manageConditions/additionalLicenceConditions', { additionalConditions })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
 

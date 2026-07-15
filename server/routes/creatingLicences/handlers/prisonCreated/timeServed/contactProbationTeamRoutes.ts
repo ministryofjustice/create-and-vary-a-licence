@@ -3,6 +3,7 @@ import TimeServedService from '../../../../../services/timeServedService'
 import { type TimeServedProbationConfirmContactRequest } from '../../../../../@types/licenceApiClientTypes'
 import logger from '../../../../../../logger'
 import PathType from '../../../../../enumeration/pathType'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 export const getTimeServerContactProbation = (licenceId: string) => {
   return `/licence/time-served/create/id/${licenceId}/contact-probation-team`
@@ -14,7 +15,7 @@ export default class ContactProbationTeamRoutes {
     private readonly path: PathType,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licence } = res.locals
     const backLink = req.session?.returnToCase || '/licence/view/cases'
 
@@ -24,7 +25,7 @@ export default class ContactProbationTeamRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     logger.info('ContactProbationTeamRoutes POST started')
     const { licenceId } = req.params
     const { user } = res.locals

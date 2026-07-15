@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import AddressService from '../../../services/addressService'
 import UserType from '../../../enumeration/userType'
 import { AddAddressRequest } from '../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class SelectAddressRoutes {
   constructor(
@@ -9,7 +10,7 @@ export default class SelectAddressRoutes {
     private readonly userType: UserType,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { searchQuery } = req.query as { searchQuery?: string }
     const { user } = res.locals
@@ -33,7 +34,7 @@ export default class SelectAddressRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user } = res.locals
     const basePath = `/licence/create/id/${licenceId}`

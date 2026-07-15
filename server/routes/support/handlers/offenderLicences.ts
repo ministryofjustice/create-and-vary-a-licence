@@ -2,11 +2,12 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import { convertToTitleCase } from '../../../utils/utils'
 import getUrlAccessByStatus from '../../../utils/urlAccessByStatus'
+import { NomsIdParams } from '../../types/routeParams'
 
 export default class OffenderLicencesRoutes {
   constructor(private readonly licenceServer: LicenceService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<NomsIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { nomsId } = req.params
 

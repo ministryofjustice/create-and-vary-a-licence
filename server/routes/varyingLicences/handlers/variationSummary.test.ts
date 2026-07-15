@@ -6,6 +6,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import { VariationChanges } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
 import ProbationService from '../../../services/probationService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
@@ -14,7 +15,7 @@ jest.mock('../../../services/probationService')
 
 describe('Route Handlers - Vary Licence - Variation summary', () => {
   const handler = new VariationSummaryRoutes(licenceService, probationService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -23,7 +24,7 @@ describe('Route Handlers - Vary Licence - Variation summary', () => {
         licenceId: 1,
       },
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

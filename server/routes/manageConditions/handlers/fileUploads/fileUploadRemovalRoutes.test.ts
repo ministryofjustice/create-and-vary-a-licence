@@ -2,11 +2,12 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import FileUploadRemovalRoutes from './fileUploadRemovalRoutes'
 import { MEZ_CONDITION_CODE } from '../../../../utils/conditionRoutes'
+import { ConditionIdParams, LicenceIdParams } from '../../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 describe('Route Handlers - Create Licence - File Upload Removal Routes Handler', () => {
   const handler = new FileUploadRemovalRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams & ConditionIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -17,7 +18,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       },
       query: {},
       body: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams & ConditionIdParams>
 
     res = {
       render: jest.fn(),
@@ -77,7 +78,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
           conditionId: '1',
         },
         body: { confirmRemoval: 'Yes' },
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams & ConditionIdParams>
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(1, 1, { username: 'joebloggs' })
     })
@@ -89,7 +90,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
           conditionId: '1',
         },
         body: { confirmRemoval: 'Yes' },
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams & ConditionIdParams>
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads`,
@@ -104,7 +105,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
         },
         body: { confirmRemoval: 'Yes' },
         query: { fromReview: true },
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams & ConditionIdParams>
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromReview=true`,
@@ -119,7 +120,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
         },
         body: { confirmRemoval: 'Yes' },
         query: { fromPolicyReview: true },
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams & ConditionIdParams>
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromPolicyReview=true`,
@@ -133,7 +134,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
           conditionId: '1',
         },
         body: { confirmRemoval: 'No' },
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams & ConditionIdParams>
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledTimes(0)
     })
@@ -145,7 +146,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
           conditionId: '1',
         },
         body: {},
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams & ConditionIdParams>
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledTimes(0)
       expect(res.render).toHaveBeenCalledWith('pages/manageConditions/fileUploads/confirmUploadDeletion', {

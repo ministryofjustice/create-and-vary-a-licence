@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { LicenceIdParams } from '../../types/routeParams'
 import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
 import LicenceType from '../../../enumeration/licenceType'
@@ -27,7 +28,7 @@ export default class InitialMeetingTimeRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
     await this.licenceService.updateAppointmentTime(licenceId, req.body, user)

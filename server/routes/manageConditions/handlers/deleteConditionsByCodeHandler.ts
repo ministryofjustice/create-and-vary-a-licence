@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
+import { ConditionCodeParams } from '../../types/routeParams'
 
 export default class DeleteConditionsByCodeHandler {
   constructor(private readonly licenceService: LicenceService) {}
 
-  DELETE = async (req: Request, res: Response): Promise<void> => {
+  DELETE = async (req: Request<ConditionCodeParams>, res: Response): Promise<void> => {
     const { user, licence } = res.locals
     const { conditionCode } = req.params
     await this.licenceService.deleteAdditionalConditionsByCode([conditionCode], licence.id, user)

@@ -6,6 +6,7 @@ import ConditionService, { PolicyAdditionalCondition } from '../../../services/c
 import policyChangeHintText from '../../../config/policyChangeHintText'
 import conditionChangeType from '../../../enumeration/conditionChangeType'
 import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/LicencePolicy'
+import { ChangeCounterParams, LicenceIdParams } from '../../types/routeParams'
 
 export default class PolicyChangeRoutes {
   constructor(
@@ -93,7 +94,7 @@ export default class PolicyChangeRoutes {
     }
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams & ChangeCounterParams>, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     const { licenceId, changeCounter } = req.params
 
@@ -205,7 +206,7 @@ export default class PolicyChangeRoutes {
     return res.redirect(`/licence/vary/id/${licenceId}/policy-changes/input/callback/1`)
   }
 
-  DELETE = async (req: Request, res: Response): Promise<void> => {
+  DELETE = async (req: Request<LicenceIdParams & ChangeCounterParams>, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     const { licenceId, changeCounter } = req.params
 

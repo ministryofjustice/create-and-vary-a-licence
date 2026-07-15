@@ -4,12 +4,13 @@ import ContactProbationTeamRoutes from './contactProbationTeamRoutes'
 import { type TimeServedProbationConfirmContactRequest } from '../../../../../@types/licenceApiClientTypes'
 import logger from '../../../../../../logger'
 import PathType from '../../../../../enumeration/pathType'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 jest.mock('../../../../../services/timeServedService')
 jest.mock('../../../../../../logger')
 
 describe('ContactProbationTeamRoutes', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   let timeServedService: jest.Mocked<TimeServedService>
 
@@ -20,7 +21,7 @@ describe('ContactProbationTeamRoutes', () => {
       body: {},
       params: { licenceId: '123' },
       session: { returnToCase: '/back-link' },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

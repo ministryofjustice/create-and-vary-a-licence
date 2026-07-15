@@ -3,11 +3,12 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import { isInHardStopPeriod, licenceIsTwoDaysToRelease } from '../../../utils/utils'
+import type { LicenceIdParams } from '../../types/routeParams'
 
 export default class EditQuestionRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licence } = res.locals
     const { licenceId } = req.params
     if (
@@ -24,7 +25,7 @@ export default class EditQuestionRoutes {
     return res.render('pages/create/editQuestion')
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user } = res.locals
     const { answer } = req.body

@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import UserType from '../../../enumeration/userType'
 import { AddAddressRequest } from '../../../@types/licenceApiClientTypes'
 import AddressService from '../../../services/addressService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class ManualAddressPostcodeLookupRoutes {
   constructor(
@@ -9,7 +10,7 @@ export default class ManualAddressPostcodeLookupRoutes {
     private readonly userType: UserType,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const isPrisonUser = this.userType === UserType.PRISON
     const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
@@ -20,7 +21,7 @@ export default class ManualAddressPostcodeLookupRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user } = res.locals
     const basePath = `/licence/create/id/${licenceId}`

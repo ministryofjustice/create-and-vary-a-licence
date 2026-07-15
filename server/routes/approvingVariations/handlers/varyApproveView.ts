@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class VaryApproveViewRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -33,7 +34,7 @@ export default class VaryApproveViewRoutes {
     }
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId } = req.params
     await this.licenceService.approveVariation(licenceId, user)

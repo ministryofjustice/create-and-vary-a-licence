@@ -2,11 +2,12 @@ import { Request, Response } from 'express'
 import moment from 'moment'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
+import { NomisIdParams } from '../../types/routeParams'
 
 export default class PrisonWillCreateThisLicenceRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<NomisIdParams>, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
 

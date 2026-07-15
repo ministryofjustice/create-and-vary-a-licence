@@ -6,6 +6,7 @@ import { LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenc
 import ProbationService from '../../../../services/probationService'
 import PrisonerService from '../../../../services/prisonerService'
 import config from '../../../../config'
+import { NomisIdParams } from '../../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
@@ -17,7 +18,7 @@ jest.mock('../../../../services/prisonerService')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
   const handler = new ConfirmCreateRoutes(probationService, licenceService, prisonerService)
-  let req: Request
+  let req: Request<NomisIdParams>
   let res: Response
 
   const existingConfig = { ...config }
@@ -37,7 +38,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       user: {
         username: 'joebloggs',
       },
-    } as unknown as Request
+    } as unknown as Request<NomisIdParams>
 
     res = {
       render: jest.fn(),

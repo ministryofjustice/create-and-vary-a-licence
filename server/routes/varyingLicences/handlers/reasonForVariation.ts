@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class ReasonForVariationRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -18,7 +19,7 @@ export default class ReasonForVariationRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { reasonForVariation } = req.body
     const { user } = res.locals

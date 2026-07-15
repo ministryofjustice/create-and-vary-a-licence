@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import ProbationService from '../../../services/probationService'
 import { nameToString } from '../../../data/deliusClient'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class VariationSummaryRoutes {
   constructor(
@@ -23,7 +24,7 @@ export default class VariationSummaryRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
 

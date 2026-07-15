@@ -4,6 +4,7 @@ import AdditionalLicenceConditionsRoutes from './additionalLicenceConditions'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('../../../services/conditionService')
 
@@ -19,7 +20,7 @@ conditionService.getGroupedAdditionalConditions.mockResolvedValue([
 
 describe('Route Handlers - Create Licence - Additional Licence Conditions', () => {
   const handler = new AdditionalLicenceConditionsRoutes(licenceService, conditionService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -29,7 +30,7 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
       },
       query: {},
       body: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
+import { CrnParams } from '../../types/routeParams'
 
 export default class RestrictedDetails {
   constructor(private readonly licenceService: LicenceService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<CrnParams>, res: Response): Promise<void> => {
     const { crn } = req.params
     const { user } = res.locals
 

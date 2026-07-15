@@ -4,6 +4,7 @@ import LicenceService from '../../../services/licenceService'
 import ConfirmAmendVariationRoutes from './confirmAmendVariation'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -13,7 +14,7 @@ const licenceService = new LicenceService(null, conditionService) as jest.Mocked
 
 describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
   const handler = new ConfirmAmendVariationRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -23,7 +24,7 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
       },
       body: {},
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

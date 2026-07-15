@@ -1,18 +1,19 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import DeleteConditionsByCodeHandler from './deleteConditionsByCodeHandler'
+import { ConditionCodeParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 describe('Route Handlers - Create Licence - Delete Conditions By Code Handler Handler', () => {
   const handler = new DeleteConditionsByCodeHandler(licenceService)
-  let req: Request
+  let req: Request<ConditionCodeParams>
   let res: Response
 
   beforeEach(() => {
     req = {
       params: { conditionCode: 'abc' },
       query: {},
-    } as unknown as Request
+    } as unknown as Request<ConditionCodeParams>
 
     licenceService.deleteAdditionalConditionsByCode = jest.fn()
 

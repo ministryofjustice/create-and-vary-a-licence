@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { stringToAddressObject } from '../../../../../utils/utils'
+import { LicenceIdParams } from '../../../../types/routeParams'
 import LicenceService from '../../../../../services/licenceService'
 import PathType from '../../../../../enumeration/pathType'
 import config from '../../../../../config'
@@ -17,7 +18,7 @@ export default class InitialMeetingPlaceRoutes {
     private readonly path: PathType,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licence } = res.locals
     const { licenceId } = req.params
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
@@ -38,7 +39,7 @@ export default class InitialMeetingPlaceRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
     const { searchQuery, preferredAddress } = req.body

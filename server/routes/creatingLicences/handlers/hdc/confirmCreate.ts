@@ -6,6 +6,7 @@ import LicenceService from '../../../../services/licenceService'
 import config from '../../../../config'
 import logger from '../../../../../logger'
 import PrisonerService from '../../../../services/prisonerService'
+import { NomisIdParams } from '../../../types/routeParams'
 
 export default class ConfirmCreateRoutes {
   constructor(
@@ -14,7 +15,7 @@ export default class ConfirmCreateRoutes {
     private readonly prisonerService: PrisonerService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<NomisIdParams>, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/create/caseload'
@@ -64,7 +65,7 @@ export default class ConfirmCreateRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<NomisIdParams>, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
 

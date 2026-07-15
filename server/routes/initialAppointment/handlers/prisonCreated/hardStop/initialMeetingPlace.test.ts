@@ -9,6 +9,7 @@ import PathType from '../../../../../enumeration/pathType'
 import config from '../../../../../config'
 import AddressService from '../../../../../services/addressService'
 import { AddressResponse } from '../../../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
@@ -16,7 +17,7 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   let formAddress: Address
   const preferredAddresses: AddressResponse[] = [
@@ -48,7 +49,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       body: formAddress,
       query: {},
       flash: jest.fn(),
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),
@@ -124,7 +125,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
         const flash = req.flash as jest.Mock
         flash.mockReturnValueOnce(['Address removed'])
-        await handler.GET(req as Request, res as Response)
+        await handler.GET(req as Request<LicenceIdParams>, res as Response)
         expect(req.flash).toHaveBeenCalledWith('addressRemovedMessage')
         expect(res.render).toHaveBeenCalledWith(
           'pages/initialAppointment/prisonCreated/initialMeetingPlace',
@@ -143,7 +144,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     describe('POST', () => {
       it('should redirect to the initial meeting contact page', async () => {
         handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
-        await handler.POST(req, res)
+        await handler.POST(req as Request<LicenceIdParams>, res)
         expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-contact')
       })
@@ -156,20 +157,20 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           },
           body: formAddress,
           query: {},
-        } as unknown as Request
-        await handler.POST(req, res)
+        } as unknown as Request<LicenceIdParams>
+        await handler.POST(req as Request<LicenceIdParams>, res)
         expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
       })
 
       it('should call to generate a flash message', async () => {
-        await handler.POST(req, res)
+        await handler.POST(req as Request<LicenceIdParams>, res)
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
       })
 
       it('should not call updateAppointmentAddress', async () => {
         config.postcodeLookupEnabled = true
-        await handler.POST(req, res)
+        await handler.POST(req as Request<LicenceIdParams>, res)
         expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
         expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalledWith()
       })
@@ -184,9 +185,9 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           body: {
             searchQuery: 'SW1A 1AA',
           },
-        } as unknown as Request
+        } as unknown as Request<LicenceIdParams>
 
-        await handler.POST(req, res)
+        await handler.POST(req as Request<LicenceIdParams>, res)
 
         expect(res.redirect).toHaveBeenCalledWith(
           '/licence/hard-stop/create/id/123/select-address?searchQuery=SW1A%201AA',
@@ -205,7 +206,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           body: {
             searchQuery: 'SW1A 1AA',
           },
-        } as unknown as Request
+        } as unknown as Request<LicenceIdParams>
 
         await handler.POST(req, res)
 
@@ -226,11 +227,15 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           postcode: 'TE5 7ST',
           source: 'test-source',
         }
-        req = { ...req, body: { preferredAddress: JSON.stringify(preferredAddress) }, query: {} } as unknown as Request
+        req = {
+          ...req,
+          body: { preferredAddress: JSON.stringify(preferredAddress) },
+          query: {},
+        } as unknown as Request<LicenceIdParams>
         config.postcodeLookupEnabled = true
         const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
 
-        await handler.POST(req, res)
+        await handler.POST(req as Request<LicenceIdParams>, res)
 
         expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
           req.params.licenceId,

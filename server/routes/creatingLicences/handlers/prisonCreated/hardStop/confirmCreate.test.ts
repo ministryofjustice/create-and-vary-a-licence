@@ -4,6 +4,7 @@ import { Session } from 'express-session'
 import LicenceService from '../../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import { PrisonerWithCvlFields } from '../../../../../@types/licenceApiClientTypes'
+import { NomisIdParams } from '../../../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -11,7 +12,7 @@ jest.mock('../../../../../services/licenceService')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
   const handler = new ConfirmCreateRoutes(licenceService)
-  let req: Request
+  let req: Request<NomisIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -28,7 +29,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       user: {
         username: 'joebloggs',
       },
-    } as unknown as Request
+    } as unknown as Request<NomisIdParams>
 
     res = {
       render: jest.fn(),

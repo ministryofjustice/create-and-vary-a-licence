@@ -2,11 +2,12 @@ import { Request, Response } from 'express'
 import AddressService from '../../../services/addressService'
 import ManualAddressPostcodeLookupRoutes from './manualAddressPostcodeLookup'
 import UserType from '../../../enumeration/userType'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
 describe('Route Handlers - Create a licence - Manual address entry', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   const handler = new ManualAddressPostcodeLookupRoutes(addressService, UserType.PROBATION)
 
@@ -18,7 +19,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
         },
         body: {},
         query: {},
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       res = {
         render: jest.fn(),

@@ -4,6 +4,7 @@ import AdditionalLicenceConditionInputRoutes from './additionalLicenceConditionI
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import type { Licence } from '../../../@types/licenceApiClientTypes'
+import { ConditionIdParams, LicenceIdParams } from '../../types/routeParams'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
@@ -13,7 +14,7 @@ jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Create Licence - Additional Licence Condition Input', () => {
   const handler = new AdditionalLicenceConditionInputRoutes(licenceService, conditionService)
-  let req: Request
+  let req: Request<LicenceIdParams & ConditionIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -24,7 +25,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       },
       query: {},
       body: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams & ConditionIdParams>
 
     res = {
       render: jest.fn(),
@@ -191,13 +192,13 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
     })
 
     it('should redirect to the callback function', async () => {
-      await handler.SKIP(req, res)
+      await handler.SKIP(req as Request<LicenceIdParams & ConditionIdParams>, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions/callback')
     })
 
     it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
       req.query.fromReview = 'true'
-      await handler.SKIP(req, res)
+      await handler.SKIP(req as Request<LicenceIdParams & ConditionIdParams>, res)
       expect(res.redirect).toHaveBeenCalledWith(
         '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
       )

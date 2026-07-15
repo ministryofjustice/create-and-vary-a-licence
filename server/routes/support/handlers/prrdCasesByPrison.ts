@@ -5,6 +5,7 @@ import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import UserService from '../../../services/userService'
 import ProbationService from '../../../services/probationService'
 import { convertToTitleCase } from '../../../utils/utils'
+import { PrisonCodeParams } from '../../types/routeParams'
 
 export default class PrrdCasesByPrisonRoutes {
   constructor(
@@ -13,7 +14,7 @@ export default class PrrdCasesByPrisonRoutes {
     private readonly userService: UserService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<PrisonCodeParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonCode } = req.params || {}
 
@@ -33,7 +34,7 @@ export default class PrrdCasesByPrisonRoutes {
     return res.render('pages/support/prrdCasesByPrison', { caseload, user, prisons, prisonCode })
   }
 
-  GET_CSV = async (req: Request, res: Response): Promise<void> => {
+  GET_CSV = async (req: Request<PrisonCodeParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonCode } = req.params || {}
 
@@ -70,7 +71,7 @@ export default class PrrdCasesByPrisonRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonCode } = req.body
-    return res.redirect(`/support/prrd-cases/by-prison/${prisonCode || user.activeCaseload}`)
+    res.redirect(`/support/prrd-cases/by-prison/${prisonCode || user.activeCaseload}`)
   }
 
   private getProbationPractitionerName = (name: string, allocated: boolean) => {

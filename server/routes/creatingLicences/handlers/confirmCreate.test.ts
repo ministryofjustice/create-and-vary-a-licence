@@ -6,6 +6,7 @@ import ProbationService from '../../../services/probationService'
 import { CvlPrisoner, LicenceSummary, PrisonerWithCvlFields } from '../../../@types/licenceApiClientTypes'
 import logger from '../../../../logger'
 import { LicenceKind } from '../../../enumeration'
+import { NomisIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
@@ -17,7 +18,7 @@ jest.mock('../../../../logger')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
   const handler = new ConfirmCreateRoutes(probationService, licenceService)
-  let req: Request
+  let req: Request<NomisIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -34,7 +35,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       user: {
         username: 'joebloggs',
       },
-    } as unknown as Request
+    } as unknown as Request<NomisIdParams>
 
     res = {
       render: jest.fn(),
@@ -143,7 +144,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         },
         session: {},
         flash: jest.fn(),
-      } as unknown as Request
+      } as unknown as Request<NomisIdParams>
 
       await handler.GET(reqWithEmptySession, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {

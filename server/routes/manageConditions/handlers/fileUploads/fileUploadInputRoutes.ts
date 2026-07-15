@@ -3,6 +3,7 @@ import LicenceService from '../../../../services/licenceService'
 import FileUploadType from '../../../../enumeration/fileUploadType'
 import { AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 import { mapToTargetField } from '../../../../utils/utils'
+import { ConditionIdParams, LicenceIdParams } from '../../../types/routeParams'
 
 export default class FileUploadInputRoutes {
   constructor(
@@ -10,9 +11,8 @@ export default class FileUploadInputRoutes {
     private readonly fileUploadType: FileUploadType,
   ) {}
 
-  POST = async (req: Request, res: Response): Promise<void> => {
-    const { licenceId } = req.params
-    const { conditionId } = req.params
+  POST = async (req: Request<LicenceIdParams & ConditionIdParams>, res: Response): Promise<void> => {
+    const { licenceId, conditionId } = req.params
     const { user, licence } = res.locals
 
     const { code } = licence.additionalLicenceConditions.find(
@@ -51,10 +51,9 @@ export default class FileUploadInputRoutes {
     return res.redirect(redirect)
   }
 
-  DELETE = async (req: Request, res: Response): Promise<void> => {
-    const { licence } = res.locals
-    const { conditionId } = req.params
-    const { user } = res.locals
+  DELETE = async (req: Request<ConditionIdParams>, res: Response): Promise<void> => {
+    const { licence, user } = res.locals
+    const { conditionId }: ConditionIdParams = req.params
 
     const condition = licence.additionalLicenceConditions.find(
       (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),

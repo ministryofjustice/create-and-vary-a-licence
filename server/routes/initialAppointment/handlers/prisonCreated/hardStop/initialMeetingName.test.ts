@@ -6,13 +6,14 @@ import { AppointmentPersonRequest } from '../../../../../@types/licenceApiClient
 import PathType from '../../../../../enumeration/pathType'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Name - Probation users', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   const contactPerson = {
     appointmentPersonType: 'SPECIFIC_PERSON',
@@ -26,7 +27,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
       },
       body: contactPerson,
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),
@@ -92,7 +93,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           },
           body: contactPerson,
           query: {},
-        } as unknown as Request
+        } as unknown as Request<LicenceIdParams>
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
           username: 'joebloggs',

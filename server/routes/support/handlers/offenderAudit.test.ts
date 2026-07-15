@@ -3,6 +3,7 @@ import OffenderAuditRoutes from './offenderAudit'
 import LicenceService from '../../../services/licenceService'
 import type { AuditEvent, CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../../../utils/utils'
+import { LicenceIdParams, NomsIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/prisonerService')
@@ -10,7 +11,7 @@ jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Offender audit', () => {
   const handler = new OffenderAuditRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams & NomsIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -20,7 +21,7 @@ describe('Route Handlers - Offender audit', () => {
       },
       render: jest.fn(),
     } as unknown as Response
-    req = {} as Request
+    req = {} as Request<LicenceIdParams & NomsIdParams>
   })
 
   describe('GET', () => {

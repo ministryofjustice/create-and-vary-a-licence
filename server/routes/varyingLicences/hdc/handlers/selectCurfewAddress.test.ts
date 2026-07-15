@@ -4,6 +4,7 @@ import AddressService from '../../../../services/addressService'
 import { AddressSearchResponse } from '../../../../@types/licenceApiClientTypes'
 import HdcCurfewAddressService from '../../../../services/hdc/hdcCurfewAddressService'
 import CurfewAccommodationType from '../../../../enumeration/curfewAccommodationType'
+import { LicenceIdParams } from '../../../types/routeParams'
 
 jest.mock('../../../../services/addressService')
 jest.mock('../../../../services/hdc/hdcCurfewAddressService')
@@ -13,7 +14,7 @@ const hdcCurfewAddressService = new HdcCurfewAddressService(null) as jest.Mocked
 
 describe('Route Handlers - Vary Licence - Select Curfew Address', () => {
   const handler = new SelectCurfewAddressRoutes(addressService, hdcCurfewAddressService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -24,7 +25,7 @@ describe('Route Handlers - Vary Licence - Select Curfew Address', () => {
       body: {},
       query: {},
       session: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),
@@ -95,7 +96,7 @@ describe('Route Handlers - Vary Licence - Select Curfew Address', () => {
       await handler.POST(req, res)
 
       expect(hdcCurfewAddressService.updateHdcCurfewAddress).toHaveBeenCalledWith(
-        parseInt(req.params.licenceId, 10),
+        parseInt(req.params.licenceId as string, 10),
         {
           address: {
             uprn: selectedAddress.uprn,

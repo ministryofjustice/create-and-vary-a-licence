@@ -7,13 +7,14 @@ import UserType from '../../../../../enumeration/userType'
 import AppointmentTimeType from '../../../../../enumeration/appointmentTimeType'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import PathType from '../../../../../enumeration/pathType'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route - create licence - initial meeting date and time', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   let formDate: DateTime
   const appointmentTimeType: Record<string, string> = AppointmentTimeType
@@ -34,7 +35,7 @@ describe('Route - create licence - initial meeting date and time', () => {
       },
       body: formDate,
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

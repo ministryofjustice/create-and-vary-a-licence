@@ -10,6 +10,7 @@ import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
 import { LicenceKind } from '../../../enumeration'
 import config from '../../../config'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -76,11 +77,12 @@ export default class ViewAndPrintLicenceRoutes {
     }
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
 
     const errors = await this.validateLicence(licence)
+    console.log('Validation errors:', errors) // Log the validation errors for debugging
     if (errors.length > 0) {
       req.flash('validationErrors', JSON.stringify(errors))
       const referer = req.get('Referer') || `/licence/view/id/${licenceId}/show`

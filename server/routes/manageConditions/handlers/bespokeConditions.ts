@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
 import type BespokeConditions from '../types/bespokeConditions'
 import type { BespokeCondition } from '../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../types/routeParams'
 
 export default class BespokeConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -13,7 +14,7 @@ export default class BespokeConditionsRoutes {
     res.render('pages/manageConditions/bespokeConditions', { conditions })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     // TODO: Some work to do here to redirect to the same page if "Add another" or "Remove" is selected and javascript is off
     const { licenceId } = req.params
     const { licence } = res.locals
@@ -32,7 +33,7 @@ export default class BespokeConditionsRoutes {
     return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
   }
 
-  DELETE = async (req: Request, res: Response): Promise<void> => {
+  DELETE = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user } = res.locals
     await this.licenceService.updateBespokeConditions(licenceId, { conditions: [] } as BespokeConditions, user)

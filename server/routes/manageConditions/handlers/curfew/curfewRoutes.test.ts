@@ -7,6 +7,7 @@ import { CURFEW_CONDITION_CODE } from '../../../../utils/conditionRoutes'
 import { AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 import LicenceType from '../../../../enumeration/licenceType'
 import CurfewType from '../../../../enumeration/CurfewType'
+import { ConditionCodeParams, LicenceIdParams } from '../../../types/routeParams'
 
 jest.mock('../../../../services/licenceService')
 jest.mock('../../../../services/conditionService')
@@ -85,7 +86,7 @@ describe('Route handlers - Curfew routes', () => {
     ],
   }
 
-  let req: Request
+  let req: Request<LicenceIdParams & ConditionCodeParams>
   let res: Response
 
   beforeEach(() => {
@@ -96,7 +97,7 @@ describe('Route handlers - Curfew routes', () => {
       },
       query: {},
       body: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams & ConditionCodeParams>
 
     res = {
       render: jest.fn(),

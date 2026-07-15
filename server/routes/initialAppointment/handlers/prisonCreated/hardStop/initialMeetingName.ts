@@ -3,6 +3,7 @@ import LicenceService from '../../../../../services/licenceService'
 import PathType from '../../../../../enumeration/pathType'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 export default class InitialMeetingNameRoutes {
   constructor(
@@ -28,7 +29,7 @@ export default class InitialMeetingNameRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
     await this.licenceService.updateAppointmentPerson(licenceId, req.body, user)

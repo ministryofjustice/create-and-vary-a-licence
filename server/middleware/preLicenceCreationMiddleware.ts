@@ -1,9 +1,12 @@
 import { RequestHandler } from 'express'
 import assert from 'assert'
 import logger from '../../logger'
+import { NomisIdParams } from '../routes/types/routeParams'
 import ProbationService from '../services/probationService'
 
-export default function preLicenceCreationMiddleware(probationService: ProbationService): RequestHandler {
+export default function preLicenceCreationMiddleware(
+  probationService: ProbationService,
+): RequestHandler<NomisIdParams> {
   return async (req, res, next) => {
     assert(req.params.nomisId, 'No nomisId has been provided')
 

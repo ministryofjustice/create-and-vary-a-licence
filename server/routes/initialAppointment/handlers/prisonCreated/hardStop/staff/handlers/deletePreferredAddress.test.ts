@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
 import AddressService from '../../../../../../../services/addressService'
 import DeletePreferredAddressRoutes from './deletePreferredAddress'
+import { LicenceIdParams, ReferenceParams } from '../../../../../../types/routeParams'
 
 const addressService = new AddressService(null) as jest.Mocked<AddressService>
 
 describe('Route Handlers - Create a licence - Select an address', () => {
-  let req: Request
+  let req: Request<LicenceIdParams & ReferenceParams>
   let res: Response
   describe('DELETE', () => {
     beforeEach(() => {
@@ -19,7 +20,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
           PathType: 'create',
         },
         flash: jest.fn(),
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams & ReferenceParams>
 
       res = {
         render: jest.fn(),

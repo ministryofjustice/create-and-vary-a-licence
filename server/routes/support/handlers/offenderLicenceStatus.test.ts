@@ -5,6 +5,7 @@ import OffenderLicenceStatusRoutes from './offenderLicenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence, LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
+import { LicenceIdParams, NomsIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const overrideService = new LicenceOverrideService(null) as jest.Mocked<LicenceOverrideService>
@@ -13,7 +14,7 @@ jest.mock('../../../services/licenceOverrideService')
 
 describe('Route Handlers - Licence Status Override', () => {
   const handler = new OffenderLicenceStatusRoutes(licenceService, overrideService)
-  let req: Request
+  let req: Request<LicenceIdParams & NomsIdParams>
   let res: Response
 
   const mockLicences = [
@@ -45,7 +46,7 @@ describe('Route Handlers - Licence Status Override', () => {
         nomsId: 'ABC123',
         licenceId: '1',
       },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams & NomsIdParams>
   })
 
   describe('GET', () => {

@@ -6,6 +6,7 @@ import ConfirmCreateRoutes from './confirmCreate'
 import { PrisonerWithCvlFields, ExternalTimeServedRecordResponse } from '../../../../../@types/licenceApiClientTypes'
 import TimeServedService from '../../../../../services/timeServedService'
 import ProbationService from '../../../../../services/probationService'
+import { NomisIdParams } from '../../../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
@@ -17,7 +18,7 @@ jest.mock('../../../../../services/timeServedService')
 
 describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
   const handler = new ConfirmCreateRoutes(licenceService, probationService, timeServedExternalRecordService)
-  let req: Request
+  let req: Request<NomisIdParams>
   let res: Response
 
   const prisonerDetails = {
@@ -64,7 +65,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
         username: 'joebloggs',
       },
       flash: jest.fn(),
-    } as unknown as Request
+    } as unknown as Request<NomisIdParams>
 
     res = {
       render: jest.fn(),

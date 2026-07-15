@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
 import LicencePrisonerDetailsRoutes from './licencePrisonerDetails'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/licenceOverrideService')
@@ -13,7 +14,7 @@ const username = 'admin-user'
 
 describe('Route handlers - Licence prisoner details override', () => {
   const handler = new LicencePrisonerDetailsRoutes(licenceService, overrideService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   const licence = {
@@ -29,7 +30,7 @@ describe('Route handlers - Licence prisoner details override', () => {
       },
       render: jest.fn(),
     } as unknown as Response
-    req = {} as Request
+    req = {} as Request<LicenceIdParams>
   })
 
   describe('GET', () => {

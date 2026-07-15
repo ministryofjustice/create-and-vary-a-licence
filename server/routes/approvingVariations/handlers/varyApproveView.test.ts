@@ -5,6 +5,7 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { VariationChanges } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -13,7 +14,7 @@ const displayName = 'Joe Bloggs'
 
 describe('Route - view and approve a licence variation', () => {
   const handler = new VaryApproveViewRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('Route - view and approve a licence variation', () => {
       body: {
         licenceId: '1',
       },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     licenceService.approveVariation = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
@@ -112,7 +113,7 @@ describe('Route - view and approve a licence variation', () => {
     it('should approve a licence variation', async () => {
       req = {
         params: { licenceId: '1' },
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       await handler.POST(req, res)
 

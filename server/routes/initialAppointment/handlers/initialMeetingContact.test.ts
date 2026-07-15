@@ -5,13 +5,14 @@ import LicenceService from '../../../services/licenceService'
 import TelephoneNumbers from '../types/telephoneNumbers'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
+import { LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('./initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
   let telephoneNumbers: TelephoneNumbers
 
@@ -27,7 +28,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       },
       body: telephoneNumbers,
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

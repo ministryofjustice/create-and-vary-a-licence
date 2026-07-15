@@ -7,6 +7,7 @@ import { ExternalTimeServedRecordRequest } from '../../../../../@types/licenceAp
 import TimeServedService from '../../../../../services/timeServedService'
 import ProbationService from '../../../../../services/probationService'
 import logger from '../../../../../../logger'
+import { NomisIdParams } from '../../../../types/routeParams'
 
 export default class ConfirmCreateRoutes {
   constructor(
@@ -15,8 +16,8 @@ export default class ConfirmCreateRoutes {
     private readonly timeServedService: TimeServedService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
-    const { nomisId } = req.params
+  GET = async (req: Request<NomisIdParams>, res: Response): Promise<void> => {
+    const { nomisId }: NomisIdParams = req.params
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/view/cases'
     const {
@@ -53,8 +54,8 @@ export default class ConfirmCreateRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
-    const { nomisId } = req.params
+  POST = async (req: Request<NomisIdParams>, res: Response): Promise<void> => {
+    const { nomisId }: NomisIdParams = req.params
     const { user } = res.locals
     const { answer, reasonForUsingNomis } = req.body
     const backLink = req.session.returnToCase || '/licence/view/cases'

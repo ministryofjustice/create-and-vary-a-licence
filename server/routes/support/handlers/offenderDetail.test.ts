@@ -13,6 +13,7 @@ import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
 import { DeliusManager } from '../../../@types/deliusClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import { NomsIdParams } from '../../types/routeParams'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
@@ -88,7 +89,7 @@ const defaultRecallDetails: RecallSupportInfo = {
 
 describe('Route Handlers - Offender detail', () => {
   const handler = new OffenderDetailRoutes(prisonerService, probationService, licenceService)
-  let req: Request
+  let req: Request<NomsIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -102,7 +103,7 @@ describe('Route Handlers - Offender detail', () => {
       params: {
         nomsId: 'ABC123',
       },
-    } as unknown as Request
+    } as unknown as Request<NomsIdParams>
 
     probationService.getResponsibleCommunityManager.mockResolvedValue({
       id: 2000,

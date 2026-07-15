@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
 import LicenceService from '../../../services/licenceService'
 import { convertToTitleCase } from '../../../utils/utils'
+import { LicenceIdParams, NomsIdParams } from '../../types/routeParams'
 
 export default class OffenderLicenceTypeRoutes {
   constructor(
@@ -9,7 +10,7 @@ export default class OffenderLicenceTypeRoutes {
     private licenceOverrideService: LicenceOverrideService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId } = req.params
     const licence = await this.licenceService.getLicence(parseInt(licenceId, 10), user)
@@ -18,7 +19,7 @@ export default class OffenderLicenceTypeRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams & NomsIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId, nomsId } = req.params
     const { licenceType, reason } = req.body

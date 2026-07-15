@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import { AdditionalCondition, Licence } from '../../../../@types/licenceApiClientTypes'
+import { ConditionIdParams } from '../../../types/routeParams'
 
 export default class FileUploadRemovalRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -11,7 +12,7 @@ export default class FileUploadRemovalRoutes {
     return condition || null
   }
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<ConditionIdParams>, res: Response): Promise<void> => {
     const { licence } = res.locals
     const { conditionId } = req.params
 
@@ -26,7 +27,7 @@ export default class FileUploadRemovalRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<ConditionIdParams>, res: Response): Promise<void> => {
     const { user, licence } = res.locals
     const { conditionId } = req.params
     const { confirmRemoval } = req.body

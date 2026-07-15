@@ -2,13 +2,14 @@ import { Request, Response } from 'express'
 
 import LicenceService from '../../../services/licenceService'
 import SpoDiscussionRoutes from './spoDiscussion'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Vary Licence - Spo discussion', () => {
   const handler = new SpoDiscussionRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -18,7 +19,7 @@ describe('Route Handlers - Vary Licence - Spo discussion', () => {
       },
       body: {},
       query: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

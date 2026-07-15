@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
+import { ConditionIdParams, LicenceIdParams } from '../../../types/routeParams'
 import LicenceService from '../../../../services/licenceService'
 import { AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 
 export default class OutOfBoundsPremisesInputRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
-  POST = async (req: Request, res: Response): Promise<void> => {
-    const { licenceId } = req.params
-    const { conditionId } = req.params
+  POST = async (req: Request<LicenceIdParams & ConditionIdParams>, res: Response): Promise<void> => {
+    const { licenceId, conditionId } = req.params
     const { user, licence } = res.locals
 
     const { code } = licence.additionalLicenceConditions.find(
@@ -29,7 +29,7 @@ export default class OutOfBoundsPremisesInputRoutes {
     return res.redirect(redirect)
   }
 
-  DELETE = async (req: Request, res: Response): Promise<void> => {
+  DELETE = async (req: Request<ConditionIdParams>, res: Response): Promise<void> => {
     const { licence } = res.locals
     const { conditionId } = req.params
     const { user } = res.locals

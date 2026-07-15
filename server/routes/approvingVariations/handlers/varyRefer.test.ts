@@ -4,6 +4,7 @@ import VaryReferRoutes from './varyRefer'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { VariationChanges } from '../../../utils/licenceComparator'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const username = 'joebloggs'
@@ -13,7 +14,7 @@ jest.mock('../../../services/licenceService')
 
 describe('Route - refer a licence variation', () => {
   const handler = new VaryReferRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('Route - refer a licence variation', () => {
       body: {
         licenceId: '1',
       },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
   })
 
   afterEach(() => {
@@ -94,7 +95,7 @@ describe('Route - refer a licence variation', () => {
           licenceId: '1',
         },
         body: expectedRequest,
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
 
       await handler.POST(req, res)
 

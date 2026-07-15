@@ -2,11 +2,12 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import OutOfBoundsPremisesRemovalRoutes from './outOfBoundsPremisesRemovalRoutes'
 import { OUT_OF_BOUNDS_PREMISES_CONDITION_CODE } from '../../../../utils/conditionRoutes'
+import { ConditionIdParams, LicenceIdParams } from '../../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 describe('Route Handlers - Create Licence - Out Of Bounds Premises Removal Routes Handler', () => {
   const handler = new OutOfBoundsPremisesRemovalRoutes(licenceService)
-  let req: Request
+  let req: Request<ConditionIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -17,7 +18,7 @@ describe('Route Handlers - Create Licence - Out Of Bounds Premises Removal Route
       },
       query: {},
       body: {},
-    } as unknown as Request
+    } as unknown as Request<ConditionIdParams & LicenceIdParams>
 
     res = {
       render: jest.fn(),
@@ -80,7 +81,7 @@ describe('Route Handlers - Create Licence - Out Of Bounds Premises Removal Route
           conditionId: '1',
         },
         body: { confirmRemoval: 'Yes' },
-      } as unknown as Request
+      } as unknown as Request<ConditionIdParams & LicenceIdParams>
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(1, 1, { username: 'joebloggs' })
     })
@@ -92,7 +93,7 @@ describe('Route Handlers - Create Licence - Out Of Bounds Premises Removal Route
           conditionId: '1',
         },
         body: { confirmRemoval: 'Yes' },
-      } as unknown as Request
+      } as unknown as Request<ConditionIdParams & LicenceIdParams>
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/create/id/1/additional-licence-conditions/condition/${OUT_OF_BOUNDS_PREMISES_CONDITION_CODE}/outofbounds-premises?fromReview=true`,
@@ -106,7 +107,7 @@ describe('Route Handlers - Create Licence - Out Of Bounds Premises Removal Route
           conditionId: '1',
         },
         body: { confirmRemoval: 'No' },
-      } as unknown as Request
+      } as unknown as Request<ConditionIdParams & LicenceIdParams>
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledTimes(0)
     })
@@ -118,7 +119,7 @@ describe('Route Handlers - Create Licence - Out Of Bounds Premises Removal Route
           conditionId: '1',
         },
         body: {},
-      } as unknown as Request
+      } as unknown as Request<ConditionIdParams & LicenceIdParams>
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledTimes(0)
       expect(res.render).toHaveBeenCalledWith('pages/manageConditions/outOfBoundsPremises/confirmPremisesDeletion', {

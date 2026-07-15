@@ -4,11 +4,12 @@ import YesOrNo from '../../../../../enumeration/yesOrNo'
 import LicenceService from '../../../../../services/licenceService'
 import { convertToTitleCase } from '../../../../../utils/utils'
 import logger from '../../../../../../logger'
+import { NomisIdParams } from '../../../../types/routeParams'
 
 export default class ConfirmCreateRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<NomisIdParams>, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/view/cases'
@@ -38,7 +39,7 @@ export default class ConfirmCreateRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<NomisIdParams>, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
     const { answer } = req.body

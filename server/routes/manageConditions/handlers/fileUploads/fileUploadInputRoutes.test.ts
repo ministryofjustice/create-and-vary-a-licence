@@ -4,13 +4,14 @@ import FileUploadInputRoutes from './fileUploadInputRoutes'
 import LicenceService from '../../../../services/licenceService'
 import type { Licence } from '../../../../@types/licenceApiClientTypes'
 import FileUploadType from '../../../../enumeration/fileUploadType'
+import { ConditionIdParams, LicenceIdParams } from '../../../types/routeParams'
 
 jest.mock('../../../../services/licenceService')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - file upload input routes', () => {
-  let req: Request
+  let req: Request<LicenceIdParams & ConditionIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       },
       query: {},
       body: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams & ConditionIdParams>
 
     res = {
       render: jest.fn(),
@@ -160,7 +161,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           file: uploadFile,
           query: {},
           body: { filename: 'test.txt', fileTargetField: 'outOfBoundFilename' },
-        } as unknown as Request
+        } as unknown as Request<LicenceIdParams & ConditionIdParams>
 
         licenceService.uploadExclusionZoneFile = jest.fn()
         licenceService.updateAdditionalConditionData = jest.fn()
@@ -206,7 +207,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       it('does not upload file if no file present on request', async () => {
         const { file, ...reqWithoutFile } = req
 
-        await handler.POST(reqWithoutFile as Request, res)
+        await handler.POST(reqWithoutFile as Request<LicenceIdParams & ConditionIdParams>, res)
         expect(licenceService.uploadExclusionZoneFile).not.toHaveBeenCalledWith()
         expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
           '1',
@@ -317,7 +318,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           file: uploadFile,
           query: {},
           body: { filename: 'test.txt', fileTargetField: 'outOfBoundFilename' },
-        } as unknown as Request
+        } as unknown as Request<LicenceIdParams & ConditionIdParams>
 
         licenceService.uploadExclusionZoneFile = jest.fn()
         licenceService.updateAdditionalConditionData = jest.fn()
@@ -349,7 +350,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       it('does not upload file if no file present on request', async () => {
         const { file, ...reqWithoutFile } = req
 
-        await handler.POST(reqWithoutFile as Request, res)
+        await handler.POST(reqWithoutFile as Request<LicenceIdParams & ConditionIdParams>, res)
         expect(licenceService.uploadExclusionZoneFile).not.toHaveBeenCalledWith()
         expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
           '1',
@@ -382,12 +383,12 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       })
 
       it('should call licence service to update the additional conditions with the condition removed', async () => {
-        await handler.DELETE(req, res)
+        await handler.DELETE(req as Request<ConditionIdParams>, res)
         expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(1, 1, { username: 'joebloggs' })
       })
 
       it('should redirect to the additional condition input callback', async () => {
-        await handler.DELETE(req, res)
+        await handler.DELETE(req as Request<ConditionIdParams>, res)
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions/callback')
       })
     })

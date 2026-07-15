@@ -5,6 +5,7 @@ import PathType from '../../../../../enumeration/pathType'
 import { getTimeServedEditPath } from './index'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
+import { LicenceIdParams } from '../../../../types/routeParams'
 
 export default class SelectAddressRoutes {
   constructor(
@@ -12,7 +13,7 @@ export default class SelectAddressRoutes {
     private readonly path: PathType,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { searchQuery } = req.query as { searchQuery?: string }
     const { user } = res.locals
@@ -37,7 +38,7 @@ export default class SelectAddressRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
     const { isPreferredAddress } = req.body

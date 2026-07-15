@@ -3,12 +3,13 @@ import { Request, Response } from 'express'
 import EditQuestionRoutes from './editQuestion'
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import { LicenceIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Edit Licence Question', () => {
   const handler = new EditQuestionRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
       user: {
         username: 'joebloggs',
       },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),
@@ -58,7 +59,7 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
         body: {
           answer: 'Yes',
         },
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
       await handler.POST(req, res)
       expect(licenceService.updateStatus).toHaveBeenCalledWith(1, 'IN_PROGRESS', {
         username: 'joebloggs',
@@ -73,7 +74,7 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
         body: {
           answer: 'No',
         },
-      } as unknown as Request
+      } as unknown as Request<LicenceIdParams>
       await handler.POST(req, res)
       expect(licenceService.updateStatus).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
@@ -89,7 +90,7 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
       body: {
         answer: 'Yes',
       },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
     res.locals.licence.statusCode = 'APPROVED'
 
     await handler.POST(req, res)

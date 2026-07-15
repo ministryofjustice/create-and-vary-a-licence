@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { LicenceIdParams } from '../../types/routeParams'
 import ConditionService from '../../../services/conditionService'
 import LicenceService from '../../../services/licenceService'
 
@@ -12,7 +13,7 @@ export default class VloDiscussionRoutes {
     res.render('pages/vary/vloDiscussion')
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { answer } = req.body
     const { user } = res.locals

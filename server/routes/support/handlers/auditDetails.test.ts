@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import type { AuditEvent } from '../../../@types/licenceApiClientTypes'
 import AuditDetailsRoutes from './auditDetails'
+import { AuditEventIdParams, LicenceIdParams, NomsIdParams } from '../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/prisonerService')
@@ -9,7 +10,7 @@ jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Audit details', () => {
   const handler = new AuditDetailsRoutes(licenceService)
-  let req: Request
+  let req: Request<LicenceIdParams & NomsIdParams & AuditEventIdParams>
   let res: Response
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('Route Handlers - Audit details', () => {
       },
       render: jest.fn(),
     } as unknown as Response
-    req = {} as Request
+    req = {} as Request<LicenceIdParams & NomsIdParams & AuditEventIdParams>
   })
 
   describe('GET', () => {

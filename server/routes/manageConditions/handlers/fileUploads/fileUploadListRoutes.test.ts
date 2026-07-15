@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ConditionService from '../../../../services/conditionService'
 import LicenceService from '../../../../services/licenceService'
+import { ConditionIdParams, ConditionCodeParams, LicenceIdParams } from '../../../types/routeParams'
 import { MEZ_CONDITION_CODE } from '../../../../utils/conditionRoutes'
 import { AddAdditionalConditionRequest, AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 import FileUploadListRoutes from './fileUploadListRoutes'
@@ -14,7 +15,7 @@ jest.mock('../../../../services/conditionService')
 jest.mock('../../../../services/licenceService')
 
 describe('Route Handlers - Create Licence - file upload list routes', () => {
-  let req: Request
+  let req: Request<LicenceIdParams & ConditionIdParams & ConditionCodeParams>
   let res: Response
   const handler = new FileUploadListRoutes(licenceService, conditionService)
 
@@ -28,7 +29,7 @@ describe('Route Handlers - Create Licence - file upload list routes', () => {
       query: {},
       body: {},
       session: {},
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams & ConditionIdParams & ConditionCodeParams>
 
     res = {
       render: jest.fn(),

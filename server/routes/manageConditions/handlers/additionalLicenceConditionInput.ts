@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import { getConfigForCondition } from '../../../utils/conditionRoutes'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
+import { ConditionIdParams, LicenceIdParams } from '../../types/routeParams'
 
 export default class AdditionalLicenceConditionInputRoutes {
   constructor(
@@ -10,10 +11,9 @@ export default class AdditionalLicenceConditionInputRoutes {
     private readonly conditionService: ConditionService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
-    const { licenceId } = req.params
+  GET = async (req: Request<LicenceIdParams & ConditionIdParams>, res: Response): Promise<void> => {
+    const { licenceId, conditionId } = req.params
     const { licence } = res.locals
-    const { conditionId } = req.params
 
     const additionalCondition = licence.additionalLicenceConditions.find(
       (condition: AdditionalCondition) => condition.id === +conditionId,
@@ -44,9 +44,8 @@ export default class AdditionalLicenceConditionInputRoutes {
     return undefined
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
-    const { licenceId } = req.params
-    const { conditionId } = req.params
+  POST = async (req: Request<LicenceIdParams & ConditionIdParams>, res: Response): Promise<void> => {
+    const { licenceId, conditionId } = req.params
     const { user, licence } = res.locals
 
     let redirect
@@ -66,10 +65,9 @@ export default class AdditionalLicenceConditionInputRoutes {
     return res.redirect(redirect)
   }
 
-  DELETE = async (req: Request, res: Response): Promise<void> => {
-    const { licence } = res.locals
+  DELETE = async (req: Request<LicenceIdParams & ConditionIdParams>, res: Response): Promise<void> => {
     const { conditionId } = req.params
-    const { user } = res.locals
+    const { licence, user } = res.locals
 
     let redirect
     if (req.query?.fromPolicyReview) {
@@ -87,7 +85,7 @@ export default class AdditionalLicenceConditionInputRoutes {
     return res.redirect(redirect)
   }
 
-  SKIP = async (req: Request, res: Response): Promise<void> => {
+  SKIP = async (req: Request<LicenceIdParams & ConditionIdParams>, res: Response): Promise<void> => {
     const { user, licence } = res.locals
     const { conditionId } = req.params
 

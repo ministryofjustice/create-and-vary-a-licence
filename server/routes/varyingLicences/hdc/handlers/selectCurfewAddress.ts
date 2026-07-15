@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { LicenceIdParams } from '../../../types/routeParams'
 import AddressService from '../../../../services/addressService'
 import HdcCurfewAddressService from '../../../../services/hdc/hdcCurfewAddressService'
 import { AddAddressRequest, AddHdcCurfewAddressRequest } from '../../../../@types/licenceApiClientTypes'
@@ -32,7 +33,7 @@ export default class SelectCurfewAddressRoutes {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<LicenceIdParams>, res: Response): Promise<void> => {
     const { licenceId } = req.params
 
     const { uprn, firstLine, secondLine, townOrCity, county, postcode } = JSON.parse(req.body?.selectedCurfewAddress)

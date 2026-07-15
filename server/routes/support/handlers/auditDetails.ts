@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
+import { AuditEventIdParams, LicenceIdParams, NomsIdParams } from '../../types/routeParams'
 
 export default class AuditDetailsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<LicenceIdParams & NomsIdParams & AuditEventIdParams>, res: Response): Promise<void> => {
     const { user } = res.locals
     const { nomsId, licenceId, auditEventId } = req.params
     const audit = await this.licenceService.getAuditEvents(user, parseInt(licenceId, 10))

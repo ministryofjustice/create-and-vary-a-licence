@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import ConditionService, { PolicyAdditionalCondition } from '../../../services/conditionService'
 import PolicyChangeRoutes from './policyChange'
 import { Licence, LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
+import { ChangeCounterParams, LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -11,7 +12,7 @@ describe('Route handlers', () => {
   const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
   const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
   const handler = new PolicyChangeRoutes(licenceService, conditionService)
-  let req: Request
+  let req: Request<LicenceIdParams & ChangeCounterParams>
   let res: Response
 
   const condition1 = {
@@ -88,7 +89,7 @@ describe('Route handlers', () => {
         changedConditionsCounter: '2',
         changedConditionInputs: [],
       },
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams & ChangeCounterParams>
 
     res = {
       render: jest.fn(),

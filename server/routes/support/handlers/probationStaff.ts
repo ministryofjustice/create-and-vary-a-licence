@@ -6,6 +6,7 @@ import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { parseCvlDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { nameToString } from '../../../data/deliusClient'
+import { StaffCodeParams } from '../../types/routeParams'
 
 export default class ProbationStaffRoutes {
   constructor(
@@ -13,7 +14,7 @@ export default class ProbationStaffRoutes {
     private readonly probationService: ProbationService,
   ) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request<StaffCodeParams>, res: Response): Promise<void> => {
     const view = req.query?.view as string
     const { staffCode } = req.params
 

@@ -7,6 +7,7 @@ import CheckAnswersRoutes from './checkAnswers'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import HdcService from '../../../services/hdc/hdcService'
+import { LicenceIdParams } from '../../types/routeParams'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -18,7 +19,7 @@ const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 describe('Route Handlers - Create Licence - Check Answers', () => {
   const handler = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
-  let req: Request
+  let req: Request<LicenceIdParams>
   let res: Response
 
   afterEach(() => {
@@ -35,7 +36,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       },
       flash: jest.fn(),
       get: jest.fn().mockReturnValue('/previous-page'),
-    } as unknown as Request
+    } as unknown as Request<LicenceIdParams>
 
     res = {
       render: jest.fn(),

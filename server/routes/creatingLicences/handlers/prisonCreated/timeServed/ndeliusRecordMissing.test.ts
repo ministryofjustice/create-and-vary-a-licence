@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../../services/licenceService'
 import { PrisonerWithCvlFields } from '../../../../../@types/licenceApiClientTypes'
 import NDeliusRecordMissingRoutes from './ndeliusRecordMissingRoutes'
+import { NomisIdParams } from '../../../../types/routeParams'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -10,7 +11,7 @@ jest.mock('../../../../../services/licenceService')
 
 describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
   const handler = new NDeliusRecordMissingRoutes(licenceService)
-  let req: Request
+  let req: Request<NomisIdParams>
   let res: Response
 
   const prisonerDetails = {
@@ -46,7 +47,7 @@ describe('Route Handlers - Create Time Served Licence - Confirm Create', () => {
         username: 'joebloggs',
       },
       flash: jest.fn(),
-    } as unknown as Request
+    } as unknown as Request<NomisIdParams>
 
     res = {
       render: jest.fn(),
