@@ -98,7 +98,7 @@
     "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^7.1.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "agentkeepalive": "^4.6.0",
-    "applicationinsights": "^2.9.8",
+    "applicationinsights": "3.15.1",
     "body-parser": "^2.3.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
