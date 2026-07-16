@@ -10,7 +10,7 @@ class PersonName {
 
   @Expose()
   @Type(() => String)
-  appointmentPersonType: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+  appointmentPersonType: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED'
 }
 
 export default PersonName
