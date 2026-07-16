@@ -7,7 +7,7 @@
 {% from "partials/timePicker.njk" import timePicker %}
 {% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
 
-{% set pageTitle = applicationName + " - Create a licence - Curfew Hours" %}
+{% set pageTitle = applicationName + " - " + ("Vary a licence" if isVaryJourney else "Create a licence") + " - Enter the same curfew hours for every day" %}
 {% set pageId = "curfew-hours" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/hdc/do-hdc-curfew-hours-apply-daily" %}
 
