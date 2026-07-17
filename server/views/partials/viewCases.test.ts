@@ -11,15 +11,14 @@ interface ProbationPractitioner {
 describe('viewCases template', () => {
   it('should render HDC release date message, and formatted date when HDC kind', () => {
     // Given
-    const options = createComponentModel({ kind: LicenceKind.HDC })
+    const options = createComponentModel({ kind: LicenceKind.HDC, releaseDateLabel: 'HDC actual date' })
 
     // When
     const $ = render({ options })
 
     // Then
     const releaseDateHtml = $('#release-date-1').html() ?? ''
-    expect(releaseDateHtml).toContain('HDC release')
-    expect(releaseDateHtml).toContain('Confirmed release date')
+    expect(releaseDateHtml).toContain('HDC actual date')
     expect(releaseDateHtml).toContain('1 May 2022')
   })
 
@@ -104,11 +103,13 @@ describe('viewCases template', () => {
     name = 'Test Person',
     prisonerNumber = 'A1234AA',
     probationPractitioner = { name: 'Test COM', staffCode: 'T123', allocated: true } as ProbationPractitioner,
+    releaseDateLabel = 'Confirmed release date',
   }: {
     kind: LicenceKind
     name?: string
     prisonerNumber?: string
     probationPractitioner?: ProbationPractitioner
+    releaseDateLabel?: string
   }) => ({
     cases: [
       {
@@ -119,7 +120,7 @@ describe('viewCases template', () => {
         prisonerNumber,
         probationPractitioner,
         releaseDate: '01/05/2022',
-        releaseDateLabel: 'Confirmed release date',
+        releaseDateLabel,
         tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS,
         nomisLegalStatus: 'SENTENCED',
         lastWorkedOnBy: 'Updater Name',

@@ -124,9 +124,7 @@
             %}
         {% endif %}
 
-        {% if case.kind == 'HDC' %}
-            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
-        {% elseif case.kind == "TIME_SERVED"  %}
+        {% if case.kind == "TIME_SERVED"  %}
             {% set releaseDate = '<span class="urgent-highlight white-space-nowrap">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
         {% else %}
             {% set releaseDate = '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</p>' %}

@@ -53,11 +53,9 @@
         }, statusConfig) %}
     {% endif %}
 
-    {% if case.kind == 'HDC' %}
-        {% set releaseDateHtml = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
-    {% else %}
-        {% set releaseDateHtml = '<p>' + (case.releaseDateLabel + ': <br>' if not probationView) + case.releaseDate | cvlDateToDateShort + '</p>' %}
-    {% endif %}
+    {% set showReleaseDateLabel = case.kind == 'HDC' or case.kind == 'HDC_VARIATION' or not probationView %}
+    {% set releaseDatePrefix = (case.releaseDateLabel + ': <br>') if showReleaseDateLabel else '' %}
+    {% set releaseDateHtml = '<p>' + releaseDatePrefix + (case.releaseDate | cvlDateToDateShort) + '</p>' %}
 
     {% set licences = (licences.push([
         {

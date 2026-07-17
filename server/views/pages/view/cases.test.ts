@@ -230,7 +230,7 @@ describe('View and print a licence - case list', () => {
     expect($('.govuk-tabs__list a').text()).not.toContain('Attention needed')
   })
 
-  it('should highlight a HDC licence with a HDC release warning label in prison view', () => {
+  it('should show the release date label for HDC in prison view', () => {
     const search = ''
     const prisonsToDisplay = ''
     const probationView = false
@@ -240,7 +240,7 @@ describe('View and print a licence - case list', () => {
           name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '03/08/2022',
-          releaseDateLabel: 'HDCAD',
+          releaseDateLabel: 'HDC actual date',
           tabType: 'releasesInNextTwoWorkingDays',
           kind: LicenceKind.HDC,
         },
@@ -255,10 +255,10 @@ describe('View and print a licence - case list', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
-    expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022')
   })
 
-  it('should highlight a HDC licence with a HDC release warning label in prison view for the attention needed tab', () => {
+  it('should show the release date label for HDC in prison view for the attention needed tab', () => {
     const search = ''
     const prisonsToDisplay = ''
     const probationView = false
@@ -268,7 +268,7 @@ describe('View and print a licence - case list', () => {
           name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '03/08/2022',
-          releaseDateLabel: 'HDCAD',
+          releaseDateLabel: 'HDC actual date',
           tabType: 'releasesInNextTwoWorkingDays',
           kind: LicenceKind.HDC,
         },
@@ -283,10 +283,10 @@ describe('View and print a licence - case list', () => {
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
-    expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022')
   })
 
-  it('should highlight a HDC licence with a HDC release warning label in probation view', () => {
+  it('should show the release date label for HDC variation in probation view', () => {
     const search = ''
     const prisonsToDisplay = ''
     const probationView = true
@@ -296,9 +296,9 @@ describe('View and print a licence - case list', () => {
           name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '03/08/2022',
-          releaseDateLabel: 'HDCAD',
+          releaseDateLabel: 'HDC actual date',
           tabType: 'releasesInNextTwoWorkingDays',
-          kind: LicenceKind.HDC,
+          kind: LicenceKind.HDC_VARIATION,
         },
       ],
       showAttentionNeededTab: false,
@@ -308,10 +308,9 @@ describe('View and print a licence - case list', () => {
       prisonsToDisplay,
       probationView,
     })
+
     expect($('tbody .govuk-table__row').length).toBe(1)
-    expect($('#name-1 > div > span').text()).toBe('Test Person')
-    expect($('#nomis-id-1').text()).toBe('A1234AA')
-    expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
+    expect($('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022')
   })
 
   it('should highlight a Time Served licence with a Time Served release warning label and Not allocated com in prison view', () => {
