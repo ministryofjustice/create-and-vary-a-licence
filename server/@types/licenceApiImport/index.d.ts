@@ -164,26 +164,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/offender/merge': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Merges two offenders into one. Requires ROLE_CVL_ADMIN.
-     * @description Merges two offenders into one. Requires ROLE_CVL_ADMIN.
-     */
-    put: operations['mergeOffenders']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/licences/time-served/{licenceId}/confirm/probation-contact': {
     parameters: {
       query?: never
@@ -1103,6 +1083,27 @@ export interface paths {
      * @description Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_CVL_ADMIN.
      */
     post: operations['addAdditionalCondition']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/licence/create': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create a licence
+     * @deprecated
+     * @description Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['createLicence']
     delete?: never
     options?: never
     head?: never
@@ -2421,6 +2422,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/caseload/com/staff/{deliusStaffIdentifier}/create-case-load/hdc': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Returns the create caseload for an officer filtered to HDC cases
+     * @description Returns an enriched list of cases which require an HDC licence to be created for an officer
+     */
+    get: operations['getStaffCreateCaseloadHdc']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bank-holidays': {
     parameters: {
       query?: never
@@ -2596,25 +2617,6 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string | null
-    }
-    /** @description Request object for merging offenders */
-    MergeOffendersRequest: {
-      /**
-       * @description The nomis id being replaced
-       * @example G4268VE
-       */
-      oldNomisId: string
-      /**
-       * @description The replacement nomis id
-       * @example G4268VF
-       */
-      newNomisId: string
-      /**
-       * Format: int64
-       * @description The new booking id
-       * @example 324
-       */
-      newBookingId: number
     }
     TimeServedProbationConfirmContactRequest: {
       /** @enum {string} */
@@ -2890,7 +2892,13 @@ export interface components {
       postReleaseResidentialChecksNotCompletedReason?: string | null
     }
     /** @description Describes the curfew times on this hdc licence */
-    CurfewTimeRequest: {
+    CurfewTimes: {
+      /**
+       * Format: int64
+       * @description The internal ID for these curfew times on this hdc licence
+       * @example 98987
+       */
+      id?: number | null
       /**
        * Format: int32
        * @description Sequence of this curfew time within the curfew times
@@ -2924,26 +2932,11 @@ export interface components {
     }
     UpdateWeeklyCurfewTimesRequest: {
       /** @description The list of hdc licence curfew times from service configuration */
-      weeklyCurfewTimes: components['schemas']['CurfewTimeRequest'][]
-    }
-    /** @description Describes the first night curfew time on this hdc licence */
-    FirstNightCurfewTimeRequest: {
-      /**
-       * Format: HH:mm
-       * @description The time at which this curfew starts on the fromDay
-       * @example 01:00:00
-       */
-      fromTime?: string | null
-      /**
-       * Format: HH:mm
-       * @description The time at which this curfew ends on the untilDay
-       * @example 01:00:00
-       */
-      untilTime?: string | null
+      weeklyCurfewTimes: components['schemas']['CurfewTimes'][]
     }
     UpdateFirstNightCurfewTimesRequest: {
       /** @description The first night curfew times for the licence */
-      firstNightCurfewTimes: components['schemas']['FirstNightCurfewTimeRequest']
+      firstNightCurfewTimes: components['schemas']['CurfewTimes']
     }
     /** @description Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
@@ -2988,7 +2981,7 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string}
        */
-      appointmentPersonType: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED'
+      appointmentPersonType: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
       /**
        * @description The name of the person the person on probation will meet at the initial appointment
        * @example John Smith
@@ -3473,11 +3466,6 @@ export interface components {
        * @example username
        */
       approvedByUsername?: string | null
-      /**
-       * @description Approved by name
-       * @example Test Tester
-       */
-      approvedByName?: string | null
       /**
        * Format: date-time
        * @description Submitted date
@@ -4159,6 +4147,20 @@ export interface components {
        * @example Base64 string
        */
       thumbnailImage?: string | null
+    }
+    /** @description Request object for creating a new licence */
+    CreateLicenceRequest: {
+      /**
+       * @description The prison nomis identifier for this offender
+       * @example A1234AA
+       */
+      nomsId: string
+      /**
+       * @description The type of licence to create
+       * @example CRD
+       * @enum {string}
+       */
+      type: 'PRRD' | 'CRD' | 'HARD_STOP' | 'HDC' | 'TIME_SERVED'
     }
     ProbationSearchSortBy: {
       /** @enum {string} */
@@ -5181,37 +5183,16 @@ export interface components {
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
       /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
        */
-      comStaffId?: number | null
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
        */
-      nomsId?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time of the initial appointment
-       * @example 23/08/2022 12:12
-       */
-      appointmentTime?: string | null
-      eligibleKind?: string | null
-      /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
-       */
-      prisonTelephone?: string | null
-      /** @deprecated */
-      isVariation: boolean
-      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
-      isInPssPeriod?: boolean | null
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string | null
+      appointmentAlternativeTelephoneNumber?: string | null
       /**
        * @description The current status code for this licence
        * @example IN_PROGRESS
@@ -5308,39 +5289,16 @@ export interface components {
        */
       submittedDate?: string | null
       /**
-       * @description The full name of the person who approved the licence on behalf of the prison governor
-       * @example John Smith
-       */
-      approvedByName?: string | null
-      /**
        * Format: date-time
        * @description The date and time that this prison approved this licence
        * @example 24/08/2022 11:30:33
        */
       approvedDate?: string | null
       /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
        */
-      comUsername?: string | null
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       * @example 24/08/2022 09:30:33
-       */
-      dateLastUpdated?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       * @example 24/08/2022 11:30:33
-       */
-      supersededDate?: string | null
-      kind: string
+      nomsId?: string | null
       /** @description The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
@@ -5391,27 +5349,11 @@ export interface components {
        */
       licenceExpiryDate?: string | null
       /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string | null
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string | null
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
        * @enum {string|null}
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED' | null
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | null
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
@@ -5477,6 +5419,32 @@ export interface components {
        */
       licenceStartDate?: string | null
       /**
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
+       */
+      appointmentTime?: string | null
+      eligibleKind?: string | null
+      /**
+       * @description The full name of the person who approved the licence on behalf of the prison governor
+       * @example John Smith
+       */
+      approvedByName?: string | null
+      /**
+       * @description The telephone number to contact the prison
+       * @example 0161 234 4747
+       */
+      prisonTelephone?: string | null
+      /** @deprecated */
+      isVariation: boolean
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
+      isInPssPeriod?: boolean | null
+      /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string | null
+      /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
@@ -5487,6 +5455,45 @@ export interface components {
        */
       prisonDescription?: string | null
       /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
+       */
+      submittedByFullName?: string | null
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string | null
+      /**
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
+       */
+      comUsername?: string | null
+      /**
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][] | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
+       */
+      dateLastUpdated?: string | null
+      kind: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
+       */
+      supersededDate?: string | null
+      /**
        * @description The username of the person who last updated this licence
        * @example X34433
        */
@@ -5494,22 +5501,23 @@ export interface components {
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
       /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
        */
-      appointmentAlternativeTelephoneNumber?: string | null
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      comStaffId?: number | null
       /**
        * @description The full name of the supervising probation officer
        * @example Jane Jones
        */
       responsibleComFullName?: string | null
       licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string | null
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
@@ -6250,7 +6258,7 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string|null}
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED' | null
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | null
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
@@ -6269,6 +6277,12 @@ export interface components {
        */
       appointmentAddress?: string | null
       licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string | null
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
@@ -6380,50 +6394,6 @@ export interface components {
        * @enum {string}
        */
       kind: 'CRD'
-    }
-    /** @description Describes the curfew times on this hdc licence */
-    CurfewTimes: {
-      /**
-       * Format: int64
-       * @description The internal ID for these curfew times on this hdc licence
-       * @example 98987
-       */
-      id?: number | null
-      /**
-       * Format: int32
-       * @description Sequence of this curfew time within the curfew times
-       * @example 1
-       */
-      curfewTimesSequence?: number | null
-      /**
-       * @description The day on which this curfew starts for this curfew time
-       * @example MONDAY
-       * @enum {string|null}
-       */
-      fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY' | null
-      /**
-       * Format: HH:mm
-       * @description The time at which this curfew starts on the fromDay
-       * @example 01:00:00
-       */
-      fromTime?: string | null
-      /**
-       * @description The day on which this curfew ends for this curfew time
-       * @example MONDAY
-       * @enum {string|null}
-       */
-      untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY' | null
-      /**
-       * Format: HH:mm
-       * @description The time at which this curfew ends on the untilDay
-       * @example 01:00:00
-       */
-      untilTime?: string | null
-      /**
-       * Format: date-time
-       * @description the date and time the curfew time was created
-       */
-      createdTimestamp?: string | null
     }
     /** @description Describes a electronic monitoring provider on a licence */
     ElectronicMonitoringProvider: {
@@ -6686,7 +6656,7 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string|null}
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED' | null
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | null
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
@@ -6705,6 +6675,12 @@ export interface components {
        */
       appointmentAddress?: string | null
       licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string | null
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
@@ -6879,16 +6855,6 @@ export interface components {
        * @example some reason
        */
       postReleaseResidentialChecksNotCompletedReason?: string | null
-      /**
-       * Format: date-time
-       * @description When the curfew address was created
-       */
-      createdTimestamp?: string | null
-      /**
-       * Format: date-time
-       * @description When the curfew address was last updated
-       */
-      lastUpdatedTimestamp?: string | null
     }
     /** @description Describes a HDC licence within this service */
     HdcLicence: Omit<
@@ -7160,7 +7126,7 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string|null}
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED' | null
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | null
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
@@ -7179,6 +7145,12 @@ export interface components {
        */
       appointmentAddress?: string | null
       licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string | null
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
@@ -7240,7 +7212,7 @@ export interface components {
        */
       updatedByUsername?: string | null
       /** @description The curfew times for this licence */
-      weeklyCurfewTimes: components['schemas']['CurfewTimes'][]
+      weeklyCurfewTimes?: components['schemas']['CurfewTimes'][] | null
       firstNightCurfewTimes?: components['schemas']['CurfewTimes'] | null
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
@@ -7572,7 +7544,7 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string|null}
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED' | null
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | null
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
@@ -7591,6 +7563,12 @@ export interface components {
        */
       appointmentAddress?: string | null
       licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string | null
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
@@ -7662,7 +7640,7 @@ export interface components {
        */
       updatedByUsername?: string | null
       /** @description The curfew times for this licence */
-      weeklyCurfewTimes: components['schemas']['CurfewTimes'][]
+      weeklyCurfewTimes?: components['schemas']['CurfewTimes'][] | null
       firstNightCurfewTimes?: components['schemas']['CurfewTimes'] | null
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
@@ -7959,7 +7937,7 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string|null}
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED' | null
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | null
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
@@ -7978,6 +7956,12 @@ export interface components {
        */
       appointmentAddress?: string | null
       licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string | null
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
@@ -8341,7 +8325,7 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string|null}
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED' | null
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | null
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
@@ -8360,6 +8344,12 @@ export interface components {
        */
       appointmentAddress?: string | null
       licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string | null
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
@@ -8728,7 +8718,7 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string|null}
        */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED' | null
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | null
       /**
        * Format: date-time
        * @description The date and time of the initial appointment
@@ -8747,6 +8737,12 @@ export interface components {
        */
       appointmentAddress?: string | null
       licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @deprecated
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentContact?: string | null
       /**
        * @description The UK telephone number to contact the person the offender should meet for their initial meeting
        * @example 0114 2557665
@@ -9087,26 +9083,15 @@ export interface components {
       /** @enum {string|null} */
       sortDirection?: 'asc' | 'desc' | null
       /** @enum {string} */
-      type: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time' | 'timestamp'
+      type: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time'
       mandatory: boolean
       visible: boolean
       calculated: boolean
       header: boolean
-      /** @enum {string} */
-      fieldSource: 'specfield' | 'paramfield'
     }
     FilterDefinition: {
       /** @enum {string} */
-      type:
-        | 'Radio'
-        | 'Select'
-        | 'multiselect'
-        | 'daterange'
-        | 'autocomplete'
-        | 'text'
-        | 'date'
-        | 'granulardaterange'
-        | 'autocompletemulti'
+      type: 'Radio' | 'Select' | 'multiselect' | 'daterange' | 'autocomplete' | 'text' | 'date' | 'granulardaterange'
       mandatory: boolean
       pattern?: string | null
       staticOptions?: components['schemas']['FilterOption'][] | null
@@ -9143,10 +9128,6 @@ export interface components {
         | null
       /** Format: int32 */
       index?: number | null
-      /** Format: int32 */
-      minSelected?: number | null
-      /** Format: int32 */
-      maxSelected?: number | null
     }
     FilterOption: {
       name: string
@@ -9183,7 +9164,7 @@ export interface components {
       name: string
       display?: string | null
       /** @enum {string|null} */
-      type?: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time' | 'timestamp' | null
+      type?: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time' | null
       header?: boolean | null
       mergeRows?: boolean | null
     }
@@ -9241,8 +9222,6 @@ export interface components {
       displayValue?: boolean | null
       axis?: string | null
       optional?: boolean | null
-      /** @enum {string|null} */
-      type?: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time' | 'timestamp' | null
     }
     DashboardVisualisationColumnsDefinition: {
       keys?: components['schemas']['DashboardVisualisationColumnDefinition'][] | null
@@ -9591,6 +9570,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateTimeServedExternalRecord: {
@@ -9670,6 +9658,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   retryDlq: {
@@ -9721,6 +9718,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -9784,6 +9790,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   purgeQueue: {
@@ -9835,6 +9850,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -9909,6 +9933,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updatePrisonUser_1: {
@@ -9969,6 +10002,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -10052,6 +10094,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateOmuEmail: {
@@ -10123,6 +10174,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   deleteOmuContactByPrisonCode: {
@@ -10181,6 +10241,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -10262,75 +10331,8 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
-    }
-  }
-  mergeOffenders: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['MergeOffendersRequest']
-      }
-    }
-    responses: {
-      /** @description The offenders have been merged */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Not-found, an invalid existing or new nomis id was provided */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Gone */
-      410: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -10416,6 +10418,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateVloDiscussion: {
@@ -10487,6 +10498,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -10572,6 +10592,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateLicenceStatus: {
@@ -10643,6 +10672,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -10728,6 +10766,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateSpoDiscussion: {
@@ -10806,6 +10853,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateSentenceDates: {
@@ -10873,6 +10929,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -10958,6 +11023,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateReasonForVariation: {
@@ -11036,6 +11110,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updatePrisonInformation: {
@@ -11107,6 +11190,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -11199,6 +11291,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   addHdcCurfewAddress: {
@@ -11270,6 +11371,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -11355,6 +11465,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateFirstNightCurfewTimes: {
@@ -11426,6 +11545,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -11511,6 +11639,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateBespokeConditions: {
@@ -11589,6 +11726,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   approveVariation: {
@@ -11656,6 +11802,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -11741,6 +11896,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateAppointmentPerson: {
@@ -11812,6 +11976,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -11897,6 +12070,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateAppointmentAddress: {
@@ -11975,6 +12157,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateAdditionalConditions: {
@@ -12046,6 +12237,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -12132,6 +12332,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   activateVariation: {
@@ -12206,6 +12415,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   updateComDetails: {
@@ -12273,6 +12491,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   recordAuditEvent: {
@@ -12333,6 +12560,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -12418,6 +12654,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   checkComCaseAccess: {
@@ -12496,6 +12741,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   migrateLicenceToCvl: {
@@ -12547,6 +12801,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -12631,6 +12894,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   uploadFile: {
@@ -12697,6 +12969,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -12780,6 +13061,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   createPrisonLicence: {
@@ -12849,6 +13139,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -12928,6 +13227,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   inactivateLicences: {
@@ -12988,6 +13296,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -13071,6 +13388,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   reviewWithNoVariationRequired: {
@@ -13138,6 +13464,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -13225,6 +13560,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   changeType: {
@@ -13296,6 +13640,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -13381,6 +13734,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   changePrisonerDetails: {
@@ -13452,6 +13814,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -13537,6 +13908,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   editLicence: {
@@ -13606,6 +13986,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -13684,6 +14073,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -13771,6 +14169,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   createVariation: {
@@ -13840,6 +14247,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -13928,6 +14344,102 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  createLicence: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateLicenceRequest']
+      }
+    }
+    responses: {
+      /** @description Licence created */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CreateLicenceResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict, resource already exists */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EntityAlreadyExistsResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   runLicenceReviewOverdueJob: {
@@ -13984,6 +14496,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -14054,6 +14575,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   runRemoveExpiredConditionsJob: {
@@ -14110,6 +14640,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -14180,6 +14719,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   notifyProbationOfUnapprovedLicences: {
@@ -14236,6 +14784,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -14308,6 +14865,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   progressionOfTypeApPssLicences: {
@@ -14364,6 +14930,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -14434,6 +15009,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   runDeactivateLicencesJob: {
@@ -14490,6 +15074,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -14560,6 +15153,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   runLicenceActivationJob: {
@@ -14616,6 +15218,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -14696,6 +15307,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   searchForOffenderOnStaffCaseload: {
@@ -14765,6 +15385,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getTimeServedCases: {
@@ -14825,6 +15454,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -14901,6 +15539,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   searchForOffenderOnVaryApproverCaseload: {
@@ -14963,6 +15610,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -15039,6 +15695,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   searchForOffenderOnApproverCaseload: {
@@ -15101,6 +15766,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -15177,6 +15851,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getTeamVaryCaseload: {
@@ -15239,6 +15922,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -15317,6 +16009,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   searchForOffenderOnProbationUserCaseload: {
@@ -15379,6 +16080,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -15455,6 +16165,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getPrisonView: {
@@ -15517,6 +16236,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -15593,6 +16321,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   requestAuditEvents: {
@@ -15662,6 +16399,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   searchForAddressesWithPost: {
@@ -15724,6 +16470,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -15971,6 +16726,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   configuredApiDataset: {
@@ -16039,6 +16803,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -16136,6 +16909,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   configuredApiCount: {
@@ -16200,6 +16982,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -16293,6 +17084,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description default response */
       default: {
         headers: {
@@ -16359,6 +17159,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -16446,6 +17255,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getLatestPolicy: {
@@ -16506,6 +17324,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -16592,6 +17419,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getLicenceById: {
@@ -16662,6 +17498,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -16740,6 +17585,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getLicenceByCrn: {
@@ -16811,6 +17665,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getCollections: {
@@ -16860,6 +17723,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -16922,6 +17794,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -17009,6 +17890,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   findByNumber: {
@@ -17078,6 +17968,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -17161,6 +18060,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getIS91Status: {
@@ -17230,6 +18138,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -17313,6 +18230,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getLicenceById_1: {
@@ -17389,6 +18315,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getPolicyByVersion: {
@@ -17456,6 +18391,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   compareLicence: {
@@ -17508,6 +18452,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -17575,6 +18528,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -17656,6 +18618,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getExclusionZoneImage: {
@@ -17726,6 +18697,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -17825,6 +18805,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   definitions: {
@@ -17886,6 +18875,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -17955,6 +18953,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -18050,6 +19057,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   dashboardDefinition: {
@@ -18138,6 +19154,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getUpcomingReleasesWithMonitoringConditions: {
@@ -18196,6 +19221,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -18268,6 +19302,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getLastMinuteCases: {
@@ -18326,6 +19369,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -18398,6 +19450,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   retrieveReviewCounts: {
@@ -18458,6 +19519,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -18541,6 +19611,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getStaffVaryCaseload: {
@@ -18601,6 +19680,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -18670,6 +19758,91 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getStaffCreateCaseloadHdc: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        deliusStaffIdentifier: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returning an enriched list of HDC cases which require a licence to be created for an officer */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ComCreateCase'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -18751,6 +19924,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   searchForAddressByReference: {
@@ -18811,6 +19993,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -18892,6 +20083,15 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   discard: {
@@ -18959,6 +20159,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
@@ -19034,6 +20243,15 @@ export interface operations {
       }
       /** @description Too Many Requests */
       429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
         headers: {
           [name: string]: unknown
         }
