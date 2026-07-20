@@ -17,33 +17,58 @@
 
 
 <div id="induction" class="section">
-    <p>
-        On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
-        during the currency of your licence, whether or not leave has been granted for you to remain in the United Kingdom),
-        unless otherwise directed by your supervising officer, you must report without delay to:
-    </p>
-    <div id="meeting-details">
-        <p>
-            <span data-qa="appointment-person" class="bold line-space-after">{{ appointmentPerson }}</span>
-            {% for a in formattedAddress %}
-                <span class="bold line-space-after">{{ a }}</span>
-            {% endfor %}
-        </p>
-        {% if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' %}
-            <p data-qa="appointment-time">On <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}</span> at <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime }}</span></p>
-        {% elif licence.appointmentTimeType === 'NEXT_WORKING_DAY_2PM' %}
-            <p data-qa="appointment-time"><span class="bold">By 2pm on the next working day after your release</span></p>
-        {% elif licence.appointmentTimeType === 'IMMEDIATE_UPON_RELEASE' %}
-            <p data-qa="appointment-time"><span class="bold">Immediately after release</span></p>
-        {% else %}
-            <p></p>
-        {% endif %}
-        <p data-qa="appointment-phone-number">Contact telephone number: <span class="bold">{{ licence.appointmentTelephoneNumber }}</span></p>
+    {% if (licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') and finalThirdEnabled %}
+        <span data-qa="supervising-officer" class="line-space-after">Your supervising officer is {{ licence.responsibleComFullName }}.</span>
+        <span class="bold line-space-after">You do not need to meet with them after you are released.</span>
+
+        <p>If you need support while you are on licence, you can contact them using the details below:</p>
+        <span data-qa="contact-phone-number" class="line-space-after">Contact phone number: {{ licence.appointmentTelephoneNumber }}</span>
         {% if licence.appointmentAlternativeTelephoneNumber %}
-            <p data-qa="appointment-alternative-phone-number">
-                Alternative contact phone number:
-                <span class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
-            </p>
+            <span data-qa="alternative-contact-phone-number">
+                Alternative contact phone number: {{ licence.appointmentAlternativeTelephoneNumber }}
+            </span>
         {% endif %}
-    </div>
+        {% if licence.licenceAppointmentAddress %}
+            {% set formattedAddress = licence.licenceAppointmentAddress | formatAddressLine %}
+        {% else %}
+            {% set formattedAddress = licence.appointmentAddress | formatAddress %}
+        {% endif %}
+        <p>{{ formattedAddress }}</p>
+    {% else %}
+        <p>
+            On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
+            during the currency of your licence, whether or not leave has been granted for you to remain in the United Kingdom),
+            unless otherwise directed by your supervising officer, you must report without delay to:
+        </p>
+        <div id="meeting-details">
+            <p>
+                <span data-qa="appointment-person" class="bold line-space-after">{{ appointmentPerson }}</span>
+                {% for a in formattedAddress %}
+                    <span class="bold line-space-after">{{ a }}</span>
+                {% endfor %}
+            </p>
+            {% if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' %}
+                <p data-qa="appointment-time">On <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}</span> at <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime }}</span></p>
+            {% elif licence.appointmentTimeType === 'NEXT_WORKING_DAY_2PM' %}
+                <p data-qa="appointment-time"><span class="bold">By 2pm on the next working day after your release</span></p>
+            {% elif licence.appointmentTimeType === 'IMMEDIATE_UPON_RELEASE' %}
+                <p data-qa="appointment-time"><span class="bold">Immediately after release</span></p>
+            {% else %}
+                <p></p>
+            {% endif %}
+            {% if finalThirdEnabled %}
+                {% set phoneNumberText = "Contact phone number:" %}
+            {% else %}
+                {% set phoneNumberText = "Contact telephone number:" %}
+            {% endif %}
+
+            <p data-qa="appointment-phone-number">{{ phoneNumberText }} <span class="bold">{{ licence.appointmentTelephoneNumber }}</span></p>
+            {% if licence.appointmentAlternativeTelephoneNumber %}
+                <p data-qa="appointment-alternative-phone-number">
+                    Alternative contact phone number:
+                    <span class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
 </div>

@@ -129,6 +129,7 @@ describe('Route - print a licence', () => {
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
+          finalThirdEnabled: false,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
@@ -171,6 +172,7 @@ describe('Route - print a licence', () => {
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
+          finalThirdEnabled: false,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
@@ -264,6 +266,7 @@ describe('Route - print a licence', () => {
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
+          finalThirdEnabled: false,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
@@ -476,6 +479,7 @@ describe('Route - print a licence', () => {
           isV4OrGreater: true,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
+          finalThirdEnabled: false,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
@@ -516,6 +520,7 @@ describe('Route - print a licence', () => {
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
+          finalThirdEnabled: false,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
@@ -579,6 +584,7 @@ describe('Route - print a licence', () => {
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
+          finalThirdEnabled: false,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
@@ -643,6 +649,7 @@ describe('Route - print a licence', () => {
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
           isV4OrGreater: false,
+          finalThirdEnabled: false,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
@@ -707,6 +714,7 @@ describe('Route - print a licence', () => {
           isV4OrGreater: false,
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
+          finalThirdEnabled: false,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
