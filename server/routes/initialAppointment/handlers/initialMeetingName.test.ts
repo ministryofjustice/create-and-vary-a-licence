@@ -4,7 +4,6 @@ import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
-import config from '../../../config'
 
 jest.mock('./initialMeetingUpdatedFlashMessage')
 
@@ -13,7 +12,6 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 describe('Route Handlers - Create Licence - Initial Meeting Name - Probation users', () => {
   let req: Request
   let res: Response
-  const originalFinalThirdEnabled = config.finalThirdEnabled
 
   beforeEach(() => {
     req = {
@@ -42,10 +40,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     licenceService.recordAuditEvent = jest.fn()
   })
 
-  afterEach(() => {
-    config.finalThirdEnabled = originalFinalThirdEnabled
-  })
-
   describe('Probation user journey', () => {
     const handler = new InitialMeetingNameRoutes(licenceService, UserType.PROBATION)
 
@@ -62,26 +56,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           appointmentPersonType: {
             DUTY_OFFICER: 'Duty officer',
             SPECIFIC_PERSON: 'Someone else',
-          },
-          userType: UserType.PROBATION,
-        })
-      })
-
-      it('should include No appointment needed when enabled', async () => {
-        // Given
-        res.locals.licence.responsibleComFullName = 'Test Tester'
-        config.finalThirdEnabled = true
-
-        // When
-        await handler.GET(req, res)
-
-        // Then
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPerson', {
-          appointmentPersonType: {
-            DUTY_OFFICER: 'Duty officer',
-            RESPONSIBLE_COM: 'Test Tester, this person’s community probation practitioner',
-            SPECIFIC_PERSON: 'Someone else',
-            NO_APPOINTMENT_NEEDED: 'No appointment needed',
           },
           userType: UserType.PROBATION,
         })

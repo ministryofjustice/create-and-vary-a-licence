@@ -3,7 +3,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitle = applicationName + " - Create a licence - Who is the initial appointment with?" %}
 {% set pageId = "appointment-person-page" %}
@@ -15,7 +14,6 @@
 
 {% set DUTY_OFFICER = "DUTY_OFFICER" %}
 {% set SPECIFIC_PERSON = "SPECIFIC_PERSON" %}
-{% set NO_APPOINTMENT_NEEDED = "NO_APPOINTMENT_NEEDED" %}
 {% set contactNameHtml %}
     <label class="govuk-label" for="Enter name">Enter name</label>
     <input
@@ -32,14 +30,14 @@
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-grid-column-full">
                 <div class="govuk-form-group {{ "govuk-form-group--error" if isError }}">
-
+                    
                     <h1 class="govuk-label-wrapper">
-                        <label class="govuk-label govuk-label--l" for="contactName">
+                        <label class="govuk-label govuk-label--l" for="contactName"> 
                             Who is the initial appointment with?
-                        </label>
-                    </h1>
+                        </label> 
+                    </h1> 
 
                     {% if isError %}
                         <p class="govuk-error-message">
@@ -50,34 +48,19 @@
                     {% if userType == 'probation' %}
                         {% set initialMeetingPersonOptions = [] %}
                         {% for value, text in appointmentPersonType %}
-                            {% if value === NO_APPOINTMENT_NEEDED %}
-                                {% set initialMeetingPersonOptions = (initialMeetingPersonOptions.push({ divider: 'or' }), initialMeetingPersonOptions) %}
-                            {% endif %}
+                            {% set initialMeetingPersonOptions = (initialMeetingPersonOptions.push(
+                                {
+                                    value: value,
+                                    text: text,
+                                    hint: {
+                                        text: "For example, someone at an approved premises or a different community probation practitioner."
+                                    } if value === SPECIFIC_PERSON,
+                                    conditional: {
+                                        html: contactNameHtml
+                                    } if value === SPECIFIC_PERSON
 
-                            {% set hint = undefined %}
-                            {% set conditional = undefined %}
-
-                            {% if value === SPECIFIC_PERSON %}
-                                {% set hint = {
-                                    text: "For example, someone at an approved premises or a different community probation practitioner."
-                                } %}
-                                {% set conditional = {
-                                    html: contactNameHtml
-                                } %}
-                            {% elif value === NO_APPOINTMENT_NEEDED %}
-                                {% set hint = {
-                                    text: "We will add the community probation practitioner's name to the licence and ask for some contact details. This is so the person knows who to contact for support."
-                                } %}
-                            {% endif %}
-
-                            {% set initialMeetingPersonOptions = (initialMeetingPersonOptions.push({
-                                value: value,
-                                text: text,
-                                hint: hint,
-                                conditional: conditional
-                            }), initialMeetingPersonOptions) %}
+                                }), initialMeetingPersonOptions) %}
                         {% endfor %}
-
 
                         {{ govukRadios({
                             id: "appointment-with-type",
@@ -99,24 +82,6 @@
                                 value="{{ contactName }}"
                                 aria-describedby="contactName"
                         >
-                    {% endif %}
-                    {% if NO_APPOINTMENT_NEEDED in appointmentPersonType %}
-                        <h2 class="govuk-heading-m govuk-!-padding-top-8">Help with initial appointments</h2>
-                        {% set hintHtml %}
-                            <p class="govuk-!-margin-bottom-0">Select No appointment needed if the person is being released in the final third of a standard determinate sentence and is not:</p>
-                            <ul class="govuk-list govuk-list--bullet">
-                                <li>MAPPA eligible</li>
-                                <li>named on a child protection plan</li>
-                                <li>sentenced for a state threat or terrorist risk offence</li>
-                                <li>tier A, B or C</li>
-                                <li>serving a standard determinate sentence plus</li>
-                            </ul>
-                        {% endset %}
-                        {{ govukDetails({
-                            summaryText: "When no initial appointment is needed",
-                            html: hintHtml,
-                            classes: 'govuk-!-margin-bottom-3'
-                        }) }}
                     {% endif %}
 
                 </div>

@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
-import config from '../../../config'
 
 export default class InitialMeetingNameRoutes {
   constructor(
@@ -21,9 +20,7 @@ export default class InitialMeetingNameRoutes {
       DUTY_OFFICER: 'Duty officer',
       ...(isProbationPractionerAllocated && probationPractionerOption),
       SPECIFIC_PERSON: 'Someone else',
-      ...(config.finalThirdEnabled && { NO_APPOINTMENT_NEEDED: 'No appointment needed' }),
     }
-
     res.render('pages/initialAppointment/initialMeetingPerson', {
       appointmentPersonType,
       userType: this.userType,

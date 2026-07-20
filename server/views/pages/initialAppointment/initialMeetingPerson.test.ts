@@ -17,10 +17,10 @@ describe('appointmentPerson page', () => {
     licence: {},
     formResponses: {},
     validationErrors: [] as { text: string }[],
-    appointmentPersonType: {
-      DUTY_OFFICER: 'Duty officer',
-      SPECIFIC_PERSON: 'Specific person',
-    },
+    appointmentPersonType: [
+      ['DUTY_OFFICER', 'Duty officer'],
+      ['SPECIFIC_PERSON', 'Specific person'],
+    ],
   }
 
   describe('when userType is probation', () => {
@@ -38,54 +38,6 @@ describe('appointmentPerson page', () => {
       expect($('input[type="radio"][name="appointmentPersonType"]').length).toBe(2)
       expect($('input[type="radio"][value="DUTY_OFFICER"]').is(':checked')).toBe(true)
       expect($('#contactName').length).toBe(1)
-    })
-
-    it('shows hint text when NO_APPOINTMENT option is available', () => {
-      // Given
-      const args = {
-        ...baseArgs,
-        userType: 'probation',
-        appointmentPersonType: {
-          DUTY_OFFICER: 'Duty officer',
-          SPECIFIC_PERSON: 'Specific person',
-          NO_APPOINTMENT_NEEDED: 'No appointment needed',
-        },
-      }
-
-      // When
-      const $ = render(args)
-
-      // Then
-      expect($('.govuk-details__summary-text').text().trim()).toBe('When no initial appointment is needed')
-      expect($('.govuk-details__text').text()).toContain(
-        'Select No appointment needed if the person is being released in the final third of a standard determinate sentence and is not:',
-      )
-      const bulletItems = $('.govuk-list--bullet li')
-      expect(bulletItems.length).toBe(5)
-      expect(bulletItems.eq(0).text().trim()).toBe('MAPPA eligible')
-      expect(bulletItems.eq(1).text().trim()).toBe('named on a child protection plan')
-      expect(bulletItems.eq(2).text().trim()).toBe('sentenced for a state threat or terrorist risk offence')
-      expect(bulletItems.eq(3).text().trim()).toBe('tier A, B or C')
-      expect(bulletItems.eq(4).text().trim()).toBe('serving a standard determinate sentence plus')
-    })
-
-    it('does not show hint text when NO_APPOINTMENT option is not available', () => {
-      // Given
-      const args = {
-        ...baseArgs,
-        userType: 'probation',
-        appointmentPersonType: [
-          ['DUTY_OFFICER', 'Duty officer'],
-          ['SPECIFIC_PERSON', 'Specific person'],
-        ],
-      }
-
-      // When
-      const $ = render(args)
-
-      // Then
-      expect($('input[type="radio"][value="NO_APPOINTMENT_NEEDED"]').length).toBe(0)
-      expect($('.govuk-details__summary-text').length).toBe(0)
     })
 
     it('selects value from formResponses when provided', () => {
