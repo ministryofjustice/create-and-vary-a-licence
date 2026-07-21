@@ -15,11 +15,9 @@ import LicenceDatesAndReason from './types/licenceDatesAndReason'
 import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
 import OffenderLicenceStatusRoutes from './handlers/offenderLicenceStatus'
 import OffenderLicenceDatesRoutes from './handlers/offenderLicenceDates'
-import OffenderLicenceTypeRoutes from './handlers/offenderLicenceType'
 import ProbationTeamRoutes from './handlers/probationTeam'
 import ProbationUserRoutes from './handlers/probationStaff'
 import ComDetailsRoutes from './handlers/comDetails'
-import LicenceTypeChange from './types/licenceTypeChange'
 import LicencePrisonerDetails from './types/licencePrisonerDetails'
 import LicencePrisonerDetailsRoutes from './handlers/licencePrisonerDetails'
 import AuditDetailsRoutes from './handlers/auditDetails'
@@ -63,7 +61,6 @@ export default function Index({
   const offenderAllocationHandler = new OffenderAllocationRoutes(licenceService, probationService)
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
-  const offenderLicenceTypeHandler = new OffenderLicenceTypeRoutes(licenceService, licenceOverrideService)
   const probationTeamHandler = new ProbationTeamRoutes(comCaseloadService)
   const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, probationService)
   const comDetailsHandler = new ComDetailsRoutes(probationService)
@@ -90,8 +87,6 @@ export default function Index({
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
   get('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.POST, LicenceDatesAndReason)
-  get('/offender/:nomsId/licence/:licenceId/type', offenderLicenceTypeHandler.GET)
-  post('/offender/:nomsId/licence/:licenceId/type', offenderLicenceTypeHandler.POST, LicenceTypeChange)
   get('/offender/:nomsId/licence/:licenceId/prisoner-details', licencePrisonerDetailsHandler.GET)
   post(
     '/offender/:nomsId/licence/:licenceId/prisoner-details',
