@@ -1,5 +1,16 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 
+{% set bannerText = "<p>Standard and additional licence conditions are changing for people being released on or after 2 September 2026.</p><p>Probation practitioners can start using the new additional conditions for these people from 27 July 2026. Standard conditions for anyone released on or after 2 September will be updated automatically.</p>" %}
+
 {% if showCommsBanner %}
+    <div class="govuk-!-margin-top-6">
+        {{ mojAlert({
+            variant: "information",
+            title: "Upcoming changes to licence conditions",
+            showTitleAsHeading: true,
+            dismissible: false,
+            html: bannerText
+        }) }}
+    </div>
 {% endif %}
