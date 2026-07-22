@@ -40,7 +40,7 @@ describe('appointmentPerson page', () => {
       expect($('#contactName').length).toBe(1)
     })
 
-    it('shows hint text when NO_APPOINTMENT option is available', () => {
+    it('show the correct hint text when NO_APPOINTMENT option is available', () => {
       // Given
       const args = {
         ...baseArgs,
@@ -56,6 +56,9 @@ describe('appointmentPerson page', () => {
       const $ = render(args)
 
       // Then
+      expect($('#appointmentPersonType-4-item-hint').text().trim()).toBe(
+        'For people being released in the final third of a standard determinate sentence. Check the help section below for eligibility information.',
+      )
       expect($('.govuk-details__summary-text').text().trim()).toBe('When no initial appointment is needed')
       expect($('.govuk-details__text').text()).toContain(
         'Select No appointment needed if the person is being released in the final third of a standard determinate sentence and is not:',
