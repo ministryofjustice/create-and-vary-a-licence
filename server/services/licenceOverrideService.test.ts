@@ -46,14 +46,6 @@ describe('Licence Override Service', () => {
     )
   })
 
-  it('Updates licence type', () => {
-    const licenceType = 'AP'
-    const reason = 'reason to update dates'
-
-    overrideStatus.overrideType(1, { licenceType, reason }, user)
-    expect(licenceApiClient.overrideLicenceType).toHaveBeenCalledWith(1, { licenceType, reason }, user)
-  })
-
   it('Updates prisoner details', () => {
     const details: OverrideLicencePrisonerDetailsRequest = {
       forename: 'foo',

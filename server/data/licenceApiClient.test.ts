@@ -552,21 +552,6 @@ describe('Licence API client tests', () => {
     )
   })
 
-  it('Override licence type', async () => {
-    const username = 'admin-user'
-    await licenceApiClient.overrideLicenceType(1, { licenceType: 'AP', reason: 'Test Reason' }, {
-      username,
-    } as User)
-    expect(post).toHaveBeenCalledWith(
-      {
-        path: `/licence/id/1/override/type`,
-        data: { licenceType: 'AP', reason: 'Test Reason' },
-        returnBodyOnErrorIfPredicate: expect.any(Function),
-      },
-      { username },
-    )
-  })
-
   it('should call to set a licence as reviewed', async () => {
     const username = 'admin-user'
     await licenceApiClient.reviewWithoutVariation(1, {
