@@ -54,7 +54,19 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       it('should render view', async () => {
         req.query = { edit: 'telNumber' }
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingContact', { edit: 'telNumber' })
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingContact', {
+          edit: 'telNumber',
+          noAppointmentNeeded: false,
+        })
+      })
+      it('should render view with noAppointmentNeeded true', async () => {
+        req.query = { edit: 'telNumber' }
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingContact', {
+          edit: 'telNumber',
+          noAppointmentNeeded: true,
+        })
       })
     })
 
@@ -75,6 +87,12 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
       })
 
+      it('should redirect to the additional licence conditions page if noAppointmentNeeded is true', async () => {
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.POST(req, res)
+        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
+      })
+
       it('should call to generate a flash message', async () => {
         await handler.POST(req, res)
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PROBATION)
@@ -89,7 +107,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       it('should render view', async () => {
         req.query = { edit: 'telNumber' }
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingContact', { edit: 'telNumber' })
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingContact', {
+          edit: 'telNumber',
+          noAppointmentNeeded: false,
+        })
       })
     })
 
