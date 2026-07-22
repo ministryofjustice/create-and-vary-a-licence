@@ -6,6 +6,7 @@ import { AppointmentPersonRequest } from '../../../../../@types/licenceApiClient
 import PathType from '../../../../../enumeration/pathType'
 import flashInitialApptUpdatedFlashMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
+import config from '../../../../../config'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
@@ -60,7 +61,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
           SPECIFIC_PERSON: 'Someone else',
         },
         continueOrSaveLabel: 'Continue',
-        isProbationPractionerAllocated: true,
       })
     })
 
@@ -79,7 +79,26 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
           SPECIFIC_PERSON: 'Someone else',
         },
         continueOrSaveLabel: 'Continue',
-        isProbationPractionerAllocated: false,
+      })
+    })
+
+    it('should render view with no appointment needed option if final third enabled', async () => {
+      // Given
+      config.finalThirdEnabled = true
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+
+      // When
+      await handler.GET(req, res)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
+        appointmentPersonType: {
+          DUTY_OFFICER: 'Duty officer',
+          RESPONSIBLE_COM: 'FirstName SecondName, this person’s community probation practitioner',
+          SPECIFIC_PERSON: 'Someone else',
+          NO_APPOINTMENT_NEEDED: 'No appointment needed',
+        },
+        continueOrSaveLabel: 'Continue',
       })
     })
 
