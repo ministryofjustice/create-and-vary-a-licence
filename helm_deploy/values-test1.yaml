@@ -35,6 +35,8 @@ generic-service:
     COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
     MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
 
+    SHOW_WHATS_NEW_BANNER: 'true'
+
   namespace_secrets:
     create-and-vary-a-licence-prison-events-sqs-instance-output:
       SQS_PRISON_EVENTS_QUEUE_URL: 'sqs_id'
