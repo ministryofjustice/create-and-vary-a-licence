@@ -83,6 +83,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
           preferredAddresses: [],
+          noAppointmentNeeded: false,
         })
       })
 
@@ -93,6 +94,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
           preferredAddresses: [],
+          noAppointmentNeeded: false,
         })
       })
 
@@ -104,6 +106,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
           preferredAddresses,
+          noAppointmentNeeded: false,
         })
       })
 
@@ -120,6 +123,22 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
             formAddress,
             manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
             addressRemovedMessage: 'Address removed',
+            noAppointmentNeeded: false,
+          }),
+        )
+      })
+
+      it('When the appointmentPersonType is NO_APPOINTMENT_NEEDED, noAppointmentNeeded should be true', async () => {
+        config.postcodeLookupEnabled = true
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
+        await handler.GET(req as Request, res as Response)
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/initialAppointment/initialMeetingPlace',
+          expect.objectContaining({
+            formAddress,
+            manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
+            noAppointmentNeeded: true,
           }),
         )
       })
@@ -228,6 +247,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry',
           preferredAddresses: [],
+          noAppointmentNeeded: false,
         })
       })
 
@@ -238,6 +258,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           formAddress,
           manualAddressEntryUrl: '/licence/create/id/1/manual-address-entry?fromReview=true',
           preferredAddresses: [],
+          noAppointmentNeeded: false,
         })
       })
     })
