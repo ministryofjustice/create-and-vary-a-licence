@@ -59,6 +59,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         },
         licence: {
           appointmentAddress: 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
+          appointmentType: 'RESPONSIBLE_COM',
           conditionalReleaseDate: '14/05/2022',
           isEligibleForEarlyRelease: true,
         },
@@ -89,6 +90,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           formAddress,
           continueOrSaveLabel: 'Continue',
           manualAddressEntryUrl: '/licence/hard-stop/create/id/1/manual-address-entry',
+          noAppointmentNeeded: false,
         })
       })
 
@@ -101,6 +103,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           formAddress,
           continueOrSaveLabel: 'Save',
           manualAddressEntryUrl: '/licence/hard-stop/edit/id/1/manual-address-entry',
+          noAppointmentNeeded: false,
         })
       })
 
@@ -115,6 +118,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           formAddress,
           continueOrSaveLabel: 'Save',
           manualAddressEntryUrl: '/licence/hard-stop/edit/id/1/manual-address-entry',
+          noAppointmentNeeded: false,
         })
       })
 
