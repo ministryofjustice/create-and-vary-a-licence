@@ -3,6 +3,7 @@ import LicenceService from '../../../../../services/licenceService'
 import PathType from '../../../../../enumeration/pathType'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
+import config from '../../../../../config'
 
 export default class InitialMeetingNameRoutes {
   constructor(
@@ -12,14 +13,15 @@ export default class InitialMeetingNameRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
-    const isProbationPractionerAllocated = !!licence?.responsibleComFullName
-    const probationPractionerOption = {
+    const isProbationPractitionerAllocated = !!licence?.responsibleComFullName
+    const probationPractitionerOption = {
       RESPONSIBLE_COM: `${licence?.responsibleComFullName}, this person’s community probation practitioner`,
     }
     const appointmentPersonType = {
       DUTY_OFFICER: 'Duty officer',
-      ...(isProbationPractionerAllocated && probationPractionerOption),
+      ...(isProbationPractitionerAllocated && probationPractitionerOption),
       SPECIFIC_PERSON: 'Someone else',
+      ...(config.finalThirdEnabled && { NO_APPOINTMENT_NEEDED: 'No appointment needed' }),
     }
 
     res.render('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
