@@ -6,11 +6,13 @@
 {% set pageTitle = applicationName + " - Create a licence - What is the contact phone number for the initial appointment?" %}
 {% set pageId = "appointment-contact-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-place" %}
+{% set heading = "What is the community probation practitioner's contact phone number?" if noAppointmentNeeded else "What is the contact phone number for the initial appointment?" %}
+
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">What is the contact phone number for the initial appointment?</h1>
+            <h1 class="govuk-heading-l">{{ heading }}</h1>
         </div>
     </div>
     <form method="POST">
