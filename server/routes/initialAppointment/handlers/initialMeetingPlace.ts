@@ -26,11 +26,14 @@ export default class InitialMeetingPlaceRoutes {
     if (config.postcodeLookupEnabled) {
       preferredAddresses = await this.addressService.getPreferredAddresses(res.locals.user)
     }
+    const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
+
     return res.render('pages/initialAppointment/initialMeetingPlace', {
       preferredAddresses,
       formAddress,
       manualAddressEntryUrl: `${basePath}/manual-address-entry${fromReviewParam}`,
       addressRemovedMessage: req.flash('addressRemovedMessage')?.[0],
+      noAppointmentNeeded,
     })
   }
 

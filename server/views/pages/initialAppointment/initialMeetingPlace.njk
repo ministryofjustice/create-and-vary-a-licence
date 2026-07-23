@@ -9,6 +9,7 @@
 {% set pageTitle = applicationName + " - Create a licence - Where is the initial appointment?" %}
 {% set pageId = "appointment-place-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-name" %}
+{% set heading = "What contact address should be shown on the licence?" if noAppointmentNeeded else "Where is the initial appointment?" %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -24,7 +25,7 @@
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">Where is the initial appointment?</h1>
+            <h1 class="govuk-heading-l">{{ heading }}</h1>
                 <h1 class="govuk-heading-m" data-qa="use-saved-address">Use a saved address</h1>
                 {% if preferredAddresses.length > 0 %}
                     {% set preferredAddressesOptions = [] %}

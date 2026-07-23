@@ -9,6 +9,7 @@ describe('postcodeLookupEnabled', () => {
   afterEach(() => {
     jest.resetAllMocks()
   })
+
   it('shows postcode lookup when postcodeLookupEnabled is true', () => {
     const $ = render({
       postcodeLookupEnabled: true,
@@ -27,5 +28,23 @@ describe('postcodeLookupEnabled', () => {
     expect($('label[for="addressLine1"]').length).toBe(1)
     expect($('label[for="addressPostcode"]').text()).toContain('Postcode')
     expect($('[data-qa="searchAddresses"]').length).toBe(0)
+  })
+})
+
+describe('heading', () => {
+  it('shows the correct heading when noAppointmentNeeded is true', () => {
+    const $ = render({
+      licence: {},
+      noAppointmentNeeded: true,
+    })
+    expect($('h1.govuk-heading-l').text().trim()).toBe('What contact address should be shown on the licence?')
+  })
+
+  it('when noAppointmentNeeded is false the heading should read "Where is the initial appointment?"', () => {
+    const $ = render({
+      licence: {},
+      noAppointmentNeeded: false,
+    })
+    expect($('h1.govuk-heading-l').text().trim()).toBe('Where is the initial appointment?')
   })
 })
