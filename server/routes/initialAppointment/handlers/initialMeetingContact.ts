@@ -11,8 +11,11 @@ export default class InitialMeetingContactRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { edit } = req.query
+    const { licence } = res.locals
+    const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
     return res.render('pages/initialAppointment/initialMeetingContact', {
       edit,
+      noAppointmentNeeded,
     })
   }
 
@@ -27,6 +30,8 @@ export default class InitialMeetingContactRoutes {
       res.redirect(`/licence/view/id/${licenceId}/show`)
     } else if (req.query?.fromReview) {
       res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
+    } else if (licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
+      res.redirect(`/licence/create/id/${licenceId}/additional-licence-conditions-question`)
     } else {
       res.redirect(`/licence/create/id/${licenceId}/initial-meeting-time`)
     }

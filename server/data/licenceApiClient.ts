@@ -46,7 +46,6 @@ import type {
   OmuContact,
   OverrideLicenceDatesRequest,
   OverrideLicencePrisonerDetailsRequest,
-  OverrideLicenceTypeRequest,
   PolicyUpdateResponse,
   PrisonCaseAdminSearchResult,
   PrisonerWithCvlFields,
@@ -505,22 +504,6 @@ export default class LicenceApiClient extends RestClient {
 
   async overrideLicenceDates(licenceId: number, request: OverrideLicenceDatesRequest, user: User) {
     await this.put({ path: `/licence/id/${licenceId}/override/dates`, data: request }, { username: user?.username })
-  }
-
-  async overrideLicenceType(
-    licenceId: number,
-    request: OverrideLicenceTypeRequest,
-    user: User,
-  ): Promise<Record<string, string>> {
-    const response = (await this.post(
-      {
-        path: `/licence/id/${licenceId}/override/type`,
-        data: request,
-        returnBodyOnErrorIfPredicate: e => e.response.status === 400,
-      },
-      { username: user?.username },
-    )) as Record<string, unknown>
-    return response.status === 400 ? (response.fieldErrors as Record<string, string>) : null
   }
 
   async overrideLicencePrisonerDetails(licenceId: number, request: OverrideLicencePrisonerDetailsRequest, user: User) {

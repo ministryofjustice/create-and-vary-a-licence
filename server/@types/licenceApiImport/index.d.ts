@@ -929,26 +929,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/licence/id/{licenceId}/override/type': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Override a licence type
-     * @description Override the type for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['changeType']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/licence/id/{licenceId}/override/status': {
     parameters: {
       query?: never
@@ -3899,29 +3879,6 @@ export interface components {
        */
       view: boolean
     }
-    /** @description Request object for overriding a licence type */
-    OverrideLicenceTypeRequest: {
-      /**
-       * @description The new licence Type to assign to the licence
-       * @enum {string}
-       */
-      licenceType: 'AP' | 'AP_PSS' | 'PSS'
-      /** @description Reason for overriding the licence status */
-      reason: string
-    }
-    ProblemDetail: {
-      /** Format: uri */
-      type?: string
-      title?: string
-      /** Format: int32 */
-      status?: number
-      detail?: string
-      /** Format: uri */
-      instance?: string
-      properties?: {
-        [key: string]: unknown
-      }
-    }
     /** @description Request object for overriding a licence status */
     OverrideLicenceStatusRequest: {
       /**
@@ -5181,57 +5138,22 @@ export interface components {
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
       /**
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string | null
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
        * @example 12345
        */
       comStaffId?: number | null
-      /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
-       */
-      nomsId?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time of the initial appointment
-       * @example 23/08/2022 12:12
-       */
-      appointmentTime?: string | null
-      eligibleKind?: string | null
-      /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
-       */
-      prisonTelephone?: string | null
-      /** @deprecated */
-      isVariation: boolean
-      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
-      isInPssPeriod?: boolean | null
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string | null
-      /**
-       * @description The current status code for this licence
-       * @example IN_PROGRESS
-       * @enum {string|null}
-       */
-      statusCode?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-        | null
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -5319,6 +5241,32 @@ export interface components {
        */
       approvedDate?: string | null
       /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
+       */
+      appointmentTime?: string | null
+      eligibleKind?: string | null
+      /**
+       * @description The telephone number to contact the prison
+       * @example 0161 234 4747
+       */
+      prisonTelephone?: string | null
+      /** @deprecated */
+      isVariation: boolean
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
+      isInPssPeriod?: boolean | null
+      /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string | null
+      /**
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
        */
@@ -5340,20 +5288,42 @@ export interface components {
        * @example 24/08/2022 11:30:33
        */
       supersededDate?: string | null
+      /**
+       * @description The current status code for this licence
+       * @example IN_PROGRESS
+       * @enum {string|null}
+       */
+      statusCode?:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
+        | null
       kind: string
-      /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
        */
       approvedByUsername?: string | null
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean | null
       /**
        * Format: date
        * @description The sentence start date
        * @example 13/09/2019
        */
       sentenceStartDate?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
@@ -5390,22 +5360,6 @@ export interface components {
        * @example 13/09/2024
        */
       licenceExpiryDate?: string | null
-      /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string | null
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string | null
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
@@ -5487,23 +5441,26 @@ export interface components {
        */
       prisonDescription?: string | null
       /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
+       */
+      submittedByFullName?: string | null
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string | null
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][] | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /**
        * @description The username of the person who last updated this licence
        * @example X34433
        */
       updatedByUsername?: string | null
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean | null
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string | null
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
       /**
        * @description The full name of the supervising probation officer
        * @example Jane Jones
@@ -13178,84 +13135,6 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Gone */
-      410: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  changeType: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['OverrideLicenceTypeRequest']
-      }
-    }
-    responses: {
-      /** @description Status has been updated */
-      202: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ProblemDetail']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
