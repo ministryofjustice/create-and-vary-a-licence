@@ -28,6 +28,7 @@ describe('Route Handlers - Create Licence - Select an address', () => {
         user: {
           username: 'joebloggs',
         },
+        licence: {},
       },
     } as unknown as Response
 
@@ -94,6 +95,22 @@ describe('Route Handlers - Create Licence - Select an address', () => {
         )
 
         expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/${req.params.licenceId}/initial-meeting-contact`)
+      })
+      it('should parse selectedAddress and call addAppointmentAddress in create flow', async () => {
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.POST(req, res)
+
+        expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
+          req.params.licenceId,
+          {
+            ...selectedAddress,
+            isPreferredAddress: false,
+            source: 'OS_PLACES',
+          },
+          res.locals.user,
+        )
+
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/${req.params.licenceId}/licence-contact-number`)
       })
 
       it('should parse selectedAddress and call addAppointmentAddress in edit flow', async () => {

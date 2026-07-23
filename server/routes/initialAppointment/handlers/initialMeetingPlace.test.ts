@@ -150,6 +150,12 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-contact')
       })
+      it('should redirect to the contact page', async () => {
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.POST(req, res)
+        expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
+        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/licence-contact-number')
+      })
 
       it('should redirect to the check your answers page if fromReview flag is set', async () => {
         req.query.fromReview = 'true'

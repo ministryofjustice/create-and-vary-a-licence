@@ -129,6 +129,17 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
       })
 
+      it('should use the licence contact address url if no appointment is needed', async () => {
+        // Given
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+        // When
+        await handler.POST(req, res)
+
+        // Then
+        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/licence-contact-address')
+      })
+
       it('should call to generate a flash message', async () => {
         // Given
 
