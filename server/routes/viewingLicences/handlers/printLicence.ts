@@ -76,6 +76,7 @@ export default class PrintLicenceRoutes {
     const { exclusionZoneMapData, restrictionZoneMapData, eventExclusionZoneMapData } =
       await this.splitUploadConditions(licence, user)
     const isV4OrGreater = this.isLicenceV4OrGreater(licence)
+    const { finalThirdEnabled } = config
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
@@ -107,6 +108,7 @@ export default class PrintLicenceRoutes {
       prisonTelephone,
       monitoringSupplierTelephone,
       isV4OrGreater,
+      finalThirdEnabled,
     }
 
     res.renderPDF(`pages/licence/${this.getTemplateForLicence(licence)}`, licenceToPrint, {

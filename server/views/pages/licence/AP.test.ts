@@ -16,7 +16,7 @@ describe('Print an AP licence', () => {
         prisonCode: 'MDI',
         appointmentPerson: 'Jack Frost',
         appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
-        comTelephone: '07878 234566',
+        appointmentTelephoneNumber: '07878 234566',
         standardLicenceConditions: [
           { code: '1', text: 'Standard 1' },
           { code: '2', text: 'Standard 2' },
@@ -165,6 +165,43 @@ describe('Print an AP licence', () => {
         },
       })
       expect($('[data-qa="appointment-person"]').text().trim()).toBe('test user2')
+    })
+  })
+
+  describe('No appointment needed rendering', () => {
+    it('should render supervisor officer details', () => {
+      const $ = render({
+        licence: {
+          appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
+          appointmentTelephoneNumber: '07878 234566',
+          appointmentAlternativeTelephoneNumber: '07541 943732',
+          appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+          responsibleComFullName: 'test user1',
+        },
+        finalThirdEnabled: true,
+      })
+      expect($('[data-qa="supervising-officer"]').text().trim()).toBe('Your supervising officer is test user1.')
+      expect($('[data-qa="contact-phone-number"]').text().trim()).toBe('Contact phone number: 07878 234566')
+      expect($('[data-qa="alternative-contact-phone-number"]').text().trim()).toBe(
+        'Alternative contact phone number: 07541 943732',
+      )
+    })
+
+    it('should not render supervisor officer details when final third not enabled', () => {
+      const $ = render({
+        licence: {
+          appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
+          appointmentTelephoneNumber: '07878 234566',
+          appointmentAlternativeTelephoneNumber: '07541 943732',
+          appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+          responsibleComFullName: 'test user1',
+        },
+        finalThirdEnabled: false,
+      })
+      expect($('[data-qa="supervising-officer"]').text().trim()).toBe('')
+      expect($('[data-qa="contact-phone-number"]').text().trim()).toBe('')
+      expect($('[data-qa="alternative-contact-phone-number"]').text().trim()).toBe('')
+      expect($('[data-qa="appointment-person"]').text().trim()).toBe('')
     })
   })
 })
