@@ -39,6 +39,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     } as unknown as Response
 
     licenceService.updateAppointmentPerson = jest.fn()
+    licenceService.updateAppointmentTime = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
   })
 
@@ -131,12 +132,17 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
 
       it('should use the licence contact address url if no appointment is needed', async () => {
         // Given
-        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
 
         // When
         await handler.POST(req, res)
 
         // Then
+        expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(
+          '1',
+          { appointmentTimeType: 'NO_APPOINTMENT_NEEDED', time: null, date: null },
+          { username: 'joebloggs' },
+        )
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/licence-contact-address')
       })
 

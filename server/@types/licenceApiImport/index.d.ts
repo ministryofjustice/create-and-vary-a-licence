@@ -1129,26 +1129,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/jobs/remove-expired-conditions': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Remove AP conditions from in-progress variations after PSS starts.
-     * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'.
-     */
-    post: operations['runRemoveExpiredConditionsJob']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/jobs/prompt-licence-creation': {
     parameters: {
       query?: never
@@ -2959,7 +2939,11 @@ export interface components {
        * @example IMMEDIATE_UPON_RELEASE
        * @enum {string}
        */
-      appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
+      appointmentTimeType:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME'
+        | 'NO_APPOINTMENT_NEEDED'
     }
     /** @description Request object for updating the person the person on probation will meet at the initial appointment */
     AppointmentPersonRequest: {
@@ -5148,23 +5132,87 @@ export interface components {
        * @enum {string}
        */
       electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      kind: string
       /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
+       * @description The version number of this licence
+       * @example 1.3
        */
-      comStaffId?: number | null
+      licenceVersion?: string | null
+      /**
+       * @description The current status code for this licence
+       * @example IN_PROGRESS
+       * @enum {string|null}
+       */
+      statusCode?:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
+        | null
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
        * @example 989898
        */
       bookingId?: number | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
-       * @description The version number of this licence
-       * @example 1.3
+       * @description The username who approved the licence on behalf of the prison governor
+       * @example X33221
        */
-      licenceVersion?: string | null
+      approvedByUsername?: string | null
+      /**
+       * Format: date
+       * @description The sentence start date
+       * @example 13/09/2019
+       */
+      sentenceStartDate?: string | null
+      /**
+       * Format: date
+       * @description The earliest conditional release date of the person on licence
+       * @example 13/08/2022
+       */
+      conditionalReleaseDate?: string | null
+      /**
+       * Format: date
+       * @description The actual release date (if set)
+       * @example 13/09/2022
+       */
+      actualReleaseDate?: string | null
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string | null
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       * @example 06/06/2023
+       */
+      topupSupervisionExpiryDate?: string | null
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       * @example 06/06/2023
+       */
+      postRecallReleaseDate?: string | null
+      /**
+       * Format: date
+       * @description The date that the licence will expire
+       * @example 13/09/2024
+       */
+      licenceExpiryDate?: string | null
       /**
        * @description The agency code of the detaining prison
        * @example LEI
@@ -5253,114 +5301,6 @@ export interface components {
       appointmentTime?: string | null
       eligibleKind?: string | null
       /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
-       */
-      prisonTelephone?: string | null
-      /** @deprecated */
-      isVariation: boolean
-      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
-      isInPssPeriod?: boolean | null
-      /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
-       */
-      comEmail?: string | null
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string | null
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       * @example 24/08/2022 09:30:33
-       */
-      dateLastUpdated?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       * @example 24/08/2022 11:30:33
-       */
-      supersededDate?: string | null
-      /**
-       * @description The current status code for this licence
-       * @example IN_PROGRESS
-       * @enum {string|null}
-       */
-      statusCode?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-        | null
-      kind: string
-      /**
-       * @description The username who approved the licence on behalf of the prison governor
-       * @example X33221
-       */
-      approvedByUsername?: string | null
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean | null
-      /**
-       * Format: date
-       * @description The sentence start date
-       * @example 13/09/2019
-       */
-      sentenceStartDate?: string | null
-      /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition'][]
-      /**
-       * Format: date
-       * @description The earliest conditional release date of the person on licence
-       * @example 13/08/2022
-       */
-      conditionalReleaseDate?: string | null
-      /**
-       * Format: date
-       * @description The actual release date (if set)
-       * @example 13/09/2022
-       */
-      actualReleaseDate?: string | null
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
-       */
-      topupSupervisionStartDate?: string | null
-      /**
-       * Format: date
-       * @description The date when the post sentence supervision period ends, from prison services
-       * @example 06/06/2023
-       */
-      topupSupervisionExpiryDate?: string | null
-      /**
-       * Format: date
-       * @description The release date after being recalled
-       * @example 06/06/2023
-       */
-      postRecallReleaseDate?: string | null
-      /**
-       * Format: date
-       * @description The date that the licence will expire
-       * @example 13/09/2024
-       */
-      licenceExpiryDate?: string | null
-      /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
        * @enum {string|null}
@@ -5376,7 +5316,12 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
+      appointmentTimeType?:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME'
+        | 'NO_APPOINTMENT_NEEDED'
+        | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -5441,6 +5386,28 @@ export interface components {
        */
       prisonDescription?: string | null
       /**
+       * @description The telephone number to contact the prison
+       * @example 0161 234 4747
+       */
+      prisonTelephone?: string | null
+      /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string | null
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
+       */
+      comUsername?: string | null
+      /**
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /**
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
        */
@@ -5457,10 +5424,26 @@ export interface components {
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
+       */
+      dateLastUpdated?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
+       */
+      supersededDate?: string | null
+      /**
        * @description The username of the person who last updated this licence
        * @example X34433
        */
       updatedByUsername?: string | null
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean | null
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
+      isInPssPeriod?: boolean | null
       /**
        * @description The full name of the supervising probation officer
        * @example Jane Jones
@@ -5484,6 +5467,12 @@ export interface components {
        * @example Test Person
        */
       createdByFullName?: string | null
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number | null
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
@@ -6219,7 +6208,12 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
+      appointmentTimeType?:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME'
+        | 'NO_APPOINTMENT_NEEDED'
+        | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -6655,7 +6649,12 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
+      appointmentTimeType?:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME'
+        | 'NO_APPOINTMENT_NEEDED'
+        | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -7129,7 +7128,12 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
+      appointmentTimeType?:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME'
+        | 'NO_APPOINTMENT_NEEDED'
+        | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -7541,7 +7545,12 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
+      appointmentTimeType?:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME'
+        | 'NO_APPOINTMENT_NEEDED'
+        | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -7928,7 +7937,12 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
+      appointmentTimeType?:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME'
+        | 'NO_APPOINTMENT_NEEDED'
+        | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -8310,7 +8324,12 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
+      appointmentTimeType?:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME'
+        | 'NO_APPOINTMENT_NEEDED'
+        | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -8697,7 +8716,12 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
+      appointmentTimeType?:
+        | 'IMMEDIATE_UPON_RELEASE'
+        | 'NEXT_WORKING_DAY_2PM'
+        | 'SPECIFIC_DATE_TIME'
+        | 'NO_APPOINTMENT_NEEDED'
+        | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -13882,69 +13906,6 @@ export interface operations {
     requestBody?: never
     responses: {
       /** @description Time out job executed. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Gone */
-      410: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  runRemoveExpiredConditionsJob: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description run-remove-ap-conditions-job */
       200: {
         headers: {
           [name: string]: unknown

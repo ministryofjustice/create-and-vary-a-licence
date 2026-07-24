@@ -38,7 +38,11 @@ class DateTime {
 
   @Expose()
   @Type(() => String)
-  appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
+  appointmentTimeType:
+    | 'IMMEDIATE_UPON_RELEASE'
+    | 'NEXT_WORKING_DAY_2PM'
+    | 'SPECIFIC_DATE_TIME'
+    | 'NO_APPOINTMENT_NEEDED'
 
   static toJson(dt: DateTime): string | undefined {
     const { date, time } = dt
