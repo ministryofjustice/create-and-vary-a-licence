@@ -18,10 +18,16 @@
 
 <div id="induction" class="section">
     {% if (licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') and finalThirdEnabled %}
-        <span data-qa="supervising-officer" class="line-space-after">Your supervising officer is {{ licence.responsibleComFullName }}.</span>
-        <span class="bold line-space-after">You do not need to meet with them after you are released.</span>
+        {% if licence.responsibleComFullName %}
+            <span data-qa="supervising-officer" class="line-space-after">Your supervising officer is {{ licence.responsibleComFullName }}.</span>
+            <span class="bold line-space-after">You do not need to meet with them after you are released unless they ask to see you.</span>
+        {% else %}
+            <span data-qa="supervising-officer" class="bold line-space-after">
+                You do not need to meet with a supervising officer after you are released.
+            </span>
+        {% endif %}
 
-        <p>If you need support while you are on licence, you can contact them using the details below:</p>
+        <p>If you need support while you are on licence, you can use the details below:</p>
         <span data-qa="contact-phone-number" class="line-space-after">Contact phone number: {{ licence.appointmentTelephoneNumber }}</span>
         {% if licence.appointmentAlternativeTelephoneNumber %}
             <span data-qa="alternative-contact-phone-number">
