@@ -24,6 +24,7 @@ class LicenceToSubmit {
   appointmentTelephoneNumber: string
 
   @Expose()
+  @ValidateIf(o => o.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED')
   @IsNotEmpty({ message: "Select 'Change' to go back and add appointment date and time" })
   appointmentTimeType: AppointmentTimeType
 

@@ -43,6 +43,7 @@ export default class InitialMeetingPlaceRoutes {
     const { searchQuery, preferredAddress } = req.body
     const fromReview = req.query?.fromReview as string
     const isPrisonUser = this.userType === UserType.PRISON
+    const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
     const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
 
     if (config.postcodeLookupEnabled) {
@@ -59,7 +60,7 @@ export default class InitialMeetingPlaceRoutes {
       flashInitialApptUpdatedMessage(req, licence, this.userType)
     }
 
-    return res.redirect(this.getRedirectPath(licenceId, isPrisonUser, fromReview))
+    return res.redirect(this.getRedirectPath(licenceId, isPrisonUser, fromReview, noAppointmentNeeded))
   }
 
   private async handlePreferredAddress(licenceId: string, preferredAddressJson: string, user: User): Promise<void> {
@@ -79,7 +80,12 @@ export default class InitialMeetingPlaceRoutes {
     await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
   }
 
-  private getRedirectPath(licenceId: string, isPrisonUser: boolean, fromReview?: string): string {
+  private getRedirectPath(
+    licenceId: string,
+    isPrisonUser: boolean,
+    fromReview?: string,
+    noAppointmentNeeded?: boolean,
+  ): string {
     const basePath = `/licence/create/id/${licenceId}`
 
     if (isPrisonUser) {
@@ -88,6 +94,10 @@ export default class InitialMeetingPlaceRoutes {
 
     if (fromReview) {
       return `${basePath}/check-your-answers`
+    }
+
+    if (noAppointmentNeeded) {
+      return `${basePath}/licence-contact-number`
     }
 
     return `${basePath}/initial-meeting-contact`
