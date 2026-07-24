@@ -45,6 +45,7 @@ describe('InitialMeetingPlaceRoutes', () => {
     licence = {
       id: 1,
       appointmentAddress: 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
+      appointmentPersonType: 'SPECIFIC_PERSON',
       conditionalReleaseDate: '14/05/2022',
       isEligibleForEarlyRelease: true,
     } as Licence
@@ -97,6 +98,7 @@ describe('InitialMeetingPlaceRoutes', () => {
         formAddress,
         continueOrSaveLabel: 'Continue',
         manualAddressEntryUrl: '/licence/time-served/create/id/1/manual-address-entry',
+        noAppointmentNeeded: false,
       })
     })
 
