@@ -21,6 +21,7 @@ export default class InitialMeetingPlaceRoutes {
     const { licenceId } = req.params
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/hard-stop/${action}/id/${licenceId}`
+    const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
     let preferredAddresses: AddressResponse[] = []
@@ -34,6 +35,7 @@ export default class InitialMeetingPlaceRoutes {
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
       manualAddressEntryUrl: `${basePath}/manual-address-entry`,
       addressRemovedMessage: req.flash('addressRemovedMessage')?.[0],
+      noAppointmentNeeded,
     })
   }
 
