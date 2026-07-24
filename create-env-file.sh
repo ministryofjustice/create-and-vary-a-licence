@@ -51,7 +51,7 @@ export AWS_ACCESS_KEY_ID=foo
 export AWS_SECRET_ACCESS_KEY=bar
 export SERVICE_NAME=create-and-vary-a-licence
 
-export POLICY_V4_CREATION_DATE=2026-07-27
+export POLICY_V4_CREATION_DATE=2027-01-01
 export POLICY_V4_GO_LIVE_DATE=2026-09-02
 
 # Write to .env grouped by value type
