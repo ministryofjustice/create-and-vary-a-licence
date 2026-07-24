@@ -41,12 +41,9 @@ describe('Hdc Confirmation', () => {
     const $ = render({
       kind: 'CRD',
     })
+    expect($('#message').text().trim().toString()).toContain('You can do so up to 2 days before a standard release.')
     expect($('#message').text().trim().toString()).toContain(
-      'You can do so up to 2 days before a standard release. From this point, you can only ask the prison to change the initial appointment details. Other changes must be made after release.',
-    )
-
-    expect($('#message').text()).not.toContain(
-      'You can make changes to reporting instructions through the Create and vary a licence service. These changes do not need to be reapproved by the prison, but a case administrator may need to reprint the licence.',
+      'From this point, you can only ask the prison to change the contact details that will be shown on the licence, for an if an initial appointment is needed. Other changes must be made after release.',
     )
   })
 
