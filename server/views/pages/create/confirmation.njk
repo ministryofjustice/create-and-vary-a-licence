@@ -37,9 +37,19 @@
                     </p>
                 {% endif %}
             {% else %}
-                <p class="govuk-body" id="message">
-                    You can do so up to 2 days before a standard release. From this point, you can only ask the prison to change the initial appointment details. Other changes must be made after release.
-                </p>
+                {% if finalThirdEnabled %}
+                    <p class="govuk-body" id="first-part-message">
+                        You can do so up to 2 days before a standard release.
+                    </p>
+                    <p class="govuk-body" id="second-part-message">
+                        From this point, you can only ask the prison to change the contact details that will be shown on the licence, for example if an initial appointment is needed. Other changes must be made after release.
+                    </p>
+                {% else %}
+                    <p class="govuk-body" id="message">
+                        You can do so up to 2 days before a standard release.
+                        From this point, you can only ask the prison to change the initial appointment details. Other changes must be made after release.
+                    </p>
+                {% endif %}
             {% endif %}
             {{ govukButton({
                 text: "Return to case list",
