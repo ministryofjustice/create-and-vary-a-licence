@@ -34,7 +34,7 @@ generic-service:
     COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
     MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
 
-    POLICY_V4_CREATION_DATE: "2026-07-27"
+    POLICY_V4_CREATION_DATE: "2027-01-01"
     POLICY_V4_GO_LIVE_DATE: "2030-09-02"
 
     SHOW_WHATS_NEW_BANNER: "true"
