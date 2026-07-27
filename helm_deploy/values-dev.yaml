@@ -38,6 +38,7 @@ generic-service:
     POLICY_V4_GO_LIVE_DATE: "2030-09-02"
 
     SHOW_WHATS_NEW_BANNER: "false"
+    FINAL_THIRD_ENABLED: "true"
 
   namespace_secrets:
     create-and-vary-a-licence-prison-events-sqs-instance-output:
