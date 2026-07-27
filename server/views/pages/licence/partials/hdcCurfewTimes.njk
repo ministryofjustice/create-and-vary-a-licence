@@ -22,7 +22,8 @@
 
     {% set hdcad %}
         {% if params.licence.homeDetentionCurfewActualDate %}
-            {{ params.licence.homeDetentionCurfewActualDate | datetimeToDate }}{{ (' ' + (releaseDatesBadge | safe)) if showBadges }}
+            {{ params.licence.homeDetentionCurfewActualDate | datetimeToDate }}
+            {{ releaseDatesBadge | safe if showBadges }}
         {% else %}
             Not entered yet
         {% endif %}
