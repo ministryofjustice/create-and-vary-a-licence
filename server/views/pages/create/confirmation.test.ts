@@ -28,9 +28,7 @@ describe('Confirmation page', () => {
     })
     expect($('.govuk-panel__title').text().trim().toString()).toBe('Licence conditions for John Smith sent')
     expect($('#sent-to').text().trim().toString()).toBe('We have sent the licence to HMP Leeds for approval.')
-    expect($('#first-part-message').text().trim().toString()).toContain(
-      'You can do so up to 2 days before a standard release.',
-    )
+    expect($('#first-part-message').text().trim().toString()).toContain('You can do so up to 2 days before release.')
     expect($('#second-part-message').text().trim().toString()).toContain(
       'From this point, you can only ask the prison to change the contact details that will be shown on the licence, for example if an initial appointment is needed. Other changes must be made after release.',
     )
