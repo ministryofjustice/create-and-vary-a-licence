@@ -4,10 +4,12 @@ import { addDays } from 'date-fns'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import config from '../../../config'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/create/checkAnswers.njk').toString())
 
 describe('Create a Licence Views - Check Answers', () => {
+  config.finalThirdEnabled = true
   const licence = {
     id: 1,
     typeCode: 'AP_PSS',
@@ -247,7 +249,7 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: false,
     })
 
-    expect($('.govuk-summary-list__actions').length).toBe(10)
+    expect($('.govuk-summary-list__actions').length).toBe(11)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
 
     const $2 = render({
@@ -299,7 +301,7 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: false,
     })
 
-    expect($2('.govuk-summary-list__actions').length).toBe(9)
+    expect($2('.govuk-summary-list__actions').length).toBe(10)
     expect($2('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 

@@ -4,6 +4,8 @@
             {% set appointmentPerson = 'Duty officer' %}
         {% case 'RESPONSIBLE_COM' %}
             {% set appointmentPerson = licence.responsibleComFullName %}
+        {% case 'NO_APPOINTMENT_NEEDED' %}
+            {% set appointmentPerson = licence.responsibleComFullName %}
         {% default %}
             {% set appointmentPerson = licence.appointmentPerson %}
     {% endswitch %}

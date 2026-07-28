@@ -9,6 +9,8 @@
     {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
 
     {% set addressPath = 'manual-address-entry' if (licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL') else 'initial-meeting-place' %}
+    {% set appointmentNeeded = licence.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' %}
+
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
@@ -24,6 +26,20 @@
         classes: 'govuk-!-margin-bottom-9',
         rows: [
             {
+                key: { text: "Does this person need an initial appointment?" },
+                value: { text: "Yes" if appointmentNeeded else "No" },
+                actions: {
+                    items: [
+                        {
+                            href: routepath + "/initial-meeting-name",
+                            text: "Change",
+                            visuallyHiddenText: "name",
+                            attributes: { "id": "appointmentPersonType", "data-qa": "person-change-link" }
+                        }
+                    ]
+                } if isEditable
+            } if finalThirdEnabled,
+            {
                 classes: 'govuk-summary-list__row--error' if (validationErrors | findError('appointmentPerson') or validationErrors | findError('appointmentPersonType')),
                 key: { text: "Name" },
                 value: { text: selectedAppointmentPerson(licence) },
@@ -37,7 +53,7 @@
                         }
                     ]
                 } if isEditable
-            },
+            } if (appointmentNeeded or licence.responsibleComFullName),
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
                 key: { text: "Address" },
@@ -97,7 +113,7 @@
                         }
                     ]
                 } if isEditable
-            }if licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME',
+            } if licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME',
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Date" },
