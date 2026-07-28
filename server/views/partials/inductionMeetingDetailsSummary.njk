@@ -113,7 +113,7 @@
                         }
                     ]
                 } if isEditable
-            } if licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME',
+            } if (licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME' and licence.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED'),
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Date" },
