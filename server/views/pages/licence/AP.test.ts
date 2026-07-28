@@ -187,6 +187,26 @@ describe('Print an AP licence', () => {
       )
     })
 
+    it('should not render supervisor officer details if no com allocated', () => {
+      const $ = render({
+        licence: {
+          appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
+          appointmentTelephoneNumber: '07878 234566',
+          appointmentAlternativeTelephoneNumber: '07541 943732',
+          appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+          responsibleComFullName: null,
+        },
+        finalThirdEnabled: true,
+      })
+      expect($('[data-qa="supervising-officer"]').text().trim()).toBe(
+        'You do not need to meet with a supervising officer after you are released.',
+      )
+      expect($('[data-qa="contact-phone-number"]').text().trim()).toBe('Contact phone number: 07878 234566')
+      expect($('[data-qa="alternative-contact-phone-number"]').text().trim()).toBe(
+        'Alternative contact phone number: 07541 943732',
+      )
+    })
+
     it('should not render supervisor officer details when final third not enabled', () => {
       const $ = render({
         licence: {

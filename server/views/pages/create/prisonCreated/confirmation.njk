@@ -25,13 +25,20 @@
                 {% endif %}
                 </p>
             {% endif %}
-       
+
 
             <h2 class="govuk-heading-m">If you need to make any changes</h2>
-            <div class="govuk-body">
-                <p>Only the initial appointment can be changed. For example, because a probation practitioner requests a different date or time. You can return to the service to edit this after it has been sent or approved.</p>
-                <p>The licence will not need to be approved again.</p>
-            </div>
+            {% if finalThirdEnabled %}
+                <div class="govuk-body" id="message">
+                    <p>Only the contact details that will be shown on the licence can be changed, for example if an initial appointment is needed. You can return to the service to edit this after the licence has been sent or approved.</p>
+                    <p>The licence will not need to be approved again.</p>
+                </div>
+            {% else %}
+                <div class="govuk-body" id="message">
+                    <p>Only the initial appointment can be changed. For example, because a probation practitioner requests a different date or time. You can return to the service to edit this after it has been sent or approved.</p>
+                    <p>The licence will not need to be approved again.</p>
+                </div>
+            {% endif %}
 
             <p class="govuk-body">
             {{ govukButton({

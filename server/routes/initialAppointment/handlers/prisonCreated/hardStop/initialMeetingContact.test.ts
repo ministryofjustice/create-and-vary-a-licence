@@ -55,6 +55,8 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingContact', {
           continueOrSaveLabel: 'Continue',
+          edit: undefined,
+          noAppointmentNeeded: false,
         })
       })
 
@@ -63,6 +65,19 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingContact', {
           continueOrSaveLabel: 'Save',
+          edit: undefined,
+          noAppointmentNeeded: false,
+        })
+      })
+
+      it('should render view when no appointment needed has been selected', async () => {
+        handler = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingContact', {
+          continueOrSaveLabel: 'Continue',
+          edit: undefined,
+          noAppointmentNeeded: true,
         })
       })
     })
@@ -94,6 +109,12 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
           { telephone: '0114 2556556' },
           { username: 'joebloggs' },
         )
+        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
+      })
+
+      it('should redirect to check your answers if no appointment needed has been selected', async () => {
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
       })
 

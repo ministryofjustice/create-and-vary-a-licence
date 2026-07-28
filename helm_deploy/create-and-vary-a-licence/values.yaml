@@ -44,7 +44,7 @@ generic-service:
     EPF2_URL: "https://epf.linkspace.uk/planning"
     HDC_ENABLED: "true"
     FINAL_THIRD_ENABLED: "false"
-    POLICY_V4_CREATION_DATE: "2026-07-27"
+    POLICY_V4_CREATION_DATE: "2027-01-01"
     POLICY_V4_GO_LIVE_DATE: "2026-09-02"
 
     # HDC
