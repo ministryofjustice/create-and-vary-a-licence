@@ -84,7 +84,7 @@
             {% if licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION' %}
                 {{ variationSummary(licence, isInProgress) }}
             {% else %}
-                {{ inductionMeetingDetails(licence, canEditInitialAppt, validationErrors, contactForChangeText) }}
+                {{ inductionMeetingDetails(licence, canEditInitialAppt, validationErrors, contactForChangeText, isPrisonUser) }}
             {% endif %}
 
             {% if licence.kind === 'HDC' or licence.kind === 'HDC_VARIATION' %}
