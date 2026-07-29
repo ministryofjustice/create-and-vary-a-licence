@@ -8,7 +8,7 @@ import ElectronicMonitoringProvider from '../../manageConditions/types/electroni
 class LicenceToSubmit {
   @Expose()
   @IsNotEmpty({ message: "Select 'Change' to go back and add who to meet" })
-  appointmentPersonType: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+  appointmentPersonType: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON' | 'NO_APPOINTMENT_NEEDED'
 
   @Expose()
   @ValidateIf(o => o.appointmentPersonType === 'SPECIFIC_PERSON')
@@ -24,6 +24,7 @@ class LicenceToSubmit {
   appointmentTelephoneNumber: string
 
   @Expose()
+  @ValidateIf(o => o.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED')
   @IsNotEmpty({ message: "Select 'Change' to go back and add appointment date and time" })
   appointmentTimeType: AppointmentTimeType
 
