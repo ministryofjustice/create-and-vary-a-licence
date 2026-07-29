@@ -1518,8 +1518,6 @@ export default {
               name: 'Test Person',
               crn: 'A123456',
               nomisId: 'A1234BC',
-              comName: 'Test Staff',
-              comStaffCode: '3000',
               probationPractitioner: {
                 name: 'Test Staff',
                 staffCode: '3000',
@@ -1547,8 +1545,6 @@ export default {
       name: 'Test Person',
       crn: 'A123456',
       nomisId: 'A1234BC',
-      comName: 'Test Staff',
-      comStaffCode: '3000',
       probationPractitioner: {
         name: 'Test Staff',
         staffCode: '3000',
