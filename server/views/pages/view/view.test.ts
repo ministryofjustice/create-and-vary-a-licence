@@ -231,7 +231,7 @@ describe('View and print - single licence view', () => {
     expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
 
     // Check the initial meeting details are populated
-    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
+    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
     expect(
       $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__key').text().trim(),
     ).toBe('Does this person need an initial appointment?')
