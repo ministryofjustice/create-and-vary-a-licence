@@ -9,10 +9,12 @@
     {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
 
     {% set addressPath = 'manual-address-entry' if (licence.licenceAppointmentAddress and licence.licenceAppointmentAddress.source == 'MANUAL') else 'initial-meeting-place' %}
+    {% set appointmentNeeded = licence.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' %}
+
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
-            <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">Initial appointment details</h2>
+            <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">Community probation team contact details</h2>
         </div>
     </div>
     {% if contactForChangeText %}
@@ -23,6 +25,20 @@
         attributes: { id: 'induction-meeting-details' },
         classes: 'govuk-!-margin-bottom-9',
         rows: [
+            {
+                key: { text: "Does this person need an initial appointment?" },
+                value: { text: "Yes" if appointmentNeeded else "No" },
+                actions: {
+                    items: [
+                        {
+                            href: baseURL + "/initial-meeting-name" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "name",
+                            attributes: { "id": "appointmentPersonType", "data-qa": "appointment-change-link" }
+                        }
+                    ]
+                } if isEditable
+            },
             {
                 classes: 'govuk-summary-list__row--error' if (validationErrors | findError('appointmentPerson') or validationErrors | findError('appointmentPersonType')),
                 key: { text: "Name" },
@@ -36,7 +52,7 @@
                             attributes: { "id": "appointmentPersonType", "data-qa": "person-change-link" }
                         }
                     ]
-                } if isEditable
+                } if isEditable and appointmentNeeded
             },
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
@@ -45,7 +61,7 @@
                 actions: {
                     items: [
                         {
-                            href: baseURL + "/" + addressPath + routeAppend,
+                            href: baseURL + "/" + ("licence-contact-address" if not appointmentNeeded else addressPath) + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "address",
                             attributes: { "id": "appointmentAddress", "data-qa": "address-change-link" }
@@ -60,7 +76,7 @@
                 actions: {
                     items: [
                         {
-                            href: baseURL + "/initial-meeting-contact" + routeAppend,
+                            href: baseURL + ('/initial-meeting-contact' if appointmentNeeded else '/licence-contact-number') + routeAppend,
                             text: "Change",
                             visuallyHiddenText: "telephone",
                             attributes: { "id": "appointmentTelephoneNumber", "data-qa": "telephone-change-link" }
@@ -75,7 +91,7 @@
                 actions: {
                 items: [
                     {
-                        href: baseURL + "/initial-meeting-contact" + routeAppend,
+                        href: baseURL + ("/initial-meeting-contact" if appointmentNeeded else "/licence-contact-number") + routeAppend,
                         text: "Change",
                         visuallyHiddenText: "alternative telephone",
                         attributes: { "id": "appointmentAlternativeTelephoneNumber",  "data-qa": "alternative-telephone-change-link" }
@@ -97,7 +113,7 @@
                         }
                     ]
                 } if isEditable
-            }if licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME',
+            } if licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME' and appointmentNeeded,
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Date" },
@@ -112,7 +128,7 @@
                         }
                     ]
                 } if isEditable
-            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME',
+            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' and appointmentNeeded,
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Time" },
@@ -127,7 +143,7 @@
                         }
                     ]
                 } if isEditable
-            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME'
+            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' and appointmentNeeded
         ]
     }) }}
 {% endmacro %}

@@ -25,8 +25,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -203,8 +201,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -253,8 +249,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: null,
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Not allocated',
             staffCode: null,
@@ -300,8 +294,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: null,
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Not allocated',
             staffCode: '3000',
@@ -334,8 +326,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: null,
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Not allocated',
             staffCode: '3000',
@@ -368,8 +358,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -403,8 +391,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -438,8 +424,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -473,8 +457,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -508,8 +490,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -542,8 +522,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -576,8 +554,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -615,8 +591,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -654,8 +628,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -695,8 +667,6 @@ describe('View Probation Search Results', () => {
           name: 'Test Person',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',
@@ -736,8 +706,6 @@ describe('View Probation Search Results', () => {
     ].map((o, idx) => ({
       name: `Offender ${idx}`,
       crn: 'CRN',
-      comName: 'Bob',
-      comStaffCode: '123',
       probationPractitioner: {
         name: 'Bob',
         staffCode: '123',
@@ -777,8 +745,6 @@ describe('View Probation Search Results', () => {
     ].map((o, idx) => ({
       name: `Offender ${idx}`,
       crn: 'CRN',
-      comName: 'Bob',
-      comStaffCode: '123',
       probationPractitioner: {
         name: 'Bob',
         staffCode: '123',
@@ -830,7 +796,7 @@ describe('View Probation Search Results', () => {
     expect($('.govuk-tabs__list a').text()).toContain('People on probation (2 results)')
   })
 
-  it('should render offender name link when licence is TIMED_OUT and comName is missing, kind is not Time served or on prisoner is not on probation', () => {
+  it('should render offender name link when licence is TIMED_OUT and probation practitioner name is missing, kind is not Time served or on prisoner is not on probation', () => {
     // Given
     const peopleOnProbation = [{}]
 
@@ -1048,8 +1014,6 @@ describe('View Probation Search Results', () => {
           kind,
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: '3000',

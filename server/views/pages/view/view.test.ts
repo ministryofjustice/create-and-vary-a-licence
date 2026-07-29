@@ -3,10 +3,12 @@ import fs from 'fs'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import config from '../../../config'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/view/view.njk').toString())
 
 describe('View and print - single licence view', () => {
+  config.finalThirdEnabled = true
   const licence = {
     id: 1,
     kind: 'CRD',
@@ -115,11 +117,16 @@ describe('View and print - single licence view', () => {
       ],
     })
 
-    // Check the appropriate title is used
     expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
 
     // Check the initial meeting details are populated
-    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
+    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(7)
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__key').text().trim(),
+    ).toBe('Does this person need an initial appointment?')
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__value').text().trim(),
+    ).toBe('Yes')
 
     // Check the additional conditions count
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(2)
@@ -170,7 +177,118 @@ describe('View and print - single licence view', () => {
       appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
     })
     // Check the initial meeting details are populated
-    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
+    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
+  })
+
+  it('should display a single licence to print when no appointment needed', () => {
+    const $ = render({
+      licence: {
+        ...licence,
+        appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+      },
+      additionalConditions: [
+        [
+          {
+            code: 'condition1',
+            category: 'Category 1',
+            expandedText: 'Template 1',
+            data: [
+              {
+                field: 'field1',
+                value: 'Data 1',
+                contributesToLicence: true,
+              },
+            ],
+          },
+        ],
+        [
+          {
+            code: 'condition2',
+            category: 'Category 2',
+            expandedText: 'Template 2',
+            data: [
+              {
+                field: 'field2',
+                value: 'Data 2A',
+                contributesToLicence: true,
+              },
+              {
+                field: 'field2',
+                value: 'Data 2B',
+                contributesToLicence: true,
+              },
+              {
+                field: 'field3',
+                value: 'Data 2C',
+                contributesToLicence: false,
+              },
+            ],
+          },
+        ],
+      ],
+    })
+
+    expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
+
+    // Check the initial meeting details are populated
+    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__key').text().trim(),
+    ).toBe('Does this person need an initial appointment?')
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__value').text().trim(),
+    ).toBe('No')
+
+    // Check the additional conditions count
+    expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(2)
+
+    // Check the actual conditions
+    expect($('#additionalLicenceConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
+    expect($('#additionalLicenceConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe(
+      'Template 1',
+    )
+    expect($('#additionalLicenceConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe(
+      'Data 1',
+    )
+
+    expect($('#additionalLicenceConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
+    expect($('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
+      'Template 2',
+    )
+    expect(
+      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim(),
+    ).toBe('Data 2A, Data 2B')
+
+    // Check contributesToLicence filters out false values from rendering
+    expect(
+      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim(),
+    ).not.toBe('Data 2C')
+
+    // Check the additional pss conditions are rendered correctly
+    expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(1)
+
+    // Check the actual PSS requirement
+    expect($('#additionalPssConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
+    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe('Template 1')
+    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
+
+    // Check the bespoke conditions are rendered correctly using the macro for them
+    expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)
+
+    // Check the actual bespoke conditions
+    expect($('#bespoke-conditions-details > div:nth-child(1) > dd').text().trim()).toBe('Bespoke condition 1')
+    expect($('#bespoke-conditions-details > div:nth-child(2) > dd').text().trim()).toBe('Bespoke condition 2')
+
+    // Check the existence of the print and return to case list buttons
+    expect($('[data-qa="print-licence"]').length).toBe(1)
+    expect($('[data-qa="return-to-view-list"]').length).toBe(1)
+
+    const $1 = render({
+      ...licence,
+      appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
+    })
+    // Check the initial meeting details are populated
+    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
   })
 
   it('Print buttons are not visible when licence is not approved or active', () => {
@@ -277,6 +395,7 @@ describe('View and print - single licence view', () => {
 })
 
 describe('View and print - single standard licence view', () => {
+  config.finalThirdEnabled = true
   const licence = {
     id: 1,
     kind: 'HARD_STOP',
@@ -389,7 +508,13 @@ describe('View and print - single standard licence view', () => {
     expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
 
     // Check the initial meeting details are populated
-    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
+    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(7)
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__key').text().trim(),
+    ).toBe('Does this person need an initial appointment?')
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__value').text().trim(),
+    ).toBe('Yes')
 
     // Check the additional conditions count
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(0)
@@ -418,7 +543,97 @@ describe('View and print - single standard licence view', () => {
       appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
     })
     // Check the initial meeting details are populated
-    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
+    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
+  })
+
+  it('should display a single licence to print when no appointment needed', () => {
+    const $ = render({
+      licence: {
+        ...licence,
+        appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+      },
+      additionalConditions: [
+        [
+          {
+            code: 'condition1',
+            category: 'Category 1',
+            expandedText: 'Template 1',
+            data: [
+              {
+                field: 'field1',
+                value: 'Data 1',
+                contributesToLicence: true,
+              },
+            ],
+          },
+        ],
+        [
+          {
+            code: 'condition2',
+            category: 'Category 2',
+            expandedText: 'Template 2',
+            data: [
+              {
+                field: 'field2',
+                value: 'Data 2A',
+                contributesToLicence: true,
+              },
+              {
+                field: 'field2',
+                value: 'Data 2B',
+                contributesToLicence: true,
+              },
+              {
+                field: 'field3',
+                value: 'Data 2C',
+                contributesToLicence: false,
+              },
+            ],
+          },
+        ],
+      ],
+    })
+
+    // Check the appropriate title is used
+    expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
+
+    // Check the initial meeting details are populated
+    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__key').text().trim(),
+    ).toBe('Does this person need an initial appointment?')
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__value').text().trim(),
+    ).toBe('No')
+
+    // Check the additional conditions count
+    expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(0)
+
+    // Check the bespoke conditions count
+    expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(0)
+
+    // Check the licence conditions title
+    expect($('h2').text()).toContain('Licence conditions')
+
+    expect($('p').text()).toContain('By default, the licence will automatically contain the following restrictions:')
+
+    // Check the licence conditions
+    expect($('ul.standard-conditions li:nth-child(1)').text().trim()).toBe('standard conditions')
+    expect($('ul.standard-conditions li:nth-child(2)').text().trim()).toBe('the following additional condition:')
+    expect($('.govuk-inset-text').text().trim()).toBe(
+      'Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer.',
+    )
+
+    // Check the existence of the print and return to case list buttons
+    expect($('[data-qa="print-licence"]').length).toBe(1)
+    expect($('[data-qa="return-to-view-list"]').length).toBe(1)
+
+    const $1 = render({
+      ...licence,
+      appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
+    })
+
+    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
   })
 
   it('Print buttons are not visible when licence is not approved or active', () => {
