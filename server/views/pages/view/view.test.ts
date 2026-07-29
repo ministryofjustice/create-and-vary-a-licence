@@ -55,6 +55,7 @@ describe('View and print - single licence view', () => {
         ],
       },
     ],
+    responsibleComFullName: 'COM',
     additionalPssConditions: [
       {
         code: 'condition1',
@@ -75,6 +76,7 @@ describe('View and print - single licence view', () => {
   it('should display a single licence to print', () => {
     const $ = render({
       licence,
+      isEditableByPrison: true,
       additionalConditions: [
         [
           {
@@ -127,6 +129,11 @@ describe('View and print - single licence view', () => {
     expect(
       $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__value').text().trim(),
     ).toBe('Yes')
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(2) .govuk-summary-list__actions')
+        .text()
+        .trim(),
+    ).toBe('Change name')
 
     // Check the additional conditions count
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(2)
@@ -186,6 +193,7 @@ describe('View and print - single licence view', () => {
         ...licence,
         appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
       },
+      isEditableByPrison: true,
       additionalConditions: [
         [
           {
@@ -238,6 +246,11 @@ describe('View and print - single licence view', () => {
     expect(
       $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__value').text().trim(),
     ).toBe('No')
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(2) .govuk-summary-list__actions')
+        .text()
+        .trim(),
+    ).toBe('')
 
     // Check the additional conditions count
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(2)
@@ -406,6 +419,7 @@ describe('View and print - single standard licence view', () => {
     appointmentTimeType: 'SPECIFIC_DATE_TIME',
     appointmentPerson: 'Jack Frost',
     appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
+    responsibleComFullName: 'COM',
     additionalLicenceConditions: [
       {
         code: 'condition1',
@@ -462,6 +476,7 @@ describe('View and print - single standard licence view', () => {
   it('should display a single licence to print', () => {
     const $ = render({
       licence,
+      isEditableByPrison: true,
       additionalConditions: [
         [
           {
@@ -515,6 +530,11 @@ describe('View and print - single standard licence view', () => {
     expect(
       $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__value').text().trim(),
     ).toBe('Yes')
+    expect(
+      $('#induction-meeting-details > .govuk-summary-list__row:nth-child(2) .govuk-summary-list__actions')
+        .text()
+        .trim(),
+    ).toBe('Change name')
 
     // Check the additional conditions count
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(0)
@@ -552,6 +572,7 @@ describe('View and print - single standard licence view', () => {
         ...licence,
         appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
       },
+      isEditableByPrison: true,
       additionalConditions: [
         [
           {
@@ -598,7 +619,7 @@ describe('View and print - single standard licence view', () => {
     expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
 
     // Check the initial meeting details are populated
-    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
+    expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(7)
     expect(
       $('#induction-meeting-details > .govuk-summary-list__row:nth-child(1) .govuk-summary-list__key').text().trim(),
     ).toBe('Does this person need an initial appointment?')
