@@ -55,6 +55,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingContact', {
           continueOrSaveLabel: 'Continue',
           edit: undefined,
+          noAppointmentNeeded: false,
         })
       })
 
@@ -70,6 +71,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingContact', {
           continueOrSaveLabel: 'Continue',
           edit: 'true',
+          noAppointmentNeeded: false,
         })
       })
 
@@ -84,6 +86,18 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingContact', {
           continueOrSaveLabel: 'Save',
           edit: undefined,
+          noAppointmentNeeded: false,
+        })
+      })
+
+      it('should render view when no appointment needed has been selected', async () => {
+        const handler = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingContact', {
+          continueOrSaveLabel: 'Continue',
+          edit: undefined,
+          noAppointmentNeeded: true,
         })
       })
     })
@@ -134,6 +148,13 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
 
         // Then
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
+      })
+
+      it('should redirect to check your answers if no appointment needed has been selected', async () => {
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        const handler = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
+        await handler.POST(req, res)
+        expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
       })
     })
   })
