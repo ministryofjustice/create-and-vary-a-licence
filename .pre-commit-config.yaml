@@ -6,9 +6,12 @@
 
 repos:
   - repo: https://github.com/ministryofjustice/devsecops-hooks
-    rev: v1.3.0
+    rev: v2.0.2
     hooks:
       - id: baseline
+        env:
+          GITLEAKS_CONFIGURATION_FILE: ./.gitleaks/config.toml
+          GITLEAKS_IGNORE_FILE: ./.gitleaks/.gitleaksignore
   - repo: local
     hooks:
       - id: lint
@@ -32,3 +35,10 @@ repos:
       - id: check-json
       - id: check-yaml
       - id: check-merge-conflict
+
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    cooldown:
+      default-days: 7
+    schedule:
+      interval: "weekly"

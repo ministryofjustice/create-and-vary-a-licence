@@ -574,6 +574,22 @@ describe('Create a Licence Views - Check Answers', () => {
     expect(secondRow.eq(1).hasClass('white-space-nowrap')).toBe(true)
   })
 
+  it('When no appointment is needed the change links redirect to the correct page', () => {
+    const $ = render({
+      licence: { ...licence, appointmentPersonType: 'NO_APPOINTMENT_NEEDED' },
+      statusCode: 'IN_PROGRESS',
+      canEditInitialAppt: true,
+      isInHardStopPeriod: false,
+    })
+    expect($('.govuk-summary-list__key').first().text().trim()).toEqual('Does this person need an initial appointment?')
+    expect($('.govuk-summary-list__value').first().text().trim()).toEqual('No')
+
+    const addressLink = $('[data-qa="address-change-link"]')
+    expect(addressLink.attr('href')).toBe('/licence/create/id/1/licence-contact-address?fromReview=true') // destination
+    const telephoneLink = $('[data-qa="telephone-change-link"]')
+    expect(telephoneLink.attr('href')).toBe('/licence/create/id/1/licence-contact-number?fromReview=true') // destination
+  })
+
   it('should not show the curfew address change link for HDC licences that are not variations', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC', allCurfewTimesEqual: true },
