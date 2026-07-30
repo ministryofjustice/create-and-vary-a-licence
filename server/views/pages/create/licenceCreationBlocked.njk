@@ -4,16 +4,16 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set pageTitle = applicationName + " - Create a licence - You cannot create this person's licence yet" %}
-{% set pageId = "create-from-27-july-page" %}
+{% set pageId = "licence-creation-blocked-page" %}
 {% set backLinkHref = "/" %}
 
 {% block content %}
     <div class="govuk-grid-row govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">You cannot create this person's licence yet</h1>
-        <p class="govuk-body">You cannot currently create a licence for anyone being released on or after 2 September 2026.</p>
+        <p class="govuk-body">You cannot currently create a licence for anyone being released on or after 1 October 2026.</p>
         <p class="govuk-body">This is because the implementation of the progression model has been paused.</p>
         <h2 class="govuk-heading-m">What happens next</h2>
-        <p class="govuk-body">As soon as you can create licences for people being released on or after 2 September, we will display a banner on the screen you see when you first enter this service.</p>
+        <p class="govuk-body">As soon as you can create licences for people being released on or after 1 October, we will display a banner on the screen you see when you first enter this service.</p>
 
         <div class="govuk-button-group" id="button-group">
             {{ govukButton({
