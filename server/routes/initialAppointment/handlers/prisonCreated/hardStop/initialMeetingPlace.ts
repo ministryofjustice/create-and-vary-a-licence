@@ -14,7 +14,6 @@ export default class InitialMeetingPlaceRoutes {
     private readonly licenceService: LicenceService,
     private readonly addressService: AddressService,
     private readonly path: PathType,
-    private readonly noAppointmentNeeded: boolean = false,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

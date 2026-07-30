@@ -240,5 +240,16 @@ describe('InitialMeetingPlaceRoutes', () => {
       expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
       expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
     })
+
+    it('should redirect to licence contact number page if noAppointmentNeeded is true', async () => {
+      const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
+      res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+      await handler.POST(req as Request, res as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/time-served/create/id/${req.params.licenceId}/licence-contact-number`,
+      )
+    })
   })
 })

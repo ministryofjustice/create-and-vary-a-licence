@@ -84,7 +84,7 @@ export default class InitialMeetingPlaceRoutes {
       return getTimeServedEditPath(licence)
     }
     if (noAppointmentNeeded) {
-      return `/licence/time-served/create/id/${licence.id}/licence-contact-address`
+      return `/licence/time-served/create/id/${licence.id}/licence-contact-number`
     }
 
     return `/licence/time-served/create/id/${licence.id}/initial-meeting-contact`
