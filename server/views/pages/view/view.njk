@@ -73,7 +73,7 @@
                 {% endif %}
 
                 {% if prisonKinds.includes(licence.kind) %}
-                    {{ prisonCreatedInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser) }}
+                    {{ prisonCreatedInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser, noAppointmentNeeded) }}
                 {% else %}
                     {{ inductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
                 {% endif %}

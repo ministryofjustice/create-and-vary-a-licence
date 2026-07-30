@@ -40,6 +40,11 @@ export default class InitialMeetingNameRoutes {
     if (PathType.EDIT === this.path) {
       return res.redirect(getTimeServedEditPath(licence))
     }
+
+    if (req.body.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
+      return res.redirect(`/licence/time-served/create/id/${licenceId}/licence-contact-address`)
+    }
+
     return res.redirect(`/licence/time-served/create/id/${licence.id}/initial-meeting-place`)
   }
 }

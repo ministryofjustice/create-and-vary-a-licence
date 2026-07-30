@@ -125,6 +125,16 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         await handler.POST(req, res)
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
       })
+
+      it('should redirect to licence contact address page if no appointment needed', async () => {
+        handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+        req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.POST(req, res)
+        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', req.body, {
+          username: 'joebloggs',
+        })
+        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/licence-contact-address')
+      })
     })
   })
 })

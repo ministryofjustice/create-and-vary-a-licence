@@ -28,6 +28,7 @@ describe('Route - view and approve a licence', () => {
     comStaffId: 123,
     kind: LicenceKind.CRD,
     isInHardStopPeriod: false,
+    appointmentPersonType: 'DUTY_OFFICER',
   } as Licence
 
   const user = {
@@ -64,6 +65,8 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         isEditableByPrison: false,
         isPrisonUser: true,
+        noAppointmentNeeded: false,
+        initialApptUpdatedMessage: undefined,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -84,6 +87,8 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         isEditableByPrison: false,
         isPrisonUser: true,
+        noAppointmentNeeded: false,
+        initialApptUpdatedMessage: undefined,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -126,6 +131,8 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         isEditableByPrison: false,
         isPrisonUser: true,
+        noAppointmentNeeded: false,
+        initialApptUpdatedMessage: undefined,
         warningMessage:
           "This is the last approved version of this person's licence.<br />Another version was started on 15 December 2022.<br />" +
           'You can print the most recent version once it has been approved.',
@@ -161,6 +168,8 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         isEditableByPrison: false,
         isPrisonUser: true,
+        noAppointmentNeeded: false,
+        initialApptUpdatedMessage: undefined,
         warningMessage:
           'This is the most recent version of this licence that was submitted on 15 June 2012.<br />' +
           'Once this version is approved, you can print it.<br /><a href="/licence/view/id/1/pdf-print" target="_blank">' +
@@ -191,7 +200,11 @@ describe('Route - view and approve a licence', () => {
           redirect: jest.fn(),
           locals: {
             user,
-            licence: { ...licence, statusCode: LicenceStatus.APPROVED, isInHardStopPeriod: true },
+            licence: {
+              ...licence,
+              statusCode: LicenceStatus.APPROVED,
+              isInHardStopPeriod: true,
+            },
           },
         } as unknown as Response
 
@@ -201,6 +214,8 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: true,
           isPrisonUser: true,
+          noAppointmentNeeded: false,
+          initialApptUpdatedMessage: undefined,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -221,6 +236,8 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: false,
           isPrisonUser: true,
+          noAppointmentNeeded: false,
+          initialApptUpdatedMessage: undefined,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -241,6 +258,8 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: false,
           isPrisonUser: true,
+          noAppointmentNeeded: false,
+          initialApptUpdatedMessage: undefined,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -289,6 +308,8 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: true,
           isPrisonUser: true,
+          noAppointmentNeeded: false,
+          initialApptUpdatedMessage: undefined,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -299,7 +320,11 @@ describe('Route - view and approve a licence', () => {
           redirect: jest.fn(),
           locals: {
             user,
-            licence: { ...licence, kind: LicenceKind.TIME_SERVED, isInHardStopPeriod: false },
+            licence: {
+              ...licence,
+              kind: LicenceKind.TIME_SERVED,
+              isInHardStopPeriod: false,
+            },
           },
         } as unknown as Response
 
@@ -309,6 +334,8 @@ describe('Route - view and approve a licence', () => {
           additionalConditions: [],
           isEditableByPrison: false,
           isPrisonUser: true,
+          noAppointmentNeeded: false,
+          initialApptUpdatedMessage: undefined,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -319,7 +346,11 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username, deliusStaffIdentifier: 123, authSource: 'something_else' },
+          user: {
+            username,
+            deliusStaffIdentifier: 123,
+            authSource: 'something_else',
+          },
           licence,
         },
       } as unknown as Response
@@ -330,6 +361,8 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         isEditableByPrison: false,
         isPrisonUser: false,
+        noAppointmentNeeded: false,
+        initialApptUpdatedMessage: undefined,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -367,7 +400,9 @@ describe('Route - view and approve a licence', () => {
 
       await handler.POST(req, res)
 
-      expect(licenceService.submitLicence).toHaveBeenCalledWith(1, { username: 'joebloggs' })
+      expect(licenceService.submitLicence).toHaveBeenCalledWith(1, {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/confirmation')
     })
 
