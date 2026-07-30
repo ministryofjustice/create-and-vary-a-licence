@@ -38,6 +38,8 @@ export default class InitialMeetingNameRoutes {
 
     if (this.path === PathType.EDIT) {
       res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
+    } else if (req.body.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
+      res.redirect(`/licence/hard-stop/create/id/${licenceId}/licence-contact-address`)
     } else {
       res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-place`)
     }
