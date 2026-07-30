@@ -35,9 +35,10 @@ export default class SelectAddressRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
     const basePath = `/licence/create/id/${licenceId}`
     const { isPreferredAddress } = req.body
+    const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
 
     const { uprn, firstLine, secondLine, townOrCity, county, postcode } = JSON.parse(req.body?.selectedAddress)
 
@@ -58,6 +59,8 @@ export default class SelectAddressRoutes {
       res.redirect(`/licence/view/id/${licenceId}/show`)
     } else if (req.query?.fromReview) {
       res.redirect(`${basePath}/check-your-answers`)
+    } else if (noAppointmentNeeded) {
+      res.redirect(`${basePath}/licence-contact-number`)
     } else {
       res.redirect(`${basePath}/initial-meeting-contact`)
     }

@@ -21,8 +21,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         name: 'Test Person',
         crn: 'A123456',
         nomisId: 'A1234BC',
-        comName: 'Test Staff',
-        comStaffCode: deliusStaffIdentifier.toString(),
         probationPractitioner: {
           name: 'Test Staff',
           staffCode: deliusStaffIdentifier.toString(),
@@ -44,8 +42,6 @@ describe('Route Handlers - Search - Probation Search', () => {
       name: 'Test Person',
       crn: 'A123456',
       nomisId: 'A1234BC',
-      comName: 'Test Staff',
-      comStaffCode: deliusStaffIdentifier.toString(),
       probationPractitioner: {
         name: 'Test Staff',
         staffCode: deliusStaffIdentifier.toString(),
@@ -225,8 +221,6 @@ describe('Route Handlers - Search - Probation Search', () => {
           name: 'Test Person1',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: deliusStaffIdentifier.toString(),
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: deliusStaffIdentifier.toString(),
@@ -247,8 +241,6 @@ describe('Route Handlers - Search - Probation Search', () => {
           name: 'Test Person2',
           crn: 'A123457',
           nomisId: 'A1234BD',
-          comName: 'Test Staff',
-          comStaffCode: deliusStaffIdentifier.toString(),
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: deliusStaffIdentifier.toString(),
@@ -269,8 +261,6 @@ describe('Route Handlers - Search - Probation Search', () => {
           name: 'Test Person3',
           crn: 'A123458',
           nomisId: 'A1234BE',
-          comName: 'Test Staff',
-          comStaffCode: deliusStaffIdentifier.toString(),
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: deliusStaffIdentifier.toString(),
@@ -323,8 +313,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         name: 'Access restricted on NDelius',
         crn: 'Z999999',
         nomisId: '',
-        comName: 'Restricted',
-        comStaffCode: '',
         probationPractitioner: {
           name: 'Restricted',
           staffCode: 'Restricted',
@@ -347,8 +335,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         name: 'Test Person',
         crn: 'A111111',
         nomisId: 'A1234BC',
-        comName: 'Test Staff',
-        comStaffCode: '3000',
         probationPractitioner: {
           name: 'Test Staff',
           staffCode: '3000',
@@ -400,8 +386,6 @@ describe('Route Handlers - Search - Probation Search', () => {
       const baseCase = {
         name: 'Access restricted on NDelius',
         nomisId: '',
-        comName: 'Restricted',
-        comStaffCode: '',
         probationPractitioner: {
           name: 'Restricted',
           staffCode: 'Restricted',
@@ -458,8 +442,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         name: 'Access restricted on NDelius',
         crn: 'Z999999',
         nomisId: '',
-        comName: 'Restricted',
-        comStaffCode: '',
         probationPractitioner: {
           name: 'Restricted',
           staffCode: 'Restricted',
@@ -482,8 +464,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         name: 'Test Person',
         crn: 'A111111',
         nomisId: 'A1234BC',
-        comName: 'Test Staff',
-        comStaffCode: '3000',
         probationPractitioner: {
           name: 'Test Staff',
           staffCode: '3000',
@@ -532,8 +512,6 @@ describe('Route Handlers - Search - Probation Search', () => {
       const baseCase = {
         name: 'Access restricted on NDelius',
         nomisId: '',
-        comName: 'Restricted',
-        comStaffCode: '',
         probationPractitioner: {
           name: 'Restricted',
           staffCode: 'Restricted',
@@ -587,8 +565,6 @@ describe('Route Handlers - Search - Probation Search', () => {
           name: 'Test Person1',
           crn: 'A123456',
           nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: deliusStaffIdentifier.toString(),
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: deliusStaffIdentifier.toString(),
@@ -609,8 +585,6 @@ describe('Route Handlers - Search - Probation Search', () => {
           name: 'Test Person2',
           crn: 'A123457',
           nomisId: 'A1234BD',
-          comName: 'Test Staff',
-          comStaffCode: deliusStaffIdentifier.toString(),
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: deliusStaffIdentifier.toString(),
@@ -631,8 +605,6 @@ describe('Route Handlers - Search - Probation Search', () => {
           name: 'Test Person3',
           crn: 'A123458',
           nomisId: 'A1234BE',
-          comName: 'Test Staff',
-          comStaffCode: deliusStaffIdentifier.toString(),
           probationPractitioner: {
             name: 'Test Staff',
             staffCode: deliusStaffIdentifier.toString(),
@@ -674,8 +646,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         name: 'Access restricted on NDelius',
         crn: 'Z999999',
         nomisId: '',
-        comName: 'Restricted',
-        comStaffCode: '',
         probationPractitioner: {
           name: 'Restricted',
           staffCode: 'Restricted',
@@ -698,8 +668,6 @@ describe('Route Handlers - Search - Probation Search', () => {
         name: 'Test Person',
         crn: 'A111111',
         nomisId: 'A1234BC',
-        comName: 'Test Staff',
-        comStaffCode: '3000',
         probationPractitioner: {
           name: 'Test Staff',
           staffCode: '3000',

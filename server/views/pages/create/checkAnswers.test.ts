@@ -4,10 +4,12 @@ import { addDays } from 'date-fns'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import config from '../../../config'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/create/checkAnswers.njk').toString())
 
 describe('Create a Licence Views - Check Answers', () => {
+  config.finalThirdEnabled = true
   const licence = {
     id: 1,
     typeCode: 'AP_PSS',
@@ -247,7 +249,7 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: false,
     })
 
-    expect($('.govuk-summary-list__actions').length).toBe(10)
+    expect($('.govuk-summary-list__actions').length).toBe(11)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
 
     const $2 = render({
@@ -299,7 +301,7 @@ describe('Create a Licence Views - Check Answers', () => {
       isInHardStopPeriod: false,
     })
 
-    expect($2('.govuk-summary-list__actions').length).toBe(9)
+    expect($2('.govuk-summary-list__actions').length).toBe(10)
     expect($2('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 
@@ -570,6 +572,22 @@ describe('Create a Licence Views - Check Answers', () => {
     expect(secondRow.eq(1).text().trim()).toBe('6am on Wednesday')
     expect(secondRow.eq(0).hasClass('white-space-nowrap')).toBe(true)
     expect(secondRow.eq(1).hasClass('white-space-nowrap')).toBe(true)
+  })
+
+  it('When no appointment is needed the change links redirect to the correct page', () => {
+    const $ = render({
+      licence: { ...licence, appointmentPersonType: 'NO_APPOINTMENT_NEEDED' },
+      statusCode: 'IN_PROGRESS',
+      canEditInitialAppt: true,
+      isInHardStopPeriod: false,
+    })
+    expect($('.govuk-summary-list__key').first().text().trim()).toEqual('Does this person need an initial appointment?')
+    expect($('.govuk-summary-list__value').first().text().trim()).toEqual('No')
+
+    const addressLink = $('[data-qa="address-change-link"]')
+    expect(addressLink.attr('href')).toBe('/licence/create/id/1/licence-contact-address?fromReview=true') // destination
+    const telephoneLink = $('[data-qa="telephone-change-link"]')
+    expect(telephoneLink.attr('href')).toBe('/licence/create/id/1/licence-contact-number?fromReview=true') // destination
   })
 
   it('should not show the curfew address change link for HDC licences that are not variations', () => {
