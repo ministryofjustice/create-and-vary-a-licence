@@ -58,8 +58,10 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET)
+    get('/create/id/:licenceId/licence-contact-address', controller.GET)
     const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, addressType)
+    post('/create/id/:licenceId/licence-contact-address', controller.POST, addressType)
   }
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
@@ -98,7 +100,9 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-contact', controller.GET)
+    get('/create/id/:licenceId/licence-contact-number', controller.GET)
     post('/create/id/:licenceId/initial-meeting-contact', controller.POST, TelephoneNumbers)
+    post('/create/id/:licenceId/licence-contact-number', controller.POST, TelephoneNumbers)
   }
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)

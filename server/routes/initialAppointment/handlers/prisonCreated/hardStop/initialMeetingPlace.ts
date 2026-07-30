@@ -14,6 +14,7 @@ export default class InitialMeetingPlaceRoutes {
     private readonly licenceService: LicenceService,
     private readonly addressService: AddressService,
     private readonly path: PathType,
+    private readonly noAppointmentNeeded: boolean = false,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -22,6 +23,7 @@ export default class InitialMeetingPlaceRoutes {
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/hard-stop/${action}/id/${licenceId}`
     const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
+    console.log('noAppointmentNeeded', noAppointmentNeeded)
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
     let preferredAddresses: AddressResponse[] = []
@@ -45,6 +47,7 @@ export default class InitialMeetingPlaceRoutes {
     const { searchQuery, preferredAddress } = req.body
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/hard-stop/${action}/id/${licenceId}`
+    const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
 
     if (config.postcodeLookupEnabled) {
       if (preferredAddress) {
@@ -57,7 +60,7 @@ export default class InitialMeetingPlaceRoutes {
       flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
     }
 
-    return res.redirect(this.getRedirectPath(licenceId))
+    return res.redirect(this.getRedirectPath(licenceId, noAppointmentNeeded))
   }
 
   private async handlePreferredAddress(licenceId: string, preferredAddressJson: string, user: User): Promise<void> {
@@ -77,11 +80,13 @@ export default class InitialMeetingPlaceRoutes {
     await this.addressService.addAppointmentAddress(licenceId, appointmentAddress, user)
   }
 
-  private getRedirectPath(licenceId: string): string {
+  private getRedirectPath(licenceId: string, noAppointmentNeeded: boolean): string {
     if (this.path === PathType.EDIT) {
       return `/licence/hard-stop/id/${licenceId}/check-your-answers`
     }
-
+    if (noAppointmentNeeded) {
+      return `/licence/hard-stop/create/id/${licenceId}/licence-contact-number`
+    }
     return `/licence/hard-stop/create/id/${licenceId}/initial-meeting-contact`
   }
 }
