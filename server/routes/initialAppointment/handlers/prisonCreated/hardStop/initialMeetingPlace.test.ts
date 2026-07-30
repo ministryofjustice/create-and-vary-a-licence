@@ -246,6 +246,17 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         )
         expect(res.redirect).toHaveBeenCalledWith(`/licence/hard-stop/id/${req.params.licenceId}/check-your-answers`)
       })
+
+      it('should redirect to licence contact number page if noAppointmentNeeded is true', async () => {
+        const handler = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/licence/hard-stop/create/id/${req.params.licenceId}/licence-contact-number`,
+        )
+      })
     })
   })
 })
