@@ -51,7 +51,7 @@ export AWS_ACCESS_KEY_ID=foo
 export AWS_SECRET_ACCESS_KEY=bar
 export SERVICE_NAME=create-and-vary-a-licence
 
-export LICENCE_CREATION_BLOCK_DATE=2027-01-01
+export LICENCE_CREATION_BLOCK_DATE=2028-01-01
 
 # Write to .env grouped by value type
 cat <<EOF > $fileToAddVars
