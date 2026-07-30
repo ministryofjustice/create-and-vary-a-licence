@@ -23,7 +23,6 @@ export default class InitialMeetingPlaceRoutes {
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/hard-stop/${action}/id/${licenceId}`
     const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
-    console.log('noAppointmentNeeded', noAppointmentNeeded)
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
     let preferredAddresses: AddressResponse[] = []
