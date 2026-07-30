@@ -14,8 +14,10 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 
+{% set updatedFromNoAppointmentRequired = initialAppointmentUpdatedFromNotRequired | length > 0%}
 {% set isApprovedOrActive = licence.statusCode in ["APPROVED", "ACTIVE"] %}
 {% set isPrintable = isApprovedOrActive %}
+{% set printDisabled = updatedFromNoAppointmentRequired %}
 {% set showHdcAlert = (licence.kind == "HDC") and (not licence.homeDetentionCurfewActualDate) %}
 {% if showHdcAlert %}
         {% set isPrintable = false %}
@@ -43,6 +45,13 @@
         {{ mojBanner({
             type: 'success',
             html: initialApptUpdatedMessage,
+            iconFallbackText: 'Success'
+        }) }}
+    {% endif %}
+    {% if updatedFromNoAppointmentRequired %}
+        {{ mojBanner({
+            type: 'success',
+            html: initialAppointmentUpdatedFromNotRequired,
             iconFallbackText: 'Success'
         }) }}
     {% endif %}
@@ -85,6 +94,7 @@
 
                 {% if prisonKinds.includes(licence.kind) %}
                     <h2 class="govuk-heading-m">Licence conditions</h2>
+                    <p>print disabled {{ printDisabled }}</p>
                     {{ immediateReleaseConditions(licence.typeCode) }}
                 {% else %}
                     {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
@@ -114,12 +124,19 @@
                         }) }}
                     {% endif %}
 
-                    {% if isPrintable %}
+                    {% if isPrintable and not updatedFromNoAppointmentRequired %}
                         {{ govukButton({
                             text: "View and print licence PDF",
                             classes: "govuk-button--primary govuk-!-margin-right-1",
                             href: '/licence/view/id/' + licence.id + '/pdf-print',
-                            attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+                            attributes: { 'data-qa': 'print-licence', 'target': "_blank" },
+                            disabled: true
+                        }) }}
+                    {% elseif isPrintable and updatedFromNoAppointmentRequired %}
+                        {{ govukButton({
+                            text: "View and print licence PDF",
+                            classes: "govuk-button--primary govuk-!-margin-right-1",
+                            disabled: true
                         }) }}
                     {% endif %}
 
