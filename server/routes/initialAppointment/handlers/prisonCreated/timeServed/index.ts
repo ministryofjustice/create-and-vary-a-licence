@@ -80,8 +80,10 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-place', controller.GET, UserType.PRISON)
+    get('/edit/id/:licenceId/licence-contact-address', controller.GET, UserType.PRISON)
     const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/edit/id/:licenceId/initial-meeting-place', controller.POST, UserType.PRISON, addressType)
+    post('/edit/id/:licenceId/licence-contact-address', controller.POST, UserType.PRISON, addressType)
   }
   {
     const controller = new SelectAddressRoutes(addressService, PathType.CREATE)
@@ -121,7 +123,9 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-contact', controller.GET, UserType.PRISON)
+    get('/edit/id/:licenceId/licence-contact-number', controller.GET, UserType.PRISON)
     post('/edit/id/:licenceId/initial-meeting-contact', controller.POST, UserType.PRISON, TelephoneNumbers)
+    post('/edit/id/:licenceId/licence-contact-number', controller.POST, UserType.PRISON, TelephoneNumbers)
   }
   {
     const controller = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)
