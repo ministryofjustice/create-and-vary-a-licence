@@ -316,7 +316,7 @@ describe('View and print - single licence view', () => {
     // Check the initial meeting details are populated
     expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
   })
-  // moj-banner moj-banner--success
+
   it('Print buttons are not visible when licence is not approved or active', () => {
     const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
 
