@@ -796,7 +796,7 @@ describe('View Probation Search Results', () => {
     expect($('.govuk-tabs__list a').text()).toContain('People on probation (2 results)')
   })
 
-  it('should render offender name link when licence is TIMED_OUT and probation practitioner name is missing, kind is not Time served or on prisoner is not on probation', () => {
+  it('should render offender name link when licence is TIMED_OUT and probation practitioner is not allocated, kind is not Time served and prisoner is not on probation', () => {
     // Given
     const peopleOnProbation = [{}]
 
