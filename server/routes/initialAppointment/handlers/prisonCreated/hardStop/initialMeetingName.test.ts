@@ -123,7 +123,14 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
 
       it('should call to generate a flash message', async () => {
         await handler.POST(req, res)
-        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
+      })
+
+      it('should generate a flash message if appointment changed from not required', async () => {
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, true)
       })
 
       it('should redirect to licence contact address page if no appointment needed', async () => {

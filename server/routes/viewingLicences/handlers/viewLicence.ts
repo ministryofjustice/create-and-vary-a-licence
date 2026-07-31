@@ -71,6 +71,7 @@ export default class ViewAndPrintLicenceRoutes {
           licence.statusCode !== LicenceStatus.ACTIVE && (isTimeServedLicence(licence) || isInHardStopPeriod(licence)),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
+        initialAppointmentUpdatedFromNotRequired: req.flash('initialAppointmentUpdatedFromNotRequired')?.[0],
         noAppointmentNeeded,
       })
     } else {
