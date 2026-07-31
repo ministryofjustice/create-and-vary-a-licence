@@ -38,6 +38,7 @@ export default class SelectAddressRoutes {
     const { licenceId } = req.params
     const { user } = res.locals
     const { isPreferredAddress } = req.body
+    const noAppointmentNeeded = res.locals.licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
 
     const { uprn, firstLine, secondLine, townOrCity, county, postcode } = JSON.parse(req.body?.selectedAddress)
 
@@ -56,6 +57,8 @@ export default class SelectAddressRoutes {
 
     if (this.path === PathType.EDIT) {
       res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
+    } else if (noAppointmentNeeded) {
+      res.redirect(`/licence/hard-stop/create/id/${licenceId}/licence-contact-number`)
     } else {
       res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-contact`)
     }
