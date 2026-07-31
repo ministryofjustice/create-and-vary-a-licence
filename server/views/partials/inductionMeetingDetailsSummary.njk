@@ -33,8 +33,9 @@
                         {
                             href: baseURL + "/initial-meeting-name" + routeAppend,
                             text: "Change",
-                            visuallyHiddenText: "name",
+                            visuallyHiddenText: "appointment",
                             attributes: { "id": "appointmentPersonType", "data-qa": "appointment-change-link" }
+
                         }
                     ]
                 } if isEditable
@@ -53,7 +54,7 @@
                         }
                     ]
                 } if isEditable and appointmentNeeded
-            },
+            } if (appointmentNeeded or licence.responsibleComFullName),
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
                 key: { text: "Address" },
