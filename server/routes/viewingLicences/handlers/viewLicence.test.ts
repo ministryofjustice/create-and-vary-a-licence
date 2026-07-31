@@ -191,6 +191,7 @@ describe('Route - view and approve a licence', () => {
       await handler.GET(req, res)
 
       expect(req.flash).toHaveBeenCalledWith('initialApptUpdated')
+      expect(req.flash).toHaveBeenCalledWith('initialAppointmentUpdatedFromNotRequired')
     })
 
     describe('when hard stop is enabled', () => {

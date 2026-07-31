@@ -187,6 +187,19 @@ describe('View and print - single licence view', () => {
     expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
   })
 
+  it('should display a banner when the appointment type has changed from no appointment needed', () => {
+    const bannerMessage = 'banner message'
+    const $ = render({
+      licence: {
+        ...licence,
+        appointmentPersonType: 'DUTY_OFFICER',
+      },
+      initialAppointmentUpdatedFromNotRequired: bannerMessage,
+    })
+
+    expect($('.moj-banner__message').text().trim()).toBe(bannerMessage)
+  })
+
   it('should display a single licence to print when no appointment needed', () => {
     const $ = render({
       licence: {
