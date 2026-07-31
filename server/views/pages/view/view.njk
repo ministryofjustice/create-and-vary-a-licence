@@ -94,7 +94,6 @@
 
                 {% if prisonKinds.includes(licence.kind) %}
                     <h2 class="govuk-heading-m">Licence conditions</h2>
-                    <p>print disabled {{ printDisabled }}</p>
                     {{ immediateReleaseConditions(licence.typeCode) }}
                 {% else %}
                     {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
