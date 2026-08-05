@@ -634,6 +634,26 @@ export default {
           },
           {
             changeType: 'REPLACED',
+            code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
+            sequence: 3,
+            previousText:
+              'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
+            dataChanges: [],
+            suggestions: [
+              {
+                code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
+                currentText:
+                  'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+              },
+              {
+                code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
+                currentText:
+                  'Allow person(s) as designated by your supervising officer to install an electronic monitoring tag on you and access to install any associated equipment in your property, and for the purpose of ensuring that equipment is functioning correctly. You must not damage or tamper with these devices and ensure that the tag is charged, and report to your supervising officer and the EM provider immediately if the tag or the associated equipment are not working correctly. This will be for the purpose of monitoring your [INSERT TYPES OF CONDITIONS TO BE ELECTRONICALLY MONITORED HERE] licence condition(s) unless otherwise authorised by your supervising officer.',
+              },
+            ],
+          },
+          {
+            changeType: 'REPLACED',
             code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
             sequence: 3,
             previousText:
@@ -643,12 +663,7 @@ export default {
               {
                 code: '52faefcf-15f0-42c5-b908-621b4a7ecdb9',
                 currentText:
-                  'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
-              },
-              {
-                code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
-                currentText:
-                  'Allow person(s) as designated by your supervising officer to install an electronic monitoring tag on you and access to install any associated equipment in your property, and for the purpose of ensuring that equipment is functioning correctly. You must not damage or tamper with these devices and ensure that the tag is charged, and report to your supervising officer and the EM provider immediately if the tag or the associated equipment are not working correctly. This will be for the purpose of monitoring your [INSERT TYPES OF CONDITIONS TO BE ELECTRONICALLY MONITORED HERE] licence condition(s) unless otherwise authorised by your supervising officer.',
+                  'You must stay at the address approved by your supervising officer between [TIME] and [TIME] each day, unless your supervising officer gives permission for you to be elsewhere during those hours. This is called a curfew.',
               },
             ],
           },
