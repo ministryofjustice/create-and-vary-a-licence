@@ -34,7 +34,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
         },
         licence: {
           id: 1,
-          licenceStartDate: '2024-01-01',
+          licenceStartDate: '01/01/2024',
         },
       },
     } as unknown as Response
