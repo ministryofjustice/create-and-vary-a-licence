@@ -6,7 +6,7 @@
 {% set pageTitle = applicationName + " - Create a licence - What is the contact phone number for the initial appointment?" %}
 {% set pageId = "appointment-contact-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-place" %}
-{% set heading = "What is the community probation practitioner's contact phone number?" if noAppointmentNeeded else "What is the contact phone number for the initial appointment?" %}
+{% set heading = "What contact phone number should be shown on the licence?" if noAppointmentNeeded else "What is the contact phone number for the initial appointment?" %}
 
 
 {% block content %}
