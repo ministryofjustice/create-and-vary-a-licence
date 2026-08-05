@@ -31,6 +31,7 @@ describe('Route - Vary - View variation', () => {
     additionalLicenceConditions: [],
     additionalPssConditions: [],
     bespokeConditions: [],
+    licenceStartDate: '2024-01-01',
   } as Licence
 
   const conversation = [] as ApprovalComment[]
