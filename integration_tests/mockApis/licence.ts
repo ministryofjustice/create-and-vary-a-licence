@@ -653,21 +653,6 @@ export default {
             ],
           },
           {
-            changeType: 'REPLACED',
-            code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
-            sequence: 3,
-            previousText:
-              'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
-            dataChanges: [],
-            suggestions: [
-              {
-                code: '52faefcf-15f0-42c5-b908-621b4a7ecdb9',
-                currentText:
-                  'You must stay at the address approved by your supervising officer between [TIME] and [TIME] each day, unless your supervising officer gives permission for you to be elsewhere during those hours. This is called a curfew.',
-              },
-            ],
-          },
-          {
             changeType: 'DELETED',
             code: '599bdcae-d545-461c-b1a9-02cb3d4ba268',
             sequence: 4,
@@ -1446,7 +1431,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           policyUpdated: false,
-          policyVersion: '4.0',
+          policyVersion: '3.0',
         },
       },
     })
@@ -1499,7 +1484,7 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         // eslint-disable-next-line camelcase
-        jsonBody: policyV4_0,
+        jsonBody: policyV3_0,
       },
     })
   },
