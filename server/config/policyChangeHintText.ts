@@ -201,6 +201,22 @@ const policyChangeHints: HintText[] = [
     ],
     bulletpoints: [],
   },
+  {
+    code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
+    fromVersions: ['1.0', '2.0', '2.1'],
+    description: [
+      'The condition has been simplified and you no longer need to say how often the curfew will be reviewed.',
+    ],
+    bulletpoints: [],
+  },
+  {
+    code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: [
+      'The condition has been simplified and you no longer need to say how often the curfew will be reviewed.',
+    ],
+    bulletpoints: [],
+  },
 ]
 
 export default policyChangeHints

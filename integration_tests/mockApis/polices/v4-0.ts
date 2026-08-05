@@ -648,7 +648,7 @@ const policy: LicencePolicyResponse = {
         requiresElectronicMonitoringResponse: false,
       },
       {
-        code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
+        code: '52faefcf-15f0-42c5-b908-621b4a7ecdb9',
         category: 'Curfew arrangement',
         text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
         tpl: 'Confine yourself to an address approved by your supervising officer between the hours of {curfewStart} and {curfewEnd} daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
@@ -1661,12 +1661,16 @@ const policy: LicencePolicyResponse = {
   },
   changeHints: [
     {
+      previousCode: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
+      replacements: ['52faefcf-15f0-42c5-b908-621b4a7ecdb9', 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4'],
+    },
+    {
       previousCode: '599bdcae-d545-461c-b1a9-02cb3d4ba268',
       replacements: ['d36a3b77-30ba-40ce-8953-83e761d3b487', '2F8A5418-C6E4-4F32-9E58-64B23550E504'],
     },
     {
-      previousCode: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
-      replacements: ['0a370862-5426-49c1-b6d4-3d074d78a81a', 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4'],
+      previousCode: '0a370862-5426-49c1-b6d4-3d074d78a81a',
+      replacements: ['52faefcf-15f0-42c5-b908-621b4a7ecdb9'],
     },
     {
       previousCode: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
