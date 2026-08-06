@@ -70,10 +70,7 @@ export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalCondit
 export default class ConditionService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
-  private async getLicencePolicy(
-    version: string = null,
-    licenceStartDate: string = null,
-  ): Promise<LicencePolicyResponse> {
+  private async getLicencePolicy(version: string = null, licenceStartDate?: string): Promise<LicencePolicyResponse> {
     let licencePolicy
     if (version) {
       licencePolicy = await this.licenceApiClient.getLicencePolicyForVersion(version)
@@ -84,7 +81,7 @@ export default class ConditionService {
     return licencePolicy
   }
 
-  async getPolicyVersion(licenceStartDate: string): Promise<string> {
+  async getPolicyVersion(licenceStartDate?: string): Promise<string> {
     return (await this.getLicencePolicy(null, licenceStartDate)).version
   }
 
