@@ -78,7 +78,7 @@ import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
 import logger from '../../logger'
-import { isVariation } from '../utils/utils'
+import { isVariation, parseCvlDate, toIsoDate } from '../utils/utils'
 import authRole from '../enumeration/authRole'
 
 export default class LicenceApiClient extends RestClient {
@@ -487,9 +487,11 @@ export default class LicenceApiClient extends RestClient {
           path: `/licence-policy/active`,
         })) as Promise<LicencePolicyResponse>
       }
+
+      const parsedDate = parseCvlDate(licenceStartDate)
       return (await this.get({
         path: `/licence-policy/active`,
-        query: { licenceStartDate },
+        query: { licenceStartDate: toIsoDate(parsedDate) },
       })) as Promise<LicencePolicyResponse>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
