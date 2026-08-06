@@ -40,7 +40,6 @@ export MANAGE_USERS_API_URL=https://manage-users-api-dev.hmpps.service.justice.g
 export DPS_URL=https://digital-dev.prison.service.justice.gov.uk
 
 export LICENCE_WATERMARK=true
-export POSTCODE_LOOKUP_ENABLED=true
 export COMMON_COMPONENTS_ENABLED=false
 export SHOW_WHATS_NEW_BANNER=false
 export HDC_ENABLED=true
@@ -79,7 +78,6 @@ cat <<EOF > $fileToAddVars
 
 # === Boolean flags ===
   LICENCE_WATERMARK=$LICENCE_WATERMARK
-  POSTCODE_LOOKUP_ENABLED=$POSTCODE_LOOKUP_ENABLED
   COMMON_COMPONENTS_ENABLED=$COMMON_COMPONENTS_ENABLED
   SHOW_WHATS_NEW_BANNER=$SHOW_WHATS_NEW_BANNER
   HDC_ENABLED=$HDC_ENABLED
