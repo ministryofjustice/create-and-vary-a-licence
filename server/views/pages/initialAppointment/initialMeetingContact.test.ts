@@ -16,9 +16,7 @@ describe('Initial meeting telephone number page', () => {
 
     it('the heading is correct when no appointment is needed', () => {
       const $ = render({ noAppointmentNeeded: true })
-      expect($('h1.govuk-heading-l').text()).toBe(
-        "What is the community probation practitioner's contact phone number?",
-      )
+      expect($('h1.govuk-heading-l').text()).toBe('What contact phone number should be shown on the licence?')
     })
   })
 })
