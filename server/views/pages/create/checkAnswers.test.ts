@@ -61,6 +61,27 @@ describe('Create a Licence Views - Check Answers', () => {
     appointmentAlternativeTelephoneNumber: '01632960902',
   } as Licence
 
+  it('should display a warning banner when appointment time details are missing', () => {
+    const $ = render({
+      licence: { ...licence, appointmentTimeType: null, appointmentTime: null },
+    })
+
+    const warningBanner = $('.moj-banner--warning')
+    expect(warningBanner.length).toBe(1)
+    expect(warningBanner.text()).toContain(
+      'You must say when the appointment is for before the licence can be printed.',
+    )
+  })
+
+  it('no warning banner when appointment time details are present', () => {
+    const $ = render({
+      licence: { ...licence, appointmentTimeType: 'IMMEDIATELY_AFTER_RELEASE' },
+    })
+
+    const warningBanner = $('.moj-banner--warning')
+    expect(warningBanner.length).toBe(0)
+  })
+
   it('should display additional licence conditions section if licence type is AP', () => {
     const $ = render({ licence: { ...licence, typeCode: 'AP' } })
     expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (0)')
