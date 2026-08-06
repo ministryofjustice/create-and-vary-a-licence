@@ -26,6 +26,11 @@ describe('ConditionService', () => {
       // eslint-disable-next-line camelcase
       expect(await conditionService.getPolicyVersion(licenceStartDate)).toEqual(policyV2_1.version)
     })
+
+    it('accepts a null licence start date', async () => {
+      // eslint-disable-next-line camelcase
+      expect(await conditionService.getPolicyVersion(null)).toEqual(policyV2_1.version)
+    })
   })
 
   describe('getAdditionalConditionByCode', () => {
