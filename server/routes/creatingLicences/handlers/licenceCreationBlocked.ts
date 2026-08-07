@@ -3,7 +3,7 @@ import moment from 'moment'
 import LicenceService from '../../../services/licenceService'
 import { convertToTitleCase } from '../../../utils/utils'
 
-export default class CreateFrom27JulyRoutes {
+export default class LicenceCreationBlockedRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -23,7 +23,7 @@ export default class CreateFrom27JulyRoutes {
 
     const backLink = req.session.returnToCase || '/licence/create/caseload'
 
-    return res.render('pages/create/createFrom27July', {
+    return res.render('pages/create/licenceCreationBlocked', {
       licence: {
         crn: deliusRecord?.crn,
         licenceStartDate,

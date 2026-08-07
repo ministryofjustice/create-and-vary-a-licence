@@ -14,11 +14,15 @@ export default class ManualAddressPostcodeLookupRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
+    const noAppointmentNeeded = res.locals.licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
+
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/time-served/${action}/id/${licenceId}`
     res.render('pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm', {
       continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
-      postcodeLookupUrl: `${basePath}/initial-meeting-place`,
+      postcodeLookupUrl: noAppointmentNeeded
+        ? `${basePath}/licence-contact-address`
+        : `${basePath}/initial-meeting-place`,
     })
   }
 
@@ -43,6 +47,9 @@ export default class ManualAddressPostcodeLookupRoutes {
 
     if (this.path === PathType.EDIT) {
       return res.redirect(getTimeServedEditPath(licence))
+    }
+    if (res.locals.licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
+      return res.redirect(`/licence/time-served/create/id/${licenceId}/licence-contact-number`)
     }
     return res.redirect(`/licence/time-served/create/id/${licenceId}/initial-meeting-contact`)
   }
