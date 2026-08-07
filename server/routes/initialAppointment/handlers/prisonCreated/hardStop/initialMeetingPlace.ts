@@ -1,10 +1,7 @@
 import { Request, Response } from 'express'
 import { stringToAddressObject } from '../../../../../utils/utils'
 import LicenceService from '../../../../../services/licenceService'
-import UserType from '../../../../../enumeration/userType'
-import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import PathType from '../../../../../enumeration/pathType'
-import config from '../../../../../config'
 import { AddAddressRequest, AddressResponse } from '../../../../../@types/licenceApiClientTypes'
 import AddressService from '../../../../../services/addressService'
 import { User } from '../../../../../@types/CvlUserDetails'
@@ -24,10 +21,7 @@ export default class InitialMeetingPlaceRoutes {
     const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
-    let preferredAddresses: AddressResponse[] = []
-    if (config.postcodeLookupEnabled) {
-      preferredAddresses = await this.addressService.getPreferredAddresses(res.locals.user)
-    }
+    const preferredAddresses: AddressResponse[] = await this.addressService.getPreferredAddresses(res.locals.user)
     return res.render('pages/initialAppointment/prisonCreated/initialMeetingPlace', {
       action,
       preferredAddresses,
@@ -47,15 +41,10 @@ export default class InitialMeetingPlaceRoutes {
     const basePath = `/licence/hard-stop/${action}/id/${licenceId}`
     const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
 
-    if (config.postcodeLookupEnabled) {
-      if (preferredAddress) {
-        await this.handlePreferredAddress(licenceId, preferredAddress, user)
-      } else if (searchQuery?.trim()) {
-        return res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}`)
-      }
-    } else {
-      await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
-      flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
+    if (preferredAddress) {
+      await this.handlePreferredAddress(licenceId, preferredAddress, user)
+    } else if (searchQuery?.trim()) {
+      return res.redirect(`${basePath}/select-address?searchQuery=${encodeURIComponent(searchQuery)}`)
     }
 
     return res.redirect(this.getRedirectPath(licenceId, noAppointmentNeeded))
