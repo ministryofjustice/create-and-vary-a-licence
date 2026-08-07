@@ -8,6 +8,7 @@ import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 import HdcService from '../../../services/hdc/hdcService'
+import config from '../../../config'
 
 export default class CheckAnswersRoutes {
   constructor(
@@ -48,6 +49,7 @@ export default class CheckAnswersRoutes {
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
       isVariationOfHdcMigration,
+      finalThirdEnabled: config.finalThirdEnabled,
     })
   }
 

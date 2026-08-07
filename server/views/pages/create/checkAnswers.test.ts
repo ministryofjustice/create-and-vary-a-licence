@@ -61,9 +61,10 @@ describe('Create a Licence Views - Check Answers', () => {
     appointmentAlternativeTelephoneNumber: '01632960902',
   } as Licence
 
-  it('should display a warning banner when appointment time details are missing', () => {
+  it('should display a warning banner when appointment time details are missing and the final third is enabled', () => {
     const $ = render({
       licence: { ...licence, appointmentTimeType: null, appointmentTime: null },
+      finalThirdEnabled: true,
     })
 
     const warningBanner = $('.moj-banner--warning')
@@ -73,13 +74,20 @@ describe('Create a Licence Views - Check Answers', () => {
     )
   })
 
+  it('should display a warning banner when appointment time details are missing and the final third is disabled', () => {
+    const $ = render({
+      licence: { ...licence, appointmentTimeType: null, appointmentTime: null },
+      finalThirdEnabled: false,
+    })
+    expect($('.moj-banner--warning').length).toBe(0)
+  })
+
   it('no warning banner when appointment time details are present', () => {
     const $ = render({
       licence: { ...licence, appointmentTimeType: 'IMMEDIATELY_AFTER_RELEASE' },
+      finalThirdEnabled: true,
     })
-
-    const warningBanner = $('.moj-banner--warning')
-    expect(warningBanner.length).toBe(0)
+    expect($('.moj-banner--warning').length).toBe(0)
   })
 
   it('should display additional licence conditions section if licence type is AP', () => {
