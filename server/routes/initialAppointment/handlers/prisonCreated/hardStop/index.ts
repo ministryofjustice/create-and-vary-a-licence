@@ -58,14 +58,18 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET)
+    get('/create/id/:licenceId/licence-contact-address', controller.GET)
     const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, addressType)
+    post('/create/id/:licenceId/licence-contact-address', controller.POST, addressType)
   }
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-place', controller.GET)
+    get('/edit/id/:licenceId/licence-contact-address', controller.GET)
     const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
     post('/edit/id/:licenceId/initial-meeting-place', controller.POST, addressType)
+    post('/edit/id/:licenceId/licence-contact-address', controller.POST, addressType)
   }
   {
     const controller = new SelectAddressRoutes(addressService, PathType.CREATE)
@@ -98,12 +102,16 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-contact', controller.GET)
+    get('/create/id/:licenceId/licence-contact-number', controller.GET)
     post('/create/id/:licenceId/initial-meeting-contact', controller.POST, TelephoneNumbers)
+    post('/create/id/:licenceId/licence-contact-number', controller.POST, TelephoneNumbers)
   }
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-contact', controller.GET)
+    get('/edit/id/:licenceId/licence-contact-number', controller.GET)
     post('/edit/id/:licenceId/initial-meeting-contact', controller.POST, TelephoneNumbers)
+    post('/edit/id/:licenceId/licence-contact-number', controller.POST, TelephoneNumbers)
   }
   {
     const controller = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)

@@ -28,6 +28,7 @@ describe('Route Handlers - Create a licence - Select an address', () => {
           user: {
             username: 'joebloggs',
           },
+          licence: { id: 123 },
         },
       } as unknown as Response
       addressService.searchForAddresses = jest.fn()
@@ -138,6 +139,16 @@ describe('Route Handlers - Create a licence - Select an address', () => {
         )
 
         expect(res.redirect).toHaveBeenCalledWith(`/licence/hard-stop/id/${req.params.licenceId}/check-your-answers`)
+      })
+
+      it('should redirect to licence contact number if no appointment is needed', async () => {
+        const handler = new SelectAddressRoutes(addressService, PathType.CREATE)
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/licence/hard-stop/create/id/${req.params.licenceId}/licence-contact-number`,
+        )
       })
     })
   })

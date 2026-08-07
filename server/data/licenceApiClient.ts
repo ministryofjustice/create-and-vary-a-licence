@@ -78,7 +78,7 @@ import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
 import logger from '../../logger'
-import { isVariation } from '../utils/utils'
+import { isVariation, parseCvlDate, toIsoDate } from '../utils/utils'
 import authRole from '../enumeration/authRole'
 
 export default class LicenceApiClient extends RestClient {
@@ -480,15 +480,25 @@ export default class LicenceApiClient extends RestClient {
     }
   }
 
-  async getActiveLicencePolicy(): Promise<LicencePolicyResponse> {
+  async getActiveLicencePolicy(licenceStartDate?: string): Promise<LicencePolicyResponse> {
     try {
-      return (await this.get({ path: `/licence-policy/active` })) as Promise<LicencePolicyResponse>
+      if (!licenceStartDate) {
+        return (await this.get({
+          path: `/licence-policy/active`,
+        })) as Promise<LicencePolicyResponse>
+      }
+
+      const parsedDate = parseCvlDate(licenceStartDate)
+      return (await this.get({
+        path: `/licence-policy/active`,
+        query: { licenceStartDate: toIsoDate(parsedDate) },
+      })) as Promise<LicencePolicyResponse>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
     }
   }
 
-  async getPolicyChanges(licenceId: string, activePolicyVersion: string): Promise<LicenceConditionChange[]> {
+  async getPolicyChanges(licenceId: number, activePolicyVersion: string): Promise<LicenceConditionChange[]> {
     return (await this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` })) as Promise<
       LicenceConditionChange[]
     >

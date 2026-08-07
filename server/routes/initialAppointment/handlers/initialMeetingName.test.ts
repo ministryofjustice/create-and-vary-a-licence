@@ -146,6 +146,18 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/licence-contact-address')
       })
 
+      it('If coming from check answers changing from no appointment to appointment it should redirect to the time page', async () => {
+        // Given
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        req.body.appointmentPersonType = 'CUSTOM_PERSON'
+        req.query.fromReview = 'true'
+
+        // When
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-time?fromReview=true')
+      })
+
       it('should call to generate a flash message', async () => {
         // Given
 

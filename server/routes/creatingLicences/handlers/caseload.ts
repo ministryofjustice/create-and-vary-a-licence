@@ -97,12 +97,8 @@ export default class CaseloadRoutes {
     }
 
     if (licenceCreationType === LicenceCreationType.LICENCE_NOT_STARTED) {
-      if (
-        config.policyV4GoLiveDate &&
-        isBefore(Date.now(), config.policyV4CreationDate) &&
-        !isBefore(parseCvlDate(releaseDate), parseIsoDate(config.policyV4GoLiveDate))
-      ) {
-        return `/licence/create/nomisId/${prisonerNumber}/create-from-27-july`
+      if (!isBefore(parseCvlDate(releaseDate), parseIsoDate(config.licenceCreationBlockDate))) {
+        return `/licence/create/nomisId/${prisonerNumber}/licence-creation-blocked`
       }
       return `/licence/create/nomisId/${prisonerNumber}/confirm`
     }

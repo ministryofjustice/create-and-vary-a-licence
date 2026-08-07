@@ -33,11 +33,18 @@ export default class InitialMeetingNameRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user, licence } = res.locals
+
+    const updateFromNoAppointment =
+      licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED' &&
+      req.body.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED'
+
     await this.licenceService.updateAppointmentPerson(licenceId, req.body, user)
-    flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
+    flashInitialApptUpdatedMessage(req, licence, UserType.PRISON, updateFromNoAppointment)
 
     if (this.path === PathType.EDIT) {
       res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
+    } else if (req.body.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
+      res.redirect(`/licence/hard-stop/create/id/${licenceId}/licence-contact-address`)
     } else {
       res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-place`)
     }

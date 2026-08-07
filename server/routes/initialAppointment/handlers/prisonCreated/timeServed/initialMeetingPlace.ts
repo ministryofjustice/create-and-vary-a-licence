@@ -46,6 +46,7 @@ export default class InitialMeetingPlaceRoutes {
     const { searchQuery, preferredAddress } = req.body
     const action = this.path === PathType.EDIT ? 'edit' : 'create'
     const basePath = `/licence/time-served/${action}/id/${licenceId}`
+    const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
 
     if (config.postcodeLookupEnabled) {
       if (preferredAddress) {
@@ -59,7 +60,7 @@ export default class InitialMeetingPlaceRoutes {
       flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
     }
 
-    return res.redirect(this.getRedirectPath(licence))
+    return res.redirect(this.getRedirectPath(licence, noAppointmentNeeded))
   }
 
   private async handlePreferredAddress(licence: Licence, preferredAddressJson: string, user: User): Promise<void> {
@@ -78,10 +79,14 @@ export default class InitialMeetingPlaceRoutes {
     await this.addressService.addAppointmentAddress(licence.id.toString(), appointmentAddress, user)
   }
 
-  private getRedirectPath(licence: Licence): string {
+  private getRedirectPath(licence: Licence, noAppointmentNeeded: boolean): string {
     if (this.path === PathType.EDIT) {
       return getTimeServedEditPath(licence)
     }
+    if (noAppointmentNeeded) {
+      return `/licence/time-served/create/id/${licence.id}/licence-contact-number`
+    }
+
     return `/licence/time-served/create/id/${licence.id}/initial-meeting-contact`
   }
 }

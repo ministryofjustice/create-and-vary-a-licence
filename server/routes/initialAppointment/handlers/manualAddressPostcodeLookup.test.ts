@@ -10,7 +10,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
   let res: Response
   const handler = new ManualAddressPostcodeLookupRoutes(addressService, UserType.PROBATION)
 
-  describe('Hardstop licence prison user journey', () => {
+  describe('COM create journey', () => {
     beforeEach(() => {
       req = {
         params: {
@@ -27,6 +27,9 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           user: {
             username: 'joebloggs',
           },
+          licence: {
+            appointmentPersonType: 'DUTY_OFFICER',
+          },
         },
       } as unknown as Response
     })
@@ -39,12 +42,31 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
         })
       })
 
+      it('should render the manual address postcode lookup form in create initial appointment flow for no appointment needed', async () => {
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/manualAddressPostcodeLookupForm', {
+          postcodeLookupUrl: `/licence/create/id/${req.params.licenceId}/licence-contact-address`,
+        })
+      })
+
       it('should render the manual address postcode lookup form in edit flow', async () => {
         req.query.fromReview = 'true'
         await handler.GET(req, res)
 
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/manualAddressPostcodeLookupForm', {
           postcodeLookupUrl: `/licence/create/id/${req.params.licenceId}/initial-meeting-place?fromReview=true`,
+        })
+      })
+
+      it('should render the manual address postcode lookup form in edit flow for no appointment needed', async () => {
+        req.query.fromReview = 'true'
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/manualAddressPostcodeLookupForm', {
+          postcodeLookupUrl: `/licence/create/id/${req.params.licenceId}/licence-contact-address?fromReview=true`,
         })
       })
     })
@@ -80,6 +102,22 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           user,
         )
         expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/${licenceId}/initial-meeting-contact`)
+      })
+
+      it('should call addAppointmentAddress with correct data and redirect to licence contact number in create flow for no appointment needed', async () => {
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        await handler.POST(req, res)
+
+        expect(addressService.addAppointmentAddress).toHaveBeenCalledWith(
+          licenceId,
+          {
+            ...req.body,
+            isPreferredAddress: false,
+            source: 'MANUAL',
+          },
+          user,
+        )
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/${licenceId}/licence-contact-number`)
       })
 
       it('should call addAppointmentAddress and redirect to check-your-answers in edit flow', async () => {
