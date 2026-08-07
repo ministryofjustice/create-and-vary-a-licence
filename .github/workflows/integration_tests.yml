@@ -94,7 +94,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json', '!**/node_modules/**') }}
       - name: Init testing framework if necessary
         run: npm run int-test-init:ci --if-present
-      - uses: ministryofjustice/hmpps-github-shared-actions/.github/actions/tool-installers/setup-wiremock@122496e475fb4a2a5a808c9677f10de010737984 # v1
+      - uses: ministryofjustice/hmpps-github-shared-actions/.github/actions/tool-installers/setup-wiremock@35bb5e74a025299cddf50909c1968444d966c1dc # v1
       - name: Initialize Localstack
         run: |
             export AWS_DEFAULT_REGION=eu-west-2
