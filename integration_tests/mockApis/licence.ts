@@ -1478,7 +1478,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licences-api/licence-policy/active`,
+        urlPattern: `/licences-api/licence-policy/active\\?licenceStartDate=([0-9]{4}-[0-9]{2}-[0-9]{2})`,
       },
       response: {
         status: 200,

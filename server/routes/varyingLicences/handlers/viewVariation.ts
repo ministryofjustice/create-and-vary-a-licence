@@ -16,7 +16,7 @@ export default class ViewVariationRoutes {
     if (licence.statusCode === LicenceStatus.VARIATION_IN_PROGRESS) {
       if (
         (await this.licenceService.getParentLicenceOrSelf(licence.id, user)).version !==
-        (await this.conditionService.getPolicyVersion())
+        (await this.conditionService.getPolicyVersion(licence.licenceStartDate))
       ) {
         return res.redirect(`/licence/vary/id/${licence.id}/policy-changes`)
       }
