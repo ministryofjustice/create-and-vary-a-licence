@@ -7,6 +7,7 @@ import CheckAnswersRoutes from './checkAnswers'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import HdcService from '../../../services/hdc/hdcService'
+import config from '../../../config'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -84,7 +85,44 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        finalThirdEnabled: false,
+        showAppointmentTimeWarningBanner: false,
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
+
+    it('should set showAppointmentTimeWarningBanner to true when appointmentTimeType is null and finalThirdEnabled is true', async () => {
+      res.locals.licence.appointmentTimeType = null
+      const original = config.finalThirdEnabled
+      config.finalThirdEnabled = true
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
+        showAppointmentTimeWarningBanner: true,
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+      config.finalThirdEnabled = original
+    })
+
+    it('showAppointmentTimeWarningBanner should remain false when finalThirdEnabled not enabled', async () => {
+      res.locals.licence.appointmentTimeType = null
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
+        showAppointmentTimeWarningBanner: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -107,7 +145,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        finalThirdEnabled: false,
+        showAppointmentTimeWarningBanner: false,
       })
     })
 
@@ -134,7 +172,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        finalThirdEnabled: false,
+        showAppointmentTimeWarningBanner: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -153,7 +191,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        finalThirdEnabled: false,
+        showAppointmentTimeWarningBanner: false,
       })
     })
 
@@ -171,7 +209,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        finalThirdEnabled: false,
+        showAppointmentTimeWarningBanner: false,
       })
     })
 
@@ -195,7 +233,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: true,
-        finalThirdEnabled: false,
+        showAppointmentTimeWarningBanner: false,
       })
     })
 
@@ -214,7 +252,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isInHardStopPeriod: false,
           statusCode: 'IN_PROGRESS',
           isVariationOfHdcMigration: false,
-          finalThirdEnabled: false,
+          showAppointmentTimeWarningBanner: false,
         })
       })
 
@@ -232,7 +270,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
           isVariationOfHdcMigration: false,
-          finalThirdEnabled: false,
+          showAppointmentTimeWarningBanner: false,
         })
       })
 
@@ -252,7 +290,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           statusCode: 'IN_PROGRESS',
           omuEmail: 'test@test.test',
           isVariationOfHdcMigration: false,
-          finalThirdEnabled: false,
+          showAppointmentTimeWarningBanner: false,
         })
       })
     })

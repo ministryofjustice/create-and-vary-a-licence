@@ -38,6 +38,7 @@ export default class CheckAnswersRoutes {
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
     const isVariationOfHdcMigration = await this.hdcService.isVariationOfHdcMigration(licence, user)
+    const showAppointmentTimeWarningBanner = config.finalThirdEnabled && licence.appointmentTimeType === null
 
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
@@ -49,7 +50,7 @@ export default class CheckAnswersRoutes {
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
       isVariationOfHdcMigration,
-      finalThirdEnabled: config.finalThirdEnabled,
+      showAppointmentTimeWarningBanner,
     })
   }
 
