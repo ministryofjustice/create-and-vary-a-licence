@@ -31,7 +31,7 @@
 {% endif %}
 
 {% block content %}
-    {% if not (licence.appointmentTime or licence.appointmentTimeType | length > 0) %}
+    {% if showAppointmentTimeWarningBanner %}
         {{ mojBanner({
             type: 'warning',
             text: 'You must say when the appointment is for before the licence can be printed.',
