@@ -8,6 +8,7 @@ import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 import HdcService from '../../../services/hdc/hdcService'
+import config from '../../../config'
 
 export default class CheckAnswersRoutes {
   constructor(
@@ -37,6 +38,7 @@ export default class CheckAnswersRoutes {
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
     const isVariationOfHdcMigration = await this.hdcService.isVariationOfHdcMigration(licence, user)
+    const showAppointmentTimeWarningBanner = config.finalThirdEnabled && licence.appointmentTimeType === null
 
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
@@ -48,6 +50,7 @@ export default class CheckAnswersRoutes {
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
       isVariationOfHdcMigration,
+      showAppointmentTimeWarningBanner,
     })
   }
 
