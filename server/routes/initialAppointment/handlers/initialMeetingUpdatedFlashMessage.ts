@@ -26,7 +26,7 @@ const flashInitialApptUpdatedMessage = (
     return
   }
 
-  let updateMessage = 'Initial appointment details updated.'
+  let updateMessage = 'Details updated.'
   if (userType === UserType.PRISON) {
     updateMessage += ' You must now tell the community probation team.'
     if (licence.statusCode === LicenceStatus.APPROVED) {
