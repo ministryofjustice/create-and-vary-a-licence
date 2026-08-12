@@ -3,30 +3,41 @@
 {% from "partials/getFormattedAddress.njk" import getFormattedAddress %}
 
 {% macro InitialAppointment(licence) %}
+    {% set appointmentNeeded = licence.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' %}
+    {% set specificTime = licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' %}
+
+    {% if not appointmentNeeded %}
+        <p class="govuk-body" id="no-appointment-needed-paragraph">{{ licence.updatedByFullName }} has told us that this person does not need an initial appointment. The details below will be shown on the licence so this person knows who to contact for support.</p>
+    {% endif %}
+
     {{ govukSummaryList({
         attributes: { id: 'initial-appointment-details' },
         rows: [
             {
-                key: { text: "Appointment with" },
+                key: { text: "Contact name" },
                 value: { text: selectedAppointmentPerson(licence) }
             },
             {
-                key: { text: "Address" },
+                key: { text: "Contact address" },
                 value: { text: getFormattedAddress(licence) }
+            },
+            {
+                key: { text: "Contact phone number" },
+                value: { text: licence.appointmentTelephoneNumber if licence.appointmentTelephoneNumber else "Not yet entered" }
             },
             {
                 key: { text: "Date/time", id: "date-time" },
                 value: { text: licence.appointmentTimeType | getAppointmentTimeTypeDescription }
-            } if licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME',
+            } if appointmentNeeded and not specificTime,
             {
                 key: { text: "Date", id: "date" },
                 id: "date",
                 value: { text: licence.appointmentTime | datetimeToDate }
-            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME',
+            } if appointmentNeeded and specificTime,
             {
                 key: { text: "Time", id: "time" },
                 value: { text: licence.appointmentTime | datetimeTo12HourTime }
-            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME'
+            } if appointmentNeeded and specificTime
         ]
     }) }}
 {% endmacro %}
