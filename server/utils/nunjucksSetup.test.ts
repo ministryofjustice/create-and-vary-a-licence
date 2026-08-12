@@ -4,6 +4,7 @@ import { renderTemplate } from './__testutils/templateTestUtils'
 import { registerNunjucks } from './nunjucksSetup'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceKind from '../enumeration/LicenceKind'
+import { MEZ_CONDITION_CODE, RESTRICTION_ZONE_CONDITION_CODE } from './conditionRoutes'
 
 describe('Nunjucks Filters', () => {
   describe('initialiseName', () => {
@@ -904,6 +905,41 @@ describe('Nunjucks Filters', () => {
 
     test('handles edge case just before midnight', () => {
       expect(registerNunjucks().getFilter('localTimeTo12h')('23:59:00')).toBe('11:59pm')
+    })
+  })
+
+  describe('findConditionCodeForId', () => {
+    it('should find condition code from list of conditions where id matches given value', () => {
+      const licence = {
+        additionalLicenceConditions: [
+          { id: 1, code: 'CODE1' },
+          { id: 2, code: 'CODE2' },
+        ],
+      } as Licence
+      expect(registerNunjucks().getFilter('findConditionCodeForId')(licence, 2)).toBe('CODE2')
+    })
+  })
+
+  describe('getConditionCaption', () => {
+    it('should return the exclusion zone caption for the MEZ condition code', () => {
+      expect(registerNunjucks().getFilter('getConditionCaption')(MEZ_CONDITION_CODE)).toBe(
+        'Area this person must not enter (exclusion zone)',
+      )
+    })
+
+    it('should return the restriction zone caption for the restriction zone condition code', () => {
+      expect(registerNunjucks().getFilter('getConditionCaption')(RESTRICTION_ZONE_CONDITION_CODE)).toBe(
+        'Area this person must not leave (restriction zone)',
+      )
+    })
+
+    it('should return the null for other condition codes', () => {
+      expect(registerNunjucks().getFilter('getConditionCaption')('OTHER_CODE')).toBeNull()
+    })
+
+    it('should return null for null or undefined condition codes', () => {
+      expect(registerNunjucks().getFilter('getConditionCaption')(null)).toBeNull()
+      expect(registerNunjucks().getFilter('getConditionCaption')(undefined)).toBeNull()
     })
   })
 })

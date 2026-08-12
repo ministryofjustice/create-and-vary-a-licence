@@ -4,8 +4,13 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + conditionCode + "/file-uploads?fromReview=true" %}
+{% set conditionHeaderCaption = conditionCode | getConditionCaption %}
+
 
 {% block content %}
+    {% if conditionHeaderCaption | length %}
+        <span class="govuk-caption-l">{{ conditionHeaderCaption }}</span>
+    {% endif %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <form method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">

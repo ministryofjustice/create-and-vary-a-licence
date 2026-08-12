@@ -2,23 +2,9 @@ import fs from 'fs'
 import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
 import { MEZ_CONDITION_CODE, RESTRICTION_ZONE_CONDITION_CODE } from '../../../../utils/conditionRoutes'
 
-const render = templateRenderer(
-  fs.readFileSync('server/views/pages/manageConditions/fileUploads/confirmUploadDeletion.njk').toString(),
-)
+const render = templateRenderer(fs.readFileSync('server/views/pages/manageConditions/fileUploads/list.njk').toString())
 
-describe('Confirm Upload Deletion view', () => {
-  it('Renders header containing file description if the description is provided', () => {
-    const $ = render({ conditionId: '123', conditionCode: 'abc123', description: 'Test file' })
-
-    expect($('legend').text().trim()).toBe('Are you sure you want to delete the map for Test file?')
-  })
-
-  it('Renders generic header if no description is provided', () => {
-    const $ = render({ conditionId: '123', conditionCode: 'abc123', description: null })
-
-    expect($('legend').text().trim()).toBe('Are you sure you want to delete this untitled map?')
-  })
-
+describe('File upload list view', () => {
   describe('Condition header caption', () => {
     it('renders the caption for the MEZ condition', () => {
       const $ = render({ conditionId: '123', conditionCode: MEZ_CONDITION_CODE, description: 'Test file' })

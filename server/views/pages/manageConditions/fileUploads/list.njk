@@ -6,9 +6,14 @@
 {% set pageTitle = applicationName + " - Create a licence - File Upload " %}
 {% set pageId = "licence-upload-file-page" %}
 {% set fromReviewAppend = "&fromReview=true" if fromReview %}
+{% set conditionHeaderCaption = conditionCode | getConditionCaption %}
+
 {% block content %}
 
     {% set uploadCount = conditions.length %}
+    {% if conditionHeaderCaption | length %}
+        <span class="govuk-caption-l">{{ conditionHeaderCaption }}</span>
+    {% endif %}
 
     <h1 class="govuk-heading-l">You have added {% if uploadCount == 1 %}one{% else %}{{ uploadCount }}{% endif %} map{% if uploadCount > 1 %}s{% endif %}</h1>
 
@@ -114,5 +119,5 @@
             </div>
         </div>
     </form>
-    
+
 {% endblock %}

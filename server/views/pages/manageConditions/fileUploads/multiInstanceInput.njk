@@ -12,6 +12,9 @@
 {% set fromPolicyReviewQuery = "?fromPolicyReview=true" if fromPolicyReview %}
 {% set fromPolicyReviewAppend = "&fromPolicyReview=true" if fromPolicyReview %}
 
+{% set conditionCode = licence | findConditionCodeForId(additionalCondition.id) %}
+{% set conditionHeaderCaption = conditionCode | getConditionCaption %}
+
 {% if fromPolicyReview %}
     {% set backLinkHref = "/licence/vary/id/" + licence.id + "/policy-changes/input/callback/"+ (policyReview.policyChangeInputCounter - 1) %}
     {% set noJsBackLink = true %}
@@ -22,6 +25,10 @@
 {% block content %}
     {% if fromPolicyReview %}
         <span class="govuk-caption-l">Change {{ policyReview.conditionCounter }} of {{ policyReview.policyChangesCount }}</span>
+    {% endif %}
+
+    {% if conditionHeaderCaption | length %}
+        <span class="govuk-caption-l">{{ conditionHeaderCaption }}</span>
     {% endif %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-three-quarters">
@@ -93,4 +100,3 @@
 {% block pageScripts %}
     <script src="/assets/js/conditions/addAnother.js"></script>
 {% endblock %}
-

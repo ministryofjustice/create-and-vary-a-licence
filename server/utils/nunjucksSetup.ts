@@ -24,7 +24,12 @@ import { AdditionalCondition, AdditionalConditionData, Licence, FoundComCase } f
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/initialAppointment/types/address'
-import { getEditConditionHref, getDeleteConditionHref } from './conditionRoutes'
+import {
+  getEditConditionHref,
+  getDeleteConditionHref,
+  MEZ_CONDITION_CODE,
+  RESTRICTION_ZONE_CONDITION_CODE,
+} from './conditionRoutes'
 import { LegalStatus, AppointmentTimeType, LicenceKind, CaViewCasesTab, LicenceStatus } from '../enumeration'
 
 const production = process.env.NODE_ENV === 'production'
@@ -467,6 +472,22 @@ export function registerNunjucks(app?: express.Express): Environment {
       return 'Restricted'
     }
     return value
+  })
+
+  njkEnv.addFilter('findConditionCodeForId', (licence: Licence, conditionId: number): string => {
+    const condition = licence.additionalLicenceConditions.find(c => c.id === conditionId)
+    return condition?.code
+  })
+
+  njkEnv.addFilter('getConditionCaption', (conditionCode: string): string => {
+    switch (conditionCode) {
+      case MEZ_CONDITION_CODE:
+        return 'Area this person must not enter (exclusion zone)'
+      case RESTRICTION_ZONE_CONDITION_CODE:
+        return 'Area this person must not leave (restriction zone)'
+      default:
+        return null
+    }
   })
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)

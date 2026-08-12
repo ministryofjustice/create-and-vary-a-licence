@@ -33,6 +33,7 @@ export default class FileUploadListRoutes {
       conditions,
       licenceId,
       displayMessage: null,
+      conditionCode,
     })
   }
 
@@ -53,6 +54,7 @@ export default class FileUploadListRoutes {
         conditions,
         licenceId,
         displayMessage,
+        conditionCode,
       })
     }
 

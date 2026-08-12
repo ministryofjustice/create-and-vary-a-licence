@@ -84,6 +84,7 @@ describe('Route Handlers - Create Licence - file upload list routes', () => {
         conditions: [mezInstance],
         licenceId: '1',
         displayMessage: null,
+        conditionCode: MEZ_CONDITION_CODE,
       })
     })
   })
@@ -102,6 +103,7 @@ describe('Route Handlers - Create Licence - file upload list routes', () => {
         conditions: [mezInstance],
         licenceId: '1',
         displayMessage: { text: 'Select yes or no' },
+        conditionCode: MEZ_CONDITION_CODE,
       })
     })
 
