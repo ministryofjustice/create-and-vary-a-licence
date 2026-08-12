@@ -103,7 +103,7 @@
                     {% if NO_APPOINTMENT_NEEDED in appointmentPersonType %}
                         <h2 class="govuk-heading-m govuk-!-padding-top-8">Help with initial appointments</h2>
                         {% set hintHtml %}
-                            <p class="govuk-!-margin-bottom-0">Select No appointment needed if the person is being released in the final third of a standard determinate sentence and is not:</p>
+                            <p class="govuk-!-margin-bottom-2">Select No appointment needed if the person is being released in the final third of a standard determinate sentence and is not:</p>
                             <ul class="govuk-list govuk-list--bullet">
                                 <li>serving a sentence for rape, serious sexual abuse against children or organised child sexual exploitation or grooming offences</li>
                                 <li>MAPPA eligible</li>
@@ -116,7 +116,7 @@
                         {{ govukDetails({
                             summaryText: "When no initial appointment is needed",
                             html: hintHtml,
-                            classes: 'govuk-!-margin-bottom-3'
+                            classes: 'govuk-!-padding-bottom-3'
                         }) }}
                     {% endif %}
 

@@ -40,14 +40,14 @@ describe('Initial appointment updated flash message', () => {
     const userType = UserType.PRISON
     it('sends the expected message for SUBMITTED licences', () => {
       licence.statusCode = LicenceStatus.SUBMITTED
-      const expectedMessage = 'Initial appointment details updated. You must now tell the community probation team.'
+      const expectedMessage = 'Details updated. You must now tell the community probation team.'
       flashInitialApptUpdatedMessage(req, licence, userType)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
     })
 
     it('sends the expected message for APPROVED licences', () => {
-      const expectedMessage = `Initial appointment details updated. You must now tell the community probation team. <a target="_blank" href='/licence/view/id/1/pdf-print'>View and print new licence PDF</a>`
+      const expectedMessage = `Details updated. You must now tell the community probation team. <a target="_blank" href='/licence/view/id/1/pdf-print'>View and print new licence PDF</a>`
       flashInitialApptUpdatedMessage(req, licence, userType)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
@@ -65,7 +65,7 @@ describe('Initial appointment updated flash message', () => {
 
     it('sends the expected message if appointment changed from not required and final third disabled', () => {
       config.finalThirdEnabled = false
-      const expectedMessage = `Initial appointment details updated. You must now tell the community probation team. <a target="_blank" href='/licence/view/id/1/pdf-print'>View and print new licence PDF</a>`
+      const expectedMessage = `Details updated. You must now tell the community probation team. <a target="_blank" href='/licence/view/id/1/pdf-print'>View and print new licence PDF</a>`
       flashInitialApptUpdatedMessage(req, licence, userType, true)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
@@ -76,15 +76,14 @@ describe('Initial appointment updated flash message', () => {
     const userType = UserType.PROBATION
     it('sends the expected message for SUBMITTED licences', () => {
       licence.statusCode = LicenceStatus.SUBMITTED
-      const expectedMessage = 'Initial appointment details updated.'
+      const expectedMessage = 'Details updated.'
       flashInitialApptUpdatedMessage(req, licence, userType)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
     })
 
     it('sends the expected message for APPROVED licences', () => {
-      const expectedMessage =
-        'Initial appointment details updated. You must now notify the prison so they can print the licence again.'
+      const expectedMessage = 'Details updated. You must now notify the prison so they can print the licence again.'
       flashInitialApptUpdatedMessage(req, licence, userType)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
