@@ -36,7 +36,7 @@ export default class AdditionalLicenceConditionInputRoutes {
       additionalCondition,
       config,
       policyReview,
-      parentLicenceId: parentLicence.id,
+      parentLicenceId: parentLicence?.id,
     })
   }
 
