@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ProbationService from '../../../services/probationService'
 import { convertToTitleCase } from '../../../utils/utils'
+import config from '../../../config'
 
 export default class ConfirmApprovedRoutes {
   constructor(private readonly probationService: ProbationService) {}
@@ -14,6 +15,7 @@ export default class ConfirmApprovedRoutes {
     res.render('pages/approve/confirmation', {
       fullName,
       isComEmailAvailable: comDetails?.email != null,
+      isFinalThirdEnabled: config.finalThirdEnabled,
     })
   }
 }

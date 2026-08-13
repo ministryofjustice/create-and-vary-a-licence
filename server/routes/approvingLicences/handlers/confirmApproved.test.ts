@@ -47,6 +47,7 @@ describe('Route - approve licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
         fullName: 'Joe Bloggs',
         isComEmailAvailable: true,
+        isFinalThirdEnabled: false,
       })
     })
 
@@ -65,6 +66,7 @@ describe('Route - approve licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
         fullName: 'Joe Bloggs',
         isComEmailAvailable: false,
+        isFinalThirdEnabled: false,
       })
     })
   })
