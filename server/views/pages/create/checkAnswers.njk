@@ -31,20 +31,14 @@
 {% endif %}
 
 {% block content %}
-    {% if showAppointmentTimeWarningBanner %}
+    {% if banner %}
         {{ mojBanner({
-            type: 'warning',
-            text: 'You must say when the appointment is for before the licence can be printed.',
-            iconFallbackText: 'Warning'
+            type: banner.type,
+            text: banner.text,
+            iconFallbackText: banner.iconFallbackText
         }) }}
     {% endif %}
-    {% if initialApptUpdatedMessage | length > 0%}
-        {{ mojBanner({
-            type: 'success',
-            text: initialApptUpdatedMessage,
-            iconFallbackText: 'Success'
-        }) }}
-    {% endif %}
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION' %}

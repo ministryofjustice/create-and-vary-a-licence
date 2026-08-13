@@ -3,7 +3,7 @@
 {% from "partials/getFormattedAddress.njk" import getFormattedAddress %}
 
 {% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
-    {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
+    {% set apptDateTimeEntered = (licence.appointmentTime or licence.appointmentTimeType | length > 0 ) and licence.appointmentTimeType !== 'NO_APPOINTMENT_NEEDED' %}
     {% set routePath = 'view' if isPrisonUser else 'create' %}
     {% set baseURL = "/licence/"+routePath+"/id/" + licence.id %}
     {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
