@@ -28,7 +28,7 @@
         <span class="govuk-caption-l">Change {{policyReview.conditionCounter}} of {{policyReview.policyChangesCount}}</span>
     {% endif %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
-        <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Complete the licence condition</h1>
         </div>
     </div>
@@ -38,7 +38,7 @@
         <input type="hidden" name="code" value="{{ config.code }}">
 
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-grid-column-full">
                 <p class="govuk-body">
                     {{ config.text }}
                 </p>
@@ -46,7 +46,8 @@
                     <div class="govuk-hint">{{ config.subtext }}</div>
                 {% endif %}
 
-                {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+                {% set showCurfewHint = true if policyReview else false %}
+                {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken, showCurfewHint, parentLicenceId) }}
 
                 <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
 

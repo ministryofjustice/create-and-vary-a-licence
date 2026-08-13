@@ -6,6 +6,7 @@ import ConditionService, { PolicyAdditionalCondition } from '../../../services/c
 import policyChangeHintText from '../../../config/policyChangeHintText'
 import conditionChangeType from '../../../enumeration/conditionChangeType'
 import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/LicencePolicy'
+import { CURFEW_V4_CONDITION_CODE } from '../../../utils/conditionRoutes'
 
 export default class PolicyChangeRoutes {
   constructor(
@@ -64,6 +65,7 @@ export default class PolicyChangeRoutes {
           condition,
           conditionHintText,
           replacements,
+          CURFEW_V4_CONDITION_CODE,
         })
       case conditionChangeType.REMOVED_NO_REPLACEMENTS:
         return res.render('pages/vary/policyConditionRemovedNoReplacements', {
