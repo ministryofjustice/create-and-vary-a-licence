@@ -24,11 +24,6 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       },
       query: {},
       body: {},
-      session: {
-        changedConditionsInputsCounter: 0,
-        changedConditionsCounter: 0,
-        changedConditions: [],
-      },
     } as unknown as Request
 
     res = {
@@ -69,7 +64,6 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       })
 
       req.query.fromReview = 'true'
-      req.query.fromPolicyReview = 'true'
 
       res.locals.licence = {
         additionalLicenceConditions: [
@@ -80,7 +74,6 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         ],
         version: 'version',
       } as Licence
-      licenceService.getParentLicenceOrSelf.mockResolvedValue({ id: 2 } as Licence)
 
       await handler.GET(req, res)
       expect(conditionsProviderSpy).toHaveBeenCalledWith('code1', 'version')
@@ -96,12 +89,6 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           category: 'category',
           requiresInput: false,
         },
-        policyReview: {
-          conditionCounter: 0,
-          policyChangeInputCounter: 0,
-          policyChangesCount: 0,
-        },
-        parentLicenceId: 2,
       })
     })
   })

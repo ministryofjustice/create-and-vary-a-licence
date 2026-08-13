@@ -12,7 +12,7 @@ export default class AdditionalLicenceConditionInputRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { licence, user } = res.locals
+    const { licence } = res.locals
     const { conditionId } = req.params
 
     const additionalCondition = licence.additionalLicenceConditions.find(
@@ -28,16 +28,10 @@ export default class AdditionalLicenceConditionInputRoutes {
     }
 
     const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code, licence.version)
-    const parentLicence = await this.licenceService.getParentLicenceOrSelf(licence.id, user)
 
     const policyReview = this.getPolicyReviewState(req)
     const conditionConfig = getConfigForCondition(additionalCondition.code)
-    return res.render(conditionConfig.inputTemplate(additionalCondition), {
-      additionalCondition,
-      config,
-      policyReview,
-      parentLicenceId: parentLicence?.id,
-    })
+    return res.render(conditionConfig.inputTemplate(additionalCondition), { additionalCondition, config, policyReview })
   }
 
   private getPolicyReviewState = (req: Request) => {

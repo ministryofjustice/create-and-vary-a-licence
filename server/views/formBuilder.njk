@@ -12,7 +12,7 @@
 {# TODO: Currently, this form builder only supports the "add another" functionality for the text input type. #}
 {# It can be extended in future if the other field types require Add Another functionality #}
 
-{% macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken, showCurfewHint, parentLicenceId) %}
+{% macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken) %}
     {% for input in config.inputs %}
         {% set validationError = validationErrors | findError(input.name) %}
         {% set formValues = getFormResponses(formResponses, input.name) or getValueFromAdditionalCondition(additionalCondition, input.name) %}
@@ -60,12 +60,10 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken, showCurfewHint, parentLicenceId)
+                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken)
                         } if option.conditional
                     }), options) %}
                 {% endfor %}
-
-                {% set curfewHint = "You can <a href=\"/licence/view/id/" + parentLicenceId + "/pdf-print\" target=\"_blank\" rel=\"noopener noreferrer\">check this person's current licence (opens in new tab)</a> for their curfew times before re-entering them." %}
 
                 {{ govukRadios({
                     idPrefix: input.name,
@@ -76,7 +74,6 @@
                             classes: "govuk-fieldset__legend govuk-fieldset__legend--s radio-" + input.name + "-legend"
                         }
                     },
-                    hint: { html: curfewHint, classes: "govuk-!-margin-top-2 govuk-!-padding-bottom-4" } if showCurfewHint,
                     items: options,
                     errorMessage: validationError
                 }) }}
@@ -193,7 +190,7 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken, showCurfewHint, parentLicenceId)
+                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken)
                         } if option.conditional
                     }), options) %}
                 {% endfor %}

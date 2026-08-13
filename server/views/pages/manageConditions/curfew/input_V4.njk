@@ -46,7 +46,6 @@
                     <div class="govuk-hint">{{ config.subtext }}</div>
                 {% endif %}
 
-                {% set showCurfewHint = true if policyReview else false %}
                 {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
 
                 <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
