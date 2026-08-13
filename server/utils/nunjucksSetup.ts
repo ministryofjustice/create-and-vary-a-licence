@@ -250,7 +250,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal(
     'additionalConditionRow',
     (licence: Licence, condition: AdditionalCondition, html: string, isEditable: boolean) => {
-      const { requiresInput, id, code, category, sequence } = condition
+      const { requiresInput, id, code, category, sequence, version } = condition
 
       const getActionItem = () => {
         const href = requiresInput
@@ -259,6 +259,7 @@ export function registerNunjucks(app?: express.Express): Environment {
               conditionId: id,
               conditionCode: code,
               fromReview: true,
+              version,
             })
           : getDeleteConditionHref({
               licenceId: licence.id.toString(),

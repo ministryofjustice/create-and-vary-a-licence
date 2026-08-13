@@ -3,7 +3,6 @@ import LicenceService from '../../../services/licenceService'
 import ConditionService, { PolicyAdditionalCondition } from '../../../services/conditionService'
 import PolicyChangeRoutes from './policyChange'
 import { Licence, LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
-import { CURFEW_V4_CONDITION_CODE } from '../../../utils/conditionRoutes'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -173,7 +172,6 @@ describe('Route handlers', () => {
           licenceId: '1',
           policyChangesCount: 5,
           replacements: [condition],
-          CURFEW_V4_CONDITION_CODE,
         })
       })
 

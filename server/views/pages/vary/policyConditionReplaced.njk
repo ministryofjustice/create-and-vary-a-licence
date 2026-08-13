@@ -8,7 +8,6 @@
 {% set pageId = "policy-changes-page" %}
 {% set backLinkHref = "/licence/vary/id/" + licenceId + "/policy-changes/condition/" + (conditionCounter - 1) + "/" %}
 {% set noJsBackLink = true %}
-{% set isCurfewV4Replacement = replacements | selectattr('code', 'equalto', CURFEW_V4_CONDITION_CODE) | list | length > 0 %}
 
 {% block content %}
     <form method="POST">
@@ -40,11 +39,7 @@
                             {{condition.previousText}}
                         </p>
                         <h2 class="govuk-heading-m govuk-!-margin-top-6">
-                            {% if isCurfewV4Replacement %}
-                                Licence condition to use instead
-                            {% else %}
-                                Select new licence conditions to use
-                            {% endif %}
+                            Select new licence conditions to use
                         </h2>
                         {% if conditionHintText.description.length > 0 %}
                             <p class="govuk-hint">
