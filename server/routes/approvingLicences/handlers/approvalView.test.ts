@@ -5,6 +5,7 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ProbationService from '../../../services/probationService'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
+import config from '../../../config'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const deliusStaff = new ProbationService(null) as jest.Mocked<ProbationService>
@@ -97,6 +98,7 @@ describe('Route - view and approve a licence', () => {
           name: 'Joe Bloggs',
           telephone: '07777777777',
         },
+        isLicenceUnsubmittable: false,
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -129,7 +131,43 @@ describe('Route - view and approve a licence', () => {
         additionalConditions: [],
         staffDetails: null,
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
+        isLicenceUnsubmittable: false,
       })
+    })
+
+    it('should check if the licence is unsubmittable', async () => {
+      const original = config.finalThirdEnabled
+      config.finalThirdEnabled = true
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username, displayName },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.SUBMITTED,
+            surname: 'Bobson',
+            forename: 'Bob',
+            appointmentTime: '12/12/2022 14:16',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            bespokeConditions: [],
+            comUsername: null,
+            appointmentPersonType: 'DUTY_OFFICER',
+            appointmentTimeType: 'NO_APPOINTMENT_NEEDED',
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
+        additionalConditions: [],
+        staffDetails: null,
+        returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
+        isLicenceUnsubmittable: true,
+      })
+      config.finalThirdEnabled = original
     })
   })
 
