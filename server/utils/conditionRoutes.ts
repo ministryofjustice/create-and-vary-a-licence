@@ -29,7 +29,7 @@ type DeleteConditionHrefArgs = {
 }
 
 type ConditionConfig = {
-  inputTemplate: (additionalCondition: AdditionalCondition) => string
+  inputTemplate: (additionalCondition: AdditionalCondition, licenceVersion?: string) => string
   getConditionCallbackHref: (args: ConditionCallbackHrefArgs) => string
   getEditConditionHref: (args: EditConditionHrefArgs) => string
 }
@@ -70,10 +70,8 @@ const conditions: Record<string, ConditionConfig> = {
       }/outofbounds-premises${args.fromReview ? '?fromReview=true' : ''}`,
   },
   [CURFEW_CONDITION_CODE]: {
-    inputTemplate: (additionalCondition: AdditionalCondition) =>
-      additionalCondition.version === '4.0'
-        ? 'pages/manageConditions/curfew/input_V4'
-        : 'pages/manageConditions/curfew/input',
+    inputTemplate: (additionalCondition: AdditionalCondition, licenceVersion?: string) =>
+      licenceVersion === '4.0' ? 'pages/manageConditions/curfew/input_V4' : 'pages/manageConditions/curfew/input',
     getConditionCallbackHref: (args: ConditionCallbackHrefArgs) =>
       args.version === '4.0'
         ? `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionId}${

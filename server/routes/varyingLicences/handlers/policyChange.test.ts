@@ -3,6 +3,9 @@ import LicenceService from '../../../services/licenceService'
 import ConditionService, { PolicyAdditionalCondition } from '../../../services/conditionService'
 import PolicyChangeRoutes from './policyChange'
 import { Licence, LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
+import { CURFEW_CONDITION_CODE } from '../../../utils/conditionRoutes'
+import LicenceType from '../../../enumeration/licenceType'
+import CurfewConditionService from '../../../services/curfewConditionService'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -10,7 +13,8 @@ jest.mock('../../../services/conditionService')
 describe('Route handlers', () => {
   const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
   const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
-  const handler = new PolicyChangeRoutes(licenceService, conditionService)
+  const curfewConditionService = new CurfewConditionService(licenceService)
+  const handler = new PolicyChangeRoutes(licenceService, conditionService, curfewConditionService)
   let req: Request
   let res: Response
 
@@ -223,6 +227,68 @@ describe('Route handlers', () => {
       req.session.changedConditions = [condition1]
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/policy-changes/condition/1/delete')
+    })
+
+    it('migrates legacy curfew instances to V4 data without showing the input page', async () => {
+      const curfewChange = {
+        ...condition2,
+        code: CURFEW_CONDITION_CODE,
+      } as LicenceConditionChange
+      const firstCurfew = {
+        id: 5,
+        code: CURFEW_CONDITION_CODE,
+        data: [
+          { field: 'numberOfCurfews', value: 'Two curfews' },
+          { field: 'curfewStart', value: '08:00 am' },
+          { field: 'curfewEnd', value: '10:00 am' },
+          { field: 'reviewPeriod', value: 'Weekly' },
+        ],
+      }
+      const secondCurfew = {
+        id: 6,
+        code: CURFEW_CONDITION_CODE,
+        data: [
+          { field: 'numberOfCurfews', value: 'Two curfews' },
+          { field: 'curfewStart', value: '06:00 pm' },
+          { field: 'curfewEnd', value: '08:00 pm' },
+          { field: 'reviewPeriod', value: 'Weekly' },
+        ],
+      }
+      req.session.changedConditions = [curfewChange]
+      res.locals.licence = {
+        id: 1,
+        version: '4.0',
+        additionalLicenceConditions: [firstCurfew, secondCurfew],
+      } as Licence
+      conditionService.getAdditionalConditionType.mockResolvedValue(LicenceType.AP)
+      conditionService.getAdditionalConditionByCode.mockResolvedValue({
+        code: CURFEW_CONDITION_CODE,
+        requiresInput: true,
+      } as PolicyAdditionalCondition)
+
+      await handler.POST(req, res)
+
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
+        '1',
+        firstCurfew,
+        {
+          numberOfCurfews: 'Two curfews',
+          twoCurfewStart: '08:00 am',
+          twoCurfewEnd: '10:00 am',
+          twoCurfewStart2: '06:00 pm',
+          twoCurfewEnd2: '08:00 pm',
+        },
+        res.locals.user,
+      )
+      expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(6, 1, res.locals.user)
+      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
+        1,
+        'AP',
+        { additionalConditions: [CURFEW_CONDITION_CODE] },
+        res.locals.user,
+        '4.0',
+      )
+      expect(req.session.changedConditionsInputs).toEqual([])
     })
   })
 
