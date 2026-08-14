@@ -103,7 +103,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isVariationOfHdcMigration: false,
         banner: {
           type: 'warning',
-          text: 'You must say when the appointment is for before the licence can be printed.',
+          text: 'You must set a date and time for the appointment before the licence can be printed.',
           iconFallbackText: 'Warning',
         },
       })
@@ -127,16 +127,39 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
 
-    it('should create a warning banner when the time is not set', async () => {
+    it.each([
+      {
+        statusCode: LicenceStatus.APPROVED,
+        bannerText:
+          'Details updated. You must set a date and time for the appointment before the licence can be printed.',
+        flashMessage: 'Details update',
+      },
+      {
+        statusCode: LicenceStatus.APPROVED,
+        bannerText: 'You must set a date and time for the appointment before the licence can be printed.',
+        flashMessage: '',
+      },
+      {
+        statusCode: LicenceStatus.SUBMITTED,
+        bannerText:
+          'Details updated. You must set a date and time for the appointment before the licence can be approved.',
+        flashMessage: 'Details update',
+      },
+      {
+        statusCode: LicenceStatus.SUBMITTED,
+        bannerText: 'You must set a date and time for the appointment before the licence can be approved.',
+        flashMessage: '',
+      },
+    ])('should create a warning banner when the time is not set', async ({ statusCode, bannerText, flashMessage }) => {
       res.locals.licence.appointmentTimeType = null
-      res.locals.licence.statusCode = 'APPROVED'
+      res.locals.licence.statusCode = statusCode as Licence['statusCode']
       const original = config.finalThirdEnabled
       config.finalThirdEnabled = true
       req = {
         ...req,
         flash: jest.fn().mockImplementation((key: string) => {
           if (key === 'initialApptUpdated') {
-            return ['Details updated']
+            return [flashMessage]
           }
           return []
         }),
@@ -148,10 +171,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         backLink: req.session.returnToCase,
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
-        statusCode: 'APPROVED',
+        statusCode,
         isVariationOfHdcMigration: false,
         banner: {
-          text: 'Details updated. You must say when the appointment is for and then notify the prison of the changes so they can print the licence.',
+          text: bannerText,
           iconFallbackText: 'Warning',
           type: 'warning',
         },

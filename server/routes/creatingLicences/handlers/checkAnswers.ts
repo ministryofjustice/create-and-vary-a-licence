@@ -112,15 +112,13 @@ export default class CheckAnswersRoutes {
     initialApptUpdatedMessage: string,
     statusCode: Licence['statusCode'],
   ): string => {
-    if (!initialApptUpdatedMessage) {
-      return 'You must say when the appointment is for before the licence can be printed.'
-    }
-
     if (statusCode === LicenceStatus.APPROVED) {
-      return 'Details updated. You must say when the appointment is for and then notify the prison of the changes so they can print the licence.'
+      return `${initialApptUpdatedMessage ? 'Details updated. ' : ''}You must set a date and time for the appointment before the licence can be printed.`
     }
-
-    return 'Details updated. You must say when the appointment is for before the licence can be printed.'
+    if (statusCode === LicenceStatus.SUBMITTED) {
+      return `${initialApptUpdatedMessage ? 'Details updated. ' : ''}You must set a date and time for the appointment before the licence can be approved.`
+    }
+    return 'You must set a date and time for the appointment before the licence can be printed.'
   }
 
   flattenValidationErrors = (errors: ValidationError[], parentProperty = ''): FieldValidationError[] =>
