@@ -163,7 +163,7 @@ export default class PolicyChangeRoutes {
       const isCurfewV4Upgrade = condition.code === CURFEW_CONDITION_CODE && licence.version === '4.0'
       if (isCurfewV4Upgrade) {
         await this.curfewConditionService.upgradeCurfewConditionData(licence.id, additionalLicenceConditions, user)
-        licenceConditionCodesToUpdate = this.keepSingleConditionCode(licenceConditionCodes, CURFEW_CONDITION_CODE)
+        licenceConditionCodesToUpdate = this.removeDuplicateConditionCodes(licenceConditionCodes)
       } else if (policyCondition.requiresInput) {
         inputs.push(condition.code)
       } else {
@@ -212,17 +212,7 @@ export default class PolicyChangeRoutes {
     return res.redirect(`/licence/vary/id/${licenceId}/policy-changes/input/callback/1`)
   }
 
-  private keepSingleConditionCode = (conditionCodes: string[], conditionCode: string): string[] => {
-    let conditionFound = false
-
-    return conditionCodes.filter(code => {
-      if (code !== conditionCode) return true
-      if (conditionFound) return false
-
-      conditionFound = true
-      return true
-    })
-  }
+  private removeDuplicateConditionCodes = (conditionCodes: string[]): string[] => [...new Set(conditionCodes)]
 
   DELETE = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals

@@ -5,7 +5,7 @@ import { CURFEW_CONDITION_CODE } from '../utils/conditionRoutes'
 import LicenceService from './licenceService'
 
 type CurfewFieldPair = [startField: string, endField: string]
-type UpgradedCurfewData = Record<string, unknown>
+type UpgradedCurfewData = Record<string, string>
 
 const curfewFieldsByType: Record<CurfewType, CurfewFieldPair[]> = {
   [CurfewType.ONE_CURFEW]: [['oneCurfewStart', 'oneCurfewEnd']],
@@ -40,7 +40,7 @@ export default class CurfewConditionService {
       .filter(condition => condition.code === CURFEW_CONDITION_CODE)
       .sort((first, second) => first.id - second.id)
 
-  private buildUpgradedData = (conditions: AdditionalCondition[]): UpgradedCurfewData => {
+  private buildUpgradedData = (conditions: AdditionalCondition[]): UpgradedCurfewData | null => {
     const numberOfCurfews = this.getDataValue(conditions[0], 'numberOfCurfews') as CurfewType
     const targetFields = curfewFieldsByType[numberOfCurfews]
     if (!targetFields) return null
