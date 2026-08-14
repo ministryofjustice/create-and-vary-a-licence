@@ -180,26 +180,15 @@
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <input type="hidden" name="licenceId" value="{{ licence.id }}">
 
-                {% if isLicenceUnsubmittable %}
-                    {{ govukButton({
-                        text: "Approve",
-                        classes: "govuk-button--primary",
-                        type: "submit",
-                        name: "result",
-                        value: "approve",
-                        disabled: true,
-                        attributes: { 'data-qa': 'approve-licence-disabled' }
-                    }) }}
-                {% else %}
-                    {{ govukButton({
-                        text: "Approve",
-                        classes: "govuk-button--primary",
-                        type: "submit",
-                        name: "result",
-                        value: "approve",
-                        attributes: { 'data-qa': 'approve-licence' }
-                    }) }}
-                {% endif %}
+                {{ govukButton({
+                   text: "Approve",
+                   classes: "govuk-button--primary",
+                   type: "submit",
+                   name: "result",
+                   value: "approve",
+                   disabled: isLicenceUnsubmittable,
+                   attributes: { 'data-qa': 'approve-licence' }
+                }) }}
 
                 {{ govukButton({
                     text: "Return to case list",

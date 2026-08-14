@@ -71,9 +71,8 @@ describe('Approve view page', () => {
         serviceName: 'test-service',
       })
 
-      expect($('[data-qa="approve-licence-disabled"]').length).toBe(1)
-      expect($('[data-qa="approve-licence-disabled"]').attr('disabled')).toBeDefined()
-      expect($('[data-qa="approve-licence"]').length).toBe(0)
+      expect($('[data-qa="approve-licence"]').length).toBe(1)
+      expect($('[data-qa="approve-licence"]').attr('disabled')).toBeDefined()
     })
 
     it('approve button should be enabled if the licence is submittable', () => {
@@ -90,7 +89,6 @@ describe('Approve view page', () => {
 
       expect($('[data-qa="approve-licence"]').length).toBe(1)
       expect($('[data-qa="approve-licence"]').attr('disabled')).toBeUndefined()
-      expect($('[data-qa="approve-licence-disabled"]').length).toBe(0)
     })
   })
 })
