@@ -17,4 +17,28 @@ describe('Confirm Upload Deletion view', () => {
 
     expect($('legend').text().trim()).toBe('Are you sure you want to delete this untitled map?')
   })
+
+  describe('Condition header caption', () => {
+    it('renders the caption if one is provided', () => {
+      const $ = render({
+        conditionId: '123',
+        conditionCode: 'abc123',
+        description: 'Test file',
+        headerCaption: 'Area this person must not enter (exclusion zone)',
+      })
+
+      expect($('.govuk-caption-l').text().trim()).toBe('Area this person must not enter (exclusion zone)')
+    })
+
+    it('does not render the caption if one is not provided', () => {
+      const $ = render({
+        conditionId: '123',
+        conditionCode: 'OTHER_CODE',
+        description: 'Test file',
+        headerCaption: null,
+      })
+
+      expect($('.govuk-caption-l').length).toBe(0)
+    })
+  })
 })

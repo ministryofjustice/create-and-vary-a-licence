@@ -9,6 +9,9 @@
 {% block content %}
 
     {% set uploadCount = conditions.length %}
+    {% if conditions[0].headerCaption | length %}
+        <span class="govuk-caption-l">{{ conditions[0].headerCaption }}</span>
+    {% endif %}
 
     <h1 class="govuk-heading-l">You have added {% if uploadCount == 1 %}one{% else %}{{ uploadCount }}{% endif %} map{% if uploadCount > 1 %}s{% endif %}</h1>
 
@@ -114,5 +117,5 @@
             </div>
         </div>
     </form>
-    
+
 {% endblock %}
