@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import ConditionService, { PolicyAdditionalCondition } from '../../../services/conditionService'
 import PolicyChangeRoutes from './policyChange'
-import { Licence, LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
+import { AdditionalCondition, Licence, LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
 import { CURFEW_CONDITION_CODE } from '../../../utils/conditionRoutes'
 import LicenceType from '../../../enumeration/licenceType'
 import CurfewConditionService from '../../../services/curfewConditionService'
@@ -229,7 +229,7 @@ describe('Route handlers', () => {
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/policy-changes/condition/1/delete')
     })
 
-    it('migrates legacy curfew instances to V4 data without showing the input page', async () => {
+    it('migrates legacy curfew instances and sends unique condition codes in their original order', async () => {
       const curfewChange = {
         ...condition2,
         code: CURFEW_CONDITION_CODE,
@@ -254,11 +254,13 @@ describe('Route handlers', () => {
           { field: 'reviewPeriod', value: 'Weekly' },
         ],
       }
+      const firstOtherCondition = { id: 4, code: 'other-code', data: [] } as AdditionalCondition
+      const duplicateOtherCondition = { id: 7, code: 'other-code', data: [] } as AdditionalCondition
       req.session.changedConditions = [curfewChange]
       res.locals.licence = {
         id: 1,
         version: '4.0',
-        additionalLicenceConditions: [firstCurfew, secondCurfew],
+        additionalLicenceConditions: [firstOtherCondition, firstCurfew, secondCurfew, duplicateOtherCondition],
       } as Licence
       conditionService.getAdditionalConditionType.mockResolvedValue(LicenceType.AP)
       conditionService.getAdditionalConditionByCode.mockResolvedValue({
@@ -284,7 +286,7 @@ describe('Route handlers', () => {
       expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
         1,
         'AP',
-        { additionalConditions: [CURFEW_CONDITION_CODE] },
+        { additionalConditions: ['other-code', CURFEW_CONDITION_CODE] },
         res.locals.user,
         '4.0',
       )
