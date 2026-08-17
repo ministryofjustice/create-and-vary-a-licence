@@ -1,8 +1,10 @@
 import moment from 'moment'
 import Page from '../pages/page'
 import IndexPage from '../pages'
+import ExclusionZoneConditionInputPage from '../pages/exclusionZoneConditionInput'
 
 const MEZ_CONDITION_CODE = '0f9a20f4-35c7-4c77-8af8-f200f153fa11'
+const EVENT_RESTRICTION_CONDITION_CODE = '99195049-f355-46fb-b7d8-aef87a1b19c5'
 
 context('Create a licence', () => {
   const dates: string[] = []
@@ -26,6 +28,18 @@ context('Create a licence', () => {
     cy.task('stubCheckComCaseAccess')
     cy.task('stubUpdatePolicy')
     cy.signIn()
+  })
+
+  it('should display the configured header caption for an event restriction', () => {
+    cy.task('stubGetLicencePolicyConditions', '4.0')
+    cy.task('stubGetLicenceWithConditionToComplete', {
+      code: EVENT_RESTRICTION_CONDITION_CODE,
+      version: '4.0',
+    })
+
+    cy.visit('/licence/create/id/1/additional-licence-conditions/condition/1')
+
+    Page.verifyOnPage(ExclusionZoneConditionInputPage).shouldDisplayHeaderCaption('Event exclusion condition')
   })
 
   it('should add an exclusion zone to the licence', () => {
