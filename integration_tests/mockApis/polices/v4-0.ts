@@ -882,6 +882,7 @@ const policy: LicencePolicyResponse = {
       {
         code: '99195049-f355-46fb-b7d8-aef87a1b19c5',
         category: 'Freedom of movement',
+        headerCaption: 'Event exclusion condition',
         text: 'Not to enter the area as defined by the attached map, during the period that [NAME OF EVENT] takes place, including all occasions that the event takes place, without the prior permission of your supervising officer.',
         tpl: 'Not to enter the area as defined by the attached map, during the period that {eventName} takes place, including all occasions that the event takes place, without the prior permission of your supervising officer.',
         requiresInput: true,
