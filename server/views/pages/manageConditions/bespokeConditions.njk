@@ -21,8 +21,8 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <div data-module="moj-condition-add-another">
+            <div data-module="moj-condition-add-another">
+                <div class="govuk-grid-column-two-thirds moj-add-another__items">
 
                     {% for c in conditions %}
                         {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
@@ -84,5 +84,5 @@
 {% endmacro %}
 
 {% block pageScripts %}
-    <script src="/assets/js/conditions/addAnother.js"></script>
+    <script type="module" src="/assets/js/conditions/addAnother.mjs"></script>
 {% endblock %}

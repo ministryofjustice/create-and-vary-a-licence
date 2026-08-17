@@ -7,7 +7,7 @@
 
   &__item {
     margin-top: 65px;
-    margin-bottom: 35px; 
+    margin-bottom: 35px;
 
     &:first-of-type {
       margin-bottom: 5px;
@@ -28,7 +28,7 @@
 }
 
 .newest-fieldset {
-  background-color: govuk-colour("light-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
   padding: 20px 20px 15px 20px;
 
   &.moj-add-another__item {

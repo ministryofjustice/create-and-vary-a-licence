@@ -1,8 +1,9 @@
+import { AddAnother } from '/@ministryofjustice/frontend'
 
 window.addEventListener('load', () => {
   (() => {
     const init = () => {
-      const AddAnotherProto = MOJFrontend.AddAnother.prototype;
+      const AddAnotherProto = AddAnother.prototype;
       const oldButtonClick = AddAnotherProto.onAddButtonClick;
       const oldRemoveClick = AddAnotherProto.onRemoveButtonClick;
 
@@ -57,7 +58,7 @@ window.addEventListener('load', () => {
 
       roots.forEach((el) => {
         if (el && el.nodeType === 1) {
-          new MOJFrontend.AddAnother(el);
+          new AddAnother(el);
         }
       });
 
