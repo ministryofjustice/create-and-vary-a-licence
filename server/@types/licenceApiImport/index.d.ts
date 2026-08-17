@@ -8835,6 +8835,7 @@ export interface components {
       code: string
       category: string
       text: string
+      headerCaption?: string | null
       textPlural?: string | null
       tpl?: string | null
       requiresInput: boolean

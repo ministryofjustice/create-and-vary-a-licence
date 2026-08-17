@@ -12,6 +12,11 @@ export default class ExclusionZoneConditionInputPage extends AdditionalCondition
 
   private deleteButtonId = '[data-qa=delete]'
 
+  shouldDisplayHeaderCaption = (caption: string): ExclusionZoneConditionInputPage => {
+    cy.get('.govuk-grid-column-three-quarters > .govuk-caption-l').should('have.text', caption)
+    return this
+  }
+
   enterText = (text: string, fieldName?: string): ExclusionZoneConditionInputPage => {
     if (fieldName) {
       cy.get(`input[name="${fieldName}"]`).type(text)

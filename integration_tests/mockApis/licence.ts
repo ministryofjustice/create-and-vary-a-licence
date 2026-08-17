@@ -1002,7 +1002,11 @@ export default {
     })
   },
 
-  stubGetLicenceWithConditionToComplete: (options: { code: string; licenceKind?: LicenceKind }): SuperAgentRequest => {
+  stubGetLicenceWithConditionToComplete: (options: {
+    code: string
+    licenceKind?: LicenceKind
+    version?: string
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -1014,6 +1018,7 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           kind: options.licenceKind || LicenceKind.CRD,
+          version: options.version || licencePlaceholder.version,
           additionalLicenceConditions: [
             {
               id: 1,
