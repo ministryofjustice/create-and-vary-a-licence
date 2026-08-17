@@ -84,5 +84,12 @@
 {% endmacro %}
 
 {% block pageScripts %}
+    <script nonce="{{ cspNonce }}" type="importmap">
+        {
+            "imports": {
+                "@ministryofjustice/frontend":  "/node_modules/@ministryofjustice/frontend/index.js"
+            }
+        }
+    </script>
     <script type="module" src="/assets/js/conditions/addAnother.mjs"></script>
 {% endblock %}
