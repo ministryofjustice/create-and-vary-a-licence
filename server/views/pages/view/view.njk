@@ -41,6 +41,13 @@
             html: 'Add a HDCAD in <a href="' + calculateReleaseDateUrl + '" class="govuk-link" target="_blank" rel="noopener noreferrer">Calculate release dates</a> to be able to print this licence and change details of the initial appointment and first night curfew.'
         }) }}
     {% endif %}
+    {% if isLicenceUnsubmittable %}
+        {{ mojBanner({
+            iconFallbackText: 'Warning',
+            text: "This licence cannot be printed until a date and time for the initial appointment have been set. Contact the probation practitioner if they do not get entered soon.",
+            type: 'warning'
+        }) }}
+    {% endif %}
     {% if initialApptUpdatedMessage | length > 0%}
         {{ mojBanner({
             type: 'success',
@@ -124,18 +131,26 @@
                     {% endif %}
 
                     {% if isPrintable and not updatedFromNoAppointmentRequired %}
-                        {{ govukButton({
-                            text: "View and print licence PDF",
-                            classes: "govuk-button--primary govuk-!-margin-right-1",
-                            href: '/licence/view/id/' + licence.id + '/pdf-print',
-                            attributes: { 'data-qa': 'print-licence', 'target': "_blank" },
-                            disabled: true
-                        }) }}
+                        {% if isLicenceUnsubmittable %}
+                            {{ govukButton({
+                                text: "View and print licence PDF",
+                                classes: "govuk-button--primary govuk-!-margin-right-1",
+                                disabled: isLicenceUnsubmittable,
+                                attributes: { 'data-qa': 'print-licence' }
+                            }) }}
+                        {% else %}
+                            {{ govukButton({
+                                text: "View and print licence PDF",
+                                classes: "govuk-button--primary govuk-!-margin-right-1",
+                                href: '/licence/view/id/' + licence.id + '/pdf-print',
+                                attributes: { 'data-qa': 'print-licence' }
+                            }) }}
+                        {% endif %}
                     {% elseif isPrintable and updatedFromNoAppointmentRequired %}
                         {{ govukButton({
                             text: "View and print licence PDF",
                             classes: "govuk-button--primary govuk-!-margin-right-1",
-                            disabled: true
+                            disabled: isLicenceUnsubmittable
                         }) }}
                     {% endif %}
 
