@@ -17,6 +17,7 @@ export default class ViewAndPrintLicenceRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     let warningMessage
+    const noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
 
     if (req.query?.latestVersion) {
       const latestLicenceVersion = req.query?.latestVersion as string
@@ -70,6 +71,8 @@ export default class ViewAndPrintLicenceRoutes {
           licence.statusCode !== LicenceStatus.ACTIVE && (isTimeServedLicence(licence) || isInHardStopPeriod(licence)),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
+        initialAppointmentUpdatedFromNotRequired: req.flash('initialAppointmentUpdatedFromNotRequired')?.[0],
+        noAppointmentNeeded,
       })
     } else {
       res.redirect(`/licence/view/cases`)

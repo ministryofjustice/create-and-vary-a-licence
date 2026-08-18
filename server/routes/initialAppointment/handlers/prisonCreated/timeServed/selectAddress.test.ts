@@ -157,6 +157,17 @@ describe('Route Handlers - Create a licence - Select an address', () => {
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
         expect(res.redirect).toHaveBeenCalledWith(`/licence/time-served/id/123/check-your-answers`)
       })
+
+      it('should redirect to licence contact number if no appointment is needed', async () => {
+        const handler = new SelectAddressRoutes(addressService, PathType.CREATE)
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/licence/time-served/create/id/${req.params.licenceId}/licence-contact-number`,
+        )
+      })
     })
   })
 })

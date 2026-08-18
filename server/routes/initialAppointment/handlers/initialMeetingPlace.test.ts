@@ -4,12 +4,9 @@ import InitialMeetingPlaceRoutes from './initialMeetingPlace'
 import LicenceService from '../../../services/licenceService'
 import Address from '../types/address'
 import UserType from '../../../enumeration/userType'
-import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
-import config from '../../../config'
 import AddressService from '../../../services/addressService'
 import { AddressResponse } from '../../../@types/licenceApiClientTypes'
 
-jest.mock('./initialMeetingUpdatedFlashMessage')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/addressService')
 
@@ -65,10 +62,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         },
       },
     } as unknown as Response
+
+    addressService.getPreferredAddresses.mockResolvedValue([])
   })
 
   afterEach(() => {
-    config.postcodeLookupEnabled = false
     jest.clearAllMocks()
   })
 
@@ -77,7 +75,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
 
     describe('GET', () => {
       it('should render view', async () => {
-        addressService.getPreferredAddresses.mockResolvedValue([])
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPlace', {
           formAddress,
@@ -98,8 +95,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         })
       })
 
-      it('should render view with fromReviewParam and preferredAddresses when postcode lookup is enabled', async () => {
-        config.postcodeLookupEnabled = true
+      it('should render view with preferredAddresses', async () => {
         addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingPlace', {
@@ -111,7 +107,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       })
 
       it('should render view with addressRemovedMessage', async () => {
-        config.postcodeLookupEnabled = true
         addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
         const flash = req.flash as jest.Mock
         flash.mockReturnValueOnce(['Address removed'])
@@ -129,7 +124,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       })
 
       it('When the appointmentPersonType is NO_APPOINTMENT_NEEDED, noAppointmentNeeded should be true', async () => {
-        config.postcodeLookupEnabled = true
         res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
         addressService.getPreferredAddresses.mockResolvedValue(preferredAddresses)
         await handler.GET(req as Request, res as Response)
@@ -147,13 +141,12 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     describe('POST', () => {
       it('should redirect to the contact page', async () => {
         await handler.POST(req, res)
-        expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
+        expect(addressService.addAppointmentAddress).not.toHaveBeenCalled()
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-contact')
       })
-      it('should redirect to the contact page', async () => {
+      it('should redirect to the licence contact number page when no appointment is needed', async () => {
         res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
         await handler.POST(req, res)
-        expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/licence-contact-number')
       })
 
@@ -163,13 +156,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
       })
 
-      it('should call to generate a flash message', async () => {
-        await handler.POST(req, res)
-        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PROBATION)
-      })
-
-      it('should redirect to /select-address with fromReview flag if postcode lookup is enabled and searchQuery is provided', async () => {
-        config.postcodeLookupEnabled = true
+      it('should redirect to /select-address with fromReview flag if searchQuery is provided', async () => {
         req = {
           params: {
             licenceId: 123,
@@ -187,12 +174,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.redirect).toHaveBeenCalledWith(
           '/licence/create/id/123/select-address?searchQuery=SW1A%201AA&fromReview=true',
         )
-        expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
-        expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
+        expect(addressService.addAppointmentAddress).not.toHaveBeenCalled()
       })
 
-      it('should redirect to /select-address with out fromReview flag if postcode lookup is enabled and searchQuery is provided', async () => {
-        config.postcodeLookupEnabled = true
+      it('should redirect to /select-address with out fromReview flag if searchQuery is provided', async () => {
         req = {
           params: {
             licenceId: 123,
@@ -206,11 +191,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         await handler.POST(req, res)
 
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/select-address?searchQuery=SW1A%201AA')
-        expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
-        expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalled()
+        expect(addressService.addAppointmentAddress).not.toHaveBeenCalled()
       })
 
-      it('should add appointment address when postcode lookup is enabled and preferredAddress is provided', async () => {
+      it('should add appointment address when preferredAddress is provided', async () => {
         const preferredAddress = {
           uprn: '123456',
           firstLine: '123 Test Street',
@@ -223,7 +207,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
 
         req = { ...req, body: { preferredAddress: JSON.stringify(preferredAddress) }, query: {} } as unknown as Request
 
-        config.postcodeLookupEnabled = true
         const mockAddAppointmentAddress = jest.fn()
         addressService.addAppointmentAddress = mockAddAppointmentAddress
 
@@ -272,21 +255,14 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     describe('POST', () => {
       it('should redirect to the show page', async () => {
         await handler.POST(req, res)
-        expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
+        expect(addressService.addAppointmentAddress).not.toHaveBeenCalled()
         expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')
       })
 
-      it('should call to generate a flash message', async () => {
-        await handler.POST(req, res)
-        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
-      })
-
-      it('should not call updateAppointmentAddress', async () => {
+      it('should not call addAppointmentAddress when only a search query is provided', async () => {
         req.body = { searchQuery: '123 Fake Street' }
-        config.postcodeLookupEnabled = true // Mocking the config for postcode lookup
         await handler.POST(req, res)
-        expect(licenceService.updateAppointmentAddress).not.toHaveBeenCalled()
-        expect(flashInitialApptUpdatedMessage).not.toHaveBeenCalledWith()
+        expect(addressService.addAppointmentAddress).not.toHaveBeenCalled()
       })
     })
   })

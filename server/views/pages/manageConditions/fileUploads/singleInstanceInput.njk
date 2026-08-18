@@ -25,13 +25,16 @@
     {% endif %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-three-quarters">
+            {% if config.headerCaption %}
+                <span class="govuk-caption-l">{{ config.headerCaption }}</span>
+            {% endif %}
             <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Complete the licence condition</h1>
         </div>
     </div>
 
 
     {% set fileUploadPresent = additionalCondition.uploadSummary.length > 0 %}
-    
+
     {# Alter the form encoding to multi-part formdata and supply csrf token in query params for file upload conditions #}
     <div class="govuk-button-group">
         <form method="POST"
@@ -67,7 +70,7 @@
                             attributes: { 'data-qa': 'continue' },
                             preventDoubleClick: true
                         }) }}
-                        
+
                         {{ govukButton({
                             text: "Delete this condition",
                             href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReviewQuery,
@@ -85,4 +88,3 @@
 {% block pageScripts %}
     <script src="/assets/js/conditions/addAnother.js"></script>
 {% endblock %}
-

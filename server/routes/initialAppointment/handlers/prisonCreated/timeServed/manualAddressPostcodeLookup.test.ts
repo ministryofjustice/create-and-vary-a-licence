@@ -65,6 +65,21 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           },
         )
       })
+
+      it('should render postcodeLookupUrl with licence contact address url when no appointment is needed', async () => {
+        const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.CREATE)
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm',
+          {
+            continueOrSaveLabel: 'Continue',
+            postcodeLookupUrl: `/licence/time-served/create/id/${req.params.licenceId}/licence-contact-address`,
+          },
+        )
+      })
     })
 
     describe('POST /manual-address', () => {

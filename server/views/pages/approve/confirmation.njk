@@ -52,6 +52,15 @@
                 <p class="govuk-body">
                     Probation practitioners can update the reporting instructions. You do not need to approve those changes, but a case administrator might need to reprint the licence.
                 </p>
+            {% elseif isTimeServed and isFinalThirdEnabled %}
+                <p class="govuk-body" data-qa="licence-change-message">
+                    Only the contact details that will be shown on the licence can be changed, for example if an initial appointment is needed. You will not need to approve the licence again.
+                </p>
+            {% elseif isFinalThirdEnabled %}
+                <p class="govuk-body" data-qa="licence-change-message">
+                    Probation practitioners can make changes up to 2 days before release.
+                    After this, they can only ask the prison to change the contact details that will be shown on the licence, for example if an initial appointment is needed. Other changes must then be made after release.
+                </p>
             {% else %}
                 <p class="govuk-body" data-qa="licence-change-message">
                     Probation practitioners can make changes up to 2 days before release.

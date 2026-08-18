@@ -6,7 +6,6 @@ import roleCheckMiddleware from '../../../../../middleware/roleCheckMiddleware'
 import { Services } from '../../../../../services'
 import PersonName from '../../../types/personName'
 import InitialMeetingNameRoutes from './initialMeetingName'
-import Address from '../../../types/address'
 import InitialMeetingPlaceRoutes from './initialMeetingPlace'
 import InitialMeetingContactRoutes from './initialMeetingContact'
 import TelephoneNumbers from '../../../types/telephoneNumbers'
@@ -15,7 +14,6 @@ import DateTime from '../../../types/dateTime'
 import ViewAndPrintLicenceRoutes from '../../../../viewingLicences/handlers/viewLicence'
 import ConfirmationRoutes from '../../../../creatingLicences/handlers/prisonCreated/confirmation'
 import PathType from '../../../../../enumeration/pathType'
-import config from '../../../../../config'
 import PostcodeLookupAddress from '../../../types/PostcodeLookupAddress'
 import SelectAddressRoutes from './selectAddress'
 import PostcodeLookupInputValidation from '../../../types/PostcodeLookupInputValidation'
@@ -58,14 +56,16 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET)
-    const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
-    post('/create/id/:licenceId/initial-meeting-place', controller.POST, addressType)
+    get('/create/id/:licenceId/licence-contact-address', controller.GET)
+    post('/create/id/:licenceId/initial-meeting-place', controller.POST, PostcodeLookupInputValidation)
+    post('/create/id/:licenceId/licence-contact-address', controller.POST, PostcodeLookupInputValidation)
   }
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-place', controller.GET)
-    const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
-    post('/edit/id/:licenceId/initial-meeting-place', controller.POST, addressType)
+    get('/edit/id/:licenceId/licence-contact-address', controller.GET)
+    post('/edit/id/:licenceId/initial-meeting-place', controller.POST, PostcodeLookupInputValidation)
+    post('/edit/id/:licenceId/licence-contact-address', controller.POST, PostcodeLookupInputValidation)
   }
   {
     const controller = new SelectAddressRoutes(addressService, PathType.CREATE)
@@ -98,12 +98,16 @@ export default function Index({ licenceService, conditionService, addressService
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-contact', controller.GET)
+    get('/create/id/:licenceId/licence-contact-number', controller.GET)
     post('/create/id/:licenceId/initial-meeting-contact', controller.POST, TelephoneNumbers)
+    post('/create/id/:licenceId/licence-contact-number', controller.POST, TelephoneNumbers)
   }
   {
     const controller = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-contact', controller.GET)
+    get('/edit/id/:licenceId/licence-contact-number', controller.GET)
     post('/edit/id/:licenceId/initial-meeting-contact', controller.POST, TelephoneNumbers)
+    post('/edit/id/:licenceId/licence-contact-number', controller.POST, TelephoneNumbers)
   }
   {
     const controller = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)

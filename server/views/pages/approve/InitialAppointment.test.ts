@@ -24,9 +24,12 @@ const licence = {
 describe('View Initial appointment details - approve licence', () => {
   it('should display a separate date and time fields', () => {
     const $ = render({ options: licence })
-    expect($('#initial-appointment-details > .govuk-summary-list__row').length).toBe(4)
-    expect($('#initial-appointment-details  > div:nth-child(3) > dt').text()).toContain('Date')
-    expect($('#initial-appointment-details  > div:nth-child(4) > dt').text()).toContain('Time')
+    expect($('#initial-appointment-details > .govuk-summary-list__row').length).toBe(5)
+    expect($('#initial-appointment-details  > div:nth-child(1) > dt').text()).toContain('Contact name')
+    expect($('#initial-appointment-details  > div:nth-child(2) > dt').text()).toContain('Contact address')
+    expect($('#initial-appointment-details  > div:nth-child(3) > dt').text()).toContain('Contact phone number')
+    expect($('#initial-appointment-details  > div:nth-child(4) > dt').text()).toContain('Date')
+    expect($('#initial-appointment-details  > div:nth-child(5) > dt').text()).toContain('Time')
   })
 
   it('should display a date/time field', () => {
@@ -36,8 +39,42 @@ describe('View Initial appointment details - approve licence', () => {
         appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
       },
     })
+    expect($('#initial-appointment-details > .govuk-summary-list__row').length).toBe(4)
+    expect($('#initial-appointment-details > div:nth-child(4) > dt').text()).toContain('Date/time')
+  })
+
+  it('there should no date or time visible if no appointment is needed', () => {
+    const $ = render({
+      options: {
+        ...licence,
+        appointmentTimeType: 'NO_APPOINTMENT_NEEDED',
+        appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+      },
+    })
     expect($('#initial-appointment-details > .govuk-summary-list__row').length).toBe(3)
-    expect($('#initial-appointment-details > div:nth-child(3) > dt').text()).toContain('Date/time')
+  })
+
+  it('if no appointment is needed there should be information showing who entered this', () => {
+    const $ = render({
+      options: {
+        ...licence,
+        appointmentTimeType: 'NO_APPOINTMENT_NEEDED',
+        appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+        updatedByFullName: 'Jack Frost',
+      },
+    })
+    expect($('#no-appointment-needed-paragraph').text()).toBe(
+      'Jack Frost has told us that this person does not need an initial appointment. The details below will be shown on the licence so this person knows who to contact for support.',
+    )
+  })
+
+  it('if an appointment is needed the paragraph should not be visible', () => {
+    const $ = render({
+      options: {
+        ...licence,
+      },
+    })
+    expect($('#no-appointment-needed-paragraph').length).toBe(0)
   })
 
   it('should display appointment person based on the appointment person type selected', () => {

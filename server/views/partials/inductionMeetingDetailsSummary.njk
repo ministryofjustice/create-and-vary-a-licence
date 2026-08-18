@@ -3,7 +3,7 @@
 {% from "partials/getFormattedAddress.njk" import getFormattedAddress %}
 
 {% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
-    {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
+    {% set apptDateTimeEntered = (licence.appointmentTime or licence.appointmentTimeType | length > 0 ) and licence.appointmentTimeType !== 'NO_APPOINTMENT_NEEDED' %}
     {% set routePath = 'view' if isPrisonUser else 'create' %}
     {% set baseURL = "/licence/"+routePath+"/id/" + licence.id %}
     {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
@@ -33,8 +33,9 @@
                         {
                             href: baseURL + "/initial-meeting-name" + routeAppend,
                             text: "Change",
-                            visuallyHiddenText: "name",
+                            visuallyHiddenText: "appointment",
                             attributes: { "id": "appointmentPersonType", "data-qa": "appointment-change-link" }
+
                         }
                     ]
                 } if isEditable
@@ -53,7 +54,7 @@
                         }
                     ]
                 } if isEditable and appointmentNeeded
-            },
+            } if (appointmentNeeded or licence.responsibleComFullName),
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
                 key: { text: "Address" },

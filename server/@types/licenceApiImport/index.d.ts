@@ -4166,16 +4166,6 @@ export interface components {
        * @example A1234AA
        */
       nomisId?: string | null
-      /**
-       * @deprecated
-       * @description The forename and surname of the COM
-       */
-      comName?: string | null
-      /**
-       * @deprecated
-       * @description The COM's staff code
-       */
-      comStaffCode?: string | null
       /** @description The details for the active supervising probation officer */
       probationPractitioner: components['schemas']['ProbationPractitioner']
       /** @description The description of the COM's team */
@@ -8845,6 +8835,7 @@ export interface components {
       code: string
       category: string
       text: string
+      headerCaption?: string | null
       textPlural?: string | null
       tpl?: string | null
       requiresInput: boolean

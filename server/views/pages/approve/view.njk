@@ -11,6 +11,7 @@
 {% from "../../partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "../../partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "pages/approverImmediateReleaseConditions.njk" import approverImmediateReleaseConditions %}
+{% from "moj/components/banner/macro.njk" import mojBanner %}
 
 {% set pageTitle = applicationName + " - Approve a licence" %}
 {% set pageId = "approval-view-page" %}
@@ -21,10 +22,15 @@
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-padding-left-3">
+        {% if isLicenceUnsubmittable %}
+            {{ mojBanner({
+                iconFallbackText: 'Warning',
+                text: "This licence cannot be approved until a date and time for the initial appointment have been set. Contact the probation practitioner if they do not get entered soon.",
+                type: 'warning'
+            }) }}
+        {% endif %}
         <h1 class="govuk-heading-xl" id="approve-licence-heading">Approve licence</h1>
-    </div>
-
-    <div class="govuk-grid-column-two-thirds-from-desktop float-none">
+        <div class="govuk-grid-column-two-thirds-from-desktop float-none">
         <div class="govuk-grid-row ">
             <div class="prisoner-record-detail">
                 <div class="govuk-grid-column-three-quarters">
@@ -175,14 +181,14 @@
                 <input type="hidden" name="licenceId" value="{{ licence.id }}">
 
                 {{ govukButton({
-                    text: "Approve",
-                    classes: "govuk-button--primary",
-                    type: "submit",
-                    name: "result",
-                    value: "approve",
-                    attributes: { 'data-qa': 'approve-licence' }
+                   text: "Approve",
+                   classes: "govuk-button--primary",
+                   type: "submit",
+                   name: "result",
+                   value: "approve",
+                   disabled: isLicenceUnsubmittable,
+                   attributes: { 'data-qa': 'approve-licence' }
                 }) }}
-
 
                 {{ govukButton({
                     text: "Return to case list",

@@ -4,7 +4,8 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import ProbationService from '../../../services/probationService'
 import { groupingBy } from '../../../utils/utils'
 import { nameToString } from '../../../data/deliusClient'
-import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
+import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
+import config from '../../../config'
 
 export default class ApprovalViewRoutes {
   constructor(
@@ -41,11 +42,17 @@ export default class ApprovalViewRoutes {
             }
           : null,
         returnPath,
+        isLicenceUnsubmittable: this.isLicenceUnsubmittable(licence),
       })
     } else {
       res.redirect(`/licence/approve/cases`)
     }
   }
+
+  private isLicenceUnsubmittable = (licence: Licence): boolean =>
+    config.finalThirdEnabled &&
+    licence.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' &&
+    (licence.appointmentTimeType === 'NO_APPOINTMENT_NEEDED' || licence.appointmentTimeType === null)
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals

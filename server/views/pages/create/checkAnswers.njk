@@ -31,13 +31,14 @@
 {% endif %}
 
 {% block content %}
-    {% if initialApptUpdatedMessage | length > 0%}
+    {% if banner %}
         {{ mojBanner({
-            type: 'success',
-            text: initialApptUpdatedMessage,
-            iconFallbackText: 'Success'
+            type: banner.type,
+            text: banner.text,
+            iconFallbackText: banner.iconFallbackText
         }) }}
     {% endif %}
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION' %}

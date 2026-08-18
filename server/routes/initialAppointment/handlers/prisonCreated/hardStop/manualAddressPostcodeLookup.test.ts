@@ -26,6 +26,7 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           user: {
             username: 'joebloggs',
           },
+          licence: { id: 123 },
         },
       } as unknown as Response
     })
@@ -54,6 +55,21 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           {
             continueOrSaveLabel: 'Save',
             postcodeLookupUrl: `/licence/hard-stop/edit/id/${req.params.licenceId}/initial-meeting-place`,
+          },
+        )
+      })
+
+      it('should render postcodeLookupUrl with licence contact address url when no appointment is needed', async () => {
+        const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.CREATE)
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/initialAppointment/prisonCreated/manualAddressPostcodeLookupForm',
+          {
+            continueOrSaveLabel: 'Continue',
+            postcodeLookupUrl: `/licence/hard-stop/create/id/${req.params.licenceId}/licence-contact-address`,
           },
         )
       })
@@ -108,6 +124,15 @@ describe('Route Handlers - Create a licence - Manual address entry', () => {
           user,
         )
         expect(res.redirect).toHaveBeenCalledWith(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
+      })
+
+      it('should redirect to licence contact address when no appointment is needed', async () => {
+        const handler = new ManualAddressPostcodeLookupRoutes(addressService, PathType.CREATE)
+        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith(`/licence/hard-stop/create/id/${licenceId}/licence-contact-number`)
       })
     })
   })

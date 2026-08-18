@@ -15,8 +15,9 @@ export default class ManualAddressPostcodeLookupRoutes {
     const basePath = `/licence/${isPrisonUser ? 'view' : 'create'}/id/${licenceId}`
     const fromReview = req.query?.fromReview
     const fromReviewParam = fromReview ? '?fromReview=true' : ''
+    const noAppointmentNeeded = res.locals.licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
     res.render('pages/initialAppointment/manualAddressPostcodeLookupForm', {
-      postcodeLookupUrl: `${basePath}/initial-meeting-place${fromReviewParam}`,
+      postcodeLookupUrl: `${basePath}/${noAppointmentNeeded ? 'licence-contact-address' : 'initial-meeting-place'}${fromReviewParam}`,
     })
   }
 
@@ -26,6 +27,7 @@ export default class ManualAddressPostcodeLookupRoutes {
     const basePath = `/licence/create/id/${licenceId}`
     const { isPreferredAddress } = req.body
     const { firstLine, secondLine, townOrCity, county, postcode } = req.body
+    const noAppointmentNeeded = res.locals.licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
 
     const appointmentAddress = {
       firstLine,
@@ -44,7 +46,7 @@ export default class ManualAddressPostcodeLookupRoutes {
     } else if (req.query?.fromReview) {
       res.redirect(`${basePath}/check-your-answers`)
     } else {
-      res.redirect(`${basePath}/initial-meeting-contact`)
+      res.redirect(`${basePath}/${noAppointmentNeeded ? 'licence-contact-number' : 'initial-meeting-contact'}`)
     }
   }
 }
