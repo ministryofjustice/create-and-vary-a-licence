@@ -427,7 +427,7 @@ describe('View and print - single licence view', () => {
 
     expect($('.moj-banner--warning').length).toBe(1)
     expect($('.moj-banner--warning').text()).toContain(
-      'This licence cannot be printed until a date and time for the initial appointment have been set. Contact the probation practitioner to confirm these details.',
+      'This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.',
     )
   })
 
