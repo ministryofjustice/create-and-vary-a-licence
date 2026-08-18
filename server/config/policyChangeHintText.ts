@@ -215,6 +215,9 @@ const policyChangeHints: HintText[] = [
     description: [
       'The condition has been simplified and you no longer need to say how often the curfew will be reviewed.',
     ],
+    code: '8e52e16e-1abf-4251-baca-2fabfcb243d0',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: ['Requirement not to install an e-sim added.'],
     bulletpoints: [],
   },
 ]
