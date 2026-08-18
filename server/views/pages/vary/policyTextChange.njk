@@ -9,6 +9,8 @@
 {% set noJsBackLink = true %}
 
 {% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-form-group">
@@ -24,11 +26,11 @@
                     <p>
                         This licence condition has been changed in policy.
                     </p>
-                    <p> 
-                        Before you can continue varying this licence, you must review this change and then accept or delete it.
+                    <p>
+                        Before you can continue varying this licence, you must review this change and then accept it or delete the condition.
                     </p>
                     <p>
-                        You need to add or check some information before we can update the licence.
+                        The licence will then be updated automatically.
                     </p>
                     <div class="govuk-form-group">
                         <h2 class="govuk-heading-m govuk-!-margin-top-8">
@@ -69,7 +71,7 @@
                     <div class="govuk-grid-column-full">
                         <div class="govuk-button-group">
                             {{ govukButton({
-                                text: "Continue",
+                                text: "Accept change",
                                 attributes: { 'data-qa': 'continue' }
                             }) }}
                             {{ govukButton({
@@ -84,4 +86,6 @@
             </fieldset>
         </div>
     </form>
+    </div>
+</div>
 {% endblock %}

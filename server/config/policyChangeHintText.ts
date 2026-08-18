@@ -207,6 +207,12 @@ const policyChangeHints: HintText[] = [
     description: ['Requirement not to install an e-sim added.'],
     bulletpoints: [],
   },
+  {
+    code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: ['The condition has been simplified.'],
+    bulletpoints: [],
+  },
 ]
 
 export default policyChangeHints
