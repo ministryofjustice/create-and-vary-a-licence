@@ -6,7 +6,6 @@ import ConditionService, { PolicyAdditionalCondition } from '../../../services/c
 import policyChangeHintText from '../../../config/policyChangeHintText'
 import conditionChangeType from '../../../enumeration/conditionChangeType'
 import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/LicencePolicy'
-import { CURFEW_CONDITION_CODE } from '../../../utils/conditionRoutes'
 import CurfewConditionService from '../../../services/curfewConditionService'
 
 export default class PolicyChangeRoutes {
@@ -116,7 +115,6 @@ export default class PolicyChangeRoutes {
 
     const inputs: string[] = []
     const licenceConditionCodes = additionalLicenceConditions.map((c: AdditionalCondition) => c.code)
-    let licenceConditionCodesToUpdate = licenceConditionCodes
     const conditionsToAdd: PolicyAdditionalCondition[] = []
 
     // if the condition is being replaced by new condition(s)
@@ -160,29 +158,40 @@ export default class PolicyChangeRoutes {
         conditionsToAdd.push(policyCondition)
       }
 
-      const isCurfewV4Upgrade = condition.code === CURFEW_CONDITION_CODE && licence.version === '4.0'
-      if (isCurfewV4Upgrade) {
-        await this.curfewConditionService.upgradeCurfewConditionData(licence.id, additionalLicenceConditions, user)
-        licenceConditionCodesToUpdate = this.removeDuplicateConditionCodes(licenceConditionCodes)
-      } else if (policyCondition.requiresInput) {
-        inputs.push(condition.code)
-      } else {
-        const existingCondition = additionalLicenceConditions.find(
-          additionalCondition => additionalCondition.code === condition.code,
-        )
-
-        // Removes any now-unused user-entered data
-        await this.licenceService.updateAdditionalConditionData(licenceId, existingCondition, {}, user)
-      }
-
-      // Update condition text to match new policy version
-      await this.licenceService.updateAdditionalConditions(
-        licence.id,
-        conditionType,
-        { additionalConditions: licenceConditionCodesToUpdate },
-        user,
+      const isCurfewUpgrade = this.curfewConditionService.isCurfewConditionUpdateRequired(
+        condition.code,
         licence.version,
       )
+
+      if (isCurfewUpgrade) {
+        await this.curfewConditionService.upgradeCurfewCondition(
+          licence.id,
+          conditionType,
+          additionalLicenceConditions,
+          user,
+          licence.version,
+        )
+      } else {
+        if (policyCondition.requiresInput) {
+          inputs.push(condition.code)
+        } else {
+          const existingCondition = additionalLicenceConditions.find(
+            additionalCondition => additionalCondition.code === condition.code,
+          )
+
+          // Removes any now-unused user-entered data
+          await this.licenceService.updateAdditionalConditionData(licenceId, existingCondition, {}, user)
+        }
+
+        // Update condition text to match new policy version
+        await this.licenceService.updateAdditionalConditions(
+          licence.id,
+          conditionType,
+          { additionalConditions: licenceConditionCodes },
+          user,
+          licence.version,
+        )
+      }
     }
 
     await Promise.all(
@@ -211,8 +220,6 @@ export default class PolicyChangeRoutes {
 
     return res.redirect(`/licence/vary/id/${licenceId}/policy-changes/input/callback/1`)
   }
-
-  private removeDuplicateConditionCodes = (conditionCodes: string[]): string[] => [...new Set(conditionCodes)]
 
   DELETE = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals

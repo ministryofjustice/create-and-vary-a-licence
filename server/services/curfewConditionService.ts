@@ -1,6 +1,7 @@
 import { AdditionalCondition } from '../@types/licenceApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
 import CurfewType from '../enumeration/CurfewType'
+import LicenceType from '../enumeration/licenceType'
 import { CURFEW_CONDITION_CODE } from '../utils/conditionRoutes'
 import LicenceService from './licenceService'
 
@@ -23,7 +24,16 @@ const curfewFieldsByType: Record<CurfewType, CurfewFieldPair[]> = {
 export default class CurfewConditionService {
   constructor(private readonly licenceService: LicenceService) {}
 
-  async upgradeCurfewConditionData(licenceId: number, conditions: AdditionalCondition[], user: User): Promise<void> {
+  isCurfewConditionUpdateRequired = (conditionCode: string, licenceVersion: string): boolean =>
+    conditionCode === CURFEW_CONDITION_CODE && licenceVersion === '4.0'
+
+  async upgradeCurfewCondition(
+    licenceId: number,
+    conditionType: LicenceType,
+    conditions: AdditionalCondition[],
+    user: User,
+    licenceVersion: string,
+  ): Promise<void> {
     const curfewConditions = this.getCurfewConditionsInSaveOrder(conditions)
     if (!curfewConditions.length) return
 
@@ -33,7 +43,18 @@ export default class CurfewConditionService {
 
     await this.licenceService.updateAdditionalConditionData(licenceId.toString(), primaryCondition, upgradedData, user)
     await this.deleteDuplicateConditions(licenceId, duplicateConditions, user)
+    await this.licenceService.updateAdditionalConditions(
+      licenceId,
+      conditionType,
+      { additionalConditions: this.getUniqueConditionCodes(conditions) },
+      user,
+      licenceVersion,
+    )
   }
+
+  private getUniqueConditionCodes = (conditions: AdditionalCondition[]): string[] => [
+    ...new Set(conditions.map(condition => condition.code)),
+  ]
 
   private getCurfewConditionsInSaveOrder = (conditions: AdditionalCondition[]): AdditionalCondition[] =>
     conditions
@@ -45,18 +66,20 @@ export default class CurfewConditionService {
     const targetFields = curfewFieldsByType[numberOfCurfews]
     if (!targetFields) return null
 
-    return targetFields.reduce<UpgradedCurfewData>(
-      (data, [startField, endField], index) => {
-        if (!conditions[index]) return data
+    const timePairs = conditions.slice(0, targetFields.length).map((_, index) => ({
+      start: this.getLegacyTime(conditions, index, 'curfewStart'),
+      end: this.getLegacyTime(conditions, index, 'curfewEnd'),
+    }))
 
-        return {
-          ...data,
-          [startField]: this.getLegacyTime(conditions, index, 'curfewStart'),
-          [endField]: this.getLegacyTime(conditions, index, 'curfewEnd'),
-        }
-      },
-      { numberOfCurfews },
-    )
+    const upgradedData: UpgradedCurfewData = { numberOfCurfews }
+
+    timePairs.forEach(({ start, end }, index) => {
+      const [startField, endField] = targetFields[index]
+      upgradedData[startField] = start
+      upgradedData[endField] = end
+    })
+
+    return upgradedData
   }
 
   private getLegacyTime = (conditions: AdditionalCondition[], index: number, field: string): string => {

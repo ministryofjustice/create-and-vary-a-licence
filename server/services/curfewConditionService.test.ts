@@ -5,6 +5,7 @@ import ConditionService from './conditionService'
 import CurfewConditionService from './curfewConditionService'
 import LicenceService from './licenceService'
 import { CURFEW_CONDITION_CODE } from '../utils/conditionRoutes'
+import LicenceType from '../enumeration/licenceType'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./conditionService')
@@ -28,6 +29,20 @@ describe('CurfewConditionService', () => {
     jest.clearAllMocks()
   })
 
+  describe('isCurfewConditionUpdateRequired', () => {
+    it('returns true for the V4 curfew condition', () => {
+      expect(curfewConditionService.isCurfewConditionUpdateRequired(CURFEW_CONDITION_CODE, '4.0')).toBe(true)
+    })
+
+    it('returns false for a curfew condition from an earlier policy version', () => {
+      expect(curfewConditionService.isCurfewConditionUpdateRequired(CURFEW_CONDITION_CODE, '3.0')).toBe(false)
+    })
+
+    it('returns false for a different V4 condition', () => {
+      expect(curfewConditionService.isCurfewConditionUpdateRequired('other-code', '4.0')).toBe(false)
+    })
+  })
+
   it('upgrades curfew conditions in save order and deletes the redundant conditions', async () => {
     const firstCurfew = condition(5, CURFEW_CONDITION_CODE, {
       numberOfCurfews: 'Two curfews',
@@ -41,7 +56,13 @@ describe('CurfewConditionService', () => {
     })
     const unrelatedCondition = condition(4, 'other-code', {})
 
-    await curfewConditionService.upgradeCurfewConditionData(1, [secondCurfew, unrelatedCondition, firstCurfew], user)
+    await curfewConditionService.upgradeCurfewCondition(
+      1,
+      LicenceType.AP,
+      [secondCurfew, unrelatedCondition, firstCurfew],
+      user,
+      '4.0',
+    )
 
     expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
       '1',
@@ -57,13 +78,27 @@ describe('CurfewConditionService', () => {
     )
     expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledTimes(1)
     expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(6, 1, user)
+    expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
+      1,
+      LicenceType.AP,
+      { additionalConditions: [CURFEW_CONDITION_CODE, 'other-code'] },
+      user,
+      '4.0',
+    )
   })
 
   it('does nothing when there are no curfew conditions', async () => {
-    await curfewConditionService.upgradeCurfewConditionData(1, [condition(4, 'other-code', {})], user)
+    await curfewConditionService.upgradeCurfewCondition(
+      1,
+      LicenceType.AP,
+      [condition(4, 'other-code', {})],
+      user,
+      '4.0',
+    )
 
     expect(licenceService.updateAdditionalConditionData).not.toHaveBeenCalled()
     expect(licenceService.deleteAdditionalCondition).not.toHaveBeenCalled()
+    expect(licenceService.updateAdditionalConditions).not.toHaveBeenCalled()
   })
 
   it('does nothing when the legacy number of curfews is unsupported', async () => {
@@ -73,9 +108,10 @@ describe('CurfewConditionService', () => {
       curfewEnd: '10:00 am',
     })
 
-    await curfewConditionService.upgradeCurfewConditionData(1, [curfew], user)
+    await curfewConditionService.upgradeCurfewCondition(1, LicenceType.AP, [curfew], user, '4.0')
 
     expect(licenceService.updateAdditionalConditionData).not.toHaveBeenCalled()
     expect(licenceService.deleteAdditionalCondition).not.toHaveBeenCalled()
+    expect(licenceService.updateAdditionalConditions).not.toHaveBeenCalled()
   })
 })
