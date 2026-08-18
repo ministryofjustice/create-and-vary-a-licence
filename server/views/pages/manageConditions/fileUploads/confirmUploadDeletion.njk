@@ -6,6 +6,10 @@
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + conditionCode + "/file-uploads?fromReview=true" %}
 
 {% block content %}
+    {% if headerCaption | length %}
+        <span class="govuk-caption-l">{{ headerCaption }}</span>
+    {% endif %}
+
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <form method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
