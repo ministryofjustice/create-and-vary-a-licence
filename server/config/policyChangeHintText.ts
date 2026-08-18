@@ -1,4 +1,4 @@
-type HintText = { code: string; fromVersions: string[]; description: string[]; bulletpoints: string[] }
+export type HintText = { code: string; fromVersions: string[]; description: string[]; bulletpoints: string[] }
 
 const policyChangeHints: HintText[] = [
   {

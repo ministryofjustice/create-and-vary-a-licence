@@ -36,14 +36,14 @@
                         <h2 class="govuk-heading-m govuk-!-margin-top-8">
                             Licence condition being changed
                         </h2>
-                        <p>
+                        <p data-qa="previous-condition-text">
                             {{condition.previousText}}
                         </p>
                         <h2 class="govuk-heading-m govuk-!-margin-top-6">
                             New licence condition
                         </h2>
                         {% if conditionHintText.description.length > 0 %}
-                            <p class="govuk-hint">
+                            <p class="govuk-hint" data-qa="condition-hint-text">
                                 {% for line in conditionHintText.description %}
                                     {{line}}
                                     <br/>
@@ -61,7 +61,8 @@
                             <br/>
                         {% endif %}
                         {{ govukInsetText({
-                            text: condition.currentText
+                            text: condition.currentText,
+                            attributes: { 'data-qa': 'current-condition-text' }
                         }) }}
                     </div>
                 </div>
