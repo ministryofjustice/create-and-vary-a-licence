@@ -73,12 +73,6 @@ const policyChangeHints: HintText[] = [
     bulletpoints: [],
   },
   {
-    code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
-    fromVersions: ['1.0', '2.0'],
-    description: [],
-    bulletpoints: ['Details of test centre location removed', 'Requirement not to hamper testing process added'],
-  },
-  {
     code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
     fromVersions: ['1.0', '2.0'],
     description: [
