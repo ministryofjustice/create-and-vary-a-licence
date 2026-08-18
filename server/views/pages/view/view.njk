@@ -136,14 +136,14 @@
                                 text: "View and print licence PDF",
                                 classes: "govuk-button--primary govuk-!-margin-right-1",
                                 disabled: isLicenceUnsubmittable,
-                                attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+                                attributes: { 'data-qa': 'print-licence' }
                             }) }}
                         {% else %}
                             {{ govukButton({
                                 text: "View and print licence PDF",
                                 classes: "govuk-button--primary govuk-!-margin-right-1",
                                 href: '/licence/view/id/' + licence.id + '/pdf-print',
-                                attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+                                attributes: { 'data-qa': 'print-licence' }
                             }) }}
                         {% endif %}
                     {% elseif isPrintable and updatedFromNoAppointmentRequired %}
