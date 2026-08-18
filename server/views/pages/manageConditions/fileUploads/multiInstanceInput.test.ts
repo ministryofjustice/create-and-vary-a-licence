@@ -18,7 +18,7 @@ describe('Multi-instance input view', () => {
       expect($('.govuk-caption-l').text().trim()).toBe('Area this person must not enter (exclusion zone)')
     })
 
-    it('does not render the caption for other condition codes', () => {
+    it('does not render the caption when one is not provided', () => {
       const $ = render({
         additionalCondition: {
           id: 1,
