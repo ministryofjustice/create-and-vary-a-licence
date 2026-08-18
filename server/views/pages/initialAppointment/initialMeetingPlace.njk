@@ -63,9 +63,5 @@
                 {% endif %}
         </div>
     </div>
-    {% if postcodeLookupEnabled %}
-        {% include "pages/initialAppointment/postcodeLookupForm.njk" %}
-    {% else %}
-        {% include "pages/initialAppointment/manualAddressForm.njk" %}
-    {% endif %}
+    {% include "pages/initialAppointment/postcodeLookupForm.njk" %}
 {% endblock %}

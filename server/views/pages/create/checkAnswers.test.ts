@@ -61,6 +61,44 @@ describe('Create a Licence Views - Check Answers', () => {
     appointmentAlternativeTelephoneNumber: '01632960902',
   } as Licence
 
+  it('should display a warning banner when one is passed through', () => {
+    const $ = render({
+      banner: {
+        type: 'warning',
+        text: 'You must say when the appointment is for before the licence can be printed.',
+        iconFallbackText: 'Warning',
+      },
+    })
+
+    const warningBanner = $('.moj-banner--warning')
+    expect(warningBanner.length).toBe(1)
+    expect(warningBanner.text()).toContain(
+      'You must say when the appointment is for before the licence can be printed.',
+    )
+  })
+
+  it('should display a success banner when passed through', () => {
+    const $ = render({
+      banner: {
+        type: 'success',
+        text: 'Details updated.',
+        iconFallbackText: 'Success',
+      },
+    })
+
+    const successBanner = $('.moj-banner--success')
+    expect(successBanner.length).toBe(1)
+    expect(successBanner.text()).toContain('Details updated.')
+  })
+
+  it('should display no banners when they are not passed through', () => {
+    const $ = render({
+      banner: {},
+    })
+    expect($('.moj-banner--success').length).toBe(0)
+    expect($('.moj-banner--warning').length).toBe(0)
+  })
+
   it('should display additional licence conditions section if licence type is AP', () => {
     const $ = render({ licence: { ...licence, typeCode: 'AP' } })
     expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (0)')

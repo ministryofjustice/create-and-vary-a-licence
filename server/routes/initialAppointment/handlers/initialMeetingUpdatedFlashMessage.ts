@@ -2,13 +2,31 @@ import { Request } from 'express'
 import UserType from '../../../enumeration/userType'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import config from '../../../config'
 
-const flashInitialApptUpdatedMessage = (req: Request, licence: Licence, userType: UserType) => {
+const flashInitialApptUpdatedMessage = (
+  req: Request,
+  licence: Licence,
+  userType: UserType,
+  updateFromNoAppointmentNeeded: boolean = false,
+) => {
   if (licence.statusCode !== LicenceStatus.SUBMITTED && licence.statusCode !== LicenceStatus.APPROVED) {
     return
   }
 
-  let updateMessage = 'Initial appointment details updated.'
+  if (config.finalThirdEnabled && updateFromNoAppointmentNeeded && userType === UserType.PRISON) {
+    const pathMap: Record<string, string> = {
+      TIME_SERVED: '/licence/time-served/edit/id/',
+      HARD_STOP: '/licence/hard-stop/edit/id/',
+    }
+
+    const routePath = (pathMap[licence.kind] || '/licence/edit/id/') + licence.id
+    const updateMessage = `Details updated. You must say <a href=${routePath}/initial-meeting-time>when the initial appointment is for</a> before you can print the licence`
+    req.flash('initialAppointmentUpdatedFromNotRequired', updateMessage)
+    return
+  }
+
+  let updateMessage = 'Details updated.'
   if (userType === UserType.PRISON) {
     updateMessage += ' You must now tell the community probation team.'
     if (licence.statusCode === LicenceStatus.APPROVED) {

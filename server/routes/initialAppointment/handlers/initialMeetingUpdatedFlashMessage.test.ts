@@ -3,6 +3,7 @@ import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 import UserType from '../../../enumeration/userType'
+import config from '../../../config'
 
 describe('Initial appointment updated flash message', () => {
   let req: Request
@@ -39,15 +40,33 @@ describe('Initial appointment updated flash message', () => {
     const userType = UserType.PRISON
     it('sends the expected message for SUBMITTED licences', () => {
       licence.statusCode = LicenceStatus.SUBMITTED
-      const expectedMessage = 'Initial appointment details updated. You must now tell the community probation team.'
+      const expectedMessage = 'Details updated. You must now tell the community probation team.'
       flashInitialApptUpdatedMessage(req, licence, userType)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
     })
 
     it('sends the expected message for APPROVED licences', () => {
-      const expectedMessage = `Initial appointment details updated. You must now tell the community probation team. <a target="_blank" href='/licence/view/id/1/pdf-print'>View and print new licence PDF</a>`
+      const expectedMessage = `Details updated. You must now tell the community probation team. <a target="_blank" href='/licence/view/id/1/pdf-print'>View and print new licence PDF</a>`
       flashInitialApptUpdatedMessage(req, licence, userType)
+
+      expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
+    })
+
+    it('sends the expected message if appointment changed from not required and final third enabled', () => {
+      config.finalThirdEnabled = true
+      flashInitialApptUpdatedMessage(req, licence, userType, true)
+
+      expect(req.flash).toHaveBeenCalledWith(
+        'initialAppointmentUpdatedFromNotRequired',
+        'Details updated. You must say <a href=/licence/edit/id/1/initial-meeting-time>when the initial appointment is for</a> before you can print the licence',
+      )
+    })
+
+    it('sends the expected message if appointment changed from not required and final third disabled', () => {
+      config.finalThirdEnabled = false
+      const expectedMessage = `Details updated. You must now tell the community probation team. <a target="_blank" href='/licence/view/id/1/pdf-print'>View and print new licence PDF</a>`
+      flashInitialApptUpdatedMessage(req, licence, userType, true)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
     })
@@ -57,15 +76,14 @@ describe('Initial appointment updated flash message', () => {
     const userType = UserType.PROBATION
     it('sends the expected message for SUBMITTED licences', () => {
       licence.statusCode = LicenceStatus.SUBMITTED
-      const expectedMessage = 'Initial appointment details updated.'
+      const expectedMessage = 'Details updated.'
       flashInitialApptUpdatedMessage(req, licence, userType)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
     })
 
     it('sends the expected message for APPROVED licences', () => {
-      const expectedMessage =
-        'Initial appointment details updated. You must now notify the prison so they can print the licence again.'
+      const expectedMessage = 'Details updated. You must now notify the prison so they can print the licence again.'
       flashInitialApptUpdatedMessage(req, licence, userType)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)

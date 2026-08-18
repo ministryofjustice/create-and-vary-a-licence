@@ -18,6 +18,7 @@ describe('Print a HDC AP_PSS licence', () => {
         licenceExpiryDate: '08/02/2023',
         homeDetentionCurfewActualDate: '08/02/2022',
         appointmentPerson: 'Jack Frost',
+        appointmentTime: '28/01/2023 10:30',
         appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
         comTelephone: '07878 234566',
         curfewAddress: {
@@ -174,7 +175,7 @@ describe('Print a HDC AP_PSS licence', () => {
   })
 
   describe('Appointment date rendering', () => {
-    it('Should render specific date time', () => {
+    it('Should render on specific date at time if present', () => {
       const $ = render({
         licence: {
           appointmentTimeType: 'SPECIFIC_DATE_TIME',
@@ -182,6 +183,13 @@ describe('Print a HDC AP_PSS licence', () => {
         } as Licence,
       })
       expect($('[data-qa="appointment-time"]').text().trim()).toBe('On Saturday 28 January 2023 at 10:30 am')
+    })
+
+    it('Should not render on specific date at time if not present', () => {
+      const $ = render({
+        licence: {} as Licence,
+      })
+      expect($('[data-qa="appointment-time"]').length).toBe(0)
     })
   })
 })

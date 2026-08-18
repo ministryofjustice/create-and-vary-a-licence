@@ -8,6 +8,8 @@ import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 import HdcService from '../../../services/hdc/hdcService'
+import config from '../../../config'
+import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class CheckAnswersRoutes {
   constructor(
@@ -38,16 +40,18 @@ export default class CheckAnswersRoutes {
 
     const isVariationOfHdcMigration = await this.hdcService.isVariationOfHdcMigration(licence, user)
 
+    const initialApptUpdatedMessage = req.flash('initialApptUpdated')?.[0]
+
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
       backLink,
-      initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
       canEditInitialAppt: !isVariation(licence) && !isInHardStopPeriod(licence),
       statusCode: licence.statusCode,
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
       isVariationOfHdcMigration,
+      banner: this.mergeBanners(initialApptUpdatedMessage, licence),
     })
   }
 
@@ -76,6 +80,45 @@ export default class CheckAnswersRoutes {
     const licenceToSubmit = plainToInstance(LicenceToSubmit, licence, { excludeExtraneousValues: true })
     const errors: ValidationError[] = await validate(licenceToSubmit)
     return this.flattenValidationErrors(errors)
+  }
+
+  private mergeBanners = (initialApptUpdatedMessage: string, licence: Licence) => {
+    let banner
+    if (initialApptUpdatedMessage) {
+      banner = {
+        type: 'success',
+        text: initialApptUpdatedMessage,
+        iconFallbackText: 'Success',
+      }
+    }
+
+    if (config.finalThirdEnabled && this.shouldShowAppointmentTimeWarning(licence)) {
+      banner = {
+        type: 'warning',
+        text: this.getAppointmentTimeWarningText(initialApptUpdatedMessage, licence.statusCode),
+        iconFallbackText: 'Warning',
+      }
+    }
+
+    return banner
+  }
+
+  private shouldShowAppointmentTimeWarning = (licence: Licence): boolean =>
+    licence.appointmentTimeType === null ||
+    (licence.appointmentTimeType === 'NO_APPOINTMENT_NEEDED' &&
+      licence.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED')
+
+  private getAppointmentTimeWarningText = (
+    initialApptUpdatedMessage: string,
+    statusCode: Licence['statusCode'],
+  ): string => {
+    if (statusCode === LicenceStatus.APPROVED) {
+      return `${initialApptUpdatedMessage ? 'Details updated. ' : ''}You must set a date and time for the appointment before the licence can be printed.`
+    }
+    if (statusCode === LicenceStatus.SUBMITTED) {
+      return `${initialApptUpdatedMessage ? 'Details updated. ' : ''}You must set a date and time for the appointment before the licence can be approved.`
+    }
+    return 'You must set a date and time for the appointment before the licence can be printed.'
   }
 
   flattenValidationErrors = (errors: ValidationError[], parentProperty = ''): FieldValidationError[] =>

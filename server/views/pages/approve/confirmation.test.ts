@@ -51,6 +51,21 @@ describe('Approval confirmation page', () => {
         'Probation practitioners can make changes up to 2 days before release',
       )
     })
+
+    it('should display licence change message for TIME_SERVED if final third is enabled', () => {
+      const $ = render({
+        licence: { kind: 'TIME_SERVED' },
+        titleText: 'Licence approved',
+        confirmationMessage: 'The licence has been approved',
+        isComEmailAvailable: true,
+        applicationName: 'Create and vary a licence',
+        isFinalThirdEnabled: true,
+      })
+
+      expect($('[data-qa="licence-change-message"]').text()).toContain(
+        'Only the contact details that will be shown on the licence can be changed, for example if an initial appointment is needed. You will not need to approve the licence again.',
+      )
+    })
   })
 
   describe('HDC licence with MVP2 enabled', () => {
@@ -82,6 +97,27 @@ describe('Approval confirmation page', () => {
 
       expect($('p').text()).not.toContain(
         "You'll need to reapprove the licence if changes are made to the HDC curfew details or licence conditions",
+      )
+    })
+
+    it('should not display HDC reapproval message when licence kind is not HDC and the new message for no initial appointment', () => {
+      const $ = render({
+        licence: { kind: 'CRD' },
+        titleText: 'Licence approved',
+        confirmationMessage: 'The licence has been approved',
+        isComEmailAvailable: true,
+        applicationName: 'Create and vary a licence',
+        isFinalThirdEnabled: true,
+      })
+
+      expect($('p').text()).not.toContain(
+        "You'll need to reapprove the licence if changes are made to the HDC curfew details or licence conditions",
+      )
+      expect($('[data-qa="licence-change-message"]').text()).toContain(
+        'Probation practitioners can make changes up to 2 days before release.',
+      )
+      expect($('[data-qa="licence-change-message"]').text()).toContain(
+        'After this, they can only ask the prison to change the contact details that will be shown on the licence, for example if an initial appointment is needed. Other changes must then be made after release.',
       )
     })
   })

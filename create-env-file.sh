@@ -40,7 +40,6 @@ export MANAGE_USERS_API_URL=https://manage-users-api-dev.hmpps.service.justice.g
 export DPS_URL=https://digital-dev.prison.service.justice.gov.uk
 
 export LICENCE_WATERMARK=true
-export POSTCODE_LOOKUP_ENABLED=true
 export COMMON_COMPONENTS_ENABLED=false
 export SHOW_WHATS_NEW_BANNER=false
 export HDC_ENABLED=true
@@ -51,8 +50,7 @@ export AWS_ACCESS_KEY_ID=foo
 export AWS_SECRET_ACCESS_KEY=bar
 export SERVICE_NAME=create-and-vary-a-licence
 
-export POLICY_V4_CREATION_DATE=2027-01-01
-export POLICY_V4_GO_LIVE_DATE=2026-09-02
+export LICENCE_CREATION_BLOCK_DATE=2028-01-01
 
 # Write to .env grouped by value type
 cat <<EOF > $fileToAddVars
@@ -80,7 +78,6 @@ cat <<EOF > $fileToAddVars
 
 # === Boolean flags ===
   LICENCE_WATERMARK=$LICENCE_WATERMARK
-  POSTCODE_LOOKUP_ENABLED=$POSTCODE_LOOKUP_ENABLED
   COMMON_COMPONENTS_ENABLED=$COMMON_COMPONENTS_ENABLED
   SHOW_WHATS_NEW_BANNER=$SHOW_WHATS_NEW_BANNER
   HDC_ENABLED=$HDC_ENABLED
@@ -92,7 +89,7 @@ cat <<EOF > $fileToAddVars
   AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   SERVICE_NAME=$SERVICE_NAME
   POLICY_V4_CREATION_DATE=$POLICY_V4_CREATION_DATE
-  POLICY_V4_GO_LIVE_DATE=$POLICY_V4_GO_LIVE_DATE
+  LICENCE_CREATION_BLOCK_DATE=$LICENCE_CREATION_BLOCK_DATE
 EOF
 
 echo ".env file created successfully."
