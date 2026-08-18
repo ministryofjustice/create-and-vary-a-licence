@@ -73,6 +73,7 @@ export default class ViewAndPrintLicenceRoutes {
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
         initialAppointmentUpdatedFromNotRequired: req.flash('initialAppointmentUpdatedFromNotRequired')?.[0],
         noAppointmentNeeded,
+        isLicenceUnsubmittable: this.isLicenceUnsubmittable(licence),
       })
     } else {
       res.redirect(`/licence/view/cases`)
@@ -128,4 +129,9 @@ export default class ViewAndPrintLicenceRoutes {
       message: Object.values(error.constraints)[Object.values(error.constraints).length - 1],
     }))
   }
+
+  private isLicenceUnsubmittable = (licence: Licence): boolean =>
+    config.finalThirdEnabled &&
+    licence.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' &&
+    (licence.appointmentTimeType === 'NO_APPOINTMENT_NEEDED' || licence.appointmentTimeType === null)
 }

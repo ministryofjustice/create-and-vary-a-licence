@@ -23,6 +23,7 @@ export default class FileUploadRemovalRoutes {
       displayMessage: null,
       description: condition.data[0]?.value,
       fileName: condition.uploadSummary[0]?.filename,
+      headerCaption: condition.headerCaption,
     })
   }
 

@@ -67,6 +67,7 @@ describe('Route - view and approve a licence', () => {
         isPrisonUser: true,
         noAppointmentNeeded: false,
         initialApptUpdatedMessage: undefined,
+        isLicenceUnsubmittable: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -89,6 +90,7 @@ describe('Route - view and approve a licence', () => {
         isPrisonUser: true,
         noAppointmentNeeded: false,
         initialApptUpdatedMessage: undefined,
+        isLicenceUnsubmittable: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -133,6 +135,7 @@ describe('Route - view and approve a licence', () => {
         isPrisonUser: true,
         noAppointmentNeeded: false,
         initialApptUpdatedMessage: undefined,
+        isLicenceUnsubmittable: false,
         warningMessage:
           "This is the last approved version of this person's licence.<br />Another version was started on 15 December 2022.<br />" +
           'You can print the most recent version once it has been approved.',
@@ -170,6 +173,7 @@ describe('Route - view and approve a licence', () => {
         isPrisonUser: true,
         noAppointmentNeeded: false,
         initialApptUpdatedMessage: undefined,
+        isLicenceUnsubmittable: false,
         warningMessage:
           'This is the most recent version of this licence that was submitted on 15 June 2012.<br />' +
           'Once this version is approved, you can print it.<br /><a href="/licence/view/id/1/pdf-print" target="_blank">' +
@@ -217,6 +221,7 @@ describe('Route - view and approve a licence', () => {
           isPrisonUser: true,
           noAppointmentNeeded: false,
           initialApptUpdatedMessage: undefined,
+          isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -239,6 +244,7 @@ describe('Route - view and approve a licence', () => {
           isPrisonUser: true,
           noAppointmentNeeded: false,
           initialApptUpdatedMessage: undefined,
+          isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -261,6 +267,7 @@ describe('Route - view and approve a licence', () => {
           isPrisonUser: true,
           noAppointmentNeeded: false,
           initialApptUpdatedMessage: undefined,
+          isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -287,6 +294,35 @@ describe('Route - view and approve a licence', () => {
       })
     })
 
+    it('should check if the licence is unsubmittable', async () => {
+      const original = config.finalThirdEnabled
+      config.finalThirdEnabled = true
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user,
+          licence: {
+            ...licence,
+            appointmentPersonType: 'DUTY_OFFICER',
+            appointmentTimeType: 'NO_APPOINTMENT_NEEDED',
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+        additionalConditions: [],
+        isEditableByPrison: false,
+        isPrisonUser: true,
+        noAppointmentNeeded: false,
+        initialApptUpdatedMessage: undefined,
+        isLicenceUnsubmittable: true,
+      })
+      config.finalThirdEnabled = original
+    })
+
     describe('when it is a time served case', () => {
       it('should be editable by prison CAs when it is a time served case', async () => {
         res = {
@@ -311,6 +347,7 @@ describe('Route - view and approve a licence', () => {
           isPrisonUser: true,
           noAppointmentNeeded: false,
           initialApptUpdatedMessage: undefined,
+          isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -337,6 +374,7 @@ describe('Route - view and approve a licence', () => {
           isPrisonUser: true,
           noAppointmentNeeded: false,
           initialApptUpdatedMessage: undefined,
+          isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -364,6 +402,7 @@ describe('Route - view and approve a licence', () => {
         isPrisonUser: false,
         noAppointmentNeeded: false,
         initialApptUpdatedMessage: undefined,
+        isLicenceUnsubmittable: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
