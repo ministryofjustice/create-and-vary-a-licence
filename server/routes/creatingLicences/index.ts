@@ -23,7 +23,6 @@ import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import UserType from '../../enumeration/userType'
 import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMiddleware'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
-import LicenceCreationBlockedRoutes from './handlers/licenceCreationBlocked'
 
 export default function Index({
   licenceService,
@@ -158,9 +157,5 @@ export default function Index({
     get('/id/:licenceId/licence-changes-not-approved-in-time', controller.GET)
   }
 
-  {
-    const controller = new LicenceCreationBlockedRoutes(licenceService)
-    get('/nomisId/:nomisId/licence-creation-blocked', controller.GET)
-  }
   return router
 }
