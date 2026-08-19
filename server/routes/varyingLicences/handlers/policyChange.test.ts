@@ -286,7 +286,7 @@ describe('Route handlers', () => {
       expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
         1,
         'AP',
-        { additionalConditions: ['other-code', CURFEW_CONDITION_CODE] },
+        { additionalConditions: ['other-code', CURFEW_CONDITION_CODE, 'other-code'] },
         res.locals.user,
         '4.0',
       )
