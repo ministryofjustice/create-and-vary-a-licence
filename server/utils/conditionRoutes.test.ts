@@ -77,6 +77,30 @@ describe('conditionRoutes', () => {
         }),
       ).toStrictEqual(`/licence/create/id/1/additional-licence-conditions/condition/${CURFEW_CONDITION_CODE}/curfew`)
     })
+
+    test('Curfew V4, from review', () => {
+      expect(
+        getConditionCallbackHref({
+          licenceId: '1',
+          conditionId: 2,
+          conditionCode: CURFEW_CONDITION_CODE,
+          fromReview: true,
+          version: '4.0',
+        }),
+      ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2?fromReview=true')
+    })
+
+    test('Curfew V4, not from review', () => {
+      expect(
+        getConditionCallbackHref({
+          licenceId: '1',
+          conditionId: 2,
+          conditionCode: CURFEW_CONDITION_CODE,
+          fromReview: false,
+          version: '4.0',
+        }),
+      ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2')
+    })
   })
 
   describe('getEditConditionHref', () => {
@@ -100,6 +124,31 @@ describe('conditionRoutes', () => {
           fromReview: false,
         }),
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2')
+    })
+
+    test('Curfew, from review', () => {
+      expect(
+        getEditConditionHref({
+          licenceId: 1,
+          conditionId: 2,
+          conditionCode: CURFEW_CONDITION_CODE,
+          fromReview: true,
+        }),
+      ).toStrictEqual(
+        `/licence/create/id/1/additional-licence-conditions/condition/${CURFEW_CONDITION_CODE}/curfew?fromReview=true`,
+      )
+    })
+
+    test('Curfew V4, from review', () => {
+      expect(
+        getEditConditionHref({
+          licenceId: 1,
+          conditionId: 2,
+          conditionCode: CURFEW_CONDITION_CODE,
+          fromReview: true,
+          version: '4.0',
+        }),
+      ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2?fromReview=true')
     })
 
     test('MEZ condition, from review', () => {
