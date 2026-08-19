@@ -68,7 +68,7 @@ export default function Index({ licenceService, conditionService, addressService
     post('/edit/id/:licenceId/initial-meeting-name', controller.POST, UserType.PRISON, PersonName)
   }
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
+    const controller = new InitialMeetingPlaceRoutes(addressService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET, UserType.PRISON)
     get('/create/id/:licenceId/licence-contact-address', controller.GET, UserType.PRISON)
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, UserType.PRISON, PostcodeLookupInputValidation)
@@ -80,7 +80,7 @@ export default function Index({ licenceService, conditionService, addressService
     )
   }
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
+    const controller = new InitialMeetingPlaceRoutes(addressService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-place', controller.GET, UserType.PRISON)
     get('/edit/id/:licenceId/licence-contact-address', controller.GET, UserType.PRISON)
     post('/edit/id/:licenceId/initial-meeting-place', controller.POST, UserType.PRISON, PostcodeLookupInputValidation)
