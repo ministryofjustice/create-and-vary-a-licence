@@ -89,14 +89,26 @@ describe('CurfewConditionService', () => {
     )
   })
 
-  it('does nothing when the legacy number of curfews is unsupported', async () => {
+  it('throws when there are no curfew conditions to upgrade', async () => {
+    await expect(
+      curfewConditionService.upgradeCurfewCondition(1, LicenceType.AP, [condition(4, 'other-code', {})], user, '4.0'),
+    ).rejects.toThrow('No curfew conditions found to upgrade')
+
+    expect(licenceService.updateAdditionalConditionData).not.toHaveBeenCalled()
+    expect(licenceService.deleteAdditionalCondition).not.toHaveBeenCalled()
+    expect(licenceService.updateAdditionalConditions).not.toHaveBeenCalled()
+  })
+
+  it('throws when the legacy number of curfews is unsupported', async () => {
     const curfew = condition(5, CURFEW_CONDITION_CODE, {
       numberOfCurfews: 'Four curfews',
       curfewStart: '08:00 am',
       curfewEnd: '10:00 am',
     })
 
-    await curfewConditionService.upgradeCurfewCondition(1, LicenceType.AP, [curfew], user, '4.0')
+    await expect(
+      curfewConditionService.upgradeCurfewCondition(1, LicenceType.AP, [curfew], user, '4.0'),
+    ).rejects.toThrow('Unsupported number of curfews: Four curfews')
 
     expect(licenceService.updateAdditionalConditionData).not.toHaveBeenCalled()
     expect(licenceService.deleteAdditionalCondition).not.toHaveBeenCalled()

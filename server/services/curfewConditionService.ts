@@ -1,3 +1,4 @@
+import assert from 'assert'
 import { AdditionalCondition } from '../@types/licenceApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
 import CurfewType from '../enumeration/CurfewType'
@@ -35,10 +36,10 @@ export default class CurfewConditionService {
     licenceVersion: string,
   ): Promise<void> {
     const curfewConditions = this.getCurfewConditionsInSaveOrder(conditions)
+    assert(curfewConditions.length, 'No curfew conditions found to upgrade')
 
     const [primaryCondition, ...duplicateConditions] = curfewConditions
     const upgradedData = this.buildUpgradedData(curfewConditions)
-    if (!upgradedData) return
 
     await this.licenceService.updateAdditionalConditionData(licenceId.toString(), primaryCondition, upgradedData, user)
     await this.deleteDuplicateConditions(licenceId, duplicateConditions, user)
@@ -64,10 +65,10 @@ export default class CurfewConditionService {
       .filter(condition => condition.code === CURFEW_CONDITION_CODE)
       .sort((first, second) => first.sequence - second.sequence)
 
-  private buildUpgradedData = (conditions: AdditionalCondition[]): UpgradedCurfewData | null => {
+  private buildUpgradedData = (conditions: AdditionalCondition[]): UpgradedCurfewData => {
     const numberOfCurfews = this.getDataValue(conditions[0], 'numberOfCurfews') as CurfewType
     const targetFields = curfewFieldsByType[numberOfCurfews]
-    if (!targetFields) return null
+    assert(targetFields, `Unsupported number of curfews: ${numberOfCurfews}`)
 
     const timePairs = conditions.slice(0, targetFields.length).map((_, index) => ({
       start: this.getLegacyTime(conditions, index, 'curfewStart'),
