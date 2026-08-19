@@ -1,4 +1,4 @@
-import { AddAnother } from '/@ministryofjustice/frontend'
+import { AddAnother } from '@ministryofjustice/frontend'
 
 window.addEventListener('load', () => {
   (() => {
