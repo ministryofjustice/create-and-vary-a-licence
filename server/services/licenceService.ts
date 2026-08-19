@@ -6,7 +6,6 @@ import type {
   AddAdditionalConditionRequest,
   AdditionalCondition,
   AdditionalConditionsRequest,
-  AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   AuditEvent,
@@ -47,8 +46,7 @@ import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
 import TelephoneNumbers from '../routes/initialAppointment/types/telephoneNumbers'
-import Address from '../routes/initialAppointment/types/address'
-import { addressObjectToString, isHdcLicence, isVariation, objectIsEmpty } from '../utils/utils'
+import { isHdcLicence, isVariation, objectIsEmpty } from '../utils/utils'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
@@ -106,12 +104,6 @@ export default class LicenceService {
     const appointmentTime = (appointmentTimeType === 'SPECIFIC_DATE_TIME' && DateTime.toJson(formData)) || null
     const requestBody = { appointmentTime, appointmentTimeType } as AppointmentTimeRequest
     return this.licenceApiClient.updateAppointmentTime(id, requestBody, user)
-  }
-
-  async updateAppointmentAddress(id: string, formData: Address, user: User): Promise<void> {
-    const appointmentAddress = addressObjectToString(formData)
-    const requestBody = { appointmentAddress } as AppointmentAddressRequest
-    return this.licenceApiClient.updateAppointmentAddress(id, requestBody, user)
   }
 
   async updateContactNumber(id: string, formData: TelephoneNumbers, user: User): Promise<void> {

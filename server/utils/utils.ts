@@ -97,14 +97,6 @@ const jsonToSimpleDateTime = (dt: string): SimpleDateTime | undefined => {
 }
 
 /**
- * Converts an Address object to a comma-separated string
- * @param address: Address
- */
-const addressObjectToString = (address: Address): string => {
-  return Object.values(address).join(', ')
-}
-
-/**
  * Converts a comma-separated string to an address object for display
  * @param address
  */
@@ -336,7 +328,6 @@ export {
   simpleDateTimeToJson,
   dateStringToSimpleDate,
   jsonToSimpleDateTime,
-  addressObjectToString,
   stringToAddressObject,
   jsonDtToDate,
   jsonDtToDateShort,
