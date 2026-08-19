@@ -35,7 +35,6 @@ export default class CurfewConditionService {
     licenceVersion: string,
   ): Promise<void> {
     const curfewConditions = this.getCurfewConditionsInSaveOrder(conditions)
-    if (!curfewConditions.length) return
 
     const [primaryCondition, ...duplicateConditions] = curfewConditions
     const upgradedData = this.buildUpgradedData(curfewConditions)
