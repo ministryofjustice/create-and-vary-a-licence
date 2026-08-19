@@ -36,7 +36,6 @@ generic-service:
 
     LICENCE_CREATION_BLOCK_DATE: "2030-01-01"
 
-    SHOW_WHATS_NEW_BANNER: "false"
     FINAL_THIRD_ENABLED: "true"
 
   namespace_secrets:

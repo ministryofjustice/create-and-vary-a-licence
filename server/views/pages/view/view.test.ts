@@ -418,6 +418,45 @@ describe('View and print - single licence view', () => {
     expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
     expect($('.moj-alert.moj-alert--warning').length).toBe(0)
   })
+
+  it('should show the warning banner when isLicenceUnsubmittable is true', () => {
+    const $ = render({
+      licence: { ...licence },
+      isLicenceUnsubmittable: true,
+    })
+
+    expect($('.moj-banner--warning').length).toBe(1)
+    expect($('.moj-banner--warning').text()).toContain(
+      'This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.',
+    )
+  })
+
+  it('should not show the warning banner when isLicenceUnsubmittable is false', () => {
+    const $ = render({
+      licence: { ...licence },
+      isLicenceUnsubmittable: false,
+    })
+    expect($('.moj-banner--warning').length).toBe(0)
+  })
+
+  it('View and print licence PDF button should be disabled if the licence is unsubmittable', () => {
+    const $ = render({
+      licence: { ...licence },
+      isLicenceUnsubmittable: true,
+    })
+
+    expect($('[data-qa="print-licence"]').length).toBe(1)
+    expect($('[data-qa="print-licence"]').attr('disabled')).toBeDefined()
+  })
+
+  it('View and print licence PDF button should be enabled if the licence is submittable', () => {
+    const $ = render({
+      licence: { ...licence },
+      isLicenceUnsubmittable: false,
+    })
+    expect($('[data-qa="print-licence"]').length).toBe(1)
+    expect($('[data-qa="print-licence"]').attr('disabled')).toBeUndefined()
+  })
 })
 
 describe('View and print - single standard licence view', () => {

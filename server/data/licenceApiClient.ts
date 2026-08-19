@@ -8,7 +8,6 @@ import type {
   AdditionalConditionsRequest,
   AddressResponse,
   AddressSearchResponse,
-  AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   ApprovalCase,
@@ -173,17 +172,6 @@ export default class LicenceApiClient extends RestClient {
   async updateAppointmentTime(licenceId: string, appointmentTime: AppointmentTimeRequest, user: User): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/appointmentTime`, data: appointmentTime },
-      { username: user.username },
-    )
-  }
-
-  async updateAppointmentAddress(
-    licenceId: string,
-    appointmentAddress: AppointmentAddressRequest,
-    user: User,
-  ): Promise<void> {
-    await this.put(
-      { path: `/licence/id/${licenceId}/appointment-address`, data: appointmentAddress },
       { username: user.username },
     )
   }

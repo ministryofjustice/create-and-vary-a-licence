@@ -946,20 +946,6 @@ export default {
     })
   },
 
-  stubPutAppointmentAddress: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'PUT',
-        urlPattern: `/licences-api/licence/id/(\\d)*/appointment-address`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
-      },
-    })
-  },
-
   stubPutContactNumber: (): SuperAgentRequest => {
     return stubFor({
       request: {
