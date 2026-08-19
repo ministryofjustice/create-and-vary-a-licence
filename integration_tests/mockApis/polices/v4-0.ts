@@ -650,8 +650,8 @@ const policy: LicencePolicyResponse = {
       {
         code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
         category: 'Curfew arrangement',
-        text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
-        tpl: 'Confine yourself to an address approved by your supervising officer between the hours of {curfewStart} and {curfewEnd} daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+        text: 'You must stay at the address approved by your supervising officer between [TIME] and [TIME] each day, unless your supervising officer gives permission for you to be elsewhere during those hours. This is called a curfew.',
+        tpl: 'You must stay at the address approved by your supervising officer between {oneCurfewStart}{twoCurfewStart}{threeCurfewStart} and {oneCurfewEnd}{twoCurfewEnd}{threeCurfewEnd}{twoCurfewStart2}{twoCurfewEnd2}{threeCurfewStart2}{threeCurfewEnd2}{threeCurfewStart3}{threeCurfewEnd3} each day, unless your supervising officer gives permission for you to be elsewhere during those hours. This is called a curfew.',
         requiresInput: true,
         inputs: [
           {

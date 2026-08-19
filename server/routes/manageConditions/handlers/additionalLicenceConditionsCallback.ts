@@ -31,6 +31,7 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
           conditionId: requiringInput.id,
           conditionCode: requiringInput.code,
           fromReview: !!req.query?.fromReview,
+          version: licence.version,
         }),
       )
     }
