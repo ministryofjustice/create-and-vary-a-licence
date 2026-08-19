@@ -43,7 +43,6 @@ generic-service:
     EPF2_URL: "https://epf.linkspace.uk/planning"
     HDC_ENABLED: "true"
     FINAL_THIRD_ENABLED: "false"
-    LICENCE_CREATION_BLOCK_DATE: "2026-10-01"
 
     # HDC
     MONITORING_SUPPLIER_TELEPHONE: "0800 137 291"
