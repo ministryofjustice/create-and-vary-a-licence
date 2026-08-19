@@ -46,20 +46,24 @@ export default class CurfewConditionService {
     await this.licenceService.updateAdditionalConditions(
       licenceId,
       conditionType,
-      { additionalConditions: this.getUniqueConditionCodes(conditions) },
+      { additionalConditions: this.getConditionCodesWithSingleCurfew(conditions) },
       user,
       licenceVersion,
     )
   }
 
-  private getUniqueConditionCodes = (conditions: AdditionalCondition[]): string[] => [
-    ...new Set(conditions.map(condition => condition.code)),
-  ]
+  private getConditionCodesWithSingleCurfew = (conditions: AdditionalCondition[]): string[] => {
+    const firstCurfewIndex = conditions.findIndex(condition => condition.code === CURFEW_CONDITION_CODE)
+
+    return conditions
+      .filter((condition, index) => condition.code !== CURFEW_CONDITION_CODE || index === firstCurfewIndex)
+      .map(condition => condition.code)
+  }
 
   private getCurfewConditionsInSaveOrder = (conditions: AdditionalCondition[]): AdditionalCondition[] =>
     conditions
       .filter(condition => condition.code === CURFEW_CONDITION_CODE)
-      .sort((first, second) => first.id - second.id)
+      .sort((first, second) => first.sequence - second.sequence)
 
   private buildUpgradedData = (conditions: AdditionalCondition[]): UpgradedCurfewData | null => {
     const numberOfCurfews = this.getDataValue(conditions[0], 'numberOfCurfews') as CurfewType

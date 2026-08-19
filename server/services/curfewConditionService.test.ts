@@ -22,6 +22,7 @@ describe('CurfewConditionService', () => {
     ({
       id,
       code,
+      sequence: id,
       data: Object.entries(data).map(([field, value]) => ({ field, value })),
     }) as AdditionalCondition
 
@@ -55,11 +56,12 @@ describe('CurfewConditionService', () => {
       curfewEnd: '08:00 pm',
     })
     const unrelatedCondition = condition(4, 'other-code', {})
+    const duplicateUnrelatedCondition = condition(7, 'other-code', {})
 
     await curfewConditionService.upgradeCurfewCondition(
       1,
       LicenceType.AP,
-      [secondCurfew, unrelatedCondition, firstCurfew],
+      [secondCurfew, unrelatedCondition, firstCurfew, duplicateUnrelatedCondition],
       user,
       '4.0',
     )
@@ -81,7 +83,7 @@ describe('CurfewConditionService', () => {
     expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
       1,
       LicenceType.AP,
-      { additionalConditions: [CURFEW_CONDITION_CODE, 'other-code'] },
+      { additionalConditions: [CURFEW_CONDITION_CODE, 'other-code', 'other-code'] },
       user,
       '4.0',
     )
