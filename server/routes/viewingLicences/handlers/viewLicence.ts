@@ -131,7 +131,5 @@ export default class ViewAndPrintLicenceRoutes {
   }
 
   private isLicenceUnsubmittable = (licence: Licence): boolean =>
-    config.finalThirdEnabled &&
-    licence.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' &&
-    (licence.appointmentTimeType === 'NO_APPOINTMENT_NEEDED' || licence.appointmentTimeType === null)
+    config.finalThirdEnabled && licence.missingAppointmentTime
 }

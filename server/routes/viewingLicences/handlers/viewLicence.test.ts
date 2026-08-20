@@ -29,6 +29,7 @@ describe('Route - view and approve a licence', () => {
     kind: LicenceKind.CRD,
     isInHardStopPeriod: false,
     appointmentPersonType: 'DUTY_OFFICER',
+    missingAppointmentTime: false,
   } as Licence
 
   const user = {
@@ -305,7 +306,8 @@ describe('Route - view and approve a licence', () => {
           licence: {
             ...licence,
             appointmentPersonType: 'DUTY_OFFICER',
-            appointmentTimeType: 'NO_APPOINTMENT_NEEDED',
+            appointmentTimeType: null,
+            missingAppointmentTime: true,
           },
         },
       } as unknown as Response
