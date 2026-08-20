@@ -92,7 +92,7 @@ export default class CheckAnswersRoutes {
       }
     }
 
-    if (config.finalThirdEnabled && this.shouldShowAppointmentTimeWarning(licence)) {
+    if (config.finalThirdEnabled && licence.missingAppointmentTime) {
       banner = {
         type: 'warning',
         text: this.getAppointmentTimeWarningText(initialApptUpdatedMessage, licence.statusCode),
@@ -102,11 +102,6 @@ export default class CheckAnswersRoutes {
 
     return banner
   }
-
-  private shouldShowAppointmentTimeWarning = (licence: Licence): boolean =>
-    licence.appointmentTimeType === null ||
-    (licence.appointmentTimeType === 'NO_APPOINTMENT_NEEDED' &&
-      licence.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED')
 
   private getAppointmentTimeWarningText = (
     initialApptUpdatedMessage: string,

@@ -154,7 +154,8 @@ describe('Route - view and approve a licence', () => {
             bespokeConditions: [],
             comUsername: null,
             appointmentPersonType: 'DUTY_OFFICER',
-            appointmentTimeType: 'NO_APPOINTMENT_NEEDED',
+            appointmentTimeType: null,
+            missingAppointmentTime: true,
           },
         },
       } as unknown as Response

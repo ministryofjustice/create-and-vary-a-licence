@@ -90,7 +90,7 @@ export default class LicenceService {
     return this.licenceApiClient.updatePolicy(licenceId)
   }
 
-  async updateAppointmentPerson(id: string, formData: PersonName, user: User): Promise<void> {
+  async updateAppointmentPerson(id: number, formData: PersonName, user: User): Promise<void> {
     const requestBody = {
       appointmentPersonType: formData.appointmentPersonType || 'SPECIFIC_PERSON',
       appointmentPerson: formData.appointmentPersonType === 'NO_APPOINTMENT_NEEDED' ? null : formData.contactName,

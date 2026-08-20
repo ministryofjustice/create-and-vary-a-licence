@@ -128,7 +128,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       await handler.POST(req, res)
 
       // Then
-      expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, { username: 'joebloggs' })
+      expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, contactPerson, { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/id/1/initial-meeting-place')
     })
 
@@ -184,7 +184,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       await handler.POST(req, res)
 
       // Then
-      expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', req.body, { username: 'joebloggs' })
+      expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, req.body, { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/create/id/1/licence-contact-address')
     })
   })

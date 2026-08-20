@@ -159,7 +159,7 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async updateAppointmentPerson(
-    licenceId: string,
+    licenceId: number,
     appointmentPerson: AppointmentPersonRequest,
     user: User,
   ): Promise<void> {
