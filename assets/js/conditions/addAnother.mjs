@@ -32,12 +32,13 @@ window.addEventListener('load', () => {
       };
 
       AddAnotherProto.createRemoveButton = function (item) {
+        const fieldset = item.querySelector('.govuk-fieldset');
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className =
             'govuk-button govuk-button--warning moj-add-another__remove-button';
         btn.textContent = 'Remove';
-        item.appendChild(btn);
+        fieldset.appendChild(btn);
       };
 
       AddAnotherProto.onAddButtonClick = function (e) {

@@ -22,21 +22,21 @@
 
         <div class="govuk-grid-row">
             <div data-module="moj-condition-add-another">
-                <div class="govuk-grid-column-two-thirds moj-add-another__items">
-
-                    {% for c in conditions %}
-                        {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
-                            {{  bespokeCondition(loop.index0, c) }}
-                            {% if conditions.length > 1 %}
-                                <button type="button" class="govuk-button govuk-button--warning moj-add-another__remove-button">Remove</button>
-                            {% endif %}
-                        {% endcall %}
-                    {% else %}
-                        {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
-                            {{  bespokeCondition(0, '') }}
-                        {% endcall %}
-                    {% endfor %}
-
+                <div class="govuk-grid-column-two-thirds">
+                    <div class="moj-add-another__items">
+                        {% for c in conditions %}
+                            {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
+                                {{  bespokeCondition(loop.index0, c) }}
+                                {% if conditions.length > 1 %}
+                                    <button type="button" class="govuk-button govuk-button--warning moj-add-another__remove-button">Remove</button>
+                                {% endif %}
+                            {% endcall %}
+                        {% else %}
+                            {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
+                                {{  bespokeCondition(0, '') }}
+                            {% endcall %}
+                        {% endfor %}
+                    </div>
                     <div class="moj-button-action">
                         {{ govukButton({
                             text: 'Add another bespoke condition',
@@ -69,8 +69,8 @@
 
 {% macro bespokeCondition(conditionIndex, conditionValue) %}
     {{ govukTextarea({
-        id: 'conditions[' + conditionIndex + ']',
-        name: 'conditions[' + conditionIndex + ']',
+        id: 'conditions[%index%]',
+        name: 'conditions[%index%]',
         label: {
             html: 'Bespoke condition',
             classes: 'govuk-visually-hidden'
