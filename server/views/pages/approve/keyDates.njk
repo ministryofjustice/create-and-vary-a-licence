@@ -16,6 +16,14 @@
             {
                 key: { text: releaseDateHeading, classes: "release-date-heading" },
                 value: { html: releaseDateHtml }
+            },
+            {
+                key: { text: "Licence start date" },
+                value: { text: licence.licenceStartDate | datetimeToDate }
+            },
+            {
+                key: { text: "Licence expiry date" },
+                value: { text: licence.licenceExpiryDate | datetimeToDate }
             }
         ]
      %}
@@ -29,19 +37,6 @@
                 {
                     key: { text: "Conditional release date" },
                     value: { text: licence.conditionalReleaseDate | datetimeToDate, classes: "conditional-release-date" }
-                }
-        ), dateRows) %}
-    {% endif %}
-
-     {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'AP' %}
-        {% set dateRows = (dateRows.push(
-                 {
-                    key: { text: "Licence start date" },
-                    value: { text: licence.licenceStartDate | datetimeToDate }
-                },
-                {
-                    key: { text: "Licence expiry date" },
-                    value: { text: licence.licenceExpiryDate | datetimeToDate }
                 }
         ), dateRows) %}
     {% endif %}
