@@ -7,6 +7,7 @@ import CheckAnswersRoutes from './checkAnswers'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import HdcService from '../../../services/hdc/hdcService'
+import config from '../../../config'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -79,11 +80,129 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
-        initialApptUpdatedMessage: undefined,
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
+
+    it('should set warning banner when appointmentTimeType is null and finalThirdEnabled is true', async () => {
+      res.locals.licence.appointmentTimeType = null
+      const original = config.finalThirdEnabled
+      config.finalThirdEnabled = true
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
+        banner: {
+          type: 'warning',
+          text: 'You must set a date and time for the appointment before the licence can be printed.',
+          iconFallbackText: 'Warning',
+        },
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+      config.finalThirdEnabled = original
+    })
+
+    it('should not set warning banner when finalThirdEnabled is not enabled', async () => {
+      res.locals.licence.appointmentTimeType = null
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
+        banner: undefined,
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
+
+    it.each([
+      {
+        statusCode: LicenceStatus.APPROVED,
+        bannerText:
+          'Details updated. You must set a date and time for the appointment before the licence can be printed.',
+        flashMessage: 'Details update',
+      },
+      {
+        statusCode: LicenceStatus.APPROVED,
+        bannerText: 'You must set a date and time for the appointment before the licence can be printed.',
+        flashMessage: '',
+      },
+      {
+        statusCode: LicenceStatus.SUBMITTED,
+        bannerText:
+          'Details updated. You must set a date and time for the appointment before the licence can be approved.',
+        flashMessage: 'Details update',
+      },
+      {
+        statusCode: LicenceStatus.SUBMITTED,
+        bannerText: 'You must set a date and time for the appointment before the licence can be approved.',
+        flashMessage: '',
+      },
+    ])('should create a warning banner when the time is not set', async ({ statusCode, bannerText, flashMessage }) => {
+      res.locals.licence.appointmentTimeType = null
+      res.locals.licence.statusCode = statusCode as Licence['statusCode']
+      const original = config.finalThirdEnabled
+      config.finalThirdEnabled = true
+      req = {
+        ...req,
+        flash: jest.fn().mockImplementation((key: string) => {
+          if (key === 'initialApptUpdated') {
+            return [flashMessage]
+          }
+          return []
+        }),
+      } as unknown as Request
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode,
+        isVariationOfHdcMigration: false,
+        banner: {
+          text: bannerText,
+          iconFallbackText: 'Warning',
+          type: 'warning',
+        },
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+      config.finalThirdEnabled = original
+    })
+
+    it('should create a success banner when details are updated', async () => {
+      req = {
+        ...req,
+        flash: jest.fn().mockImplementation((key: string) => {
+          if (key === 'initialApptUpdated') {
+            return ['Details updated']
+          }
+          return []
+        }),
+      } as unknown as Request
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        isVariationOfHdcMigration: false,
+        banner: { text: 'Details updated', iconFallbackText: 'Success', type: 'success' },
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -101,7 +220,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
         backLink: '/licence/create/caseload',
-        initialApptUpdatedMessage: undefined,
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
@@ -127,7 +245,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
-        initialApptUpdatedMessage: undefined,
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
@@ -145,7 +262,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
-        initialApptUpdatedMessage: undefined,
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
@@ -162,7 +278,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
-        initialApptUpdatedMessage: undefined,
         canEditInitialAppt: false,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
@@ -185,7 +300,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
-        initialApptUpdatedMessage: undefined,
         canEditInitialAppt: true,
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
@@ -203,7 +317,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           additionalConditions: [],
           bespokeConditionsToDisplay: [],
           backLink: req.session.returnToCase,
-          initialApptUpdatedMessage: undefined,
           canEditInitialAppt: true,
           isInHardStopPeriod: false,
           statusCode: 'IN_PROGRESS',
@@ -220,7 +333,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           additionalConditions: [],
           bespokeConditionsToDisplay: [],
           backLink: req.session.returnToCase,
-          initialApptUpdatedMessage: undefined,
           canEditInitialAppt: false,
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',

@@ -10,9 +10,7 @@ import InitialMeetingNameRoutes from './initialMeetingName'
 import InitialMeetingPlaceRoutes from './initialMeetingPlace'
 import PathType from '../../../../../enumeration/pathType'
 import UserType from '../../../../../enumeration/userType'
-import config from '../../../../../config'
 import PostcodeLookupInputValidation from '../../../types/PostcodeLookupInputValidation'
-import Address from '../../../types/address'
 import SelectAddressRoutes from './selectAddress'
 import PostcodeLookupAddress from '../../../types/PostcodeLookupAddress'
 import NoAddressFoundRoutes from './noAddressFound'
@@ -70,20 +68,23 @@ export default function Index({ licenceService, conditionService, addressService
     post('/edit/id/:licenceId/initial-meeting-name', controller.POST, UserType.PRISON, PersonName)
   }
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.CREATE)
+    const controller = new InitialMeetingPlaceRoutes(addressService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET, UserType.PRISON)
     get('/create/id/:licenceId/licence-contact-address', controller.GET, UserType.PRISON)
-    const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
-    post('/create/id/:licenceId/initial-meeting-place', controller.POST, UserType.PRISON, addressType)
-    post('/create/id/:licenceId/licence-contact-address', controller.POST, UserType.PRISON, addressType)
+    post('/create/id/:licenceId/initial-meeting-place', controller.POST, UserType.PRISON, PostcodeLookupInputValidation)
+    post(
+      '/create/id/:licenceId/licence-contact-address',
+      controller.POST,
+      UserType.PRISON,
+      PostcodeLookupInputValidation,
+    )
   }
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, addressService, PathType.EDIT)
+    const controller = new InitialMeetingPlaceRoutes(addressService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-place', controller.GET, UserType.PRISON)
     get('/edit/id/:licenceId/licence-contact-address', controller.GET, UserType.PRISON)
-    const addressType = config.postcodeLookupEnabled ? PostcodeLookupInputValidation : Address
-    post('/edit/id/:licenceId/initial-meeting-place', controller.POST, UserType.PRISON, addressType)
-    post('/edit/id/:licenceId/licence-contact-address', controller.POST, UserType.PRISON, addressType)
+    post('/edit/id/:licenceId/initial-meeting-place', controller.POST, UserType.PRISON, PostcodeLookupInputValidation)
+    post('/edit/id/:licenceId/licence-contact-address', controller.POST, UserType.PRISON, PostcodeLookupInputValidation)
   }
   {
     const controller = new SelectAddressRoutes(addressService, PathType.CREATE)

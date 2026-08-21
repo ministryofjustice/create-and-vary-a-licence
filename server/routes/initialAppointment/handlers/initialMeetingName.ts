@@ -46,6 +46,8 @@ export default class InitialMeetingNameRoutes {
 
     if (this.userType === UserType.PRISON) {
       res.redirect(`/licence/view/id/${licenceId}/show`)
+    } else if (req.query?.fromReview && licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
+      res.redirect(`/licence/create/id/${licenceId}/initial-meeting-time?fromReview=true`)
     } else if (req.query?.fromReview) {
       res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     } else if (noAppointmentNeeded) {

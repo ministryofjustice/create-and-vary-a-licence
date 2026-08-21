@@ -6,7 +6,6 @@ import LicenceApiClient from './licenceApiClient'
 import {
   AddAddressRequest,
   AdditionalConditionsRequest,
-  AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   ApproverSearchRequest,
@@ -159,19 +158,6 @@ describe('Licence API client tests', () => {
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/appointmentTime', data: { appointmentTime: '12:30pm' } },
-      { username: 'joebloggs' },
-    )
-  })
-
-  it('Update appointment address', async () => {
-    await licenceApiClient.updateAppointmentAddress(
-      '1',
-      { appointmentAddress: '123 Fake Street' } as AppointmentAddressRequest,
-      { username: 'joebloggs' } as User,
-    )
-
-    expect(put).toHaveBeenCalledWith(
-      { path: '/licence/id/1/appointment-address', data: { appointmentAddress: '123 Fake Street' } },
       { username: 'joebloggs' },
     )
   })
@@ -1057,6 +1043,35 @@ describe('Licence API client tests', () => {
         },
         { username: 'joebloggs' },
       )
+    })
+  })
+
+  describe('getActiveLicencePolicy', () => {
+    it('should pass through the licence start date as an ISO string in a query param if it is defined', async () => {
+      await licenceApiClient.getActiveLicencePolicy('01/01/2024')
+
+      expect(get).toHaveBeenCalledWith({
+        path: '/licence-policy/active',
+        query: {
+          licenceStartDate: '2024-01-01',
+        },
+      })
+    })
+
+    it('should not pass through the licence start date as a query string if it is null', async () => {
+      await licenceApiClient.getActiveLicencePolicy(null)
+
+      expect(get).toHaveBeenCalledWith({
+        path: '/licence-policy/active',
+      })
+    })
+
+    it('should not pass through the licence start date as a query string if it is undefined', async () => {
+      await licenceApiClient.getActiveLicencePolicy()
+
+      expect(get).toHaveBeenCalledWith({
+        path: '/licence-policy/active',
+      })
     })
   })
 })

@@ -946,20 +946,6 @@ export default {
     })
   },
 
-  stubPutAppointmentAddress: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'PUT',
-        urlPattern: `/licences-api/licence/id/(\\d)*/appointment-address`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
-      },
-    })
-  },
-
   stubPutContactNumber: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -1002,7 +988,11 @@ export default {
     })
   },
 
-  stubGetLicenceWithConditionToComplete: (options: { code: string; licenceKind?: LicenceKind }): SuperAgentRequest => {
+  stubGetLicenceWithConditionToComplete: (options: {
+    code: string
+    licenceKind?: LicenceKind
+    version?: string
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -1014,6 +1004,7 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           kind: options.licenceKind || LicenceKind.CRD,
+          version: options.version || licencePlaceholder.version,
           additionalLicenceConditions: [
             {
               id: 1,
@@ -1478,7 +1469,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licences-api/licence-policy/active`,
+        urlPattern: `/licences-api/licence-policy/active\\?licenceStartDate=([0-9]{4}-[0-9]{2}-[0-9]{2})`,
       },
       response: {
         status: 200,
