@@ -1,8 +1,9 @@
+import { AddAnother } from '@ministryofjustice/frontend'
 
 window.addEventListener('load', () => {
   (() => {
     const init = () => {
-      const AddAnotherProto = MOJFrontend.AddAnother.prototype;
+      const AddAnotherProto = AddAnother.prototype;
       const oldButtonClick = AddAnotherProto.onAddButtonClick;
       const oldRemoveClick = AddAnotherProto.onRemoveButtonClick;
 
@@ -31,12 +32,13 @@ window.addEventListener('load', () => {
       };
 
       AddAnotherProto.createRemoveButton = function (item) {
+        const fieldset = item.querySelector('.govuk-fieldset');
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className =
             'govuk-button govuk-button--warning moj-add-another__remove-button';
         btn.textContent = 'Remove';
-        item.appendChild(btn);
+        fieldset.appendChild(btn);
       };
 
       AddAnotherProto.onAddButtonClick = function (e) {
@@ -57,7 +59,7 @@ window.addEventListener('load', () => {
 
       roots.forEach((el) => {
         if (el && el.nodeType === 1) {
-          new MOJFrontend.AddAnother(el);
+          new AddAnother(el);
         }
       });
 

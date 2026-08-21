@@ -32,7 +32,7 @@
             <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Complete the licence condition</h1>
         </div>
     </div>
-    
+
     <div class="govuk-button-group">
         <form method="POST"
             id="additionConditionInputs"
@@ -214,6 +214,12 @@
 {% endblock %}
 
 {% block pageScripts %}
-    <script src="/assets/js/conditions/addAnother.js"></script>
+    <script nonce="{{ cspNonce }}" type="importmap">
+        {
+            "imports": {
+                "@ministryofjustice/frontend":  "/assets/moj/all.bundle.mjs"
+            }
+        }
+    </script>
+    <script type="module" src="/assets/js/conditions/addAnother.mjs"></script>
 {% endblock %}
-
