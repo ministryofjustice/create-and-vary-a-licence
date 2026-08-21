@@ -92,33 +92,31 @@
                         }
                     ), items) %}
                 {% else %}
-                    {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'AP' %}
-                        {% set items = (items.push(
-                                {
-                                    heading: {
-                                        text: "Additional licence conditions (" +  additionalConditions.length + ")"
-                                    },
-                                    content: {
-                                            html:
-                                                    additionalLicenceConditions(licence, additionalConditions, null, [], null, true)
-                                                    if additionalConditions.length else
-                                                    "<p>No additional licence conditions added</p>"
-                                    },
-                                    expanded: true
-                                }, {
-                                    heading: {
-                                        text: "Bespoke licence conditions (" +  licence.bespokeConditions.length + ")"
-                                    },
-                                    content: {
+                    {% set items = (items.push(
+                            {
+                                heading: {
+                                    text: "Additional licence conditions (" +  additionalConditions.length + ")"
+                                },
+                                content: {
                                         html:
-                                                bespokeConditions(licence.id, null, null, true, licence.bespokeConditions)
-                                            if licence.bespokeConditions.length else
-                                            "<p>No bespoke licence conditions added</p>"
-                                    },
-                                    expanded: true
-                                }
-                        ), items) %}
-                    {% endif %}
+                                                additionalLicenceConditions(licence, additionalConditions, null, [], null, true)
+                                                if additionalConditions.length else
+                                                "<p>No additional licence conditions added</p>"
+                                },
+                                expanded: true
+                            }, {
+                                heading: {
+                                    text: "Bespoke licence conditions (" +  licence.bespokeConditions.length + ")"
+                                },
+                                content: {
+                                    html:
+                                            bespokeConditions(licence.id, null, null, true, licence.bespokeConditions)
+                                        if licence.bespokeConditions.length else
+                                        "<p>No bespoke licence conditions added</p>"
+                                },
+                                expanded: true
+                            }
+                    ), items) %}
                 {% endif %}
 
                 {{
