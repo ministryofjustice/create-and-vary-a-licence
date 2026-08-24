@@ -31,29 +31,22 @@ export default class InitialMeetingNameRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const { licenceId } = req.params
     const { user, licence } = res.locals
     const noAppointmentNeeded = req.body.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
-    await this.licenceService.updateAppointmentPerson(licenceId, req.body, user)
-    if (noAppointmentNeeded) {
-      await this.licenceService.updateAppointmentTime(
-        licenceId,
-        { appointmentTimeType: 'NO_APPOINTMENT_NEEDED', time: null, date: null },
-        user,
-      )
-    }
+    await this.licenceService.updateAppointmentPerson(licence.id, req.body, user)
+
     flashInitialApptUpdatedMessage(req, licence, this.userType)
 
     if (this.userType === UserType.PRISON) {
-      res.redirect(`/licence/view/id/${licenceId}/show`)
+      res.redirect(`/licence/view/id/${licence.id}/show`)
     } else if (req.query?.fromReview && licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
-      res.redirect(`/licence/create/id/${licenceId}/initial-meeting-time?fromReview=true`)
+      res.redirect(`/licence/create/id/${licence.id}/initial-meeting-time?fromReview=true`)
     } else if (req.query?.fromReview) {
-      res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
+      res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
     } else if (noAppointmentNeeded) {
-      res.redirect(`/licence/create/id/${licenceId}/licence-contact-address`)
+      res.redirect(`/licence/create/id/${licence.id}/licence-contact-address`)
     } else {
-      res.redirect(`/licence/create/id/${licenceId}/initial-meeting-place`)
+      res.redirect(`/licence/create/id/${licence.id}/initial-meeting-place`)
     }
   }
 }
