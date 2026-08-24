@@ -13,7 +13,7 @@ class ElectronicMonitoringTypesV4 {
   @Type(() => SimpleDate)
   @Validate(ValidSimpleDate)
   @DateIsAfterExpectedReleaseDate({
-    message: 'Date cannot be more than 3 working days before release',
+    message: 'End date cannot be more than 3 working days before release',
   })
   endDate: SimpleDate
 }
