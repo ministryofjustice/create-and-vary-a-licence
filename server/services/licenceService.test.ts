@@ -6,7 +6,6 @@ import LicenceService from './licenceService'
 import * as utils from '../utils/utils'
 import { VariationChanges } from '../utils/licenceComparator'
 import DateTime from '../routes/initialAppointment/types/dateTime'
-import Address from '../routes/initialAppointment/types/address'
 import LicenceType from '../enumeration/licenceType'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -154,22 +153,6 @@ describe('Licence Service', () => {
     expect(licenceApiClient.updateAppointmentTime).toHaveBeenCalledWith(
       '1',
       { appointmentTime: null, appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' },
-      user,
-    )
-  })
-
-  it('Update appointment address', async () => {
-    await licenceService.updateAppointmentAddress(
-      '1',
-      {
-        addressLine1: '123 Fake Street',
-        addressTown: 'Fakestown',
-      } as Address,
-      user,
-    )
-    expect(licenceApiClient.updateAppointmentAddress).toHaveBeenCalledWith(
-      '1',
-      { appointmentAddress: '123 Fake Street, Fakestown' },
       user,
     )
   })

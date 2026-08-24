@@ -2,7 +2,6 @@ import { isDefined } from 'class-validator'
 import { format, isValid } from 'date-fns'
 import { expectTypeOf } from 'expect-type'
 import {
-  addressObjectToString,
   convertDateFormat,
   convertToTitleCase,
   hasRole,
@@ -102,32 +101,6 @@ describe("Check user's auth source", () => {
   it('should false if user does not have the correct auth source', () => {
     const user = { authSource: 'nomis' } as Express.User
     expect(hasAuthSource(user, 'delius')).toBe(false)
-  })
-})
-
-describe('Convert Address to comma-separated string', () => {
-  it('should return all values in comma-separated string', () => {
-    const address = {
-      addressLine1: 'Manchester Probation Service',
-      addressLine2: 'Unit 4',
-      addressTown: 'Smith Street',
-      addressCounty: 'Stockport',
-      addressPostcode: 'SP1 3DN',
-    } as unknown as Address
-    expect(addressObjectToString(address)).toBe(
-      'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
-    )
-  })
-
-  it('should return comma-separated string with values missing', () => {
-    const address = {
-      addressLine1: 'Manchester Probation Service',
-      addressLine2: null,
-      addressTown: 'Smith Street',
-      addressCounty: 'Stockport',
-      addressPostcode: 'SP1 3DN',
-    } as unknown as Address
-    expect(addressObjectToString(address)).toBe('Manchester Probation Service, , Smith Street, Stockport, SP1 3DN')
   })
 })
 

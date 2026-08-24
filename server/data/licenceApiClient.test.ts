@@ -6,7 +6,6 @@ import LicenceApiClient from './licenceApiClient'
 import {
   AddAddressRequest,
   AdditionalConditionsRequest,
-  AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   ApproverSearchRequest,
@@ -159,19 +158,6 @@ describe('Licence API client tests', () => {
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/appointmentTime', data: { appointmentTime: '12:30pm' } },
-      { username: 'joebloggs' },
-    )
-  })
-
-  it('Update appointment address', async () => {
-    await licenceApiClient.updateAppointmentAddress(
-      '1',
-      { appointmentAddress: '123 Fake Street' } as AppointmentAddressRequest,
-      { username: 'joebloggs' } as User,
-    )
-
-    expect(put).toHaveBeenCalledWith(
-      { path: '/licence/id/1/appointment-address', data: { appointmentAddress: '123 Fake Street' } },
       { username: 'joebloggs' },
     )
   })

@@ -259,6 +259,7 @@ export function registerNunjucks(app?: express.Express): Environment {
               conditionId: id,
               conditionCode: code,
               fromReview: true,
+              version: licence.version,
             })
           : getDeleteConditionHref({
               licenceId: licence.id.toString(),

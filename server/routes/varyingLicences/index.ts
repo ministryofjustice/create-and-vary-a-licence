@@ -25,6 +25,7 @@ import PolicyChangesCallbackRoutes from './handlers/policyChangesCallback'
 import PolicyChangeRoutes from './handlers/policyChange'
 import PolicyChangesInputCallbackRoutes from './handlers/policyChangesInputCallback'
 import PolicyConfirmDeleteRoutes from './handlers/policyConfirmDelete'
+import CurfewConditionService from '../../services/curfewConditionService'
 import ReviewLicenceRoutes from './handlers/reviewLicence'
 import YesOrNotApplicableDto from '../creatingLicences/types/yesOrNotApplicable'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
@@ -87,10 +88,11 @@ export default function Index({
   const reviewLicenceHandler = new ReviewLicenceRoutes(licenceService)
   const reasonForVariationHandler = new ReasonForVariationRoutes(licenceService)
   const variationSummaryHandler = new VariationSummaryRoutes(licenceService, probationService)
-  const confirmationHandler = new ConfirmationRoutes(licenceService)
+  const confirmationHandler = new ConfirmationRoutes()
   const policyChangesNoticeHandler = new PolicyChangesNoticeRoutes(licenceService)
   const policyChangesCallbackHandler = new PolicyChangesCallbackRoutes()
-  const policyChangeHandler = new PolicyChangeRoutes(licenceService, conditionService)
+  const curfewConditionService = new CurfewConditionService(licenceService)
+  const policyChangeHandler = new PolicyChangeRoutes(licenceService, conditionService, curfewConditionService)
   const policyConfirmDeleteHandler = new PolicyConfirmDeleteRoutes()
   const policyChangeInputCallbackHandler = new PolicyChangesInputCallbackRoutes(conditionService)
   const otherAgenciesHandler = new OtherAgenciesRoutes()

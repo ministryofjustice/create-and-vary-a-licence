@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { stringToAddressObject } from '../../../../../utils/utils'
-import LicenceService from '../../../../../services/licenceService'
 import PathType from '../../../../../enumeration/pathType'
 import { AddAddressRequest, AddressResponse, Licence } from '../../../../../@types/licenceApiClientTypes'
 import AddressService from '../../../../../services/addressService'
@@ -11,7 +10,6 @@ import { User } from '../../../../../@types/CvlUserDetails'
 
 export default class InitialMeetingPlaceRoutes {
   constructor(
-    private readonly licenceService: LicenceService,
     private readonly addressService: AddressService,
     private readonly path: PathType,
   ) {}
