@@ -70,10 +70,6 @@
                   <h1 class="govuk-heading-l">Check licence details</h1>
                 {% elseif licence.typeCode === 'AP' %}
                   <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ (licence.forename + ' ' + licence.surname) | convertToTitleCase }}</h1>
-                {% elseif licence.typeCode === 'AP_PSS' %}
-                    <h1 class="govuk-heading-l">{{ actionWord }} licence and post sentence supervision order for {{ (licence.forename + ' ' + licence.surname) | convertToTitleCase }}</h1>
-                {% elseif licence.typeCode === 'PSS' %}
-                    <h1 class="govuk-heading-l">{{ actionWord }} post sentence supervision order for {{ (licence.forename + ' ' + licence.surname) | convertToTitleCase }}</h1>
                 {% else %}
                     <h1 class="govuk-heading-l">{{ actionWord }} licence type {{ licence.typeCode }} for {{ (licence.forename + ' ' + licence.surname) | convertToTitleCase }}</h1>
                 {% endif %}

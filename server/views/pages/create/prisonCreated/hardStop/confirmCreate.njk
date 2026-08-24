@@ -18,9 +18,7 @@
             <div class="licence-conditions">
                 {{ immediateReleaseConditions(licence.licenceType) }}
             </div>
-            {% if licence.licenceType === 'AP_PSS' or licence.licenceType === 'AP' %}
-                <p class="govuk-body">You cannot add any other additional or bespoke licence conditions.<br> <br> A community probation practitioner can do this after release.</p>
-            {% endif %}
+            <p class="govuk-body">You cannot add any other additional or bespoke licence conditions.<br> <br> A community probation practitioner can do this after release.</p>
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <div class="govuk-grid-row">
