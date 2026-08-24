@@ -2,6 +2,7 @@ import { Expose, Type } from 'class-transformer'
 import { IsNotEmpty, Validate } from 'class-validator'
 import { SimpleDate } from '../index'
 import ValidSimpleDate from '../../../../validators/simpleDateValidator'
+import DateIsAfterExpectedReleaseDate from '../../../../validators/dateIsAfterExpectedReleaseDate'
 
 class ElectronicMonitoringTypesV4 {
   @Expose()
@@ -11,6 +12,9 @@ class ElectronicMonitoringTypesV4 {
   @Expose()
   @Type(() => SimpleDate)
   @Validate(ValidSimpleDate)
+  @DateIsAfterExpectedReleaseDate({
+    message: 'Date cannot be more than 3 working days before release',
+  })
   endDate: SimpleDate
 }
 
