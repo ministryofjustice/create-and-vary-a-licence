@@ -47,7 +47,6 @@ describe('View Initial appointment details - approve licence', () => {
     const $ = render({
       options: {
         ...licence,
-        appointmentTimeType: 'NO_APPOINTMENT_NEEDED',
         appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
       },
     })
@@ -58,7 +57,7 @@ describe('View Initial appointment details - approve licence', () => {
     const $ = render({
       options: {
         ...licence,
-        appointmentTimeType: 'NO_APPOINTMENT_NEEDED',
+        appointmentTimeType: null,
         appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
         updatedByFullName: 'Jack Frost',
       },

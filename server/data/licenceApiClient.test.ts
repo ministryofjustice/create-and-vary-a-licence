@@ -138,7 +138,7 @@ describe('Licence API client tests', () => {
 
   it('Update appointment person', async () => {
     await licenceApiClient.updateAppointmentPerson(
-      '1',
+      1,
       { appointmentPerson: 'Joe Bloggs' } as AppointmentPersonRequest,
       { username: 'joebloggs' } as User,
     )
