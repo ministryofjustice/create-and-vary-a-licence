@@ -7,6 +7,7 @@ import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 import config from '../../../config'
 
 jest.mock('./initialMeetingUpdatedFlashMessage')
+jest.mock('../../../services/licenceService')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -17,9 +18,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
 
   beforeEach(() => {
     req = {
-      params: {
-        licenceId: '1',
-      },
       body: {},
       query: {},
     } as unknown as Request
@@ -32,15 +30,12 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           username: 'joebloggs',
         },
         licence: {
+          id: 1,
           conditionalReleaseDate: '14/05/2022',
           isEligibleForEarlyRelease: true,
         },
       },
     } as unknown as Response
-
-    licenceService.updateAppointmentPerson = jest.fn()
-    licenceService.updateAppointmentTime = jest.fn()
-    licenceService.recordAuditEvent = jest.fn()
   })
 
   afterEach(() => {
@@ -115,7 +110,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         await handler.POST(req, res)
 
         // Then
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', {}, { username: 'joebloggs' })
+        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, {}, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-place')
       })
 
@@ -128,22 +123,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
 
         // Then
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
-      })
-
-      it('should use the licence contact address url if no appointment is needed', async () => {
-        // Given
-        req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
-
-        // When
-        await handler.POST(req, res)
-
-        // Then
-        expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(
-          '1',
-          { appointmentTimeType: 'NO_APPOINTMENT_NEEDED', time: null, date: null },
-          { username: 'joebloggs' },
-        )
-        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/licence-contact-address')
       })
 
       it('If coming from check answers changing from no appointment to appointment it should redirect to the time page', async () => {
@@ -196,7 +175,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         await handler.POST(req, res)
 
         // Then
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', {}, { username: 'joebloggs' })
+        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, {}, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')
       })
 

@@ -5135,12 +5135,6 @@ export interface components {
        */
       version?: string | null
       /**
-       * Format: date
-       * @description The date when the post sentence supervision period starts, from prison services
-       * @example 06/05/2023
-       */
-      topupSupervisionStartDate?: string | null
-      /**
        * @description The current status code for this licence
        * @example IN_PROGRESS
        * @enum {string|null}
@@ -5166,10 +5160,6 @@ export interface components {
        */
       surname?: string | null
       kind: string
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][] | null
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -5255,6 +5245,12 @@ export interface components {
       actualReleaseDate?: string | null
       /**
        * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       * @example 06/05/2023
+       */
+      topupSupervisionStartDate?: string | null
+      /**
+       * Format: date
        * @description The date when the post sentence supervision period ends, from prison services
        * @example 06/06/2023
        */
@@ -5311,6 +5307,12 @@ export interface components {
        */
       appointmentPerson?: string | null
       /**
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
+       */
+      appointmentTime?: string | null
+      /**
        * @description The type of appointment time of the initial appointment
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
@@ -5321,12 +5323,6 @@ export interface components {
         | 'SPECIFIC_DATE_TIME'
         | 'NO_APPOINTMENT_NEEDED'
         | null
-      /**
-       * Format: date-time
-       * @description The date and time of the initial appointment
-       * @example 23/08/2022 12:12
-       */
-      appointmentTime?: string | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -5423,6 +5419,10 @@ export interface components {
        * @example Jane Jones
        */
       updatedByFullName?: string | null
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][] | null
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /**
@@ -5487,6 +5487,11 @@ export interface components {
        * @example Jane Jones
        */
       responsibleComFullName?: string | null
+      /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
     }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
@@ -6212,6 +6217,11 @@ export interface components {
         | 'NO_APPOINTMENT_NEEDED'
         | null
       /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
+      /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
@@ -6654,6 +6664,11 @@ export interface components {
         | 'SPECIFIC_DATE_TIME'
         | 'NO_APPOINTMENT_NEEDED'
         | null
+      /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -7135,6 +7150,11 @@ export interface components {
         | 'NO_APPOINTMENT_NEEDED'
         | null
       /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
+      /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
@@ -7556,6 +7576,11 @@ export interface components {
         | 'NO_APPOINTMENT_NEEDED'
         | null
       /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
+      /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
@@ -7951,6 +7976,11 @@ export interface components {
         | 'NO_APPOINTMENT_NEEDED'
         | null
       /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
+      /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
@@ -8339,6 +8369,11 @@ export interface components {
         | 'SPECIFIC_DATE_TIME'
         | 'NO_APPOINTMENT_NEEDED'
         | null
+      /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -8732,6 +8767,11 @@ export interface components {
         | 'SPECIFIC_DATE_TIME'
         | 'NO_APPOINTMENT_NEEDED'
         | null
+      /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN

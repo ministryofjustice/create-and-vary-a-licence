@@ -6,11 +6,13 @@ import ConditionService, { PolicyAdditionalCondition } from '../../../services/c
 import policyChangeHintText from '../../../config/policyChangeHintText'
 import conditionChangeType from '../../../enumeration/conditionChangeType'
 import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/LicencePolicy'
+import CurfewConditionService from '../../../services/curfewConditionService'
 
 export default class PolicyChangeRoutes {
   constructor(
     private readonly licenceService: LicenceService,
     private readonly conditionService: ConditionService,
+    private readonly curfewConditionService: CurfewConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -156,26 +158,40 @@ export default class PolicyChangeRoutes {
         conditionsToAdd.push(policyCondition)
       }
 
-      if (policyCondition.requiresInput) {
-        inputs.push(condition.code)
-      } else {
-        // Removes any now-unused user-entered data
-        await this.licenceService.updateAdditionalConditionData(
-          licenceId,
-          additionalLicenceConditions.find((c: AdditionalCondition) => c.code === condition.code),
-          {},
-          user,
-        )
-      }
-
-      // Update condition text to match new policy version
-      await this.licenceService.updateAdditionalConditions(
-        licence.id,
-        conditionType,
-        { additionalConditions: licenceConditionCodes },
-        user,
+      const isCurfewUpgrade = this.curfewConditionService.isCurfewConditionUpdateRequired(
+        condition.code,
         licence.version,
       )
+
+      if (isCurfewUpgrade) {
+        await this.curfewConditionService.upgradeCurfewCondition(
+          licence.id,
+          conditionType,
+          additionalLicenceConditions,
+          user,
+          licence.version,
+        )
+      } else {
+        if (policyCondition.requiresInput) {
+          inputs.push(condition.code)
+        } else {
+          const existingCondition = additionalLicenceConditions.find(
+            additionalCondition => additionalCondition.code === condition.code,
+          )
+
+          // Removes any now-unused user-entered data
+          await this.licenceService.updateAdditionalConditionData(licenceId, existingCondition, {}, user)
+        }
+
+        // Update condition text to match new policy version
+        await this.licenceService.updateAdditionalConditions(
+          licence.id,
+          conditionType,
+          { additionalConditions: licenceConditionCodes },
+          user,
+          licence.version,
+        )
+      }
     }
 
     await Promise.all(

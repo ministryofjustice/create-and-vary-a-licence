@@ -77,7 +77,7 @@ describe('Licence Service', () => {
 
   it('Update appointment person with type SPECIFIC_PERSON', async () => {
     await licenceService.updateAppointmentPerson(
-      '1',
+      1,
       {
         contactName: 'Joe Bloggs',
         appointmentPersonType: 'SPECIFIC_PERSON',
@@ -85,7 +85,7 @@ describe('Licence Service', () => {
       user,
     )
     expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
-      '1',
+      1,
       { appointmentPerson: 'Joe Bloggs', appointmentPersonType: 'SPECIFIC_PERSON' },
       user,
     )
@@ -93,7 +93,7 @@ describe('Licence Service', () => {
 
   it('Update appointment person with type DUTY_OFFICER', async () => {
     await licenceService.updateAppointmentPerson(
-      '1',
+      1,
       {
         contactName: '',
         appointmentPersonType: 'DUTY_OFFICER',
@@ -101,23 +101,7 @@ describe('Licence Service', () => {
       user,
     )
     expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
-      '1',
-      { appointmentPerson: '', appointmentPersonType: 'DUTY_OFFICER' },
-      user,
-    )
-  })
-
-  it('Update appointment person with type DUTY_OFFICER', async () => {
-    await licenceService.updateAppointmentPerson(
-      '1',
-      {
-        contactName: '',
-        appointmentPersonType: 'DUTY_OFFICER',
-      },
-      user,
-    )
-    expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
-      '1',
+      1,
       { appointmentPerson: '', appointmentPersonType: 'DUTY_OFFICER' },
       user,
     )
