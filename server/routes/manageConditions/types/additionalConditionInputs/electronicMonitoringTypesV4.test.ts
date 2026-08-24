@@ -26,7 +26,7 @@ describe('ElectronicMonitoringTypesV4', () => {
       expect.arrayContaining([
         expect.objectContaining({
           constraints: expect.objectContaining({
-            DateIsAfterExpectedReleaseDate: 'Date cannot be more than 3 working days before release',
+            DateIsAfterExpectedReleaseDate: 'End date cannot be more than 3 working days before release',
           }),
         }),
       ]),
@@ -52,7 +52,7 @@ describe('ElectronicMonitoringTypesV4', () => {
       expect.arrayContaining([
         expect.objectContaining({
           constraints: expect.objectContaining({
-            DateIsAfterExpectedReleaseDate: 'Date cannot be more than 3 working days before release',
+            DateIsAfterExpectedReleaseDate: 'End date cannot be more than 3 working days before release',
           }),
         }),
       ]),
