@@ -88,8 +88,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
 
-    it('should set warning banner when appointmentTimeType is null and finalThirdEnabled is true', async () => {
-      res.locals.licence.appointmentTimeType = null
+    it('should set warning banner when the appointment time is missing and finalThirdEnabled is true', async () => {
+      res.locals.licence.missingAppointmentTime = true
       const original = config.finalThirdEnabled
       config.finalThirdEnabled = true
       await handler.GET(req, res)
@@ -151,7 +151,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         flashMessage: '',
       },
     ])('should create a warning banner when the time is not set', async ({ statusCode, bannerText, flashMessage }) => {
-      res.locals.licence.appointmentTimeType = null
+      res.locals.licence.missingAppointmentTime = true
       res.locals.licence.statusCode = statusCode as Licence['statusCode']
       const original = config.finalThirdEnabled
       config.finalThirdEnabled = true
