@@ -13,7 +13,7 @@ describe('View and print - single licence view', () => {
     id: 1,
     kind: 'CRD',
     statusCode: 'APPROVED',
-    typeCode: 'AP_PSS',
+    typeCode: 'AP',
     forename: 'John',
     surname: 'Smith',
     appointmentTimeType: 'SPECIFIC_DATE_TIME',
@@ -56,20 +56,6 @@ describe('View and print - single licence view', () => {
       },
     ],
     responsibleComFullName: 'COM',
-    additionalPssConditions: [
-      {
-        code: 'condition1',
-        category: 'Category 1',
-        expandedText: 'Template 1',
-        data: [
-          {
-            field: 'field1',
-            value: 'Data 1',
-            contributesToLicence: true,
-          },
-        ],
-      },
-    ],
     bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
   } as Licence
 
@@ -119,7 +105,7 @@ describe('View and print - single licence view', () => {
       ],
     })
 
-    expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
+    expect($('h1').text()).toContain('Print licence for John Smith')
 
     // Check the initial meeting details are populated
     expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(7)
@@ -159,14 +145,6 @@ describe('View and print - single licence view', () => {
     expect(
       $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim(),
     ).not.toBe('Data 2C')
-
-    // Check the additional pss conditions are rendered correctly
-    expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(1)
-
-    // Check the actual PSS requirement
-    expect($('#additionalPssConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
-    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe('Template 1')
-    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
 
     // Check the bespoke conditions are rendered correctly using the macro for them
     expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)
@@ -249,7 +227,7 @@ describe('View and print - single licence view', () => {
       ],
     })
 
-    expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
+    expect($('h1').text()).toContain('Print licence for John Smith')
 
     // Check the initial meeting details are populated
     expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
@@ -290,14 +268,6 @@ describe('View and print - single licence view', () => {
       $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim(),
     ).not.toBe('Data 2C')
 
-    // Check the additional pss conditions are rendered correctly
-    expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(1)
-
-    // Check the actual PSS requirement
-    expect($('#additionalPssConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
-    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe('Template 1')
-    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
-
     // Check the bespoke conditions are rendered correctly using the macro for them
     expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)
 
@@ -326,15 +296,7 @@ describe('View and print - single licence view', () => {
   it('Title changes to view when licence is not printable', () => {
     const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
 
-    expect($('h1').text()).toContain('View licence and post sentence supervision order for John Smith')
-  })
-
-  it('Title changes depending on licence type', () => {
-    const $ = render({
-      licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'PSS' },
-    })
-
-    expect($('h1').text()).toContain('Print post sentence supervision order for John Smith')
+    expect($('h1').text()).toContain('View licence for John Smith')
   })
 
   it('should render the HDC curfew details if the licence kind is HDC', () => {
@@ -405,7 +367,7 @@ describe('View and print - single licence view', () => {
     })
 
     expect($('[data-qa="print-licence"]').length).toBe(0)
-    expect($('h1').text()).toContain('View licence and post sentence supervision order for John Smith')
+    expect($('h1').text()).toContain('View licence for John Smith')
     expect($('.moj-alert.moj-alert--warning').length).toBe(1)
   })
 
@@ -415,7 +377,7 @@ describe('View and print - single licence view', () => {
     })
 
     expect($('[data-qa="print-licence"]').length).toBe(1)
-    expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
+    expect($('h1').text()).toContain('Print licence for John Smith')
     expect($('.moj-alert.moj-alert--warning').length).toBe(0)
   })
 
@@ -465,7 +427,7 @@ describe('View and print - single standard licence view', () => {
     id: 1,
     kind: 'HARD_STOP',
     statusCode: 'APPROVED',
-    typeCode: 'AP_PSS',
+    typeCode: 'AP',
     forename: 'John',
     surname: 'Smith',
     appointmentTimeType: 'SPECIFIC_DATE_TIME',
@@ -504,20 +466,6 @@ describe('View and print - single standard licence view', () => {
             field: 'field3',
             value: 'Data 2C',
             contributesToLicence: false,
-          },
-        ],
-      },
-    ],
-    additionalPssConditions: [
-      {
-        code: 'condition1',
-        category: 'Category 1',
-        expandedText: 'Template 1',
-        data: [
-          {
-            field: 'field1',
-            value: 'Data 1',
-            contributesToLicence: true,
           },
         ],
       },
@@ -572,7 +520,7 @@ describe('View and print - single standard licence view', () => {
     })
 
     // Check the appropriate title is used
-    expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
+    expect($('h1').text()).toContain('Print licence for John Smith')
 
     // Check the initial meeting details are populated
     expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(7)
@@ -668,7 +616,7 @@ describe('View and print - single standard licence view', () => {
     })
 
     // Check the appropriate title is used
-    expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
+    expect($('h1').text()).toContain('Print licence for John Smith')
 
     // Check the initial meeting details are populated
     expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(7)
@@ -718,28 +666,28 @@ describe('View and print - single standard licence view', () => {
   it('Title changes to view when licence is not printable', () => {
     const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
 
-    expect($('h1').text()).toContain('View licence and post sentence supervision order for John Smith')
+    expect($('h1').text()).toContain('View licence for John Smith')
   })
 
   it('Title changes depending on licence type', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'PSS' },
+      licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'AP' },
     })
 
-    expect($('h1').text()).toContain('Print post sentence supervision order for John Smith')
+    expect($('h1').text()).toContain('Print licence for John Smith')
   })
 
   it('Title changes for hard stop in progress licence', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'IN_PROGRESS', typeCode: 'PSS' },
+      licence: { ...licence, statusCode: 'IN_PROGRESS', typeCode: 'AP' },
     })
 
     expect($('h1').text()).toContain('Check licence details')
   })
 
-  it('Title changes fot time served in progress licence', () => {
+  it('Title changes for time served in progress licence', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'IN_PROGRESS', kind: 'TIME_SERVED', typeCode: 'PSS' },
+      licence: { ...licence, statusCode: 'IN_PROGRESS', kind: 'TIME_SERVED', typeCode: 'AP' },
     })
 
     expect($('h1').text()).toContain('Check licence details')
@@ -747,7 +695,7 @@ describe('View and print - single standard licence view', () => {
 
   it('should render Return to case list as secondary button for printable licences', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'PSS' },
+      licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'AP' },
     })
 
     expect($('[data-qa="return-to-view-list"]').hasClass('govuk-button--secondary')).toBe(true)
@@ -755,7 +703,7 @@ describe('View and print - single standard licence view', () => {
 
   it('should render Return to case list as secondary button for in-progress hard stop licences', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'IN_PROGRESS', kind: 'HARD_STOP', typeCode: 'PSS' },
+      licence: { ...licence, statusCode: 'IN_PROGRESS', kind: 'HARD_STOP', typeCode: 'AP' },
     })
 
     expect($('[data-qa="return-to-view-list"]').hasClass('govuk-button--secondary')).toBe(true)
@@ -763,7 +711,7 @@ describe('View and print - single standard licence view', () => {
 
   it('should render Return to case list as secondary button for in-progress time served licences', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'IN_PROGRESS', kind: 'TIME_SERVED', typeCode: 'PSS' },
+      licence: { ...licence, statusCode: 'IN_PROGRESS', kind: 'TIME_SERVED', typeCode: 'AP' },
     })
 
     expect($('[data-qa="return-to-view-list"]').hasClass('govuk-button--secondary')).toBe(true)

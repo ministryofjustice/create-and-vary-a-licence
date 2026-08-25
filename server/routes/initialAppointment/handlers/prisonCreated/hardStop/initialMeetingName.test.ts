@@ -37,6 +37,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           username: 'joebloggs',
         },
         licence: {
+          id: 1,
           responsibleComFullName: 'Com Name',
         },
       },
@@ -99,7 +100,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
       it('should redirect to the meeting time page', async () => {
         handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
         await handler.POST(req, res)
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
+        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, contactPerson, {
           username: 'joebloggs',
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-place')
@@ -115,7 +116,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           query: {},
         } as unknown as Request
         await handler.POST(req, res)
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
+        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, contactPerson, {
           username: 'joebloggs',
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
@@ -137,7 +138,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
         req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
         await handler.POST(req, res)
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', req.body, {
+        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, req.body, {
           username: 'joebloggs',
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/licence-contact-address')
