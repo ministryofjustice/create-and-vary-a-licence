@@ -216,6 +216,12 @@ const policyChangeHints: HintText[] = [
     bulletpoints: [],
   },
   {
+    code: '1dc7ee29-df47-48a8-90b6-69e286692d8a',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: ['The condition has been simplified.'],
+    bulletpoints: [],
+  },
+  {
     code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
     fromVersions: ['1.0', '2.0', '2.1', '3.0'],
     description: [],
