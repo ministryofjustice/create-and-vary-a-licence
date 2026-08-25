@@ -215,6 +215,16 @@ const policyChangeHints: HintText[] = [
     ],
     bulletpoints: [],
   },
+  {
+    code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: [],
+    bulletpoints: [
+      'Text simplified',
+      'Conditions to be monitored updated',
+      'New requirement to add a tagging end date',
+    ],
+  },
 ]
 
 export default policyChangeHints
