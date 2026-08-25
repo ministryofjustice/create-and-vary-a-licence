@@ -1,4 +1,4 @@
-type HintText = { code: string; fromVersions: string[]; description: string[]; bulletpoints: string[] }
+export type HintText = { code: string; fromVersions: string[]; description: string[]; bulletpoints: string[] }
 
 const policyChangeHints: HintText[] = [
   {
@@ -71,12 +71,6 @@ const policyChangeHints: HintText[] = [
     fromVersions: ['2.1'],
     description: ['Option to select “the Approved Premises where you reside” added.'],
     bulletpoints: [],
-  },
-  {
-    code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
-    fromVersions: ['1.0', '2.0'],
-    description: [],
-    bulletpoints: ['Details of test centre location removed', 'Requirement not to hamper testing process added'],
   },
   {
     code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
@@ -205,6 +199,12 @@ const policyChangeHints: HintText[] = [
     code: '8e52e16e-1abf-4251-baca-2fabfcb243d0',
     fromVersions: ['1.0', '2.0', '2.1', '3.0'],
     description: ['Requirement not to install an e-sim added.'],
+    bulletpoints: [],
+  },
+  {
+    code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: ['The condition has been simplified.'],
     bulletpoints: [],
   },
   {
