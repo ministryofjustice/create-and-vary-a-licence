@@ -69,8 +69,8 @@
 
 {% macro bespokeCondition(conditionIndex, conditionValue) %}
     {{ govukTextarea({
-        id: 'conditions[%index%]',
-        name: 'conditions[%index%]',
+        id: 'conditions[' + conditionIndex + ']',
+        name: 'conditions[' + conditionIndex + ']',
         label: {
             html: 'Bespoke condition',
             classes: 'govuk-visually-hidden'
@@ -84,12 +84,12 @@
 {% endmacro %}
 
 {% block pageScripts %}
-    <script nonce="{{ cspNonce }}" type="importmap">
+ <script nonce="{{ cspNonce }}" type="importmap">
         {
             "imports": {
-                "@ministryofjustice/frontend":  "/assets/moj/all.bundle.mjs"
+                "govuk-frontend":  "/assets/govuk/all.bundle.mjs"
             }
         }
     </script>
-    <script type="module" src="/assets/js/conditions/addAnother.mjs"></script>
+    <script type="module" src="/assets/js/conditions/addAnother.js"></script>
 {% endblock %}
