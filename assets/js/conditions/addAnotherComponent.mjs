@@ -1,9 +1,14 @@
 import { Component } from 'govuk-frontend'
 
+/**
+  * A copy of the AddAnother component from version 9 of @ministryofjustice/frontend.
+  * The latter version has been changed vastly and is not suitable for our purposes therefore we agreed to retain the below implementation.
+  * Design team will communicate features we require to @ministryofjustice/frontend and if they are incorporated, we may switch to the newer version in the future.
+*/
 export class AddAnother extends Component {
   /**
    * @param {Element | null} $root - HTML element to use for add another
-   */
+  */
   constructor($root) {
     super($root)
 
@@ -25,7 +30,7 @@ export class AddAnother extends Component {
 
   /**
    * @param {MouseEvent} event - Click event
-   */
+  */
   onAddButtonClick(event) {
     const $button = event.target
 
@@ -62,7 +67,7 @@ export class AddAnother extends Component {
 
   /**
    * @param {HTMLElement} $item - Add another item
-   */
+  */
   hasRemoveButton($item) {
     return $item.querySelectorAll('.moj-add-another__remove-button').length
   }
@@ -97,7 +102,7 @@ export class AddAnother extends Component {
   /**
    * @param {HTMLElement} $item - Add another item
    * @param {number} index - Add another item index
-   */
+  */
   updateAttributes($item, index) {
     $item.querySelectorAll('[data-name]').forEach(($input) => {
       if (!this.isValidInputElement($input)) {
@@ -124,7 +129,7 @@ export class AddAnother extends Component {
 
   /**
    * @param {HTMLElement} $item - Add another item
-   */
+  */
   createRemoveButton($item) {
     const $button = document.createElement('button')
     $button.type = 'button'
@@ -142,8 +147,8 @@ export class AddAnother extends Component {
 
   /**
    * @param {HTMLElement} $item - Add another item
-   */
-resetItem($item) {
+  */
+  resetItem($item) {
     $item.querySelectorAll('[data-name], [data-id]').forEach(($input) => {
       if (!this.isValidInputElement($input)) {
         return
@@ -169,7 +174,7 @@ resetItem($item) {
 
   /**
    * @param {MouseEvent} event - Click event
-   */
+  */
   onRemoveButtonClick(event) {
     const $button = event.target
 
@@ -206,7 +211,7 @@ resetItem($item) {
 
   /**
    * @param {Element} $input - the input to validate
-   */
+  */
   isValidInputElement($input) {
     return (
       $input instanceof HTMLInputElement ||
@@ -217,6 +222,6 @@ resetItem($item) {
 
   /**
    * Name for the component used when initialising using data-module attributes.
-   */
+  */
   static moduleName = 'moj-add-another'
 }
