@@ -1,4 +1,4 @@
-type HintText = { code: string; fromVersions: string[]; description: string[]; bulletpoints: string[] }
+export type HintText = { code: string; fromVersions: string[]; description: string[]; bulletpoints: string[] }
 
 const policyChangeHints: HintText[] = [
   {
@@ -71,12 +71,6 @@ const policyChangeHints: HintText[] = [
     fromVersions: ['2.1'],
     description: ['Option to select “the Approved Premises where you reside” added.'],
     bulletpoints: [],
-  },
-  {
-    code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
-    fromVersions: ['1.0', '2.0'],
-    description: [],
-    bulletpoints: ['Details of test centre location removed', 'Requirement not to hamper testing process added'],
   },
   {
     code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
@@ -208,12 +202,34 @@ const policyChangeHints: HintText[] = [
     bulletpoints: [],
   },
   {
+    code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: ['The condition has been simplified.'],
+    bulletpoints: [],
+  },
+  {
     code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
     fromVersions: ['1.0', '2.0', '2.1', '3.0'],
     description: [
       'The condition has been simplified and you no longer need to say how often the curfew will be reviewed.',
     ],
     bulletpoints: [],
+  },
+  {
+    code: '1dc7ee29-df47-48a8-90b6-69e286692d8a',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: ['The condition has been simplified.'],
+    bulletpoints: [],
+  },
+  {
+    code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: [],
+    bulletpoints: [
+      'Text simplified',
+      'Conditions to be monitored updated',
+      'New requirement to add a tagging end date',
+    ],
   },
 ]
 
