@@ -3,15 +3,15 @@ import { validate, ValidationError } from 'class-validator'
 import ElectronicMonitoringTypesV4 from './electronicMonitoringTypesV4'
 
 describe('ElectronicMonitoringTypesV4', () => {
-  const validateEndDate = (day: string) => {
+  const validateEndDate = (day: string, month = '08') => {
     const input = plainToInstance(ElectronicMonitoringTypesV4, {
       electronicMonitoringTypes: ['location'],
-      endDate: { day, month: '08', year: '2027' },
+      endDate: { day, month, year: '2027' },
     })
 
     Object.assign(input, {
       licence: {
-        earliestReleaseDate: '18/08/2027',
+        licenceStartDate: '18/08/2027',
         licenceExpiryDate: '31/08/2027',
       },
     })
@@ -19,29 +19,63 @@ describe('ElectronicMonitoringTypesV4', () => {
     return validate(input)
   }
 
-  it('rejects an end date earlier than 3 working days before release', async () => {
+  it('rejects an end date before release', async () => {
     const errors: ValidationError[] = await validateEndDate('17')
 
     expect(errors).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           constraints: expect.objectContaining({
-            DateIsAfterExpectedReleaseDate: 'End date cannot be more than 3 working days before release',
+            dateIsStrictlyAfter: 'Enter a date that is after their release',
           }),
         }),
       ]),
     )
   })
 
-  it('rejects a null end date with the 3 working days before release error', async () => {
+  it('rejects an end date on the release date', async () => {
+    const errors = await validateEndDate('18')
+
+    expect(errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          constraints: expect.objectContaining({
+            dateIsStrictlyAfter: 'Enter a date that is after their release',
+          }),
+        }),
+      ]),
+    )
+  })
+
+  it('accepts an end date after release and on the licence expiry date', async () => {
+    const errors = await validateEndDate('31')
+
+    expect(errors).toHaveLength(0)
+  })
+
+  it('rejects an end date after the licence expiry date', async () => {
+    const errors = await validateEndDate('01', '09')
+
+    expect(errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          constraints: expect.objectContaining({
+            dateIsBefore: 'The monitoring end date must be before the licence expiry date',
+          }),
+        }),
+      ]),
+    )
+  })
+
+  it('shows an enter a date error when the end date is missing', async () => {
     const input = plainToInstance(ElectronicMonitoringTypesV4, {
       electronicMonitoringTypes: ['location'],
-      endDate: { day: null, month: null, year: null },
+      endDate: { day: '', month: '', year: '' },
     })
 
     Object.assign(input, {
       licence: {
-        earliestReleaseDate: '18/08/2027',
+        licenceStartDate: '18/08/2027',
         licenceExpiryDate: '31/08/2027',
       },
     })
@@ -52,16 +86,10 @@ describe('ElectronicMonitoringTypesV4', () => {
       expect.arrayContaining([
         expect.objectContaining({
           constraints: expect.objectContaining({
-            DateIsAfterExpectedReleaseDate: 'End date cannot be more than 3 working days before release',
+            ValidSimpleDate: 'Enter a date',
           }),
         }),
       ]),
     )
-  })
-
-  it('accepts an end date exactly 3 working days before release', async () => {
-    const errors: ValidationError[] = await validateEndDate('18')
-
-    expect(errors).toHaveLength(0)
   })
 })
