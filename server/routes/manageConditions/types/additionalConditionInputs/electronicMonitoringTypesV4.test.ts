@@ -3,6 +3,31 @@ import { validate, ValidationError } from 'class-validator'
 import ElectronicMonitoringTypesV4 from './electronicMonitoringTypesV4'
 
 describe('ElectronicMonitoringTypesV4', () => {
+  it('shows an error when no condition is selected', async () => {
+    const input = plainToInstance(ElectronicMonitoringTypesV4, {
+      endDate: { day: '31', month: '08', year: '2027' },
+    })
+
+    Object.assign(input, {
+      licence: {
+        licenceStartDate: '18/08/2027',
+        licenceExpiryDate: '31/08/2027',
+      },
+    })
+
+    const errors: ValidationError[] = await validate(input)
+
+    expect(errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          constraints: expect.objectContaining({
+            isNotEmpty: 'Choose a condition to be monitored',
+          }),
+        }),
+      ]),
+    )
+  })
+
   const validateEndDate = (day: string, month = '08') => {
     const input = plainToInstance(ElectronicMonitoringTypesV4, {
       electronicMonitoringTypes: ['location'],

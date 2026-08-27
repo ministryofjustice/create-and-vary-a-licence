@@ -7,7 +7,7 @@ import DateIsStrictlyAfter from '../../../../validators/dateIsStrictlyAfter'
 
 class ElectronicMonitoringTypesV4 {
   @Expose()
-  @IsNotEmpty({ message: 'Select the options that apply' })
+  @IsNotEmpty({ message: 'Choose a condition to be monitored' })
   electronicMonitoringTypes: string[]
 
   @Expose()
