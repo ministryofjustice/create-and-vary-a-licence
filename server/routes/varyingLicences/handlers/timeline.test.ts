@@ -43,7 +43,6 @@ describe('Route Handlers - Timeline', () => {
 
   afterEach(() => {
     config.hdcEnabled = existingConfig.hdcEnabled
-    config.timeServed = existingConfig.timeServed
   })
 
   describe('GET', () => {

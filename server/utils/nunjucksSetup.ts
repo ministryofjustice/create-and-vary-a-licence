@@ -478,7 +478,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('fridayReleasePolicy', config.fridayReleasePolicy)
   njkEnv.addGlobal('hdcEnabled', config.hdcEnabled)
   njkEnv.addGlobal('finalThirdEnabled', config.finalThirdEnabled)
-  njkEnv.addGlobal('timeServedServiceNowUrl', config.timeServed.serviceNowUrl)
+  njkEnv.addGlobal('technologyPortalUrl', config.technologyPortalUrl)
+  njkEnv.addGlobal('hdcSurveyUrl', config.hdc.surveyUrl)
 
   return njkEnv
 }

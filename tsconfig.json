@@ -16,5 +16,5 @@
     "types": ["jest", "node"]
   },
   "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "cypress.config.ts"],
-  "include": ["**/*.ts", ".allowed-scripts.mjs"]
+  "include": ["**/*.ts"]
 }
