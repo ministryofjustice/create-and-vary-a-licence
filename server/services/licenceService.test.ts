@@ -589,7 +589,7 @@ describe('Licence Service', () => {
 
   describe('Exclusion zone file', () => {
     const myUploadFile = {
-      path: 'test-file.txt',
+      path: 'uploads/test-file.txt',
       originalname: 'test',
       mimetype: 'application/pdf',
       size: 2020,
@@ -612,6 +612,36 @@ describe('Licence Service', () => {
       const result = await licenceService.getExclusionZoneImage('1', '1', user)
       expect(result.read()).toEqual('image')
       expect(licenceApiClient.getExclusionZoneImage).toHaveBeenCalledWith('1', '1', user)
+    })
+
+    it('Do not upload file in relative path', async () => {
+      const myHackedFile = {
+        path: '../test-file.txt',
+        originalname: 'test',
+        mimetype: 'application/pdf',
+        size: 2020,
+      } as Express.Multer.File
+
+      await expect(licenceService.uploadExclusionZoneFile('1', '1', myHackedFile, user, false)).rejects.toThrow(
+        'Invalid file path',
+      )
+
+      expect(licenceApiClient.uploadExclusionZoneFile).not.toHaveBeenCalled()
+    })
+
+    it('Do not upload file out side uploads path ', async () => {
+      const myHackedFile = {
+        path: '/system-dir/test-file.txt',
+        originalname: 'test',
+        mimetype: 'application/pdf',
+        size: 2020,
+      } as Express.Multer.File
+
+      await expect(licenceService.uploadExclusionZoneFile('1', '1', myHackedFile, user, false)).rejects.toThrow(
+        'Invalid file path',
+      )
+
+      expect(licenceApiClient.uploadExclusionZoneFile).not.toHaveBeenCalled()
     })
   })
 
