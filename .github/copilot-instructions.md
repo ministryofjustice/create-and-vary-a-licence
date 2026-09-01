@@ -18,7 +18,7 @@
 ### Build Commands (ALWAYS RUN IN THIS ORDER)
 
 1. **Install dependencies**: `npm run setup` (NOT `npm install`)
-   - This runs `npm ci && hmpps-npm-script-run-allowlist`
+   - This runs `npm ci`
    - CircleCI uses this command
    - NEVER use `npm install` in CI or production builds
 

@@ -1,36 +1,10 @@
 import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
-import ElectronicMonitoringTypesV4 from './electronicMonitoringTypesV4'
+import AlcoholRestrictionPeriod from './alcoholRestrictionPeriod'
 
-describe('ElectronicMonitoringTypesV4', () => {
-  it('shows an error when no condition is selected', async () => {
-    const input = plainToInstance(ElectronicMonitoringTypesV4, {
-      endDate: { day: '31', month: '08', year: '2027' },
-    })
-
-    Object.assign(input, {
-      licence: {
-        licenceStartDate: '18/08/2027',
-        licenceExpiryDate: '31/08/2027',
-      },
-    })
-
-    const errors: ValidationError[] = await validate(input)
-
-    expect(errors).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          constraints: expect.objectContaining({
-            isNotEmpty: 'Choose a condition to be monitored',
-          }),
-        }),
-      ]),
-    )
-  })
-
+describe('AlcoholRestrictionPeriod', () => {
   const validateEndDate = (day: string, month = '08') => {
-    const input = plainToInstance(ElectronicMonitoringTypesV4, {
-      electronicMonitoringTypes: ['location'],
+    const input = plainToInstance(AlcoholRestrictionPeriod, {
       endDate: { day, month, year: '2027' },
     })
 
@@ -51,7 +25,8 @@ describe('ElectronicMonitoringTypesV4', () => {
       expect.arrayContaining([
         expect.objectContaining({
           constraints: expect.objectContaining({
-            dateIsStrictlyAfter: 'Enter a date that is after their release',
+            dateIsStrictlyAfter:
+              'Enter a date that is after their release. Choose to skip this step if the end date has not been confirmed',
           }),
         }),
       ]),
@@ -59,13 +34,14 @@ describe('ElectronicMonitoringTypesV4', () => {
   })
 
   it('rejects an end date on the release date', async () => {
-    const errors = await validateEndDate('18')
+    const errors: ValidationError[] = await validateEndDate('18')
 
     expect(errors).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           constraints: expect.objectContaining({
-            dateIsStrictlyAfter: 'Enter a date that is after their release',
+            dateIsStrictlyAfter:
+              'Enter a date that is after their release. Choose to skip this step if the end date has not been confirmed',
           }),
         }),
       ]),
@@ -73,13 +49,13 @@ describe('ElectronicMonitoringTypesV4', () => {
   })
 
   it('accepts an end date after release and on the licence expiry date', async () => {
-    const errors = await validateEndDate('31')
+    const errors: ValidationError[] = await validateEndDate('31')
 
     expect(errors).toHaveLength(0)
   })
 
   it('rejects an end date after the licence expiry date', async () => {
-    const errors = await validateEndDate('01', '09')
+    const errors: ValidationError[] = await validateEndDate('01', '09')
 
     expect(errors).toEqual(
       expect.arrayContaining([
@@ -93,8 +69,7 @@ describe('ElectronicMonitoringTypesV4', () => {
   })
 
   it('shows an enter a date error when the end date is missing', async () => {
-    const input = plainToInstance(ElectronicMonitoringTypesV4, {
-      electronicMonitoringTypes: ['location'],
+    const input = plainToInstance(AlcoholRestrictionPeriod, {
       endDate: { day: '', month: '', year: '' },
     })
 
