@@ -225,7 +225,7 @@ export default class LicenceService {
 
     await this.licenceApiClient.uploadExclusionZoneFile(licenceId, additionalConditionId, user, fileToUpload)
     if (!testMode) {
-      fs.unlinkSync(filePath)
+      await fs.promises.unlink(filePath)
     }
   }
 
