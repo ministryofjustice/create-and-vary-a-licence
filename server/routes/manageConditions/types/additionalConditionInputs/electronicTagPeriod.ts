@@ -3,7 +3,7 @@ import { Validate } from 'class-validator'
 import { SimpleDate } from '..'
 import ValidSimpleDate from '../../../../validators/simpleDateValidator'
 import DateIsBefore from '../../../../validators/dateIsBefore'
-import DateIsAfterExpectedReleaseDate from '../../../../validators/dateIsAfterExpectedReleaseDate'
+import DateIsStrictlyAfter from '../../../../validators/dateIsStrictlyAfter'
 
 class ElectronicTagPeriod {
   @Expose()
@@ -12,7 +12,10 @@ class ElectronicTagPeriod {
   @DateIsBefore('licence.licenceExpiryDate', {
     message: 'The monitoring end date must be before the licence expiry date',
   })
-  @DateIsAfterExpectedReleaseDate()
+  @DateIsStrictlyAfter('licence.licenceStartDate', {
+    message:
+      'Enter a date that is after their release. Choose to skip this step if the end date has not been confirmed',
+  })
   endDate: SimpleDate
 }
 
