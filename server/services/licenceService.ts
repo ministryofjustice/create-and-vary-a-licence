@@ -63,6 +63,7 @@ import {
 import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
+
 const uploadPath = path.resolve('uploads')
 
 export default class LicenceService {
