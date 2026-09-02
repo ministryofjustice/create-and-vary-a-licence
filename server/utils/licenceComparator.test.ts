@@ -777,6 +777,65 @@ describe('Licence Comparator', () => {
     })
   })
 
+  it('should return multiple exclusion a map has been changed', () => {
+    const originalLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'testCondition1',
+          uploadSummary: [
+            {
+              id: 1,
+              fileSize: 34,
+              thumbnailImage: '435rsgdfdjgkl',
+            },
+          ],
+        },
+      ],
+    } as Licence
+
+    const variedLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'amendedTestCondition1',
+          uploadSummary: [
+            {
+              id: 1,
+              fileSize: 34,
+              thumbnailImage: 'fdsaf389r9u32',
+            },
+          ],
+        },
+      ],
+    } as Licence
+
+    expect(compareLicenceConditions(originalLicence, variedLicence)).toEqual({
+      licenceConditionsAdded: [],
+      licenceConditionsAmended: [
+        {
+          category: 'category1',
+          condition: 'amendedTestCondition1',
+          uploadSummaries: [
+            {
+              text: undefined,
+              description: undefined,
+              thumbnailImage: 'fdsaf389r9u32',
+            },
+          ],
+        },
+      ],
+      licenceConditionsRemoved: [],
+      pssConditionsAdded: [],
+      pssConditionsAmended: [],
+      pssConditionsRemoved: [],
+    })
+  })
+
   it('should not return list of removed additional and bespoke licence conditions if licence is in PSS period', () => {
     const originalLicence = {
       ...licenceTemplate,
