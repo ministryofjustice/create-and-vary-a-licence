@@ -19,7 +19,7 @@ export default class ProbationService {
 
   async getProbationers(crnsOrNomisIds: string[]): Promise<DeliusRecord[]> {
     if (!Array.isArray(crnsOrNomisIds)) {
-      // This is to make sure a hacker does not call this and send a non-array e.g. a JSON object with a very large length override and effectively causing a DOS attack
+      // This is to make sure a caller does not send a non-array (e.g. a JSON object with a very large length override) and effectively cause a DoS attack
       throw new TypeError('crnsOrNomisIds must be an array')
     }
     return (await Promise.all(_.chunk(crnsOrNomisIds, 500).map(chunk => this.deliusClient.getCases(chunk)))).flat()
