@@ -63,7 +63,7 @@ import {
 import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
-import { uploadPath } from '../routes/manageConditions/handlers/fileUploads'
+const uploadPath = path.resolve('uploads')
 
 export default class LicenceService {
   constructor(
