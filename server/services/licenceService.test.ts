@@ -629,7 +629,7 @@ describe('Licence Service', () => {
       expect(licenceApiClient.uploadExclusionZoneFile).not.toHaveBeenCalled()
     })
 
-    it('Do not upload file out side uploads path ', async () => {
+    it('Do not upload file outside uploads path', async () => {
       const myHackedFile = {
         path: '/system-dir/test-file.txt',
         originalname: 'test',
