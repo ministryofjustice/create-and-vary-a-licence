@@ -64,6 +64,7 @@ import PublicEvent from '../routes/manageConditions/types/additionalConditionInp
 import CurfewTermsV4 from '../routes/manageConditions/types/additionalConditionInputs/curfewTermsV4'
 import ElectronicMonitoringTypesV4 from '../routes/manageConditions/types/additionalConditionInputs/electronicMonitoringTypesV4'
 import VehicleRestrictions from '../routes/manageConditions/types/additionalConditionInputs/vehicleRestrictions'
+import ReportToApprovedPremisesPolicyV4 from '../routes/manageConditions/types/additionalConditionInputs/reportToApprovedPremisesPolicyV4'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -302,6 +303,9 @@ export default class ConditionService {
           break
         case 'VehicleRestrictions':
           validator = VehicleRestrictions
+          break
+        case 'ReportToApprovedPremisesPolicyV4':
+          validator = ReportToApprovedPremisesPolicyV4
           break
         default: {
           // silently ignore
