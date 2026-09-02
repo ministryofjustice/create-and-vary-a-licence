@@ -777,7 +777,7 @@ describe('Licence Comparator', () => {
     })
   })
 
-  it('should return multiple exclusion a map has been changed', () => {
+  it('should return when an exclusion zone map has been changed', () => {
     const originalLicence = {
       ...licenceTemplate,
       additionalLicenceConditions: [
