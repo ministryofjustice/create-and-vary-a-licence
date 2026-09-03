@@ -1,6 +1,7 @@
 import moment from 'moment'
-import { parse, format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import assert from 'assert'
+import { createHash } from 'node:crypto'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -319,6 +320,8 @@ const mapToTargetField = (input: FileMapInput) => {
   }
 }
 
+const md5 = (str: string): string => createHash('md5').update(str).digest('hex')
+
 export {
   escapeCsv,
   convertToTitleCase,
@@ -358,4 +361,5 @@ export {
   mapToTargetField,
   simpleTimeTo24Hour,
   simpleTimeToMinutes,
+  md5,
 }
