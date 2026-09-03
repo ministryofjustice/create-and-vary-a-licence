@@ -98,7 +98,7 @@
     "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "8.4.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "agentkeepalive": "^4.6.0",
-    "applicationinsights": "^3.16.0",
+    "applicationinsights": "^2.9.8",
     "body-parser": "^2.3.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
@@ -191,7 +191,7 @@
   },
   "allowScripts": {
     "@parcel/watcher": true,
-    "cypress@15.21.0": true,
+    "cypress@15.21.1": true,
     "dtrace-provider": true,
     "unrs-resolver": true
   }
