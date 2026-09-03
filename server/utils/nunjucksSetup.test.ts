@@ -35,7 +35,7 @@ describe('Nunjucks Filters', () => {
   describe('errorSummaryList', () => {
     it('should map errors to text and href', () => {
       const template = `
-        {% set errorSummaryList = errors | errorSummaryList %}
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
         {% for error in errorSummaryList %}
             <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
         {% endfor %}
@@ -51,6 +51,7 @@ describe('Nunjucks Filters', () => {
             summaryMessage: 'message2',
           },
         ],
+        inputs: [],
       })
 
       expect($('a:nth-child(1)').text()).toBe('message1')
@@ -61,7 +62,7 @@ describe('Nunjucks Filters', () => {
 
     it('should use message for error message if summaryMessage not defined', () => {
       const template = `
-        {% set errorSummaryList = errors | errorSummaryList %}
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
         {% for error in errorSummaryList %}
             <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
         {% endfor %}
@@ -77,12 +78,101 @@ describe('Nunjucks Filters', () => {
             message: 'message2',
           },
         ],
+        inputs: [],
       })
 
       expect($('a:nth-child(1)').text()).toBe('message1')
       expect($('a:nth-child(1)').attr('href')).toBe('#field1')
       expect($('a:nth-child(2)').text()).toBe('message2')
       expect($('a:nth-child(2)').attr('href')).toBe('#field2')
+    })
+
+    it('should target the first input in a curfew time field when mapping summary links', () => {
+      const template = `
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
+        {% for error in errorSummaryList %}
+            <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
+        {% endfor %}
+      `
+      const $ = renderTemplate(template, {
+        errors: [
+          {
+            field: 'oneCurfewStart',
+            summaryMessage: 'Enter a start time',
+          },
+          {
+            field: 'twoCurfewEnd2',
+            summaryMessage: 'Enter an end time',
+          },
+        ],
+        inputs: [
+          { name: 'oneCurfewStart', type: 'timePicker' },
+          { name: 'twoCurfewEnd2', type: 'timePicker' },
+        ],
+      })
+
+      expect($('a:nth-child(1)').attr('href')).toBe('#oneCurfewStart-hour')
+      expect($('a:nth-child(2)').attr('href')).toBe('#twoCurfewEnd2-hour')
+    })
+
+    it('should target the am or pm select when the curfew time error is about am or pm', () => {
+      const template = `
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
+        {% for error in errorSummaryList %}
+            <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
+        {% endfor %}
+      `
+      const $ = renderTemplate(template, {
+        errors: [
+          {
+            field: 'oneCurfewEnd',
+            summaryMessage: 'Start time must include am or pm',
+          },
+        ],
+        inputs: [{ name: 'oneCurfewEnd', type: 'timePicker' }],
+      })
+
+      expect($('a:nth-child(1)').attr('href')).toBe('#oneCurfewEnd-ampm')
+    })
+
+    it('should target the matching subfield for date picker errors', () => {
+      const template = `
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
+        {% for error in errorSummaryList %}
+            <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
+        {% endfor %}
+      `
+      const $ = renderTemplate(template, {
+        errors: [
+          {
+            field: 'dateOfBirth',
+            summaryMessage: 'Enter a valid month',
+          },
+        ],
+        inputs: [{ name: 'dateOfBirth', type: 'datePicker' }],
+      })
+
+      expect($('a:nth-child(1)').attr('href')).toBe('#dateOfBirth-month')
+    })
+
+    it('should not classify a date as a time field based on its name', () => {
+      const template = `
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
+        {% for error in errorSummaryList %}
+            <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
+        {% endfor %}
+      `
+      const $ = renderTemplate(template, {
+        errors: [
+          {
+            field: 'endDate',
+            summaryMessage: 'Enter a date',
+          },
+        ],
+        inputs: [{ name: 'endDate', type: 'datePicker' }],
+      })
+
+      expect($('a:nth-child(1)').attr('href')).toBe('#endDate-day')
     })
   })
 

@@ -1,5 +1,5 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% set errorSummaryList = validationErrors | errorSummaryList %}
+{% set errorSummaryList = validationErrors | errorSummaryList(config.inputs if config else []) %}
 
 {% if errorSummaryList.length > 0 %}
     <div class="govuk-grid-row">

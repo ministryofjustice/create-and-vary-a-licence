@@ -20,7 +20,13 @@ import {
   formatAddressTitleCase,
   formatAddressLine,
 } from './utils'
-import { AdditionalCondition, AdditionalConditionData, Licence, FoundComCase } from '../@types/licenceApiClientTypes'
+import {
+  AdditionalCondition,
+  AdditionalConditionData,
+  FoundComCase,
+  Input,
+  Licence,
+} from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/initialAppointment/types/address'
@@ -28,6 +34,46 @@ import { getEditConditionHref, getDeleteConditionHref } from './conditionRoutes'
 import { LegalStatus, AppointmentTimeType, LicenceKind, CaViewCasesTab, LicenceStatus } from '../enumeration'
 
 const production = process.env.NODE_ENV === 'production'
+
+function getInputTypesByName(inputs: Input[]): Map<string, Input['type']> {
+  const inputTypesByName = new Map<string, Input['type']>()
+
+  for (const input of inputs) {
+    inputTypesByName.set(input.name, input.type)
+
+    for (const option of input.options ?? []) {
+      for (const conditionalInput of option.conditional?.inputs ?? []) {
+        inputTypesByName.set(conditionalInput.name, conditionalInput.type)
+      }
+    }
+  }
+
+  return inputTypesByName
+}
+
+function getErrorSummaryHref(fieldName: string, inputType: Input['type'] | undefined, message: string): string {
+  if (inputType === 'timePicker') {
+    if (message.includes('am or pm')) {
+      return `#${fieldName}-ampm`
+    }
+    if (message.includes('minute')) {
+      return `#${fieldName}-minute`
+    }
+    return `#${fieldName}-hour`
+  }
+
+  if (inputType === 'datePicker') {
+    if (message.includes('month')) {
+      return `#${fieldName}-month`
+    }
+    if (message.includes('year')) {
+      return `#${fieldName}-year`
+    }
+    return `#${fieldName}-day`
+  }
+
+  return `#${fieldName}`
+}
 
 export default function nunjucksSetup(app: express.Express, applicationInfo: ApplicationInfo): Environment {
   app.set('view engine', 'njk')
@@ -101,11 +147,19 @@ export function registerNunjucks(app?: express.Express): Environment {
     return Object.values(object).join(', ')
   })
 
-  njkEnv.addFilter('errorSummaryList', (array = []) => {
-    return array.map((error: FieldValidationError) => ({
-      text: error.summaryMessage || error.message,
-      href: `#${error.field}`,
-    }))
+  njkEnv.addFilter('errorSummaryList', (array: FieldValidationError[] = [], inputs: Input[] = []) => {
+    const inputTypesByName = getInputTypesByName(inputs)
+
+    return array.map((error: FieldValidationError) => {
+      const rawField = error.field ?? ''
+      const message = (error.summaryMessage || error.message || '').toLowerCase()
+      const inputType = inputTypesByName.get(rawField)
+
+      return {
+        text: error.summaryMessage || error.message,
+        href: getErrorSummaryHref(rawField, inputType, message),
+      }
+    })
   })
 
   // eslint-disable-next-line default-param-last
