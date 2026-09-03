@@ -10,6 +10,7 @@ describe('App event handlers', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    jest.mocked(azureAppInsights.flush).mockResolvedValue()
     processOnSpy = jest.spyOn(process, 'on')
   })
 
@@ -32,11 +33,20 @@ describe('App event handlers', () => {
     handler(testError, 'uncaughtException')
 
     expect(logger.error).toHaveBeenCalledWith({ err: testError, origin: 'uncaughtException' }, 'uncaught exception')
-    expect(azureAppInsights.flush).toHaveBeenCalledWith(
-      {
-        isAppCrashing: false,
-      },
-      'uncaught exception',
-    )
+    expect(azureAppInsights.flush).toHaveBeenCalledWith()
+  })
+
+  it('should log when flushing telemetry fails', async () => {
+    const flushError = new Error('Telemetry unavailable')
+    jest.mocked(azureAppInsights.flush).mockRejectedValueOnce(flushError)
+
+    registerAppEventHandlers()
+
+    const handler = processOnSpy.mock.calls[0][1]
+    handler(new Error('Test exception'), 'uncaughtException')
+
+    await Promise.resolve()
+
+    expect(logger.error).toHaveBeenCalledWith({ err: flushError }, 'uncaughtException')
   })
 })

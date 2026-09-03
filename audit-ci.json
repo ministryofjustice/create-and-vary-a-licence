@@ -5,6 +5,7 @@
   "allowlist": [
     "GHSA-73rr-hh4g-fpgx|mocha>diff",
     "GHSA-4mjr-xmp4-gh2g|qs",
-    "GHSA-x5fp-wj9c-mxmx|qs"
+    "GHSA-x5fp-wj9c-mxmx|qs",
+    "GHSA-g8qq-57p8-ggw5|@ministryofjustice/hmpps-digital-prison-reporting-frontend>sanitize-html"
   ]
 }
