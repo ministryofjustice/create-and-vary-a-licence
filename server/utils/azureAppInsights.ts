@@ -1,10 +1,10 @@
-import { setup, defaultClient, type TelemetryClient, DistributedTracingModes, Contracts } from 'applicationinsights'
+import { setup, defaultClient, type TelemetryClient, DistributedTracingModes } from 'applicationinsights'
 
-import type FlushOptions from 'applicationinsights/out/Library/FlushOptions'
 import type { User } from '../@types/CvlUserDetails'
 import type { ApplicationInfo } from '../applicationInfo'
 
 type TelemetryProcessor = Parameters<typeof TelemetryClient.prototype.addTelemetryProcessor>[0]
+const requestTelemetryBaseType = 'RequestData'
 
 export function initialiseAppInsights(applicationInfo: ApplicationInfo): TelemetryClient {
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
@@ -21,17 +21,15 @@ export function initialiseAppInsights(applicationInfo: ApplicationInfo): Telemet
   return null
 }
 
-export function flush(options: FlushOptions, exitMessage: string): void {
+export async function flush(): Promise<void> {
   if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
-    defaultClient.flush(options)
-  } else if (options.callback) {
-    options.callback(exitMessage)
+    await defaultClient.flush()
   }
 }
 
 export const addUserDataToRequests: TelemetryProcessor = (envelope, contextObjects) => {
   const { data } = envelope
-  const isRequest = data.baseType === Contracts.TelemetryTypeString.Request
+  const isRequest = data.baseType === requestTelemetryBaseType
   if (isRequest) {
     const user = contextObjects?.['http.ServerRequest']?.res?.locals?.user
     if (user) {

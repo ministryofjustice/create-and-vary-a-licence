@@ -1,13 +1,16 @@
-import { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 import { addUserDataToRequests, overrideOperationName } from './azureAppInsights'
+
+type TelemetryEnvelope = Parameters<typeof addUserDataToRequests>[0]
 
 const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>
   ({
+    name: 'Microsoft.ApplicationInsights.Request',
+    time: new Date(),
     data: {
       baseType,
       baseData: { properties },
-    } as DataTelemetry,
-  }) as EnvelopeTelemetry
+    },
+  }) as TelemetryEnvelope
 
 const createContext = (user: Record<string, unknown>) => ({
   'http.ServerRequest': {
@@ -109,13 +112,15 @@ describe('azureAppInsights', () => {
   describe('overrideOperationName', () => {
     const envelopeFactory = () =>
       ({
+        name: 'Microsoft.ApplicationInsights.Request',
+        time: new Date(),
         tags: {},
         data: {
           baseData: {
             name: 'originalName',
           },
         },
-      }) as unknown as EnvelopeTelemetry
+      }) as TelemetryEnvelope
 
     it('should override operation name when custom property is set', () => {
       const envelope = envelopeFactory()

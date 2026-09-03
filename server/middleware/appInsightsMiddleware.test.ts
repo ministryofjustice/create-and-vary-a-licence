@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express'
-import type { CorrelationContext } from 'applicationinsights/out/AutoCollection/CorrelationContextManager'
+import { getCorrelationContext } from 'applicationinsights'
 import appInsightsMiddleware from './appInsightsMiddleware'
+
+type CorrelationContext = NonNullable<ReturnType<typeof getCorrelationContext>>
 
 describe('appInsightsMiddleware', () => {
   const res = {

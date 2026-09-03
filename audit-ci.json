@@ -3,6 +3,8 @@
   "package-manager": "auto",
   "registry": "https://registry.npmjs.org",
   "allowlist": [
-    "GHSA-73rr-hh4g-fpgx|mocha>diff"
+    "GHSA-73rr-hh4g-fpgx|mocha>diff",
+    "GHSA-4mjr-xmp4-gh2g|qs",
+    "GHSA-x5fp-wj9c-mxmx|qs"
   ]
 }
