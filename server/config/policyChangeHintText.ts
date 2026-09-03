@@ -231,6 +231,16 @@ const policyChangeHints: HintText[] = [
       'New requirement to add a tagging end date',
     ],
   },
+  {
+    code: '79ac033f-9d7a-4dab-8344-475106e58b71',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0'],
+    description: [
+      'This is being removed as an additional condition and will appear on the licence as the following standard condition:',
+      '',
+      'Get permission from your supervising officer if you want to apply for a new passport. If requested, tell your supervising officer about any passports you have already.',
+    ],
+    bulletpoints: [],
+  },
 ]
 
 export default policyChangeHints
