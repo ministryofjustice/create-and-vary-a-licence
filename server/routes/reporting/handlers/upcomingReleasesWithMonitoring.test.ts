@@ -16,6 +16,7 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       prisonNumber: 'A1234BC',
       status: 'SUBMITTED',
       licenceStartDate: '01/01/2024',
+      submittedDate: '15/12/2023',
       fullName: 'full name',
       emConditionCodes: '12h, 45a, 78b',
     },
@@ -42,6 +43,7 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       prisonNumber: 'A1234BC',
       status: 'SUBMITTED',
       licenceStartDate: '01/01/2024',
+      submittedDate: '15/12/2023',
       fullName: 'full name',
       emConditionCodes: '12h, 45a, 78b',
     }
@@ -68,11 +70,25 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       `attachment; filename=upcoming-releases-with-monitoring-conditions-report-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`,
     )
 
-    const headerLine = ['Prison Number', 'Name', 'CRN', 'Licence Status', 'Ems conditions', 'Licence Start Date'].join(
-      ',',
-    )
+    const headerLine = [
+      'Prison Number',
+      'Name',
+      'CRN',
+      'Licence Status',
+      'Ems conditions',
+      'Licence Start Date',
+      'Licence Submitted Date',
+    ].join(',')
 
-    const expectedRow = ['A1234BC', 'full name', 'CRN123', 'SUBMITTED', '12h, 45a, 78b', '01/01/2024'].join(',')
+    const expectedRow = [
+      'A1234BC',
+      'full name',
+      'CRN123',
+      'SUBMITTED',
+      '"12h, 45a, 78b"',
+      '01/01/2024',
+      '15/12/2023',
+    ].join(',')
 
     const sentBody = (res.send as jest.Mock).mock.calls[0][0]
     expect(sentBody).toBe(`${headerLine}\n${expectedRow}`)

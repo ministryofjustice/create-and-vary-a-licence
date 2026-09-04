@@ -20,7 +20,11 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   const routePrefix = (path: string) => `/reports${path}`
 
   const get = (path: string, ...handlers: RequestHandler[]) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD', 'ROLE_CVL_REPORTS']), ...handlers)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD', 'ROLE_CVL_REPORTS', 'ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      ...handlers,
+    )
 
   {
     const routes = new LastMinuteHandoverCasesRoutes(licenceService)
