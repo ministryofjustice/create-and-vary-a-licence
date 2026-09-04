@@ -7,7 +7,7 @@ import {
   Licence,
 } from '../@types/licenceApiClientTypes'
 import ConditionType from '../enumeration/conditionType'
-import { groupingBy } from './utils'
+import { groupingBy, md5 } from './utils'
 
 type ImageUploadSummary = {
   text: string
@@ -138,7 +138,10 @@ const compareAdditionalConditionSet = (
       })
       variedCondition = sortedVariedConditions.shift()
     } else {
-      if (originalCondition.expandedText !== variedCondition.expandedText) {
+      if (
+        originalCondition.expandedText !== variedCondition.expandedText ||
+        hasUpdateExclusionZones(originalCondition.uploadSummaries, variedCondition.uploadSummaries)
+      ) {
         variedConditionsBuilder.recordConditionAmended({
           category: variedCondition.category,
           condition: variedCondition.expandedText,
@@ -232,6 +235,15 @@ const hasUpdatedCurfewHours = (originalCurfewHours: CurfewTimes[], variedCurfewH
       curfew.untilDay !== variedCurfew.untilDay
     )
   })
+}
+
+const hasUpdateExclusionZones = (
+  originalUploadSummaries: ImageUploadSummary[],
+  variedUploadSummaries: ImageUploadSummary[],
+) => {
+  const originalImages = (originalUploadSummaries ?? []).map(upload => md5(upload.thumbnailImage)).sort()
+  const variedImages = (variedUploadSummaries ?? []).map(upload => md5(upload.thumbnailImage)).sort()
+  return !_.isEqual(originalImages.sort(), variedImages.sort())
 }
 
 class VariedConditionsBuilder {
