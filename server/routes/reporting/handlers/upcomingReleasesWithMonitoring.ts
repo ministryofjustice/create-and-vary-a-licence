@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { format } from 'date-fns'
 
 import LicenceService from '../../../services/licenceService'
+import { escapeCsv } from '../../../utils/utils'
 
 export default class UpcomingReleasesWithMonitoringConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -19,16 +20,25 @@ export default class UpcomingReleasesWithMonitoringConditionsRoutes {
   GET_CSV = async (req: Request, res: Response): Promise<void> => {
     const upcomingCases = await this.getUpcomingReleasesWithMonitoring()
 
-    const header = ['Prison Number', 'Name', 'CRN', 'Licence Status', 'Ems conditions', 'Licence Start Date']
+    const header = [
+      'Prison Number',
+      'Name',
+      'CRN',
+      'Licence Status',
+      'Ems conditions',
+      'Licence Start Date',
+      'Licence Submitted Date',
+    ]
 
     const csv = upcomingCases
       .map(upcomingCases => [
-        upcomingCases.prisonNumber,
-        upcomingCases.fullName,
-        upcomingCases.crn,
-        upcomingCases.status,
-        upcomingCases.emConditionCodes,
-        upcomingCases.licenceStartDate,
+        escapeCsv(upcomingCases.prisonNumber),
+        escapeCsv(upcomingCases.fullName),
+        escapeCsv(upcomingCases.crn),
+        escapeCsv(upcomingCases.status),
+        escapeCsv(upcomingCases.emConditionCodes),
+        escapeCsv(upcomingCases.licenceStartDate),
+        escapeCsv(upcomingCases.submittedDate),
       ])
       .map(row => row.join(','))
       .join('\n')
@@ -50,6 +60,7 @@ export default class UpcomingReleasesWithMonitoringConditionsRoutes {
         prisonNumber: upcomingCase.prisonNumber,
         status: upcomingCase.status,
         licenceStartDate: upcomingCase.licenceStartDate,
+        submittedDate: upcomingCase.submittedDate,
         emConditionCodes: upcomingCase.emConditionCodes,
         fullName: upcomingCase.fullName,
       }

@@ -9344,6 +9344,11 @@ export interface components {
        */
       licenceStartDate?: string | null
       /**
+       * Format: date
+       * @description Licence submitted date
+       */
+      submittedDate?: string | null
+      /**
        * @description em condition codes
        * @example 14a, 14b, 14c, 5a
        */
