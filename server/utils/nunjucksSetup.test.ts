@@ -35,7 +35,7 @@ describe('Nunjucks Filters', () => {
   describe('errorSummaryList', () => {
     it('should map errors to text and href', () => {
       const template = `
-        {% set errorSummaryList = errors | errorSummaryList %}
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
         {% for error in errorSummaryList %}
             <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
         {% endfor %}
@@ -51,6 +51,7 @@ describe('Nunjucks Filters', () => {
             summaryMessage: 'message2',
           },
         ],
+        inputs: [],
       })
 
       expect($('a:nth-child(1)').text()).toBe('message1')
@@ -61,7 +62,7 @@ describe('Nunjucks Filters', () => {
 
     it('should use message for error message if summaryMessage not defined', () => {
       const template = `
-        {% set errorSummaryList = errors | errorSummaryList %}
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
         {% for error in errorSummaryList %}
             <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
         {% endfor %}
@@ -77,12 +78,144 @@ describe('Nunjucks Filters', () => {
             message: 'message2',
           },
         ],
+        inputs: [],
       })
 
       expect($('a:nth-child(1)').text()).toBe('message1')
       expect($('a:nth-child(1)').attr('href')).toBe('#field1')
       expect($('a:nth-child(2)').text()).toBe('message2')
       expect($('a:nth-child(2)').attr('href')).toBe('#field2')
+    })
+
+    it('should target the first input in a curfew time field when mapping summary links', () => {
+      const template = `
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
+        {% for error in errorSummaryList %}
+            <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
+        {% endfor %}
+      `
+      const $ = renderTemplate(template, {
+        errors: [
+          {
+            field: 'oneCurfewStart',
+            summaryMessage: 'Enter a start time',
+          },
+          {
+            field: 'twoCurfewEnd2',
+            summaryMessage: 'Enter an end time',
+          },
+        ],
+        inputs: [
+          { name: 'oneCurfewStart', type: 'timePicker' },
+          { name: 'twoCurfewEnd2', type: 'timePicker' },
+        ],
+      })
+
+      expect($('a:nth-child(1)').attr('href')).toBe('#oneCurfewStart-hour')
+      expect($('a:nth-child(2)').attr('href')).toBe('#twoCurfewEnd2-hour')
+    })
+
+    it('should target the am or pm select when the curfew time error is about am or pm', () => {
+      const template = `
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
+        {% for error in errorSummaryList %}
+            <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
+        {% endfor %}
+      `
+      const $ = renderTemplate(template, {
+        errors: [
+          {
+            field: 'oneCurfewEnd',
+            summaryMessage: 'Start time must include am or pm',
+          },
+        ],
+        inputs: [{ name: 'oneCurfewEnd', type: 'timePicker' }],
+      })
+
+      expect($('a:nth-child(1)').attr('href')).toBe('#oneCurfewEnd-ampm')
+    })
+
+    it('should prioritise the hour when both hour and minute are missing', () => {
+      const errorSummaryList = registerNunjucks().getFilter('errorSummaryList')
+      const result = errorSummaryList(
+        [{ field: 'curfewEnd', summaryMessage: 'End time must include hours and minutes' }],
+        [{ name: 'curfewEnd', type: 'timePicker' }],
+      )
+
+      expect(result).toEqual([{ text: 'End time must include hours and minutes', href: '#curfewEnd-hour' }])
+    })
+
+    it('should target the matching subfield for date picker errors', () => {
+      const template = `
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
+        {% for error in errorSummaryList %}
+            <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
+        {% endfor %}
+      `
+      const $ = renderTemplate(template, {
+        errors: [
+          {
+            field: 'dateOfBirth',
+            summaryMessage: 'Enter a valid month',
+          },
+        ],
+        inputs: [{ name: 'dateOfBirth', type: 'datePicker' }],
+      })
+
+      expect($('a:nth-child(1)').attr('href')).toBe('#dateOfBirth-month')
+    })
+
+    it('should not classify a date as a time field based on its name', () => {
+      const template = `
+        {% set errorSummaryList = errors | errorSummaryList(inputs) %}
+        {% for error in errorSummaryList %}
+            <a href="{{ errorSummaryList[loop.index0].href }}">{{ errorSummaryList[loop.index0].text }}</a>
+        {% endfor %}
+      `
+      const $ = renderTemplate(template, {
+        errors: [
+          {
+            field: 'endDate',
+            summaryMessage: 'Enter a date',
+          },
+        ],
+        inputs: [{ name: 'endDate', type: 'datePicker' }],
+      })
+
+      expect($('a:nth-child(1)').attr('href')).toBe('#endDate-day')
+    })
+
+    it('should target the minute and year subfields and conditional inputs', () => {
+      const errorSummaryList = registerNunjucks().getFilter('errorSummaryList')
+      const result = errorSummaryList(
+        [
+          { field: 'time', summaryMessage: 'Enter a valid minute' },
+          { field: 'date', summaryMessage: 'Enter a valid year' },
+          { field: 'conditionalDate', summaryMessage: 'Enter a valid month' },
+        ],
+        [
+          { name: 'time', type: 'timePicker' },
+          { name: 'date', type: 'datePicker' },
+          {
+            name: 'choice',
+            type: 'radio',
+            options: [
+              {
+                value: 'yes',
+                conditional: {
+                  inputs: [{ name: 'conditionalDate', type: 'datePicker' }],
+                },
+              },
+            ],
+          },
+        ],
+      )
+
+      expect(result).toEqual([
+        { text: 'Enter a valid minute', href: '#time-minute' },
+        { text: 'Enter a valid year', href: '#date-year' },
+        { text: 'Enter a valid month', href: '#conditionalDate-month' },
+      ])
     })
   })
 

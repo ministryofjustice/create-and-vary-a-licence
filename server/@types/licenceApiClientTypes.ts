@@ -1,6 +1,8 @@
 import { components } from './licenceApiImport'
 
 export type AdditionalCondition = components['schemas']['AdditionalCondition']
+export type Input = components['schemas']['Input']
+export type ConditionalInput = components['schemas']['ConditionalInput']
 export type AddHdcCurfewAddressRequest = components['schemas']['AddHdcCurfewAddressRequest']
 export type AppointmentPersonRequest = components['schemas']['AppointmentPersonRequest']
 export type AppointmentTimeRequest = components['schemas']['AppointmentTimeRequest']
