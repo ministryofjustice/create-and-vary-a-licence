@@ -69,8 +69,8 @@ describe('Route handlers', () => {
     jest.resetAllMocks()
     licenceService.getParentLicenceOrSelf.mockResolvedValue({
       id: 1,
-      version: 'version',
-      typeCode: 'AP_PSS',
+      version: '1.0',
+      typeCode: 'AP',
     } as Licence)
 
     conditionService.getAdditionalConditionByCode.mockResolvedValue({
@@ -123,7 +123,7 @@ describe('Route handlers', () => {
 
     describe('page rendering', () => {
       it('should redirect to the deleted condition page when the condition change type is DELETED', async () => {
-        const condition = { code: 'code5', text: 'Conditon 5', category: 'group1', requiresInput: false }
+        const condition = { code: 'code5', text: 'Condition 5', category: 'group1', requiresInput: false }
         conditionService.getAdditionalConditionByCode.mockResolvedValue(condition)
         await handler.GET(req, res)
 
@@ -190,6 +190,90 @@ describe('Route handlers', () => {
           licenceId: '1',
           policyChangesCount: 5,
         })
+      })
+    })
+
+    it('should get the correct change hint when upgrading from version 1.0', async () => {
+      const condition = {
+        changeType: 'NEW_OPTIONS',
+        code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+        sequence: 6,
+        previousText: 'Condition 6 previous text',
+        currentText: 'Condition 6 current text',
+        dataChanges: [],
+        suggestions: [],
+      } as LicenceConditionChange
+
+      req = {
+        ...req,
+        session: {
+          changedConditions: [condition],
+          changedConditionsCounter: '1',
+          changedConditionInputs: [],
+        },
+      } as unknown as Request
+
+      req.params.changeCounter = '1'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/vary/policyNewOptions', {
+        condition,
+        conditionCounter: 1,
+        conditionHintText: {
+          code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+          fromVersions: ['1.0', '2.0'],
+          description: [],
+          bulletpoints: [
+            'More precise options for reporting times added – you can use these on the next page if you need to',
+            'Option to select “the Approved Premises where you reside” added',
+          ],
+        },
+        licenceId: '1',
+        policyChangesCount: 1,
+      })
+    })
+
+    it('should get the correct change hint when upgrading from version 2.1', async () => {
+      const condition = {
+        changeType: 'NEW_OPTIONS',
+        code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+        sequence: 6,
+        previousText: 'Condition 6 previous text',
+        currentText: 'Condition 6 current text',
+        dataChanges: [],
+        suggestions: [],
+      } as LicenceConditionChange
+
+      req = {
+        ...req,
+        session: {
+          changedConditions: [condition],
+          changedConditionsCounter: '1',
+          changedConditionInputs: [],
+        },
+      } as unknown as Request
+
+      req.params.changeCounter = '1'
+
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({
+        id: 1,
+        version: '2.1',
+        typeCode: 'AP',
+      } as Licence)
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/vary/policyNewOptions', {
+        condition,
+        conditionCounter: 1,
+        conditionHintText: {
+          code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+          fromVersions: ['2.1'],
+          description: ['Option to select “the Approved Premises where you reside” added.'],
+          bulletpoints: [],
+        },
+        licenceId: '1',
+        policyChangesCount: 1,
       })
     })
   })
