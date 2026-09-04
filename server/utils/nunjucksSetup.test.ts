@@ -135,6 +135,16 @@ describe('Nunjucks Filters', () => {
       expect($('a:nth-child(1)').attr('href')).toBe('#oneCurfewEnd-ampm')
     })
 
+    it('should prioritise the hour when both hour and minute are missing', () => {
+      const errorSummaryList = registerNunjucks().getFilter('errorSummaryList')
+      const result = errorSummaryList(
+        [{ field: 'curfewEnd', summaryMessage: 'End time must include hours and minutes' }],
+        [{ name: 'curfewEnd', type: 'timePicker' }],
+      )
+
+      expect(result).toEqual([{ text: 'End time must include hours and minutes', href: '#curfewEnd-hour' }])
+    })
+
     it('should target the matching subfield for date picker errors', () => {
       const template = `
         {% set errorSummaryList = errors | errorSummaryList(inputs) %}
@@ -173,6 +183,39 @@ describe('Nunjucks Filters', () => {
       })
 
       expect($('a:nth-child(1)').attr('href')).toBe('#endDate-day')
+    })
+
+    it('should target the minute and year subfields and conditional inputs', () => {
+      const errorSummaryList = registerNunjucks().getFilter('errorSummaryList')
+      const result = errorSummaryList(
+        [
+          { field: 'time', summaryMessage: 'Enter a valid minute' },
+          { field: 'date', summaryMessage: 'Enter a valid year' },
+          { field: 'conditionalDate', summaryMessage: 'Enter a valid month' },
+        ],
+        [
+          { name: 'time', type: 'timePicker' },
+          { name: 'date', type: 'datePicker' },
+          {
+            name: 'choice',
+            type: 'radio',
+            options: [
+              {
+                value: 'yes',
+                conditional: {
+                  inputs: [{ name: 'conditionalDate', type: 'datePicker' }],
+                },
+              },
+            ],
+          },
+        ],
+      )
+
+      expect(result).toEqual([
+        { text: 'Enter a valid minute', href: '#time-minute' },
+        { text: 'Enter a valid year', href: '#date-year' },
+        { text: 'Enter a valid month', href: '#conditionalDate-month' },
+      ])
     })
   })
 

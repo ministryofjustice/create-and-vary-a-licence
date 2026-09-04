@@ -53,11 +53,14 @@ function getInputTypesByName(inputs: Input[]): Map<string, Input['type']> {
 
 function getErrorSummaryHref(fieldName: string, inputType: Input['type'] | undefined, message: string): string {
   if (inputType === 'timePicker') {
-    if (message.includes('am or pm')) {
-      return `#${fieldName}-ampm`
+    if (message.includes('hour')) {
+      return `#${fieldName}-hour`
     }
     if (message.includes('minute')) {
       return `#${fieldName}-minute`
+    }
+    if (message.includes('am or pm')) {
+      return `#${fieldName}-ampm`
     }
     return `#${fieldName}-hour`
   }
