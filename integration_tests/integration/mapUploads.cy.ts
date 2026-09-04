@@ -39,7 +39,9 @@ context('Create a licence', () => {
 
     cy.visit('/licence/create/id/1/additional-licence-conditions/condition/1')
 
-    Page.verifyOnPage(ExclusionZoneConditionInputPage).shouldDisplayHeaderCaption('Event exclusion condition')
+    Page.verifyOnPage(ExclusionZoneConditionInputPage).shouldDisplayHeaderCaption(
+      'Area this person must not enter during an event (exclusion zone)',
+    )
   })
 
   it('should add an exclusion zone to the licence', () => {

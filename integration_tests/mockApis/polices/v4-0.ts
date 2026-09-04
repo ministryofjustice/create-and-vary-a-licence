@@ -6,80 +6,38 @@ const policy: LicencePolicyResponse = {
     AP: [
       {
         code: '9ce9d594-e346-4785-9642-c87e764bee37',
-        text: 'Be of good behaviour and not behave in a way which undermines the purpose of the licence period.',
-      },
-      {
-        code: '3b19fdb0-4ca3-4615-9fdd-61fabc1587af',
-        text: 'Not commit any offence.',
+        text: 'Behave well in a way that supports the purpose of you being on licence, and do not commit any crime.',
       },
       {
         code: '3361683a-504a-4357-ae22-6aa01b370b4a',
-        text: 'Keep in touch with the supervising officer in accordance with instructions given by the supervising officer.',
+        text: 'Get permission from your supervising officer to stay at an address and if you want to stay somewhere else for one or more nights.',
       },
       {
         code: '9fc04065-df29-4bda-9b1d-bced8335c356',
-        text: 'Receive visits from the supervising officer in accordance with any instructions given by the supervising officer.',
+        text: 'Keep in touch and meet with your supervising officer in the way they tell you to. This includes meeting them where you live.',
       },
       {
         code: 'e670ac69-eda2-4b04-a0a1-a3c8492fe1e6',
-        text: 'Reside permanently at an address approved by the supervising officer and obtain the prior permission of the supervising officer for any stay of one or more nights at a different address.',
+        text: 'Tell your supervising officer about any names you use that are different to the names on this licence.',
       },
       {
         code: '78A5F860-4791-48F2-B707-D6D4413850EE',
-        text: 'Tell the supervising officer if you use a name which is different to the name or names which appear on your licence.',
+        text: 'Inform your supervising officer if your contact details change. For example, your phone number or email address.',
       },
       {
         code: '6FA6E492-F0AB-4E76-B868-63813DB44696',
-        text: 'Tell the supervising officer if you change or add any contact details, including phone number or email.',
+        text: 'Tell your supervising officer about any new work, or a type of work, you want to do. Get their approval before you start this work.',
       },
       {
         code: '88069445-08cb-4f16-915f-5a162d085c26',
-        text: 'Not undertake work, or a particular type of work, unless it is approved by the supervising officer and notify the supervising officer in advance of any proposal to undertake work or a particular type of work.',
+        text: 'Get permission from your supervising officer if you want to leave the United Kingdom, Isle of Man or the Channel Islands. This does not apply if you are being deported or removed for immigration purposes.',
       },
       {
         code: '7d416906-0e94-4fde-ae86-8339d339ccb7',
-        text: 'Not travel outside the United Kingdom, the Channel Islands or the Isle of Man except with the prior permission of the supervising officer or for the purposes of immigration deportation or removal.',
-      },
-      {
-        code: '2cbfc6ef-576e-482d-97c1-f6f937a34de8',
-        text: 'Mandatory Drug Testing.',
-        tpl: null,
+        text: 'Get permission from your supervising officer if you want to apply for a new passport. If requested, tell your supervising officer about any passports you have already.',
       },
     ],
-    PSS: [
-      {
-        code: 'b3cd4a30-11fd-4715-9ebb-ed89f5386e1f',
-        text: 'Be of good behaviour and not behave in a way that undermines the rehabilitative purpose of the supervision period.',
-      },
-      {
-        code: 'b950407d-2270-45b8-9666-3ad58a17d0be',
-        text: 'Not commit any offence.',
-      },
-      {
-        code: '93413832-9954-4907-a64d-eb8a56e34afb',
-        text: 'Keep in touch with your supervisor in accordance with instructions given by your supervisor.',
-      },
-      {
-        code: '9288e01c-e40e-4040-8b6e-57092361f422',
-        text: 'Receive visits from your supervisor in accordance with instructions given by your supervisor.',
-      },
-      {
-        code: '8e15cf42-f8e0-4408-a33e-d16a3448b7bd',
-        text: 'Reside permanently at an address approved by your supervisor and obtain the prior permission of the supervisor for any stay of one or more nights at a different address.',
-      },
-      {
-        code: '0ed57797-2745-4592-a78b-8e4d712c580e',
-        text: 'Not undertake work, or a particular type of work, unless it is approved by your supervisor and notify your supervisor in advance of any proposal to undertake work or a particular type of work.',
-      },
-      {
-        code: 'c8966621-088a-4b87-9a19-752ff8b900c6',
-        text: 'Not travel outside the United Kingdom, the Channel Islands or the Isle of Man except with the prior permission of your supervisor or in order to comply with a legal obligation (whether or not arising under the law of any part of the United Kingdom, the Channel Islands or the Isle of Man).',
-      },
-      {
-        code: '579060fd-e412-471c-94d7-2fefa06d5052',
-        text: 'Participate in activities in accordance with any instructions given by your supervisor.',
-      },
-    ],
+    PSS: [],
   },
   additionalConditions: {
     AP: [
@@ -132,6 +90,7 @@ const policy: LicencePolicyResponse = {
                 value: 'Wales',
               },
             ],
+            hideHintText: false,
           },
         ],
         type: 'RegionOfResidence',
@@ -147,7 +106,7 @@ const policy: LicencePolicyResponse = {
         inputs: [
           {
             type: 'radio',
-            label: 'Select the relevant text',
+            label: 'Select gender',
             name: 'gender',
             options: [
               {
@@ -161,11 +120,13 @@ const policy: LicencePolicyResponse = {
               },
             ],
             case: 'lower',
+            hideHintText: false,
           },
           {
             type: 'text',
-            label: 'Enter the relevant age',
+            label: 'Enter an age up to 18',
             name: 'age',
+            hideHintText: false,
           },
         ],
         type: 'RestrictionOfResidencyPolicyV3',
@@ -196,6 +157,7 @@ const policy: LicencePolicyResponse = {
               },
             ],
             case: 'lower',
+            hideHintText: false,
           },
         ],
         categoryShort: 'Contact with a person',
@@ -237,6 +199,7 @@ const policy: LicencePolicyResponse = {
             addAnother: {
               label: 'Add another person',
             },
+            hideHintText: false,
           },
           {
             type: 'text',
@@ -244,6 +207,7 @@ const policy: LicencePolicyResponse = {
             name: 'socialServicesDepartment',
             case: 'capitalised',
             includeBefore: ' and / or ',
+            hideHintText: false,
           },
         ],
         categoryShort: 'Contact with a person',
@@ -260,7 +224,7 @@ const policy: LicencePolicyResponse = {
         inputs: [
           {
             type: 'radio',
-            label: 'Select the relevant gender',
+            label: 'Select gender',
             name: 'gender',
             options: [
               {
@@ -274,11 +238,13 @@ const policy: LicencePolicyResponse = {
               },
             ],
             case: 'lower',
+            hideHintText: false,
           },
           {
             type: 'text',
-            label: 'Select the relevant age',
+            label: 'Enter an age up to 18',
             name: 'age',
+            hideHintText: false,
           },
           {
             type: 'text',
@@ -286,6 +252,7 @@ const policy: LicencePolicyResponse = {
             name: 'socialServicesDepartment',
             case: 'capitalised',
             includeBefore: ' and / or ',
+            hideHintText: false,
           },
         ],
         categoryShort: 'Contact with a person',
@@ -309,6 +276,7 @@ const policy: LicencePolicyResponse = {
             addAnother: {
               label: 'Add another person',
             },
+            hideHintText: false,
           },
         ],
         categoryShort: 'Contact with a person',
@@ -349,6 +317,7 @@ const policy: LicencePolicyResponse = {
             addAnother: {
               label: 'Add another group or organisation',
             },
+            hideHintText: false,
           },
         ],
         categoryShort: 'Contact with a person',
@@ -421,6 +390,7 @@ const policy: LicencePolicyResponse = {
                 value: 'offending behaviour',
               },
             ],
+            hideHintText: false,
           },
         ],
         categoryShort: 'Programmes or activities',
@@ -437,8 +407,9 @@ const policy: LicencePolicyResponse = {
         inputs: [
           {
             type: 'text',
-            label: 'Select the relevant age',
+            label: 'Enter an age up to 18',
             name: 'age',
+            hideHintText: false,
           },
         ],
         categoryShort: 'Programmes or activities',
@@ -487,6 +458,7 @@ const policy: LicencePolicyResponse = {
                 value: 'an education provider',
               },
             ],
+            hideHintText: false,
           },
         ],
         categoryShort: 'Programmes or activities',
@@ -533,7 +505,7 @@ const policy: LicencePolicyResponse = {
       {
         code: '2d67f68a-8adf-47a9-a68d-a6fc9f2c4556',
         category: 'Possession, ownership, control or inspection of specified items or documents',
-        text: 'Not to delete the usage history on any [INTERNET ENABLED DEVICE / COMPUTER / MOBILE PHONE / DIGITAL CAMERAS] used and to allow such items to be inspected as requested. Such inspection may include removal of the device for inspection and the installation of monitoring software.',
+        text: 'Not to delete the usage history on any [INTERNET ENABLED DEVICE / COMPUTER / MOBILE PHONE / DIGITAL CAMERA] used and to allow such items to be inspected as requested. Such inspection may include removal of the device for inspection and the installation of monitoring software.',
         tpl: 'Not to delete the usage history on any {deviceTypes} used and to allow such items to be inspected as requested. Such inspection may include removal of the device for inspection and the installation of monitoring software.',
         requiresInput: true,
         inputs: [
@@ -553,9 +525,10 @@ const policy: LicencePolicyResponse = {
                 value: 'mobile phone',
               },
               {
-                value: 'digital cameras',
+                value: 'digital camera',
               },
             ],
+            hideHintText: false,
           },
         ],
         categoryShort: 'Items and documents',
@@ -579,6 +552,7 @@ const policy: LicencePolicyResponse = {
             addAnother: {
               label: 'Add another item',
             },
+            hideHintText: false,
           },
         ],
         categoryShort: 'Items and documents',
@@ -611,14 +585,6 @@ const policy: LicencePolicyResponse = {
         requiresElectronicMonitoringResponse: false,
       },
       {
-        code: '79ac033f-9d7a-4dab-8344-475106e58b71',
-        category: 'Disclosure of information',
-        text: 'To notify your supervising officer of the details of any passport that you possess (including passport number), and of any intention to apply for a new passport.',
-        requiresInput: false,
-        skippable: false,
-        requiresElectronicMonitoringResponse: false,
-      },
-      {
         code: '8686a815-b7f0-43b6-9886-f01df6a48773',
         category: 'Disclosure of information',
         text: 'Provide your supervising officer with the details of any [BANK ACCOUNTS / CREDIT CARDS / CRYPTO CURRENCY ACCOUNTS OR WALLETS] to which you have access or control over, including those held by a third party. You must also notify your supervising officer when you have access or control over any new accounts/wallets, and provide the details.',
@@ -641,6 +607,7 @@ const policy: LicencePolicyResponse = {
                 value: 'crypto currency accounts or wallets',
               },
             ],
+            hideHintText: false,
           },
         ],
         type: 'BankAccountDetails',
@@ -648,7 +615,7 @@ const policy: LicencePolicyResponse = {
         requiresElectronicMonitoringResponse: false,
       },
       {
-        code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
+        code: '52faefcf-15f0-42c5-b908-621b4a7ecdb9',
         category: 'Curfew arrangement',
         text: 'You must stay at the address approved by your supervising officer between [TIME] and [TIME] each day, unless your supervising officer gives permission for you to be elsewhere during those hours. This is called a curfew.',
         tpl: 'You must stay at the address approved by your supervising officer between {oneCurfewStart}{twoCurfewStart}{threeCurfewStart} and {oneCurfewEnd}{twoCurfewEnd}{threeCurfewEnd}{twoCurfewStart2}{twoCurfewEnd2}{threeCurfewStart2}{threeCurfewEnd2}{threeCurfewStart3}{threeCurfewEnd3} each day, unless your supervising officer gives permission for you to be elsewhere during those hours. This is called a curfew.',
@@ -666,12 +633,14 @@ const policy: LicencePolicyResponse = {
                     {
                       type: 'timePicker',
                       label: 'Enter the curfew start time',
-                      name: 'curfewStart',
+                      name: 'oneCurfewStart',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Enter the curfew end time',
-                      name: 'curfewEnd',
+                      name: 'oneCurfewEnd',
+                      hideHintText: true,
                     },
                   ],
                 },
@@ -683,22 +652,28 @@ const policy: LicencePolicyResponse = {
                     {
                       type: 'timePicker',
                       label: 'First curfew – enter the start time',
-                      name: 'curfewStart',
+                      name: 'twoCurfewStart',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'First curfew – enter the end time',
-                      name: 'curfewEnd',
+                      name: 'twoCurfewEnd',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Second curfew – enter the start time',
-                      name: 'curfewStart2',
+                      name: 'twoCurfewStart2',
+                      includeBefore: ' and ',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Second curfew – enter the end time',
-                      name: 'curfewEnd2',
+                      name: 'twoCurfewEnd2',
+                      includeBefore: ' and ',
+                      hideHintText: true,
                     },
                   ],
                 },
@@ -710,69 +685,51 @@ const policy: LicencePolicyResponse = {
                     {
                       type: 'timePicker',
                       label: 'First curfew – enter the start time',
-                      name: 'curfewStart',
+                      name: 'threeCurfewStart',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'First curfew – enter the end time',
-                      name: 'curfewEnd',
+                      name: 'threeCurfewEnd',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Second curfew – enter the start time',
-                      name: 'curfewStart2',
+                      name: 'threeCurfewStart2',
+                      includeBefore: ', ',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Second curfew – enter the end time',
-                      name: 'curfewEnd2',
+                      name: 'threeCurfewEnd2',
+                      includeBefore: ' and ',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Third curfew – enter the start time',
-                      name: 'curfewStart3',
+                      name: 'threeCurfewStart3',
+                      includeBefore: ', and ',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Third curfew – enter the end time',
-                      name: 'curfewEnd3',
+                      name: 'threeCurfewEnd3',
+                      includeBefore: ' and ',
+                      hideHintText: true,
                     },
                   ],
                 },
               },
             ],
-          },
-          {
-            type: 'radio',
-            label: 'Select a review period',
-            name: 'reviewPeriod',
-            options: [
-              {
-                value: 'Weekly',
-              },
-              {
-                value: 'Monthly',
-              },
-              {
-                value: 'Other',
-                conditional: {
-                  inputs: [
-                    {
-                      type: 'text',
-                      label: 'Enter a review period',
-                      name: 'alternativeReviewPeriod',
-                      case: 'lower',
-                      handleIndefiniteArticle: true,
-                    },
-                  ],
-                },
-              },
-            ],
-            case: 'lower',
-            handleIndefiniteArticle: true,
+            hideHintText: false,
           },
         ],
-        type: 'CurfewTerms',
+        type: 'CurfewTermsV4',
         skippable: false,
         requiresElectronicMonitoringResponse: false,
       },
@@ -780,6 +737,8 @@ const policy: LicencePolicyResponse = {
         code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
         category: 'Freedom of movement',
         text: 'Not to enter the area as defined by the attached map without the prior approval of your supervising officer.',
+        textPlural:
+          'Not to enter the areas as defined by the attached maps without the prior approval of your supervising officer.',
         tpl: 'Not to enter the area as defined by the attached map without the prior approval of your supervising officer.',
         requiresInput: true,
         inputs: [
@@ -787,11 +746,13 @@ const policy: LicencePolicyResponse = {
             type: 'fileUpload',
             label: 'Select a PDF map of the area this person must not enter',
             name: 'outOfBoundFilename',
+            hideHintText: false,
           },
         ],
         type: 'OutOfBoundsRegionPolicyV3',
         skippable: false,
         requiresElectronicMonitoringResponse: false,
+        headerCaption: 'Area this person must not enter (exclusion zone)',
       },
       {
         code: '42f71b40-84cd-446d-8647-f00bbb6c079c',
@@ -813,6 +774,7 @@ const policy: LicencePolicyResponse = {
                       type: 'text',
                       label: 'Name or type of premises',
                       name: 'nameOfPremises',
+                      hideHintText: false,
                     },
                   ],
                 },
@@ -825,6 +787,7 @@ const policy: LicencePolicyResponse = {
                       type: 'address',
                       label: 'Enter the address of the premises',
                       name: 'premisesAddress',
+                      hideHintText: false,
                     },
                   ],
                 },
@@ -837,16 +800,19 @@ const policy: LicencePolicyResponse = {
                       type: 'text',
                       label: 'Name or type of premises',
                       name: 'nameOfPremises',
+                      hideHintText: false,
                     },
                     {
                       type: 'address',
                       label: 'Enter the address of the premises',
                       name: 'premisesAddress',
+                      hideHintText: false,
                     },
                   ],
                 },
               },
             ],
+            hideHintText: false,
           },
         ],
         type: 'OutOfBoundsPremises',
@@ -865,6 +831,7 @@ const policy: LicencePolicyResponse = {
             label: 'Enter area or type of premises',
             name: 'typeOfPremises',
             case: 'lower',
+            hideHintText: false,
           },
         ],
         type: 'OutOfBoundsPremisesType',
@@ -882,7 +849,6 @@ const policy: LicencePolicyResponse = {
       {
         code: '99195049-f355-46fb-b7d8-aef87a1b19c5',
         category: 'Freedom of movement',
-        headerCaption: 'Event exclusion condition',
         text: 'Not to enter the area as defined by the attached map, during the period that [NAME OF EVENT] takes place, including all occasions that the event takes place, without the prior permission of your supervising officer.',
         tpl: 'Not to enter the area as defined by the attached map, during the period that {eventName} takes place, including all occasions that the event takes place, without the prior permission of your supervising officer.',
         requiresInput: true,
@@ -891,16 +857,19 @@ const policy: LicencePolicyResponse = {
             type: 'text',
             label: 'Enter the name of the event',
             name: 'eventName',
+            hideHintText: false,
           },
           {
             type: 'fileUpload',
             label: 'Select a PDF map of the area this person must not enter',
             name: 'outOfBoundFilename',
+            hideHintText: false,
           },
         ],
         type: 'OutOfBoundsEvent',
         skippable: false,
         requiresElectronicMonitoringResponse: false,
+        headerCaption: 'Area this person must not enter during an event (exclusion zone)',
       },
       {
         code: '1e9a66c6-f083-4c29-b209-b625252afbe5',
@@ -911,17 +880,10 @@ const policy: LicencePolicyResponse = {
         requiresElectronicMonitoringResponse: false,
       },
       {
-        code: 'd523d711-9975-4a9a-a37e-a17bd611140f',
-        category: 'Freedom of movement',
-        text: 'DRIVING PROHIBITION PLACEHOLDER',
-        requiresInput: false,
-        skippable: false,
-        requiresElectronicMonitoringResponse: false,
-      },
-      {
         code: 'be16ee0b-a916-43ef-9319-b42a1dd418a3',
         category: 'Freedom of movement',
         text: 'Not to enter a drinking establishment [AT ANY TIME / BETWEEN SPECIFIED TIMES] without the prior approval of your supervising officer. This means any location where you can buy alcohol without needing to buy food or stay overnight. It also means places that stay open past midnight for entertainment reasons (things like music or shows) and also serve alcohol.',
+        tpl: 'Not to enter a drinking establishment {firstCurfewStart}{firstCurfewEnd}{secondCurfewStart}{secondCurfewEnd} without the prior approval of your supervising officer. This means any location where you can buy alcohol without needing to buy food or stay overnight. It also means places that stay open past midnight for entertainment reasons (things like music or shows) and also serve alcohol.',
         requiresInput: true,
         inputs: [
           {
@@ -940,75 +902,155 @@ const policy: LicencePolicyResponse = {
                       type: 'timePicker',
                       label: 'Enter first start time',
                       name: 'firstCurfewStart',
+                      includeBefore: ' between ',
+                      defaultValue: ' at any time',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Enter first end time',
                       name: 'firstCurfewEnd',
+                      includeBefore: ' and ',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Enter second start time (optional)',
                       name: 'secondCurfewStart',
+                      includeBefore: ' or between ',
+                      hideHintText: true,
                     },
                     {
                       type: 'timePicker',
                       label: 'Enter second end time (optional)',
                       name: 'secondCurfewEnd',
+                      includeBefore: ' and ',
+                      hideHintText: true,
                     },
                   ],
                 },
               },
             ],
+            hideHintText: false,
           },
         ],
         type: 'DrinkingEstablishment',
+        skippable: false,
         requiresElectronicMonitoringResponse: false,
       },
       {
-        category: 'Freedom of movement',
-        code: '344a87e0-677a-49be-9adc-1f1891b1bd50',
-        requiresInput: false,
-        text: 'FOREIGN TRAVEL RESTRICTION PLACEHOLDER',
-        requiresElectronicMonitoringResponse: false,
-      },
-      {
-        category: 'Freedom of movement',
         code: '005d70e4-a247-4f82-b8b3-6d294a0f5051',
-        requiresInput: false,
-        text: 'RESTRICTION ZONES PLACEHOLDER',
+        category: 'Freedom of movement',
+        text: 'Not to leave the area as defined by the attached map without the prior approval of your supervising officer.',
+        textPlural:
+          'Not to leave the areas as defined by the attached maps without the prior approval of your supervising officer.',
+        tpl: 'Not to leave the area as defined by the attached map without the prior approval of your supervising officer.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: 'fileUpload',
+            label: 'Select a PDF map of the area this person must not leave',
+            name: 'inBoundFilename',
+            hideHintText: false,
+          },
+        ],
+        type: 'InBoundsRegion',
+        skippable: false,
+        requiresElectronicMonitoringResponse: false,
+        headerCaption: 'Area this person must not leave (restriction zone)',
+      },
+      {
+        code: '3f96ac05-ef71-43e3-ac07-1219aa26b5f3',
+        category: 'Freedom of movement',
+        text: 'Not to attend [ANY PUBLIC EVENT / TYPES OF PUBLIC EVENT] [AT ANY TIME / BETWEEN SPECIFIED TIMES] without the prior approval of your supervising officer.',
+        tpl: 'Not to attend {publicEventType}{firstCurfewStart}{firstCurfewEnd}{secondCurfewStart}{secondCurfewEnd} without the prior approval of your supervising officer.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: 'radio',
+            label: 'Event type',
+            name: 'eventType',
+            options: [
+              {
+                value: 'Any public event',
+              },
+              {
+                value: 'Types of public event',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'text',
+                      label: 'Enter one or more types of public event',
+                      name: 'publicEventType',
+                      defaultValue: 'any public event',
+                      hideHintText: false,
+                    },
+                  ],
+                },
+              },
+            ],
+            hideHintText: false,
+          },
+          {
+            type: 'radio',
+            label: 'Time restriction',
+            name: 'timeRestriction',
+            options: [
+              {
+                value: 'At any time',
+              },
+              {
+                value: 'Between specified times',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'timePicker',
+                      label: 'Enter first start time',
+                      name: 'firstCurfewStart',
+                      includeBefore: ' between ',
+                      defaultValue: ' at any time',
+                      hideHintText: true,
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter first end time',
+                      name: 'firstCurfewEnd',
+                      includeBefore: ' and ',
+                      hideHintText: true,
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter second start time (optional)',
+                      name: 'secondCurfewStart',
+                      includeBefore: ' or between ',
+                      hideHintText: true,
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter second end time (optional)',
+                      name: 'secondCurfewEnd',
+                      includeBefore: ' and ',
+                      hideHintText: true,
+                    },
+                  ],
+                },
+              },
+            ],
+            hideHintText: false,
+          },
+        ],
+        type: 'PublicEvent',
+        skippable: false,
         requiresElectronicMonitoringResponse: false,
       },
       {
         code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
-        text: 'Report to staff at [THE APPROVED PREMISES WHERE YOU RESIDE / NAME OF APPROVED PREMISES] at [TIME / DAILY / OTHER], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-        tpl: 'Report to staff at {approvedPremises} at {reportingTime}{reportingTime1}{reportingTime2} {alternativeReportingFrequency || reportingFrequency}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+        text: 'Report to staff at the Approved Premises where you reside at [TIME / DAILY / OTHER], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+        tpl: 'Report to staff at the Approved Premises where you reside at {reportingTime}{reportingTime1}{reportingTime2} {alternativeReportingFrequency || reportingFrequency}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         requiresInput: true,
         inputs: [
-          {
-            type: 'radio',
-            label: 'Choose what information to enter',
-            name: 'addressOrGeneric',
-            options: [
-              {
-                value: 'The approved premises where you reside',
-              },
-              {
-                value: 'Name of approved premises',
-                conditional: {
-                  inputs: [
-                    {
-                      type: 'text',
-                      label: 'Enter name of approved premises',
-                      name: 'approvedPremises',
-                    },
-                  ],
-                },
-              },
-            ],
-          },
           {
             type: 'radio',
             label: 'Select when the person needs to report',
@@ -1028,11 +1070,13 @@ const policy: LicencePolicyResponse = {
                       type: 'text',
                       label: 'Enter the other frequency',
                       name: 'alternativeReportingFrequency',
+                      hideHintText: false,
                     },
                   ],
                 },
               },
             ],
+            hideHintText: false,
           },
           {
             type: 'radio',
@@ -1047,6 +1091,7 @@ const policy: LicencePolicyResponse = {
                       type: 'timePicker',
                       label: 'Enter the reporting time',
                       name: 'reportingTime',
+                      hideHintText: false,
                     },
                   ],
                 },
@@ -1059,12 +1104,14 @@ const policy: LicencePolicyResponse = {
                       type: 'timePicker',
                       label: 'Enter the first reporting time',
                       name: 'reportingTime1',
+                      hideHintText: false,
                     },
                     {
                       type: 'timePicker',
                       label: 'Enter the second reporting time',
                       name: 'reportingTime2',
                       includeBefore: ' and ',
+                      hideHintText: false,
                     },
                   ],
                 },
@@ -1072,6 +1119,7 @@ const policy: LicencePolicyResponse = {
             ],
             subtext:
               'If you want to add more than 2 reporting times per day, this must be done as a bespoke condition approved by PPCS.',
+            hideHintText: false,
           },
           {
             type: 'radio',
@@ -1094,6 +1142,7 @@ const policy: LicencePolicyResponse = {
                       name: 'alternativeReviewPeriod',
                       case: 'lower',
                       handleIndefiniteArticle: true,
+                      hideHintText: false,
                     },
                   ],
                 },
@@ -1101,10 +1150,11 @@ const policy: LicencePolicyResponse = {
             ],
             case: 'lower',
             handleIndefiniteArticle: true,
+            hideHintText: false,
           },
         ],
         categoryShort: 'Supervision in the community',
-        type: 'ReportToApprovedPremisesPolicyV3',
+        type: 'ReportToApprovedPremisesPolicyV4',
         skippable: false,
         requiresElectronicMonitoringResponse: false,
       },
@@ -1121,6 +1171,7 @@ const policy: LicencePolicyResponse = {
             label: 'Enter name of police station',
             name: 'policeStation',
             case: 'capitalised',
+            hideHintText: false,
           },
           {
             type: 'radio',
@@ -1141,11 +1192,13 @@ const policy: LicencePolicyResponse = {
                       type: 'text',
                       label: 'Enter the other frequency',
                       name: 'alternativeReportingFrequency',
+                      hideHintText: false,
                     },
                   ],
                 },
               },
             ],
+            hideHintText: false,
           },
           {
             type: 'radio',
@@ -1160,6 +1213,7 @@ const policy: LicencePolicyResponse = {
                       type: 'timePicker',
                       label: 'Enter the reporting time',
                       name: 'reportingTime',
+                      hideHintText: false,
                     },
                   ],
                 },
@@ -1172,12 +1226,14 @@ const policy: LicencePolicyResponse = {
                       type: 'timePicker',
                       label: 'Enter the first reporting time',
                       name: 'reportingTime1',
+                      hideHintText: false,
                     },
                     {
                       type: 'timePicker',
                       label: 'Enter the second reporting time',
                       name: 'reportingTime2',
                       includeBefore: ' and ',
+                      hideHintText: false,
                     },
                   ],
                 },
@@ -1185,6 +1241,7 @@ const policy: LicencePolicyResponse = {
             ],
             subtext:
               'If you want to add more than 2 reporting times per day, this must be done as a bespoke condition approved by PPCS.',
+            hideHintText: false,
           },
           {
             type: 'radio',
@@ -1207,6 +1264,7 @@ const policy: LicencePolicyResponse = {
                       name: 'alternativeReviewPeriod',
                       case: 'lower',
                       handleIndefiniteArticle: true,
+                      hideHintText: false,
                     },
                   ],
                 },
@@ -1214,6 +1272,7 @@ const policy: LicencePolicyResponse = {
             ],
             case: 'lower',
             handleIndefiniteArticle: true,
+            hideHintText: false,
           },
         ],
         categoryShort: 'Supervision in the community',
@@ -1258,6 +1317,7 @@ const policy: LicencePolicyResponse = {
                 value: 'Request permission from your supervising officer before you',
               },
             ],
+            hideHintText: false,
           },
           {
             type: 'check',
@@ -1278,6 +1338,7 @@ const policy: LicencePolicyResponse = {
                 value: 'podcasts',
               },
             ],
+            hideHintText: false,
           },
         ],
         categoryShort: 'Restriction of conduct or acts',
@@ -1296,6 +1357,7 @@ const policy: LicencePolicyResponse = {
             type: 'text',
             label: 'Enter the type of website or app',
             name: 'contentType',
+            hideHintText: false,
           },
         ],
         categoryShort: 'Restriction of conduct or acts',
@@ -1329,10 +1391,120 @@ const policy: LicencePolicyResponse = {
                 value: 'automatic deletion of content',
               },
             ],
+            hideHintText: false,
           },
         ],
         categoryShort: 'Restriction of conduct or acts',
         type: 'DigitalServices',
+        skippable: false,
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
+        code: 'd523d711-9975-4a9a-a37e-a17bd611140f',
+        category: 'Restriction of specified conduct or specified acts',
+        text: 'Not to use [ANY MOTOR VEHICLE / TYPES OF MOTOR VEHICLE] [AT ANY TIME / BETWEEN SPECIFIED TIMES] [AT ANY LOCATION / IN SPECIFIED LOCATIONS] without the prior approval of your supervising officer.',
+        tpl: 'Not to use {typesOfMotorVehicle}{firstCurfewStart}{firstCurfewEnd}{secondCurfewStart}{secondCurfewEnd} {locations} without the prior approval of your supervising officer.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: 'radio',
+            label: 'Vehicle types',
+            name: 'vehicleTypes',
+            options: [
+              {
+                value: 'Any motor vehicle',
+              },
+              {
+                value: 'Types of motor vehicle',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'text',
+                      label: 'Enter one or more types of motor vehicle',
+                      name: 'typesOfMotorVehicle',
+                      defaultValue: 'any motor vehicle',
+                      hideHintText: false,
+                    },
+                  ],
+                },
+              },
+            ],
+            hideHintText: false,
+          },
+          {
+            type: 'radio',
+            label: 'Time restriction',
+            name: 'timeRestriction',
+            options: [
+              {
+                value: 'At any time',
+              },
+              {
+                value: 'Between specified times',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'timePicker',
+                      label: 'Enter first start time',
+                      name: 'firstCurfewStart',
+                      includeBefore: ' between ',
+                      defaultValue: ' at any time',
+                      hideHintText: true,
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter first end time',
+                      name: 'firstCurfewEnd',
+                      includeBefore: ' and ',
+                      hideHintText: true,
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter second start time (optional)',
+                      name: 'secondCurfewStart',
+                      includeBefore: ' or between ',
+                      hideHintText: true,
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter second end time (optional)',
+                      name: 'secondCurfewEnd',
+                      includeBefore: ' and ',
+                      hideHintText: true,
+                    },
+                  ],
+                },
+              },
+            ],
+            hideHintText: false,
+          },
+          {
+            type: 'radio',
+            label: 'Location restriction',
+            name: 'locationRestriction',
+            options: [
+              {
+                value: 'At any location',
+              },
+              {
+                value: 'In specified locations',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'text',
+                      label: 'Enter one or more locations',
+                      name: 'locations',
+                      defaultValue: ' at any location',
+                      hideHintText: false,
+                    },
+                  ],
+                },
+              },
+            ],
+            hideHintText: false,
+          },
+        ],
+        type: 'VehicleRestrictions',
         skippable: false,
         requiresElectronicMonitoringResponse: false,
       },
@@ -1379,7 +1551,15 @@ const policy: LicencePolicyResponse = {
       {
         code: '1dc7ee29-df47-48a8-90b6-69e286692d8a',
         category: 'Polygraph',
-        text: 'To comply with any instruction given by your supervising officer requiring you to attend polygraph testing. To participate in polygraph sessions and examinations as instructed by or under the authority of your supervising officer and to comply with any instruction given to you during a polygraph session by the person conducting the polygraph.',
+        text: 'You must have polygraph tests and follow the instructions of the person doing them. You must not try to stop or disrupt the test.',
+        requiresInput: false,
+        skippable: false,
+        requiresElectronicMonitoringResponse: false,
+      },
+      {
+        code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
+        category: 'Drug, alcohol and solvent abuse',
+        text: 'When requested, provide a sample so it can be tested for specified Class A or Class B drugs. Do not try to stop or disrupt the test.',
         requiresInput: false,
         skippable: false,
         requiresElectronicMonitoringResponse: false,
@@ -1407,6 +1587,7 @@ const policy: LicencePolicyResponse = {
                 value: 'solvents',
               },
             ],
+            hideHintText: false,
           },
         ],
         type: 'SubstanceMisuse',
@@ -1416,8 +1597,8 @@ const policy: LicencePolicyResponse = {
       {
         code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
         category: 'Electronic monitoring',
-        text: 'Allow person(s) as designated by your supervising officer to install an electronic monitoring tag on you and access to install any associated equipment in your property, and for the purpose of ensuring that equipment is functioning correctly. You must not damage or tamper with these devices and ensure that the tag is charged, and report to your supervising officer and the EM provider immediately if the tag or the associated equipment are not working correctly. This will be for the purpose of monitoring your [INSERT TYPES OF CONDITIONS TO BE ELECTRONICALLY MONITORED HERE] licence condition(s) unless otherwise authorised by your supervising officer.',
-        tpl: 'Allow person(s) as designated by your supervising officer to install an electronic monitoring tag on you and access to install any associated equipment in your property, and for the purpose of ensuring that equipment is functioning correctly. You must not damage or tamper with these devices and ensure that the tag is charged, and report to your supervising officer and the EM provider immediately if the tag or the associated equipment are not working correctly. This will be for the purpose of monitoring your {electronicMonitoringTypes} licence condition(s) unless otherwise authorised by your supervising officer.',
+        text: 'You must agree to have an electronic monitoring tag put on you. You must also keep the tag charged and allow equipment needed for it to work to be installed at your home. Report any issues with this equipment or tag to your supervising officer immediately and do not tamper with it. Your electronic monitoring tag will be checking [CONDITIONS TO BE MONITORED] until [INSERT END DATE].',
+        tpl: 'You must agree to have an electronic monitoring tag put on you. You must also keep the tag charged and allow equipment needed for it to work to be installed at your home. Report any issues with this equipment or tag to your supervising officer immediately and do not tamper with it. Your electronic monitoring tag will be checking {electronicMonitoringTypes} until {endDate}.',
         requiresInput: true,
         inputs: [
           {
@@ -1427,27 +1608,37 @@ const policy: LicencePolicyResponse = {
             listType: 'AND',
             options: [
               {
-                value: 'exclusion zone',
+                value: 'that you do not go to areas you must not enter (exclusion zones)',
               },
               {
-                value: 'curfew',
+                value: 'that you do not leave areas you must stay in (restriction zones)',
               },
               {
-                value: 'location monitoring',
+                value: 'that you comply with your curfew',
               },
               {
-                value: 'attendance at appointments',
+                value: 'that you do not drink any alcohol',
               },
               {
-                value: 'alcohol monitoring',
+                value: 'that you attend appointments',
               },
               {
-                value: 'alcohol abstinence',
+                value: 'your alcohol consumption',
+              },
+              {
+                value: 'your location',
               },
             ],
+            hideHintText: false,
+          },
+          {
+            type: 'datePicker',
+            label: 'Enter the end date',
+            name: 'endDate',
+            hideHintText: false,
           },
         ],
-        type: 'ElectronicMonitoringTypes',
+        type: 'ElectronicMonitoringTypesV4',
         skippable: false,
         requiresElectronicMonitoringResponse: true,
       },
@@ -1462,6 +1653,7 @@ const policy: LicencePolicyResponse = {
             type: 'datePicker',
             label: 'Enter the end date',
             name: 'endDate',
+            hideHintText: false,
           },
         ],
         type: 'ElectronicMonitoringPeriod',
@@ -1479,6 +1671,7 @@ const policy: LicencePolicyResponse = {
             type: 'address',
             label: 'Enter the approved address',
             name: 'approvedAddress',
+            hideHintText: false,
           },
         ],
         type: 'ApprovedAddress',
@@ -1488,14 +1681,15 @@ const policy: LicencePolicyResponse = {
       {
         code: 'd36a3b77-30ba-40ce-8953-83e761d3b487',
         category: 'Electronic monitoring',
-        text: 'You must not drink any alcohol until [END DATE] unless your probation officer says you can. You will need to wear an electronic tag all the time so we can check this.',
-        tpl: 'You must not drink any alcohol until {endDate} unless your probation officer says you can. You will need to wear an electronic tag all the time so we can check this.',
+        text: 'You must not drink any alcohol until [END DATE]. You will need to wear an electronic tag all the time so we can check this.',
+        tpl: 'You must not drink any alcohol until {endDate}. You will need to wear an electronic tag all the time so we can check this.',
         requiresInput: true,
         inputs: [
           {
             type: 'datePicker',
             label: 'Enter the end date',
             name: 'endDate',
+            hideHintText: false,
           },
         ],
         type: 'AlcoholRestrictionPeriod',
@@ -1513,6 +1707,7 @@ const policy: LicencePolicyResponse = {
             type: 'datePicker',
             label: 'Enter the end date',
             name: 'endDate',
+            hideHintText: false,
           },
         ],
         type: 'ElectronicTagPeriod',
@@ -1538,6 +1733,7 @@ const policy: LicencePolicyResponse = {
             type: 'text',
             label: 'Enter the value in £',
             name: 'value',
+            hideHintText: false,
           },
         ],
         type: 'CashInPossession',
@@ -1555,6 +1751,7 @@ const policy: LicencePolicyResponse = {
             type: 'text',
             label: 'Enter the value in £',
             name: 'value',
+            hideHintText: false,
           },
         ],
         type: 'ValueOfAssets',
@@ -1584,6 +1781,7 @@ const policy: LicencePolicyResponse = {
                 value: 'details of all forms of income',
               },
             ],
+            hideHintText: false,
           },
         ],
         type: 'EvidenceOfIncome',
@@ -1607,58 +1805,7 @@ const policy: LicencePolicyResponse = {
         requiresElectronicMonitoringResponse: false,
       },
     ],
-    PSS: [
-      {
-        code: '62c83b80-2223-4562-a195-0670f4072088',
-        category: 'Drug appointment',
-        text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
-        tpl: 'Attend {appointmentAddress}{appointmentDate}{appointmentTime}, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
-        requiresInput: true,
-        pssDates: true,
-        inputs: [
-          {
-            type: 'timePicker',
-            label: 'Enter time (optional)',
-            name: 'appointmentTime',
-            includeBefore: ' at ',
-          },
-          {
-            type: 'datePicker',
-            label: 'Enter date (optional)',
-            name: 'appointmentDate',
-            includeBefore: ' on ',
-          },
-          {
-            type: 'address',
-            label: 'Enter the address for the appointment',
-            name: 'appointmentAddress',
-          },
-        ],
-        type: 'AppointmentTimeAndPlaceDuringPss',
-        skippable: true,
-      },
-      {
-        code: 'fda24aa9-a2b0-4d49-9c87-23b0a7be4013',
-        category: 'Drug testing',
-        text: 'Attend [INSERT NAME AND ADDRESS], as reasonably required by your supervisor, to give a sample of oral fluid / urine in order to test whether you have any specified Class A or specified Class B drugs in your body, for the purpose of ensuring that you are complying with the requirement of your supervision period requiring you to be of good behaviour.',
-        tpl: 'Attend {name} {address}, as reasonably required by your supervisor, to give a sample of oral fluid / urine in order to test whether you have any specified Class A or specified Class B drugs in your body, for the purpose of ensuring that you are complying with the requirement of your supervision period requiring you to be of good behaviour.',
-        requiresInput: true,
-        inputs: [
-          {
-            type: 'text',
-            label: 'Enter name',
-            name: 'name',
-          },
-          {
-            type: 'address',
-            label: 'Enter address',
-            name: 'address',
-          },
-        ],
-        type: 'DrugTestLocation',
-        skippable: false,
-      },
-    ],
+    PSS: [],
   },
   changeHints: [
     {

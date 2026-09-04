@@ -32,6 +32,7 @@ import {
   mapToTargetField,
   assertIsHdcLicence,
   assertIsVariation,
+  md5,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -806,5 +807,12 @@ describe('mapToTargetField', () => {
       nested: { a: 1, b: { c: 2 } },
       outOfBoundFilename: 'nested.doc',
     })
+  })
+})
+
+describe('md5', () => {
+  it('returns a MD5 hash of a string', () => {
+    const result = md5('Hello, world!')
+    expect(result).toEqual('6cd3556deb0da54bca060b4c39479839')
   })
 })
