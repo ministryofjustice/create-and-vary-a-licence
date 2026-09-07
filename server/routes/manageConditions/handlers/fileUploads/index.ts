@@ -1,5 +1,6 @@
 import { RequestHandler, Router } from 'express'
 import multer from 'multer'
+import path from 'path'
 import fetchLicence from '../../../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
@@ -10,7 +11,8 @@ import FileUploadListRoutes from './fileUploadListRoutes'
 import FileUploadRemovalRoutes from './fileUploadRemovalRoutes'
 import FileUploadType from '../../../../enumeration/fileUploadType'
 
-const upload = multer({ dest: 'uploads/' })
+export const uploadPath = path.resolve('uploads')
+const upload = multer({ dest: uploadPath })
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()

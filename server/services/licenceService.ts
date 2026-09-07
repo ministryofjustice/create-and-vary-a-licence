@@ -2,6 +2,7 @@ import { Readable } from 'stream'
 import fs from 'fs'
 import _ from 'lodash'
 import { format } from 'date-fns'
+import path from 'path'
 import type {
   AddAdditionalConditionRequest,
   AdditionalCondition,
@@ -62,6 +63,8 @@ import {
 import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
+
+const uploadPath = path.resolve('uploads')
 
 export default class LicenceService {
   constructor(
@@ -212,9 +215,17 @@ export default class LicenceService {
     user: User,
     testMode = false,
   ): Promise<void> {
+    const filePath = path.resolve(fileToUpload.path)
+    const relativePath = path.relative(uploadPath, filePath)
+
+    if (relativePath === '..' || relativePath.startsWith(`..${path.sep}`)) {
+      // This is to prevent hackers from sending a file path that is outside the uploads directory, which could lead to deletion of arbitrary files on the server.
+      throw new Error('Invalid file path')
+    }
+
     await this.licenceApiClient.uploadExclusionZoneFile(licenceId, additionalConditionId, user, fileToUpload)
     if (!testMode) {
-      fs.unlinkSync(fileToUpload.path)
+      await fs.promises.unlink(filePath)
     }
   }
 
