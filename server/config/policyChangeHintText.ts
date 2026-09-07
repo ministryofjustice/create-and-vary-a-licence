@@ -73,6 +73,12 @@ const policyChangeHints: HintText[] = [
     bulletpoints: [],
   },
   {
+    code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+    fromVersions: ['3.0'],
+    description: ['The option to add the name of an Approved Premises has been removed.'],
+    bulletpoints: [],
+  },
+  {
     code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
     fromVersions: ['1.0', '2.0'],
     description: [
