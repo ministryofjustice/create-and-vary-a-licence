@@ -32,13 +32,13 @@ export default class UpcomingReleasesWithMonitoringConditionsRoutes {
 
     const csv = upcomingCases
       .map(upcomingCases => [
-        escapeCsv(upcomingCases.prisonNumber),
-        escapeCsv(upcomingCases.fullName),
-        escapeCsv(upcomingCases.crn),
-        escapeCsv(upcomingCases.status),
+        upcomingCases.prisonNumber,
+        upcomingCases.fullName,
+        upcomingCases.crn,
+        upcomingCases.status,
         escapeCsv(upcomingCases.emConditionCodes),
-        escapeCsv(upcomingCases.licenceStartDate),
-        escapeCsv(upcomingCases.submittedDate),
+        upcomingCases.licenceStartDate,
+        upcomingCases.submittedDate,
       ])
       .map(row => row.join(','))
       .join('\n')

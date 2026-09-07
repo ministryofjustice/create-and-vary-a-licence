@@ -93,4 +93,18 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
     const sentBody = (res.send as jest.Mock).mock.calls[0][0]
     expect(sentBody).toBe(`${headerLine}\n${expectedRow}`)
   })
+
+  test('GET_CSV keeps comma-separated EM condition codes in one CSV column', async () => {
+    const req = {} as Request
+    const res = {
+      type: jest.fn(),
+      setHeader: jest.fn(),
+      send: jest.fn(),
+    } as unknown as Response
+
+    await routes.GET_CSV(req, res)
+
+    const sentBody = (res.send as jest.Mock).mock.calls[0][0]
+    expect(sentBody).toContain('A1234BC,full name,CRN123,SUBMITTED,"12h, 45a, 78b",01/01/2024,15/12/2023')
+  })
 })
