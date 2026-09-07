@@ -442,6 +442,7 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence,
       statusCode: 'APPROVED',
+      canChooseToPrint: true,
     })
 
     expect($('#print-licence-button').length).toBe(1)
