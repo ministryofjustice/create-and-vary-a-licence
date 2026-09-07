@@ -175,6 +175,17 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       expect(flashInitialApptUpdatedFlashMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, true)
     })
 
+    it('should redirect to meeting time page if appointment type changed from not required', async () => {
+      res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+      await handler.POST(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/time-served/edit/id/${res.locals.licence.id}/initial-meeting-time`,
+      )
+    })
+
     it('should redirect to licence contact address page if no appointment needed', async () => {
       // Given
       const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
