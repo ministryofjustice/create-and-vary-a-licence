@@ -52,6 +52,7 @@ export default class CheckAnswersRoutes {
       omuEmail,
       isVariationOfHdcMigration,
       banner: this.mergeBanners(initialApptUpdatedMessage, licence),
+      canChooseToPrint: this.isLicencePrintable(licence),
     })
   }
 
@@ -80,6 +81,12 @@ export default class CheckAnswersRoutes {
     const licenceToSubmit = plainToInstance(LicenceToSubmit, licence, { excludeExtraneousValues: true })
     const errors: ValidationError[] = await validate(licenceToSubmit)
     return this.flattenValidationErrors(errors)
+  }
+
+  private isLicencePrintable(licence: Licence): boolean {
+    return (
+      licence.statusCode === LicenceStatus.APPROVED && !(config.finalThirdEnabled && licence.missingAppointmentTime)
+    )
   }
 
   private mergeBanners = (initialApptUpdatedMessage: string, licence: Licence) => {
