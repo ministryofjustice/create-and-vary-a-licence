@@ -55,6 +55,13 @@
                 "data-sort-value": upcomingCase.licenceStartDate
             },
             text: upcomingCase.licenceStartDate
+        },
+        {
+            attributes: {
+                id: 'submittedDate-' + loop.index,
+                "data-sort-value": upcomingCase.submittedDate
+            },
+            text: upcomingCase.submittedDate
         }
     ]), cases) %}
 {% endfor %}
@@ -113,6 +120,12 @@
                 },
                 {
                     text: "Licence start date",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Licence submitted date",
                     attributes: {
                         "aria-sort": "none"
                     }
