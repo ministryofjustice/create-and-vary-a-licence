@@ -19,7 +19,7 @@ export default class CheckAnswersRoutes {
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { licence, user } = res.locals
+    const { licence, user, validationErrors } = res.locals
     const backLink = req.session?.returnToCase || '/licence/create/caseload'
 
     // Record the view event only when an officer views a licence which is not their own
@@ -41,6 +41,7 @@ export default class CheckAnswersRoutes {
     const isVariationOfHdcMigration = await this.hdcService.isVariationOfHdcMigration(licence, user)
 
     const initialApptUpdatedMessage = req.flash('initialApptUpdated')?.[0]
+    const hasValidationErrors = validationErrors && validationErrors.length > 0
 
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
@@ -51,7 +52,8 @@ export default class CheckAnswersRoutes {
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
       isVariationOfHdcMigration,
-      banner: this.mergeBanners(initialApptUpdatedMessage, licence),
+      banner: this.mergeBanners(initialApptUpdatedMessage, licence, hasValidationErrors),
+      canChooseToPrint: this.isLicencePrintable(licence),
     })
   }
 
@@ -82,8 +84,17 @@ export default class CheckAnswersRoutes {
     return this.flattenValidationErrors(errors)
   }
 
-  private mergeBanners = (initialApptUpdatedMessage: string, licence: Licence) => {
+  private isLicencePrintable(licence: Licence): boolean {
+    return (
+      licence.statusCode === LicenceStatus.APPROVED && !(config.finalThirdEnabled && licence.missingAppointmentTime)
+    )
+  }
+
+  private mergeBanners = (initialApptUpdatedMessage: string, licence: Licence, hasValidationErrors: boolean) => {
     let banner
+    if (hasValidationErrors) {
+      return banner
+    }
     if (initialApptUpdatedMessage) {
       banner = {
         type: 'success',
@@ -92,7 +103,11 @@ export default class CheckAnswersRoutes {
       }
     }
 
-    if (config.finalThirdEnabled && licence.missingAppointmentTime) {
+    if (
+      config.finalThirdEnabled &&
+      licence.missingAppointmentTime &&
+      (licence.statusCode === LicenceStatus.APPROVED || licence.statusCode === LicenceStatus.SUBMITTED)
+    ) {
       banner = {
         type: 'warning',
         text: this.getAppointmentTimeWarningText(initialApptUpdatedMessage, licence.statusCode),
@@ -113,7 +128,7 @@ export default class CheckAnswersRoutes {
     if (statusCode === LicenceStatus.SUBMITTED) {
       return `${initialApptUpdatedMessage ? 'Details updated. ' : ''}You must set a date and time for the appointment before the licence can be approved.`
     }
-    return 'You must set a date and time for the appointment before the licence can be printed.'
+    return null
   }
 
   flattenValidationErrors = (errors: ValidationError[], parentProperty = ''): FieldValidationError[] =>

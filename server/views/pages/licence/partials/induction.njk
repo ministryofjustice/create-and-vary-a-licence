@@ -30,7 +30,7 @@
         <p>If you need support while you are on licence, you can use the details below:</p>
         <span data-qa="contact-phone-number" class="line-space-after">Contact phone number: {{ licence.appointmentTelephoneNumber }}</span>
         {% if licence.appointmentAlternativeTelephoneNumber %}
-            <span data-qa="alternative-contact-phone-number">
+            <span data-qa="alternative-contact-phone-number" class="line-space-after">
                 Alternative contact phone number: {{ licence.appointmentAlternativeTelephoneNumber }}
             </span>
         {% endif %}
@@ -39,7 +39,7 @@
         {% else %}
             {% set formattedAddress = licence.appointmentAddress | formatAddress %}
         {% endif %}
-        <p>Contact address: {{ formattedAddress }}</p>
+        <span>Contact address: {{ formattedAddress }}</span>
     {% else %}
         <p>
             On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
