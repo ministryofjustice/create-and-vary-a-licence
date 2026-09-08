@@ -53,7 +53,8 @@ export default class CheckAnswersRoutes {
       omuEmail,
       isVariationOfHdcMigration,
       banner: this.mergeBanners(initialApptUpdatedMessage, licence, hasValidationErrors),
-      canChooseToPrint: this.isLicencePrintable(licence),
+      canChooseToPrint: licence.statusCode === LicenceStatus.APPROVED,
+      isApprovedLicencePrintable: this.isApprovedLicencePrintable(licence),
     })
   }
 
@@ -84,7 +85,7 @@ export default class CheckAnswersRoutes {
     return this.flattenValidationErrors(errors)
   }
 
-  private isLicencePrintable(licence: Licence): boolean {
+  private isApprovedLicencePrintable(licence: Licence): boolean {
     return (
       licence.statusCode === LicenceStatus.APPROVED && !(config.finalThirdEnabled && licence.missingAppointmentTime)
     )

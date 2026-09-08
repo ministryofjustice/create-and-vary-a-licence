@@ -86,6 +86,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -105,6 +106,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isVariationOfHdcMigration: false,
         banner: undefined,
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       config.finalThirdEnabled = original
@@ -131,6 +133,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isVariationOfHdcMigration: false,
         banner: undefined,
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       config.finalThirdEnabled = original
@@ -149,6 +152,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isVariationOfHdcMigration: false,
         banner: undefined,
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -166,6 +170,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isVariationOfHdcMigration: false,
         banner: undefined,
         canChooseToPrint: true,
+        isApprovedLicencePrintable: true,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -176,56 +181,68 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         bannerText:
           'Details updated. You must set a date and time for the appointment before the licence can be printed.',
         flashMessage: 'Details update',
+        canChooseToPrint: true,
+        isApprovedLicencePrintable: false,
       },
       {
         statusCode: LicenceStatus.APPROVED,
         bannerText: 'You must set a date and time for the appointment before the licence can be printed.',
         flashMessage: '',
+        canChooseToPrint: true,
+        isApprovedLicencePrintable: false,
       },
       {
         statusCode: LicenceStatus.SUBMITTED,
         bannerText:
           'Details updated. You must set a date and time for the appointment before the licence can be approved.',
         flashMessage: 'Details update',
+        canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       },
       {
         statusCode: LicenceStatus.SUBMITTED,
         bannerText: 'You must set a date and time for the appointment before the licence can be approved.',
         flashMessage: '',
-      },
-    ])('should create a warning banner when the time is not set', async ({ statusCode, bannerText, flashMessage }) => {
-      res.locals.licence.missingAppointmentTime = true
-      res.locals.licence.statusCode = statusCode as Licence['statusCode']
-      const original = config.finalThirdEnabled
-      config.finalThirdEnabled = true
-      req = {
-        ...req,
-        flash: jest.fn().mockImplementation((key: string) => {
-          if (key === 'initialApptUpdated') {
-            return [flashMessage]
-          }
-          return []
-        }),
-      } as unknown as Request
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        additionalConditions: [],
-        bespokeConditionsToDisplay: [],
-        backLink: req.session.returnToCase,
-        canEditInitialAppt: true,
-        isInHardStopPeriod: false,
-        statusCode,
-        isVariationOfHdcMigration: false,
-        banner: {
-          text: bannerText,
-          iconFallbackText: 'Warning',
-          type: 'warning',
-        },
         canChooseToPrint: false,
-      })
-      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
-      config.finalThirdEnabled = original
-    })
+        isApprovedLicencePrintable: false,
+      },
+    ])(
+      'should create a warning banner when the time is not set',
+      async ({ statusCode, bannerText, flashMessage, canChooseToPrint, isApprovedLicencePrintable }) => {
+        res.locals.licence.missingAppointmentTime = true
+        res.locals.licence.statusCode = statusCode as Licence['statusCode']
+        const original = config.finalThirdEnabled
+        config.finalThirdEnabled = true
+        req = {
+          ...req,
+          flash: jest.fn().mockImplementation((key: string) => {
+            if (key === 'initialApptUpdated') {
+              return [flashMessage]
+            }
+            return []
+          }),
+        } as unknown as Request
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+          additionalConditions: [],
+          bespokeConditionsToDisplay: [],
+          backLink: req.session.returnToCase,
+          canEditInitialAppt: true,
+          isInHardStopPeriod: false,
+          statusCode,
+          isVariationOfHdcMigration: false,
+          banner: {
+            text: bannerText,
+            iconFallbackText: 'Warning',
+            type: 'warning',
+          },
+          canChooseToPrint,
+          isApprovedLicencePrintable,
+        })
+        expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+        config.finalThirdEnabled = original
+      },
+    )
 
     it('should create a success banner when details are updated', async () => {
       req = {
@@ -248,6 +265,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isVariationOfHdcMigration: false,
         banner: { text: 'Details updated', iconFallbackText: 'Success', type: 'success' },
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -270,6 +288,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
     })
 
@@ -296,6 +315,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -314,6 +334,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
     })
 
@@ -331,6 +352,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
     })
 
@@ -354,6 +376,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: true,
         canChooseToPrint: false,
+        isApprovedLicencePrintable: false,
       })
     })
 
@@ -372,6 +395,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           statusCode: 'IN_PROGRESS',
           isVariationOfHdcMigration: false,
           canChooseToPrint: false,
+          isApprovedLicencePrintable: false,
         })
       })
 
@@ -389,6 +413,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           statusCode: 'IN_PROGRESS',
           isVariationOfHdcMigration: false,
           canChooseToPrint: false,
+          isApprovedLicencePrintable: false,
         })
       })
 
@@ -409,6 +434,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           omuEmail: 'test@test.test',
           isVariationOfHdcMigration: false,
           canChooseToPrint: false,
+          isApprovedLicencePrintable: false,
         })
       })
     })

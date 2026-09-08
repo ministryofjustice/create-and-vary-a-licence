@@ -10,6 +10,29 @@
 {% from "partials/additionalInformationSummary.njk" import additionalInformationSummary %}
 {% from "moj/components/banner/macro.njk" import mojBanner %}
 
+{% macro printLicenceButton(licenceId, canChooseToEdit, isApprovedLicencePrintable, id) %}
+    {% if isApprovedLicencePrintable %}
+        {{ govukButton({
+            text: "View and print licence PDF",
+            href: '/licence/view/id/' + licenceId + '/pdf-print',
+            classes: "govuk-button--secondary" if canChooseToEdit,
+            attributes: {
+                id: id,
+                target: "_blank"
+            }
+        }) }}
+    {% else %}
+        {{ govukButton({
+            text: "View and print licence PDF",
+            disabled: true,
+            classes: "govuk-button--secondary" if canChooseToEdit,
+            attributes: {
+                id: id
+            }
+        }) }}
+    {% endif %}
+{% endmacro %}
+
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
 
@@ -64,18 +87,9 @@
                     }
                 }) }}
             {% endif %}
-
             {% if canChooseToPrint %}
-                {{ govukButton({
-                    text: "View and print licence PDF",
-                    href: '/licence/view/id/' + licence.id + '/pdf-print',
-                    classes: "govuk-button--secondary" if canChooseToEdit,
-                    attributes: {
-                        id: 'print-licence-button',
-                        target: "_blank"
-                    }
-                }) }}
-            {% endif %}
+                {{ printLicenceButton(licence.id, canChooseToEdit, isApprovedLicencePrintable, 'print-licence-button') }}
+            {%  endif %}
         </div>
     {% endif %}
 
@@ -154,17 +168,8 @@
                     {% endif %}
 
                     {% if canChooseToPrint %}
-                        {{ govukButton({
-                            text: "View and print licence PDF",
-                            href: '/licence/view/id/' + licence.id + '/pdf-print',
-                            classes: "govuk-button--secondary" if canChooseToEdit,
-                            attributes: {
-                                id: 'print-licence-button-2',
-                                target: "_blank"
-                            }
-                        }) }}
+                        {{ printLicenceButton(licence.id, canChooseToEdit, isApprovedLicencePrintable , 'print-licence-button-2') }}
                     {% endif %}
-
 
                     {% if isInProgress and (licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION') %}
                             {{ govukButton({
