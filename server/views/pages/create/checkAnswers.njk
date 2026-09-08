@@ -40,7 +40,6 @@
 {% set isInVariation = statusCode == 'VARIATION_IN_PROGRESS' or statusCode == 'VARIATION_SUBMITTED'
     or statusCode == 'VARIATION_REJECTED' or statusCode == 'VARIATION_APPROVED' %}
 {% set canChooseToEdit = (statusCode == 'APPROVED' or statusCode == 'SUBMITTED') and (not isInHardStopPeriod) %}
-{% set canChooseToPrint = printLicenceStatus and printLicenceStatus !== 'HIDDEN' %}
 {% if licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION' %}
   {% set submitButtonText = 'View summary and add notes' %}
   {% set submitButtonAttrs = { 'data-qa': 'add-notes' } %}
@@ -88,9 +87,9 @@
                     }
                 }) }}
             {% endif %}
-            {% if canChooseToPrint %}
-                {{ printLicenceButton(licence.id, canChooseToEdit, printLicenceStatus, 'print-licence-button') }}
-            {%  endif %}
+
+            {{ printLicenceButton(licence.id, canChooseToEdit, printLicenceStatus, 'print-licence-button') }}
+
         </div>
     {% endif %}
 
@@ -168,9 +167,7 @@
                         }) }}
                     {% endif %}
 
-                    {% if canChooseToPrint %}
-                        {{ printLicenceButton(licence.id, canChooseToEdit, printLicenceStatus, 'print-licence-button-2') }}
-                    {% endif %}
+                    {{ printLicenceButton(licence.id, canChooseToEdit, printLicenceStatus, 'print-licence-button-2') }}
 
                     {% if isInProgress and (licence.kind === 'VARIATION' or licence.kind === 'HDC_VARIATION') %}
                             {{ govukButton({
