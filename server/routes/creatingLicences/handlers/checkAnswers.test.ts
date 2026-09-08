@@ -85,7 +85,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -104,7 +104,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
         banner: undefined,
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       config.finalThirdEnabled = original
@@ -130,7 +130,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
         banner: undefined,
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       config.finalThirdEnabled = original
@@ -148,7 +148,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
         banner: undefined,
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -165,7 +165,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'APPROVED',
         isVariationOfHdcMigration: false,
         banner: undefined,
-        canChooseToPrint: true,
+        printLicenceStatus: 'ALLOWED',
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -176,56 +176,63 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         bannerText:
           'Details updated. You must set a date and time for the appointment before the licence can be printed.',
         flashMessage: 'Details update',
+        printLicenceStatus: 'DISABLED',
       },
       {
         statusCode: LicenceStatus.APPROVED,
         bannerText: 'You must set a date and time for the appointment before the licence can be printed.',
         flashMessage: '',
+        printLicenceStatus: 'DISABLED',
       },
       {
         statusCode: LicenceStatus.SUBMITTED,
         bannerText:
           'Details updated. You must set a date and time for the appointment before the licence can be approved.',
         flashMessage: 'Details update',
+        printLicenceStatus: 'HIDDEN',
       },
       {
         statusCode: LicenceStatus.SUBMITTED,
         bannerText: 'You must set a date and time for the appointment before the licence can be approved.',
         flashMessage: '',
+        printLicenceStatus: 'HIDDEN',
       },
-    ])('should create a warning banner when the time is not set', async ({ statusCode, bannerText, flashMessage }) => {
-      res.locals.licence.missingAppointmentTime = true
-      res.locals.licence.statusCode = statusCode as Licence['statusCode']
-      const original = config.finalThirdEnabled
-      config.finalThirdEnabled = true
-      req = {
-        ...req,
-        flash: jest.fn().mockImplementation((key: string) => {
-          if (key === 'initialApptUpdated') {
-            return [flashMessage]
-          }
-          return []
-        }),
-      } as unknown as Request
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        additionalConditions: [],
-        bespokeConditionsToDisplay: [],
-        backLink: req.session.returnToCase,
-        canEditInitialAppt: true,
-        isInHardStopPeriod: false,
-        statusCode,
-        isVariationOfHdcMigration: false,
-        banner: {
-          text: bannerText,
-          iconFallbackText: 'Warning',
-          type: 'warning',
-        },
-        canChooseToPrint: false,
-      })
-      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
-      config.finalThirdEnabled = original
-    })
+    ])(
+      'should create a warning banner when the time is not set',
+      async ({ statusCode, bannerText, flashMessage, printLicenceStatus }) => {
+        res.locals.licence.missingAppointmentTime = true
+        res.locals.licence.statusCode = statusCode as Licence['statusCode']
+        const original = config.finalThirdEnabled
+        config.finalThirdEnabled = true
+        req = {
+          ...req,
+          flash: jest.fn().mockImplementation((key: string) => {
+            if (key === 'initialApptUpdated') {
+              return [flashMessage]
+            }
+            return []
+          }),
+        } as unknown as Request
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+          additionalConditions: [],
+          bespokeConditionsToDisplay: [],
+          backLink: req.session.returnToCase,
+          canEditInitialAppt: true,
+          isInHardStopPeriod: false,
+          statusCode,
+          isVariationOfHdcMigration: false,
+          banner: {
+            text: bannerText,
+            iconFallbackText: 'Warning',
+            type: 'warning',
+          },
+          printLicenceStatus,
+        })
+        expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+        config.finalThirdEnabled = original
+      },
+    )
 
     it('should create a success banner when details are updated', async () => {
       req = {
@@ -247,7 +254,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
         banner: { text: 'Details updated', iconFallbackText: 'Success', type: 'success' },
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -269,7 +276,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
     })
 
@@ -295,7 +302,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -313,7 +320,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
     })
 
@@ -330,7 +337,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
     })
 
@@ -353,7 +360,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: true,
-        canChooseToPrint: false,
+        printLicenceStatus: 'HIDDEN',
       })
     })
 
@@ -371,7 +378,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isInHardStopPeriod: false,
           statusCode: 'IN_PROGRESS',
           isVariationOfHdcMigration: false,
-          canChooseToPrint: false,
+          printLicenceStatus: 'HIDDEN',
         })
       })
 
@@ -388,7 +395,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
           isVariationOfHdcMigration: false,
-          canChooseToPrint: false,
+          printLicenceStatus: 'HIDDEN',
         })
       })
 
@@ -408,7 +415,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           statusCode: 'IN_PROGRESS',
           omuEmail: 'test@test.test',
           isVariationOfHdcMigration: false,
-          canChooseToPrint: false,
+          printLicenceStatus: 'HIDDEN',
         })
       })
     })
