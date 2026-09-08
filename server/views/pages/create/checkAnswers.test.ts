@@ -442,11 +442,22 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence,
       statusCode: 'APPROVED',
-      canChooseToPrint: true,
+      printLicenceStatus: 'ALLOWED',
     })
 
     expect($('#print-licence-button').length).toBe(1)
     expect($('#print-licence-button-2').length).toBe(1)
+  })
+
+  it('should show disabled print licence buttons when printLicenceStatus is DISABLED', () => {
+    const $ = render({
+      licence,
+      statusCode: 'APPROVED',
+      printLicenceStatus: 'DISABLED',
+    })
+
+    expect($('#print-licence-button[disabled]').length).toBe(1)
+    expect($('#print-licence-button-2[disabled]').length).toBe(1)
   })
 
   it('should hide print licence button when status is SUBMITTED', () => {
