@@ -40,6 +40,10 @@ export default class InitialMeetingNameRoutes {
     await this.licenceService.updateAppointmentPerson(licence.id, req.body, user)
     flashInitialApptUpdatedMessage(req, licence, UserType.PRISON, updateFromNoAppointment)
 
+    if (updateFromNoAppointment) {
+      return res.redirect(`/licence/time-served/edit/id/${licence.id}/initial-meeting-time`)
+    }
+
     if (PathType.EDIT === this.path) {
       return res.redirect(getTimeServedEditPath(licence))
     }
