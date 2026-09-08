@@ -11,6 +11,14 @@ import HdcService from '../../../services/hdc/hdcService'
 import config from '../../../config'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
+const PrintLicenceStatus = {
+  ALLOWED: 'ALLOWED',
+  DISABLED: 'DISABLED',
+  HIDDEN: 'HIDDEN',
+} as const
+
+type PrintLicenceStatus = (typeof PrintLicenceStatus)[keyof typeof PrintLicenceStatus]
+
 export default class CheckAnswersRoutes {
   constructor(
     private readonly licenceService: LicenceService,
@@ -53,8 +61,7 @@ export default class CheckAnswersRoutes {
       omuEmail,
       isVariationOfHdcMigration,
       banner: this.mergeBanners(initialApptUpdatedMessage, licence, hasValidationErrors),
-      canChooseToPrint: licence.statusCode === LicenceStatus.APPROVED,
-      isApprovedLicencePrintable: this.isApprovedLicencePrintable(licence),
+      printLicenceStatus: this.getPrintLicenceStatus(licence),
     })
   }
 
@@ -85,10 +92,16 @@ export default class CheckAnswersRoutes {
     return this.flattenValidationErrors(errors)
   }
 
-  private isApprovedLicencePrintable(licence: Licence): boolean {
-    return (
-      licence.statusCode === LicenceStatus.APPROVED && !(config.finalThirdEnabled && licence.missingAppointmentTime)
-    )
+  private getPrintLicenceStatus(licence: Licence): PrintLicenceStatus {
+    if (licence.statusCode !== LicenceStatus.APPROVED) {
+      return PrintLicenceStatus.HIDDEN
+    }
+
+    if (config.finalThirdEnabled && licence.missingAppointmentTime) {
+      return PrintLicenceStatus.DISABLED
+    }
+
+    return PrintLicenceStatus.ALLOWED
   }
 
   private mergeBanners = (initialApptUpdatedMessage: string, licence: Licence, hasValidationErrors: boolean) => {
