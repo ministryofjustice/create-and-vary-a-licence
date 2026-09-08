@@ -62,7 +62,11 @@
                             {% set conditional = {
                                 html: contactNameHtml
                             } %}
-                            {% elif value === NO_APPOINTMENT_NEEDED %}
+                        {% elif value === DUTY_OFFICER %}
+                            {% set hint = {
+                                text: "Choose duty officer if you have not spoken to this person’s community probation practitioner or if a community probation practitioner has not been allocated."
+                            } %}
+                        {% elif value === NO_APPOINTMENT_NEEDED %}
                             {% set hint = {
                                 text: "Select this only if the community probation team have confirmed that this person is being released in the final third of a standard determinate sentence and does not require an appointment."
                             } %}
@@ -79,10 +83,6 @@
                     {{ govukRadios({
                     id: "appointment-with-type",
                     name: "appointmentPersonType",
-                    hint: {
-                        text: "Choose duty officer if you have not spoken to this person’s community probation practitioner or if a community probation practitioner has not been allocated.",
-                        classes: "govuk-!-margin-bottom-6"
-                    },
                     value: (formResponses.appointmentPersonType or licence.appointmentPersonType) or DUTY_OFFICER,
                     items: initialMeetingPersonOptions
                     }) }}
