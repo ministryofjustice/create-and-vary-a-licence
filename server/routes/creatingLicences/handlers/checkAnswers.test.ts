@@ -224,7 +224,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isVariationOfHdcMigration: false,
           banner: {
             text: bannerText,
-            iconFallbackText: 'Warning',
             type: 'warning',
           },
           printLicenceStatus,
@@ -253,7 +252,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         isVariationOfHdcMigration: false,
-        banner: { text: 'Details updated', iconFallbackText: 'Success', type: 'success' },
+        banner: { text: 'Details updated', type: 'success' },
         printLicenceStatus: 'HIDDEN',
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()

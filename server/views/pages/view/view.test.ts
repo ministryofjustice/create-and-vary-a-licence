@@ -165,7 +165,7 @@ describe('View and print - single licence view', () => {
     expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
   })
 
-  it('should display a banner when the appointment type has changed from no appointment needed', () => {
+  it('should display a alert when the appointment type has changed from no appointment needed', () => {
     const bannerMessage = 'banner message'
     const $ = render({
       licence: {
@@ -175,7 +175,7 @@ describe('View and print - single licence view', () => {
       initialAppointmentUpdatedFromNotRequired: bannerMessage,
     })
 
-    expect($('.moj-banner__message').text().trim()).toBe(bannerMessage)
+    expect($('.moj-alert__content').text().trim()).toBe(bannerMessage)
   })
 
   it('should display a single licence to print when no appointment needed', () => {

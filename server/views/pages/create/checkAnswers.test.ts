@@ -61,7 +61,7 @@ describe('Create a Licence Views - Check Answers', () => {
     appointmentAlternativeTelephoneNumber: '01632960902',
   } as Licence
 
-  it('should display a warning banner when one is passed through', () => {
+  it('should display a warning alert when one is passed through', () => {
     const $ = render({
       banner: {
         type: 'warning',
@@ -70,33 +70,30 @@ describe('Create a Licence Views - Check Answers', () => {
       },
     })
 
-    const warningBanner = $('.moj-banner--warning')
-    expect(warningBanner.length).toBe(1)
-    expect(warningBanner.text()).toContain(
-      'You must say when the appointment is for before the licence can be printed.',
-    )
+    const alertBanner = $('.moj-alert--warning')
+    expect(alertBanner.length).toBe(1)
+    expect(alertBanner.text()).toContain('You must say when the appointment is for before the licence can be printed.')
   })
 
-  it('should display a success banner when passed through', () => {
+  it('should display a success alert when passed through', () => {
     const $ = render({
       banner: {
         type: 'success',
         text: 'Details updated.',
-        iconFallbackText: 'Success',
       },
     })
 
-    const successBanner = $('.moj-banner--success')
-    expect(successBanner.length).toBe(1)
-    expect(successBanner.text()).toContain('Details updated.')
+    const successAlert = $('.moj-alert--success')
+    expect(successAlert.length).toBe(1)
+    expect(successAlert.text()).toContain('Details updated.')
   })
 
-  it('should display no banners when they are not passed through', () => {
+  it('should display no alerts when they are not passed through', () => {
     const $ = render({
       banner: {},
     })
-    expect($('.moj-banner--success').length).toBe(0)
-    expect($('.moj-banner--warning').length).toBe(0)
+    expect($('.moj-alert--success').length).toBe(0)
+    expect($('.moj-alert--warning').length).toBe(0)
   })
 
   it('should display additional licence conditions section if licence type is AP', () => {
