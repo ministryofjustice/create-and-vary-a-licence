@@ -7,6 +7,7 @@ import PathType from '../../../../../enumeration/pathType'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
 import config from '../../../../../config'
+import flashInitialApptUpdatedFlashMessage from '../../initialMeetingUpdatedFlashMessage'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
@@ -142,6 +143,19 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           username: 'joebloggs',
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/licence-contact-address')
+      })
+
+      it('should generate a flash message if appointment type is changed while editing the licence', async () => {
+        res.locals.licence.appointmentPersonType = 'RESPONSIBLE_COM'
+
+        const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedFlashMessage).toHaveBeenCalledWith(
+          req,
+          res.locals.licence,
+          UserType.PRISON,
+          false,
+        )
       })
     })
   })

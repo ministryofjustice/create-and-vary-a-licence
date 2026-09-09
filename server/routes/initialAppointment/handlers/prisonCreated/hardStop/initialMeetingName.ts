@@ -38,9 +38,9 @@ export default class InitialMeetingNameRoutes {
       req.body.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED'
 
     await this.licenceService.updateAppointmentPerson(licence.id, req.body, user)
-    flashInitialApptUpdatedMessage(req, licence, UserType.PRISON, updateFromNoAppointment)
 
     if (this.path === PathType.EDIT) {
+      flashInitialApptUpdatedMessage(req, licence, UserType.PRISON, updateFromNoAppointment)
       res.redirect(`/licence/hard-stop/id/${licence.id}/check-your-answers`)
     } else if (req.body.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
       res.redirect(`/licence/hard-stop/create/id/${licence.id}/licence-contact-address`)
