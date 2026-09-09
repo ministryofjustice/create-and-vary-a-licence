@@ -67,7 +67,6 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: true,
         noAppointmentNeeded: false,
-        initialApptUpdatedMessage: undefined,
         isLicenceUnsubmittable: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
@@ -90,7 +89,6 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: true,
         noAppointmentNeeded: false,
-        initialApptUpdatedMessage: undefined,
         isLicenceUnsubmittable: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -135,7 +133,6 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: true,
         noAppointmentNeeded: false,
-        initialApptUpdatedMessage: undefined,
         isLicenceUnsubmittable: false,
         warningMessage:
           "This is the last approved version of this person's licence.<br />Another version was started on 15 December 2022.<br />" +
@@ -173,7 +170,6 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: true,
         noAppointmentNeeded: false,
-        initialApptUpdatedMessage: undefined,
         isLicenceUnsubmittable: false,
         warningMessage:
           'This is the most recent version of this licence that was submitted on 15 June 2012.<br />' +
@@ -221,7 +217,6 @@ describe('Route - view and approve a licence', () => {
           isEditableByPrison: true,
           isPrisonUser: true,
           noAppointmentNeeded: false,
-          initialApptUpdatedMessage: undefined,
           isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
@@ -244,7 +239,6 @@ describe('Route - view and approve a licence', () => {
           isEditableByPrison: false,
           isPrisonUser: true,
           noAppointmentNeeded: false,
-          initialApptUpdatedMessage: undefined,
           isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
@@ -267,7 +261,6 @@ describe('Route - view and approve a licence', () => {
           isEditableByPrison: false,
           isPrisonUser: true,
           noAppointmentNeeded: false,
-          initialApptUpdatedMessage: undefined,
           isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
@@ -319,8 +312,11 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: true,
         noAppointmentNeeded: false,
-        initialApptUpdatedMessage: undefined,
         isLicenceUnsubmittable: true,
+        banner: {
+          html: 'This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.',
+          type: 'warning',
+        },
       })
       config.finalThirdEnabled = original
     })
@@ -348,7 +344,6 @@ describe('Route - view and approve a licence', () => {
           isEditableByPrison: true,
           isPrisonUser: true,
           noAppointmentNeeded: false,
-          initialApptUpdatedMessage: undefined,
           isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
@@ -375,7 +370,6 @@ describe('Route - view and approve a licence', () => {
           isEditableByPrison: false,
           isPrisonUser: true,
           noAppointmentNeeded: false,
-          initialApptUpdatedMessage: undefined,
           isLicenceUnsubmittable: false,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
@@ -403,7 +397,6 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: false,
         noAppointmentNeeded: false,
-        initialApptUpdatedMessage: undefined,
         isLicenceUnsubmittable: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()

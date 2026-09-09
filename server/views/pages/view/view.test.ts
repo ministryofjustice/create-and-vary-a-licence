@@ -166,16 +166,15 @@ describe('View and print - single licence view', () => {
   })
 
   it('should display a alert when the appointment type has changed from no appointment needed', () => {
-    const bannerMessage = 'banner message'
+    const bannerMessage = { type: 'success', html: 'banner message' }
     const $ = render({
       licence: {
         ...licence,
         appointmentPersonType: 'DUTY_OFFICER',
       },
-      initialAppointmentUpdatedFromNotRequired: bannerMessage,
+      banner: bannerMessage,
     })
-
-    expect($('.moj-alert__content').text().trim()).toBe(bannerMessage)
+    expect($('.moj-alert__content').text().trim()).toBe('banner message')
   })
 
   it('should display an alert when the licence is approved and requires an appointment but a time has not been set', () => {

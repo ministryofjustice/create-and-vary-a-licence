@@ -39,16 +39,10 @@
             html: 'Add a HDCAD in <a href="' + calculateReleaseDateUrl + '" class="govuk-link" target="_blank" rel="noopener noreferrer">Calculate release dates</a> to be able to print this licence and change details of the initial appointment and first night curfew.'
         }) }}
     {% endif %}
-    {% if initialApptUpdatedMessage | length > 0%}
+    {% if banner %}
         {{ mojAlert({
-            variant: 'success',
-            html: initialApptUpdatedMessage
-        }) }}
-    {% endif %}
-    {% if updatedFromNoAppointmentRequired %}
-        {{ mojAlert({
-            variant: 'success',
-            html: initialAppointmentUpdatedFromNotRequired
+            variant: banner.type,
+            html: banner.html
         }) }}
     {% endif %}
     {% if isPrintable and isLicenceUnsubmittable %}
