@@ -321,6 +321,48 @@ describe('Route - view and approve a licence', () => {
       config.finalThirdEnabled = original
     })
 
+    it('should check if the licence is unsubmittable and display the correct message if it is an update', async () => {
+      const original = config.finalThirdEnabled
+      const req = {
+        query: {},
+        flash: jest.fn((key: string) => {
+          if (key === 'initialApptUpdated') return ['Appointment updated']
+          return []
+        }),
+        get: jest.fn(),
+      } as unknown as Request
+
+      config.finalThirdEnabled = true
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user,
+          licence: {
+            ...licence,
+            appointmentPersonType: 'DUTY_OFFICER',
+            appointmentTimeType: null,
+            missingAppointmentTime: true,
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+        additionalConditions: [],
+        isEditableByPrison: false,
+        isPrisonUser: true,
+        noAppointmentNeeded: false,
+        isLicenceUnsubmittable: true,
+        banner: {
+          html: 'Details Updated. This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.',
+          type: 'warning',
+        },
+      })
+      config.finalThirdEnabled = original
+    })
+
     describe('when it is a time served case', () => {
       it('should be editable by prison CAs when it is a time served case', async () => {
         res = {

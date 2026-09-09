@@ -45,12 +45,6 @@
             html: banner.html
         }) }}
     {% endif %}
-    {% if isPrintable and isLicenceUnsubmittable %}
-        {{ mojAlert({
-            variant: 'warning',
-            html: "You must set a date and time for the initial appointment."
-        }) }}
-    {% endif %}
 
     <form method="POST">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">

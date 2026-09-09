@@ -125,27 +125,27 @@ export default class ViewAndPrintLicenceRoutes {
     licence: Licence,
     initialApptUpdatedMessage: string,
     initialAppointmentUpdatedFromNotRequired: string,
-  ) => {
-    let banner
+  ): { type: string; html: string } | undefined => {
+    if (this.isLicenceUnsubmittable(licence)) {
+      const htmlText = `${initialApptUpdatedMessage || initialAppointmentUpdatedFromNotRequired ? 'Details Updated. ' : ''}This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.`
+      return {
+        type: 'warning',
+        html: htmlText,
+      }
+    }
     if (initialApptUpdatedMessage) {
-      banner = {
+      return {
         type: 'success',
         html: initialApptUpdatedMessage,
       }
     }
     if (initialAppointmentUpdatedFromNotRequired) {
-      banner = {
+      return {
         type: 'success',
         html: initialAppointmentUpdatedFromNotRequired,
       }
     }
-    if (this.isLicenceUnsubmittable(licence)) {
-      banner = {
-        type: 'warning',
-        html: 'This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.',
-      }
-    }
-    return banner
+    return undefined
   }
 
   private validateLicence = async (licence: Licence): Promise<FieldValidationError[]> => {
