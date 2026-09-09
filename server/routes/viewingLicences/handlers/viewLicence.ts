@@ -63,6 +63,8 @@ export default class ViewAndPrintLicenceRoutes {
           user,
         )
       }
+      const initialApptUpdatedMessage = req.flash('initialApptUpdated')?.[0]
+      const initialAppointmentUpdatedFromNotRequired = req.flash('initialAppointmentUpdatedFromNotRequired')?.[0]
 
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions as AdditionalCondition[], 'code'),
@@ -70,8 +72,7 @@ export default class ViewAndPrintLicenceRoutes {
         isEditableByPrison:
           licence.statusCode !== LicenceStatus.ACTIVE && (isTimeServedLicence(licence) || isInHardStopPeriod(licence)),
         isPrisonUser: user.authSource === 'nomis',
-        initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
-        initialAppointmentUpdatedFromNotRequired: req.flash('initialAppointmentUpdatedFromNotRequired')?.[0],
+        banner: this.mergeBanners(licence, initialApptUpdatedMessage, initialAppointmentUpdatedFromNotRequired),
         noAppointmentNeeded,
         isLicenceUnsubmittable: this.isLicenceUnsubmittable(licence),
       })
@@ -118,6 +119,33 @@ export default class ViewAndPrintLicenceRoutes {
         break
     }
     return licenceDate ? format(parseCvlDateTime(licenceDate, { withSeconds: true }), 'd LLLL yyyy') : null
+  }
+
+  private mergeBanners = (
+    licence: Licence,
+    initialApptUpdatedMessage: string,
+    initialAppointmentUpdatedFromNotRequired: string,
+  ): { type: string; html: string } | undefined => {
+    if (this.isLicenceUnsubmittable(licence)) {
+      const htmlText = `${initialApptUpdatedMessage || initialAppointmentUpdatedFromNotRequired ? 'Details Updated. ' : ''}This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.`
+      return {
+        type: 'warning',
+        html: htmlText,
+      }
+    }
+    if (initialApptUpdatedMessage) {
+      return {
+        type: 'success',
+        html: initialApptUpdatedMessage,
+      }
+    }
+    if (initialAppointmentUpdatedFromNotRequired) {
+      return {
+        type: 'success',
+        html: initialAppointmentUpdatedFromNotRequired,
+      }
+    }
+    return undefined
   }
 
   private validateLicence = async (licence: Licence): Promise<FieldValidationError[]> => {
