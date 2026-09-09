@@ -11,7 +11,7 @@
 {% from "../../partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "../../partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "pages/approverImmediateReleaseConditions.njk" import approverImmediateReleaseConditions %}
-{% from "moj/components/banner/macro.njk" import mojBanner %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% set pageTitle = applicationName + " - Approve a licence" %}
 {% set pageId = "approval-view-page" %}
@@ -23,10 +23,9 @@
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-padding-left-3">
         {% if isLicenceUnsubmittable %}
-            {{ mojBanner({
-                iconFallbackText: 'Warning',
+            {{ mojAlert({
                 text: "This licence cannot be approved until a date and time for the initial appointment have been set. Contact the probation practitioner if they do not get entered soon.",
-                type: 'warning'
+                variant: 'warning'
             }) }}
         {% endif %}
         <h1 class="govuk-heading-xl" id="approve-licence-heading">Approve licence</h1>

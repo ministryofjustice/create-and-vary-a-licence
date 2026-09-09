@@ -8,7 +8,6 @@
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/additionalInformationSummary.njk" import additionalInformationSummary %}
-{% from "moj/components/banner/macro.njk" import mojBanner %}
 {% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
 {% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
@@ -42,17 +41,15 @@
         }) }}
     {% endif %}
     {% if initialApptUpdatedMessage | length > 0%}
-        {{ mojBanner({
-            type: 'success',
-            html: initialApptUpdatedMessage,
-            iconFallbackText: 'Success'
+        {{ mojAlert({
+            variant: 'success',
+            html: initialApptUpdatedMessage
         }) }}
     {% endif %}
     {% if updatedFromNoAppointmentRequired %}
-        {{ mojBanner({
-            type: 'success',
-            html: initialAppointmentUpdatedFromNotRequired,
-            iconFallbackText: 'Success'
+        {{ mojAlert({
+            variant: 'success',
+            html: initialAppointmentUpdatedFromNotRequired
         }) }}
     {% endif %}
     <form method="POST">

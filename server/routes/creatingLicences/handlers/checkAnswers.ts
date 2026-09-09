@@ -113,7 +113,6 @@ export default class CheckAnswersRoutes {
       banner = {
         type: 'success',
         text: initialApptUpdatedMessage,
-        iconFallbackText: 'Success',
       }
     }
 
@@ -125,7 +124,6 @@ export default class CheckAnswersRoutes {
       banner = {
         type: 'warning',
         text: this.getAppointmentTimeWarningText(initialApptUpdatedMessage, licence.statusCode),
-        iconFallbackText: 'Warning',
       }
     }
 
