@@ -546,7 +546,7 @@ describe('View and print - single standard licence view', () => {
     expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
   })
 
-  it('should display an alert when the licence is approved and requires an appointment but a time has not been set', () => {
+  it('print licence button should link to print licence url', () => {
     const $ = render({
       licence: {
         ...licence,
