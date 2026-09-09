@@ -115,7 +115,7 @@
                             {{ govukButton({
                                 text: "View and print licence PDF",
                                 classes: "govuk-button--primary govuk-!-margin-right-1",
-                                disabled: isLicenceUnsubmittable,
+                                disabled: true,
                                 attributes: { 'data-qa': 'print-licence' }
                             }) }}
                         {% else %}
@@ -130,7 +130,9 @@
                         {{ govukButton({
                             text: "View and print licence PDF",
                             classes: "govuk-button--primary govuk-!-margin-right-1",
-                            disabled: isLicenceUnsubmittable
+                            href: ('/licence/view/id/' + licence.id + '/pdf-print') if not isLicenceisLicenceUnsubmittable,
+                            disabled: isLicenceUnsubmittable,
+                            attributes: { 'data-qa': 'view-and-print-button' }
                         }) }}
                     {% endif %}
 

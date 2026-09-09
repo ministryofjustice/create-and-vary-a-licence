@@ -545,6 +545,18 @@ describe('View and print - single standard licence view', () => {
     expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(6)
   })
 
+  it('print licence button should link to print licence url', () => {
+    const $ = render({
+      licence: {
+        ...licence,
+        statusCode: 'APPROVED',
+      },
+      initialAppointmentUpdatedFromNotRequired: 'appointment now required',
+    })
+
+    expect($('[data-qa="view-and-print-button"]').attr('href').trim()).toBe(`/licence/view/id/${licence.id}/pdf-print`)
+  })
+
   it('should display a single licence to print when no appointment needed', () => {
     const $ = render({
       licence: {
