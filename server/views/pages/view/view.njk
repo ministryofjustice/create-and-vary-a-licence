@@ -16,12 +16,11 @@
 {% set updatedFromNoAppointmentRequired = initialAppointmentUpdatedFromNotRequired | length > 0%}
 {% set isApprovedOrActive = licence.statusCode in ["APPROVED", "ACTIVE"] %}
 {% set isPrintable = isApprovedOrActive %}
-{% set printDisabled = updatedFromNoAppointmentRequired %}
 {% set showHdcAlert = (licence.kind == "HDC") and (not licence.homeDetentionCurfewActualDate) %}
 {% if showHdcAlert %}
         {% set isPrintable = false %}
 {% endif %}
-{% set actionWord =  "Print" if isPrintable else "View" %}
+{% set actionWord = "Print" if isPrintable else "View" %}
 
 {% set prisonKinds = ['TIME_SERVED', 'HARD_STOP'] %}
 
@@ -52,6 +51,13 @@
             html: initialAppointmentUpdatedFromNotRequired
         }) }}
     {% endif %}
+    {% if isPrintable and isLicenceUnsubmittable %}
+        {{ mojAlert({
+            variant: 'warning',
+            html: "You must set a date and time for the initial appointment."
+        }) }}
+    {% endif %}
+
     <form method="POST">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
