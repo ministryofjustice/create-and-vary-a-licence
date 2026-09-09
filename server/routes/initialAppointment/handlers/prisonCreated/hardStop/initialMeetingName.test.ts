@@ -143,6 +143,14 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/licence-contact-address')
       })
+
+      it('should generate a flash message if appointment type is changed while editing the licence', async () => {
+        res.locals.licence.appointmentPersonType = 'RESPONSIBLE_COM'
+
+        const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
+      })
     })
   })
 })
