@@ -178,6 +178,18 @@ describe('View and print - single licence view', () => {
     expect($('.moj-alert__content').text().trim()).toBe(bannerMessage)
   })
 
+  it('should display an alert when the licence is approved and requires an appointment but a time has not been set', () => {
+    const $ = render({
+      licence: {
+        ...licence,
+        statusCode: 'APPROVED',
+      },
+      isLicenceUnsubmittable: true,
+    })
+
+    expect($('.moj-alert__content').text().trim()).toBe('You must set a date and time for the initial appointment.')
+  })
+
   it('should display a single licence to print when no appointment needed', () => {
     const $ = render({
       licence: {
