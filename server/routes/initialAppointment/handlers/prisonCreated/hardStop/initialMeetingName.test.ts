@@ -7,7 +7,6 @@ import PathType from '../../../../../enumeration/pathType'
 import flashInitialApptUpdatedMessage from '../../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../../enumeration/userType'
 import config from '../../../../../config'
-import flashInitialApptUpdatedFlashMessage from '../../initialMeetingUpdatedFlashMessage'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
 
@@ -150,12 +149,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
 
         const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
         await handler.POST(req, res)
-        expect(flashInitialApptUpdatedFlashMessage).toHaveBeenCalledWith(
-          req,
-          res.locals.licence,
-          UserType.PRISON,
-          false,
-        )
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
       })
     })
   })
