@@ -7,6 +7,7 @@ context('Search for a person', () => {
 
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubGetOmuEmail')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetLicence', {})
