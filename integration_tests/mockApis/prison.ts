@@ -350,7 +350,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/prison-api/api/bookings/offenderNo/.*?/image/data`,
+        urlPathPattern: '/prison-api/api/bookings/offenderNo/[^/]+/image/data',
       },
       response: {
         status: 200,

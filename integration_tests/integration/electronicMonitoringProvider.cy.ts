@@ -11,6 +11,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetLicence', {})
+    cy.task('stubGetOmuEmail')
     cy.task('stubSearchForAddresses')
     cy.task('stubGetStaffPreferredAddresses')
     cy.task('stubPutLicenceAppointmentPerson')

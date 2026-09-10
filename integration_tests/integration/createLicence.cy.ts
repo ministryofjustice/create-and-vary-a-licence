@@ -13,6 +13,8 @@ context('Create a licence', () => {
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetLicence', { hasAppointmentTimeType: false })
+    cy.task('stubGetOmuEmail')
+    cy.task('stubGetPrisonerImage')
     cy.task('stubSearchForAddresses')
     cy.task('stubGetStaffPreferredAddresses')
     cy.task('stubPutLicenceAppointmentPerson')
