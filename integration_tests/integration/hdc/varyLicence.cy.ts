@@ -22,7 +22,6 @@ context('Vary a HDC licence', () => {
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetPolicyChanges')
-    cy.task('stubFeComponents')
     cy.task('stubUpdatePolicy')
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubDeleteAdditionalConditionsByCode')

@@ -10,7 +10,6 @@ context('Search for a person', () => {
     cy.task('stubGetPrisonOmuCaseload')
     cy.task('stubGetProbationOmuCaseload')
     cy.task('stubGetPrisons')
-    cy.task('stubFeComponents')
     cy.task('stubGetCompletedLicence', { statusCode: 'APPROVED', typeCode: 'AP_PSS' })
     cy.task('stubRecordAuditEvent')
   })
