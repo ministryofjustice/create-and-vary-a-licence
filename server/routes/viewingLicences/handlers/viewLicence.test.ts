@@ -356,9 +356,51 @@ describe('Route - view and approve a licence', () => {
         noAppointmentNeeded: false,
         isLicenceUnsubmittable: true,
         banner: {
-          html: 'Details Updated. This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.',
+          html: 'Details updated. This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.',
           type: 'warning',
         },
+      })
+      config.finalThirdEnabled = original
+    })
+
+    it('should not display any banners if there are validation errors', async () => {
+      const original = config.finalThirdEnabled
+      const req = {
+        query: {},
+        flash: jest.fn((key: string) => {
+          if (key === 'initialApptUpdated') return ['Appointment updated']
+          return []
+        }),
+        get: jest.fn(),
+      } as unknown as Request
+
+      config.finalThirdEnabled = true
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user,
+          licence: {
+            ...licence,
+            appointmentPersonType: 'DUTY_OFFICER',
+            appointmentTimeType: null,
+            missingAppointmentTime: true,
+          },
+          validationErrors: [
+            { field: 'appointmentTimeType', message: 'Select a date and time for the initial appointment' },
+          ],
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+        additionalConditions: [],
+        isEditableByPrison: false,
+        isPrisonUser: true,
+        noAppointmentNeeded: false,
+        isLicenceUnsubmittable: true,
+        banner: undefined,
       })
       config.finalThirdEnabled = original
     })
