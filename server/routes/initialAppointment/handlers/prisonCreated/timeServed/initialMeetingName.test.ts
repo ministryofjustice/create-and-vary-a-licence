@@ -186,6 +186,18 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       )
     })
 
+    it('should redirect to meeting time page if time not set', async () => {
+      req.body.appointmentPersonType = 'DUTY_OFFICER'
+      res.locals.licence.missingAppointmentTime = true
+
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+      await handler.POST(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/time-served/edit/id/${res.locals.licence.id}/initial-meeting-time`,
+      )
+    })
+
     it('should redirect to licence contact address page if no appointment needed', async () => {
       // Given
       const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)

@@ -128,6 +128,20 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
       it('If coming from check answers changing from no appointment to appointment it should redirect to the time page', async () => {
         // Given
         res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        res.locals.licence.missingAppointmentTime = true
+        req.body.appointmentPersonType = 'CUSTOM_PERSON'
+        req.query.fromReview = 'true'
+
+        // When
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-time?fromReview=true')
+      })
+
+      it('If coming from check answers changing the person that requires an appointment time it should redirect to the appointment time screen', async () => {
+        // Given
+        res.locals.licence.appointmentPersonType = 'DUTY_OFFICER'
+        res.locals.licence.missingAppointmentTime = true
         req.body.appointmentPersonType = 'CUSTOM_PERSON'
         req.query.fromReview = 'true'
 
