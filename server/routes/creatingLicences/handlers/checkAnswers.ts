@@ -104,30 +104,31 @@ export default class CheckAnswersRoutes {
     return PrintLicenceStatus.ALLOWED
   }
 
-  private mergeBanners = (initialApptUpdatedMessage: string, licence: Licence, hasValidationErrors: boolean) => {
-    let banner
+  private mergeBanners = (
+    initialApptUpdatedMessage: string,
+    licence: Licence,
+    hasValidationErrors: boolean,
+  ): { type: string; text: string } | undefined => {
     if (hasValidationErrors) {
-      return banner
+      return undefined
     }
-    if (initialApptUpdatedMessage) {
-      banner = {
-        type: 'success',
-        text: initialApptUpdatedMessage,
-      }
-    }
-
     if (
       config.finalThirdEnabled &&
       licence.missingAppointmentTime &&
       (licence.statusCode === LicenceStatus.APPROVED || licence.statusCode === LicenceStatus.SUBMITTED)
     ) {
-      banner = {
+      return {
         type: 'warning',
         text: this.getAppointmentTimeWarningText(initialApptUpdatedMessage, licence.statusCode),
       }
     }
-
-    return banner
+    if (initialApptUpdatedMessage) {
+      return {
+        type: 'success',
+        text: initialApptUpdatedMessage,
+      }
+    }
+    return undefined
   }
 
   private getAppointmentTimeWarningText(initialApptUpdatedMessage: string, statusCode: Licence['statusCode']): string {
