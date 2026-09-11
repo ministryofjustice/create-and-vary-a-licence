@@ -7,7 +7,6 @@ context('SignIn with common header', () => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
-    cy.task('stubFeComponents')
   })
 
   it('Unauthenticated user directed to auth', () => {

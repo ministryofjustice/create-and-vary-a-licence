@@ -35,10 +35,10 @@ context('Reject a licence', () => {
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetPrisons')
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetPrisonerImage')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetStaffDetails')
-    cy.task('stubFeComponents')
     cy.signIn()
   })
 

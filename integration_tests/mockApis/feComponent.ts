@@ -4,7 +4,7 @@ const stubFeComponents = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/components-api/components\\?component=header&component=footer',
+      urlPattern: '/components-api/components\\?.*component=header.*component=footer',
     },
     response: {
       status: 200,
@@ -30,12 +30,12 @@ const stubFeComponentsCss = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/components-api/components/.+css',
+      urlPattern: '/components/(header|footer)\\.css',
     },
     response: {
       status: 200,
       headers: {
-        'Content-Type': 'application/css',
+        'Content-Type': 'text/css',
       },
       body: '',
     },
@@ -45,12 +45,12 @@ const stubFeComponentsJs = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/components-api/components/§.+js',
+      urlPattern: '/components/(header|footer)\\.js',
     },
     response: {
       status: 200,
       headers: {
-        'Content-Type': 'application/js',
+        'Content-Type': 'application/javascript',
       },
       body: '',
     },
@@ -60,8 +60,9 @@ const stubFeComponentsFail = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/components-api/components/header',
+      urlPattern: '/components-api/components\\?.*',
     },
+    priority: 1,
     response: {
       status: 500,
       headers: {

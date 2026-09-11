@@ -10,6 +10,7 @@ context('Vary a HDC licence', () => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
+    cy.task('stubGetOmuEmail')
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'HDC', status: 'ACTIVE' })
     cy.task('stubGetStaffVaryCaseloadWithLao', {
       licenceId: 1,
@@ -21,7 +22,6 @@ context('Vary a HDC licence', () => {
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetPolicyChanges')
-    cy.task('stubFeComponents')
     cy.task('stubUpdatePolicy')
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubDeleteAdditionalConditionsByCode')

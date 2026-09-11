@@ -31,7 +31,13 @@ export default defineConfig({
       on('task', {
         ...manageUsersApi,
         ...tokenVerification,
-        reset: resetStubs,
+        reset: async () => {
+          await resetStubs()
+          await feComponent.stubFeComponents()
+          await feComponent.stubFeComponentsJs()
+          await feComponent.stubFeComponentsCss()
+          return null
+        },
         verifyEndpointCalled,
         verifyEndpointCalledWith,
 
