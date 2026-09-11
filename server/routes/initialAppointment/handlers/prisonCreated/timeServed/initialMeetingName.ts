@@ -37,9 +37,11 @@ export default class InitialMeetingNameRoutes {
     const updateFromNoAppointment =
       licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED' &&
       req.body.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED'
+    const appointmentTimeRequired =
+      req.body.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' && licence.missingAppointmentTime
     await this.licenceService.updateAppointmentPerson(licence.id, req.body, user)
 
-    if (updateFromNoAppointment) {
+    if (updateFromNoAppointment || appointmentTimeRequired) {
       return res.redirect(`/licence/time-served/edit/id/${licence.id}/initial-meeting-time`)
     }
 

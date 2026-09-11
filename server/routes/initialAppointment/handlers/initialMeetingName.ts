@@ -32,18 +32,19 @@ export default class InitialMeetingNameRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { user, licence } = res.locals
-    const noAppointmentNeeded = req.body.appointmentPersonType === 'NO_APPOINTMENT_NEEDED'
+    const appointmentTimeRequired =
+      req.body.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' && !req.body.appointmentTimeType
     await this.licenceService.updateAppointmentPerson(licence.id, req.body, user)
 
     flashInitialApptUpdatedMessage(req, licence, this.userType)
 
     if (this.userType === UserType.PRISON) {
       res.redirect(`/licence/view/id/${licence.id}/show`)
-    } else if (req.query?.fromReview && licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
+    } else if (req.query?.fromReview && appointmentTimeRequired) {
       res.redirect(`/licence/create/id/${licence.id}/initial-meeting-time?fromReview=true`)
     } else if (req.query?.fromReview) {
       res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
-    } else if (noAppointmentNeeded) {
+    } else if (req.body.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
       res.redirect(`/licence/create/id/${licence.id}/licence-contact-address`)
     } else {
       res.redirect(`/licence/create/id/${licence.id}/initial-meeting-place`)
