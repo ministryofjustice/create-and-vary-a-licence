@@ -133,12 +133,12 @@ export default class ViewAndPrintLicenceRoutes {
     initialAppointmentUpdatedFromNotRequired: string,
     hasValidationErrors: boolean,
   ): { type: string; html: string } | undefined => {
-    if (hasValidationErrors) {
+    if (hasValidationErrors || licence.statusCode === 'IN_PROGRESS') {
       return undefined
     }
 
     if (this.isLicenceUnsubmittable(licence)) {
-      const htmlText = `${initialApptUpdatedMessage || initialAppointmentUpdatedFromNotRequired ? 'Details updated. ' : ''}This licence cannot be printed until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.`
+      const htmlText = `${initialApptUpdatedMessage || initialAppointmentUpdatedFromNotRequired ? 'Details updated. ' : ''}This licence cannot be ${licence.statusCode === 'SUBMITTED' ? 'approved' : 'printed'} until a date and time for the initial appointment have been set. Contact the community probation team to confirm these details.`
       return {
         type: 'warning',
         html: htmlText,
