@@ -114,9 +114,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-place')
       })
 
-      it('should redirect to the check your answers page if fromReview flag is set', async () => {
+      it('should redirect to the check your answers page if fromReview flag is set and a time is not required or already set', async () => {
         // Given
         req.query.fromReview = 'true'
+        req.body.appointmentPersonType = 'DUTY_OFFICER'
+        req.body.appointmentTimeType = 'IMMEDIATE_UPON_RELEASE'
 
         // When
         await handler.POST(req, res)
