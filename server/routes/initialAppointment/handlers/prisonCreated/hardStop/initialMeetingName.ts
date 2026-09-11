@@ -36,16 +36,23 @@ export default class InitialMeetingNameRoutes {
     const updateFromNoAppointment =
       licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED' &&
       req.body.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED'
-
+    const appointmentTimeRequired =
+      req.body.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' && licence.missingAppointmentTime
     await this.licenceService.updateAppointmentPerson(licence.id, req.body, user)
 
-    if (this.path === PathType.EDIT) {
-      flashInitialApptUpdatedMessage(req, licence, UserType.PRISON, updateFromNoAppointment)
-      res.redirect(`/licence/hard-stop/id/${licence.id}/check-your-answers`)
-    } else if (req.body.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
-      res.redirect(`/licence/hard-stop/create/id/${licence.id}/licence-contact-address`)
-    } else {
-      res.redirect(`/licence/hard-stop/create/id/${licence.id}/initial-meeting-place`)
+    if (updateFromNoAppointment || appointmentTimeRequired) {
+      return res.redirect(`/licence/hard-stop/edit/id/${licence.id}/initial-meeting-time`)
     }
+
+    if (PathType.EDIT === this.path) {
+      flashInitialApptUpdatedMessage(req, licence, UserType.PRISON, updateFromNoAppointment)
+      return res.redirect(`/licence/hard-stop/id/${licence.id}/check-your-answers`)
+    }
+
+    if (req.body.appointmentPersonType === 'NO_APPOINTMENT_NEEDED') {
+      return res.redirect(`/licence/hard-stop/create/id/${licence.id}/licence-contact-address`)
+    }
+
+    return res.redirect(`/licence/hard-stop/create/id/${licence.id}/initial-meeting-place`)
   }
 }

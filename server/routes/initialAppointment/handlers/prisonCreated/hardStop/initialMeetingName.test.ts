@@ -12,7 +12,7 @@ jest.mock('../../initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
-describe('Route Handlers - Create Licence - Initial Meeting Name - Probation users', () => {
+describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
   let req: Request
   let res: Response
   const contactPerson = {
@@ -115,7 +115,9 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           body: contactPerson,
           query: {},
         } as unknown as Request
+
         await handler.POST(req, res)
+
         expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, contactPerson, {
           username: 'joebloggs',
         })
@@ -127,14 +129,18 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
       })
 
-      it('should generate a flash message if appointment changed from not required', async () => {
+      it('should redirect to meeting time page if appointment type changed from not required', async () => {
         res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
 
+        const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
         await handler.POST(req, res)
-        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, true)
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/licence/hard-stop/edit/id/${res.locals.licence.id}/initial-meeting-time`,
+        )
       })
 
-      it('should redirect to licence contact address page if no appointment needed', async () => {
+      it('should redirect to licence contact address page if no appointment needed while creating licence', async () => {
         handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
         req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
         await handler.POST(req, res)
@@ -142,6 +148,15 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           username: 'joebloggs',
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/licence-contact-address')
+      })
+
+      it('should redirect to check answers if appointment changed to not required while editing licence', async () => {
+        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+        req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+        await handler.POST(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
       })
 
       it('should generate a flash message if appointment type is changed while editing the licence', async () => {
