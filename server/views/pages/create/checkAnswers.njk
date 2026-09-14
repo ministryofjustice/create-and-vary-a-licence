@@ -8,7 +8,7 @@
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/variationSummary.njk" import variationSummary %}
 {% from "partials/additionalInformationSummary.njk" import additionalInformationSummary %}
-{% from "moj/components/banner/macro.njk" import mojBanner %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% macro printLicenceButton(licenceId, canChooseToEdit, printLicenceStatus, id) %}
     {% if printLicenceStatus === 'ALLOWED' %}
@@ -54,10 +54,9 @@
 
 {% block content %}
     {% if banner %}
-        {{ mojBanner({
-            type: banner.type,
-            text: banner.text,
-            iconFallbackText: banner.iconFallbackText
+        {{ mojAlert({
+            variant: banner.type,
+            text: banner.text
         }) }}
     {% endif %}
 

@@ -8,7 +8,6 @@
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/additionalInformationSummary.njk" import additionalInformationSummary %}
-{% from "moj/components/banner/macro.njk" import mojBanner %}
 {% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
 {% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
@@ -17,12 +16,11 @@
 {% set updatedFromNoAppointmentRequired = initialAppointmentUpdatedFromNotRequired | length > 0%}
 {% set isApprovedOrActive = licence.statusCode in ["APPROVED", "ACTIVE"] %}
 {% set isPrintable = isApprovedOrActive %}
-{% set printDisabled = updatedFromNoAppointmentRequired %}
 {% set showHdcAlert = (licence.kind == "HDC") and (not licence.homeDetentionCurfewActualDate) %}
 {% if showHdcAlert %}
         {% set isPrintable = false %}
 {% endif %}
-{% set actionWord =  "Print" if isPrintable else "View" %}
+{% set actionWord = "Print" if isPrintable else "View" %}
 
 {% set prisonKinds = ['TIME_SERVED', 'HARD_STOP'] %}
 
@@ -41,20 +39,13 @@
             html: 'Add a HDCAD in <a href="' + calculateReleaseDateUrl + '" class="govuk-link" target="_blank" rel="noopener noreferrer">Calculate release dates</a> to be able to print this licence and change details of the initial appointment and first night curfew.'
         }) }}
     {% endif %}
-    {% if initialApptUpdatedMessage | length > 0%}
-        {{ mojBanner({
-            type: 'success',
-            html: initialApptUpdatedMessage,
-            iconFallbackText: 'Success'
+    {% if banner %}
+        {{ mojAlert({
+            variant: banner.type,
+            html: banner.html
         }) }}
     {% endif %}
-    {% if updatedFromNoAppointmentRequired %}
-        {{ mojBanner({
-            type: 'success',
-            html: initialAppointmentUpdatedFromNotRequired,
-            iconFallbackText: 'Success'
-        }) }}
-    {% endif %}
+
     <form method="POST">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
@@ -124,7 +115,7 @@
                             {{ govukButton({
                                 text: "View and print licence PDF",
                                 classes: "govuk-button--primary govuk-!-margin-right-1",
-                                disabled: isLicenceUnsubmittable,
+                                disabled: true,
                                 attributes: { 'data-qa': 'print-licence' }
                             }) }}
                         {% else %}
@@ -139,7 +130,9 @@
                         {{ govukButton({
                             text: "View and print licence PDF",
                             classes: "govuk-button--primary govuk-!-margin-right-1",
-                            disabled: isLicenceUnsubmittable
+                            href: ('/licence/view/id/' + licence.id + '/pdf-print') if not isLicenceisLicenceUnsubmittable,
+                            disabled: isLicenceUnsubmittable,
+                            attributes: { 'data-qa': 'view-and-print-button' }
                         }) }}
                     {% endif %}
 

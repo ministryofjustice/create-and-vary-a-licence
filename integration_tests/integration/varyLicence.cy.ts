@@ -10,6 +10,7 @@ context('Vary a licence', () => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
+    cy.task('stubGetOmuEmail')
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'VARIATION', status: 'ACTIVE' })
     cy.task('stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP_PSS' })
     cy.task('stubGetStaffVaryCaseloadWithLao', {
@@ -23,7 +24,6 @@ context('Vary a licence', () => {
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetPolicyChanges')
     cy.task('stubUpdatePolicy')
-    cy.task('stubFeComponents')
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubDeleteAdditionalConditionsByCode')
     cy.task('stubCheckComCaseAccess')

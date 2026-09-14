@@ -33,6 +33,13 @@ context('Healthcheck', () => {
       cy.task('stubAuthPing')
       cy.task('stubManageUsersPing')
       cy.task('stubTokenVerificationPing', 500)
+      cy.task('stubFeComponentsPing')
+      cy.task('stubPrisonerSearchApiPing')
+      cy.task('stubDeliusPing')
+      cy.task('stubPrisonApiPing')
+      cy.task('stubLicencesPing')
+      cy.task('stubPrisonRegisterApiPing')
+      cy.task('stubGotenbergApiPing')
     })
 
     it('Reports correctly when token verification down', () => {

@@ -18,7 +18,6 @@ context('View COM vary caseload', () => {
       licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,
     })
     cy.task('stubGetBankHolidays', dates)
-    cy.task('stubFeComponents')
     cy.task('stubCheckComCaseAccess')
     cy.task('stubGetCaseAccessDetails')
     cy.signIn()

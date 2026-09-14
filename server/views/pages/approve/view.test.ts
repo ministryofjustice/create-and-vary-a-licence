@@ -38,8 +38,8 @@ describe('Approve view page', () => {
         serviceName: 'test-service',
       })
 
-      expect($('.moj-banner--warning').length).toBe(1)
-      expect($('.moj-banner--warning').text()).toContain(
+      expect($('.moj-alert--warning').length).toBe(1)
+      expect($('.moj-alert--warning').text()).toContain(
         'This licence cannot be approved until a date and time for the initial appointment have been set. Contact the probation practitioner if they do not get entered soon.',
       )
     })
@@ -56,7 +56,7 @@ describe('Approve view page', () => {
         serviceName: 'test-service',
       })
 
-      expect($('.moj-banner--warning').length).toBe(0)
+      expect($('.moj-alert--warning').length).toBe(0)
     })
 
     it('approve button should be disabled if the licence is unsubmittable', () => {

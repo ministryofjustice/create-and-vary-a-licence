@@ -7,6 +7,7 @@ context('Approve a licence - time served', () => {
     cy.task('stubPrisonSignIn')
     cy.task('stubGetPrisonUserDetails')
     cy.task('stubGetPrisons')
+    cy.task('stubGetPrisonerImage')
     cy.task('stubGetPrisonUserCaseloads', {
       details: [
         {
@@ -19,7 +20,6 @@ context('Approve a licence - time served', () => {
       ],
     })
     cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', urgentApproval: true })
-    cy.task('stubFeComponents')
     cy.signIn()
     Page.verifyOnPage(IndexPage)
   })

@@ -6,6 +6,7 @@ import { LicenceKind } from '../../../server/enumeration'
 context('Vary a licence - time served', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubGetOmuEmail')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
     cy.task('stubMatchLicenceEvents')

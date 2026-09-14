@@ -28,10 +28,10 @@ context('View and print licence', () => {
     cy.task('stubGetHdcStatus')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetPrisons')
+    cy.task('stubGetPrisonerImage')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetBankHolidays', dates)
-    cy.task('stubFeComponents')
   })
   const singleCaseload = {
     details: [

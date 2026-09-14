@@ -17,7 +17,6 @@ context('Approve a licence', () => {
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetPrisonerImage')
     cy.task('stubGetStaffDetails')
-    cy.task('stubFeComponents')
   })
 
   const singleCaseload = {

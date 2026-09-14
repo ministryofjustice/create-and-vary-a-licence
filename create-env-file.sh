@@ -43,7 +43,7 @@ export LICENCE_WATERMARK=true
 export COMMON_COMPONENTS_ENABLED=false
 export SHOW_WHATS_NEW_BANNER=false
 export HDC_ENABLED=true
-export FINAL_THIRD_ENABLED=false
+export FINAL_THIRD_ENABLED=true
 
 export REDIS_HOST=localhost
 export AWS_ACCESS_KEY_ID=foo

@@ -74,11 +74,11 @@ export default class AppointmentPlacePage extends Page {
   }
 
   getSuccessBanner = () => {
-    return cy.get('[class*="moj-banner"][class*="success"]')
+    return cy.get('[class*="moj-alert"][class*="success"]')
   }
 
   getSuccessBannerText = () => {
-    return cy.get('[class*="moj-banner"][class*="success"]').then($banner => {
+    return cy.get('[class*="moj-alert"][class*="success"]').then($banner => {
       return $banner.text()
     })
   }

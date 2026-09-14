@@ -12,7 +12,7 @@ context('Search for a person', () => {
     cy.task('stubGetApprovalCaseload')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetPrisons')
-    cy.task('stubFeComponents')
+    cy.task('stubGetPrisonerImage')
     cy.task('stubGetStaffDetails')
   })
 

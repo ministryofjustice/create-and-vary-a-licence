@@ -30,7 +30,6 @@ context('ACO review a HDC licence variation', () => {
     cy.task('stubMatchLicenceEvents')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
-    cy.task('stubFeComponents')
     cy.task('stubCheckComCaseAccess')
     cy.task('stubGetCaseAccessDetails')
     cy.signIn()

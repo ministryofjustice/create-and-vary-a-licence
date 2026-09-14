@@ -104,45 +104,43 @@ export default class CheckAnswersRoutes {
     return PrintLicenceStatus.ALLOWED
   }
 
-  private mergeBanners = (initialApptUpdatedMessage: string, licence: Licence, hasValidationErrors: boolean) => {
-    let banner
+  private mergeBanners = (
+    initialApptUpdatedMessage: string,
+    licence: Licence,
+    hasValidationErrors: boolean,
+  ): { type: string; text: string } | undefined => {
     if (hasValidationErrors) {
-      return banner
+      return undefined
     }
-    if (initialApptUpdatedMessage) {
-      banner = {
-        type: 'success',
-        text: initialApptUpdatedMessage,
-        iconFallbackText: 'Success',
-      }
-    }
-
     if (
       config.finalThirdEnabled &&
       licence.missingAppointmentTime &&
       (licence.statusCode === LicenceStatus.APPROVED || licence.statusCode === LicenceStatus.SUBMITTED)
     ) {
-      banner = {
+      return {
         type: 'warning',
         text: this.getAppointmentTimeWarningText(initialApptUpdatedMessage, licence.statusCode),
-        iconFallbackText: 'Warning',
       }
     }
-
-    return banner
+    if (initialApptUpdatedMessage) {
+      return {
+        type: 'success',
+        text: initialApptUpdatedMessage,
+      }
+    }
+    return undefined
   }
 
-  private getAppointmentTimeWarningText = (
-    initialApptUpdatedMessage: string,
-    statusCode: Licence['statusCode'],
-  ): string => {
+  private getAppointmentTimeWarningText(initialApptUpdatedMessage: string, statusCode: Licence['statusCode']): string {
+    if (statusCode !== LicenceStatus.APPROVED && statusCode !== LicenceStatus.SUBMITTED) {
+      throw new Error(`Unexpected status for warning text: ${statusCode}`)
+    }
+
     if (statusCode === LicenceStatus.APPROVED) {
       return `${initialApptUpdatedMessage ? 'Details updated. ' : ''}You must set a date and time for the appointment before the licence can be printed.`
     }
-    if (statusCode === LicenceStatus.SUBMITTED) {
-      return `${initialApptUpdatedMessage ? 'Details updated. ' : ''}You must set a date and time for the appointment before the licence can be approved.`
-    }
-    return null
+
+    return `${initialApptUpdatedMessage ? 'Details updated. ' : ''}You must set a date and time for the appointment before the licence can be approved.`
   }
 
   flattenValidationErrors = (errors: ValidationError[], parentProperty = ''): FieldValidationError[] =>

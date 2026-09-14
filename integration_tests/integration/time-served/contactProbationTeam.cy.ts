@@ -23,7 +23,6 @@ context('Time Served – Contact Probation Team', () => {
       ],
     })
     cy.task('stubGetCaseloadItemInHardStop')
-    cy.task('stubFeComponents')
     cy.task('stubGetPrisons')
     cy.task('stubGetCompletedLicence', {
       statusCode: 'SUBMITTED',
