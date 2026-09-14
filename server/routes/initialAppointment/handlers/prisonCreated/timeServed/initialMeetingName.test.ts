@@ -38,6 +38,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
           id: 1,
           responsibleComFullName: 'FirstName SecondName',
           statusCode: 'SUBMITTED',
+          appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
         },
       },
     } as unknown as Response
@@ -176,7 +177,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
     })
 
     it('should redirect to meeting time page if appointment type changed from not required', async () => {
-      res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+      res.locals.licence = {
+        ...res.locals.licence,
+        appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+        appointmentTimeType: null,
+      }
 
       const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
       await handler.POST(req, res)
@@ -188,7 +193,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
 
     it('should redirect to meeting time page if time not set', async () => {
       req.body.appointmentPersonType = 'DUTY_OFFICER'
-      res.locals.licence.missingAppointmentTime = true
+      res.locals.licence = {
+        ...res.locals.licence,
+        appointmentTimeType: null,
+      }
 
       const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
       await handler.POST(req, res)
