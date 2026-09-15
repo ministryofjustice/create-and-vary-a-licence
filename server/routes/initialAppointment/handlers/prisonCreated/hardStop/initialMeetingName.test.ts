@@ -101,7 +101,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
     describe('POST', () => {
       it('should redirect to the meeting place page', async () => {
         handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
-        res.locals.licence.appointmentTimeType = 'IMMEDIATE_UPON_RELEASE'
 
         await handler.POST(req, res)
 
@@ -140,9 +139,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       })
 
       it('should redirect to meeting time page if appointment type changed from not required', async () => {
-        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        res.locals.licence.missingAppointmentTime = true
 
-        const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+        const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+
         await handler.POST(req, res)
 
         expect(res.redirect).toHaveBeenCalledWith(

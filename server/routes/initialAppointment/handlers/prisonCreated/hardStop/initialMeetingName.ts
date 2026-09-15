@@ -38,7 +38,7 @@ export default class InitialMeetingNameRoutes {
 
     await this.licenceService.updateAppointmentPerson(licence.id, req.body, user)
 
-    if (requiresAppointmentTime) {
+    if (PathType.EDIT === this.path && requiresAppointmentTime) {
       return res.redirect(`/licence/hard-stop/edit/id/${licence.id}/initial-meeting-time`)
     }
 
