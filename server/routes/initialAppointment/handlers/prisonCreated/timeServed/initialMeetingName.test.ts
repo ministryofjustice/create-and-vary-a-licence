@@ -21,6 +21,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
   } as AppointmentPersonRequest
 
   beforeEach(() => {
+    jest.resetAllMocks()
     req = {
       params: { licenceId: '1' },
       body: contactPerson,
@@ -134,6 +135,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
 
     it('should redirect to check-your-answers when EDIT + IN_PROGRESS', async () => {
       // Given
+      res.locals.licence = {
+        ...res.locals.licence,
+        appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
+      }
       const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
       res.locals.licence.statusCode = 'IN_PROGRESS'
 
@@ -147,7 +152,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
     it('should redirect to check-your-answers when EDIT + not IN_PROGRESS', async () => {
       // Given
       const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
-      res.locals.licence.statusCode = 'SUBMITTED'
+      res.locals.licence = {
+        ...res.locals.licence,
+        statusCode: 'SUBMITTED',
+        appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
+      }
 
       // When
       await handler.POST(req, res)
@@ -156,9 +165,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       expect(res.redirect).toHaveBeenCalledWith('/licence/time-served/id/1/check-your-answers')
     })
 
-    it('should call flash message generator', async () => {
+    it('should call flash message generator when editing licence and changing appointment type', async () => {
       // Given
-      const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+      req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
 
       // When
       await handler.POST(req, res)
@@ -169,16 +180,20 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
 
     it('should generate a flash message if appointment type is changed while editing the licence', async () => {
       res.locals.licence.appointmentPersonType = 'RESPONSIBLE_COM'
-
       const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
       await handler.POST(req, res)
       expect(flashInitialApptUpdatedFlashMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
     })
 
     it('should redirect to meeting time page if appointment type changed from not required', async () => {
-      res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+      req.body.appointmentPersonType = 'DUTY_OFFICER'
+      res.locals.licence = {
+        ...res.locals.licence,
+        appointmentTimeType: null,
+      }
 
-      const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+      const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+
       await handler.POST(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith(
@@ -188,7 +203,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
 
     it('should redirect to meeting time page if time not set', async () => {
       req.body.appointmentPersonType = 'DUTY_OFFICER'
-      res.locals.licence.missingAppointmentTime = true
+      res.locals.licence = {
+        ...res.locals.licence,
+        appointmentTimeType: null,
+      }
 
       const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
       await handler.POST(req, res)

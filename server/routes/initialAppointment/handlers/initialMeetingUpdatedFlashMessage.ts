@@ -8,13 +8,13 @@ const flashInitialApptUpdatedMessage = (
   req: Request,
   licence: Licence,
   userType: UserType,
-  updateFromNoAppointmentNeeded: boolean = false,
+  requiresAppointmentTime: boolean = false,
 ) => {
   if (licence.statusCode !== LicenceStatus.SUBMITTED && licence.statusCode !== LicenceStatus.APPROVED) {
     return
   }
 
-  if (config.finalThirdEnabled && updateFromNoAppointmentNeeded && userType === UserType.PRISON) {
+  if (config.finalThirdEnabled && requiresAppointmentTime && userType === UserType.PRISON) {
     const pathMap: Record<string, string> = {
       TIME_SERVED: '/licence/time-served/edit/id/',
       HARD_STOP: '/licence/hard-stop/edit/id/',

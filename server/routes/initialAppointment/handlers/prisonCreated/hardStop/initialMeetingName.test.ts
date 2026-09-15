@@ -68,7 +68,9 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
           DUTY_OFFICER: 'Duty officer',
           SPECIFIC_PERSON: 'Someone else',
         }
+
         await handler.GET(req, res)
+
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/prisonCreated/initialMeetingPerson', {
           appointmentPersonType: appointmentPersonTypeWithOutPP,
           continueOrSaveLabel: 'Save',
@@ -97,16 +99,18 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
     })
 
     describe('POST', () => {
-      it('should redirect to the meeting time page', async () => {
+      it('should redirect to the meeting place page', async () => {
         handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+
         await handler.POST(req, res)
+
         expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, contactPerson, {
           username: 'joebloggs',
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-place')
       })
 
-      it('should redirect to the check your answers page', async () => {
+      it('should redirect to the check your answers page if all required appointment details are populated', async () => {
         handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
         req = {
           params: {
@@ -115,6 +119,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
           body: contactPerson,
           query: {},
         } as unknown as Request
+        res.locals.licence.appointmentTimeType = 'IMMEDIATE_UPON_RELEASE'
 
         await handler.POST(req, res)
 
@@ -124,15 +129,20 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
       })
 
-      it('should call to generate a flash message', async () => {
+      it('should generate a flash message if appointment type updated while editing and time has been set', async () => {
+        res.locals.licence.appointmentTimeType = 'NEXT_WORKING_DAY_2PM'
+        const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+
         await handler.POST(req, res)
+
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
       })
 
       it('should redirect to meeting time page if appointment type changed from not required', async () => {
-        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        res.locals.licence.missingAppointmentTime = true
 
-        const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+        const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+
         await handler.POST(req, res)
 
         expect(res.redirect).toHaveBeenCalledWith(
@@ -164,6 +174,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
 
         const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
         await handler.POST(req, res)
+
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
       })
     })
