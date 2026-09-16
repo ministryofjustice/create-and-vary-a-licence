@@ -9,6 +9,7 @@ import UserType from '../../../../../enumeration/userType'
 import config from '../../../../../config'
 
 jest.mock('../../initialMeetingUpdatedFlashMessage')
+jest.mock('../../../../../services/licenceService')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -42,8 +43,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
         },
       },
     } as unknown as Response
-    licenceService.updateAppointmentPerson = jest.fn()
-    licenceService.recordAuditEvent = jest.fn()
   })
 
   describe('Prison user(CA) journey', () => {
@@ -99,83 +98,86 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
     })
 
     describe('POST', () => {
-      it('should redirect to the meeting place page', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+      describe('CREATE', () => {
+        const handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
 
-        await handler.POST(req, res)
+        it('should redirect to the meeting place page', async () => {
+          licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: false })
 
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, contactPerson, {
-          username: 'joebloggs',
+          await handler.POST(req, res)
+
+          expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, contactPerson, {
+            username: 'joebloggs',
+          })
+          expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-place')
         })
-        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-place')
-      })
 
-      it('should redirect to the check your answers page if all required appointment details are populated', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
-        req = {
-          params: {
-            licenceId: '1',
-          },
-          body: contactPerson,
-          query: {},
-        } as unknown as Request
-        res.locals.licence.appointmentTimeType = 'IMMEDIATE_UPON_RELEASE'
+        it('should redirect to licence contact address page if no appointment needed while creating licence', async () => {
+          req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+          licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: false })
 
-        await handler.POST(req, res)
+          await handler.POST(req, res)
 
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, contactPerson, {
-          username: 'joebloggs',
+          expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, req.body, {
+            username: 'joebloggs',
+          })
+          expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/licence-contact-address')
         })
-        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
       })
-
-      it('should generate a flash message if appointment type updated while editing and time has been set', async () => {
-        res.locals.licence.appointmentTimeType = 'NEXT_WORKING_DAY_2PM'
+      describe('EDIT', () => {
         const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
 
-        await handler.POST(req, res)
+        it('should redirect to meeting time page if appointment type changed from not required', async () => {
+          licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: true })
 
-        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
-      })
+          await handler.POST(req, res)
 
-      it('should redirect to meeting time page if appointment type changed from not required', async () => {
-        res.locals.licence.missingAppointmentTime = true
-
-        const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
-
-        await handler.POST(req, res)
-
-        expect(res.redirect).toHaveBeenCalledWith(
-          `/licence/hard-stop/edit/id/${res.locals.licence.id}/initial-meeting-time`,
-        )
-      })
-
-      it('should redirect to licence contact address page if no appointment needed while creating licence', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
-        req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
-        await handler.POST(req, res)
-        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, req.body, {
-          username: 'joebloggs',
+          expect(res.redirect).toHaveBeenCalledWith(
+            `/licence/hard-stop/edit/id/${res.locals.licence.id}/initial-meeting-time`,
+          )
         })
-        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/licence-contact-address')
-      })
 
-      it('should redirect to check answers if appointment changed to not required while editing licence', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
-        req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+        it('should redirect to check answers if appointment changed to not required while editing licence', async () => {
+          req.body.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
+          licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: false })
 
-        await handler.POST(req, res)
+          await handler.POST(req, res)
 
-        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
-      })
+          expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
+        })
+        it('should generate a flash message if appointment type is changed while editing the licence', async () => {
+          res.locals.licence.appointmentPersonType = 'RESPONSIBLE_COM'
+          licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: false })
 
-      it('should generate a flash message if appointment type is changed while editing the licence', async () => {
-        res.locals.licence.appointmentPersonType = 'RESPONSIBLE_COM'
+          await handler.POST(req, res)
 
-        const handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
-        await handler.POST(req, res)
+          expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
+        })
 
-        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
+        it('should redirect to the check your answers page if all required appointment details are populated', async () => {
+          req = {
+            params: {
+              licenceId: '1',
+            },
+            body: contactPerson,
+            query: {},
+          } as unknown as Request
+          licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: false })
+
+          await handler.POST(req, res)
+
+          expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith(1, contactPerson, {
+            username: 'joebloggs',
+          })
+          expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
+        })
+        it('should generate a flash message if appointment type updated while editing and time has been set', async () => {
+          licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: false })
+
+          await handler.POST(req, res)
+
+          expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON, false)
+        })
       })
     })
   })

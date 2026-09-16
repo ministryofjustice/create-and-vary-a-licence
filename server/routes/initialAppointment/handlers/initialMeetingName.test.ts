@@ -105,6 +105,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     describe('POST', () => {
       it('should redirect to the meeting place page', async () => {
         // Given
+        licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: false })
 
         // When
         await handler.POST(req, res)
@@ -118,7 +119,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         // Given
         req.query.fromReview = 'true'
         req.body.appointmentPersonType = 'DUTY_OFFICER'
-        req.body.appointmentTimeType = 'IMMEDIATE_UPON_RELEASE'
+        licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: false })
 
         // When
         await handler.POST(req, res)
@@ -127,23 +128,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
       })
 
-      it('If coming from check answers changing from no appointment to appointment it should redirect to the time page', async () => {
-        // Given
-        res.locals.licence.appointmentPersonType = 'NO_APPOINTMENT_NEEDED'
-        res.locals.licence.missingAppointmentTime = true
-        req.body.appointmentPersonType = 'CUSTOM_PERSON'
-        req.query.fromReview = 'true'
-
-        // When
-        await handler.POST(req, res)
-
-        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-time?fromReview=true')
-      })
-
       it('If coming from check answers changing the person that requires an appointment time it should redirect to the appointment time screen', async () => {
         // Given
         res.locals.licence.appointmentPersonType = 'DUTY_OFFICER'
-        res.locals.licence.missingAppointmentTime = true
+        licenceService.updateAppointmentPerson.mockResolvedValue({ missingAppointmentTime: true })
         req.body.appointmentPersonType = 'CUSTOM_PERSON'
         req.query.fromReview = 'true'
 

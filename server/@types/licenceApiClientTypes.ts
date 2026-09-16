@@ -3,6 +3,7 @@ import { components } from './licenceApiImport'
 export type AdditionalCondition = components['schemas']['AdditionalCondition']
 export type AddHdcCurfewAddressRequest = components['schemas']['AddHdcCurfewAddressRequest']
 export type AppointmentPersonRequest = components['schemas']['AppointmentPersonRequest']
+export type AppointmentPersonUpdateResponse = components['schemas']['AppointmentPersonUpdateResponse']
 export type AppointmentTimeRequest = components['schemas']['AppointmentTimeRequest']
 export type AuditEvent = components['schemas']['AuditEvent']
 export type AuditRequest = components['schemas']['AuditRequest']

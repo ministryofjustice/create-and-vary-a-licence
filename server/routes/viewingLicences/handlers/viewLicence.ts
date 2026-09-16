@@ -50,7 +50,6 @@ export default class ViewAndPrintLicenceRoutes {
       licence?.statusCode === LicenceStatus.APPROVED ||
       licence?.statusCode === LicenceStatus.ACTIVE ||
       licence?.statusCode === LicenceStatus.SUBMITTED ||
-      licence?.statusCode === LicenceStatus.REJECTED ||
       licence?.statusCode === LicenceStatus.IN_PROGRESS
     ) {
       if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
