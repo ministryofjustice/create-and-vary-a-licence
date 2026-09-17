@@ -12,7 +12,7 @@ context('Event handlers', () => {
     it('should listen to the released event and call endpoint to update licence status to ACTIVE', () => {
       cy.task('searchPrisonersByBookingIds')
       cy.task('stubGetLicencesForOffender', { nomisId: 'A7774DY', status: 'APPROVED', bookingId: 12345 })
-      cy.task('stubGetHdcLicencesForOffender', { status: 'REJECTED', bookingId: 12345 })
+      cy.task('stubGetHdcLicencesForOffender', { status: 'APPROVED', bookingId: 12345 })
       cy.task('stubUpdateLicenceStatus')
 
       cy.task(

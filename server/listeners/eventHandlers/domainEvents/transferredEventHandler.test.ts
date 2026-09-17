@@ -56,7 +56,7 @@ describe('Transferred event handler', () => {
 
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC1234'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED'],
+      ['IN_PROGRESS', 'SUBMITTED', 'APPROVED'],
     )
     expect(licenceService.updatePrisonInformation).not.toHaveBeenCalled()
   })
@@ -102,10 +102,6 @@ describe('Transferred event handler', () => {
         licenceId: 3,
         licenceStatus: 'APPROVED',
       },
-      {
-        licenceId: 4,
-        licenceStatus: 'REJECTED',
-      },
     ] as LicenceSummary[])
 
     await handler.handle(event)
@@ -121,11 +117,6 @@ describe('Transferred event handler', () => {
       prisonTelephone: '+44 276 54545',
     })
     expect(licenceService.updatePrisonInformation).toHaveBeenCalledWith('3', {
-      prisonCode: 'PVI',
-      prisonDescription: 'Pentonville (HMP)',
-      prisonTelephone: '+44 276 54545',
-    })
-    expect(licenceService.updatePrisonInformation).toHaveBeenCalledWith('4', {
       prisonCode: 'PVI',
       prisonDescription: 'Pentonville (HMP)',
       prisonTelephone: '+44 276 54545',

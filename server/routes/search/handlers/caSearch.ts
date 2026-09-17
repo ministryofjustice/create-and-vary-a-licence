@@ -15,9 +15,6 @@ export default class CaSearch {
   ) {}
 
   nonViewableStatuses = [
-    LicenceStatus.NOT_IN_PILOT,
-    LicenceStatus.OOS_RECALL,
-    LicenceStatus.OOS_BOTUS,
     LicenceStatus.VARIATION_IN_PROGRESS,
     LicenceStatus.VARIATION_APPROVED,
     LicenceStatus.VARIATION_SUBMITTED,
