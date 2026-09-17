@@ -9,6 +9,7 @@ import type {
   AddressResponse,
   AddressSearchResponse,
   AppointmentPersonRequest,
+  AppointmentPersonUpdateResponse,
   AppointmentTimeRequest,
   ApprovalCase,
   ApproverSearchRequest,
@@ -162,11 +163,11 @@ export default class LicenceApiClient extends RestClient {
     licenceId: number,
     appointmentPerson: AppointmentPersonRequest,
     user: User,
-  ): Promise<void> {
-    await this.put(
+  ): Promise<AppointmentPersonUpdateResponse> {
+    return (await this.put(
       { path: `/licence/id/${licenceId}/appointmentPerson`, data: appointmentPerson },
       { username: user.username },
-    )
+    )) as AppointmentPersonUpdateResponse
   }
 
   async updateAppointmentTime(licenceId: string, appointmentTime: AppointmentTimeRequest, user: User): Promise<void> {

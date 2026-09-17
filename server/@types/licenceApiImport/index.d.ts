@@ -374,6 +374,7 @@ export interface paths {
     get?: never
     /**
      * Updates the prison information.
+     * @deprecated
      * @description Updates the prison information. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updatePrisonInformation']
@@ -1616,6 +1617,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/variations/{newVariationId}/diff-from-parent': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Compares a licence variation to its original licence.
+     * @description Compares a licence variation to its original licence and returns the differences. Requires ROLE_CVL_ADMIN.
+     */
+    get: operations['variationDiffFromParent']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/subject-access-request': {
     parameters: {
       query?: never
@@ -2613,9 +2634,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -2938,11 +2957,7 @@ export interface components {
        * @example IMMEDIATE_UPON_RELEASE
        * @enum {string}
        */
-      appointmentTimeType:
-        | 'IMMEDIATE_UPON_RELEASE'
-        | 'NEXT_WORKING_DAY_2PM'
-        | 'SPECIFIC_DATE_TIME'
-        | 'NO_APPOINTMENT_NEEDED'
+      appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
     }
     /** @description Request object for updating the person the person on probation will meet at the initial appointment */
     AppointmentPersonRequest: {
@@ -2957,6 +2972,14 @@ export interface components {
        * @example John Smith
        */
       appointmentPerson?: string | null
+    }
+    /** @description Response to an update appointment person request */
+    AppointmentPersonUpdateResponse: {
+      /**
+       * @description Whether the licence still needs an appointment time to be set, given the new appointment person
+       * @example true
+       */
+      missingAppointmentTime: boolean
     }
     /** @description Request object for updating the address of the initial appointment */
     AppointmentAddressRequest: {
@@ -3574,9 +3597,7 @@ export interface components {
             | 'SUBMITTED'
             | 'APPROVED'
             | 'ACTIVE'
-            | 'REJECTED'
             | 'INACTIVE'
-            | 'RECALLED'
             | 'VARIATION_IN_PROGRESS'
             | 'VARIATION_SUBMITTED'
             | 'VARIATION_REJECTED'
@@ -3621,9 +3642,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -3878,9 +3897,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -4219,9 +4236,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -4586,9 +4601,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -4677,9 +4690,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -4815,9 +4826,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -4954,6 +4963,87 @@ export interface components {
        * @example Wales
        */
       country: string
+    }
+    /** @description Describes a condition that has changed when a licence was varied. */
+    Condition: {
+      /**
+       * @description The type of licence condition
+       * @example AP
+       */
+      type: string
+      /**
+       * @description The condition text
+       * @example Receive home visits from a Mental Health Worker.
+       */
+      condition: string
+      /**
+       * @description The category code of the condition
+       * @example Making or maintaining contact with a person
+       */
+      category?: string | null
+    }
+    /** @description Describes a image uploaded linked to a condition. */
+    ImageUploadSummary: {
+      /**
+       * @description The text associated with the image
+       * @example An exclusion zone map
+       */
+      text?: string | null
+      /**
+       * @description The description of the image
+       * @example A map showing where licence holder cannot enter.
+       */
+      description?: string | null
+      /**
+       * @description The thumbnail for the  exclusion zone map as a base64-encoded JPEG image
+       * @example Base64 string
+       */
+      thumbnailImage?: string | null
+    }
+    /** @description Describes changes between a varied licence and its parent. */
+    VariationChangeResponse: {
+      /** @description A list of licence conditions that have been added to the variation */
+      licenceConditionsAdded: components['schemas']['Condition'][]
+      /** @description A list of licence conditions that have been removed from the variation */
+      licenceConditionsRemoved: components['schemas']['Condition'][]
+      /** @description A list of licence conditions that have been amended in the variation */
+      licenceConditionsAmended: components['schemas']['Condition'][]
+      /**
+       * @description Has the curfew address been updated in the variation
+       * @example true
+       */
+      hasUpdatedCurfewAddress: boolean
+      /**
+       * @description Have the curfew hours been updated in the variation
+       * @example false
+       */
+      hasUpdatedCurfewHours: boolean
+    }
+    /** @description Describes an additional condition that has changed when a licence was varied. */
+    VariedAdditionalCondition: Omit<WithRequired<components['schemas']['Condition'], 'condition' | 'type'>, 'type'> & {
+      /**
+       * @description The category code of the condition
+       * @example Making or maintaining contact with a person
+       */
+      category?: string | null
+      uploadSummaries: components['schemas']['ImageUploadSummary'][]
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      type: 'AP'
+    }
+    /** @description Describes a bespoke condition that has changed when a licence was varied. */
+    VariedBespokeCondition: Omit<
+      WithRequired<components['schemas']['Condition'], 'category' | 'condition' | 'type'>,
+      'type'
+    > & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      type: 'BESPOKE'
     }
     ExternalTimeServedRecordResponse: {
       /**
@@ -5144,9 +5234,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -5160,6 +5248,52 @@ export interface components {
        */
       surname?: string | null
       kind: string
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number | null
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string | null
+      /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
+      /** @description The address of initial appointment */
+      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentTelephoneNumber?: string | null
+      /**
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string | null
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string | null
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string | null
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -5317,12 +5451,7 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?:
-        | 'IMMEDIATE_UPON_RELEASE'
-        | 'NEXT_WORKING_DAY_2PM'
-        | 'SPECIFIC_DATE_TIME'
-        | 'NO_APPOINTMENT_NEEDED'
-        | null
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -5378,11 +5507,6 @@ export interface components {
       licenceStartDate?: string | null
       eligibleKind?: string | null
       /**
-       * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
-       */
-      earliestReleaseDate?: string | null
-      /**
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
        */
@@ -5394,6 +5518,11 @@ export interface components {
       comEmail?: string | null
       /** @deprecated */
       isVariation: boolean
+      /**
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       */
+      earliestReleaseDate?: string | null
       /**
        * @description The agency description of the detaining prison
        * @example Leeds (HMP)
@@ -5410,15 +5539,15 @@ export interface components {
        */
       comUsername?: string | null
       /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
       updatedByFullName?: string | null
+      /**
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
       /** @description The list of standard post sentence supervision conditions on this licence */
@@ -5446,52 +5575,6 @@ export interface components {
       isInPssPeriod?: boolean | null
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
-      /** @description The address of initial appointment */
-      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
-      /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentTelephoneNumber?: string | null
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string | null
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string | null
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string | null
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number | null
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string | null
-      /**
-       * @description Whether a licence is missing appointment time
-       * @example false
-       */
-      missingAppointmentTime?: boolean | null
     }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
@@ -5534,9 +5617,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -5991,9 +6072,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -6210,12 +6289,7 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?:
-        | 'IMMEDIATE_UPON_RELEASE'
-        | 'NEXT_WORKING_DAY_2PM'
-        | 'SPECIFIC_DATE_TIME'
-        | 'NO_APPOINTMENT_NEEDED'
-        | null
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
       /**
        * @description Whether a licence is missing appointment time
        * @example false
@@ -6439,9 +6513,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -6658,12 +6730,7 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?:
-        | 'IMMEDIATE_UPON_RELEASE'
-        | 'NEXT_WORKING_DAY_2PM'
-        | 'SPECIFIC_DATE_TIME'
-        | 'NO_APPOINTMENT_NEEDED'
-        | null
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
       /**
        * @description Whether a licence is missing appointment time
        * @example false
@@ -6906,9 +6973,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -7143,12 +7208,7 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?:
-        | 'IMMEDIATE_UPON_RELEASE'
-        | 'NEXT_WORKING_DAY_2PM'
-        | 'SPECIFIC_DATE_TIME'
-        | 'NO_APPOINTMENT_NEEDED'
-        | null
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
       /**
        * @description Whether a licence is missing appointment time
        * @example false
@@ -7332,9 +7392,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -7569,12 +7627,7 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?:
-        | 'IMMEDIATE_UPON_RELEASE'
-        | 'NEXT_WORKING_DAY_2PM'
-        | 'SPECIFIC_DATE_TIME'
-        | 'NO_APPOINTMENT_NEEDED'
-        | null
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
       /**
        * @description Whether a licence is missing appointment time
        * @example false
@@ -7750,9 +7803,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -7969,12 +8020,7 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?:
-        | 'IMMEDIATE_UPON_RELEASE'
-        | 'NEXT_WORKING_DAY_2PM'
-        | 'SPECIFIC_DATE_TIME'
-        | 'NO_APPOINTMENT_NEEDED'
-        | null
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
       /**
        * @description Whether a licence is missing appointment time
        * @example false
@@ -8144,9 +8190,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -8363,12 +8407,7 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?:
-        | 'IMMEDIATE_UPON_RELEASE'
-        | 'NEXT_WORKING_DAY_2PM'
-        | 'SPECIFIC_DATE_TIME'
-        | 'NO_APPOINTMENT_NEEDED'
-        | null
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
       /**
        * @description Whether a licence is missing appointment time
        * @example false
@@ -8542,9 +8581,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -8761,12 +8798,7 @@ export interface components {
        * @example SPECIFIC_DATE_TIME
        * @enum {string|null}
        */
-      appointmentTimeType?:
-        | 'IMMEDIATE_UPON_RELEASE'
-        | 'NEXT_WORKING_DAY_2PM'
-        | 'SPECIFIC_DATE_TIME'
-        | 'NO_APPOINTMENT_NEEDED'
-        | null
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME' | null
       /**
        * @description Whether a licence is missing appointment time
        * @example false
@@ -9328,9 +9360,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -9345,7 +9375,8 @@ export interface components {
       licenceStartDate?: string | null
       /**
        * Format: date
-       * @description Licence submitted date
+       * @description The date that this licence was submitted for approval
+       * @example 24/08/2024
        */
       submittedDate?: string | null
       /**
@@ -9396,9 +9427,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -9443,9 +9472,7 @@ export interface components {
         | 'SUBMITTED'
         | 'APPROVED'
         | 'ACTIVE'
-        | 'REJECTED'
         | 'INACTIVE'
-        | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
@@ -11802,7 +11829,9 @@ export interface operations {
         headers: {
           [name: string]: unknown
         }
-        content?: never
+        content: {
+          'application/json': components['schemas']['AppointmentPersonUpdateResponse']
+        }
       }
       /** @description Bad request, request body must be valid */
       400: {
@@ -15604,6 +15633,82 @@ export interface operations {
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  variationDiffFromParent: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        newVariationId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Differences between the variation and the original licence returned */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VariationChangeResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The variation for the provided ID was not found. */
+      404: {
         headers: {
           [name: string]: unknown
         }

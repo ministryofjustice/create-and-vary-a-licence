@@ -34,17 +34,14 @@ export default class InitialMeetingNameRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { user, licence } = res.locals
 
-    const requiresAppointmentTime =
-      req.body.appointmentPersonType !== 'NO_APPOINTMENT_NEEDED' && licence.appointmentTimeType == null
+    const { missingAppointmentTime } = await this.licenceService.updateAppointmentPerson(licence.id, req.body, user)
 
-    await this.licenceService.updateAppointmentPerson(licence.id, req.body, user)
-
-    if (PathType.EDIT === this.path && requiresAppointmentTime) {
+    if (PathType.EDIT === this.path && missingAppointmentTime) {
       return res.redirect(`/licence/time-served/edit/id/${licence.id}/initial-meeting-time`)
     }
 
     if (PathType.EDIT === this.path) {
-      flashInitialApptUpdatedMessage(req, licence, UserType.PRISON, requiresAppointmentTime)
+      flashInitialApptUpdatedMessage(req, licence, UserType.PRISON, false)
       return res.redirect(getTimeServedEditPath(licence))
     }
 
