@@ -5,14 +5,16 @@ import LicenceType from '../../../enumeration/licenceType'
 
 describe('View print licence button', () => {
   const render = templateRenderer(fs.readFileSync('server/views/pages/create/licenceCreatedByPrison.njk').toString())
+  const prisonDescription = 'prisonDescription'
 
   it('should show print licence pdf button', () => {
     const $ = render({
       licence: {
         statusCode: LicenceStatus.APPROVED,
-        prisonDescription: 'prisonDescription',
+        prisonDescription,
         typeCode: LicenceType.AP_PSS,
       },
+      prisonName: prisonDescription,
       omuEmail: 'jbloggs@justice.gov.uk',
       backLink: '/licence/create/caseload',
     })
@@ -39,28 +41,35 @@ describe('View print licence button', () => {
         typeCode: LicenceType.AP,
         isTimeServed: false,
       },
+      prisonName: prisonDescription,
       omuEmail: 'jbloggs@justice.gov.uk',
       backLink: '/licence/create/caseload',
     })
     expect($('p.govuk-body').first().text()).toContain(
-      'A licence for this person has been created by the prison because none was submitted in time for their final release checks.',
+      `A licence for this person has been created by ${prisonDescription} because none was submitted in time for their final release checks.`,
     )
+    expect($('.govuk-details__summary-text').text()).toContain('When no initial appointment is needed')
   })
+
   it('should show licence details for TIME_SERVED', () => {
+    const prisonDescription = 'prisonDescription'
     const $ = render({
       licence: {
         statusCode: LicenceStatus.APPROVED,
-        prisonDescription: 'prisonDescription',
+        prisonDescription,
         typeCode: LicenceType.PSS,
         kind: 'TIME_SERVED',
       },
+      prisonName: prisonDescription,
       omuEmail: 'jbloggs@justice.gov.uk',
       backLink: '/licence/create/caseload',
     })
     expect($('p.govuk-body').first().text()).toContain(
-      'A licence for this person has been created by the prison because they are being released immediately following sentencing having served time on remand.',
+      `A licence for this person has been created by ${prisonDescription} because they are being released immediately following sentencing having served time on remand.`,
     )
+    expect($('.govuk-details__summary-text').text()).toContain('When no initial appointment is needed')
   })
+
   it('should show A licence for this person txt', () => {
     const $ = render({
       licence: {
