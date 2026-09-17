@@ -14,6 +14,7 @@ export default class LicenceCreatedByPrisonRoutes {
       licence,
       omuEmail: email,
       backLink,
+      prisonName: licence.prisonDescription,
     })
   }
 }
