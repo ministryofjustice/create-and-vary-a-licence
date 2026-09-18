@@ -1,0 +1,14 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{%  macro immediateReleaseConditions(typeCode) %}
+    <p class="govuk-body">The licence will contain standard licence conditions. By default, it will also automatically contain an additional condition.</p>
+    {{ govukSummaryList({
+        attributes: { id: 'immediate-release-conditions' },
+        rows: [
+            {
+                key: { text: "Making or maintaing contact with a person" },
+                value: { text: "Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer." }
+            }
+        ]
+    }) }}
+{% endmacro %}
