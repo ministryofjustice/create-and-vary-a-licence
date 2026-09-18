@@ -2641,6 +2641,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
       /**
        * @description The username of the person who is updating this status
        * @example X12333
@@ -3604,6 +3605,7 @@ export interface components {
             | 'VARIATION_APPROVED'
             | 'NOT_STARTED'
             | 'TIMED_OUT'
+            | 'REJECTED'
           )[]
         | null
       /**
@@ -3649,6 +3651,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
       /**
        * @description The prison nomis identifier for this offender
        * @example A1234AA
@@ -3904,6 +3907,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
       /** @description Reason for overriding the licence status */
       reason: string
     }
@@ -4243,6 +4247,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /** @description Indicates whether the offender is in prison or out on probation */
       isOnProbation?: boolean | null
@@ -4608,6 +4613,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The licence type code
@@ -4697,6 +4703,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The licence type code
@@ -4833,6 +4840,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
       /**
        * @description The type of tab this licence has to be populated
        * @example RELEASES_IN_NEXT_TWO_WORKING_DAYS
@@ -5241,6 +5249,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The family name of the person on licence
@@ -5248,52 +5257,6 @@ export interface components {
        */
       surname?: string | null
       kind: string
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number | null
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string | null
-      /**
-       * @description Whether a licence is missing appointment time
-       * @example false
-       */
-      missingAppointmentTime?: boolean | null
-      /** @description The address of initial appointment */
-      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
-      /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentTelephoneNumber?: string | null
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string | null
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string | null
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string | null
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -5575,6 +5538,52 @@ export interface components {
       isInPssPeriod?: boolean | null
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number | null
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string | null
+      /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
+      /** @description The address of initial appointment */
+      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentTelephoneNumber?: string | null
+      /**
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string | null
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string | null
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string | null
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
     }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
@@ -5624,6 +5633,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
       /**
        * @description The prison identifier for the person on the licence. Also known as the NOMIS ID
        * @example A1234AA
@@ -6079,6 +6089,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The prison identifier for the person on this licence
@@ -6520,6 +6531,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The prison identifier for the person on this licence
@@ -6980,6 +6992,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The prison identifier for the person on this licence
@@ -7399,6 +7412,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The prison identifier for the person on this licence
@@ -7810,6 +7824,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The prison identifier for the person on this licence
@@ -8197,6 +8212,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The prison identifier for the person on this licence
@@ -8588,6 +8604,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
         | null
       /**
        * @description The prison identifier for the person on this licence
@@ -9367,6 +9384,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
       /**
        * Format: date
        * @description Licence start date
@@ -9389,6 +9407,17 @@ export interface components {
        * @example Forename Surname
        */
       fullName?: string | null
+      /**
+       * @description electronic monitoring types
+       * @example EXCLUSION_ZONE, LOCATION_MONITORING, CURFEW
+       */
+      electronicMonitoringTypes: string
+      /**
+       * Format: date
+       * @description electronic monitoring end date
+       * @example 24/08/2024
+       */
+      emEndDate?: string | null
     }
     /** @description Response representing a case with a licence status coming up for release */
     LicenceStatusResponse: {
@@ -9434,6 +9463,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
     }
     /** @description Response representing a last-minute handover case */
     LastMinuteHandoverCaseResponse: {
@@ -9479,6 +9509,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'REJECTED'
       /**
        * @description Prison code where the prisoner is held
        * @example LEI
