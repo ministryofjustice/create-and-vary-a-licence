@@ -2,7 +2,7 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
-{% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
+{% from "pages/finalThirdImmediateReleaseConditions.njk" import immediateReleaseConditions %}
 
 {% set pageTitle = applicationName + " - Create licence - Licence has been created by prison" %}
 {% set backLinkHref = backLink %}
@@ -44,10 +44,10 @@
                   </ul>"
             }) }}
 
-            <h1 class="govuk-heading-m">Licence conditions</h1>
+            <h1 class="govuk-heading-m govuk-!-margin-top-8">Licence conditions</h1>
             {{ immediateReleaseConditions(licence.typeCode) }}
             <p class="govuk-body">
-                The prison <strong>cannot</strong>  add any other additional or bespoke conditions.<br>
+                The prison cannot add any other additional or bespoke conditions.<br>
                 If you need to add any additional or bespoke licence conditions, you can do so after release.
             </p>
             <p class="govuk-body">
