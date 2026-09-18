@@ -1,11 +1,12 @@
 {% extends "layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
-{% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
+{% from "pages/finalThirdImmediateReleaseConditions.njk" import immediateReleaseConditions %}
 
 {% set pageTitle = applicationName + " - Create licence - Licence has been created by prison" %}
 {% set backLinkHref = backLink %}
-{% set contactForChangeText = "To request a change to this person’s appointment, contact " + licence.prisonDescription + " at " + omuEmail + "." %}
+{% set contactForChangeText = "To request a change to these details, contact " + prisonName + " at " + omuEmail + "." %}
 {% set pageId = "hard-stop-licence-page"%}
 {% set isPrintable = licence.statusCode === "APPROVED" %}
 
@@ -13,22 +14,42 @@
 
 {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l">Licence has been created by prison</h1>
 
             {% if licence.kind == 'TIME_SERVED' %}
-                <p class="govuk-body">A licence for this person has been created by the prison because they are being released immediately following sentencing having served time on remand.</p>
+                <p class="govuk-body">
+                    A licence for this person has been created by {{ prisonName }} because they are being released immediately following sentencing having served time on remand.
+                </p>
             {% else %}
-                <p class="govuk-body">A licence for this person has been created by the prison because none was submitted in time for their final release checks.</p>
+                <p class="govuk-body">
+                    A licence for this person has been created by {{ prisonName }} because none was submitted in time for their final release checks.
+                </p>
             {% endif %}
-            <p class="govuk-body" id="licence-created-by-prison-inset">Once this person is released, the licence must be reviewed. If changes are needed, the licence can be varied.</p>
-            
+            <p class="govuk-body" id="licence-created-by-prison-inset">
+                Once this person is released, the licence must be reviewed. If changes are needed, the licence can be varied.
+            </p>
             {{ inductionMeetingDetails(licence, isInProgress, validationErrors, contactForChangeText) }}
 
-            <h1 class="govuk-heading-m">Licence conditions</h1>
+            {{ govukDetails({
+                summaryText: "When no initial appointment is needed",
+                html: "Select no appointment needed if this person is being released in the final third of a standard determinate sentence and is not:
+                  <ul class='govuk-list govuk-list--bullet govuk-!-margin-top-1'>
+                    <li>serving a sentence for rape, serious sexual abuse against children or organised child sexual exploitation or grooming offences</li>
+                    <li>MAPPA eligible</li>
+                    <li>named on a child protection plan</li>
+                    <li>serving a sentence for a state threat or a terrorist risk offence</li>
+                    <li>tier A, B or C</li>
+                    <li>serving a standard determinate sentence plus</li>
+                  </ul>"
+            }) }}
+
+            <h1 class="govuk-heading-m govuk-!-margin-top-8">Licence conditions</h1>
             {{ immediateReleaseConditions(licence.typeCode) }}
-            <p class="govuk-body">The prison <strong>cannot</strong>  add any other additional or bespoke conditions.</p>
-            <p class="govuk-body">If you need to add any additional or bespoke licence conditions, you can do so after release.</p>
+            <p class="govuk-body">
+                The prison cannot add any other additional or bespoke conditions.<br>
+                If you need to add any additional or bespoke licence conditions, you can do so after release.
+            </p>
             <p class="govuk-body">
                 {% if isPrintable %}
                     {{ govukButton({

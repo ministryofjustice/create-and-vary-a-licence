@@ -51,6 +51,20 @@
         },
         {
             attributes: {
+                id: 'electronicMonitoringTypes-' + loop.index,
+                "data-sort-value": upcomingCase.electronicMonitoringTypes
+            },
+            text: upcomingCase.electronicMonitoringTypes | replace(",", ", ")
+        },
+        {
+            attributes: {
+                id: 'emEndDate-' + loop.index,
+                "data-sort-value": upcomingCase.emEndDate
+            },
+            text: upcomingCase.emEndDate
+        },
+        {
+            attributes: {
                 id: 'licenceStartDate-' + loop.index,
                 "data-sort-value": upcomingCase.licenceStartDate
             },
@@ -114,6 +128,18 @@
                 },
                 {
                     text: "Ems conditions",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "EM Types",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "EM End Date",
                     attributes: {
                         "aria-sort": "none"
                     }
