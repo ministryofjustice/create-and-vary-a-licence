@@ -55,14 +55,14 @@
                     {{ govukButton({
                         text: 'View and print licence PDF',
                         id: 'print-licence-pdf',
-                        classes: 'govuk-button--primary govuk-!-margin-right-1',
+                        classes: 'govuk-button--primary govuk-!-margin-top-4 govuk-!-margin-right-1',
                         href: printPdfLink,
                         attributes: { 'data-qa': 'print-licence', 'target': '_blank' }
                     }) }}
                 {% endif %}
                 {{ govukButton({
                     text: 'Return to case list',
-                    classes: 'govuk-button--secondary' if isPrintable,
+                    classes: 'govuk-button--secondary govuk-!-margin-top-4' if isPrintable,
                     href: backLink,
                     attributes: { 'data-qa': 'return-to-caselist' }
                 }) }}

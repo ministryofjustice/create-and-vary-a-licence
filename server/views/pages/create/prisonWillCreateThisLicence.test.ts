@@ -5,6 +5,7 @@ const render = templateRenderer(fs.readFileSync('server/views/pages/create/priso
 
 describe('View prison will create this licence page', () => {
   it('should display licence details for HARD_STOP', () => {
+    const prisonName = 'HMP Example'
     const $ = render({
       licence: {
         crn: 'X12345',
@@ -14,21 +15,24 @@ describe('View prison will create this licence page', () => {
         surname: 'Smith',
         isTimeServed: false,
       },
+      prisonName,
       omuEmail: 'omu@example.com',
       backLink: '/licence/create/caseload',
-      licenceType: 'AP_PSS',
+      licenceType: 'AP',
     })
 
     expect($('h1').text()).toContain('Prison will create this licence')
     expect($('p.govuk-body').first().text()).toContain(
-      'The prison will create a licence for this person as none was submitted in time for their final release checks.',
+      `${prisonName} will create a licence for this person as none was submitted in time for their final release checks.`,
     )
+    expect($('.govuk-details__summary-text').text()).toContain('When no initial appointment is needed')
     expect($('#licence-review-warning').text()).toContain(
       'This licence must be reviewed after this person is released.',
     )
   })
 
   it('should display licence details for TIME_SERVED', () => {
+    const prisonName = 'HMP Example'
     const $ = render({
       licence: {
         crn: 'Y98765',
@@ -38,17 +42,19 @@ describe('View prison will create this licence page', () => {
         surname: 'Doe',
         isTimeServed: true,
       },
+      prisonName,
       omuEmail: 'omu-mdi@example.com',
       backLink: '/licence/create/caseload',
-      licenceType: 'PSS',
+      licenceType: 'AP',
     })
 
     expect($('h1').text()).toContain('Prison will create this licence')
     expect($('p.govuk-body').first().text()).toContain(
-      "The prison will create this person's licence because they are being released immediately following sentencing having served time on remand.",
+      `${prisonName} will create a licence for this person because they are being released immediately following sentencing having served time on remand.`,
     )
     expect($('#licence-review-warning').text()).toContain(
       'This licence must be reviewed after this person is released.',
     )
+    expect($('.govuk-details__summary-text').text()).toContain('When no initial appointment is needed')
   })
 })
