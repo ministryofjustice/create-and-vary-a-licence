@@ -26,6 +26,8 @@ export default class UpcomingReleasesWithMonitoringConditionsRoutes {
       'CRN',
       'Licence Status',
       'Ems conditions',
+      'EM Types',
+      'EM End Date',
       'Licence Start Date',
       'Licence Submitted Date',
     ]
@@ -37,6 +39,8 @@ export default class UpcomingReleasesWithMonitoringConditionsRoutes {
         upcomingCases.crn,
         upcomingCases.status,
         escapeCsv(upcomingCases.emConditionCodes),
+        escapeCsv(upcomingCases.electronicMonitoringTypes),
+        upcomingCases.emEndDate,
         upcomingCases.licenceStartDate,
         upcomingCases.submittedDate,
       ])
@@ -63,6 +67,8 @@ export default class UpcomingReleasesWithMonitoringConditionsRoutes {
         submittedDate: upcomingCase.submittedDate,
         emConditionCodes: upcomingCase.emConditionCodes,
         fullName: upcomingCase.fullName,
+        electronicMonitoringTypes: upcomingCase.electronicMonitoringTypes,
+        emEndDate: upcomingCase.emEndDate,
       }
     })
   }

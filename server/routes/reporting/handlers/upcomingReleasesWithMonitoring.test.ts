@@ -19,6 +19,8 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       submittedDate: '15/12/2023',
       fullName: 'full name',
       emConditionCodes: '12h, 45a, 78b',
+      electronicMonitoringTypes: 'type1, type2, type3',
+      emEndDate: '01/02/2024',
     },
   ]
 
@@ -40,12 +42,14 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
 
     const expectedMappedRow = {
       crn: 'CRN123',
+      electronicMonitoringTypes: 'type1, type2, type3',
       prisonNumber: 'A1234BC',
       status: 'SUBMITTED',
       licenceStartDate: '01/01/2024',
       submittedDate: '15/12/2023',
       fullName: 'full name',
       emConditionCodes: '12h, 45a, 78b',
+      emEndDate: '01/02/2024',
     }
 
     expect(res.render).toHaveBeenCalledWith('pages/reports/upcomingReleasesWithMonitoring', {
@@ -76,6 +80,8 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       'CRN',
       'Licence Status',
       'Ems conditions',
+      'EM Types',
+      'EM End Date',
       'Licence Start Date',
       'Licence Submitted Date',
     ].join(',')
@@ -86,6 +92,8 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       'CRN123',
       'SUBMITTED',
       '"12h, 45a, 78b"',
+      '"type1, type2, type3"',
+      '01/02/2024',
       '01/01/2024',
       '15/12/2023',
     ].join(',')
@@ -105,6 +113,8 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
     await routes.GET_CSV(req, res)
 
     const sentBody = (res.send as jest.Mock).mock.calls[0][0]
-    expect(sentBody).toContain('A1234BC,full name,CRN123,SUBMITTED,"12h, 45a, 78b",01/01/2024,15/12/2023')
+    expect(sentBody).toContain(
+      'A1234BC,full name,CRN123,SUBMITTED,"12h, 45a, 78b","type1, type2, type3",01/02/2024,01/01/2024,15/12/2023',
+    )
   })
 })
