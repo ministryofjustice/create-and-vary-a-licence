@@ -13,7 +13,7 @@ export default class PrisonWillCreateThisLicenceRoutes {
     const [
       {
         cvl: { licenceType, licenceStartDate, isTimeServed },
-        prisoner: { prisonId, dateOfBirth, firstName, lastName },
+        prisoner: { prisonId, prisonName, dateOfBirth, firstName, lastName },
       },
       deliusRecord,
     ] = await Promise.all([
@@ -34,6 +34,7 @@ export default class PrisonWillCreateThisLicenceRoutes {
         surname: convertToTitleCase(lastName),
         isTimeServed,
       },
+      prisonName,
       omuEmail: email,
       backLink,
       licenceType,
