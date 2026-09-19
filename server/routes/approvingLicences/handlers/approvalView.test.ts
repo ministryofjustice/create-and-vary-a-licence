@@ -188,15 +188,5 @@ describe('Route - view and approve a licence', () => {
       expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.APPROVED, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/id/1/confirm-approved')
     })
-
-    it('should reject a licence', async () => {
-      req = {
-        body: { licenceId: '1', result: 'reject' },
-      } as unknown as Request
-
-      await handler.POST(req, res)
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.REJECTED, res.locals.user)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/approve/id/1/confirm-rejected')
-    })
   })
 })

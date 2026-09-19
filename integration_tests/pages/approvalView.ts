@@ -1,12 +1,9 @@
 import Page from './page'
 import ApprovalSearchPage from './approvalSearch'
 import ConfirmApprovePage from './confirmApprove'
-import ConfirmRejectPage from './confirmReject'
 
 export default class ApprovalViewPage extends Page {
   private approveLicenceButtonId = '[data-qa=approve-licence]'
-
-  private rejectLicenceButtonId = '[data-qa=reject-licence]'
 
   private prisonerImageId = '[data-qa=prisoner-image]'
 
@@ -47,12 +44,6 @@ export default class ApprovalViewPage extends Page {
   clickApprove = (): ConfirmApprovePage => {
     cy.get(this.approveLicenceButtonId).click()
     return Page.verifyOnPage(ConfirmApprovePage)
-  }
-
-  clickReject = (): ConfirmRejectPage => {
-    // Force: true will click even if a hidden element
-    cy.get(this.rejectLicenceButtonId).click({ force: true })
-    return Page.verifyOnPage(ConfirmRejectPage)
   }
 
   clickBackToPrisonApproverSearch = (): ApprovalSearchPage => {
