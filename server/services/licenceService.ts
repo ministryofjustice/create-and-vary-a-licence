@@ -33,6 +33,7 @@ import type {
   RecallSupportInfo,
   ReferVariationRequest,
   StatusUpdateRequest,
+  SupportInfo,
   UpcomingReleasesWithMonitoringConditionsResponse,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
@@ -492,6 +493,10 @@ export default class LicenceService {
 
   async getRecallSupportInfo(nomsId: string): Promise<RecallSupportInfo> {
     return this.licenceApiClient.getRecallSupportInfo(nomsId)
+  }
+
+  async getSupportInfo(nomsId: string): Promise<SupportInfo> {
+    return this.licenceApiClient.getSupportInfo(nomsId)
   }
 
   async getLastMinuteCases(): Promise<LastMinuteHandoverCaseResponse[]> {
