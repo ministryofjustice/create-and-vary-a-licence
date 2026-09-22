@@ -60,8 +60,7 @@ export default class OffenderDetailRoutes {
     const licenceSummary = await this.licenceService.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
     const licence = licenceSummary ? await this.licenceService.getLicence(licenceSummary.licenceId, user) : null
     const ineligibilityReasons = await this.licenceService.getIneligibilityReasons(nomsId)
-    const is91Status = await this.licenceService.getIS91Status(nomsId)
-    const recallDetails = await this.licenceService.getRecallSupportInfo(nomsId)
+    const { isIS91Case, recallSupportInfo, remandSupportInfo } = await this.licenceService.getSupportInfo(nomsId)
 
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -90,6 +89,7 @@ export default class OffenderDetailRoutes {
         dob: (!!prisonerDetail && moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY')) || '',
         hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',
         recall: prisonerDetail.recall ? 'Yes' : 'No',
+        remand: remandSupportInfo.isRemand ? 'Yes' : 'No',
       },
       probationPractitioner: {
         name: probationPractitioner ? nameToString(probationPractitioner.name) : 'Not allocated',
@@ -106,8 +106,9 @@ export default class OffenderDetailRoutes {
       cvlCom: this.getCvlComDetails(licence),
       licence: this.getLicenceDates(licence),
       ineligibilityReasons,
-      is91Status: is91Status ? 'Yes' : 'No',
-      recallDetails,
+      is91Status: isIS91Case ? 'Yes' : 'No',
+      recallDetails: recallSupportInfo,
+      remandDetails: remandSupportInfo,
     })
   }
 

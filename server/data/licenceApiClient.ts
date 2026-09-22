@@ -55,6 +55,7 @@ import type {
   RecallSupportInfo,
   ReferVariationRequest,
   StatusUpdateRequest,
+  SupportInfo,
   TeamCaseloadRequest,
   TimeServedCaseload,
   TimeServedProbationConfirmContactRequest,
@@ -717,6 +718,12 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({
       path: `/offender/nomisid/${nomisId}/recall-info`,
     })) as Promise<RecallSupportInfo>
+  }
+
+  async getSupportInfo(nomisId: string): Promise<SupportInfo> {
+    return (await this.get({
+      path: `/offender/nomisid/${nomisId}/support-info`,
+    })) as Promise<SupportInfo>
   }
 
   async getLastMinuteCases(): Promise<LastMinuteHandoverCaseResponse[]> {
