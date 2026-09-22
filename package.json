@@ -126,6 +126,7 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
+    "proxy-addr": "2.0.8",
     "qrcode": "^1.5.4",
     "redis": "^5.12.1",
     "reflect-metadata": "^0.2.2",
@@ -187,7 +188,8 @@
     "brace-expansion": "5.0.9",
     "mocha": {
       "serialize-javascript": "7.0.5"
-    }
+    },
+    "proxy-addr": "2.0.8"
   },
   "allowScripts": {
     "@parcel/watcher": true,
