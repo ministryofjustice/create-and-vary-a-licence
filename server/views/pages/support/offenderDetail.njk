@@ -231,6 +231,10 @@
                         <th scope="row" class="govuk-table__header">IS-91</th>
                         <td class="govuk-table__cell">{{ is91Status }}</td>
                     </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Remand</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.remand }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -322,11 +326,11 @@
                 <caption class="govuk-table__caption govuk-table__caption--m">Recall details</caption>
                 <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">Recall Type</th>
+                    <th scope="row" class="govuk-table__header">Recall type</th>
                     <td class="govuk-table__cell">{{ recallDetails.recallType }}</td>
                 </tr>
                 <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">Recall Name</th>
+                    <th scope="row" class="govuk-table__header">Recall name</th>
                     <td class="govuk-table__cell">{{ recallDetails.recallName }}</td>
                 </tr>
                 <tr class="govuk-table__row">
@@ -366,6 +370,28 @@
                             None
                         {% endif %}
                     </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">Remand details</caption>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Remand</th>
+                    <td class="govuk-table__cell">{{ prisonerDetail.remand }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Offence result code</th>
+                    <td class="govuk-table__cell">{{ remandDetails.courtEventOutcomeCode }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Offence result description</th>
+                    <td class="govuk-table__cell">{{ remandDetails.courtEventOutcomeDescription }}</td>
                 </tr>
                 </tbody>
             </table>
