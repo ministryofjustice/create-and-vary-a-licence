@@ -137,7 +137,9 @@ describe('Licence API client tests', () => {
   })
 
   it('Update appointment person', async () => {
-    await licenceApiClient.updateAppointmentPerson(
+    put.mockResolvedValue({ missingAppointmentTime: true })
+
+    const response = await licenceApiClient.updateAppointmentPerson(
       1,
       { appointmentPerson: 'Joe Bloggs' } as AppointmentPersonRequest,
       { username: 'joebloggs' } as User,
@@ -147,6 +149,7 @@ describe('Licence API client tests', () => {
       { path: '/licence/id/1/appointmentPerson', data: { appointmentPerson: 'Joe Bloggs' } },
       { username: 'joebloggs' },
     )
+    expect(response.missingAppointmentTime).toStrictEqual(true)
   })
 
   it('Update appointment time', async () => {

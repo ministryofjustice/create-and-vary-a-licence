@@ -68,16 +68,6 @@ const allowedPaths = [
     ],
   },
   {
-    status: 'REJECTED',
-    allowed: [
-      '/licence/create/id/(\\d)*/check-your-answers.*',
-      '/licence/create/id/(\\d)*/edit.*',
-      '/licence/approve/id/(\\d)*/confirm-rejected.*',
-      '/licence/view/id/(\\d)*/.*',
-    ],
-    disallowed: ['/licence/view/id/(\\d)/pdf-print'],
-  },
-  {
     status: 'ACTIVE',
     allowed: [
       '/licence/create/id/(\\d)*/check-your-answers.*',
@@ -95,11 +85,6 @@ const allowedPaths = [
       '/licence/view/id/(\\d)*/.*',
       '/licence/vary/id/(\\d)*/.*',
     ],
-  },
-  {
-    status: 'RECALLED',
-    allowed: ['/licence/create/id/(\\d)*/check-your-answers.*', '/licence/view/id/(\\d)*/.*'],
-    disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
   {
     status: 'VARIATION_IN_PROGRESS',

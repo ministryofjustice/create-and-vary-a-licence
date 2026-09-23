@@ -33,13 +33,7 @@ export default class DatesChangedEventHandler {
     } else {
       const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
         [nomisId],
-        [
-          LicenceStatus.IN_PROGRESS,
-          LicenceStatus.SUBMITTED,
-          LicenceStatus.REJECTED,
-          LicenceStatus.APPROVED,
-          LicenceStatus.TIMED_OUT,
-        ],
+        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.APPROVED, LicenceStatus.TIMED_OUT],
       )
 
       await Promise.all(licences.map(licence => this.licenceService.updateSentenceDates(licence.licenceId.toString())))

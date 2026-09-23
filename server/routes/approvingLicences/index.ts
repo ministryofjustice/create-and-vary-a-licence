@@ -6,7 +6,6 @@ import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import ApprovalCaseRoutes from './handlers/approvalCases'
 import ApprovalViewRoutes from './handlers/approvalView'
 import ConfirmApprovedRoutes from './handlers/confirmApproved'
-import ConfirmRejectedRoutes from './handlers/confirmRejected'
 
 import { Services } from '../../services'
 import ComDetailsRoutes from './handlers/comDetails'
@@ -37,14 +36,12 @@ export default function Index({
   const approvalCasesHandler = new ApprovalCaseRoutes(approvedCaseloadService, prisonerService)
   const approvalViewHandler = new ApprovalViewRoutes(licenceService, probationService)
   const approvalConfirmedHandler = new ConfirmApprovedRoutes(probationService)
-  const approvalRejectedHandler = new ConfirmRejectedRoutes()
 
   get('/cases', approvalCasesHandler.GET)
   get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
   get('/id/:licenceId/view', approvalViewHandler.GET)
   post('/id/:licenceId/view', approvalViewHandler.POST)
   get('/id/:licenceId/confirm-approved', approvalConfirmedHandler.GET)
-  get('/id/:licenceId/confirm-rejected', approvalRejectedHandler.GET)
 
   return router
 }

@@ -51,12 +51,6 @@ const allowedPathsByStatus = {
     '/licence/time-served/edit/foo',
     '/licence/time-served/id/1/check-your-answers',
   ],
-  REJECTED: [
-    '/licence/create/id/1/check-your-answers',
-    '/licence/create/id/1/edit',
-    '/licence/approve/id/1/confirm-rejected',
-    '/licence/view/id/1/foo',
-  ],
   ACTIVE: [
     '/licence/create/id/1/check-your-answers',
     '/licence/create/id/1/licence-created-by-prison',
@@ -66,7 +60,6 @@ const allowedPathsByStatus = {
     '/licence/approve/id/1/probation-practitioner',
   ],
   INACTIVE: ['/licence/create/id/1/check-your-answers', '/licence/view/id/1/foo', '/licence/vary/id/1/foo'],
-  RECALLED: ['/licence/create/id/1/check-your-answers', '/licence/view/id/1/foo'],
   VARIATION_IN_PROGRESS: ['/licence/create/foo', '/licence/vary/foo'],
   VARIATION_SUBMITTED: ['/licence/vary/foo', '/licence/vary-approve/foo'],
   VARIATION_APPROVED: ['/licence/vary/foo', '/licence/vary-approve/foo'],
@@ -77,8 +70,6 @@ const allowedPathsByStatus = {
 const disallowedPathsByStatus: Record<string, readonly string[]> = {
   IN_PROGRESS: ['/licence/view/id/1/pdf-print'],
   SUBMITTED: ['/licence/view/id/1/pdf-print'],
-  REJECTED: ['/licence/view/id/1/pdf-print'],
-  RECALLED: ['/licence/view/id/1/pdf-print'],
   VARIATION_IN_PROGRESS: ['/licence/view/id/1/pdf-print'],
   VARIATION_SUBMITTED: ['/licence/view/id/1/pdf-print'],
   VARIATION_REJECTED: ['/licence/view/id/1/pdf-print'],

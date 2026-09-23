@@ -56,11 +56,6 @@ export default class ApprovalViewRoutes {
     const { user } = res.locals
     const { licenceId, result } = req.body
     switch (result) {
-      case 'reject': {
-        await this.licenceService.updateStatus(licenceId, LicenceStatus.REJECTED, user)
-        res.redirect(`/licence/approve/id/${licenceId}/confirm-rejected`)
-        break
-      }
       case 'approve': {
         await this.licenceService.updateStatus(licenceId, LicenceStatus.APPROVED, user)
         res.redirect(`/licence/approve/id/${licenceId}/confirm-approved`)

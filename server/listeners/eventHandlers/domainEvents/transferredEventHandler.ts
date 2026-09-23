@@ -14,7 +14,7 @@ export default class TransferredEventHandler {
       const nomisId = event.additionalInformation.nomsNumber
       const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
         [nomisId],
-        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED],
+        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.APPROVED],
       )
 
       if (!licences.length) return

@@ -22,19 +22,9 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     description: 'Approved by the prison and is now the currently active licence',
     colour: 'turquoise',
   },
-  REJECTED: {
-    label: 'Rejected',
-    description: 'Rejected by the prison',
-    colour: 'red',
-  },
   INACTIVE: {
     label: 'Inactive',
     description: 'Superseded by a later licence variation',
-    colour: 'grey',
-  },
-  RECALLED: {
-    label: 'Recalled',
-    description: 'Recalled back to prison',
     colour: 'grey',
   },
   APPROVED: {
@@ -66,21 +56,6 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     label: 'Attention needed',
     description: 'Feedback from Head of PDU received',
     colour: 'red',
-  },
-  NOT_IN_PILOT: {
-    label: 'Outside pilot',
-    description: 'Outside pilot area',
-    colour: 'grey',
-  },
-  OOS_BOTUS: {
-    label: 'Breach of supervision',
-    description: 'Breach of supervision',
-    colour: 'grey',
-  },
-  OOS_RECALL: {
-    label: 'Recall',
-    description: 'Recall',
-    colour: 'grey',
   },
   TIMED_OUT: {
     label: 'Timed out',
