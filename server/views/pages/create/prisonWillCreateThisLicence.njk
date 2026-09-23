@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-{% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
+{% from "pages/finalThirdImmediateReleaseConditions.njk" import immediateReleaseConditions %}
 
 {% set pageTitle = applicationName + " - Create licence - Prison will create this licence" %}
 {% set backLinkHref = backLink %}
@@ -8,33 +9,51 @@
 
 {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l">Prison will create this licence</h1>
 
             <p class="govuk-body">
-                {% if licence.isTimeServed %}
-                    The prison will create this person's licence because they are being released immediately following sentencing having served time on remand.
+                {% if licence.isTimeServed %}s
+                    {{ prisonName }} will create a licence for this person because they are being released immediately following sentencing having served time on remand.
                 {% else %}
-                    The prison will create a licence for this person as none was submitted in time for their final release checks.
+                    {{ prisonName }} will create a licence for this person as none was submitted in time for their final release checks.
                 {% endif %}
             </p>
             <p class="govuk-body" id="licence-review-warning">
                 This licence must be reviewed after this person is released.
             </p>
 
-            <h1 class="govuk-heading-m">Initial appointment</h2>
-            <ul class="govuk-body">
-                <li>The prison can tell this person to report immediately after release or by 2pm the next working day</li>
-                <li>Or they can set a specific date and time, for example if you request this by contacting {{omuEmail}}</li>
-            </ul>
-            <h1 class="govuk-heading-m">Licence conditions</h2>
+            <h2 class="govuk-heading-m">Initial appointment</h2>
+            <p class="govuk-body">
+                If you need {{ prisonName }} to set the initial appointment for a specific date and time or if no appointment is required,
+                you must contact them to request this. You can email {{ omuEmail }}
+            </p>
+            <p class="govuk-body">
+                Otherwise, the prison can schedule the appointment for immediately after release or by 2pm the next working day.
+            </p>
+            {{ govukDetails({
+                summaryText: "When no initial appointment is needed",
+                html: "Select no appointment needed if this person is being released in the final third of a standard determinate sentence and is not:
+                  <ul class='govuk-list govuk-list--bullet govuk-!-margin-top-1'>
+                    <li>serving a sentence for rape, serious sexual abuse against children or organised child sexual exploitation or grooming offences</li>
+                    <li>MAPPA eligible</li>
+                    <li>named on a child protection plan</li>
+                    <li>serving a sentence for a state threat or a terrorist risk offence</li>
+                    <li>tier A, B or C</li>
+                    <li>serving a standard determinate sentence plus</li>
+                  </ul>"
+            }) }}
+
+            <h1 class="govuk-heading-m govuk-!-margin-top-8">Licence conditions</h1>
             {{ immediateReleaseConditions(licenceType) }}
-            <p class="govuk-body">The prison <strong>cannot</strong>  add any other additional or bespoke conditions.</p>
-            <p class="govuk-body">If you need to add any additional or bespoke licence conditions, you can do so after release.</p>
+            <p class="govuk-body">
+                The prison cannot add any other additional or bespoke conditions.<br>
+                If you need to add any additional or bespoke licence conditions, you can do so after release.
+            </p>
             <p class="govuk-body">
                 {{ govukButton({
                     text: "Return to case list",
-                    classes: "govuk-!-margin-bottom-0 govuk-body",
+                    classes: "govuk-!-margin-top-4 govuk-!-margin-bottom-0 govuk-body",
                     href: backLink,
                     attributes: { 'data-qa': 'return-to-caselist' }
                 }) }}
