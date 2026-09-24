@@ -1,0 +1,47 @@
+
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "moj/components/interruption-card/macro.njk" import interruptionCard -%}
+
+{% set pageTitle = applicationName + " - This person has opted out of HDC" %}
+{% set pageId = "hdc-opt-out-interrupt-page" %}
+{% set backLinkHref = backLink %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+            <div class="moj-interruption-card">
+                <div class="moj-interruption-card__content">
+                    <h1 class="govuk-heading-l moj-interruption-card__heading" id="hdc-opt-out-interrupt-page-heading">
+                        This person has opted out of HDC
+                    </h1>
+                    <div class="govuk-body-l moj-interruption-card__body">
+                        <p>
+                            This licence is now for a standard release.
+                        </p>
+                        <p>
+                            <a href="{{ hdcUrl }}" class="govuk-link opt-out-interrupt__link">Check the HDC service</a> for more information about the HDC application.
+                        </p>
+                        <div class="opt-out-interrupt__actions">
+                            <a href="{{ toCheckYourAnswer }}"
+                               role="button"
+                               draggable="false"
+                               class="govuk-button opt-out-interrupt__button">
+                                Continue
+                            </a>
+                            <p>
+                                <a href="{{ backLink }}" class="govuk-link opt-out-interrupt__link">
+                                    Return to case list
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+{% endblock %}
