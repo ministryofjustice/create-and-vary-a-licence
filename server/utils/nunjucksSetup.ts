@@ -1,6 +1,6 @@
 import path from 'path'
 import nunjucks, { Environment } from 'nunjucks'
-import { isToday, isYesterday, format, startOfDay } from 'date-fns'
+import { format, startOfDay } from 'date-fns'
 import express from 'express'
 import moment from 'moment'
 import { filesize } from 'filesize'
@@ -338,28 +338,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('dateToDisplay', (licence: Licence) => {
-    const licenceType = licence.typeCode
-    const led = licence.licenceExpiryDate ? parseCvlDate(licence.licenceExpiryDate) : null
-    const tussd = licence.topupSupervisionStartDate ? parseCvlDate(licence.topupSupervisionStartDate) : null
-    const tused = licence.topupSupervisionExpiryDate ? parseCvlDate(licence.topupSupervisionExpiryDate) : null
-
-    let dateToDisplay: Date
-    let textToDisplay = ''
-
-    if (licenceType === 'AP' || licenceType === 'AP_PSS') {
-      textToDisplay = 'Licence end date'
-      dateToDisplay = led
-    }
-
-    const conditionsToDisplayTused =
-      (licenceType === 'AP_PSS' && tussd && isToday(tussd)) ||
-      (licenceType === 'AP_PSS' && !tussd && tused && led && isYesterday(led)) ||
-      licenceType === 'PSS'
-
-    if (conditionsToDisplayTused) {
-      textToDisplay = 'PSS end date'
-      dateToDisplay = tused
-    }
+    const dateToDisplay = licence.licenceExpiryDate ? parseCvlDate(licence.licenceExpiryDate) : null
+    const textToDisplay = 'Licence end date'
 
     if (dateToDisplay) {
       return `${textToDisplay}: ${format(dateToDisplay, 'd MMMM yyyy')}`
