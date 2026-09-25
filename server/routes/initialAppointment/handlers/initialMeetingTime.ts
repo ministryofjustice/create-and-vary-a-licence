@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
-import LicenceType from '../../../enumeration/licenceType'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
 import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
@@ -47,9 +46,6 @@ export default class InitialMeetingTimeRoutes {
     if (licence.kind === LicenceKind.HDC) {
       return `/licence/create/id/${licence.id}/hdc/first-night-curfew-hours`
     }
-    if (licence.typeCode === LicenceType.AP || licence.typeCode === LicenceType.AP_PSS) {
-      return `/licence/create/id/${licence.id}/additional-licence-conditions-question`
-    }
-    return `/licence/create/id/${licence.id}/additional-pss-conditions-question`
+    return `/licence/create/id/${licence.id}/additional-licence-conditions-question`
   }
 }

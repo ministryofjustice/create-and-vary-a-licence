@@ -66,7 +66,7 @@ describe('Route - create licence - initial meeting date and time', () => {
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingTime', {
           formDate,
           appointmentTimeType,
-          skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
+          skipUrl: '/licence/create/id/1/additional-licence-conditions-question',
           canSkip: false,
         })
       })
@@ -78,7 +78,7 @@ describe('Route - create licence - initial meeting date and time', () => {
         expect(res.render).toHaveBeenCalledWith('pages/initialAppointment/initialMeetingTime', {
           formDate: undefined,
           appointmentTimeType,
-          skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
+          skipUrl: '/licence/create/id/1/additional-licence-conditions-question',
           canSkip: true,
         })
       })
@@ -92,7 +92,7 @@ describe('Route - create licence - initial meeting date and time', () => {
 
       it('should redirect to the next page', async () => {
         await handler.POST(req, res)
-        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
+        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
       })
 
       it('should call to generate a flash message', async () => {
@@ -113,13 +113,6 @@ describe('Route - create licence - initial meeting date and time', () => {
         res.locals.licence.typeCode = 'AP_PSS'
         expect(handler.getNextPage(res.locals.licence, req)).toBe(
           '/licence/create/id/1/additional-licence-conditions-question',
-        )
-      })
-
-      it('should redirect to the additional pss conditions question page if licence type is PSS', async () => {
-        res.locals.licence.typeCode = 'PSS'
-        expect(handler.getNextPage(res.locals.licence, req)).toBe(
-          '/licence/create/id/1/additional-pss-conditions-question',
         )
       })
 

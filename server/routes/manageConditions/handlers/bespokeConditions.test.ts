@@ -64,26 +64,6 @@ describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
 
-    it('should redirect to the additional PSS conditions question page if licence type is PSS', async () => {
-      res.locals.licence.typeCode = 'PSS'
-
-      await handler.POST(req, res)
-      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(1, formBespokeConditions, {
-        username: 'joebloggs',
-      })
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
-    })
-
-    it('should redirect to the additional PSS conditions question page if licence type is AP_PSS', async () => {
-      res.locals.licence.typeCode = 'AP_PSS'
-
-      await handler.POST(req, res)
-      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(1, formBespokeConditions, {
-        username: 'joebloggs',
-      })
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
-    })
-
     it('should redirect to the check answers page if licence type is AP', async () => {
       res.locals.licence.typeCode = 'AP'
 

@@ -50,11 +50,10 @@
             <li>have a release date</li>
             <li>have not been approved for Home Detention Curfew</li>
           {% else %}
-            <li>are serving a determinate sentence or a post sentence supervision order</li>
+            <li>are serving a determinate sentence</li>
             <li>were not released on Home Detention Curfew</li>
             <li>were not released from prison with a licence created using a PD1 form</li>
           {% endif %}
-          <li>{{ recallsMessage }}</li>
         </ul>
         <p>If you think someone’s licence is missing, tell us by
           <a id="serviceNowUrl" class="govuk-link" href="{{ serviceNowUrl }}">filling in a support request form.</a>
@@ -117,7 +116,6 @@
 {% endmacro %}
 {% set peopleInPrisonResults = [] %}
 {% set peopleOnProbationResults = [] %}
-{% set recallsMessage = "have not breached a post-sentence supervision order" %}
 {% for offender in peopleInPrison %}
   {% if offender.probationPractitioner.allocated %}
     {% set comDetailsHtml = '<a class="govuk-link search-highlight" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}

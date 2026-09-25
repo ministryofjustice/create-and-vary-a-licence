@@ -1,4 +1,4 @@
-import { format, addDays, subDays, addMonths } from 'date-fns'
+import { format, addDays, subDays } from 'date-fns'
 import { FoundComCase, Licence } from '../@types/licenceApiClientTypes'
 import { renderTemplate } from './__testutils/templateTestUtils'
 import { registerNunjucks } from './nunjucksSetup'
@@ -305,46 +305,6 @@ describe('Nunjucks Filters', () => {
       const licence = { typeCode: 'AP', licenceExpiryDate: undefined } as Licence
       const result = registerNunjucks().getFilter('dateToDisplay')(licence)
       expect(result).toEqual('Licence end date: Not available')
-    })
-
-    it('Should handle AP_PSS where tussd is not today', () => {
-      const tomorrow = format(addDays(new Date(), 1), 'd/MM/yyyy')
-      const licenceExpiryDate = '12/12/2022'
-      const licence = { typeCode: 'AP_PSS', topupSupervisionStartDate: tomorrow, licenceExpiryDate } as Licence
-      const result = registerNunjucks().getFilter('dateToDisplay')(licence)
-      expect(result).toEqual('Licence end date: 12 December 2022')
-    })
-
-    it('Should handle AP_PSS where tussd is today', () => {
-      const today = format(new Date(), 'd/MM/yyyy')
-      const tused = format(addMonths(new Date(), 1), 'd/MM/yyyy')
-      const tusedInLongerForm = format(addMonths(new Date(), 1), 'd MMMM yyy')
-      const licence = {
-        typeCode: 'AP_PSS',
-        topupSupervisionStartDate: today,
-        topupSupervisionExpiryDate: tused,
-      } as Licence
-      const result = registerNunjucks().getFilter('dateToDisplay')(licence)
-      expect(result).toEqual(`PSS end date: ${tusedInLongerForm}`)
-    })
-
-    it('Should handle AP_PSS where led has passed and tused exists but no tussd', () => {
-      const yesterday = format(subDays(new Date(), 1), 'd/MM/yyyy')
-      const tused = format(addMonths(new Date(), 1), 'd/MM/yyyy')
-      const tusedInLongerForm = format(addMonths(new Date(), 1), 'd MMMM yyy')
-      const licence = {
-        typeCode: 'AP_PSS',
-        licenceExpiryDate: yesterday,
-        topupSupervisionExpiryDate: tused,
-      } as Licence
-      const result = registerNunjucks().getFilter('dateToDisplay')(licence)
-      expect(result).toEqual(`PSS end date: ${tusedInLongerForm}`)
-    })
-
-    it('Should handle PSS licence', () => {
-      const licence = { typeCode: 'PSS', topupSupervisionExpiryDate: '13/12/2022' } as Licence
-      const result = registerNunjucks().getFilter('dateToDisplay')(licence)
-      expect(result).toEqual('PSS end date: 13 December 2022')
     })
   })
 
