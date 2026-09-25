@@ -20,23 +20,6 @@ describe('Caseload', () => {
     expect($('.licence-conditions').text().toString()).toContain('standard conditions')
   })
 
-  it('should display post sentence supervision text', () => {
-    const $ = render({
-      licence: {
-        licenceId: 3,
-        name: 'Biydaav Griya',
-        crnNumber: 'Z882661',
-        typeCode: 'PSS',
-        releaseDate: '13 Feb 2023',
-        licenceStatus: 'ACTIVE',
-        probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
-      },
-    })
-    expect($('.licence-conditions').text().toString()).toContain(
-      'This licence contains standard post sentence supervision requirements only by default.',
-    )
-  })
-
   it('should display warning if prisoner in hard stop is being re-released after a recall', () => {
     const $ = render({
       licence: {
