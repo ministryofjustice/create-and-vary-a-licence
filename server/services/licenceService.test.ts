@@ -170,22 +170,31 @@ describe('Licence Service', () => {
     })
 
     it('should build list of conditions correctly with index numbers and short category name if it exists', async () => {
-      conditionService.getAdditionalConditionByCode
-        .mockResolvedValueOnce({
-          categoryShort: 'Short category name',
-          category: 'Longer category name',
-          text: 'Condition 1',
-          textPlural: 'Plural text',
-          code: 'CON1,',
-          requiresInput: false,
-        })
-        .mockResolvedValueOnce({
-          category: 'Longer category name',
-          text: 'Condition 2',
-          textPlural: 'Plural text 2',
-          code: 'CON2',
-          requiresInput: false,
-        })
+      const condition1 = {
+        categoryShort: 'Short category name',
+        category: 'Longer category name',
+        text: 'Condition 1',
+        textPlural: 'Plural text',
+        code: 'code1',
+        requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
+      }
+
+      const condition2 = {
+        category: 'Longer category name',
+        text: 'Condition 2',
+        textPlural: 'Plural text 2',
+        code: 'code2',
+        requiresInput: false,
+        requiresElectronicMonitoringResponse: false,
+      }
+
+      conditionService.getAdditionalConditions.mockResolvedValue({
+        PSS: [],
+        AP: [condition1, condition2],
+      })
+
+      conditionService.lookupAdditionalConditionByCode.mockReturnValueOnce(condition1).mockReturnValueOnce(condition2)
 
       await licenceService.updateAdditionalConditions(
         1,
@@ -217,9 +226,6 @@ describe('Licence Service', () => {
         },
         user,
       )
-      expect(conditionService.getAdditionalConditionByCode).toHaveBeenCalledTimes(2)
-      expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(1, 'code1', 'version')
-      expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(2, 'code2', 'version')
     })
   })
 
