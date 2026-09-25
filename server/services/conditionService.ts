@@ -93,6 +93,13 @@ export default class ConditionService {
 
   async getAdditionalConditionByCode(searchCode: string, version: string = null): Promise<PolicyAdditionalCondition> {
     const additionalConditions = await this.getAdditionalConditions(version)
+    return this.lookupAdditionalConditionByCode(additionalConditions, searchCode)
+  }
+
+  lookupAdditionalConditionByCode(
+    additionalConditions: AdditionalConditionsConfig,
+    searchCode: string,
+  ): PolicyAdditionalCondition {
     return Object.values(additionalConditions)
       .flat()
       .find(({ code }) => code === searchCode)
