@@ -19,10 +19,6 @@ export default class BespokeConditionsRoutes {
 
     await this.licenceService.updateBespokeConditions(licenceId, req.body, user)
 
-    if (req.query?.fromReview) {
-      return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
-    }
-
     return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
   }
 
