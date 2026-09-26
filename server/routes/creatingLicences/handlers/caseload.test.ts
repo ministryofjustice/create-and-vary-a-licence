@@ -7,6 +7,7 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { ComCreateCase } from '../../../@types/licenceApiClientTypes'
 import { parseIsoDate } from '../../../utils/utils'
+import config from '../../../config'
 
 const comCaseloadService = new ComCaseloadService(null, null) as jest.Mocked<ComCaseloadService>
 
@@ -433,6 +434,67 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         }),
       )
       expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+    })
+  })
+
+  describe('findCreateLinkToDisplay', () => {
+    const comCase = {
+      licenceId: 123,
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+    } as ComCreateCase
+
+    const nonInProgressStatuses: ComCreateCase['licenceStatus'][] = [
+      'SUBMITTED',
+      'ACTIVE',
+      'INACTIVE',
+      'APPROVED',
+      'NOT_STARTED',
+      'VARIATION_IN_PROGRESS',
+      'VARIATION_SUBMITTED',
+      'VARIATION_REJECTED',
+      'VARIATION_APPROVED',
+      'TIMED_OUT',
+    ]
+    const existingHdcOptOutToggle = config.hdc.hdcOptOutToggle
+
+    afterEach(() => {
+      config.hdc.hdcOptOutToggle = existingHdcOptOutToggle
+    })
+
+    it('should link to the HDC opt-out interrupt when the toggle is enabled for an in-progress licence', () => {
+      // Given
+      config.hdc.hdcOptOutToggle = true
+
+      // When
+      const createLink = handler.findCreateLinkToDisplay(comCase)
+
+      // Then
+      expect(createLink).toBe('/licence/create/id/123/opt-out-interrupt')
+    })
+
+    it('should link to check your answers when the HDC opt-out toggle is disabled', () => {
+      // Given
+      config.hdc.hdcOptOutToggle = false
+
+      // When
+      const createLink = handler.findCreateLinkToDisplay(comCase)
+
+      // Then
+      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
+    })
+
+    it.each(nonInProgressStatuses)('should link to check your answers when the licence status is %s', licenceStatus => {
+      // Given
+      config.hdc.hdcOptOutToggle = true
+
+      // When
+      const createLink = handler.findCreateLinkToDisplay({
+        ...comCase,
+        licenceStatus,
+      })
+
+      // Then
+      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
     })
   })
 })
