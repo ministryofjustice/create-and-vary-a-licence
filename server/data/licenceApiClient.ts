@@ -57,7 +57,6 @@ import type {
   StatusUpdateRequest,
   SupportInfo,
   TeamCaseloadRequest,
-  TimeServedCaseload,
   TimeServedProbationConfirmContactRequest,
   UpcomingReleasesWithMonitoringConditionsResponse,
   UpdateAdditionalConditionDataRequest,
@@ -614,15 +613,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username },
     )) as Promise<CaCase[]>
-  }
-
-  async getTimeServedCases(prisonCode: string, user?: User): Promise<TimeServedCaseload> {
-    return (await this.post(
-      {
-        path: `/cases/time-served/${prisonCode}`,
-      },
-      { username: user?.username },
-    )) as Promise<TimeServedCaseload>
   }
 
   async getProbationOmuCaseload(caCaseloadSearch: CaCaseloadSearch, user?: User): Promise<CaCase[]> {
