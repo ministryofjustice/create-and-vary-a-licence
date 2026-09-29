@@ -1,18 +1,21 @@
-import { RequestHandler, Router } from 'express'
-import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
-import SupportHomeRoutes from './handlers/supportHome'
-import { Services } from '../../services'
-import OffenderSearchRoutes from './handlers/offenderSearch'
-import OffenderDetailRoutes from './handlers/offenderDetail'
-import OffenderAuditRoutes from './handlers/offenderAudit'
-import OffenderLicencesRoutes from './handlers/offenderLicences'
-import validationMiddleware from '../../middleware/validationMiddleware'
+import { type RequestHandler, Router } from 'express'
+
+import type { Services } from '../../services'
+
 import prisonIdCurrent from './types/prisonIdCurrent'
 import prisonIdAndEmail from './types/prisonIdAndEmail'
 import prisonIdDelete from './types/prisonIdDelete'
 import LicenceDatesAndReason from './types/licenceDatesAndReason'
 
-import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
+import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
+import validationMiddleware from '../../middleware/validationMiddleware'
+
+import SupportHomeRoutes from './handlers/supportHome'
+import OffenderSearchRoutes from './handlers/offenderSearch'
+import OffenderDetailRoutes from './handlers/offenderDetail'
+import OffenderAuditRoutes from './handlers/offenderAudit'
+import OffenderLicencesRoutes from './handlers/offenderLicences'
+import ManageOmuEmailAddressRoutes from './handlers/omuEmailAddress'
 import OffenderLicenceStatusRoutes from './handlers/offenderLicenceStatus'
 import OffenderLicenceDatesRoutes from './handlers/offenderLicenceDates'
 import ProbationTeamRoutes from './handlers/probationTeam'
@@ -24,8 +27,6 @@ import AuditDetailsRoutes from './handlers/auditDetails'
 import VaryApproverPduCaseloadRoutes from './handlers/varyApproverPduCaseload'
 import VaryApproverRegionCaseloadRoutes from './handlers/varyApproverRegionCaseload'
 import OffenderAllocationRoutes from './handlers/offenderAllocation'
-import PrrdCasesByPrisonRoutes from './handlers/prrdCasesByPrison'
-import TimeServedCaseByPrisonRoutes from './handlers/timeServedCasesByPrison'
 
 export default function Index({
   probationService,
@@ -36,8 +37,6 @@ export default function Index({
   licenceOverrideService,
   comCaseloadService,
   varyApproverCaseloadService,
-  caCaseloadService,
-  userService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -52,53 +51,61 @@ export default function Index({
       validationMiddleware(conditionService, type),
       handler,
     )
-  const supportHomeHandler = new SupportHomeRoutes()
-  const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, probationService)
-  const offenderDetailHandler = new OffenderDetailRoutes(prisonerService, probationService, licenceService)
-  const offenderLicenceHandler = new OffenderLicencesRoutes(licenceService)
-  const offenderAuditHandler = new OffenderAuditRoutes(licenceService)
-  const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
-  const offenderAllocationHandler = new OffenderAllocationRoutes(licenceService, probationService)
-  const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
-  const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
-  const probationTeamHandler = new ProbationTeamRoutes(comCaseloadService)
-  const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, probationService)
-  const comDetailsHandler = new ComDetailsRoutes(probationService)
-  const licencePrisonerDetailsHandler = new LicencePrisonerDetailsRoutes(licenceService, licenceOverrideService)
-  const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
 
+  const supportHomeHandler = new SupportHomeRoutes()
   get('/', supportHomeHandler.GET)
 
   // Manage OMU email addresses
-
+  const manageOmuEmailAddressHandler = new ManageOmuEmailAddressRoutes(licenceService, prisonRegisterService)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
   get('/manage-omu-email-address/:prisonId', manageOmuEmailAddressHandler.GET_IN_CONTEXT)
   post('/manage-omu-email-address/add-or-edit', manageOmuEmailAddressHandler.ADD_OR_EDIT, prisonIdAndEmail)
   post('/manage-omu-email-address/delete', manageOmuEmailAddressHandler.DELETE, prisonIdDelete)
   post('/manage-omu-email-address', manageOmuEmailAddressHandler.CURRENT, prisonIdCurrent)
 
+  // COM details and caselists
+  const comDetailsHandler = new ComDetailsRoutes(probationService)
+  const probationTeamHandler = new ProbationTeamRoutes(comCaseloadService)
+  const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, probationService)
+  get('/probation-teams/:teamCode/caseload', probationTeamHandler.GET)
+  get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
+  get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
+
   // Case details
+  const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, probationService)
+  const offenderDetailHandler = new OffenderDetailRoutes(prisonerService, probationService, licenceService)
+  const offenderLicenceHandler = new OffenderLicencesRoutes(licenceService)
+  const offenderAuditHandler = new OffenderAuditRoutes(licenceService)
+  const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
   get('/offender-search', offenderSearchHandler.GET)
   get('/offender/:nomsId/detail', offenderDetailHandler.GET)
   get('/offender/:nomsId/licences', offenderLicenceHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/audit', offenderAuditHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/audit/:auditEventId', auditDetailsHandler.GET)
+
+  // View / update Licence status
+  const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   get('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
+
+  // View / update licence dates
+  const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
   get('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.POST, LicenceDatesAndReason)
+
+  // View / update Prisoner details
+  const licencePrisonerDetailsHandler = new LicencePrisonerDetailsRoutes(licenceService, licenceOverrideService)
   get('/offender/:nomsId/licence/:licenceId/prisoner-details', licencePrisonerDetailsHandler.GET)
   post(
     '/offender/:nomsId/licence/:licenceId/prisoner-details',
     licencePrisonerDetailsHandler.POST,
     LicencePrisonerDetails,
   )
+
+  // View / update allocation
+  const offenderAllocationHandler = new OffenderAllocationRoutes(licenceService, probationService)
   get('/offender/:nomsId/allocation', offenderAllocationHandler.GET)
   post('/offender/:nomsId/allocation', offenderAllocationHandler.POST)
-
-  get('/probation-teams/:teamCode/caseload', probationTeamHandler.GET)
-  get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
-  get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
 
   // get vary approver case load by pdu and region
   const varyApproverRegionCaseloadHandler = new VaryApproverRegionCaseloadRoutes(
@@ -112,22 +119,5 @@ export default function Index({
   get('/variation-approver/cases/by-pdu', varyApproverPduCaseloadHandler.GET)
   get('/variation-approver/cases/by-region', varyApproverRegionCaseloadHandler.GET)
 
-  // get PRRD cases by prison
-  const prrdCasesByPrisonHandler = new PrrdCasesByPrisonRoutes(caCaseloadService, probationService, userService)
-  get('/prrd-cases/by-prison', prrdCasesByPrisonHandler.GET)
-  post('/prrd-cases/by-prison', prrdCasesByPrisonHandler.POST)
-  get('/prrd-cases/by-prison/:prisonCode', prrdCasesByPrisonHandler.GET)
-  get('/prrd-cases/by-prison/:prisonCode/download-csv', prrdCasesByPrisonHandler.GET_CSV)
-
-  // get Time Served cases by prison
-  const timeServedCasesByPrisonHandler = new TimeServedCaseByPrisonRoutes(
-    caCaseloadService,
-    probationService,
-    userService,
-  )
-  get('/time-served-cases/by-prison', timeServedCasesByPrisonHandler.GET)
-  post('/time-served-cases/by-prison', timeServedCasesByPrisonHandler.POST)
-  get('/time-served-cases/by-prison/:prisonCode', timeServedCasesByPrisonHandler.GET)
-  get('/time-served-cases/by-prison/:prisonCode/download-csv', timeServedCasesByPrisonHandler.GET_CSV)
   return router
 }
