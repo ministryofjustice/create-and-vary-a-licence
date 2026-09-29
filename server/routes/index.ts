@@ -8,7 +8,6 @@ import manageConditionRoutes from './manageConditions'
 import varyLicenceRoutes from './varyingLicences'
 import approveLicenceRoutes from './approvingLicences'
 import homeRoutes from './home'
-import rolloutRoutes from './rollout'
 import viewLicenceRoutes from './viewingLicences'
 import approveVariationsLicenceRoutes from './approvingVariations'
 import supportRoutes from './support'
@@ -42,7 +41,6 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   router.use(fromReviewMiddleware())
 
   router.use(homeRoutes(services))
-  router.use(rolloutRoutes())
   router.use(createLicenceRoutes(services))
   router.use(createHardStopLicenceRoutes(services))
   router.use(createHdcLicenceRoutes(services))
