@@ -424,10 +424,6 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/prison-information`, data: request }, { username: user?.username })
   }
 
-  async updateSentenceDates(licenceId: string, user?: User): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/sentence-dates` }, { username: user?.username })
-  }
-
   async approveVariation(licenceId: string, user: User): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/approve-variation` }, { username: user?.username })
   }
@@ -561,15 +557,6 @@ export default class LicenceApiClient extends RestClient {
       { path: `/caseload/probation-case/${nomsId}` },
       { username: user.username },
     )) as Promise<ProbationCase>
-  }
-
-  async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
-    await this.post({
-      path: `/licence/id/${licenceId}/deactivate-licence-and-variations`,
-      data: {
-        reason,
-      },
-    })
   }
 
   async getApprovalCaseload(prisons?: string[], user?: User): Promise<ApprovalCase[]> {
