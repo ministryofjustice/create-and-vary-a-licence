@@ -5,7 +5,6 @@
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
 {% from "partials/prisonCreated/inductionMeetingDetailsSummary.njk" import prisonCreatedInductionMeetingDetails %}
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
-{% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/additionalInformationSummary.njk" import additionalInformationSummary %}
 {% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
@@ -83,13 +82,8 @@
                     <h2 class="govuk-heading-m">Licence conditions</h2>
                     {{ immediateReleaseConditions(licence.typeCode) }}
                 {% else %}
-                    {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                        {{ additionalLicenceConditions(licence, additionalConditions) }}
-                        {{ bespokeConditions(licence.id, null, null, null, licence.bespokeConditions) }}
-                    {% endif %}
-                    {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                        {{ additionalPssConditions(licence) }}
-                    {% endif %}
+                    {{ additionalLicenceConditions(licence, additionalConditions) }}
+                    {{ bespokeConditions(licence.id, null, null, null, licence.bespokeConditions) }}
                 {% endif %}
 
                 {% if licence.electronicMonitoringProviderStatus !== 'NOT_NEEDED' %}

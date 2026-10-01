@@ -108,11 +108,6 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#additional-licence-conditions-heading + p').text()).toBe('No additional licence conditions added')
   })
 
-  it('should not display additional licence conditions section if licence type is PSS', () => {
-    const $ = render({ licence: { ...licence, typeCode: 'PSS' } })
-    expect($('#additional-licence-conditions-heading').length).toBe(0)
-  })
-
   it('should display a table containing the additional licence conditions', () => {
     const $ = render({
       licence,

@@ -65,6 +65,7 @@ import {
 import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
+import logger from '../../logger'
 
 const uploadPath = path.resolve('uploads')
 
@@ -147,12 +148,17 @@ export default class LicenceService {
     user: User,
     licenceVersion: string,
   ): Promise<void> {
+    const allAdditionalConditionConfig = await this.conditionService.getAdditionalConditions(licenceVersion)
+
     const additionalConditions =
-      formData.additionalConditions?.map(async (conditionCode, index) => {
-        const additionalConditionConfig = await this.conditionService.getAdditionalConditionByCode(
+      formData.additionalConditions?.map((conditionCode, index) => {
+        const additionalConditionConfig = this.conditionService.lookupAdditionalConditionByCode(
+          allAdditionalConditionConfig,
           conditionCode,
-          licenceVersion,
         )
+        if (!additionalConditionConfig) {
+          logger.warn(`Could not find condition: ${conditionCode} on policy version ${licenceVersion}`)
+        }
         return {
           code: conditionCode,
           sequence: index,
@@ -163,7 +169,7 @@ export default class LicenceService {
       }) || []
 
     const requestBody = {
-      additionalConditions: await Promise.all(additionalConditions),
+      additionalConditions,
       conditionType,
     } as AdditionalConditionsRequest
 

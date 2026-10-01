@@ -3,6 +3,7 @@ import Converter from 'number-to-words'
 import { LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
 import LicenceService from '../../../services/licenceService'
 import { convertToTitleCase } from '../../../utils/utils'
+import logger from '../../../../logger'
 
 export default class PolicyChangesNoticeRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -27,6 +28,13 @@ export default class PolicyChangesNoticeRoutes {
     })
     req.session.changedConditionsCounter = 0
 
+    const conditionDebug = req.session.changedConditions
+      .map(condition => `${condition.code} (${condition.changeType})`)
+      .join(', ')
+
+    logger.info(
+      `Licence: '${licence.id}' on version: '${licence.version}' has ${req.session.changedConditions.length} conditions to migrate:\n[${conditionDebug}]`,
+    )
     return res.render('pages/vary/policyChanges', { numberOfChanges })
   }
 

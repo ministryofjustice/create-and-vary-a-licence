@@ -7,6 +7,7 @@ import policyChangeHintText from '../../../config/policyChangeHintText'
 import conditionChangeType from '../../../enumeration/conditionChangeType'
 import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/LicencePolicy'
 import CurfewConditionService from '../../../services/curfewConditionService'
+import logger from '../../../../logger'
 
 export default class PolicyChangeRoutes {
   constructor(
@@ -104,6 +105,9 @@ export default class PolicyChangeRoutes {
     const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
       condition.code,
       (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version,
+    )
+    logger.info(
+      `Updating condition ${condition.code} on ${licence.id} (version: ${licence.version}), sequence: ${condition.sequence}, change type: ${condition.changeType}`,
     )
 
     let additionalLicenceConditions: AdditionalCondition[] = []
