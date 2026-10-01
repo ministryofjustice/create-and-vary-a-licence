@@ -453,11 +453,6 @@ describe('Licence Service', () => {
     )
   })
 
-  it('should update sentence dates', async () => {
-    await licenceService.updateSentenceDates('1', user)
-    expect(licenceApiClient.updateSentenceDates).toHaveBeenCalledWith('1', user)
-  })
-
   it('should approve a licence variation', async () => {
     await licenceService.approveVariation('1', user)
     expect(licenceApiClient.approveVariation).toHaveBeenCalledWith('1', user)

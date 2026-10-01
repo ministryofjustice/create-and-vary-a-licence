@@ -1898,19 +1898,6 @@ export default {
         },
       },
     }),
-  stubDeactivateLicenceAndVariations: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: `/licences-api/licence/id/(\\d*)/deactivate-licence-and-variations`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
-      },
-    })
-  },
 
   stubGetApprovalCaseload: (
     overrides: Partial<
