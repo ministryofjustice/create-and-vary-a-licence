@@ -4,7 +4,7 @@ import { User } from '../@types/CvlUserDetails'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import PrisonerService from './prisonerService'
-import { HomeDetentionCurfew, PrisonApiPrisoner, PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
+import { HomeDetentionCurfew, PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 
@@ -49,63 +49,6 @@ describe('Prisoner Service', () => {
     })
   })
 
-  it('Get Prisoner Detail', async () => {
-    const expectedResult = { firstName: 'Joe', lastName: 'Bloggs' } as PrisonApiPrisoner
-
-    prisonApiClient.getPrisonerDetail.mockResolvedValue(expectedResult)
-
-    const actualResult = await prisonerService.getPrisonerDetail('ABC1234', user)
-
-    expect(actualResult).toEqual(expectedResult)
-    expect(prisonApiClient.getPrisonerDetail).toHaveBeenCalledWith('ABC1234', user)
-  })
-
-  it('Gets prisoner sentence and offence details', async () => {
-    const bookingId = 956
-    const expectedResult = [
-      {
-        bookingId,
-        sentenceDate: '2022-07-16',
-      },
-      {
-        bookingId,
-        sentenceDate: '2023-02-20',
-      },
-    ]
-
-    prisonApiClient.getPrisonerSentenceAndOffences.mockResolvedValue(expectedResult)
-    const actualResult = await prisonerService.getPrisonerSentenceAndOffenceDetails(bookingId, user)
-    expect(actualResult).toEqual(expectedResult)
-    expect(prisonApiClient.getPrisonerSentenceAndOffences).toHaveBeenCalledWith(bookingId, user)
-  })
-
-  it('Gets the latest sentence start for a prisoner', async () => {
-    const bookingId = 250412
-    const sentencesAndOffences = [
-      {
-        bookingId,
-        sentenceDate: '2022-07-16',
-      },
-      {
-        bookingId,
-        sentenceDate: '2023-02-20',
-      },
-      {
-        bookingId,
-        sentenceDate: '2021-06-15',
-      },
-      {
-        bookingId,
-        sentenceDate: '2022-03-21',
-      },
-    ]
-
-    prisonApiClient.getPrisonerSentenceAndOffences.mockResolvedValue(sentencesAndOffences)
-    const result = await prisonerService.getPrisonerLatestSentenceStartDate(bookingId, user)
-    expect(result).toEqual(new Date(2023, 1, 20))
-    expect(prisonApiClient.getPrisonerSentenceAndOffences).toHaveBeenCalledWith(bookingId, user)
-  })
-
   it('Get Prison Information', async () => {
     const expectedResult = { agencyId: 'MDI', description: 'Moorland (HMP)' } as PrisonInformation
 
@@ -140,28 +83,6 @@ describe('Prisoner Service', () => {
       { lastName: 'Bloggs' } as PrisonerSearchCriteria,
       user,
     )
-  })
-
-  describe('Search Prisoners by booking ids', () => {
-    it('should return an empty list if criteria is empty', async () => {
-      const expectedResult = [] as Prisoner[]
-
-      const actualResult = await prisonerService.searchPrisonersByBookingIds([], user)
-
-      expect(actualResult).toEqual(expectedResult)
-      expect(prisonerSearchApiClient.searchPrisonersByBookingIds).not.toHaveBeenCalled()
-    })
-
-    it('should return a list of matching prisoners', async () => {
-      const expectedResult = [{ prisonerNumber: 'ABC1234', firstName: 'Joe', lastName: 'Bloggs' }] as Prisoner[]
-
-      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
-
-      const actualResult = await prisonerService.searchPrisonersByBookingIds([1234], user)
-
-      expect(actualResult).toEqual(expectedResult)
-      expect(prisonerSearchApiClient.searchPrisonersByBookingIds).toHaveBeenCalledWith({ bookingIds: [1234] }, user)
-    })
   })
 
   describe('Get HDC statuses', () => {

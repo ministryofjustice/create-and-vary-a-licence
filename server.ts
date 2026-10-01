@@ -11,12 +11,11 @@ initialiseAppInsights(applicationInfo)
 
 import logger from './logger'
 
-import { app, sqsPrisonEventsListener, sqsDomainEventsListener } from './server/index'
+import { app, sqsDomainEventsListener } from './server/index'
 
 const server = app(applicationInfo)
 
 server.listen(server.get('port'), () => {
   logger.info(`Server listening on port ${server.get('port')}`)
 })
-sqsPrisonEventsListener.app.start()
 sqsDomainEventsListener.app.start()
