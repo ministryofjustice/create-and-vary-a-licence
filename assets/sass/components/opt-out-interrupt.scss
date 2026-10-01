@@ -1,0 +1,46 @@
+.opt-out-interrupt__link {
+  &:link,
+  &:visited,
+  &:active {
+    color: govuk-colour('white');
+  }
+
+  &:hover {
+    color: govuk-colour('white');
+  }
+
+  &:focus {
+    color: govuk-colour('black');
+  }
+}
+
+.opt-out-interrupt__button {
+  background-color: govuk-colour('white');
+
+  &:link,
+  &:visited,
+  &:active,
+  &:hover {
+    color: govuk-colour('black');
+  }
+
+  &:hover {
+    background-color: govuk-colour('white');
+  }
+
+  &:focus {
+    background-color: govuk-colour('yellow');
+    color: govuk-colour('black');
+  }
+}
+
+.opt-out-interrupt__actions {
+  display: flex;
+  align-items: center;
+  gap: govuk-spacing(4);
+
+  .opt-out-interrupt__button,
+  p {
+    margin-bottom: 0;
+  }
+}

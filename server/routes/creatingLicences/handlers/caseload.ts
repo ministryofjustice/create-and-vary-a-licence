@@ -7,6 +7,8 @@ import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { cvlDateToDateShort, parseCvlDate } from '../../../utils/utils'
 import LicenceCreationType from '../../../enumeration/licenceCreationType'
 import { LicenceKind } from '../../../enumeration'
+import type { ComCreateCase } from '../../../@types/licenceApiClientTypes'
+import config from '../../../config'
 
 export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
@@ -48,11 +50,7 @@ export default class CaseloadRoutes {
     const viewModelCaseload = comCaseload.map(comCase => {
       return {
         ...comCase,
-        createLink: this.findCreateLinkToDisplay(
-          comCase.licenceCreationType,
-          comCase.licenceId,
-          comCase.prisonerNumber,
-        ),
+        createLink: this.findCreateLinkToDisplay(comCase),
         releaseDate: comCase.releaseDate && cvlDateToDateShort(comCase.releaseDate),
         hardStopDate: comCase.hardStopDate && format(parseCvlDate(comCase.hardStopDate), 'dd/MM/yyyy'),
         hardStopWarningDate:
@@ -76,23 +74,31 @@ export default class CaseloadRoutes {
     })
   }
 
-  findCreateLinkToDisplay = (licenceCreationType: string, licenceId: number, prisonerNumber: string): string => {
-    if (licenceCreationType === LicenceCreationType.LICENCE_CHANGES_NOT_APPROVED_IN_TIME) {
-      return `/licence/create/id/${licenceId}/licence-changes-not-approved-in-time`
+  findCreateLinkToDisplay = (comCase: ComCreateCase): string => {
+    if (comCase.licenceCreationType === LicenceCreationType.LICENCE_CHANGES_NOT_APPROVED_IN_TIME) {
+      return `/licence/create/id/${comCase.licenceId}/licence-changes-not-approved-in-time`
     }
 
-    if (licenceCreationType === LicenceCreationType.PRISON_WILL_CREATE_THIS_LICENCE) {
-      return `/licence/create/nomisId/${prisonerNumber}/prison-will-create-this-licence`
+    if (comCase.licenceCreationType === LicenceCreationType.PRISON_WILL_CREATE_THIS_LICENCE) {
+      return `/licence/create/nomisId/${comCase.prisonerNumber}/prison-will-create-this-licence`
     }
 
-    if (licenceCreationType === LicenceCreationType.LICENCE_CREATED_BY_PRISON) {
-      return `/licence/create/id/${licenceId}/licence-created-by-prison`
+    if (comCase.licenceCreationType === LicenceCreationType.LICENCE_CREATED_BY_PRISON) {
+      return `/licence/create/id/${comCase.licenceId}/licence-created-by-prison`
     }
 
-    if (licenceCreationType === LicenceCreationType.LICENCE_NOT_STARTED) {
-      return `/licence/create/nomisId/${prisonerNumber}/confirm`
+    if (comCase.licenceCreationType === LicenceCreationType.LICENCE_NOT_STARTED) {
+      return `/licence/create/nomisId/${comCase.prisonerNumber}/confirm`
     }
 
-    return `/licence/create/id/${licenceId}/check-your-answers`
+    if (this.isHdcOptOut(comCase)) {
+      return `/licence/create/id/${comCase.licenceId}/opt-out-interrupt`
+    }
+    return `/licence/create/id/${comCase.licenceId}/check-your-answers`
+  }
+
+  isHdcOptOut = (comCase: ComCreateCase): boolean => {
+    logger.info(`Hdc optOut toggle: ${config.hdc.hdcOptOutToggle}, licence status: ${comCase.licenceStatus}`)
+    return config.hdc.hdcOptOutToggle && comCase.licenceStatus === 'IN_PROGRESS' // && comCase.isHdcOptOut == true*
   }
 }
