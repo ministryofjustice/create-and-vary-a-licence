@@ -1,5 +1,5 @@
 import { User } from '../../@types/CvlUserDetails'
-import { CaCase, TimeServedCaseload } from '../../@types/licenceApiClientTypes'
+import { CaCase } from '../../@types/licenceApiClientTypes'
 
 import LicenceApiClient from '../../data/licenceApiClient'
 
@@ -12,9 +12,5 @@ export default class CaCaseloadService {
 
   public async getProbationOmuCaseload(user: User, prisonCodes: string[], searchString?: string): Promise<CaCase[]> {
     return this.licenceApiClient.getProbationOmuCaseload({ prisonCodes, searchString }, user)
-  }
-
-  public async getTimeServedCases(user: User, prisonCode: string): Promise<TimeServedCaseload> {
-    return this.licenceApiClient.getTimeServedCases(prisonCode, user)
   }
 }
