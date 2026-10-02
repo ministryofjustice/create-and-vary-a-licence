@@ -33,6 +33,7 @@ const licencePlaceholder: Licence = {
   id: 1,
   typeCode: 'AP',
   kind: 'CRD',
+  eligibleKind: 'CRD',
   version: ACTIVE_POLICY_VERSION,
   statusCode: 'IN_PROGRESS',
   nomsId: 'G9786GC',
@@ -153,6 +154,7 @@ const licencePlaceholder: Licence = {
   ],
   bespokeConditions: [],
   additionalPssConditions: [],
+  electronicMonitoringProviderStatus: 'NOT_NEEDED',
 }
 
 const defaultWeeklyCurfewTimes = [
@@ -719,8 +721,8 @@ export default {
           appointmentTimeType: options.appointmentTimeType ?? 'SPECIFIC_DATE_TIME',
           isInHardStopPeriod: options.isInHardStopPeriod ?? false,
           hardStopDate: options.isInHardStopPeriod
-            ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
-            : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+            ? format(subDays(new Date(), 1), 'd/MM/yyyy')
+            : format(addDays(new Date(), 1), 'd/MM/yyyy'),
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate,
           homeDetentionCurfewEndDate: options.homeDetentionCurfewEndDate,
           additionalLicenceConditions: options.conditions || licenceConditions,
@@ -779,7 +781,7 @@ export default {
           ],
           electronicMonitoringProvider: options.electronicMonitoringProvider,
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
-          reviewDate: options.isReviewed ? format(new Date(), 'dd/MM/yyyy hh:mm a') : null,
+          reviewDate: options.isReviewed ? format(new Date(), 'd/MM/yyyy hh:mm a') : null,
           curfewAddress: options.curfewAddress,
         },
       },
@@ -909,8 +911,8 @@ export default {
             bookingId: options.bookingId,
             dateCreated: '01/03/2021 10:15',
             hardStopDate: options.isInHardStopPeriod
-              ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
-              : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+              ? format(subDays(new Date(), 1), 'd/MM/yyyy')
+              : format(addDays(new Date(), 1), 'd/MM/yyyy'),
             hardStopWarningDate: '03/12/2023',
           },
         ],
