@@ -65,6 +65,10 @@ import CurfewTermsV4 from '../routes/manageConditions/types/additionalConditionI
 import ElectronicMonitoringTypesV4 from '../routes/manageConditions/types/additionalConditionInputs/electronicMonitoringTypesV4'
 import VehicleRestrictions from '../routes/manageConditions/types/additionalConditionInputs/vehicleRestrictions'
 import ReportToApprovedPremisesPolicyV4 from '../routes/manageConditions/types/additionalConditionInputs/reportToApprovedPremisesPolicyV4'
+// eslint-disable-next-line camelcase
+import NoContactWithVictimV4_1 from '../routes/manageConditions/types/additionalConditionInputs/noContactWithVictimV4_1'
+// eslint-disable-next-line camelcase
+import UnsupervisedContactPolicyV4_1 from '../routes/manageConditions/types/additionalConditionInputs/unsupervisedContactPolicyV4_1'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -173,6 +177,10 @@ export default class ConditionService {
           break
         case 'NoContactWithVictim':
           validator = NoContactWithVictim
+          break
+        case 'NoContactWithVictimV4_1':
+          // eslint-disable-next-line camelcase
+          validator = NoContactWithVictimV4_1
           break
         case 'UnsupervisedContact':
           validator = UnsupervisedContact
@@ -295,6 +303,10 @@ export default class ConditionService {
           break
         case 'UnsupervisedContactPolicyV3':
           validator = UnsupervisedContactPolicyV3
+          break
+        case 'UnsupervisedContactPolicyV4_1':
+          // eslint-disable-next-line camelcase
+          validator = UnsupervisedContactPolicyV4_1
           break
         case 'WorkingWithChildrenPolicyV3':
           validator = WorkingWithChildrenPolicyV3
