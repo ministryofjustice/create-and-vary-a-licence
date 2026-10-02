@@ -305,22 +305,22 @@
     </div>
 
    <div class="govuk-grid-row">
-        <div class="moj-search govuk-grid-column-one-half {{ "govuk-!-margin-bottom-8" if not hasMultipleCaseloadsInNomis }}">
+        <search class="moj-search govuk-grid-column-one-half {{ "govuk-!-margin-bottom-8" if not hasMultipleCaseloadsInNomis else "govuk-!-margin-bottom-0" }}">
             <form method="GET">
-                <div class="govuk-form-group">
-                    <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-                        Find a case
-                    </label>
-                    <div id="search-hint" class="govuk-hint moj-search__hint approver-caseload-search">
-                        Search by name, prison number or probation practitioner
-                    </div>
-                    <input class="govuk-input moj-search__input" id="search" name="queryTerm" value="{{ queryTerm }}" aria-describedby="search-hint">
+                <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+                    Find a case
+                </label>
+                <div id="search-hint" class="govuk-hint moj-search__hint approver-caseload-search">
+                    Search by name, prison number or probation practitioner
                 </div>
-                <button class="govuk-button moj-search__button " data-module="govuk-button">
-                    Search
-                </button>
+                <div class="govuk-input__wrapper moj-search__input-wrapper">
+                    <input class="govuk-input moj-search__input" id="search" name="queryTerm" value="{{ queryTerm }}" aria-describedby="search-hint">
+                    <button class="govuk-button moj-search__button " data-module="govuk-button">
+                        Search
+                    </button>
+                </div>
             </form>
-        </div>
+        </search>
     </div>
 
     {% if hasMultipleCaseloadsInNomis %}

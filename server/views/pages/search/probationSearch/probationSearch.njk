@@ -238,23 +238,22 @@
         </div>
       </div>
       <div class="govuk-grid-row">
-        <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
+        <search class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
           <form method="GET">
             <input type="hidden" name="previousPage" value="{{ previousCaseloadPage }}">
-              <div class="govuk-form-group">
-                <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-                  Find a case
-                </label>
-                <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
-                  Search by name, CRN or probation practitioner
-                </div>
-                <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint" value="{{ queryTerm }}"></div>
+              <label class="govuk-label moj-search__label" for="search">Find a case</label>
+              <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
+                Search by name, CRN or probation practitioner
+              </div>
+              <div class="govuk-input__wrapper moj-search__input-wrapper">
+                <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint" value="{{ queryTerm }}">
                 <button class="govuk-button moj-search__button " data-module="govuk-button">
                   Search
                 </button>
-              </form>
-            </div>
-          </div>
+              </div>
+          </form>
+        </search>
+      </div>
           {% set inPrisonCountText = "People in prison ("  + peopleInPrison.length + peopleInPrison.length | pluralise(" result") + ")" %}
           {% set onProbationCountText = "People on probation (" + peopleOnProbation.length + peopleOnProbation.length | pluralise(" result") + ")" %}
           {% set peopleInPrison = displayResults(inPrisonCountText, tabParameters.prisonTabCaption, tabParameters.prisonTabId, peopleInPrisonResults, true) %}
