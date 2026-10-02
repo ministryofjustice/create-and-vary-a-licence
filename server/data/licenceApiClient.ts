@@ -57,7 +57,6 @@ import type {
   StatusUpdateRequest,
   SupportInfo,
   TeamCaseloadRequest,
-  TimeServedCaseload,
   TimeServedProbationConfirmContactRequest,
   UpcomingReleasesWithMonitoringConditionsResponse,
   UpdateAdditionalConditionDataRequest,
@@ -425,10 +424,6 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/prison-information`, data: request }, { username: user?.username })
   }
 
-  async updateSentenceDates(licenceId: string, user?: User): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/sentence-dates` }, { username: user?.username })
-  }
-
   async approveVariation(licenceId: string, user: User): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/approve-variation` }, { username: user?.username })
   }
@@ -564,15 +559,6 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<ProbationCase>
   }
 
-  async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
-    await this.post({
-      path: `/licence/id/${licenceId}/deactivate-licence-and-variations`,
-      data: {
-        reason,
-      },
-    })
-  }
-
   async getApprovalCaseload(prisons?: string[], user?: User): Promise<ApprovalCase[]> {
     if (prisons.length < 1) {
       return []
@@ -614,15 +600,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username },
     )) as Promise<CaCase[]>
-  }
-
-  async getTimeServedCases(prisonCode: string, user?: User): Promise<TimeServedCaseload> {
-    return (await this.post(
-      {
-        path: `/cases/time-served/${prisonCode}`,
-      },
-      { username: user?.username },
-    )) as Promise<TimeServedCaseload>
   }
 
   async getProbationOmuCaseload(caCaseloadSearch: CaCaseloadSearch, user?: User): Promise<CaCase[]> {

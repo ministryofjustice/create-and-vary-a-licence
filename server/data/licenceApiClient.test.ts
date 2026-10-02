@@ -439,17 +439,6 @@ describe('Licence API client tests', () => {
     )
   })
 
-  it('Update sentence dates', async () => {
-    await licenceApiClient.updateSentenceDates('1', { username: 'joebloggs' } as User)
-
-    expect(put).toHaveBeenCalledWith(
-      {
-        path: '/licence/id/1/sentence-dates',
-      },
-      { username: 'joebloggs' },
-    )
-  })
-
   it('Approve a licence variation', async () => {
     await licenceApiClient.approveVariation('1', { username: 'joebloggs' } as User)
     expect(put).toHaveBeenCalledWith({ path: '/licence/id/1/approve-variation' }, { username: 'joebloggs' })

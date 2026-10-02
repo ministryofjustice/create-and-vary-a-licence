@@ -3,17 +3,11 @@ import fs from 'fs'
 import _ from 'lodash'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
-import {
-  PrisonApiPrisoner,
-  PrisonInformation,
-  PrisonDetail,
-  OffenderSentenceAndOffences,
-} from '../@types/prisonApiClientTypes'
+import { PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
 import HdcStatus from '../@types/HdcStatus'
 import { User } from '../@types/CvlUserDetails'
-import { parseIsoDate } from '../utils/utils'
 import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 
 export default class PrisonerService {
@@ -41,23 +35,6 @@ export default class PrisonerService {
     return base64String
   }
 
-  async getPrisonerDetail(nomsId: string, user?: User): Promise<PrisonApiPrisoner> {
-    return this.prisonApiClient.getPrisonerDetail(nomsId, user)
-  }
-
-  async getPrisonerSentenceAndOffenceDetails(bookingId: number, user?: User): Promise<OffenderSentenceAndOffences[]> {
-    return this.prisonApiClient.getPrisonerSentenceAndOffences(bookingId, user)
-  }
-
-  async getPrisonerLatestSentenceStartDate(bookingId: number, user?: User): Promise<Date> {
-    const sentenceAndOffenceDetails: OffenderSentenceAndOffences[] = await this.getPrisonerSentenceAndOffenceDetails(
-      bookingId,
-      user,
-    )
-    const sentenceStartDates: Date[] = sentenceAndOffenceDetails.map(details => parseIsoDate(details.sentenceDate))
-    return new Date(Math.max(...sentenceStartDates.map(date => date.getTime())))
-  }
-
   async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {
     return this.prisonApiClient.getPrisonInformation(prisonId, user)
   }
@@ -68,14 +45,6 @@ export default class PrisonerService {
 
   async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria, user?: User): Promise<Prisoner[]> {
     return this.prisonerSearchApiClient.searchPrisoners(prisonerSearchCriteria, user)
-  }
-
-  async searchPrisonersByBookingIds(bookingIds: number[], user?: User): Promise<Prisoner[]> {
-    if (bookingIds.length < 1) {
-      return []
-    }
-
-    return this.prisonerSearchApiClient.searchPrisonersByBookingIds({ bookingIds }, user)
   }
 
   async getActiveHdcStatus(bookingId: string): Promise<HdcStatus | null> {

@@ -4,12 +4,10 @@ import RestClient from './hmppsRestClient'
 import type { TokenStore } from './tokenStore'
 import type {
   PrisonApiCaseload,
-  PrisonApiPrisoner,
   PrisonApiUserDetail,
   PrisonInformation,
   HomeDetentionCurfew,
   PrisonDetail,
-  OffenderSentenceAndOffences,
 } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
 
@@ -37,20 +35,6 @@ export default class PrisonApiClient extends RestClient {
       },
       { username: user.username },
     )) as Promise<Buffer>
-  }
-
-  async getPrisonerDetail(nomsId: string, user?: User): Promise<PrisonApiPrisoner> {
-    return (await this.get(
-      { path: `/api/offenders/${nomsId}` },
-      { username: user?.username },
-    )) as Promise<PrisonApiPrisoner>
-  }
-
-  async getPrisonerSentenceAndOffences(bookingId: number, user?: User): Promise<OffenderSentenceAndOffences[]> {
-    return (await this.get(
-      { path: `/api/offender-sentences/booking/${bookingId}/sentences-and-offences` },
-      { username: user?.username },
-    )) as Promise<OffenderSentenceAndOffences[]>
   }
 
   async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {

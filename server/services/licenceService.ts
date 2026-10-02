@@ -383,10 +383,6 @@ export default class LicenceService {
     return this.licenceApiClient.updatePrisonInformation(licenceId, prisonInformation, user)
   }
 
-  async updateSentenceDates(licenceId: string, user?: User): Promise<void> {
-    return this.licenceApiClient.updateSentenceDates(licenceId, user)
-  }
-
   async approveVariation(licenceId: string, user: User): Promise<void> {
     return this.licenceApiClient.approveVariation(licenceId, user)
   }
@@ -483,10 +479,6 @@ export default class LicenceService {
 
   async getProbationCase(nomsId: string, user: User): Promise<ProbationCase> {
     return this.licenceApiClient.getProbationCase(nomsId, user)
-  }
-
-  async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
-    return this.licenceApiClient.deactivateActiveAndVariationLicences(licenceId, reason)
   }
 
   async getIneligibilityReasons(nomsId: string): Promise<EligibilityAssessment> {

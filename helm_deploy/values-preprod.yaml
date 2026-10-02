@@ -31,8 +31,6 @@ generic-service:
     MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"
 
   namespace_secrets:
-    create-and-vary-a-licence-prison-events-sqs-instance-output:
-      SQS_PRISON_EVENTS_QUEUE_URL: 'sqs_id'
     create-and-vary-a-licence-domain-events-sqs-instance-output:
       SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
 
