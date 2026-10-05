@@ -197,44 +197,45 @@
     <div class="govuk-grid-column-three-quarters">
       <input type="hidden" id="searchTerm" value="{{ queryTerm }}">
         <h1 class="govuk-heading-xl" id="vary-approval-search-heading">Search results for {{ queryTerm }}</h1>
-      </div>
     </div>
-    <div class="govuk-grid-row">
-      <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
-        <form method="GET">
-          <div class="govuk-form-group">
-            <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-              Find a case
-            </label>
-            <div id="search-hint" class="govuk-hint moj-search__hint approver-caseload-search">
-              Search by name, CRN or probation practitioner
-            </div>
-            <input class="govuk-input moj-search__input" id="search" name="queryTerm" value="{{ queryTerm }}" aria-describedby="search-hint"></div>
-            <button class="govuk-button moj-search__button " data-module="govuk-button">
-              Search
-            </button>
-          </form>
+  </div>
+  <div class="govuk-grid-row">
+    <search class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
+      <form method="GET">
+        <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+          Find a case
+        </label>
+        <div id="search-hint" class="govuk-hint moj-search__hint approver-caseload-search">
+          Search by name, CRN or probation practitioner
         </div>
-      </div>
-      {{ govukTabs({
-        items: [
-            {
-                label: pduCasesCountText,
-                id: "pdu-cases",
-                panel: {
-                    html: pduCases
-                }
-            },
-            {
-                label: regionCasesCountText,
-                id: "region-cases",
-                panel: {
-                    html: regionCases
-                }
+        <div class="govuk-input__wrapper moj-search__input-wrapper">
+          <input class="govuk-input moj-search__input" id="search" name="queryTerm" value="{{ queryTerm }}" aria-describedby="search-hint">
+          <button class="govuk-button moj-search__button " data-module="govuk-button">
+            Search
+          </button>
+        </div>
+      </form>
+    </search>
+  </div>
+  {{ govukTabs({
+    items: [
+        {
+            label: pduCasesCountText,
+            id: "pdu-cases",
+            panel: {
+                html: pduCases
             }
-        ]
-    }) }}
-    {% endblock %}
-    {% block pageScripts %}
-      <script src="/assets/js/search/highlightSearchTerm.js"></script>
-    {% endblock %}
+        },
+        {
+            label: regionCasesCountText,
+            id: "region-cases",
+            panel: {
+                html: regionCases
+            }
+        }
+    ]
+  }) }}
+{% endblock %}
+{% block pageScripts %}
+  <script src="/assets/js/search/highlightSearchTerm.js"></script>
+{% endblock %}
