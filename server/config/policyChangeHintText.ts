@@ -81,10 +81,13 @@ const policyChangeHints: HintText[] = [
   {
     code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
     fromVersions: ['1.0', '2.0'],
-    description: [
-      'The wording of this licence condition will stay the same.',
-      'If you need to, you can now add more precise reporting times on the next page.',
-    ],
+    description: ['If you need to, you can now add more precise reporting times on the next page.'],
+    bulletpoints: [],
+  },
+  {
+    code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
+    fromVersions: ['2.1', '3.0', '4.0'],
+    description: ['The option for other reporting frequencies has been added to the condition text.'],
     bulletpoints: [],
   },
   {
@@ -141,10 +144,16 @@ const policyChangeHints: HintText[] = [
   {
     code: '4a5fed48-0fb9-4711-8ddf-b46ddfd90246',
     fromVersions: ['1.0', '2.0', '2.1'],
-    description: [
-      'The wording of this licence condition will stay the same.',
+    description: [],
+    bulletpoints: [
+      'The option to add a social services department has been removed.',
       'If you need to, you can set a more precise age restriction on the next page.',
     ],
+  },
+  {
+    code: '4a5fed48-0fb9-4711-8ddf-b46ddfd90246',
+    fromVersions: ['3.0', '4.0'],
+    description: ['The option to add a social services department has been removed.'],
     bulletpoints: [],
   },
   {
@@ -214,6 +223,12 @@ const policyChangeHints: HintText[] = [
     bulletpoints: [],
   },
   {
+    code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
+    fromVersions: ['4.0'],
+    description: ['The final sentence has been updated.'],
+    bulletpoints: [],
+  },
+  {
     code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
     fromVersions: ['1.0', '2.0', '2.1', '3.0'],
     description: [
@@ -225,6 +240,12 @@ const policyChangeHints: HintText[] = [
     code: '1dc7ee29-df47-48a8-90b6-69e286692d8a',
     fromVersions: ['1.0', '2.0', '2.1', '3.0'],
     description: ['The condition has been simplified.'],
+    bulletpoints: [],
+  },
+  {
+    code: '1dc7ee29-df47-48a8-90b6-69e286692d8a',
+    fromVersions: ['4.0'],
+    description: ['The final sentence has been updated.'],
     bulletpoints: [],
   },
   {
@@ -245,6 +266,30 @@ const policyChangeHints: HintText[] = [
       '',
       'Get permission from your supervising officer if you want to apply for a new passport. If requested, tell your supervising officer about any passports you have already.',
     ],
+    bulletpoints: [],
+  },
+  {
+    code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0', '4.0'],
+    description: ['The option to add a social services department has been removed.'],
+    bulletpoints: [],
+  },
+  {
+    code: 'bfbc693c-ab65-4042-920e-ddb085bc7aba',
+    fromVersions: ['1.0', '2.0', '2.1', '3.0', '4.0'],
+    description: ['The phrase ‘only for the purpose’ has been changed to ‘only for a purpose’.'],
+    bulletpoints: [],
+  },
+  {
+    code: 'be16ee0b-a916-43ef-9319-b42a1dd418a3',
+    fromVersions: ['4.0'],
+    description: ['‘And also serve alcohol’ changed to ‘which also serve alcohol’.'],
+    bulletpoints: [],
+  },
+  {
+    code: '2F8A5418-C6E4-4F32-9E58-64B23550E504',
+    fromVersions: ['2.1', '3.0', '4.0'],
+    description: ['The mention of treatment programmes has been removed.'],
     bulletpoints: [],
   },
 ]
