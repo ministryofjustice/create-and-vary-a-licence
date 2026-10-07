@@ -36,26 +36,5 @@ services:
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
-  localstack:
-    image: localstack/localstack:community-archive
-    networks:
-      - hmpps_int
-    container_name: localstack
-    ports:
-      - "4566-4597:4566-4597"
-      - 8999:8080
-    environment:
-      - DEBUG=${DEBUG- }
-      - DOCKER_HOST=unix:///var/run/docker.sock
-    volumes:
-      - "${TMPDIR:-/tmp/localstack}:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "$PWD/localstack:/etc/localstack/init/ready.d/"
-    healthcheck:
-      test: awslocal sqs list-queues
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
 networks:
   hmpps_int:

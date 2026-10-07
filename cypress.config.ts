@@ -8,7 +8,6 @@ import licence from './integration_tests/mockApis/licence'
 import delius from './integration_tests/mockApis/delius'
 import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import prison from './integration_tests/mockApis/prison'
-import events from './integration_tests/support/events'
 import feComponent from './integration_tests/mockApis/feComponent'
 import manageUsersApi from './integration_tests/mockApis/manageUsers'
 import prisonRegister from './integration_tests/mockApis/prisonRegister'
@@ -174,9 +173,6 @@ export default defineConfig({
 
         stubGotenbergApiPing: gotenbergApi.stubPing,
 
-        sendDomainEvent: events.sendDomainEvent,
-        sendPrisonEvent: events.sendPrisonEvent,
-        purgeQueues: events.purgeQueues,
         getNextWorkingDay: (dates: string[]): Moment => {
           const appointmentDate = moment().add(1, 'year').add(1, 'week').day(7)
           while (

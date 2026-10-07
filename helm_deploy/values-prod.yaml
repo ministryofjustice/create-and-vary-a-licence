@@ -30,10 +30,6 @@ generic-service:
     COMPONENT_API_URL: "https://frontend-components.hmpps.service.justice.gov.uk"
     MANAGE_USERS_API_URL: "https://manage-users-api.hmpps.service.justice.gov.uk"
 
-  namespace_secrets:
-    create-and-vary-a-licence-domain-events-sqs-instance-output:
-      SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
-
 gotenberg:
   replicaCount: 2
   env:
@@ -43,6 +39,3 @@ gotenberg:
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts
-  sqsAlertsQueueNames:
-    - "Digital-Prison-Services-prod-cvl_domain_events_queue"
-    - "Digital-Prison-Services-prod-cvl_domain_events_dl"

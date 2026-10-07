@@ -278,10 +278,6 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/submit`, data: body }, { username: user.username })
   }
 
-  async triggerReleaseProcess(prisonNumber: string): Promise<void> {
-    await this.post({ path: `/licence/trigger-release-prisoner`, data: { prisonNumber } })
-  }
-
   /** @deprecated use a custom api endpoint instead */
   async matchLicences({
     statuses,

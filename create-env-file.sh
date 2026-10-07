@@ -46,8 +46,6 @@ export HDC_ENABLED=true
 export FINAL_THIRD_ENABLED=true
 
 export REDIS_HOST=localhost
-export AWS_ACCESS_KEY_ID=foo
-export AWS_SECRET_ACCESS_KEY=bar
 export SERVICE_NAME=create-and-vary-a-licence
 
 # Write to .env grouped by value type
@@ -83,8 +81,6 @@ cat <<EOF > $fileToAddVars
 
 # === Static strings and misc ===
   REDIS_HOST=$REDIS_HOST
-  AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-  AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   SERVICE_NAME=$SERVICE_NAME
   POLICY_V4_CREATION_DATE=$POLICY_V4_CREATION_DATE
 EOF
