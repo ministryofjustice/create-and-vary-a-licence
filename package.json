@@ -105,7 +105,6 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1114.0",
     "@ministryofjustice/frontend": "11.1.0",
     "@ministryofjustice/hmpps-azure-telemetry": "^1.1.0",
     "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "9.5.0",
@@ -142,7 +141,6 @@
     "qrcode": "^1.5.4",
     "redis": "^5.12.1",
     "reflect-metadata": "^0.2.2",
-    "sqs-consumer": "15.0.4",
     "superagent": "10.4.1",
     "uuid": "^14.0.2"
   },

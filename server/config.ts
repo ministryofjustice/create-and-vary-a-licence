@@ -53,17 +53,6 @@ export default {
     secret: get('SESSION_SECRET', 'app-insecure-default-session', requiredInProduction),
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
   },
-  sqs: {
-    domainEvents: {
-      queueUrl: get(
-        'SQS_DOMAIN_EVENTS_QUEUE_URL',
-        'http://sqs.eu-west-2.localhost.localstack.cloud:4566/000000000000/create_and_vary_a_licence_domain_events_queue',
-        requiredInProduction,
-      ),
-    },
-    pollingWaitTimeMs: Number(get('SQS_POLLING_WAIT_TIME_MS', 10000)),
-    endpoint: production ? null : 'http://127.0.0.1:4566',
-  },
   apis: {
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
