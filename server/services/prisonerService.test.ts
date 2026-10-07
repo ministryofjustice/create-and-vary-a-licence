@@ -4,7 +4,7 @@ import { User } from '../@types/CvlUserDetails'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import PrisonerService from './prisonerService'
-import { HomeDetentionCurfew, PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
+import { HomeDetentionCurfew, PrisonDetail } from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 
@@ -47,17 +47,6 @@ describe('Prisoner Service', () => {
       expect(actualResult).toEqual(Buffer.from('placeholder image').toString('base64'))
       expect(prisonApiClient.getPrisonerImageData).toHaveBeenCalledWith('ABC1234', user)
     })
-  })
-
-  it('Get Prison Information', async () => {
-    const expectedResult = { agencyId: 'MDI', description: 'Moorland (HMP)' } as PrisonInformation
-
-    prisonApiClient.getPrisonInformation.mockResolvedValue(expectedResult)
-
-    const actualResult = await prisonerService.getPrisonInformation('MDI', user)
-
-    expect(actualResult).toEqual(expectedResult)
-    expect(prisonApiClient.getPrisonInformation).toHaveBeenCalledWith('MDI', user)
   })
 
   it('Get Prisons', async () => {
