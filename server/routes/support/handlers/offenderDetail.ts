@@ -1,9 +1,10 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
 import moment from 'moment'
+import { format } from 'date-fns'
 import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
-import { convertToTitleCase, isHdcLicence } from '../../../utils/utils'
+import { convertToTitleCase, isHdcLicence, parseCvlDate } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import { nameToString } from '../../../data/deliusClient'
@@ -81,12 +82,16 @@ export default class OffenderDetailRoutes {
         paroleEligibilityDate,
         actualParoleDate,
         hardStop: {
-          cutoffDate: hardStopDetails.hardStopDate,
-          warningDate: hardStopDetails.hardStopWarningDate,
+          cutoffDate:
+            (hardStopDetails.hardStopDate && format(parseCvlDate(hardStopDetails.hardStopDate), 'd MMM yyyy')) || '',
+          warningDate:
+            (hardStopDetails.hardStopWarningDate &&
+              format(parseCvlDate(hardStopDetails.hardStopWarningDate), 'd MMM yyyy')) ||
+            '',
           isInHardStopPeriod: hardStopDetails.isInHardStopPeriod,
         },
         determinate: prisonerDetail.indeterminateSentence ? 'No' : 'Yes',
-        dob: (!!prisonerDetail && moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY')) || '',
+        dob: (!!prisonerDetail && moment(prisonerDetail.dateOfBirth).format('D MMM YYYY')) || '',
         hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',
         recall: prisonerDetail.recall ? 'Yes' : 'No',
         remand: remandSupportInfo.isRemand ? 'Yes' : 'No',
@@ -167,10 +172,10 @@ export default class OffenderDetailRoutes {
   }
 
   formatNomisDate = (dateToFormat: string): string => {
-    return dateToFormat ? moment(dateToFormat, 'YYYY-MM-DD').format('DD MMM YYYY') : 'Not found'
+    return dateToFormat ? moment(dateToFormat, 'YYYY-MM-DD').format('D MMM YYYY') : 'Not found'
   }
 
   formatLicenceDate = (dateToFormat: string): string => {
-    return dateToFormat ? moment(dateToFormat, 'DD/MM/YYYY').format('DD MMM YYYY') : 'Not found'
+    return dateToFormat ? moment(dateToFormat, 'DD/MM/YYYY').format('D MMM YYYY') : 'Not found'
   }
 }
