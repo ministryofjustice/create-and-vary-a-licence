@@ -21,8 +21,6 @@ This service requires instances of these dependent services:
 - `prison-register` - prison register and contant information
 - `gotenberg` - produce PDFs from HTML templated URLs
 
-It also requires a connection to 3 SQS queues to listen to prison events, probation events and HMPPS domain events.
-In local development this uses localstack to simulate aws.
 
 ## Building
 
@@ -90,7 +88,6 @@ You will need to be on VPN.
 These are:
 
 - redis
-- localstack
 - gotenberg
 
 2. Copy `.env.example` to `.env` or run `create-env-file.sh` in the root of the project and customise.

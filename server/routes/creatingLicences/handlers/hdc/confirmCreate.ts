@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import ProbationService from '../../../../services/probationService'
 import { convertToTitleCase } from '../../../../utils/utils'
 import LicenceService from '../../../../services/licenceService'
 import config from '../../../../config'
@@ -9,7 +8,6 @@ import PrisonerService from '../../../../services/prisonerService'
 
 export default class ConfirmCreateRoutes {
   constructor(
-    private readonly probationService: ProbationService,
     private readonly licenceService: LicenceService,
     private readonly prisonerService: PrisonerService,
   ) {}

@@ -18,14 +18,6 @@ on:
         required: false
         type: string
         default: ".nvmrc"
-      localstack_tag:
-        description: Optionally, start a localstack service with this tag
-        type: string
-        required: false
-      localstack_services:
-        type: string
-        default: 'sqs,sns'
-        required: false
       redis_tag:
         description: 'Optionally, start a redis service with this tag'
         required: false
@@ -44,23 +36,6 @@ jobs:
     name: ${{ inputs.npm_script == 'int-test' && 'Run the integration tests' || format('Run the integration tests – {0}', inputs.npm_script) }}
     runs-on: ubuntu-latest
     services:
-      localstack:
-        image: ${{ inputs.localstack_tag && format('localstack/localstack:{0}', inputs.localstack_tag) || '' }}
-        env:
-            ES_PORT_EXTERNAL: 4571
-            DOCKER_HOST: 'unix:///var/run/docker.sock'
-            AWS_EXECUTION_ENV: True
-            PERSISTENCE: 1
-            SERVICES: "${{ inputs.localstack-services }}"
-        options: >-
-            --name localstack
-            --health-cmd "curl -sS 127.0.0.1:4566 || exit 1"
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
-        ports:
-            - 4566:4566
-            - 4571:4571
       redis:
         image: ${{ inputs.redis_tag && format('redis:{0}', inputs.redis_tag) || '' }}
         ports:
@@ -95,23 +70,6 @@ jobs:
       - name: Init testing framework if necessary
         run: npm run int-test-init:ci --if-present
       - uses: ministryofjustice/hmpps-github-shared-actions/.github/actions/tool-installers/setup-wiremock@cd6fbead3223fc36e047987f45af2ffacfd41c70 # v1.1.6
-      - name: Initialize Localstack
-        run: |
-            export AWS_DEFAULT_REGION=eu-west-2
-            export AWS_ACCESS_KEY_ID=foo
-            export AWS_SECRET_ACCESS_KEY=bar
-
-            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue
-            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue_dl
-            aws --endpoint-url=http://localhost:4566 sqs set-queue-attributes --queue-url "http://localhost:4566/000000000000/create_and_vary_a_licence_prison_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_prison_events_queue_dl\"}"}'
-
-            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue
-            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue_dl
-            aws --endpoint-url=http://localhost:4566 sqs set-queue-attributes --queue-url "http://localhost:4566/000000000000/create_and_vary_a_licence_probation_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_probation_events_queue_dl\"}"}'
-
-            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue
-            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue_dl
-            aws --endpoint-url=http://localhost:4566 sqs set-queue-attributes --queue-url "http://localhost:4566/000000000000/create_and_vary_a_licence_domain_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_domain_events_queue_dl\"}"}'
       - name: Prepare and run integration tests
         id: integration-tests
         shell: bash

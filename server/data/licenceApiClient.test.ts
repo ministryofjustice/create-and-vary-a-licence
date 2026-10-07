@@ -1013,17 +1013,6 @@ describe('Licence API client tests', () => {
     })
   })
 
-  describe('trigger release process', () => {
-    it('should call to trigger the release process', async () => {
-      await licenceApiClient.triggerReleaseProcess('A1234AA')
-
-      expect(post).toHaveBeenCalledWith({
-        path: `/licence/trigger-release-prisoner`,
-        data: { prisonNumber: 'A1234AA' },
-      })
-    })
-  })
-
   describe('getActiveLicencePolicy', () => {
     it('should pass through the licence start date as an ISO string in a query param if it is defined', async () => {
       await licenceApiClient.getActiveLicencePolicy('01/01/2024')
