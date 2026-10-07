@@ -20,7 +20,6 @@ import {
   LicenceSummary,
   PrisonerWithCvlFields,
   UpdateElectronicMonitoringProgrammeRequest,
-  UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceEventType from '../enumeration/licenceEventType'
@@ -430,27 +429,6 @@ describe('Licence Service', () => {
   it('should discard licence', async () => {
     await licenceService.discard('1', user)
     expect(licenceApiClient.discard).toHaveBeenCalledWith('1', user)
-  })
-
-  it('should update prison information', async () => {
-    await licenceService.updatePrisonInformation(
-      '1',
-      {
-        prisonCode: 'PVI',
-        prisonDescription: 'Pentonville (HMP)',
-        prisonTelephone: '+44 276 54545',
-      },
-      user,
-    )
-    expect(licenceApiClient.updatePrisonInformation).toHaveBeenCalledWith(
-      '1',
-      {
-        prisonCode: 'PVI',
-        prisonDescription: 'Pentonville (HMP)',
-        prisonTelephone: '+44 276 54545',
-      } as UpdatePrisonInformationRequest,
-      user,
-    )
   })
 
   it('should approve a licence variation', async () => {
