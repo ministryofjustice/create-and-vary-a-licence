@@ -1,6 +1,5 @@
 import 'reflect-metadata'
 import express from 'express'
-import { telemetryMiddleware } from '@ministryofjustice/hmpps-azure-telemetry'
 
 import createError from 'http-errors'
 import setupRoutes from './routes'
@@ -31,18 +30,6 @@ export default function createApp(services: Services, applicationInfo: Applicati
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
-  app.use(
-    telemetryMiddleware.addUserMetadataToTelemetry({
-      getAttributes: (_req, res) => {
-        const { username } = res?.locals?.user || {}
-        const caseloadId = res?.locals?.prisoner?.prisonId || null
-        return {
-          ...(username && { username }),
-          ...(caseloadId && { caseloadId }),
-        }
-      },
-    }),
-  )
   app.use(setUpHealthChecks(applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())

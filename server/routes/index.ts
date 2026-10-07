@@ -30,6 +30,7 @@ import hardStopStaffRoutes from './initialAppointment/handlers/prisonCreated/har
 import createTimeServedLicenceRoutes from './creatingLicences/handlers/prisonCreated/timeServed'
 import hdcRoutes from './initialAppointment/hdc'
 import varyHdcLicenceRoutes from './varyingLicences/hdc'
+import addCvlUserDataToTelemetry from '../middleware/addCvlUserDataToTelemetry'
 
 export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
   const router = Router({ mergeParams: true })
@@ -37,6 +38,7 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
 
   router.use(auth.authenticationMiddleware(tokenVerifier))
   router.use(populateCurrentUser(services.userService, services.licenceService))
+  router.use(addCvlUserDataToTelemetry())
   router.use(flashMessages())
   router.use(fromReviewMiddleware())
 
