@@ -146,7 +146,7 @@
     "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/lodash": "^4.17.25",
-    "@types/multer": "^2.2.0",
+    "@types/multer": "2.3.0",
     "@types/node": "^24.10.9",
     "@types/number-to-words": "^1.2.3",
     "@types/nunjucks": "^3.2.6",
@@ -178,7 +178,7 @@
     "npm-check-updates": "23.1.0",
     "openapi-typescript": "^7.13.0",
     "redis-mock": "^0.56.3",
-    "sass": "^1.103.1",
+    "sass": "1.105.1",
     "supertest": "7.3.0",
     "ts-jest": "29.4.14",
     "typescript": "^5.9.3"
