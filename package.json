@@ -22,7 +22,7 @@
     "lint": "eslint . --cache --max-warnings 0",
     "typecheck": "tsc",
     "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --maxWorkers=2",
-    "test:ci": "jest --maxWorkers=2 --collectCoverage=true --testPathPatterns=/server/.*",
+    "test:ci": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --maxWorkers=2 --collectCoverage=true --testPathPatterns=/server/.*",
     "integrationTest": "jest --runInBand --testPathPatterns=/integration_tests/.*",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run --config video=false",
