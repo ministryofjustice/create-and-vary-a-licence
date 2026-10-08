@@ -66,9 +66,7 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   const cwd = process.cwd()
   const layoutPath = `${cwd}/dist/server/views/layout.njk`
 
-  const dprResourcesMiddleware = setUpDprResources(services.dprServices, layoutPath, nunjucksEnvironment, {
-    dataProductDefinitionsPath: 'definitions/',
-  })
+  const dprResourcesMiddleware = setUpDprResources(services.dprServices, layoutPath, nunjucksEnvironment, {})
 
   const reportHomeHandler = new ReportHomeRoutes()
   get('/', dprUserMiddleware, dprResourcesMiddleware, reportHomeHandler.GET)
