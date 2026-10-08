@@ -6,6 +6,7 @@ context('Create a Time Served licence', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
+    cy.task('stubManageUser')
     cy.task('stubGetPrisonUserDetails')
     cy.task('stubGetPrisonUserCaseloads', {
       details: [

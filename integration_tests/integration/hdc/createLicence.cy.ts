@@ -13,6 +13,7 @@ context('Create an HDC licence', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
+    cy.task('stubManageUser')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetHdcCaseloadItem')
     cy.task('stubGetOmuEmail')

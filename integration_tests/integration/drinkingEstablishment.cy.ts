@@ -10,6 +10,7 @@ context('Create a licence', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
+    cy.task('stubManageUser')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetEmptyLicence')
     cy.task('stubGetOmuEmail')

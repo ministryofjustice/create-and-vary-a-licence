@@ -7,6 +7,7 @@ context('View COM create caseload', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
+    cy.task('stubManageUser')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetLicence', {})
     cy.task('stubGetOmuEmail')

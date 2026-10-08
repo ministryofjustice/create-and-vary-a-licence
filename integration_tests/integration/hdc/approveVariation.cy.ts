@@ -17,6 +17,7 @@ context('ACO review a HDC licence variation', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationAcoSignIn')
+    cy.task('stubManageUser')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetVaryApproverCaseload')
     cy.task('stubGetHdcLicence', {

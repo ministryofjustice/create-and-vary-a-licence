@@ -9,6 +9,7 @@ context('Create a licence that needs pathfinder or programme question', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
+    cy.task('stubManageUser')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetLicence', {})
     cy.task('stubGetOmuEmail')
