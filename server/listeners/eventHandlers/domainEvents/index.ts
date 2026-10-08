@@ -3,11 +3,9 @@ import logger from '../../../../logger'
 import { Services } from '../../../services'
 import { DomainEventMessage } from '../../../@types/events'
 import ReleaseEventHandler from './releaseEventHandler'
-import TransferredEventHandler from './transferredEventHandler'
 
-export default function buildEventHandler({ licenceApiClient, licenceService, prisonerService }: Services) {
+export default function buildEventHandler({ licenceApiClient }: Services) {
   const releaseEventHandler = new ReleaseEventHandler(licenceApiClient)
-  const transferredEventHandler = new TransferredEventHandler(licenceService, prisonerService)
 
   return async (messages: Message[]): Promise<Message[] | undefined> => {
     messages.forEach(message => {
@@ -21,9 +19,6 @@ export default function buildEventHandler({ licenceApiClient, licenceService, pr
       switch (eventType) {
         case 'prisoner-offender-search.prisoner.released':
           releaseEventHandler.handle(eventMessage).catch(error => logger.error(error))
-          break
-        case 'prison-offender-events.prisoner.received':
-          transferredEventHandler.handle(eventMessage).catch(error => logger.error(error))
           break
         default: {
           // silently ignore
