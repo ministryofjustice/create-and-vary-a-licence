@@ -8,7 +8,6 @@ context('Approve a licence', () => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
     cy.task('stubManageUser')
-    cy.task('stubManageUser')
     cy.task('stubGetPrisonUserDetails')
     cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' })
     cy.task('stubGetApprovalCaseload')
