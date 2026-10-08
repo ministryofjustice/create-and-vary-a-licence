@@ -364,6 +364,17 @@ describe('Licence API client tests', () => {
     expect(result).toEqual({ licenceId: 1 })
   })
 
+  it('Edit variation', async () => {
+    await licenceApiClient.editVariation('1', { username: 'joebloggs' }, {
+      username: 'joebloggs',
+    } as User)
+
+    expect(post).toHaveBeenCalledWith(
+      { path: '/variations/id/1/edit', data: { username: 'joebloggs' } },
+      { username: 'joebloggs' },
+    )
+  })
+
   it('Activate variation', async () => {
     await licenceApiClient.activateVariation(1, { username: 'joebloggs' } as User)
 

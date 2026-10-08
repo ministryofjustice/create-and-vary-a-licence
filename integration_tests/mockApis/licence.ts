@@ -1413,23 +1413,6 @@ export default {
     })
   },
 
-  stubUpdatePolicy: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: `/licences-api/licence/id/(\\d*)/update-policy`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          policyUpdated: false,
-          policyVersion: '3.0',
-        },
-      },
-    })
-  },
-
   stubGetLicencePolicyConditions: (version = ACTIVE_POLICY_VERSION): SuperAgentRequest => {
     let policy: LicencePolicyResponse
     switch (version) {

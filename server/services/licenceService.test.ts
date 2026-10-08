@@ -412,6 +412,11 @@ describe('Licence Service', () => {
     expect(licenceApiClient.createVariation).toHaveBeenCalledWith('1', user)
   })
 
+  it('should edit a licence variation', async () => {
+    await licenceService.editVariation('1', user)
+    expect(licenceApiClient.editVariation).toHaveBeenCalledWith('1', { username: user.username }, user)
+  })
+
   it('should update spo discussion', async () => {
     await licenceService.updateSpoDiscussion('1', { spoDiscussion: 'Yes' }, user)
     expect(licenceApiClient.updateSpoDiscussion).toHaveBeenCalledWith('1', { spoDiscussion: 'Yes' }, user)

@@ -98,3 +98,7 @@ export type RemandSupportInfo = components['schemas']['RemandSupportInfo']
 export type SupportInfo = components['schemas']['SupportInfo']
 export type PolicyUpdateResponse = components['schemas']['PolicyUpdateResponse']
 export type HdcCurfewAddress = components['schemas']['HdcCurfewAddress']
+
+export type EditVariationRequest = {
+  username: string
+}
