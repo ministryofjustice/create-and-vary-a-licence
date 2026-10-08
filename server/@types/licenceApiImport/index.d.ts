@@ -294,6 +294,7 @@ export interface paths {
     get?: never
     /**
      * Updates the sentence dates.
+     * @deprecated
      * @description Updates the sentence dates. Requires ROLE_CVL_ADMIN.
      */
     put: operations['updateSentenceDates']
@@ -770,6 +771,27 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/licence/trigger-release-prisoner': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Triggers the release prisoner process.
+     * @deprecated
+     * @description Temp endpoint to trigger the prisoner release process from the frontend. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['processRelease']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/licence/probation/nomisid/{nomsId}': {
     parameters: {
       query?: never
@@ -1010,26 +1032,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/licence/id/{licenceId}/deactivate-licence-and-variations': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Deactivate an active licence and any associated variations
-     * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['deactivateLicenceAndVariations']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/licence/id/{licenceId}/create-variation': {
     parameters: {
       query?: never
@@ -1150,26 +1152,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/jobs/migrate-standard-conditions': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Migrates standard conditions on in flight licences the requested policy version.
-     * @description Updates the standard conditions for in flight licences to the requested policy version conditions
-     */
-    post: operations['migrateStandardConditions']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/jobs/expire-licences': {
     parameters: {
       query?: never
@@ -1250,6 +1232,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/jobs/active-licences/migrate-standard-conditions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Migrates standard conditions on active licences to the requested policy version.
+     * @description Updates the standard conditions for active licences to the requested policy version conditions
+     */
+    post: operations['migrateStandardConditions']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/jobs/activate-licences': {
     parameters: {
       query?: never
@@ -1314,23 +1316,6 @@ export interface paths {
      * @description Search for offenders on a given staff member's caseload. Requires ROLE_CVL_ADMIN.
      */
     post: operations['searchForOffenderOnStaffCaseload']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/cases/time-served/{prisonCode}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** Returns a list of time served cases for a prison */
-    post: operations['getTimeServedCases']
     delete?: never
     options?: never
     head?: never
@@ -1963,48 +1948,6 @@ export interface paths {
      * @description Returns IS91 status, recall and remand information for creating a licence for a specific prisoner. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getSupportInfo']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/offender/nomisid/{nomsId}/recall-info': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve the information about a recall for an offender
-     * @deprecated
-     * @description Returns the type of recall sentence(s) for an offender
-     */
-    get: operations['getRecallInfo']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/offender/nomisid/{nomsId}/is-91-status': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve IS-91 status for offender
-     * @deprecated
-     * @description Returns IS-91 status for creating a licence for a specific prisoner. Requires ROLE_CVL_ADMIN.
-     */
-    get: operations['getIS91Status']
     put?: never
     post?: never
     delete?: never
@@ -3537,6 +3480,11 @@ export interface components {
        */
       postRecallReleaseDate?: string | null
     }
+    /** @description Request for providing details about the prisoner being released */
+    PrisonerToReleaseRequest: {
+      /** @description The prisoner's prison number */
+      prisonNumber: string | null
+    }
     /** @description A reference to the created licence */
     CreateLicenceResponse: {
       /**
@@ -3935,15 +3883,6 @@ export interface components {
        */
       conditionCodes: string[]
     }
-    /** @description Request object for deactivating an active licence and its variations */
-    DeactivateLicenceAndVariationsRequest: {
-      /**
-       * @description A key representing the reason for the variation
-       * @example RESENTENCED
-       * @enum {string}
-       */
-      reason: 'RECALLED' | 'FIXED_TERM' | 'STANDARD_RECALL' | 'RESENTENCED'
-    }
     /** @description A reference to the created variation licence */
     CreateVariationResponse: {
       /**
@@ -4252,103 +4191,6 @@ export interface components {
       name: string | null
       /** @description Is a probation practitioner allocated? */
       allocated: boolean
-    }
-    /** @description Describes a Time Served case */
-    TimeServedCase: {
-      /**
-       * @description The full name of the person on licence
-       * @example John Doe
-       */
-      name: string
-      /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
-       */
-      prisonerNumber: string
-      /**
-       * Format: date
-       * @description The date on which the prisoner leaves custody
-       * @example 30/11/2022
-       */
-      releaseDate?: string | null
-      /**
-       * Format: date
-       * @description The sentence start date
-       * @example 30/11/2022
-       */
-      sentenceStartDate?: string | null
-      /**
-       * Format: date
-       * @description The conditional release date
-       * @example 30/11/2022
-       */
-      conditionalReleaseDate?: string | null
-      /**
-       * Format: date
-       * @description The conditional override release date
-       * @example 30/11/2022
-       */
-      conditionalReleaseDateOverride?: string | null
-      /**
-       * Format: date
-       * @description The confirmed release date
-       * @example 30/11/2022
-       */
-      confirmedReleaseDate?: string | null
-      /**
-       * @description Legal Status
-       * @example SENTENCED
-       * @enum {string|null}
-       */
-      nomisLegalStatus?:
-        | 'RECALL'
-        | 'DEAD'
-        | 'INDETERMINATE_SENTENCE'
-        | 'SENTENCED'
-        | 'CONVICTED_UNSENTENCED'
-        | 'CIVIL_PRISONER'
-        | 'IMMIGRATION_DETAINEE'
-        | 'REMAND'
-        | 'UNKNOWN'
-        | 'OTHER'
-        | null
-      /**
-       * @description The agency code where this offender resides or was released from
-       * @example MDI
-       */
-      prisonCode?: string | null
-      /**
-       * @description This case is a time served based on CRDS rule
-       * @example true
-       */
-      isTimeServedCaseByCrdsRule: boolean
-      /**
-       * @description This case is a time served based on CRDS rule
-       * @example true
-       */
-      isTimeServedCaseByNonCrdsRule: boolean
-      /**
-       * @description This case is a time served based on All prison rule
-       * @example true
-       */
-      isTimeServedCaseByAllPrisonRule: boolean
-      /**
-       * @description This case is a time served based on ignoring the confirmed release date
-       * @example true
-       */
-      isTimeServedCaseByIgnoreArdRule: boolean
-      /**
-       * @description This is a suspected time serve case
-       * @example true
-       */
-      isTimeServedCase: boolean
-    }
-    /** @description Describes a Time Served case */
-    TimeServedCaseload: {
-      /** @description List of the cases we have identified as being time served cases */
-      identifiedCases: components['schemas']['TimeServedCase'][]
-      /** @description Other cases coming up for release */
-      otherCases: components['schemas']['TimeServedCase'][]
     }
     /** @description Search criteria for vary approver caseload search */
     VaryApproverCaseloadSearchRequest: {
@@ -4946,11 +4788,6 @@ export interface components {
     /** @description Describes a condition that has changed when a licence was varied. */
     Condition: {
       /**
-       * @description The type of licence condition
-       * @example AP
-       */
-      type: string
-      /**
        * @description The condition text
        * @example Receive home visits from a Mental Health Worker.
        */
@@ -4960,6 +4797,11 @@ export interface components {
        * @example Making or maintaining contact with a person
        */
       category?: string | null
+      /**
+       * @description The type of licence condition
+       * @example AP
+       */
+      type: string
     }
     /** @description Describes a image uploaded linked to a condition. */
     ImageUploadSummary: {
@@ -5211,119 +5053,19 @@ export interface components {
     }
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
-      /**
-       * Format: int64
-       * @description Unique identifier for this licence within the service
-       * @example 99999
-       */
-      id: number
-      /**
-       * @description The licence type code
-       * @example AP
-       * @enum {string}
-       */
-      typeCode: 'AP' | 'AP_PSS' | 'PSS'
-      /**
-       * @description The version number used for standard and additional conditions
-       * @example 1.4
-       */
-      version?: string | null
-      /**
-       * @description The current status code for this licence
-       * @example IN_PROGRESS
-       * @enum {string|null}
-       */
-      statusCode?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'INACTIVE'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-        | 'REJECTED'
-        | null
-      /**
-       * @description The family name of the person on licence
-       * @example Smith
-       */
-      surname?: string | null
-      kind: string
-      /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number | null
-      /**
-       * @description The version number of this licence
-       * @example 1.3
-       */
-      licenceVersion?: string | null
       /** @description The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition'][]
-      /**
-       * @description The agency code of the detaining prison
-       * @example LEI
-       */
-      prisonCode?: string | null
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
        */
       approvedByUsername?: string | null
       /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
-       */
-      bookingNo?: string | null
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string | null
-      /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string | null
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string | null
-      /**
-       * @description The first name of the person on licence
-       * @example Michael
-       */
-      forename?: string | null
-      /**
-       * @description The middle names of the person on licence
-       * @example John Peter
-       */
-      middleNames?: string | null
-      /**
-       * Format: date
-       * @description The date of birth of the person on licence
-       * @example 12/05/1987
-       */
-      dateOfBirth?: string | null
-      /**
        * Format: date
        * @description The sentence start date
        * @example 13/09/2019
        */
       sentenceStartDate?: string | null
-      /**
-       * Format: date
-       * @description The sentence end date
-       * @example 13/09/2022
-       */
-      sentenceEndDate?: string | null
       /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
@@ -5361,34 +5103,6 @@ export interface components {
        */
       licenceExpiryDate?: string | null
       /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       * @example 24/08/2022 09:30:33
-       */
-      dateCreated?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was submitted for approval
-       * @example 24/08/2022 11:30:33
-       */
-      submittedDate?: string | null
-      /**
-       * @description The full name of the person who approved the licence on behalf of the prison governor
-       * @example John Smith
-       */
-      approvedByName?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time that this prison approved this licence
-       * @example 24/08/2022 11:30:33
-       */
-      approvedDate?: string | null
-      /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
-       */
-      nomsId?: string | null
-      /**
        * @description The type of appointment with for the initial appointment
        * @example SPECIFIC_PERSON
        * @enum {string|null}
@@ -5399,12 +5113,6 @@ export interface components {
        * @example Duty officer
        */
       appointmentPerson?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time of the initial appointment
-       * @example 23/08/2022 12:12
-       */
-      appointmentTime?: string | null
       /**
        * @description The type of appointment time of the initial appointment
        * @example SPECIFIC_DATE_TIME
@@ -5464,17 +5172,202 @@ export interface components {
        * @example 13/09/2022
        */
       licenceStartDate?: string | null
-      eligibleKind?: string | null
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
       earliestReleaseDate?: string | null
       /**
+       * @description The agency description of the detaining prison
+       * @example Leeds (HMP)
+       */
+      prisonDescription?: string | null
+      /**
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
        */
       submittedByFullName?: string | null
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The username of the person who last updated this licence
+       * @example X34433
+       */
+      updatedByUsername?: string | null
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean | null
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string | null
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string | null
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][] | null
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string | null
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentTelephoneNumber?: string | null
+      /** @description The address of initial appointment */
+      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string | null
+      kind: string
+      /**
+       * @description The current status code for this licence
+       * @example IN_PROGRESS
+       * @enum {string|null}
+       */
+      statusCode?:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'INACTIVE'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
+        | 'REJECTED'
+        | null
+      /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
+      bookingId?: number | null
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string | null
+      /**
+       * @description The agency code of the detaining prison
+       * @example LEI
+       */
+      prisonCode?: string | null
+      /**
+       * @description The prison booking number for the person on this licence
+       * @example F12333
+       */
+      bookingNo?: string | null
+      /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string | null
+      /**
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
+       */
+      cro?: string | null
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn?: string | null
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string | null
+      /**
+       * @description The middle names of the person on licence
+       * @example John Peter
+       */
+      middleNames?: string | null
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string | null
+      /**
+       * Format: date
+       * @description The date of birth of the person on licence
+       * @example 12/05/1987
+       */
+      dateOfBirth?: string | null
+      /**
+       * Format: date
+       * @description The sentence end date
+       * @example 13/09/2022
+       */
+      sentenceEndDate?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       * @example 24/08/2022 09:30:33
+       */
+      dateCreated?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was submitted for approval
+       * @example 24/08/2022 11:30:33
+       */
+      submittedDate?: string | null
+      /**
+       * @description The full name of the person who approved the licence on behalf of the prison governor
+       * @example John Smith
+       */
+      approvedByName?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this prison approved this licence
+       * @example 24/08/2022 11:30:33
+       */
+      approvedDate?: string | null
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       * @example 23/08/2022 12:12
+       */
+      appointmentTime?: string | null
+      eligibleKind?: string | null
+      /**
+       * @description The telephone number to contact the prison
+       * @example 0161 234 4747
+       */
+      prisonTelephone?: string | null
       /**
        * @description The email address for the supervising probation officer
        * @example jane.jones@nps.gov.uk
@@ -5483,32 +5376,15 @@ export interface components {
       /** @deprecated */
       isVariation: boolean
       /**
-       * @description The agency description of the detaining prison
-       * @example Leeds (HMP)
-       */
-      prisonDescription?: string | null
-      /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
-       */
-      prisonTelephone?: string | null
-      /**
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
        */
       comUsername?: string | null
       /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string | null
-      /**
        * @description Is a review of this licence is required
        * @example true
        */
       isReviewNeeded: boolean
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /**
        * Format: date-time
        * @description The date and time that this licence was last updated
@@ -5521,15 +5397,8 @@ export interface components {
        * @example 24/08/2022 11:30:33
        */
       supersededDate?: string | null
-      /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
-       */
-      updatedByUsername?: string | null
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean | null
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean | null
       /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
@@ -5537,49 +5406,22 @@ export interface components {
        */
       comStaffId?: number | null
       /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
        */
-      responsibleComFullName?: string | null
+      id: number
       /**
-       * @description Whether a licence is missing appointment time
-       * @example false
-       */
-      missingAppointmentTime?: boolean | null
-      /** @description The address of initial appointment */
-      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
-      /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentTelephoneNumber?: string | null
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string | null
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string | null
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string | null
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
+       * @description The licence type code
+       * @example AP
        * @enum {string}
        */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * @description The version number used for standard and additional conditions
+       * @example 1.4
+       */
+      version?: string | null
     }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
@@ -5606,7 +5448,7 @@ export interface components {
        * @example V2_1
        * @enum {string}
        */
-      policyVersion: 'V1_0' | 'V2_0' | 'V2_1' | 'V3_0' | 'V4_0'
+      policyVersion: 'V1_0' | 'V2_0' | 'V2_1' | 'V3_0' | 'V4_0' | 'V4_1'
       /**
        * @description The version of this specific licence, this is unique within the context of a booking
        * @example 1.4
@@ -5966,6 +5808,28 @@ export interface components {
       /** @description Additional CVL specific information including derived fields */
       cvl: components['schemas']['CvlFields']
     }
+    /** @description Information about Is91 cases to inform support for a prisoner */
+    Is91CourtEventOutcome: {
+      /**
+       * @description The court event outcome code
+       * @example 3006
+       */
+      courtEventOutcomeCode?: string | null
+      /**
+       * @description The court event outcome description
+       * @example Deportation recommended
+       */
+      courtEventOutcomeDescription?: string | null
+    }
+    /** @description Information about IS91 cases to inform support for a prisoner */
+    Is91SupportInfo: {
+      /**
+       * @description Indicates if the case is an IS91 case
+       * @example false
+       */
+      isIs91Case: boolean
+      is91CourtEventOutcomes: components['schemas']['Is91CourtEventOutcome'][]
+    }
     /** @description Information about recall sentences to inform support for a prisoner */
     RecallSupportInfo: {
       /**
@@ -5996,12 +5860,7 @@ export interface components {
       otherSentenceTypes: string[]
     }
     /** @description Information about remand cases to inform support for a prisoner */
-    RemandSupportInfo: {
-      /**
-       * @description Indicates if the case is a remand case
-       * @example false
-       */
-      isRemand: boolean
+    RemandCourtEventOutcome: {
       /**
        * @description The court event outcome code
        * @example 4531
@@ -6012,6 +5871,28 @@ export interface components {
        * @example Remand in Custody (Bail Refused)
        */
       courtEventOutcomeDescription?: string | null
+    }
+    /** @description Information about remand cases to inform support for a prisoner */
+    RemandSupportInfo: {
+      /**
+       * @description Indicates if the case is a remand case
+       * @example false
+       */
+      isRemand: boolean
+      /**
+       * @deprecated
+       * @description The court event outcome code
+       * @example 4531
+       */
+      courtEventOutcomeCode?: string | null
+      /**
+       * @deprecated
+       * @description The court event outcome description
+       * @example Remand in Custody (Bail Refused)
+       */
+      courtEventOutcomeDescription?: string | null
+      /** @description All court event outcomes related to remand case */
+      remandCourtEventOutcomes?: components['schemas']['RemandCourtEventOutcome'][] | null
     }
     /** @description Information to populate the support page for a prisoner */
     SupportInfo: {
@@ -6024,6 +5905,8 @@ export interface components {
       recallSupportInfo?: components['schemas']['RecallSupportInfo'] | null
       /** @description Information about remand cases to inform support for a prisoner */
       remandSupportInfo?: components['schemas']['RemandSupportInfo'] | null
+      /** @description Information about IS91 cases to inform support for a prisoner */
+      is91SupportInfo?: components['schemas']['Is91SupportInfo'] | null
     }
     EligibilityAssessment: {
       /**
@@ -12753,6 +12636,73 @@ export interface operations {
       }
     }
   }
+  processRelease: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PrisonerToReleaseRequest']
+      }
+    }
+    responses: {
+      /** @description The release processed successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   createProbationLicence: {
     parameters: {
       query?: never
@@ -13662,86 +13612,6 @@ export interface operations {
       }
     }
   }
-  deactivateLicenceAndVariations: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        licenceId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DeactivateLicenceAndVariationsRequest']
-      }
-    }
-    responses: {
-      /** @description Licence(s) deactivated */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LicenceSummary']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The licence for this ID was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Gone */
-      410: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   createVariation: {
     parameters: {
       query?: never
@@ -14151,71 +14021,6 @@ export interface operations {
       }
     }
   }
-  migrateStandardConditions: {
-    parameters: {
-      query: {
-        policyVersion: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description The job ran successfully */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'text/html': unknown
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Gone */
-      410: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   runLicenceExpiryJob: {
     parameters: {
       query?: never
@@ -14468,6 +14273,71 @@ export interface operations {
       }
     }
   }
+  migrateStandardConditions: {
+    parameters: {
+      query: {
+        policyVersion: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The job ran successfully */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/html': unknown
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   runLicenceActivationJob: {
     parameters: {
       query?: never
@@ -14633,73 +14503,6 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Gone */
-      410: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getTimeServedCases: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonCode: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns a list of time served cases */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['TimeServedCaseload'][]
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -17087,158 +16890,6 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['SupportInfo']
-        }
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Could not find prisoner */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Gone */
-      410: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getRecallInfo: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        nomsId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Lists of recall sentence types for the offender */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['RecallSupportInfo']
-        }
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Could not find prisoner */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Gone */
-      410: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getIS91Status: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        nomsId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description a boolean for IS-91 status */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': boolean
         }
       }
       /** @description Bad request, request body must be valid */
