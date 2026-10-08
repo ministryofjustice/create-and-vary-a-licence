@@ -10,36 +10,41 @@
 
 
 {% block content %}
-    <form action="{{ "/licence/vary/id/" + licence.id + "/policy-changes/condition/" + changeCounter + "/delete"}}" method="POST">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        {{ govukRadios({
-            classes: "govuk-radios--inline",
-            name: "confirm-delete",
-            fieldset: {
-                legend: {
-                    text: "Are you sure you want to delete this condition?",
-                    isPageHeading: true,
-                    classes: "govuk-fieldset__legend--l"
-                }
-            },
-            hint: {
-                text: conditionText
-            },
-            items: [
-                {
-                    value: "yes",
-                    text: "Yes"
-                },
-                {
-                    value: "no",
-                    text: "No"
-                }
-            ]
-        }) }}
-        {{ govukButton({
-            text: "Continue",
-            type: "submit",
-            attributes: { 'data-qa': 'continue' }
-        }) }}
-    </form>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="{{ "/licence/vary/id/" + licence.id + "/policy-changes/condition/" + changeCounter + "/delete"}}" method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    name: "confirm-delete",
+                    fieldset: {
+                        legend: {
+                            text: "Are you sure you want to delete this condition?",
+                            isPageHeading: true,
+                            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
+                        }
+                    },
+                    hint: {
+                        text: conditionText,
+                        classes: "govuk-!-margin-bottom-6"
+                    },
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "no",
+                            text: "No"
+                        }
+                    ]
+                }) }}
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+            </form>
+        </div>
+    </div>
 {% endblock %}
