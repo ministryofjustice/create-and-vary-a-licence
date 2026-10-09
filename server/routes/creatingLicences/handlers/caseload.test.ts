@@ -464,6 +464,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     it('should link to the HDC opt-out interrupt when the toggle is enabled for an in-progress licence', () => {
       // Given
       config.hdc.hdcOptOutToggle = true
+      comCase.isReplacementForOptedOutLicence = true
 
       // When
       const createLink = handler.findCreateLinkToDisplay(comCase)
