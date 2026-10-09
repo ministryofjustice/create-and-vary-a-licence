@@ -473,6 +473,17 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(createLink).toBe('/licence/create/id/123/opt-out-interrupt')
     })
 
+    it('should link to check your answers when the toggle is enabled for an in-progress licence that is not a replacement for an opted-out licence', () => {
+      config.hdc.hdcOptOutToggle = true
+
+      const createLink = handler.findCreateLinkToDisplay({
+        ...comCase,
+        isReplacementForOptedOutLicence: false,
+      })
+
+      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
+    })
+
     it('should link to check your answers when the HDC opt-out toggle is disabled', () => {
       // Given
       config.hdc.hdcOptOutToggle = false
