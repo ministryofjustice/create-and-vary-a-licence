@@ -15,6 +15,9 @@ const stubUser = (name: string = 'john smith') =>
         username: 'USER1',
         active: true,
         name,
+        authSource: 'authSource',
+        userId: 'userId',
+        uuid: 'uuid',
       },
     },
   })

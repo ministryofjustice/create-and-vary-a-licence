@@ -37,6 +37,7 @@ describe('addCvlUserDataToTelemetry', () => {
       uuid: null,
       userRoles: null,
       token: null,
+      userUuid: 'de263104-4907-4ade-9d21-1b576a320357',
     }
 
     addCvlUserDataToTelemetry()(req, res, next)
@@ -46,6 +47,7 @@ describe('addCvlUserDataToTelemetry', () => {
       authSource: 'nomis',
       displayName: 'Joe Bloggs',
       userId: '12345',
+      userUuid: 'de263104-4907-4ade-9d21-1b576a320357',
       nomisStaffId: 12345,
       activeCaseLoadId: 'MDI',
       prisonCaseload: 'MDI,LEI',
@@ -70,6 +72,7 @@ describe('addCvlUserDataToTelemetry', () => {
       uuid: null,
       userRoles: null,
       token: null,
+      userUuid: 'de263104-4907-4ade-9d21-1b576a320357',
     }
 
     addCvlUserDataToTelemetry()(req, res, next)
@@ -85,6 +88,7 @@ describe('addCvlUserDataToTelemetry', () => {
       probationPduCodes: 'PDU1,PDU2',
       probationLauCodes: 'LAU1',
       probationTeamCodes: 'TEAM1,TEAM2',
+      userUuid: 'de263104-4907-4ade-9d21-1b576a320357',
     })
     expect(next).toHaveBeenCalledTimes(1)
   })
