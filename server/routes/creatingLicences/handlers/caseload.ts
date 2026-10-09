@@ -99,6 +99,10 @@ export default class CaseloadRoutes {
 
   isHdcOptOut = (comCase: ComCreateCase): boolean => {
     logger.info(`Hdc optOut toggle: ${config.hdc.hdcOptOutToggle}, licence status: ${comCase.licenceStatus}`)
-    return config.hdc.hdcOptOutToggle && comCase.licenceStatus === 'IN_PROGRESS' // && comCase.isHdcOptOut == true*
+    return (
+      config.hdc.hdcOptOutToggle &&
+      comCase.licenceStatus === 'IN_PROGRESS' &&
+      comCase.isReplacementForOptedOutLicence === true
+    )
   }
 }
