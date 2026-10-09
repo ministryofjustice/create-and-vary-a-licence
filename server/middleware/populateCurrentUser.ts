@@ -33,6 +33,9 @@ export default function populateCurrentUser(userService: UserService, licenceSer
           const cvlUser = new CvlUserDetails()
           const { caseloadsSelected = [] } = req.session
 
+          const authUser = await userService.getUser(user)
+          cvlUser.userUuid = authUser.uuid
+
           if (user.authSource === 'nomis') {
             cvlUser.isProbationUser = false
             // Assemble user information from Nomis via prison API
@@ -98,10 +101,8 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             })
           } else {
             // Assemble basic user information from hmpps-auth
-            const authUser = await userService.getUser(user)
             if (authUser) {
               cvlUser.displayName = convertToTitleCase(authUser?.name)
-              cvlUser.reportUserId = authUser?.userId
             }
 
             logger.info(`Auth user session : username ${user?.username} name ${cvlUser?.displayName}`)

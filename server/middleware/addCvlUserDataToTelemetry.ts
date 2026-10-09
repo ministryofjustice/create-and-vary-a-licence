@@ -9,6 +9,7 @@ export default function addCvlUserDataToTelemetry(): RequestHandler {
       telemetry.setSpanAttributes({
         ...(user.username && { username: user.username }),
         ...(user.authSource && { authSource: user.authSource }),
+        ...(user.userUuid && { userUuid: user.userUuid }),
         ...(user.displayName && { displayName: user.displayName }),
         ...(user.reportUserId && { userId: user.reportUserId }),
         ...(typeof user.nomisStaffId === 'number' && { nomisStaffId: user.nomisStaffId }),

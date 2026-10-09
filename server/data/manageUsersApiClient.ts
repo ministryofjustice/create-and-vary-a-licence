@@ -4,8 +4,12 @@ import { User } from '../@types/CvlUserDetails'
 import { TokenStore } from './tokenStore'
 
 export type UserDetails = {
+  username: string
+  active: boolean
   name: string
+  authSource: string
   userId: string
+  uuid: string
 }
 
 export type UserEmail = {
