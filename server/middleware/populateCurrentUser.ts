@@ -103,7 +103,6 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             // Assemble basic user information from hmpps-auth
             if (authUser) {
               cvlUser.displayName = convertToTitleCase(authUser?.name)
-              cvlUser.reportUserId = authUser?.userId
             }
 
             logger.info(`Auth user session : username ${user?.username} name ${cvlUser?.displayName}`)
