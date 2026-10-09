@@ -58,6 +58,9 @@ export class CvlUserDetails {
 
   // User ID - staffId from Nomis, uuid from Auth, null for delius, depending on source
   reportUserId?: string
+
+  // Uuid from Auth
+  userUuid?: string
 }
 
 export type User = Express.LocalsUser
