@@ -90,7 +90,6 @@ export default defineConfig({
         stubMatchLicenceEvents: licence.stubMatchLicenceEvents,
         stubApproveVariation: licence.stubApproveVariation,
         stubReferVariation: licence.stubReferVariation,
-        stubUpdatePolicy: licence.stubUpdatePolicy,
         stubGetVaryApproverCaseload: licence.stubGetVaryApproverCaseload,
         stubGetLicencePolicyConditions: licence.stubGetLicencePolicyConditions,
         stubGetActivePolicyConditions: licence.stubGetActivePolicyConditions,

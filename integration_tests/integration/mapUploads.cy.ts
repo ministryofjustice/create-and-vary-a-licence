@@ -27,7 +27,6 @@ context('Create a licence', () => {
     cy.task('stubPostExclusionZone')
     cy.task('stubPostProbationLicence')
     cy.task('stubCheckComCaseAccess')
-    cy.task('stubUpdatePolicy')
     cy.signIn()
   })
 

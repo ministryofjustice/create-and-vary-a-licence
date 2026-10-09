@@ -29,6 +29,7 @@ import type {
   CreateLicenceResponse,
   CreateVariationResponse,
   EditLicenceResponse,
+  EditVariationRequest,
   EligibilityAssessment,
   ExternalTimeServedRecordRequest,
   ExternalTimeServedRecordResponse,
@@ -377,6 +378,13 @@ export default class LicenceApiClient extends RestClient {
       { path: `/licence/id/${licenceId}/create-variation` },
       { username: user?.username },
     )) as Promise<CreateVariationResponse>
+  }
+
+  async editVariation(variationId: string, request: EditVariationRequest, user: User): Promise<void> {
+    return (await this.post(
+      { path: `/variations/id/${variationId}/edit`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
   }
 
   async updateSpoDiscussion(licenceId: string, request: UpdateSpoDiscussionRequest, user: User): Promise<void> {

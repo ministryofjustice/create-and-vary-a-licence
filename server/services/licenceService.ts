@@ -317,6 +317,10 @@ export default class LicenceService {
     return this.licenceApiClient.createVariation(licenceId, user)
   }
 
+  async editVariation(variationId: string, user: User): Promise<void> {
+    return this.licenceApiClient.editVariation(variationId, { username: user.username }, user)
+  }
+
   async updateSpoDiscussion(licenceId: string, spoDiscussion: UpdateSpoDiscussionRequest, user: User): Promise<void> {
     return this.licenceApiClient.updateSpoDiscussion(licenceId, spoDiscussion, user)
   }
