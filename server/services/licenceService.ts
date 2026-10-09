@@ -460,11 +460,6 @@ export default class LicenceService {
     )
   }
 
-  async deactivateLicences(licences: LicenceSummary[]): Promise<void> {
-    const licenceIds = licences.map(l => l.licenceId)
-    return this.licenceApiClient.batchInActivateLicences(licenceIds)
-  }
-
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     return this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)
   }

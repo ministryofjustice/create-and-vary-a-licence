@@ -37,7 +37,7 @@ export default class ProbationStaffRoutes {
           })
     )
       .map(comCase => {
-        const releaseDate = comCase.releaseDate ? format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy') : 'not found'
+        const releaseDate = comCase.releaseDate ? format(parseCvlDate(comCase.releaseDate), 'd MMM yyyy') : 'not found'
         return {
           ...comCase,
           releaseDate,

@@ -153,7 +153,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
-            releaseDate: '02 May 2022',
+            releaseDate: '2 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -169,7 +169,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Bob Smith',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -203,7 +203,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
-            releaseDate: '02 May 2022',
+            releaseDate: '2 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -219,7 +219,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Bob Smith',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -235,7 +235,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Person Seven',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AB',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -328,7 +328,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Bob Smith',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -364,7 +364,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
-            releaseDate: '02 May 2022',
+            releaseDate: '2 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -380,7 +380,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Bob Smith',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -416,7 +416,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Bob Smith',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -720,7 +720,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
-            releaseDate: '02 May 2022',
+            releaseDate: '2 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -736,7 +736,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Bob Smith',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -782,7 +782,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Joe Bloggs',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AR',
-            releaseDate: '02 May 2022',
+            releaseDate: '2 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -798,7 +798,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Bob Smith',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -814,7 +814,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Person Seven',
             crnNumber: 'X12346',
             prisonerNumber: 'A1234AB',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -842,7 +842,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         {
           name: 'Access restricted on NDelius',
           crnNumber: 'Z999999',
-          releaseDate: '05/01/2025',
+          releaseDate: '5/01/2025',
           isReviewNeeded: true,
           isRestricted: true,
           licenceType: 'AP',
@@ -888,7 +888,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         {
           name: 'Access restricted on NDelius',
           crnNumber: 'Z999999',
-          releaseDate: '01/01/2025',
+          releaseDate: '1/01/2025',
           isReviewNeeded: false,
           isRestricted: true,
         },
@@ -930,7 +930,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
           kind: LicenceKind.CRD,
           prisonerNumber: 'A1234AA',
-          releaseDate: '01/05/2022',
+          releaseDate: '1/05/2022',
           crnNumber: 'X12345',
           name: 'Bob Smith',
           probationPractitioner: {
@@ -956,7 +956,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Bob Smith',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -987,7 +987,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           licenceStatus: LicenceStatus.ACTIVE,
           kind: LicenceKind.CRD,
           prisonerNumber: 'A1234AA',
-          releaseDate: '01/05/2022',
+          releaseDate: '1/05/2022',
           crnNumber: 'X12345',
           name: 'Access restricted on NDelius',
           probationPractitioner: {
@@ -1016,7 +1016,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Access restricted on NDelius',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '1 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {

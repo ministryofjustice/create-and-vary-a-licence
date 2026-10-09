@@ -27,7 +27,7 @@ describe('Caseload Service', () => {
     name: 'Another Person',
     prisonerNumber: 'AB1234E',
     probationPractitioner,
-    releaseDate: format(addDays(new Date(), 2), 'dd MMM yyy'),
+    releaseDate: format(addDays(new Date(), 2), 'd MMM yyy'),
     releaseDateLabel: 'Confirmed release date',
     licenceStatus: 'IN_PROGRESS',
     tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',

@@ -5,8 +5,8 @@ import { DomainEventMessage } from '../../../@types/events'
 import ReleaseEventHandler from './releaseEventHandler'
 import TransferredEventHandler from './transferredEventHandler'
 
-export default function buildEventHandler({ licenceService, prisonerService }: Services) {
-  const releaseEventHandler = new ReleaseEventHandler(licenceService, prisonerService)
+export default function buildEventHandler({ licenceApiClient, licenceService, prisonerService }: Services) {
+  const releaseEventHandler = new ReleaseEventHandler(licenceApiClient)
   const transferredEventHandler = new TransferredEventHandler(licenceService, prisonerService)
 
   return async (messages: Message[]): Promise<Message[] | undefined> => {
