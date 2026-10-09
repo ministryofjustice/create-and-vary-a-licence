@@ -5,7 +5,6 @@ context('Approve a licence - time served', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
-    cy.task('stubManageUser')
     cy.task('stubGetPrisonUserDetails')
     cy.task('stubGetPrisons')
     cy.task('stubGetPrisonerImage')

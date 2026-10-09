@@ -6,7 +6,6 @@ context('SignIn with common header', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
-    cy.task('stubManageUser')
     cy.task('stubGetStaffDetails')
   })
 

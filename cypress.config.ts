@@ -36,6 +36,7 @@ export default defineConfig({
           await feComponent.stubFeComponents()
           await feComponent.stubFeComponentsJs()
           await feComponent.stubFeComponentsCss()
+          await manageUsers.stubManageUser()
           return null
         },
         verifyEndpointCalled,

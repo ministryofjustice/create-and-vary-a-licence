@@ -6,7 +6,6 @@ context('ACO search a licence variation', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationAcoSignIn')
-    cy.task('stubManageUser')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetVaryApproverCaseload')
     cy.task('stubGetCompletedLicence', { statusCode: 'VARIATION_SUBMITTED', typeCode: 'AP' })

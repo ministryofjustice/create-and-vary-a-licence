@@ -8,7 +8,6 @@ context('Postcode lookup', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubProbationSignIn')
-      cy.task('stubManageUser')
       cy.task('stubGetStaffDetails')
       cy.task('stubGetLicence', {})
       cy.task('stubSearchForAddresses')
@@ -106,7 +105,6 @@ context('Postcode lookup', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubPrisonSignIn')
-      cy.task('stubManageUser')
       cy.task('stubGetPrisonUserDetails')
       cy.task('stubGetPrisonOmuCaseload')
       cy.task('stubGetProbationOmuCaseload')
@@ -253,7 +251,6 @@ context('Postcode lookup', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubPrisonSignIn')
-      cy.task('stubManageUser')
       cy.task('stubGetPrisonUserDetails')
       cy.task('stubGetPrisonOmuCaseload')
       cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
