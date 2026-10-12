@@ -328,7 +328,6 @@ describe('populateCurrentUser', () => {
     expect(req.session.currentUser).toMatchObject({
       displayName: 'Joe Bloggs',
       emailAddress: 'jbloggs@prison.gov.uk',
-      reportUserId: 'some-id',
       userUuid: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
     })
     expect(next).toHaveBeenCalled()

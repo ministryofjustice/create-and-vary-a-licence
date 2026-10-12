@@ -8,7 +8,7 @@ const isExcludedPath = (url: string) =>
   url.startsWith('/favicon.ico') ||
   url.startsWith('/assets')
 
-const filterExcludedPaths: SpanFilterFn = span => {
+const filterSuccessfulExcludedPaths: SpanFilterFn = span => {
   const url = (span.attributes['url.path'] || span.attributes['http.target'] || '') as string
 
   return !(isExcludedPath(url) && span.status?.code !== SpanStatusCode.ERROR)
@@ -20,7 +20,7 @@ initialiseTelemetry({
   connectionString: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
   debug: process.env.DEBUG_TELEMETRY === 'true',
 })
-  .addFilter(filterExcludedPaths)
+  .addFilter(filterSuccessfulExcludedPaths)
   .addModifier(telemetry.processors.enrichSpanNameWithHttpRoute())
   .startRecording()
 
