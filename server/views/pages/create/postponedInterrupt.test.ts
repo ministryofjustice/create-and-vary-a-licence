@@ -8,7 +8,7 @@ describe('View postponed interrupt page', () => {
   const model = {
     backLink: '/licence/create/caseload?search=Smith',
     toCheckYourAnswer: '/licence/create/id/123/check-your-answers',
-    omuEmail: 'omu.wandsworth@justice.gov.uk',
+    omuContact: 'omu.wandsworth@justice.gov.uk',
   }
 
   it('should display the interruption card heading and postponed message', () => {
@@ -21,7 +21,7 @@ describe('View postponed interrupt page', () => {
       'You can continue working on this licence but it can only be submitted if the application resumes.',
     )
     expect($('.moj-interruption-card__body').text()).toContain(
-      'Contact  to ask for the application to be refused if this person needs a licence for a standard release.',
+      'Contact omu.wandsworth@justice.gov.uk to ask for the application to be refused if this person needs a licence for a standard release.',
     )
   })
 
