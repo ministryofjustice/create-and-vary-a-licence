@@ -441,6 +441,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     const comCase = {
       licenceId: 123,
       licenceStatus: LicenceStatus.IN_PROGRESS,
+      isPostponed: false,
+      isReplacementForOptedOutLicence: false,
     } as ComCreateCase
 
     const nonInProgressStatuses: ComCreateCase['licenceStatus'][] = [
