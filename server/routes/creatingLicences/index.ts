@@ -23,6 +23,7 @@ import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import UserType from '../../enumeration/userType'
 import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMiddleware'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
+import OptOutInterruptHandler from './handlers/optOutInterruptHandler'
 
 export default function Index({
   licenceService,
@@ -129,6 +130,10 @@ export default function Index({
     const controller = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
     get('/id/:licenceId/check-your-answers', controller.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
+  }
+  {
+    const controller = new OptOutInterruptHandler()
+    get('/id/:licenceId/opt-out-interrupt', controller.GET)
   }
 
   {
