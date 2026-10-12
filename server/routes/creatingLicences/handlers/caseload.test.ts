@@ -455,15 +455,15 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       'VARIATION_APPROVED',
       'TIMED_OUT',
     ]
-    const existingHdcOptOutToggle = config.hdc.hdcOptOutToggle
+    const existingHdcCreationEnabled = config.hdc.hdcCreationEnabled
 
     afterEach(() => {
-      config.hdc.hdcOptOutToggle = existingHdcOptOutToggle
+      config.hdc.hdcCreationEnabled = existingHdcCreationEnabled
     })
 
     it('should link to the HDC opt-out interrupt when the toggle is enabled for an in-progress licence', () => {
       // Given
-      config.hdc.hdcOptOutToggle = true
+      config.hdc.hdcCreationEnabled = true
       comCase.isReplacementForOptedOutLicence = true
 
       // When
@@ -474,7 +474,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     })
 
     it('should link to check your answers when the toggle is enabled for an in-progress licence that is not a replacement for an opted-out licence', () => {
-      config.hdc.hdcOptOutToggle = true
+      config.hdc.hdcCreationEnabled = true
 
       const createLink = handler.findCreateLinkToDisplay({
         ...comCase,
@@ -486,7 +486,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
 
     it('should link to check your answers when the HDC opt-out toggle is disabled', () => {
       // Given
-      config.hdc.hdcOptOutToggle = false
+      config.hdc.hdcCreationEnabled = false
 
       // When
       const createLink = handler.findCreateLinkToDisplay(comCase)
@@ -495,18 +495,52 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(createLink).toBe('/licence/create/id/123/check-your-answers')
     })
 
-    it.each(nonInProgressStatuses)('should link to check your answers when the licence status is %s', licenceStatus => {
+    it('should link to the postponed interrupt when the HDC application is postponed', () => {
       // Given
-      config.hdc.hdcOptOutToggle = true
+      config.hdc.hdcCreationEnabled = true
+      comCase.isPostponed = true
 
       // When
-      const createLink = handler.findCreateLinkToDisplay({
-        ...comCase,
-        licenceStatus,
-      })
+      const createLink = handler.findCreateLinkToDisplay(comCase)
 
       // Then
-      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
+      expect(createLink).toBe('/licence/create/id/123/postponed-interrupt')
     })
+
+    it.each(nonInProgressStatuses)(
+      'should link to check your answers when the licence status is %s and licence is opt out',
+      licenceStatus => {
+        // Given
+        config.hdc.hdcCreationEnabled = true
+        comCase.isReplacementForOptedOutLicence = true
+
+        // When
+        const createLink = handler.findCreateLinkToDisplay({
+          ...comCase,
+          licenceStatus,
+        })
+
+        // Then
+        expect(createLink).toBe('/licence/create/id/123/check-your-answers')
+      },
+    )
+
+    it.each(nonInProgressStatuses)(
+      'should link to check your answers when the licence status is %s and licence is postponed',
+      licenceStatus => {
+        // Given
+        config.hdc.hdcCreationEnabled = false
+        comCase.isPostponed = true
+
+        // When
+        const createLink = handler.findCreateLinkToDisplay({
+          ...comCase,
+          licenceStatus,
+        })
+
+        // Then
+        expect(createLink).toBe('/licence/create/id/123/check-your-answers')
+      },
+    )
   })
 })
