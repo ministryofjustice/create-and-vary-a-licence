@@ -531,7 +531,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       'should link to check your answers when the licence status is %s and licence is postponed',
       licenceStatus => {
         // Given
-        config.hdc.hdcCreationEnabled = false
+        config.hdc.hdcCreationEnabled = true
         comCase.isPostponed = true
 
         // When
