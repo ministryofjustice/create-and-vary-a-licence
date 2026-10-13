@@ -51,37 +51,6 @@ function extractRoutes(layer: any, prefix = '', routes: RouteEntry[] = []): Rout
 }
 
 /**
- * Collect all middleware tags applied to routes.
- * Tags are stored as custom properties on middleware functions.
- */
-
-// function collectAuditTags(layer: any, tags: Map<string, AuditRouteKey> = new Map()): Map<string, AuditRouteKey> {
-//   // For route layers, inspect their middleware stack
-//   if (layer.route && layer.route.stack) {
-//     const routeKey = `${Object.keys(layer.route.methods)[0].toUpperCase()} ${layer.route.path}`
-//
-//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//     layer.route.stack.forEach((middleware: any) => {
-//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//       if (middleware.handle && (middleware.handle as any).__auditTag) {
-//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//         tags.set(routeKey, (middleware.handle as any).__auditTag)
-//       }
-//     })
-//   }
-//
-//   // Recurse into nested routers
-//   if (layer.name === 'router' && layer.handle.stack) {
-//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//     layer.handle.stack.forEach((sublayer: any) => {
-//       collectAuditTags(sublayer, tags)
-//     })
-//   }
-//
-//   return tags
-// }
-
-/**
  * Routes to exclude from audit policy checks.
  * These are framework/system routes not managed by the audit policy.
  */
