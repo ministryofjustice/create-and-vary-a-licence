@@ -16,6 +16,8 @@ const allowedPaths = [
       '/licence/time-served/id/(\\d)*/check-your-answers.*',
       '/licence/time-served/create/.*',
       '/licence/time-served/edit/.*',
+      '/licence/create/id/(\\d)*/opt-out-interrupt.*',
+      '/licence/create/id/(\\d)*/postponed-interrupt.*',
       '/licence/create/.*',
       '/licence/view/.*',
     ],

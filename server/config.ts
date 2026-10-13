@@ -198,5 +198,7 @@ export default {
   ),
   hdc: {
     surveyUrl: get('HDC_SURVEY_URL', 'https://www.smartsurvey.co.uk/s/HDC_in_CVL/'),
+    url: get('HDC_URL', 'https://licences-dev.prison.service.justice.gov.uk'),
+    hdcCreationEnabled: get('HDC_CREATION_ENABLED', 'false') === 'true',
   },
 }

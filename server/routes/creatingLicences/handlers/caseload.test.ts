@@ -7,6 +7,7 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { ComCreateCase } from '../../../@types/licenceApiClientTypes'
 import { parseIsoDate } from '../../../utils/utils'
+import config from '../../../config'
 
 const comCaseloadService = new ComCaseloadService(null, null) as jest.Mocked<ComCaseloadService>
 
@@ -434,5 +435,114 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       )
       expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
     })
+  })
+
+  describe('findCreateLinkToDisplay', () => {
+    const comCase = {
+      licenceId: 123,
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      isPostponed: false,
+      isReplacementForOptedOutLicence: false,
+    } as ComCreateCase
+
+    const nonInProgressStatuses: ComCreateCase['licenceStatus'][] = [
+      'SUBMITTED',
+      'ACTIVE',
+      'INACTIVE',
+      'APPROVED',
+      'NOT_STARTED',
+      'VARIATION_IN_PROGRESS',
+      'VARIATION_SUBMITTED',
+      'VARIATION_REJECTED',
+      'VARIATION_APPROVED',
+      'TIMED_OUT',
+    ]
+    const existingHdcCreationEnabled = config.hdc.hdcCreationEnabled
+
+    afterEach(() => {
+      config.hdc.hdcCreationEnabled = existingHdcCreationEnabled
+    })
+
+    it('should link to the HDC opt-out interrupt when the toggle is enabled for an in-progress licence', () => {
+      // Given
+      config.hdc.hdcCreationEnabled = true
+      comCase.isReplacementForOptedOutLicence = true
+
+      // When
+      const createLink = handler.findCreateLinkToDisplay(comCase)
+
+      // Then
+      expect(createLink).toBe('/licence/create/id/123/opt-out-interrupt')
+    })
+
+    it('should link to check your answers when the toggle is enabled for an in-progress licence that is not a replacement for an opted-out licence', () => {
+      config.hdc.hdcCreationEnabled = true
+
+      const createLink = handler.findCreateLinkToDisplay({
+        ...comCase,
+        isReplacementForOptedOutLicence: false,
+      })
+
+      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
+    })
+
+    it('should link to check your answers when the HDC opt-out toggle is disabled', () => {
+      // Given
+      config.hdc.hdcCreationEnabled = false
+
+      // When
+      const createLink = handler.findCreateLinkToDisplay(comCase)
+
+      // Then
+      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
+    })
+
+    it('should link to the postponed interrupt when the HDC application is postponed', () => {
+      // Given
+      config.hdc.hdcCreationEnabled = true
+      comCase.isPostponed = true
+
+      // When
+      const createLink = handler.findCreateLinkToDisplay(comCase)
+
+      // Then
+      expect(createLink).toBe('/licence/create/id/123/postponed-interrupt')
+    })
+
+    it.each(nonInProgressStatuses)(
+      'should link to check your answers when the licence status is %s and licence is opt out',
+      licenceStatus => {
+        // Given
+        config.hdc.hdcCreationEnabled = true
+        comCase.isReplacementForOptedOutLicence = true
+
+        // When
+        const createLink = handler.findCreateLinkToDisplay({
+          ...comCase,
+          licenceStatus,
+        })
+
+        // Then
+        expect(createLink).toBe('/licence/create/id/123/check-your-answers')
+      },
+    )
+
+    it.each(nonInProgressStatuses)(
+      'should link to check your answers when the licence status is %s and licence is postponed',
+      licenceStatus => {
+        // Given
+        config.hdc.hdcCreationEnabled = true
+        comCase.isPostponed = true
+
+        // When
+        const createLink = handler.findCreateLinkToDisplay({
+          ...comCase,
+          licenceStatus,
+        })
+
+        // Then
+        expect(createLink).toBe('/licence/create/id/123/check-your-answers')
+      },
+    )
   })
 })
