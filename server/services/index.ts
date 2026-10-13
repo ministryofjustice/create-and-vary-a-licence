@@ -21,6 +21,7 @@ import HdcService from './hdc/hdcService'
 import AddressService from './addressService'
 import TimeServedService from './timeServedService'
 import HdcCurfewAddressService from './hdc/hdcCurfewAddressService'
+import AuditService from '../audit/auditService'
 
 const {
   manageUsersApiClient,
@@ -41,6 +42,7 @@ const dprServices = createDprServices(reportingClients, {
   saveDefaults: true,
 })
 
+const auditService = new AuditService()
 const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
 const probationService = new ProbationService(deliusClient)
@@ -85,6 +87,7 @@ export const services = {
   timeServedService,
   dprServices,
   hdcCurfewAddressService,
+  auditService,
 }
 
 export type Services = typeof services
