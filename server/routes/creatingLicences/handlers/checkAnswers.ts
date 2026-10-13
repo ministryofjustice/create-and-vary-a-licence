@@ -76,7 +76,6 @@ export default class CheckAnswersRoutes {
       return res.redirect(referer)
     }
 
-    await this.licenceService.updatePolicy(licenceId)
     if (licence.kind === 'VARIATION' || licence.kind === 'HDC_VARIATION') {
       return res.redirect(`/licence/vary/id/${licence.id}/reason-for-variation`)
     }
