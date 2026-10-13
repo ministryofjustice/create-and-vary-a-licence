@@ -1,6 +1,6 @@
 import { User } from '../../@types/CvlUserDetails'
 import type { ApprovalCase } from '../../@types/licenceApiClientTypes'
-import { LicenceApiClient } from '../../data'
+import type LicenceApiClient from '../../data/licenceApiClient'
 
 export default class ApproverCaseloadService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}

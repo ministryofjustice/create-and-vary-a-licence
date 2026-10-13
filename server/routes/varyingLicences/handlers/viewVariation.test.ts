@@ -7,7 +7,7 @@ import LicenceService from '../../../services/licenceService'
 import { VariationChanges } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
 import ConditionService from '../../../services/conditionService'
-import { LicenceApiClient } from '../../../data'
+import LicenceApiClient from '../../../data/licenceApiClient'
 
 jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
