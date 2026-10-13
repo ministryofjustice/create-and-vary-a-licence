@@ -653,4 +653,33 @@ describe('Create a Licence Views - Check Answers', () => {
 
     expect($('[data-qa=curfew-address-change-link]').length).toBe(1)
   })
+
+  it('should show opted out replacement info text while the licence is in progress', () => {
+    const $ = render({
+      licence: { ...licence, isReplacementForOptedOutLicence: true },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=opted-out-replacement-info]').text()).toContain(
+      'Any additional or bespoke conditions you entered previously will be saved.',
+    )
+  })
+
+  it('should hide opted out replacement info text once the licence is submitted', () => {
+    const $ = render({
+      licence: { ...licence, isReplacementForOptedOutLicence: true },
+      statusCode: 'SUBMITTED',
+    })
+
+    expect($('[data-qa=opted-out-replacement-info]').length).toBe(0)
+  })
+
+  it('should hide opted out replacement info text for licences that are not replacements', () => {
+    const $ = render({
+      licence: { ...licence, isReplacementForOptedOutLicence: false },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=opted-out-replacement-info]').length).toBe(0)
+  })
 })

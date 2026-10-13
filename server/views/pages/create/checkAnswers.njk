@@ -66,6 +66,10 @@
             {% else %}
                 <h1 class="govuk-heading-l">Check licence details</h1>
 
+                {% if licence.isReplacementForOptedOutLicence and isInProgress %}
+                    <p class='govuk-body' data-qa="opted-out-replacement-info">Any additional or bespoke conditions you entered previously will be saved.<br>You must enter any initial appointment details again and then submit the licence.</p>
+                {% endif %}
+
                 {% if isInHardStopPeriod %}
                     <p class='govuk-body'>You cannot work on a licence from 2 days before someone's release date.<br>This is so the prison can complete their final release checks.</p>
                     <p class='govuk-body'>You can only ask the prison to change the initial appointment.<br>Any other changes must be made after release.</p>
