@@ -91,17 +91,26 @@ export default class CaseloadRoutes {
       return `/licence/create/nomisId/${comCase.prisonerNumber}/confirm`
     }
 
+    if (this.isPostponed(comCase)) {
+      return `/licence/create/id/${comCase.licenceId}/postponed-interrupt`
+    }
+
     if (this.isHdcOptOut(comCase)) {
       return `/licence/create/id/${comCase.licenceId}/opt-out-interrupt`
     }
+
     return `/licence/create/id/${comCase.licenceId}/check-your-answers`
   }
 
   isHdcOptOut = (comCase: ComCreateCase): boolean => {
     return (
-      config.hdc.hdcOptOutToggle &&
+      config.hdc.hdcCreationEnabled &&
       comCase.licenceStatus === 'IN_PROGRESS' &&
       comCase.isReplacementForOptedOutLicence === true
     )
+  }
+
+  isPostponed = (comCase: ComCreateCase): boolean => {
+    return config.hdc.hdcCreationEnabled && comCase.licenceStatus === 'IN_PROGRESS' && comCase.isPostponed === true
   }
 }

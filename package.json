@@ -21,7 +21,7 @@
     "record-build-info": "node ./bin/record-build-info",
     "lint": "eslint . --cache --max-warnings 0",
     "typecheck": "tsc",
-    "test": "jest --maxWorkers=2",
+    "test": "jest --maxWorkers=50%",
     "test:ci": "jest --maxWorkers=2 --collectCoverage=true --testPathPatterns=/server/.*",
     "integrationTest": "jest --runInBand --testPathPatterns=/integration_tests/.*",
     "security_audit": "npx audit-ci --config audit-ci.json",
@@ -39,8 +39,20 @@
     "transform": {
       "^.+\\.tsx?$": [
         "ts-jest"
+      ],
+      "^.+/node_modules/sanitize-html/.+\\.m?js$": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "allowJs": true
+          },
+          "diagnostics": false
+        }
       ]
     },
+    "transformIgnorePatterns": [
+      "^(?!.*/node_modules/sanitize-html/).*/node_modules/"
+    ],
     "collectCoverageFrom": [
       "server/**/*.{ts,js,jsx,mjs}"
     ],
@@ -96,7 +108,7 @@
     "@aws-sdk/client-sqs": "^3.1114.0",
     "@ministryofjustice/frontend": "11.1.0",
     "@ministryofjustice/hmpps-azure-telemetry": "^1.1.0",
-    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "8.4.0",
+    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "9.5.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@opentelemetry/api": "1.9.0",
     "agentkeepalive": "^4.6.0",
@@ -172,7 +184,7 @@
     "jest-junit": "^17.0.0",
     "jsonwebtoken": "^9.0.3",
     "lint-staged": "17.6.0",
-    "mocha": "^11.8.0",
+    "mocha": "^12.0.3",
     "mocha-junit-reporter": "^2.2.1",
     "nock": "^14.0.17",
     "nodemon": "^3.1.14",
@@ -192,9 +204,9 @@
     "proxy-addr": "2.0.8"
   },
   "allowScripts": {
-    "@parcel/watcher": true,
+    "@parcel/watcher@2.6.0": true,
     "dtrace-provider": true,
-    "unrs-resolver": true,
+    "unrs-resolver@1.12.2": true,
     "cypress": true
   }
 }

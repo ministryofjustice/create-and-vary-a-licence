@@ -1,5 +1,5 @@
 import moment, { type Moment } from 'moment'
-import { LicenceApiClient } from '../data'
+import LicenceApiClient from '../data/licenceApiClient'
 import { InMemoryTokenStore } from '../data/tokenStore'
 import { getSystemTokenWithRetries } from '../data/systemToken'
 

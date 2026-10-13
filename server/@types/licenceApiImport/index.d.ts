@@ -4582,6 +4582,11 @@ export interface components {
        * @example true
        */
       isReplacementForOptedOutLicence: boolean
+      /**
+       * @description Is this licence postponed?
+       * @example true
+       */
+      isPostponed: boolean
     }
     /** @description Search Criteria for CA Caseload Search */
     CaCaseloadSearch: {
