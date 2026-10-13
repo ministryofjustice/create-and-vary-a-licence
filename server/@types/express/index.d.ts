@@ -45,9 +45,6 @@ declare global {
     interface Request {
       verified?: boolean
       id: string
-
-      auditTag?: AuditRouteKey
-      auditEvent?: string
     }
 
     interface Response {

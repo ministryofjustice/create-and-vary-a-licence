@@ -9,11 +9,10 @@ export default function auditMiddleware(auditService: AuditService): RequestHand
   return async (req, res, next) => {
     const path = `${req.method} ${req.baseUrl}${req.path}`
     const policy = getAuditPolicy(path)
+
     if (policy && policy.audit && !policy.customHandler) {
       const { user } = res.locals
       const { licence } = res.locals
-      req.auditTag = path
-      req.auditEvent = policy.event
       await auditService.recordAuditEvent(req.id, policy.event, licence, user)
     }
     next()
