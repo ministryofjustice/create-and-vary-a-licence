@@ -1,6 +1,6 @@
 import { User } from '../../@types/CvlUserDetails'
 import { AddHdcCurfewAddressRequest, Licence } from '../../@types/licenceApiClientTypes'
-import { LicenceApiClient } from '../../data'
+import type LicenceApiClient from '../../data/licenceApiClient'
 import { assertIsHdcLicence } from '../../utils/utils'
 
 export default class HdcCurfewAddressService {
