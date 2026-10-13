@@ -3,7 +3,7 @@ import AddressService from '../../../services/addressService'
 import UserType from '../../../enumeration/userType'
 import SelectAddressRoutes from './selectAddress'
 import { AddressSearchResponse } from '../../../@types/licenceApiClientTypes'
-import { LicenceApiClient } from '../../../data'
+import LicenceApiClient from '../../../data/licenceApiClient'
 
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
 const addressService = new AddressService(licenceApiClient) as jest.Mocked<AddressService>
