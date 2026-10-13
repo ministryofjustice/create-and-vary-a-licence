@@ -63,7 +63,6 @@ import type {
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
-  UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
@@ -422,14 +421,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username },
     )) as Promise<AuditEvent[]>
-  }
-
-  async updatePrisonInformation(
-    licenceId: string,
-    request: UpdatePrisonInformationRequest,
-    user?: User,
-  ): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/prison-information`, data: request }, { username: user?.username })
   }
 
   async approveVariation(licenceId: string, user: User): Promise<void> {

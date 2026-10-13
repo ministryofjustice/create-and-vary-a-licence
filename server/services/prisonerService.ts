@@ -3,7 +3,7 @@ import fs from 'fs'
 import _ from 'lodash'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
-import { PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
+import { PrisonDetail } from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
 import HdcStatus from '../@types/HdcStatus'
@@ -33,10 +33,6 @@ export default class PrisonerService {
       base64String = content.toString('base64')
     }
     return base64String
-  }
-
-  async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {
-    return this.prisonApiClient.getPrisonInformation(prisonId, user)
   }
 
   async getPrisons(): Promise<PrisonDetail[]> {
