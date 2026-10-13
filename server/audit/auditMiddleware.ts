@@ -14,7 +14,7 @@ export default function auditMiddleware(auditService: AuditService): RequestHand
       const { licence } = res.locals
       req.auditTag = path
       req.auditEvent = policy.event
-      await auditService.recordAuditEvent(req.id, policy, licence, user)
+      await auditService.recordAuditEvent(req.id, policy.event, licence, user)
     }
     next()
   }

@@ -1,9 +1,16 @@
 // TODO : why does this not work?
 // export type AuditPolicy = { audit: true; event: string } | { audit: false; reason: string }
 export type AuditPolicy = {
+  // Does the route need to be audited?
   audit: boolean
+
+  // The audit event if the route is auditable
   event?: string
+
+  // The reason why the route is not auditable, if applicable
   reason?: string
+
+  // Set to true if the route is auditable but needs custom event data so will send the audit event itself
   customHandler?: boolean
 }
 
@@ -495,6 +502,9 @@ export const routeAuditPolicy: Record<string, AuditPolicy> = {
   'GET /support/offender-search': { audit: true, event: 'VIEW_OFFENDER_SEARCH' },
   'GET /support/offender/:nomsId/detail': { audit: true, event: 'VIEW_OFFENDER_DETAIL' },
   'GET /support/offender/:nomsId/licences': { audit: true, event: 'VIEW_OFFENDER_LICENCES' },
+
+  // Custom handlers
+  'GET /search/probation-search': { audit: true, customHandler: true },
 
   // Framework/system routes (excluded by design)
   'GET /health': {

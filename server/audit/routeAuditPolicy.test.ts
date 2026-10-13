@@ -3,6 +3,10 @@ import nunjucks from 'nunjucks'
 import { services } from '../services'
 import setupRoutes from '../routes'
 import { AuditPolicy, AuditRouteKey, routeAuditPolicy } from './routeAuditPolicy'
+import setUpHealthChecks from '../middleware/setUpHealthChecks'
+import applicationInfo from '../applicationInfo'
+import setUpAuthentication from '../middleware/setUpAuthentication'
+import logger from '../../logger'
 
 interface RouteEntry {
   method: string
@@ -91,6 +95,8 @@ describe('Route Audit Policy', () => {
   beforeEach(() => {
     app = express()
     const njkEnv = nunjucks.configure([])
+    app.use(setUpHealthChecks(applicationInfo('test')))
+    app.use(setUpAuthentication())
     app.use(setupRoutes(services, njkEnv))
   })
 
@@ -106,7 +112,7 @@ describe('Route Audit Policy', () => {
       return !excludedRoutes.has(route.key) && !routeAuditPolicy[route.key as AuditRouteKey]
     })
 
-    console.log(missingPolicyEntries.map(route => `${route.key}: { audit: true, event: ''}`))
+    logger.info(missingPolicyEntries.map(route => `${route.key}: { audit: true, event: ''}`))
     expect(missingPolicyEntries).toEqual([])
   })
 
