@@ -28,8 +28,9 @@
     {% set comDetailsHtml = offender.probationPractitioner.name %}
   {% endif %}
   {% if offender.kind === "HDC" or offender.kind === "HDC_VARIATION" %}
+    {% set hdcLabel = 'HDC application postponed' if (hdcCreationEnabled and offender.isHdcPostponed) else 'HDC release' %}
     {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate
-            + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+            + '</span><span class="urgent-highlight urgent-highlight-message">' + hdcLabel + '</span>' %}
   {% elseif offender | shouldShowHardStopWarning %}
     {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
   {% elseif offender.kind == "TIME_SERVED" %}
