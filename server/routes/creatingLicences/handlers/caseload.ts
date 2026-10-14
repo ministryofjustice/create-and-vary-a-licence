@@ -111,6 +111,6 @@ export default class CaseloadRoutes {
   }
 
   isHdcPostponed = (comCase: ComCreateCase): boolean => {
-    return config.hdc.hdcCreationEnabled && comCase.licenceStatus === 'IN_PROGRESS' && comCase.isHdcPostponed === true
+    return config.hdc.hdcCreationEnabled && comCase.isHdcPostponed === true
   }
 }
