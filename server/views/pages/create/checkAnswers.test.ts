@@ -656,6 +656,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should show opted out replacement info text while the licence is in progress', () => {
     const $ = render({
+      hdcCreationEnabled: true,
       licence: { ...licence, isReplacementForOptedOutLicence: true },
       statusCode: 'IN_PROGRESS',
     })
@@ -667,6 +668,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should hide opted out replacement info text once the licence is submitted', () => {
     const $ = render({
+      hdcCreationEnabled: true,
       licence: { ...licence, isReplacementForOptedOutLicence: true },
       statusCode: 'SUBMITTED',
     })
@@ -676,7 +678,18 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should hide opted out replacement info text for licences that are not replacements', () => {
     const $ = render({
+      hdcCreationEnabled: true,
       licence: { ...licence, isReplacementForOptedOutLicence: false },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=opted-out-replacement-info]').length).toBe(0)
+  })
+
+  it('should hide opted out replacement info text when HDC creation is disabled', () => {
+    const $ = render({
+      hdcCreationEnabled: false,
+      licence: { ...licence, isReplacementForOptedOutLicence: true },
       statusCode: 'IN_PROGRESS',
     })
 
