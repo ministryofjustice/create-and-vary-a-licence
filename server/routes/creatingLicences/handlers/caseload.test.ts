@@ -515,6 +515,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         // Given
         config.hdc.hdcCreationEnabled = true
         comCase.isReplacementForOptedOutLicence = true
+        comCase.isHdcPostponed = false
 
         // When
         const createLink = handler.findCreateLinkToDisplay({
@@ -532,7 +533,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       licenceStatus => {
         // Given
         config.hdc.hdcCreationEnabled = true
-        comCase.isHdcPostponed = true
+        comCase.isHdcPostponed = false
 
         // When
         const createLink = handler.findCreateLinkToDisplay({
