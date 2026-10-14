@@ -441,7 +441,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     const comCase = {
       licenceId: 123,
       licenceStatus: LicenceStatus.IN_PROGRESS,
-      isPostponed: false,
+      isHdcPostponed: false,
       isReplacementForOptedOutLicence: false,
     } as ComCreateCase
 
@@ -500,7 +500,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     it('should link to the postponed interrupt when the HDC application is postponed', () => {
       // Given
       config.hdc.hdcCreationEnabled = true
-      comCase.isPostponed = true
+      comCase.isHdcPostponed = true
 
       // When
       const createLink = handler.findCreateLinkToDisplay(comCase)
@@ -515,6 +515,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         // Given
         config.hdc.hdcCreationEnabled = true
         comCase.isReplacementForOptedOutLicence = true
+        comCase.isHdcPostponed = false
 
         // When
         const createLink = handler.findCreateLinkToDisplay({
@@ -532,7 +533,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       licenceStatus => {
         // Given
         config.hdc.hdcCreationEnabled = true
-        comCase.isPostponed = true
+        comCase.isHdcPostponed = false
 
         // When
         const createLink = handler.findCreateLinkToDisplay({

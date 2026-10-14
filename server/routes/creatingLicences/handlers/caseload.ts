@@ -91,7 +91,7 @@ export default class CaseloadRoutes {
       return `/licence/create/nomisId/${comCase.prisonerNumber}/confirm`
     }
 
-    if (this.isPostponed(comCase)) {
+    if (this.isHdcPostponed(comCase)) {
       return `/licence/create/id/${comCase.licenceId}/postponed-interrupt`
     }
 
@@ -110,7 +110,7 @@ export default class CaseloadRoutes {
     )
   }
 
-  isPostponed = (comCase: ComCreateCase): boolean => {
-    return config.hdc.hdcCreationEnabled && comCase.licenceStatus === 'IN_PROGRESS' && comCase.isPostponed === true
+  isHdcPostponed = (comCase: ComCreateCase): boolean => {
+    return config.hdc.hdcCreationEnabled && comCase.isHdcPostponed === true
   }
 }

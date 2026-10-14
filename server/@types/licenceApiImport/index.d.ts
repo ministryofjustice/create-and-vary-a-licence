@@ -4607,15 +4607,15 @@ export interface components {
         | 'ELIGIBILITY_CHECKS_COMPLETE'
         | 'RISK_CHECKS_COMPLETE'
       /**
+       * @description Whether this HDC licence is currently postponed.
+       * @example true
+       */
+      isHdcPostponed: boolean
+      /**
        * @description Is this licence a replacement for an opted out licence?
        * @example true
        */
       isReplacementForOptedOutLicence: boolean
-      /**
-       * @description Is this licence postponed?
-       * @example true
-       */
-      isPostponed: boolean
     }
     /** @description Search Criteria for CA Caseload Search */
     CaCaseloadSearch: {
@@ -5133,6 +5133,7 @@ export interface components {
        * @example Smith
        */
       surname?: string | null
+      kind: string
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -5372,7 +5373,6 @@ export interface components {
        * @example X34433
        */
       updatedByUsername?: string | null
-      kind: string
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
@@ -5412,28 +5412,6 @@ export interface components {
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
       /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string | null
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string | null
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
-      /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
        * @example 12345
@@ -5461,6 +5439,28 @@ export interface components {
        * @example 07700 900000
        */
       appointmentAlternativeTelephoneNumber?: string | null
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string | null
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][] | null
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string | null
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
     }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
