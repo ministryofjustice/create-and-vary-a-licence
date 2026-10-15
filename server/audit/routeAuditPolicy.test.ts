@@ -69,6 +69,7 @@ describe('Route Audit Policy', () => {
     app.use(setupRoutes(services, njkEnv))
   })
 
+  // TODO : add test for duplicate keys
   it('every route must have an audit policy configured', () => {
     const allRoutes: RouteEntry[] = []
 

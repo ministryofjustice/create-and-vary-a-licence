@@ -1,3 +1,4 @@
+// TODO : change to json file
 // TODO : change to a union type so we don't need the nullable fields.
 // export type AuditPolicy = { audit: true; event: string } | { audit: false; reason: string }
 export type AuditPolicy = {
@@ -21,7 +22,8 @@ export type AuditPolicy = {
  * To add a new route:
  * 1. Add an entry with the HTTP method and route template (e.g., 'GET /licence/create/caseload')
  * 2. Set audit: true with an event name, or audit: false with a reason
- * 3. Run routeAuditPolicy.test.ts to verify all routes are correctly configured
+ * 3. If the route is auditable but needs custom event data, set customHandler: true and manually call aduit service in the route handler
+ * 4. Run routeAuditPolicy.test.ts to verify all routes are correctly configured
  */
 export const routeAuditPolicy: Record<string, AuditPolicy> = {
   // Home routes
@@ -244,6 +246,8 @@ export const routeAuditPolicy: Record<string, AuditPolicy> = {
     audit: true,
     event: 'SUBMIT_ADDITIONAL_CONDITION_CURFEW',
   },
+
+  // Vary routes
   'GET /licence/vary/caseload': {
     audit: true,
     event: 'VIEW_CASELOAD',
@@ -450,6 +454,8 @@ export const routeAuditPolicy: Record<string, AuditPolicy> = {
   },
   'GET /licence/vary/id/:licenceId/hdc/curfew-hours': { audit: true, event: 'VIEW_HDC_CURFEW_HOURS' },
   'POST /licence/vary/id/:licenceId/hdc/curfew-hours': { audit: true, event: 'SUBMIT_HDC_CURFEW_HOURS' },
+
+  // Approve routes
   'GET /licence/approve/cases': { audit: true, event: 'VIEW_LICENCE_APPROVE_CASES' },
   'GET /licence/approve/id/:licenceId/probation-practitioner': {
     audit: true,
@@ -461,6 +467,7 @@ export const routeAuditPolicy: Record<string, AuditPolicy> = {
     audit: true,
     event: 'VIEW_LICENCE_APPROVE_CONFIRM_APPROVED',
   },
+
   'GET /licence/view/cases': { audit: true, event: 'VIEW_LICENCE_VIEW_CASES' },
   'GET /licence/view/probation-practitioner/staffCode/:staffCode': {
     audit: true,
@@ -484,6 +491,8 @@ export const routeAuditPolicy: Record<string, AuditPolicy> = {
     audit: true,
     event: 'VIEW_LICENCE_VARY_APPROVE_PROBATION_PRACTITIONER',
   },
+
+  // support routes
   'GET /support/': { audit: true, event: 'VIEW_SUPPORT' },
   'GET /support/manage-omu-email-address': { audit: true, event: 'VIEW_MANAGE_OMU_EMAIL_ADDRESS' },
   'GET /support/manage-omu-email-address/:prisonId': { audit: true, event: 'VIEW_MANAGE_OMU_EMAIL_ADDRESS_PRISON' },

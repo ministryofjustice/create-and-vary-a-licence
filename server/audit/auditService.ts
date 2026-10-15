@@ -4,14 +4,59 @@ import applicationInfo from '../applicationInfo'
 import { Licence } from '../@types/licenceApiClientTypes'
 import logger from '../../logger'
 
+type AuditMessage = {
+  what: string
+  when: string
+  subjectType: string
+  subjectId: string
+  correlationId: string
+  who: string
+  service: string
+  details: object
+}
+
 export default class AuditService {
-  async recordAuditEvent(requestId: string, event: string, licence: Licence | undefined, user: User): Promise<void> {
-    const auditData = {
-      what: event,
+  async recordAuditEvent(
+    requestId: string,
+    eventType: string,
+    licence: Licence | undefined,
+    user: User,
+  ): Promise<void> {
+    const auditEventMessage = this.createAuditEventMessage(eventType, licence, requestId, user)
+    this.sendAuditEventMessage(eventType, auditEventMessage)
+  }
+
+  async recordProbationSearchAuditEvent(requestId: string, searchResults: object, user: User): Promise<void> {
+    const baseEventMessage = this.createAuditEventMessage('PROBATION_SEARCH', undefined, requestId, user)
+    const auditEventMessage: AuditMessage = {
+      ...baseEventMessage,
+      details: {
+        ...baseEventMessage.details,
+        searchResults,
+      },
+    }
+    this.sendAuditEventMessage('PROBATION_SEARCH', auditEventMessage)
+  }
+
+  private sendAuditEventMessage(eventType: string, auditData: object): void {
+    telemetry.setSpanAttributes({ audited: true })
+
+    logger.info(`sending audit event: ${eventType}`)
+    logger.info(`audit event data: ${JSON.stringify(auditData)}`)
+    // TODO: send audit message
+  }
+
+  private createAuditEventMessage(
+    eventType: string,
+    licence: Licence | undefined,
+    requestId: string,
+    user: User,
+  ): AuditMessage {
+    return {
+      what: eventType,
       when: new Date().toISOString(),
-      // operationId: 'dozdi57zFcTfTwkr511FRviCRGAOav1b', // Not required and from a search of Github, I can't see anyone else populating this
-      subjectId: this.getSubjectIdFromRequest(licence, user),
       subjectType: 'LICENCE', // or OFFENDER, LICENCE, etc
+      subjectId: licence && this.getSubjectIdFromRequest(licence, user),
       correlationId: requestId,
       who: user.username,
       service: applicationInfo().applicationName,
@@ -20,23 +65,6 @@ export default class AuditService {
         userRoles: user.userRoles,
       },
     }
-
-    telemetry.setSpanAttributes({ audited: true })
-
-    logger.info(`audit event: ${event}`)
-    logger.info(`audit event data: ${JSON.stringify(auditData)}`)
-    // TODO: send audit message
-  }
-
-  async recordProbationSearchAuditEvent(
-    requestId: string,
-    event: string,
-    searchResults: object,
-    user: User,
-  ): Promise<void> {
-    logger.info(
-      `recordProbationSearchAuditEvent: ${event} for user ${user.username} with requestId ${requestId}, searchResults: ${JSON.stringify(searchResults)}`,
-    )
   }
 
   private getSubjectIdFromRequest(licence: Licence | undefined, user: User): string {
