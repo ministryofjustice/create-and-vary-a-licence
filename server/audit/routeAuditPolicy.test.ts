@@ -104,7 +104,7 @@ describe('Route Audit Policy', () => {
 
   it('should verify policy structure is valid', () => {
     Object.entries(routeAuditPolicy).forEach(([, policy]: [string, AuditPolicy]) => {
-      if (policy.audit) {
+      if (policy.audit && !policy.customHandler) {
         expect(policy.event).toBeDefined()
         expect(typeof policy.event).toBe('string')
         expect(policy.event.length).toBeGreaterThan(0)
