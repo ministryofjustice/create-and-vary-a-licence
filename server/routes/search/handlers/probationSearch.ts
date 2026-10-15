@@ -53,7 +53,12 @@ export default class ProbationSearch {
     const hasRestrictedCasesOnProbation = peopleOnProbation.filter(c => c.isRestricted).length > 0
     const hasCustomSorting = hasReviewNeededCases || hasRestrictedCasesInPrison || hasRestrictedCasesOnProbation
 
-    this.auditService.recordProbationSearchAuditEvent(req.id, 'LICENCE_PROBATION_SEARCH', searchResponse.results, user)
+    await this.auditService.recordProbationSearchAuditEvent(
+      req.id,
+      'LICENCE_PROBATION_SEARCH',
+      searchResponse.results,
+      user,
+    )
 
     return res.render('pages/search/probationSearch/probationSearch', {
       queryTerm,

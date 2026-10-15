@@ -2,11 +2,11 @@ import express from 'express'
 import nunjucks from 'nunjucks'
 import { services } from '../services'
 import setupRoutes from '../routes'
-import { AuditPolicy, AuditRouteKey, routeAuditPolicy } from './routeAuditPolicy'
 import setUpHealthChecks from '../middleware/setUpHealthChecks'
 import applicationInfo from '../applicationInfo'
 import setUpAuthentication from '../middleware/setUpAuthentication'
 import logger from '../../logger'
+import { AuditPolicy, AuditRouteKey, routeAuditPolicy } from './routeAuditPolicyConfig'
 
 interface RouteEntry {
   method: string

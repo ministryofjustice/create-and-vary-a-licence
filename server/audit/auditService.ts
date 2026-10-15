@@ -19,10 +19,9 @@ export default class AuditService {
         build: applicationInfo().gitRef,
         userRoles: user.userRoles,
       },
-      user,
     }
 
-    telemetry.setSpanAttributes({ audit_event: event })
+    telemetry.setSpanAttributes({ audited: true })
 
     logger.info(`audit event: ${event}`)
     logger.info(`audit event data: ${JSON.stringify(auditData)}`)

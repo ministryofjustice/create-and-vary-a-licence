@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import { getAuditPolicy } from './routeAuditPolicy'
+import getAuditPolicy from './routeAuditPolicy'
 import AuditService from './auditService'
 
 /**
