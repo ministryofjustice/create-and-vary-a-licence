@@ -9,8 +9,7 @@
   },
   "GET /accessibility-statement": {
     "audit": false,
-    "reason": "Accessibility statement static content, not auditable action",
-    "customHandler": true
+    "reason": "Accessibility statement static content, not auditable action"
   },
   "GET /whats-new": {
     "audit": false,
@@ -550,7 +549,8 @@
   },
   "GET /search/probation-search": {
     "audit": true,
-    "customHandler": true
+    "customHandler": true,
+    "event": "VIEW_PROBATION_SEARCH"
   },
   "GET /health": {
     "audit": false,

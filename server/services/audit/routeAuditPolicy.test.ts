@@ -69,7 +69,6 @@ describe('Route Audit Policy', () => {
     app.use(setupRoutes(services, njkEnv))
   })
 
-  // TODO : add test for duplicate keys
   it('every route must have an audit policy configured', () => {
     const allRoutes: RouteEntry[] = []
 
@@ -83,7 +82,7 @@ describe('Route Audit Policy', () => {
       return !excludedRoutes.has(route.key) && !Object.keys(routeAuditPolicy).find(routeKey => routeKey === route.key)
     })
 
-    missingPolicyEntries.forEach(route => console.log(`"${route.key}": { "audit": true, event: ""}`))
+    // missingPolicyEntries.forEach(route => console.log(`"${route.key}": { "audit": true, "event": ""}`))
     expect(missingPolicyEntries).toEqual([])
   })
 
@@ -106,7 +105,7 @@ describe('Route Audit Policy', () => {
 
   it('should verify policy structure is valid', () => {
     Object.entries(routeAuditPolicy).forEach(([, policy]: [string, AuditPolicy]) => {
-      if (policy.audit && !policy.customHandler) {
+      if (policy.audit) {
         expect(policy.event).toBeDefined()
         expect(typeof policy.event).toBe('string')
         expect(policy.event.length).toBeGreaterThan(0)
@@ -116,5 +115,11 @@ describe('Route Audit Policy', () => {
         expect(policy.reason.length).toBeGreaterThan(0)
       }
     })
+  })
+
+  it('policy config should not have duplicate keys', () => {
+    const keys = Object.keys(routeAuditPolicy)
+    const uniqueKeys = new Set(keys)
+    expect(uniqueKeys.size).toBe(keys.length)
   })
 })
