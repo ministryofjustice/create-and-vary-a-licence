@@ -99,7 +99,19 @@ export default class CaseloadRoutes {
       return `/licence/create/id/${comCase.licenceId}/opt-out-interrupt`
     }
 
+    if (this.isHdcRefused(comCase)) {
+      return `/licence/create/id/${comCase.licenceId}/refused-interrupt`
+    }
+
     return `/licence/create/id/${comCase.licenceId}/check-your-answers`
+  }
+
+  isHdcRefused = (comCase: ComCreateCase): boolean => {
+    return (
+      config.hdc.hdcCreationEnabled &&
+      comCase.licenceStatus === 'IN_PROGRESS' &&
+      comCase.isReplacementForRefusedLicence === true
+    )
   }
 
   isHdcOptOut = (comCase: ComCreateCase): boolean => {

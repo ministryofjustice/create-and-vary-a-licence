@@ -12,6 +12,7 @@ const allowedPathsByStatus = {
     '/licence/time-served/create/foo',
     '/licence/time-served/edit/foo',
     '/licence/create/id/1/opt-out-interrupt',
+    '/licence/create/id/1/refused-interrupt',
     '/licence/create/id/1/postponed-interrupt',
     '/licence/create/foo',
     '/licence/view/foo',

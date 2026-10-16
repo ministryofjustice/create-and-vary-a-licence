@@ -666,6 +666,18 @@ describe('Create a Licence Views - Check Answers', () => {
     )
   })
 
+  it('should show refused replacement info text while the licence is in progress', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, isReplacementForRefusedLicence: true },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=opted-out-replacement-info]').text()).toContain(
+      'Any additional or bespoke conditions you entered previously will be saved.',
+    )
+  })
+
   it('should hide opted out replacement info text once the licence is submitted', () => {
     const $ = render({
       hdcCreationEnabled: true,
