@@ -4616,6 +4616,11 @@ export interface components {
        * @example true
        */
       isReplacementForOptedOutLicence: boolean
+      /**
+       * @description Is this licence a replacement for a refused licence?
+       * @example true
+       */
+      isReplacementForRefusedLicence: boolean
     }
     /** @description Search Criteria for CA Caseload Search */
     CaCaseloadSearch: {
@@ -5407,16 +5412,10 @@ export interface components {
       isReviewNeeded: boolean
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
-      isInPssPeriod?: boolean | null
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number | null
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
+      isInPssPeriod?: boolean | null
       /**
        * @description The full name of the supervising probation officer
        * @example Jane Jones
@@ -5461,6 +5460,12 @@ export interface components {
        * @enum {string}
        */
       electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number | null
     }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
@@ -6365,6 +6370,11 @@ export interface components {
        * @example true
        */
       isReplacementForOptedOutLicence: boolean
+      /**
+       * @description Is this licence a replacement for a refused HDC licence?
+       * @example true
+       */
+      isReplacementForRefusedLicence: boolean
       /**
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
@@ -9053,6 +9063,8 @@ export interface components {
         | 'REVIEWED_WITH_VARIATION'
         | 'INACTIVE_WHEN_HDC_OPT_OUT'
         | 'CRD_CREATED_WHEN_HDC_OPT_OUT'
+        | 'INACTIVE_WHEN_HDC_REFUSED'
+        | 'CRD_CREATED_WHEN_HDC_REFUSED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -17596,6 +17608,8 @@ export interface operations {
           | 'REVIEWED_WITH_VARIATION'
           | 'INACTIVE_WHEN_HDC_OPT_OUT'
           | 'CRD_CREATED_WHEN_HDC_OPT_OUT'
+          | 'INACTIVE_WHEN_HDC_REFUSED'
+          | 'CRD_CREATED_WHEN_HDC_REFUSED'
         )[]
         sortBy?: string
         sortOrder?: string

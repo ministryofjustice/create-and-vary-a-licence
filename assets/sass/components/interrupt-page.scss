@@ -1,4 +1,5 @@
 .opt-out-interrupt__link,
+.refused-interrupt__link,
 .postponed-interrupt__link {
   &:link,
   &:visited,
@@ -16,6 +17,7 @@
 }
 
 .opt-out-interrupt__button,
+.refused-interrupt__button,
 .postponed-interrupt__button {
   background-color: govuk-colour('white');
 
@@ -37,12 +39,14 @@
 }
 
 .opt-out-interrupt__actions,
+.refused-interrupt__actions,
 .postponed-interrupt__actions {
   display: flex;
   align-items: center;
   gap: govuk-spacing(4);
 
   .opt-out-interrupt__button,
+  .refused-interrupt__button,
   .postponed-interrupt__button,
   p {
     margin-bottom: 0;

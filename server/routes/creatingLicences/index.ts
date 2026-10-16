@@ -25,6 +25,7 @@ import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMid
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 import OptOutInterruptHandler from './handlers/optOutInterruptHandler'
 import PostponedInterruptHandler from './handlers/postponedInterruptHandler'
+import RefusedInterruptHandler from './handlers/refusedInterruptHandler'
 
 export default function Index({
   licenceService,
@@ -135,6 +136,11 @@ export default function Index({
   {
     const controller = new OptOutInterruptHandler()
     get('/id/:licenceId/opt-out-interrupt', controller.GET)
+  }
+
+  {
+    const controller = new RefusedInterruptHandler()
+    get('/id/:licenceId/refused-interrupt', controller.GET)
   }
 
   {
