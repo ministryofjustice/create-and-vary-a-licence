@@ -31,7 +31,7 @@ import createTimeServedLicenceRoutes from './creatingLicences/handlers/prisonCre
 import hdcRoutes from './initialAppointment/hdc'
 import varyHdcLicenceRoutes from './varyingLicences/hdc'
 import addCvlUserDataToTelemetry from '../middleware/addCvlUserDataToTelemetry'
-import auditMiddleware from '../audit/auditMiddleware'
+import auditMiddleware from '../services/audit/auditMiddleware'
 
 export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
   const router = Router({ mergeParams: true })

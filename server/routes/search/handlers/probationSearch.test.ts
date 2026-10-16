@@ -5,7 +5,7 @@ import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import AuditService from '../../../audit/auditService'
+import AuditService from '../../../services/audit/auditService'
 
 const auditService = new AuditService() as jest.Mocked<AuditService>
 const searchService = new SearchService(null) as jest.Mocked<SearchService>

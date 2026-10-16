@@ -21,7 +21,7 @@ import HdcService from './hdc/hdcService'
 import AddressService from './addressService'
 import TimeServedService from './timeServedService'
 import HdcCurfewAddressService from './hdc/hdcCurfewAddressService'
-import AuditService from '../audit/auditService'
+import AuditService from './audit/auditService'
 
 const {
   manageUsersApiClient,

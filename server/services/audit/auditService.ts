@@ -1,8 +1,8 @@
 import { telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
-import { User } from '../@types/CvlUserDetails'
-import applicationInfo from '../applicationInfo'
-import { Licence } from '../@types/licenceApiClientTypes'
-import logger from '../../logger'
+import { User } from '../../@types/CvlUserDetails'
+import applicationInfo from '../../applicationInfo'
+import { Licence } from '../../@types/licenceApiClientTypes'
+import logger from '../../../logger'
 
 type AuditMessage = {
   what: string

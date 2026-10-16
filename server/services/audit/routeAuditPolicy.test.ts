@@ -1,12 +1,12 @@
 import express from 'express'
 import nunjucks from 'nunjucks'
-import { services } from '../services'
-import setupRoutes from '../routes'
-import setUpHealthChecks from '../middleware/setUpHealthChecks'
-import applicationInfo from '../applicationInfo'
-import setUpAuthentication from '../middleware/setUpAuthentication'
-import logger from '../../logger'
-import { AuditPolicy, AuditRouteKey, routeAuditPolicy } from './routeAuditPolicyConfig'
+import { services } from '../index'
+import setupRoutes from '../../routes'
+import setUpHealthChecks from '../../middleware/setUpHealthChecks'
+import applicationInfo from '../../applicationInfo'
+import setUpAuthentication from '../../middleware/setUpAuthentication'
+import { AuditPolicy } from './routeAuditPolicy'
+import routeAuditPolicy from './auditPolicyConfig.json'
 
 interface RouteEntry {
   method: string
@@ -78,11 +78,12 @@ describe('Route Audit Policy', () => {
       extractRoutes(layer, '', allRoutes)
     })
 
+    // console.log(Object.keys(routeAuditPolicy).length)
     const missingPolicyEntries = allRoutes.filter(route => {
-      return !excludedRoutes.has(route.key) && !routeAuditPolicy[route.key as AuditRouteKey]
+      return !excludedRoutes.has(route.key) && !Object.keys(routeAuditPolicy).find(routeKey => routeKey === route.key)
     })
 
-    logger.info(missingPolicyEntries.map(route => `${route.key}: { audit: true, event: ''}`))
+    missingPolicyEntries.forEach(route => console.log(`"${route.key}": { "audit": true, event: ""}`))
     expect(missingPolicyEntries).toEqual([])
   })
 

@@ -3,7 +3,7 @@ import moment from 'moment/moment'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 import { FoundComCase, ComSearchResponse } from '../../../@types/licenceApiClientTypes'
-import AuditService from '../../../audit/auditService'
+import AuditService from '../../../services/audit/auditService'
 
 export default class ProbationSearch {
   constructor(
