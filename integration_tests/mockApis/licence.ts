@@ -415,6 +415,8 @@ export default {
     responsibleComFullName?: string
     isEligibleForEarlyRelease: boolean
     hasAppointmentTimeType?: string
+    isReplacementForOptedOutLicence?: boolean
+    isReplacementForRefusedLicence?: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -431,6 +433,8 @@ export default {
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
           responsibleComFullName: options.responsibleComFullName || null,
           isEligibleForEarlyRelease: options.isEligibleForEarlyRelease || false,
+          isReplacementForOptedOutLicence: options.isReplacementForOptedOutLicence || false,
+          isReplacementForRefusedLicence: options.isReplacementForRefusedLicence || false,
         },
       },
     })
@@ -2054,6 +2058,8 @@ export default {
     licenceId: number
     licenceStatus: string
     licenceCreationType: string
+    isReplacementForOptedOutLicence?: boolean
+    isReplacementForRefusedLicence?: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -2080,6 +2086,8 @@ export default {
             hardStopDate: '03/01/2023',
             hardStopWarningDate: '01/01/2023',
             licenceCreationType: options.licenceCreationType,
+            isReplacementForOptedOutLicence: options.isReplacementForOptedOutLicence || false,
+            isReplacementForRefusedLicence: options.isReplacementForRefusedLicence || false,
           },
         ],
       },

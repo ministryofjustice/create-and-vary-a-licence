@@ -661,7 +661,7 @@ describe('Create a Licence Views - Check Answers', () => {
       statusCode: 'IN_PROGRESS',
     })
 
-    expect($('[data-qa=opted-out-replacement-info]').text()).toContain(
+    expect($('[data-qa=hdc-replacement-info]').text()).toContain(
       'Any additional or bespoke conditions you entered previously will be saved.',
     )
   })
@@ -673,7 +673,7 @@ describe('Create a Licence Views - Check Answers', () => {
       statusCode: 'IN_PROGRESS',
     })
 
-    expect($('[data-qa=opted-out-replacement-info]').text()).toContain(
+    expect($('[data-qa=hdc-replacement-info]').text()).toContain(
       'Any additional or bespoke conditions you entered previously will be saved.',
     )
   })
@@ -685,7 +685,7 @@ describe('Create a Licence Views - Check Answers', () => {
       statusCode: 'SUBMITTED',
     })
 
-    expect($('[data-qa=opted-out-replacement-info]').length).toBe(0)
+    expect($('[data-qa=hdc-replacement-info]').length).toBe(0)
   })
 
   it('should hide opted out replacement info text for licences that are not replacements', () => {
@@ -695,7 +695,7 @@ describe('Create a Licence Views - Check Answers', () => {
       statusCode: 'IN_PROGRESS',
     })
 
-    expect($('[data-qa=opted-out-replacement-info]').length).toBe(0)
+    expect($('[data-qa=hdc-replacement-info]').length).toBe(0)
   })
 
   it('should hide opted out replacement info text when HDC creation is disabled', () => {
@@ -705,6 +705,6 @@ describe('Create a Licence Views - Check Answers', () => {
       statusCode: 'IN_PROGRESS',
     })
 
-    expect($('[data-qa=opted-out-replacement-info]').length).toBe(0)
+    expect($('[data-qa=hdc-replacement-info]').length).toBe(0)
   })
 })
