@@ -38,6 +38,8 @@ Then:
 
 `$ npm run lint` - to run the linter over the code
 
+`$ npm run lint -- --fix` - to run the linter and fix any issues it can automatically fix
+
 ## Unit Tests (Jest)
 
 `$ npm run test` - to run unit tests
