@@ -5,12 +5,14 @@ import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import AuditService from '../../../services/audit/auditService'
 
+const auditService = new AuditService() as jest.Mocked<AuditService>
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
 jest.mock('../../../services/searchService')
 
 describe('Route Handlers - Search - Probation Search', () => {
-  const handler = new ProbationSearchRoutes(searchService)
+  const handler = new ProbationSearchRoutes(auditService, searchService)
   const deliusStaffIdentifier = 3000
   let req: Request
   let res: Response
