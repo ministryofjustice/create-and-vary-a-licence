@@ -335,6 +335,26 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($2('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 
+  it('should disable the submit button when an HDC licence is postponed', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', isPostponed: true },
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    expect($('[data-qa="send-licence-conditions"]').prop('disabled')).toBe(true)
+  })
+
+  it('should enable the submit button when an HDC licence is not postponed', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', isPostponed: false },
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    expect($('[data-qa="send-licence-conditions"]').prop('disabled')).toBe(false)
+  })
+
   it('should hide edit initial appointment buttons when canEditInitialAppt is false', () => {
     const $ = render({
       licence: { ...licence, statusCode: 'IN_PROGRESS' },

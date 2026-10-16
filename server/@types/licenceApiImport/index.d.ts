@@ -707,6 +707,40 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/user/unsubscribe': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description Unsubscribe user to report */
+    post: operations['unsubscribe']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/user/subscribe': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description Subscribe user to report */
+    post: operations['subscribe']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/recalculate-licence-start-dates': {
     parameters: {
       query?: never
@@ -1623,6 +1657,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/user/subscriptions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description User Subscriptions */
+    get: operations['subscriptions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/subject-access-request': {
     parameters: {
       query?: never
@@ -1705,6 +1756,23 @@ export interface paths {
     }
     /** @description Streams the entire result set of the sync query execution as a csv file. */
     get: operations['downloadCsv']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/reports/{reportId}/{reportVariantId}/download/xlsx': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Streams the entire result set of the sync query execution as an Excel (xlsx) file. Unlike the csv download, cell types are explicit, so values such as room numbers are not reinterpreted as dates when the file is opened in Excel. */
+    get: operations['downloadXlsx']
     put?: never
     post?: never
     delete?: never
@@ -3088,6 +3156,22 @@ export interface components {
        * @example X12333
        */
       username: string
+    }
+    AnySubscribableRequest: {
+      reportId: string
+      reportVariantId: string
+    }
+    UserSubscription: {
+      id: string
+      userId: string
+      reportId: string
+      reportVariantId: string
+      status: string
+      tableId: string
+      /** Format: date-time */
+      createdTime: string
+      /** Format: date-time */
+      updatedTime?: string | null
     }
     /** @description Request object for updating licence start dates for a batch of licences. */
     RecalculateLicenceStartDatesRequest: {
@@ -4738,6 +4822,11 @@ export interface components {
        * @example Leeds (HMP)
        */
       prisonDescription?: string | null
+      /**
+       * @description Whether the case is postponed in the HDC service
+       * @example false
+       */
+      isHdcPostponed: boolean
       hasNomisLicence: boolean
     }
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
@@ -4909,6 +4998,15 @@ export interface components {
        * @enum {string}
        */
       type: 'BESPOKE'
+    }
+    UserReportSubscription: {
+      userId: string
+      reportId: string
+      reportVariantId: string
+      tableId: string
+      reportStatus: string
+      /** Format: date-time */
+      reportUpdatedTime?: string | null
     }
     ExternalTimeServedRecordResponse: {
       /**
@@ -5139,6 +5237,12 @@ export interface components {
        */
       surname?: string | null
       kind: string
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
+      isInPssPeriod?: boolean | null
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -5410,12 +5514,12 @@ export interface components {
        * @example true
        */
       isReviewNeeded: boolean
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean | null
-      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
-      isInPssPeriod?: boolean | null
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number | null
       /**
        * @description The full name of the supervising probation officer
        * @example Jane Jones
@@ -5460,12 +5564,6 @@ export interface components {
        * @enum {string}
        */
       electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number | null
     }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
@@ -7316,6 +7414,11 @@ export interface components {
        * @example false
        */
       isHdcMigration: boolean
+      /**
+       * @description Whether this HDC licence is currently postponed.
+       * @example true
+       */
+      isPostponed: boolean
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -9114,6 +9217,7 @@ export interface components {
       isMissing: boolean
       /** @enum {string|null} */
       loadType?: 'sync' | 'async' | null
+      schedule?: string | null
     }
     ChildVariantDefinition: {
       id: string
@@ -9236,6 +9340,7 @@ export interface components {
       type?: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time' | 'timestamp' | null
       header?: boolean | null
       mergeRows?: boolean | null
+      defaultSort?: boolean | null
     }
     VariantDefinition: {
       id: string
@@ -9262,6 +9367,7 @@ export interface components {
       description?: string | null
       sections: components['schemas']['DashboardSectionDefinition'][]
       filterFields?: components['schemas']['FieldDefinition'][] | null
+      childVariants?: components['schemas']['DashboardDefinition'][] | null
     }
     DashboardOptionDefinition: {
       useRagColour?: boolean | null
@@ -12386,6 +12492,126 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  unsubscribe: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AnySubscribableRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UserSubscription']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  subscribe: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AnySubscribableRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UserSubscription']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Gone */
@@ -15654,6 +15880,62 @@ export interface operations {
       }
     }
   }
+  subscriptions: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UserReportSubscription'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getSarContentByReference: {
     parameters: {
       query?: {
@@ -15915,12 +16197,6 @@ export interface operations {
         filters: {
           [key: string]: string
         }
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
       }
       header?: never
       path: {
@@ -15985,7 +16261,82 @@ export interface operations {
   downloadCsv: {
     parameters: {
       query: {
-        dataProductDefinitionsPath?: string
+        /**
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
+         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
+         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
+         *           filters.someMultiselectFilter=a,b,c
+         * @example {
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
+         *     }
+         */
+        filters: {
+          [key: string]: string
+        }
+        /** @description List of column names to include in the generated report. If not provided all the columns will be returned. */
+        columns?: string[]
+        sortColumn?: string
+        sortedAsc?: boolean
+      }
+      header?: never
+      path: {
+        reportId: string
+        reportVariantId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  downloadXlsx: {
+    parameters: {
+      query: {
         /**
          * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
@@ -16076,12 +16427,6 @@ export interface operations {
         filters: {
           [key: string]: string
         }
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
       }
       header?: never
       path: {
@@ -16162,12 +16507,6 @@ export interface operations {
         filters: {
           [key: string]: string
         }
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
       }
       header?: never
       path: {
@@ -17684,12 +18023,6 @@ export interface operations {
          * @example HTML
          */
         renderMethod?: 'HTML' | 'PDF' | 'SVG'
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
       }
       header?: never
       path?: never
@@ -17746,14 +18079,7 @@ export interface operations {
   }
   definitionSummary: {
     parameters: {
-      query?: {
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
-      }
+      query?: never
       header?: never
       path: {
         /**
@@ -17816,23 +18142,6 @@ export interface operations {
   definition: {
     parameters: {
       query: {
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
-        /**
-         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
-         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
-         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
-         *           filters.someMultiselectFilter=a,b,c
-         * @example {
-         *       "filters.date.start": "2023-04-25",
-         *       "filters.date.end": "2023-05-30",
-         *       "filters.someMultiselectFilter": "a,b,c"
-         *     }
-         */
         filters: {
           [key: string]: string
         }
@@ -17904,23 +18213,6 @@ export interface operations {
   dashboardDefinition: {
     parameters: {
       query: {
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
-        /**
-         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
-         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
-         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
-         *           filters.someMultiselectFilter=a,b,c
-         * @example {
-         *       "filters.date.start": "2023-04-25",
-         *       "filters.date.end": "2023-05-30",
-         *       "filters.someMultiselectFilter": "a,b,c"
-         *     }
-         */
         filters: {
           [key: string]: string
         }
