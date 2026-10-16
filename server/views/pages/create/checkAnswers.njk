@@ -67,7 +67,7 @@
                 <h1 class="govuk-heading-l">Check licence details</h1>
 
                 {% if hdcCreationEnabled and (licence.isReplacementForOptedOutLicence or licence.isReplacementForRefusedLicence) and isInProgress %}
-                    <p class='govuk-body' data-qa="opted-out-replacement-info">Any additional or bespoke conditions you entered previously will be saved.<br>You must enter any initial appointment details again and then submit the licence.</p>
+                    <p class='govuk-body' data-qa="hdc-replacement-info">Any additional or bespoke conditions you entered previously will be saved.<br>You must enter any initial appointment details again and then submit the licence.</p>
                 {% endif %}
 
                 {% if isInHardStopPeriod %}
