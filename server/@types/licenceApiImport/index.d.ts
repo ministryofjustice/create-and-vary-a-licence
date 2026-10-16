@@ -4738,6 +4738,11 @@ export interface components {
        * @example Leeds (HMP)
        */
       prisonDescription?: string | null
+      /**
+       * @description Whether the case is postponed in the HDC service
+       * @example false
+       */
+      isHdcPostponed: boolean
       hasNomisLicence: boolean
     }
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
@@ -5412,10 +5417,16 @@ export interface components {
       isReviewNeeded: boolean
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean | null
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean | null
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean | null
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number | null
       /**
        * @description The full name of the supervising probation officer
        * @example Jane Jones
@@ -5460,12 +5471,6 @@ export interface components {
        * @enum {string}
        */
       electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number | null
     }
     /** @description Describes a licence summary within this service */
     PublicLicenceSummary: {
