@@ -22,6 +22,19 @@ describe('viewCases template', () => {
     expect(releaseDateHtml).toContain('1 May 2022')
   })
 
+  it('should show HDC application postponed label when HDC is postponed', () => {
+    const options = createComponentModel({
+      kind: LicenceKind.HDC,
+      releaseDateLabel: 'HDC actual date',
+      isHdcPostponed: true,
+    })
+
+    const $ = render({ options })
+
+    expect($('#release-date-1').text()).toBe('HDC actual date: 1 May 2022HDC application postponed')
+    expect($('.info-highlight-message').text().toString()).toEqual('HDC application postponed')
+  })
+
   it('should render time-served release date with message, and formatted date when kind Time Served kind', () => {
     // Given
     const options = createComponentModel({
@@ -104,12 +117,14 @@ describe('viewCases template', () => {
     prisonerNumber = 'A1234AA',
     probationPractitioner = { name: 'Test COM', staffCode: 'T123', allocated: true } as ProbationPractitioner,
     releaseDateLabel = 'Confirmed release date',
+    isHdcPostponed = false,
   }: {
     kind: LicenceKind
     name?: string
     prisonerNumber?: string
     probationPractitioner?: ProbationPractitioner
     releaseDateLabel?: string
+    isHdcPostponed?: boolean
   }) => ({
     cases: [
       {
@@ -125,6 +140,7 @@ describe('viewCases template', () => {
         nomisLegalStatus: 'SENTENCED',
         lastWorkedOnBy: 'Updater Name',
         kind,
+        isHdcPostponed,
       },
     ],
     tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS,
