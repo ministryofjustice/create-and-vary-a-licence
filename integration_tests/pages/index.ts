@@ -76,6 +76,20 @@ export default class IndexPage extends Page {
     return Page.verifyOnPage(CaseloadPage)
   }
 
+  clickCreateALicenceWithHdcReplacement = (replacementFlags: {
+    isReplacementForOptedOutLicence?: boolean
+    isReplacementForRefusedLicence?: boolean
+  }): CaseloadPage => {
+    cy.task('stubGetStaffCreateCaseload', {
+      licenceId: 1,
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      licenceCreationType: LicenceCreationType.LICENCE_IN_PROGRESS,
+      ...replacementFlags,
+    })
+    cy.get(this.createLicenceTileId).click()
+    return Page.verifyOnPage(CaseloadPage)
+  }
+
   clickVaryALicence = (): VaryCasesPage => {
     cy.task('stubGetComReviewCount')
     cy.get(this.varyLicenceTileId).click()

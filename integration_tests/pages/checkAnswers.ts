@@ -59,6 +59,8 @@ export default class CheckAnswersPage extends Page {
     return cy.get('.govuk-error-summary__body')
   }
 
+  getReplacementInfo = () => cy.get('[data-qa=hdc-replacement-info]')
+
   dateTimeField = () => {
     return cy.get('.govuk-summary-list__key')
   }
