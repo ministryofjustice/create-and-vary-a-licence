@@ -36,6 +36,7 @@
 {% set pageId = "check-answers-page" %}
 
 {% set isInProgress = statusCode == 'IN_PROGRESS' or statusCode == 'VARIATION_IN_PROGRESS' %}
+{% set isHdcPostponed = licence.isPostponed %}
 {% set isInVariation = statusCode == 'VARIATION_IN_PROGRESS' or statusCode == 'VARIATION_SUBMITTED'
     or statusCode == 'VARIATION_REJECTED' or statusCode == 'VARIATION_APPROVED' %}
 {% set canChooseToEdit = (statusCode == 'APPROVED' or statusCode == 'SUBMITTED') and (not isInHardStopPeriod) %}
@@ -65,6 +66,10 @@
                 <h1 class="govuk-heading-l">Vary licence details</h1>
             {% else %}
                 <h1 class="govuk-heading-l">Check licence details</h1>
+
+                {% if hdcCreationEnabled and (licence.isReplacementForOptedOutLicence or licence.isReplacementForRefusedLicence) and isInProgress %}
+                    <p class='govuk-body' data-qa="hdc-replacement-info">Any additional or bespoke conditions you entered previously will be saved.<br>You must enter any initial appointment details again and then submit the licence.</p>
+                {% endif %}
 
                 {% if isInHardStopPeriod %}
                     <p class='govuk-body'>You cannot work on a licence from 2 days before someone's release date.<br>This is so the prison can complete their final release checks.</p>
@@ -128,6 +133,7 @@
                         <div class="govuk-button-group">
                         {{ govukButton({
                             text: submitButtonText,
+                            disabled: isHdcPostponed,
                             attributes: submitButtonAttrs
                         }) }}
                     {% endif %}
