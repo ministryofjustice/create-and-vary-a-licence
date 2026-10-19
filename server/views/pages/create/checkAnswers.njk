@@ -36,6 +36,7 @@
 {% set pageId = "check-answers-page" %}
 
 {% set isInProgress = statusCode == 'IN_PROGRESS' or statusCode == 'VARIATION_IN_PROGRESS' %}
+{% set isHdcPostponed = licence.isPostponed %}
 {% set isInVariation = statusCode == 'VARIATION_IN_PROGRESS' or statusCode == 'VARIATION_SUBMITTED'
     or statusCode == 'VARIATION_REJECTED' or statusCode == 'VARIATION_APPROVED' %}
 {% set canChooseToEdit = (statusCode == 'APPROVED' or statusCode == 'SUBMITTED') and (not isInHardStopPeriod) %}
@@ -132,6 +133,7 @@
                         <div class="govuk-button-group">
                         {{ govukButton({
                             text: submitButtonText,
+                            disabled: isHdcPostponed,
                             attributes: submitButtonAttrs
                         }) }}
                     {% endif %}
