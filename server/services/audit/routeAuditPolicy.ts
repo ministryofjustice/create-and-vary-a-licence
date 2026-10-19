@@ -15,7 +15,6 @@ export type AuditPolicy = {
 }
 
 export default function getAuditPolicy(key: string): AuditPolicy | undefined {
-  console.log(Object.keys(routeAuditPolicy))
   const policyKey = Object.keys(routeAuditPolicy).find(routeKey => matchesRoute(key, routeKey))
   const policy = (routeAuditPolicy as Record<string, AuditPolicy>)[policyKey]
   if (policy) {
@@ -25,17 +24,13 @@ export default function getAuditPolicy(key: string): AuditPolicy | undefined {
 }
 
 function routeTemplateToRegex(template: string): RegExp {
-  console.log(template)
   const escaped = template
     .split('/')
     .map(segment => (segment.startsWith(':') ? '[A-Za-z0-9]+' : segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
     .join('/')
-  console.log(escaped)
   return new RegExp(`^${escaped}$`)
 }
 
 function matchesRoute(input: string, template: string): boolean {
-  console.log(input)
-  console.log(template)
   return routeTemplateToRegex(template).test(input)
 }

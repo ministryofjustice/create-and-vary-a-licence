@@ -580,10 +580,6 @@
     "audit": false,
     "reason": "OAuth2 callback—authentication flow, not auditable action"
   },
-  "GET /sign-out": {
-    "audit": false,
-    "reason": "Sign out—authentication flow, not auditable action"
-  },
   "GET /licence/create/id/:licenceId/postponed-interrupt": {
     "audit": true,
     "event": "POSTPONED_LICENCE_CREATION"

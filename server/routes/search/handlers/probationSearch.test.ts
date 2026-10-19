@@ -9,6 +9,7 @@ import AuditService from '../../../services/audit/auditService'
 
 const auditService = new AuditService() as jest.Mocked<AuditService>
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
+jest.mock('../../../services/audit/auditService')
 jest.mock('../../../services/searchService')
 
 describe('Route Handlers - Search - Probation Search', () => {
