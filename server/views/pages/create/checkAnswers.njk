@@ -53,6 +53,16 @@
 {% endif %}
 
 {% block content %}
+    {% if isHdcPostponed %}
+        {{ mojAlert({
+            variant: 'warning',
+            title: 'HDC application postponed',
+            showTitleAsHeading: true,
+            text: 'This licence cannot be submitted until the application resumes',
+            dismissible: false
+        }) }}
+    {% endif %}
+
     {% if banner %}
         {{ mojAlert({
             variant: banner.type,
@@ -169,6 +179,7 @@
                     {% else %}
                         <a href="{{ backLink }}" class="govuk-link govuk-!-font-size-19" data-qa="back-to-caseload-link">Return to case list</a>
                     {% endif %}
+                        </div>
                 </div>
             </form>
         </div>
