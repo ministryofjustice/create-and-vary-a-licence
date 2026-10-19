@@ -88,6 +88,28 @@ describe('Create a Licence Views - Check Answers', () => {
     expect(successAlert.text()).toContain('Details updated.')
   })
 
+  it('should display a warning alert when an HDC licence is postponed and in progress', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', isPostponed: true },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    const alertBanner = $('.moj-alert--warning')
+    expect(alertBanner.length).toBe(1)
+    expect(alertBanner.find('.moj-alert__heading').text().trim()).toBe('HDC application postponed')
+    expect(alertBanner.text()).toContain('This licence cannot be submitted until the application resumes')
+    expect(alertBanner.find('.moj-alert__icon').length).toBe(1)
+  })
+
+  it('should not display the postponed warning when the licence is not in progress', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', isPostponed: true },
+      statusCode: 'SUBMITTED',
+    })
+
+    expect($('.moj-alert--warning').length).toBe(0)
+  })
+
   it('should display no alerts when they are not passed through', () => {
     const $ = render({
       banner: {},

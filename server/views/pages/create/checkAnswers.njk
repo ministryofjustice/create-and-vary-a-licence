@@ -36,7 +36,7 @@
 {% set pageId = "check-answers-page" %}
 
 {% set isInProgress = statusCode == 'IN_PROGRESS' or statusCode == 'VARIATION_IN_PROGRESS' %}
-{% set isHdcPostponed = licence.isPostponed %}
+{% set isHdcPostponed = licence.kind === 'HDC' and licence.isPostponed and statusCode === 'IN_PROGRESS' %}
 {% set isInVariation = statusCode == 'VARIATION_IN_PROGRESS' or statusCode == 'VARIATION_SUBMITTED'
     or statusCode == 'VARIATION_REJECTED' or statusCode == 'VARIATION_APPROVED' %}
 {% set canChooseToEdit = (statusCode == 'APPROVED' or statusCode == 'SUBMITTED') and (not isInHardStopPeriod) %}
@@ -53,6 +53,16 @@
 {% endif %}
 
 {% block content %}
+    {% if isHdcPostponed %}
+        {{ mojAlert({
+            variant: 'warning',
+            title: 'HDC application postponed',
+            showTitleAsHeading: true,
+            text: 'This licence cannot be submitted until the application resumes',
+            dismissible: false
+        }) }}
+    {% endif %}
+
     {% if banner %}
         {{ mojAlert({
             variant: banner.type,
@@ -169,6 +179,7 @@
                     {% else %}
                         <a href="{{ backLink }}" class="govuk-link govuk-!-font-size-19" data-qa="back-to-caseload-link">Return to case list</a>
                     {% endif %}
+                        </div>
                 </div>
             </form>
         </div>
