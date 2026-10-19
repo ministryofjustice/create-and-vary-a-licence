@@ -87,6 +87,10 @@
     "audit": true,
     "event": "CONFIRM_LICENCE_CREATION_HARD_STOP"
   },
+  "GET /licence/create/id/:licenceId/refused-interrupt": {
+    "audit": true,
+    "event": "REFUSED_LICENCE_CREATION"
+  },
   "POST /licence/hard-stop/create/nomisId/:nomisId/confirm": {
     "audit": true,
     "event": "SUBMIT_LICENCE_CREATION_HARD_STOP"
