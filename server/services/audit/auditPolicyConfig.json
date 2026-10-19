@@ -1112,6 +1112,10 @@
     "audit": true,
     "event": "UPDATE_LICENCE_CREATE_ADD_PATHFINDER"
   },
+  "GET /:reportId": {
+    "audit": true,
+    "event": "VIEW_REPORTS"
+  },
   "GET /reports/last-minute-handover-cases": {
     "audit": true,
     "event": "VIEW_REPORTS_LAST_MINUTE_HANDOVER_CASES"
