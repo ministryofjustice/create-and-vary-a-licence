@@ -179,7 +179,11 @@
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
-        {% set releaseDate = offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort %}
+        {% if offender.isHdcPostponed %}
+            {% set releaseDate = '<span class="info-highlight white-space-nowrap">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '<br><span class="info-highlight-message">HDC application postponed</span></span>' %}
+        {% else %}
+            {% set releaseDate = offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort %}
+        {% endif %}
     {% elseif offender | shouldShowHardStopWarning %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
     {% elseif offender.kind == "TIME_SERVED" %}
