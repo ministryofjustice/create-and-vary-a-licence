@@ -179,7 +179,7 @@
     {% endif %}
 
     {% if offender.kind === "HDC" or offender.kind === 'HDC_VARIATION' %}
-        {% if offender.isHdcPostponed %}
+        {% if hdcCreationEnabled and offender.isHdcPostponed %}
             {% set releaseDate = '<span class="info-highlight white-space-nowrap">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '<br><span class="info-highlight-message">HDC application postponed</span></span>' %}
         {% else %}
             {% set releaseDate = offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort %}

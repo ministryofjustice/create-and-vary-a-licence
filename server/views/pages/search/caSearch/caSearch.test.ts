@@ -643,8 +643,8 @@ describe('View CA Search Results', () => {
     expect($('.urgent-highlight-message').length).toBe(0)
   })
 
-  it('should show HDC application postponed label when HDC is postponed', () => {
-    const $ = render({
+  const renderPostponedHdcCase = (hdcCreationEnabled?: boolean) =>
+    render({
       queryTerm: 'Test',
       backLink: '/licence/view/cases',
       statusConfig,
@@ -694,12 +694,28 @@ describe('View CA Search Results', () => {
       showAttentionNeededTab: true,
       hasSelectedMultiplePrisonCaseloads: false,
       isSearchPageView: true,
+      ...(hdcCreationEnabled === undefined ? {} : { hdcCreationEnabled }),
     })
+
+  it('should show HDC application postponed label when HDC creation is enabled', () => {
+    const $ = renderPostponedHdcCase(true)
     expect($('tbody .govuk-table__row').length).toBe(1)
     expect($('#name-button-1').text()).toBe('Test Person 1')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022HDC application postponed')
     expect($('.info-highlight-message').text().toString()).toBe('HDC application postponed')
+  })
+
+  it('should not show HDC application postponed label when HDC creation is disabled', () => {
+    const $withoutHdcCreation = renderPostponedHdcCase(false)
+    expect($withoutHdcCreation('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022')
+    expect($withoutHdcCreation('.info-highlight-message').length).toBe(0)
+  })
+
+  it('should not show HDC application postponed label when HDC creation is not enabled', () => {
+    const $withoutHdcCreationFlag = renderPostponedHdcCase()
+    expect($withoutHdcCreationFlag('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022')
+    expect($withoutHdcCreationFlag('.info-highlight-message').length).toBe(0)
   })
 
   it('should display offender name in title case with a link when a link is present', () => {
