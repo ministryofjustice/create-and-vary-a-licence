@@ -90,6 +90,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should display a warning alert when an HDC licence is postponed', () => {
     const $ = render({
+      hdcCreationEnabled: true,
       licence: { ...licence, isPostponed: true },
     })
 
@@ -98,6 +99,15 @@ describe('Create a Licence Views - Check Answers', () => {
     expect(alertBanner.find('.moj-alert__heading').text().trim()).toBe('HDC application postponed')
     expect(alertBanner.text()).toContain('This licence cannot be submitted until the application resumes')
     expect(alertBanner.find('.moj-alert__icon').length).toBe(1)
+  })
+
+  it('should not display a warning alert when an HDC licence is postponed and HDC creation is disabled', () => {
+    const $ = render({
+      hdcCreationEnabled: false,
+      licence: { ...licence, isPostponed: true },
+    })
+
+    expect($('.moj-alert--warning').length).toBe(0)
   })
 
   it('should display no alerts when they are not passed through', () => {
@@ -349,12 +359,24 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should disable the submit button when an HDC licence is postponed', () => {
     const $ = render({
+      hdcCreationEnabled: true,
       licence: { ...licence, kind: 'HDC', isPostponed: true },
       statusCode: 'IN_PROGRESS',
       isInHardStopPeriod: false,
     })
 
     expect($('[data-qa="send-licence-conditions"]').prop('disabled')).toBe(true)
+  })
+
+  it('should enable the submit button when an HDC licence is postponed and HDC creation is disabled', () => {
+    const $ = render({
+      hdcCreationEnabled: false,
+      licence: { ...licence, kind: 'HDC', isPostponed: true },
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    expect($('[data-qa="send-licence-conditions"]').prop('disabled')).toBe(false)
   })
 
   it('should enable the submit button when an HDC licence is not postponed', () => {
