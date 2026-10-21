@@ -5,7 +5,7 @@ export type AuditPolicy = {
   audit: boolean
 
   // The audit event if the route is auditable
-  event?: string
+  eventType?: string
 
   // The reason why the route is not auditable, if applicable
   reason?: string
@@ -14,13 +14,10 @@ export type AuditPolicy = {
   customHandler?: boolean
 }
 
-export default function getAuditPolicy(key: string): AuditPolicy | undefined {
+export default function getAuditPolicy(key: string): AuditPolicy {
   const policyKey = Object.keys(routeAuditPolicy).find(routeKey => matchesRoute(key, routeKey))
   const policy = (routeAuditPolicy as Record<string, AuditPolicy>)[policyKey]
-  if (policy) {
-    return { ...policy, customHandler: policy.customHandler ?? false }
-  }
-  return undefined // TODO: REMOVE, this should never happen if the build passes as all routes will be defined.
+  return { ...policy, customHandler: policy.customHandler ?? false }
 }
 
 function routeTemplateToRegex(template: string): RegExp {

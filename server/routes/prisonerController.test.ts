@@ -10,7 +10,7 @@ import AuditService from '../services/audit/auditService'
 const image = {}
 
 let app: Express
-const auditService = new AuditService() as jest.Mocked<AuditService>
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../services/audit/auditService')

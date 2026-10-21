@@ -106,9 +106,9 @@ describe('Route Audit Policy', () => {
   it('should verify policy structure is valid', () => {
     Object.entries(routeAuditPolicy).forEach(([, policy]: [string, AuditPolicy]) => {
       if (policy.audit) {
-        expect(policy.event).toBeDefined()
-        expect(typeof policy.event).toBe('string')
-        expect(policy.event.length).toBeGreaterThan(0)
+        expect(policy.eventType).toBeDefined()
+        expect(typeof policy.eventType).toBe('string')
+        expect(policy.eventType.length).toBeGreaterThan(0)
       } else {
         expect(policy.reason).toBeDefined()
         expect(typeof policy.reason).toBe('string')

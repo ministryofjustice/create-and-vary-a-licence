@@ -13,7 +13,7 @@ import AuditService from '../../services/audit/auditService'
 
 let app: Express
 
-const auditService = new AuditService() as jest.Mocked<AuditService>
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const bankHolidayRetriever: BankHolidayRetriever = async () => []
