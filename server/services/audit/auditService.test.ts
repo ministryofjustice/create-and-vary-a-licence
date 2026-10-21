@@ -1,7 +1,7 @@
 import { AuditService as HmppsAuditService } from '@ministryofjustice/hmpps-audit-client'
 import { User } from '../../@types/CvlUserDetails'
 import AuditService from './auditService'
-import { Licence } from '../../@types/licenceApiClientTypes'
+import { FoundComCase, Licence } from '../../@types/licenceApiClientTypes'
 import config from '../../config'
 
 jest.mock('../../data/licenceApiClient')
@@ -11,7 +11,6 @@ describe('AuditService', () => {
   const hmppsAuditService = new HmppsAuditService(null) as jest.Mocked<HmppsAuditService>
   const auditService = new AuditService(hmppsAuditService) as jest.Mocked<AuditService>
 
-  config.hmppsAuditEnabled = true
   const user = {
     username: 'joebloggs',
     displayName: 'Joe Bloggs',
@@ -33,9 +32,22 @@ describe('AuditService', () => {
 
   const requestId = 'request-id'
 
+  beforeEach(() => {
+    config.auditEnabled = true
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('logPageViewAttempt', () => {
-    afterEach(() => {
-      jest.clearAllMocks()
+    it('should not send an event if audit is disabled', async () => {
+      config.auditEnabled = false
+      const eventType = 'VIEWED_SOMETHING'
+
+      await auditService.logPageViewAttempt(requestId, { eventType, audit: true }, licence, user)
+
+      expect(hmppsAuditService.logAuditEvent).not.toHaveBeenCalled()
     })
 
     it('should log an event for a page view attempt by a probation user', async () => {
@@ -101,6 +113,64 @@ describe('AuditService', () => {
         details: {
           build: config.gitRef,
           userRoles: prisonUser.userRoles,
+        },
+      })
+    })
+  })
+
+  describe('logPageViewSuccess', () => {
+    it('should log an event for a successful page view', async () => {
+      const eventType = 'VIEWED_SOMETHING'
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logPageViewSuccess(requestId, { eventType, audit: true }, licence, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: `PAGE_VIEW_${eventType}_SUCCESS`,
+        subjectType: 'CRN',
+        subjectId: licence.crn,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+        },
+      })
+    })
+  })
+
+  describe('custom handlers', () => {
+    it('should log a probation search event', async () => {
+      const eventType = 'PROBATION_SEARCH'
+      const searchTerm = 'CRN123'
+      const searchResults = [
+        {
+          crn: 'CRN123',
+          kind: 'CRD',
+        } as FoundComCase,
+        {
+          crn: 'CRN456',
+          kind: 'PRRD',
+        } as FoundComCase,
+      ]
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logProbationSearchEvent(requestId, searchTerm, searchResults, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: `${eventType}_SUCCESS`,
+        subjectType: 'SEARCH_TERM',
+        subjectId: searchTerm,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          results: {
+            resultCount: searchResults.length,
+            returnedSubjectIds: searchResults.map(result => result.crn),
+          },
         },
       })
     })

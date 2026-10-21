@@ -49,16 +49,6 @@ const hmppsAuditService = AuditServiceFactory.configureFromEnv(
   {}, // Optional SQS client config
 )
 
-// const hmppsAuditService = AuditServiceFactory.createInstance(
-//   {
-//     queueUrl: 'https://sqs.eu-west-2.amazonaws.com/123456789/audit-queue',
-//     region: 'eu-west-2',
-//     serviceName: 'my-hmpps-service',
-//     enabled: true,
-//   },
-//   logger,
-// )
-
 const auditService = new AuditService(hmppsAuditService)
 const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)

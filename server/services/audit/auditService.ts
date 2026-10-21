@@ -1,7 +1,7 @@
 import { telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
 import { AuditEvent, AuditService as HmppsAuditService, SubjectType } from '@ministryofjustice/hmpps-audit-client'
 import { User } from '../../@types/CvlUserDetails'
-import { Licence } from '../../@types/licenceApiClientTypes'
+import { FoundComCase, Licence } from '../../@types/licenceApiClientTypes'
 import logger from '../../../logger'
 import { AuditPolicy } from './routeAuditPolicy'
 import config from '../../config'
@@ -31,20 +31,31 @@ export default class AuditService {
     await this.sendAuditEvent(policy.eventType, auditEventMessage)
   }
 
-  async recordProbationSearchAuditEvent(requestId: string, searchResults: object, user: User): Promise<void> {
-    const baseEventMessage = this.createAuditEvent('PROBATION_SEARCH', undefined, requestId, user)
+  async logProbationSearchEvent(
+    requestId: string,
+    searchTerm: string,
+    searchResults: FoundComCase[],
+    user: User,
+  ): Promise<void> {
+    const searchResultsSubjectIds = searchResults.map(result => result.crn)
+    const baseEventMessage = this.createAuditEvent('PROBATION_SEARCH_SUCCESS', undefined, requestId, user)
     const auditEvent: AuditEvent = {
       ...baseEventMessage,
+      subjectType: 'SEARCH_TERM',
+      subjectId: searchTerm,
       details: {
         ...baseEventMessage.details,
-        searchResults,
+        results: {
+          resultCount: searchResults.length,
+          returnedSubjectIds: searchResultsSubjectIds,
+        },
       },
     }
     await this.sendAuditEvent('PROBATION_SEARCH', auditEvent)
   }
 
   private async sendAuditEvent(eventType: string, auditEvent: AuditEvent): Promise<void> {
-    if (config.hmppsAuditEnabled) {
+    if (config.auditEnabled) {
       logger.info(`sending audit event type: ${eventType}, data: ${JSON.stringify(auditEvent)}`)
       telemetry.setSpanAttributes({ audited: true })
       await this.hmppsAuditService.logAuditEvent(auditEvent)

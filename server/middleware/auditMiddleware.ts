@@ -8,7 +8,7 @@ import config from '../config'
  */
 export default function auditMiddleware(auditService: AuditService): RequestHandler {
   return async (req, res, next) => {
-    if (config.hmppsAuditEnabled) {
+    if (config.auditEnabled) {
       const path = `${req.method} ${req.baseUrl}${req.path}`
       const policy = getAuditPolicy(path)
 
