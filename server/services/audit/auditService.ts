@@ -44,9 +44,11 @@ export default class AuditService {
   }
 
   private async sendAuditEvent(eventType: string, auditEvent: AuditEvent): Promise<void> {
-    logger.info(`sending audit event type: ${eventType}, data: ${JSON.stringify(auditEvent)}`)
-    telemetry.setSpanAttributes({ audited: true })
-    await this.hmppsAuditService.logAuditEvent(auditEvent)
+    if (config.hmppsAuditEnabled) {
+      logger.info(`sending audit event type: ${eventType}, data: ${JSON.stringify(auditEvent)}`)
+      telemetry.setSpanAttributes({ audited: true })
+      await this.hmppsAuditService.logAuditEvent(auditEvent)
+    }
   }
 
   private createAuditEvent(eventType: string, licence: Licence | undefined, requestId: string, user: User): AuditEvent {
@@ -67,7 +69,7 @@ export default class AuditService {
   private getSubjectFromRequest(
     licence: Licence | undefined,
     user: User,
-  ): { subjectType: SubjectType; subjectId: string } | undefined {
+  ): { subjectType: SubjectType; subjectId: string } {
     if (licence) {
       if (user?.nomisStaffId) {
         return {
@@ -75,12 +77,12 @@ export default class AuditService {
           subjectId: licence.nomsId,
         }
       }
-    }
 
-    if (user?.deliusStaffIdentifier) {
-      return {
-        subjectType: 'CRN',
-        subjectId: licence.crn,
+      if (user?.deliusStaffIdentifier) {
+        return {
+          subjectType: 'CRN',
+          subjectId: licence.crn,
+        }
       }
     }
 
