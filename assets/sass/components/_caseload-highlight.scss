@@ -5,9 +5,16 @@
   display: block;
 }
 
-.urgent-highlight-message {
+.urgent-highlight-message, .info-highlight-message {
   color: #0b0c0c;
   font-size: 16px;
   font-weight: normal;
   line-height: 1.25;
+}
+
+.info-highlight {
+  border-left: 5px solid #858686;
+  font-weight: bold;
+  padding-left: 5px;
+  display: block;
 }

@@ -37,9 +37,16 @@ generic-service:
     HDC_CREATION_ENABLED: true
     HMPPS_AUDIT_ENABLED: true
 
+    # HMPPS audit
+    AUDIT_SQS_REGION: "eu-west-2"
+    AUDIT_SERVICE_NAME: "create-and-vary-a-licence"
+
   namespace_secrets:
     create-and-vary-a-licence-domain-events-sqs-instance-output:
       SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
+    sqs-hmpps-audit-secret:
+      AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
+      AUDIT_SQS_QUEUE_NAME: 'sqs_queue_name'
 
   scheduledDowntime:
     enabled: true
