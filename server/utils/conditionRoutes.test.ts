@@ -17,6 +17,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: 'some-code',
           fromReview: true,
+          version: '4.1',
         }),
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2?fromReview=true')
     })
@@ -28,6 +29,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: 'some-code',
           fromReview: false,
+          version: '4.1',
         }),
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2')
     })
@@ -39,6 +41,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: OUT_OF_BOUNDS_PREMISES_CONDITION_CODE,
           fromReview: true,
+          version: '4.1',
         }),
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2?fromReview=true')
     })
@@ -50,6 +53,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: OUT_OF_BOUNDS_PREMISES_CONDITION_CODE,
           fromReview: false,
+          version: '4.1',
         }),
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2')
     })
@@ -61,6 +65,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: CURFEW_CONDITION_CODE,
           fromReview: true,
+          version: '3.0',
         }),
       ).toStrictEqual(
         `/licence/create/id/1/additional-licence-conditions/condition/${CURFEW_CONDITION_CODE}/curfew?fromReview=true`,
@@ -74,6 +79,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: CURFEW_CONDITION_CODE,
           fromReview: false,
+          version: '3.0',
         }),
       ).toStrictEqual(`/licence/create/id/1/additional-licence-conditions/condition/${CURFEW_CONDITION_CODE}/curfew`)
     })
@@ -90,6 +96,18 @@ describe('conditionRoutes', () => {
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2?fromReview=true')
     })
 
+    test('Curfew V4.1, from review', () => {
+      expect(
+        getConditionCallbackHref({
+          licenceId: '1',
+          conditionId: 2,
+          conditionCode: CURFEW_CONDITION_CODE,
+          fromReview: true,
+          version: '4.1',
+        }),
+      ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2?fromReview=true')
+    })
+
     test('Curfew V4, not from review', () => {
       expect(
         getConditionCallbackHref({
@@ -98,6 +116,18 @@ describe('conditionRoutes', () => {
           conditionCode: CURFEW_CONDITION_CODE,
           fromReview: false,
           version: '4.0',
+        }),
+      ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2')
+    })
+
+    test('Curfew V4.1, not from review', () => {
+      expect(
+        getConditionCallbackHref({
+          licenceId: '1',
+          conditionId: 2,
+          conditionCode: CURFEW_CONDITION_CODE,
+          fromReview: false,
+          version: '4.1',
         }),
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2')
     })
@@ -111,6 +141,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: 'some-code',
           fromReview: true,
+          version: '4.1',
         }),
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2?fromReview=true')
     })
@@ -122,6 +153,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: 'some-code',
           fromReview: false,
+          version: '4.1',
         }),
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2')
     })
@@ -133,6 +165,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: CURFEW_CONDITION_CODE,
           fromReview: true,
+          version: '3.0',
         }),
       ).toStrictEqual(
         `/licence/create/id/1/additional-licence-conditions/condition/${CURFEW_CONDITION_CODE}/curfew?fromReview=true`,
@@ -151,6 +184,18 @@ describe('conditionRoutes', () => {
       ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2?fromReview=true')
     })
 
+    test('Curfew V4.1, from review', () => {
+      expect(
+        getEditConditionHref({
+          licenceId: 1,
+          conditionId: 2,
+          conditionCode: CURFEW_CONDITION_CODE,
+          fromReview: true,
+          version: '4.1',
+        }),
+      ).toStrictEqual('/licence/create/id/1/additional-licence-conditions/condition/2?fromReview=true')
+    })
+
     test('MEZ condition, from review', () => {
       expect(
         getEditConditionHref({
@@ -158,6 +203,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: MEZ_CONDITION_CODE,
           fromReview: true,
+          version: '4.1',
         }),
       ).toStrictEqual(
         `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromReview=true`,
@@ -171,6 +217,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: MEZ_CONDITION_CODE,
           fromReview: false,
+          version: '4.1',
         }),
       ).toStrictEqual(`/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads`)
     })
@@ -182,6 +229,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: RESTRICTION_ZONE_CONDITION_CODE,
           fromReview: true,
+          version: '4.1',
         }),
       ).toStrictEqual(
         `/licence/create/id/1/additional-licence-conditions/condition/${RESTRICTION_ZONE_CONDITION_CODE}/file-uploads?fromReview=true`,
@@ -195,6 +243,7 @@ describe('conditionRoutes', () => {
           conditionId: 2,
           conditionCode: RESTRICTION_ZONE_CONDITION_CODE,
           fromReview: false,
+          version: '4.1',
         }),
       ).toStrictEqual(
         `/licence/create/id/1/additional-licence-conditions/condition/${RESTRICTION_ZONE_CONDITION_CODE}/file-uploads`,
