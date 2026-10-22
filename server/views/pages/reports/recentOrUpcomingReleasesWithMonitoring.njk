@@ -83,12 +83,12 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-four-quarters">
-            <h1 class="govuk-heading-xl">Upcoming Releases with electronic monitoring conditions</h1>
-            <h2 class="govuk-heading-s">There are {{ upcomingCases.length }} upcoming releases</h2>
+            <h1 class="govuk-heading-xl">{{ releaseType }} Releases with electronic monitoring conditions</h1>
+            <h2 class="govuk-heading-s">There are {{ upcomingCases.length }} {{ releaseType | lower }} releases</h2>
             <div class="govuk-button-group">
                         {{ govukButton({
                             text: "Download CSV",
-                            href: "/reports/upcoming-releases-with-monitoring/download-csv",
+                            href: downloadCsvUrl,
                             classes: "govuk-button--secondary"
                         }) }}
             </div>

@@ -495,6 +495,10 @@ export default class LicenceService {
     return this.licenceApiClient.getUpcomingReleasesWithMonitoring()
   }
 
+  async getRecentReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
+    return this.licenceApiClient.getRecentReleasesWithMonitoring()
+  }
+
   async getLicenceStatusCases(): Promise<LicenceStatusResponse[]> {
     return this.licenceApiClient.getLicenceStatusCases()
   }
