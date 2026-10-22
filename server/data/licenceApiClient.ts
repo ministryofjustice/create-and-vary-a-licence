@@ -714,6 +714,12 @@ export default class LicenceApiClient extends RestClient {
     })) as Promise<UpcomingReleasesWithMonitoringConditionsResponse[]>
   }
 
+  async getRecentReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
+    return (await this.get({
+      path: `/cvl-report/recent-releases-with-monitoring`,
+    })) as Promise<UpcomingReleasesWithMonitoringConditionsResponse[]>
+  }
+
   async getLicenceStatusCases(): Promise<LicenceStatusResponse[]> {
     return (await this.get({
       path: `/cvl-report/licence-status-cases`,
