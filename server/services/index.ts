@@ -1,5 +1,6 @@
 import { createDprServices } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
 
+import { AuditServiceFactory } from '@ministryofjustice/hmpps-audit-client'
 import UserService from './userService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
@@ -21,6 +22,8 @@ import HdcService from './hdc/hdcService'
 import AddressService from './addressService'
 import TimeServedService from './timeServedService'
 import HdcCurfewAddressService from './hdc/hdcCurfewAddressService'
+import AuditService from './audit/auditService'
+import logger from '../../logger'
 
 const {
   manageUsersApiClient,
@@ -41,6 +44,22 @@ const dprServices = createDprServices(reportingClients, {
   saveDefaults: true,
 })
 
+const hmppsAuditService = AuditServiceFactory.configureFromEnv(
+  logger,
+  {}, // Optional SQS client config
+)
+
+// const hmppsAuditService = AuditServiceFactory.createInstance(
+//   {
+//     queueUrl: 'https://sqs.eu-west-2.amazonaws.com/123456789/audit-queue',
+//     region: 'eu-west-2',
+//     serviceName: 'my-hmpps-service',
+//     enabled: true,
+//   },
+//   logger,
+// )
+
+const auditService = new AuditService(hmppsAuditService)
 const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
 const probationService = new ProbationService(deliusClient)
@@ -85,6 +104,7 @@ export const services = {
   timeServedService,
   dprServices,
   hdcCurfewAddressService,
+  auditService,
 }
 
 export type Services = typeof services
