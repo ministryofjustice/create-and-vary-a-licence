@@ -4,12 +4,14 @@ export const CURFEW_CONDITION_CODE = '0a370862-5426-49c1-b6d4-3d074d78a81a'
 export const EVENT_RESTRICTION_CONDITION_CODE = '99195049-f355-46fb-b7d8-aef87a1b19c5'
 export const RESTRICTION_ZONE_CONDITION_CODE = '005d70e4-a247-4f82-b8b3-6d294a0f5051'
 
+const MULTI_INSTANCE_CURFEW_VERSIONS = ['1.0', '2.0', '2.1', '3.0']
+
 type ConditionCallbackHrefArgs = {
   licenceId: string
   conditionId: number
   conditionCode: string
   fromReview: boolean
-  version?: string
+  version: string
 }
 
 type EditConditionHrefArgs = {
@@ -17,7 +19,7 @@ type EditConditionHrefArgs = {
   conditionId: number
   conditionCode: string
   fromReview: boolean
-  version?: string
+  version: string
 }
 
 type DeleteConditionHrefArgs = {
@@ -69,21 +71,23 @@ const conditions: Record<string, ConditionConfig> = {
   },
   [CURFEW_CONDITION_CODE]: {
     inputTemplate: (licenceVersion?: string) =>
-      licenceVersion === '4.0' ? 'pages/manageConditions/curfew/input_V4' : 'pages/manageConditions/curfew/input',
+      MULTI_INSTANCE_CURFEW_VERSIONS.includes(licenceVersion)
+        ? 'pages/manageConditions/curfew/input'
+        : 'pages/manageConditions/curfew/input_V4',
     getConditionCallbackHref: (args: ConditionCallbackHrefArgs) =>
-      args.version === '4.0'
-        ? `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionId}${
+      MULTI_INSTANCE_CURFEW_VERSIONS.includes(args.version)
+        ? `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionCode}/curfew${
             args.fromReview ? '?fromReview=true' : ''
           }`
-        : `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionCode}/curfew${
+        : `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionId}${
             args.fromReview ? '?fromReview=true' : ''
           }`,
     getEditConditionHref: (args: EditConditionHrefArgs) =>
-      args.version === '4.0'
-        ? `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionId}${
+      MULTI_INSTANCE_CURFEW_VERSIONS.includes(args.version)
+        ? `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionCode}/curfew${
             args.fromReview ? '?fromReview=true' : ''
           }`
-        : `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionCode}/curfew${
+        : `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionId}${
             args.fromReview ? '?fromReview=true' : ''
           }`,
   },
