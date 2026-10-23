@@ -37,6 +37,7 @@ generic-service:
     HDC_CREATION_ENABLED: true
 
     # HMPPS audit
+    AUDIT_ENABLED: true
     AUDIT_SQS_REGION: "eu-west-2"
     AUDIT_SERVICE_NAME: "create-and-vary-a-licence"
 
