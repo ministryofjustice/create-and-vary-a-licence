@@ -6,6 +6,7 @@ import DoHdcCurfewHoursApplyDailyPage from '../../pages/doHdcCurfewHoursApplyDai
 import CurfewHoursPage from '../../pages/curfewHoursPage'
 import FirstNightCurfewTimesPage from '../../pages/firstNightCurfewTimesPage'
 import { LicenceKind } from '../../../server/enumeration'
+import CheckAnswersPage from '../../pages/checkAnswers'
 
 context('Create an HDC licence', () => {
   const dates: string[] = []
@@ -40,6 +41,30 @@ context('Create an HDC licence', () => {
     cy.task('stubUpdateHdcWeeklyCurfewTimes')
     cy.task('stubCheckComCaseAccess')
     cy.signIn()
+  })
+
+  it('should retain conversion info on return to check licence details and hide it after submission', () => {
+    cy.task('stubGetHdcLicence', { isReplacementForOptedInLicence: true })
+    cy.visit('/licence/create/id/1/check-your-answers')
+    const checkAnswersPage = new CheckAnswersPage()
+
+    checkAnswersPage
+      .getReplacementInfo()
+      .should('contain', 'Any additional or bespoke conditions you entered previously will be saved.')
+      .and('contain', 'You must enter any initial appointment details again and then submit the licence.')
+
+    cy.reload()
+    checkAnswersPage.getReplacementInfo().should('exist')
+    checkAnswersPage.clickSendLicenceConditionsToPrison()
+
+    cy.task('stubGetHdcLicence', { isReplacementForOptedInLicence: true, statusCode: 'SUBMITTED' })
+    cy.visit('/licence/create/id/1/check-your-answers')
+    checkAnswersPage.getReplacementInfo().should('not.exist')
+  })
+
+  it('should not show conversion info for a new HDC licence', () => {
+    cy.visit('/licence/create/id/1/check-your-answers')
+    new CheckAnswersPage().getReplacementInfo().should('not.exist')
   })
 
   it('should click through the create a licence journey', () => {

@@ -7439,6 +7439,11 @@ export interface components {
        * @example true
        */
       isPostponed: boolean
+      /**
+       * @description Is this licence a replacement for an opted in CRD licence?
+       * @example false
+       */
+      isReplacementForOptedInLicence: boolean
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
