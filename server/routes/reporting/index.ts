@@ -11,6 +11,7 @@ import { Services } from '../../services'
 import ReportHomeRoutes from './handlers'
 import LastMinuteHandoverCasesRoutes from './handlers/lastMinuteHandoverCases'
 import UpcomingReleasesWithMonitoringRoutes from './handlers/upcomingReleasesWithMonitoring'
+import RecentReleasesWithMonitoringRoutes from './handlers/recentReleasesWithMonitoring'
 import LicenceStatusCasesRoutes from './handlers/licenceStatusCases'
 import { getSystemToken } from '../../data/systemToken'
 
@@ -32,6 +33,12 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
     const routes = new UpcomingReleasesWithMonitoringRoutes(licenceService)
     get('/upcoming-releases-with-monitoring', routes.GET)
     get('/upcoming-releases-with-monitoring/download-csv', routes.GET_CSV)
+  }
+
+  {
+    const routes = new RecentReleasesWithMonitoringRoutes(licenceService)
+    get('/recent-releases-with-monitoring', routes.GET)
+    get('/recent-releases-with-monitoring/download-csv', routes.GET_CSV)
   }
 
   {

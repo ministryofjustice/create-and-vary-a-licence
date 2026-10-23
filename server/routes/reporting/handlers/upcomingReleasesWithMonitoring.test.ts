@@ -52,9 +52,11 @@ describe('UpcomingReleasesWithMonitoringRoutes', () => {
       emEndDate: '01/02/2024',
     }
 
-    expect(res.render).toHaveBeenCalledWith('pages/reports/upcomingReleasesWithMonitoring', {
+    expect(res.render).toHaveBeenCalledWith('pages/reports/recentOrUpcomingReleasesWithMonitoring', {
       user: { username: 'A User' },
       upcomingCases: [expectedMappedRow],
+      releaseType: 'Upcoming',
+      downloadCsvUrl: '/reports/upcoming-releases-with-monitoring/download-csv',
     })
   })
 
