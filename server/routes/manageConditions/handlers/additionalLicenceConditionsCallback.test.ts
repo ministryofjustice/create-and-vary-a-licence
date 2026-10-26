@@ -129,7 +129,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       )
     })
 
-    it('should redirect to the curfew-specific page if the curfew condition is selected', async () => {
+    it('should redirect to the pre-v4 curfew-specific page if the curfew condition is selected', async () => {
       res.locals.licence = {
         additionalLicenceConditions: [
           {
@@ -139,6 +139,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
             sequence: 1,
           },
         ],
+        version: '3.0',
       } as Licence
 
       conditionsProviderSpy.mockResolvedValueOnce({
@@ -153,6 +154,31 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/create/id/1/additional-licence-conditions/condition/${CURFEW_CONDITION_CODE}/curfew`,
       )
+    })
+
+    it('should redirect to the post-v4 curfew-specific page if the curfew condition is selected', async () => {
+      res.locals.licence = {
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: CURFEW_CONDITION_CODE,
+            data: [],
+            sequence: 1,
+          },
+        ],
+        version: '4.0',
+      } as Licence
+
+      conditionsProviderSpy.mockResolvedValueOnce({
+        text: 'Condition 1',
+        requiresInput: true,
+        code: CURFEW_CONDITION_CODE,
+        category: 'group1',
+      })
+
+      await handler.GET(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/additional-licence-conditions/condition/1`)
     })
 
     it('should redirect to the bespoke conditions question page if no conditions require input', async () => {

@@ -441,6 +441,7 @@ export default {
   },
 
   stubGetHdcLicence: (options: {
+    isReplacementForOptedInLicence?: boolean
     licenceId?: string
     firstNightCurfewTimes?: {
       fromTime?: string
@@ -469,6 +470,7 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           kind: options.kind ?? LicenceKind.HDC,
+          isReplacementForOptedInLicence: options.isReplacementForOptedInLicence ?? false,
           statusCode: options.statusCode ?? licencePlaceholder.statusCode,
           typeCode: options.typeCode ?? licencePlaceholder.typeCode,
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate ?? '01/03/2021',
