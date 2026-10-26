@@ -58,7 +58,12 @@ export default class AuditService {
     if (config.auditEnabled) {
       logger.info(`sending audit event type: ${eventType}, data: ${JSON.stringify(auditEvent)}`)
       telemetry.setSpanAttributes({ audited: true })
-      await this.hmppsAuditService.logAuditEvent(auditEvent)
+
+      try {
+        await this.hmppsAuditService.logAuditEvent(auditEvent)
+      } catch (error) {
+        logger.error('Could not send audit event to hmpps audit service', error)
+      }
     }
   }
 

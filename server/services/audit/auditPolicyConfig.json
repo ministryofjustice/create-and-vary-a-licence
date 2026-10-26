@@ -1299,5 +1299,13 @@
   "GET /prisoner/:nomsId/image": {
     "audit": true,
     "eventType": "VIEW_PRISONER_IMAGE"
+  },
+  "GET /reports/recent-releases-with-monitoring": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS_RECENT_RELEASES_WITH_MONITORING"
+  },
+  "GET /reports/recent-releases-with-monitoring/download-csv": {
+    "audit": true,
+    "eventType": "DOWNLOAD_REPORTS_RECENT_RELEASES_WITH_MONITORING_CSV"
   }
 }
