@@ -16,14 +16,26 @@ export type AuditPolicy = {
   customHandler?: boolean
 }
 
-export default function getAuditPolicy(routePath: string): AuditPolicy {
+export type RouteAuditPolicy = {
+  route: string
+  policy: AuditPolicy
+}
+
+export default function getAuditPolicy(routePath: string): RouteAuditPolicy {
   const policyKey = Object.keys(routeAuditPolicy).find(routeKey => matchesRoute(routePath, routeKey))
   const policy = (routeAuditPolicy as Record<string, AuditPolicy>)[policyKey]
   if (!policy) {
     logger.error(`No audit policy found for route: ${routePath}`)
-    return policy
+    return undefined
   }
-  return { ...policy, customHandler: policy.customHandler ?? false }
+
+  return {
+    route: policyKey,
+    policy: {
+      ...policy,
+      customHandler: policy.customHandler ?? false,
+    },
+  }
 }
 
 function matchesRoute(routePath: string, template: string): boolean {

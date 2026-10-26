@@ -42,7 +42,7 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   router.use(addCvlUserDataToTelemetry())
   router.use(flashMessages())
   router.use(fromReviewMiddleware())
-  router.use(auditMiddleware(services.auditService))
+  router.use(auditMiddleware(services.auditService, services.licenceService))
 
   router.use(homeRoutes(services))
   router.use(createLicenceRoutes(services))

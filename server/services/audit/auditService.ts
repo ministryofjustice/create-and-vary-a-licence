@@ -56,7 +56,7 @@ export default class AuditService {
 
   private async sendAuditEvent(eventType: string, auditEvent: AuditEvent): Promise<void> {
     if (config.auditEnabled) {
-      logger.info(`sending audit event type: ${eventType}, data: ${JSON.stringify(auditEvent)}`)
+      logger.info(`sending audit event type: ${eventType}`)
       telemetry.setSpanAttributes({ audited: true })
 
       try {

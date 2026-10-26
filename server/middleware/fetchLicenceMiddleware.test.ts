@@ -77,6 +77,16 @@ describe('fetchLicenceMiddleware', () => {
     expect(next).toHaveBeenCalledTimes(1)
   })
 
+  it('should not call licenceService if licence is already in res.locals', async () => {
+    res.locals.licence = licence
+
+    await middleware(req, res, next)
+
+    expect(res.locals.licence).toEqual(licence)
+    expect(licenceService.getLicence).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledTimes(1)
+  })
+
   // Causes an error to appear in the console with message 'Failed to get licence details for licence Id: 1' (expected)
   it('should handle error from licence service', async () => {
     licenceService.getLicence.mockRejectedValue('Error')

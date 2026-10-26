@@ -2,14 +2,16 @@ import { RequestHandler } from 'express'
 import getUrlAccessByStatus from '../utils/urlAccessByStatus'
 import LicenceService from '../services/licenceService'
 import logger from '../../logger'
-import { Licence } from '../@types/licenceApiClientTypes'
 
 export default function fetchLicence(licenceService: LicenceService): RequestHandler {
   return async (req, res, next) => {
-    if (req.params.licenceId) {
+    if (req.params.licenceId && !res.locals.licence) {
       try {
         const { user } = res.locals
-        const licence: Licence = await licenceService.getLicence(parseInt(req.params.licenceId, 10), user)
+        let { licence } = res.locals
+        if (!licence) {
+          licence = await licenceService.getLicence(parseInt(req.params.licenceId, 10), user)
+        }
 
         if (licence) {
           // Does this prison user have a caseload which allows access this licence?
