@@ -87,14 +87,14 @@ export default class AuditService {
     user: User,
   ): { subjectType: SubjectType; subjectId: string } {
     if (licence) {
-      if (user?.nomisStaffId) {
+      if (user?.authSource === 'nomis') {
         return {
           subjectType: 'PRISONER_ID',
           subjectId: licence.nomsId,
         }
       }
 
-      if (user?.deliusStaffIdentifier) {
+      if (user?.authSource === 'delius') {
         return {
           subjectType: 'CRN',
           subjectId: licence.crn,

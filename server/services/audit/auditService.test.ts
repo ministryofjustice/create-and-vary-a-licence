@@ -19,6 +19,7 @@ describe('AuditService', () => {
     lastName: 'Bloggs',
     emailAddress: 'jbloggs@probation.gov.uk',
     userRoles: ['ROLE_PROBATION'],
+    authSource: 'delius',
   } as User
 
   const licence = {
@@ -75,6 +76,7 @@ describe('AuditService', () => {
         ...user,
         nomisStaffId: 1000,
         userRoles: ['ROLE_PRISON'],
+        authSource: 'nomis',
       }
       hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
 
