@@ -24,6 +24,7 @@ import TimeServedService from './timeServedService'
 import HdcCurfewAddressService from './hdc/hdcCurfewAddressService'
 import AuditService from './audit/auditService'
 import logger from '../../logger'
+import config from '../config'
 
 const {
   manageUsersApiClient,
@@ -44,10 +45,7 @@ const dprServices = createDprServices(reportingClients, {
   saveDefaults: true,
 })
 
-const hmppsAuditService = AuditServiceFactory.configureFromEnv(
-  logger,
-  {}, // Optional SQS client config
-)
+const hmppsAuditService = AuditServiceFactory.createInstance(config.sqs.audit, logger)
 
 const auditService = new AuditService(hmppsAuditService)
 const qrCodeService = new QrCodeService()

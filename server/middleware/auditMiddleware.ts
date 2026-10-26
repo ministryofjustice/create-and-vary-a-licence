@@ -10,7 +10,7 @@ import LicenceService from '../services/licenceService'
  */
 export default function auditMiddleware(auditService: AuditService, licenceService: LicenceService): RequestHandler {
   return async (req, res, next) => {
-    if (config.auditEnabled) {
+    if (config.sqs.audit.enabled) {
       const path = `${req.method} ${req.baseUrl}${req.path}`
       const routePolicy = getAuditPolicy(path)
 

@@ -1,3 +1,5 @@
+import { AuditClientConfig } from '@ministryofjustice/hmpps-audit-client'
+
 const production = process.env.NODE_ENV === 'production'
 
 function get<T>(name: string, fallback: T, options = { requireInProduction: false }): T | string {
@@ -12,6 +14,19 @@ function get<T>(name: string, fallback: T, options = { requireInProduction: fals
 
 const requiredInProduction = { requireInProduction: true }
 
+const auditConfig = (): AuditClientConfig => {
+  const auditEnabled = get('AUDIT_ENABLED', 'false') === 'true'
+  return {
+    enabled: auditEnabled,
+    queueUrl: get(
+      'AUDIT_SQS_QUEUE_URL',
+      'http://localhost:4566/000000000000/mainQueue',
+      auditEnabled ? requiredInProduction : undefined,
+    ),
+    serviceName: get('AUDIT_SERVICE_NAME', 'UNASSIGNED', auditEnabled ? requiredInProduction : undefined),
+    region: get('AUDIT_SQS_REGION', 'eu-west-2'),
+  }
+}
 export class AgentConfig {
   timeout: number
 
@@ -63,6 +78,7 @@ export default {
     },
     pollingWaitTimeMs: Number(get('SQS_POLLING_WAIT_TIME_MS', 10000)),
     endpoint: production ? null : 'http://127.0.0.1:4566',
+    audit: auditConfig(),
   },
   apis: {
     hmppsAuth: {
@@ -201,5 +217,4 @@ export default {
     url: get('HDC_URL', 'https://licences-dev.prison.service.justice.gov.uk'),
     hdcCreationEnabled: get('HDC_CREATION_ENABLED', 'false') === 'true',
   },
-  auditEnabled: get('AUDIT_ENABLED', 'false') === 'true',
 }

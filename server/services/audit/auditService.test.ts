@@ -34,7 +34,7 @@ describe('AuditService', () => {
   const requestId = 'request-id'
 
   beforeEach(() => {
-    config.auditEnabled = true
+    config.sqs.audit.enabled = true
   })
 
   afterEach(() => {
@@ -43,7 +43,7 @@ describe('AuditService', () => {
 
   describe('logPageViewAttempt', () => {
     it('should not send an event if audit is disabled', async () => {
-      config.auditEnabled = false
+      config.sqs.audit.enabled = false
       const eventType = 'VIEWED_SOMETHING'
 
       await auditService.logPageViewAttempt(requestId, { eventType, audit: true }, licence, user)

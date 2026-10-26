@@ -38,7 +38,7 @@ beforeEach(() => {
   res = prisonRes
   res.locals.licence = undefined
   auditService.logPageViewAttempt.mockResolvedValue(undefined)
-  config.auditEnabled = true
+  config.sqs.audit.enabled = true
 })
 
 afterEach(() => {
@@ -47,7 +47,7 @@ afterEach(() => {
 
 describe('auditMiddleware', () => {
   it('should not call audit service is auditing is disabled', async () => {
-    config.auditEnabled = false
+    config.sqs.audit.enabled = false
     req.params = {}
 
     await middleware(req, res, next)
