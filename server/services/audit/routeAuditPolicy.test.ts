@@ -5,7 +5,7 @@ import setupRoutes from '../../routes'
 import setUpHealthChecks from '../../middleware/setUpHealthChecks'
 import applicationInfo from '../../applicationInfo'
 import setUpAuthentication from '../../middleware/setUpAuthentication'
-import { AuditPolicy } from './routeAuditPolicy'
+import getAuditPolicy, { AuditPolicy } from './routeAuditPolicy'
 import routeAuditPolicy from './auditPolicyConfig.json'
 
 interface RouteEntry {
@@ -121,5 +121,13 @@ describe('Route Audit Policy', () => {
     const keys = Object.keys(routeAuditPolicy)
     const uniqueKeys = new Set(keys)
     expect(uniqueKeys.size).toBe(keys.length)
+  })
+
+  it('should match routes', () => {
+    const validRoute = 'GET /licence/create/nomisId/ABC123/confirm'
+    expect(getAuditPolicy(validRoute)).toBeDefined()
+
+    const inValidRoute = 'GET /licence/create/nomisId/ABC123/confirmBad'
+    expect(getAuditPolicy(inValidRoute)).not.toBeDefined()
   })
 })

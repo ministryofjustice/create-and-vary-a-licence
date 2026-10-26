@@ -1,3 +1,5 @@
+import { match } from 'path-to-regexp'
+import logger from '../../../logger'
 import routeAuditPolicy from './auditPolicyConfig.json'
 
 export type AuditPolicy = {
@@ -14,20 +16,18 @@ export type AuditPolicy = {
   customHandler?: boolean
 }
 
-export default function getAuditPolicy(key: string): AuditPolicy {
-  const policyKey = Object.keys(routeAuditPolicy).find(routeKey => matchesRoute(key, routeKey))
+export default function getAuditPolicy(routePath: string): AuditPolicy {
+  const policyKey = Object.keys(routeAuditPolicy).find(routeKey => matchesRoute(routePath, routeKey))
   const policy = (routeAuditPolicy as Record<string, AuditPolicy>)[policyKey]
+  if (!policy) {
+    logger.error(`No audit policy found for route: ${routePath}`)
+    return policy
+  }
   return { ...policy, customHandler: policy.customHandler ?? false }
 }
 
-function routeTemplateToRegex(template: string): RegExp {
-  const escaped = template
-    .split('/')
-    .map(segment => (segment.startsWith(':') ? '[A-Za-z0-9]+' : segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
-    .join('/')
-  return new RegExp(`^${escaped}$`)
-}
-
-function matchesRoute(input: string, template: string): boolean {
-  return routeTemplateToRegex(template).test(input)
+function matchesRoute(routePath: string, template: string): boolean {
+  const checkMatch = match(template, { decode: decodeURIComponent })
+  const result = checkMatch(routePath)
+  return result !== false
 }
