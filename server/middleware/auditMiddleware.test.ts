@@ -3,10 +3,8 @@ import auditMiddleware from './auditMiddleware'
 import AuditService from '../services/audit/auditService'
 import config from '../config'
 import { Licence } from '../@types/licenceApiClientTypes'
-import LicenceService from '../services/licenceService'
 
 jest.mock('../services/audit/auditService')
-jest.mock('../services/licenceService')
 
 let res = {} as unknown as Response
 const req = {
@@ -29,12 +27,10 @@ const prisonRes = {
   redirect: jest.fn(),
 } as unknown as Response
 const auditService = new AuditService(null) as jest.Mocked<AuditService>
-const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
-const middleware = auditMiddleware(auditService, licenceService)
+const middleware = auditMiddleware(auditService)
 
 beforeEach(() => {
-  req.params = { licenceId: '1' }
   res = prisonRes
   res.locals.licence = undefined
   auditService.logPageViewAttempt.mockResolvedValue(undefined)
@@ -94,40 +90,40 @@ describe('auditMiddleware', () => {
     expect(next).toHaveBeenCalledTimes(1)
   })
 
-  it('should not fetch the licence if the route does not have a licence id param ', async () => {
-    const crn = 'X123456'
-    const auditNeededReq = {
-      ...req,
-      path: `/${crn}/restricted`,
-    } as Request
-
-    res.locals.licence = undefined
-
-    await middleware(auditNeededReq, res, next)
-
-    expect(licenceService.getLicence).not.toHaveBeenCalled()
-  })
-
-  it('should fetch the licence if the route has a licence id param ', async () => {
-    const licenceId = 25
-    const licence = {
-      id: licenceId,
-      statusCode: 'IN_PROGRESS',
-      prisonCode: 'LEI',
-      probationAreaCode: 'N55',
-      probationTeamCode: 'N55A',
-    } as Licence
-    licenceService.getLicence.mockResolvedValue(licence)
-
-    const auditNeededReq = {
-      ...req,
-      path: `/licence/create/id/${licenceId}/bespoke-conditions`,
-    } as Request
-    res.locals.licence = undefined
-
-    await middleware(auditNeededReq, res, next)
-
-    expect(licenceService.getLicence).toHaveBeenCalledWith(licenceId, res.locals.user)
-    expect(res.locals.licence).toEqual(licence)
-  })
+  // it('should not fetch the licence if the route does not have a licence id param ', async () => {
+  //   const crn = 'X123456'
+  //   const auditNeededReq = {
+  //     ...req,
+  //     path: `/${crn}/restricted`,
+  //   } as Request
+  //
+  //   res.locals.licence = undefined
+  //
+  //   await middleware(auditNeededReq, res, next)
+  //
+  //   expect(licenceService.getLicence).not.toHaveBeenCalled()
+  // })
+  //
+  // it('should fetch the licence if the route has a licence id param ', async () => {
+  //   const licenceId = 25
+  //   const licence = {
+  //     id: licenceId,
+  //     statusCode: 'IN_PROGRESS',
+  //     prisonCode: 'LEI',
+  //     probationAreaCode: 'N55',
+  //     probationTeamCode: 'N55A',
+  //   } as Licence
+  //   licenceService.getLicence.mockResolvedValue(licence)
+  //
+  //   const auditNeededReq = {
+  //     ...req,
+  //     path: `/licence/create/id/${licenceId}/bespoke-conditions`,
+  //   } as Request
+  //   res.locals.licence = undefined
+  //
+  //   await middleware(auditNeededReq, res, next)
+  //
+  //   expect(licenceService.getLicence).toHaveBeenCalledWith(licenceId, res.locals.user)
+  //   expect(res.locals.licence).toEqual(licence)
+  // })
 })

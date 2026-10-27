@@ -21,7 +21,7 @@ export type RouteAuditPolicy = {
   policy: AuditPolicy
 }
 
-export default function getAuditPolicy(routePath: string): RouteAuditPolicy {
+export default function getAu1ditPolicy(routePath: string): RouteAuditPolicy {
   const policyKey = Object.keys(routeAuditPolicy).find(routeKey => matchesRoute(routePath, routeKey))
   const policy = (routeAuditPolicy as Record<string, AuditPolicy>)[policyKey]
   if (!policy) {
