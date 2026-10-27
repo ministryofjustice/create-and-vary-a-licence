@@ -53,7 +53,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             cvlUser.hasMultipleCaseloadsInNomis = cvlUser.prisonCaseload.length > 1
             cvlUser.hasSelectedMultiplePrisonCaseloads = caseloadsSelected.length > 1
             cvlUser.prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [cvlUser.activeCaseload]
-            cvlUser.reportUserId = prisonUser.staffId.toString()
+            cvlUser.reportUserId = authUser.uuid
             logger.info(
               `Prison user session : username ${prisonUser?.username} name ${cvlUser?.displayName} caseload ${cvlUser?.prisonCaseload}`,
             )
