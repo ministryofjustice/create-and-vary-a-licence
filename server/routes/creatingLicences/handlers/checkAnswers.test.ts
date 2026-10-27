@@ -75,6 +75,87 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   })
 
   describe('GET', () => {
+    describe('HDC address checks interrupt', () => {
+      let originalHdcCreationEnabled: boolean
+
+      beforeEach(() => {
+        originalHdcCreationEnabled = config.hdc.hdcCreationEnabled
+        config.hdc.hdcCreationEnabled = true
+        req.query = {}
+        res.locals.licence = {
+          ...res.locals.licence,
+          kind: LicenceKind.HDC,
+          isReplacementForOptedInLicence: true,
+          hdcAddressChecksComplete: false,
+        } as Licence
+      })
+
+      afterEach(() => {
+        config.hdc.hdcCreationEnabled = originalHdcCreationEnabled
+      })
+
+      it('should interrupt before loading licence details when address checks are incomplete', async () => {
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/create/addressChecksIncompleteInterrupt', {
+          backLink: 'some-back-link',
+        })
+        expect(conditionService.getAdditionalAPConditionsForSummaryAndPdf).not.toHaveBeenCalled()
+      })
+
+      it('should interrupt for a COM who does not own the licence', async () => {
+        res.locals.user.deliusStaffIdentifier = 456
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/create/addressChecksIncompleteInterrupt', expect.any(Object))
+      })
+
+      it('should use the caseload as the default back link', async () => {
+        req.session.returnToCase = undefined
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/create/addressChecksIncompleteInterrupt',
+          expect.objectContaining({ backLink: '/licence/create/caseload' }),
+        )
+      })
+
+      it.each([
+        { hdcAddressChecksComplete: true },
+        { hdcAddressChecksComplete: undefined },
+        { isReplacementForOptedInLicence: false },
+        { kind: LicenceKind.CRD },
+        { kind: LicenceKind.HDC_VARIATION },
+        { statusCode: LicenceStatus.SUBMITTED },
+        { statusCode: LicenceStatus.APPROVED },
+      ])('should show licence details for %o', async licenceChanges => {
+        Object.assign(res.locals.licence, licenceChanges)
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', expect.any(Object))
+      })
+
+      it('should show licence details when HDC creation is disabled', async () => {
+        config.hdc.hdcCreationEnabled = false
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', expect.any(Object))
+      })
+
+      it('should not allow bypassing incomplete address checks using a query parameter', async () => {
+        req.query.acknowledgeAddressChecks = 'true'
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/create/addressChecksIncompleteInterrupt', expect.any(Object))
+        expect(conditionService.getAdditionalAPConditionsForSummaryAndPdf).not.toHaveBeenCalled()
+      })
+    })
+
     it('should render view and not record audit event (owner)', async () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {

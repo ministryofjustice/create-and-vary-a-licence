@@ -26,6 +26,7 @@ import {
   cvlDateToDateShort,
   isVariation,
   isHdcLicence,
+  shouldShowHdcAddressChecksInterrupt,
   lowercaseFirstLetter,
   escapeCsv,
   isTimeServedLicence,
@@ -592,6 +593,30 @@ describe('isHdcLicence', () => {
     expect(isHdcLicence(crdLicence)).toBe(false)
     expect(isHdcLicence(variationLicence)).toBe(false)
     expect(isHdcLicence(hardStopLicence)).toBe(false)
+  })
+})
+
+describe('shouldShowHdcAddressChecksInterrupt', () => {
+  const licence = {
+    kind: LicenceKind.HDC,
+    statusCode: LicenceStatus.IN_PROGRESS,
+    isReplacementForOptedInLicence: true,
+    hdcAddressChecksComplete: false,
+  } as Licence
+
+  it('returns true for an in-progress opted-in HDC replacement with incomplete address checks', () => {
+    expect(shouldShowHdcAddressChecksInterrupt(licence)).toBe(true)
+  })
+
+  it.each([
+    { kind: LicenceKind.CRD },
+    { kind: LicenceKind.HDC_VARIATION },
+    { statusCode: LicenceStatus.SUBMITTED },
+    { isReplacementForOptedInLicence: false },
+    { hdcAddressChecksComplete: true },
+    { hdcAddressChecksComplete: undefined },
+  ])('returns false when the licence does not meet the interrupt conditions: %o', changes => {
+    expect(shouldShowHdcAddressChecksInterrupt({ ...licence, ...changes } as Licence)).toBe(false)
   })
 })
 

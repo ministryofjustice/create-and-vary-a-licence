@@ -16,6 +16,7 @@ import type {
   VariationLicence,
 } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
+import LicenceStatus from '../enumeration/licenceStatus'
 
 const CVL_DATE = 'DD/MM/YYYY'
 const DATE_SHORT = 'D MMM YYYY'
@@ -289,6 +290,15 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
   return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
 }
 
+function shouldShowHdcAddressChecksInterrupt(licence: Licence): boolean {
+  return (
+    licence.kind === LicenceKind.HDC &&
+    licence.statusCode === LicenceStatus.IN_PROGRESS &&
+    licence.isReplacementForOptedInLicence &&
+    licence.hdcAddressChecksComplete === false
+  )
+}
+
 function assertIsHdcLicence(licence: Licence): asserts licence is HdcLicence | HdcVariationLicence {
   assert(isHdcLicence(licence), 'Licence must be HDC or HDC Variation')
 }
@@ -352,6 +362,7 @@ export {
   cvlDateToDateShort,
   isVariation,
   isHdcLicence,
+  shouldShowHdcAddressChecksInterrupt,
   assertIsHdcLicence,
   assertIsVariation,
   formatAddressTitleCase,
