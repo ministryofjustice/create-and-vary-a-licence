@@ -5,14 +5,9 @@ import logger from '../../logger'
 
 export default function fetchLicence(licenceService: LicenceService): RequestHandler {
   return async (req, res, next) => {
-    if (req.params.licenceId && !res.locals.licence) {
+    if (req.params.licenceId) {
       try {
-        const { user } = res.locals
-        let { licence } = res.locals
-        if (!licence) {
-          licence = await licenceService.getLicence(parseInt(req.params.licenceId, 10), user)
-        }
-
+        const { user, licence } = res.locals
         if (licence) {
           // Does this prison user have a caseload which allows access this licence?
           if (user?.nomisStaffId) {
@@ -53,8 +48,6 @@ export default function fetchLicence(licenceService: LicenceService): RequestHan
             logger.info(`URL access denied to licence ID ${licence.statusCode} ${licence.id} ${req.path}`)
             return res.redirect('/access-denied')
           }
-
-          res.locals.licence = licence
         }
       } catch (error) {
         logger.error(error, `Failed to get licence details for licence Id: ${req.params.licenceId}`)
