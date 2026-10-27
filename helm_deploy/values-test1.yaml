@@ -37,10 +37,6 @@ generic-service:
     HDC_URL: 'https://licences-dev.prison.service.justice.gov.uk/'
     HDC_CREATION_ENABLED: true
 
-  namespace_secrets:
-    create-and-vary-a-licence-domain-events-sqs-instance-output:
-      SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
-
   scheduledDowntime:
     enabled: true
     businessHoursOnly: true
