@@ -107,7 +107,7 @@ export default function Index({
   }
 
   {
-    const controller = new ConfirmCreateRoutes(probationService, licenceService)
+    const controller = new ConfirmCreateRoutes(probationService, licenceService, hdcService)
     getWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.GET)
     postWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.POST)
   }

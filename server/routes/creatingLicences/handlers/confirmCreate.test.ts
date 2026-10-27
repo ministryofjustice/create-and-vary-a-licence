@@ -3,20 +3,23 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import ProbationService from '../../../services/probationService'
+import HdcService from '../../../services/hdc/hdcService'
 import { CvlPrisoner, LicenceSummary, PrisonerWithCvlFields } from '../../../@types/licenceApiClientTypes'
 import logger from '../../../../logger'
 import { LicenceKind } from '../../../enumeration'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
+const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/probationService')
 jest.mock('../../../services/prisonerService')
+jest.mock('../../../services/hdc/hdcService')
 jest.mock('../../../../logger')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(probationService, licenceService)
+  const handler = new ConfirmCreateRoutes(probationService, licenceService, hdcService)
   let req: Request
   let res: Response
 
@@ -64,6 +67,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         eligibleKind: LicenceKind.CRD,
       },
     } as PrisonerWithCvlFields)
+    hdcService.hasHdcRiskChecksCompleted.mockResolvedValue(false)
   })
 
   afterEach(() => {
@@ -96,6 +100,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           homeDetentionCurfewEligibilityDate: '16/03/2026',
         },
         backLink: req.session.returnToCase,
+        hdcRiskChecksCompleted: false,
       })
     })
 
@@ -133,6 +138,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           homeDetentionCurfewEligibilityDate: null,
         },
         backLink: req.session.returnToCase,
+        hdcRiskChecksCompleted: false,
       })
     })
 
@@ -159,6 +165,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           homeDetentionCurfewEligibilityDate: '16/03/2026',
         },
         backLink: '/licence/create/caseload',
+        hdcRiskChecksCompleted: false,
       })
     })
 

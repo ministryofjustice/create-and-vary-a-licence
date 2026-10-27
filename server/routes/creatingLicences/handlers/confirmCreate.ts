@@ -3,12 +3,14 @@ import moment from 'moment'
 import ProbationService from '../../../services/probationService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
+import HdcService from '../../../services/hdc/hdcService'
 import logger from '../../../../logger'
 
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly probationService: ProbationService,
     private readonly licenceService: LicenceService,
+    private readonly hdcService: HdcService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -25,6 +27,11 @@ export default class ConfirmCreateRoutes {
       logger.error('Access denied to PP licence creation GET due to being in hard stop period')
       return res.redirect('/access-denied')
     }
+
+    const hdcRiskChecksCompleted = await this.hdcService.hasHdcRiskChecksCompleted(
+      nomisRecord.prisoner.bookingId,
+      nomisRecord.cvl.eligibleKind,
+    )
 
     return res.render('pages/create/confirmCreate', {
       licence: {
@@ -43,6 +50,7 @@ export default class ConfirmCreateRoutes {
           : null,
       },
       backLink,
+      hdcRiskChecksCompleted,
     })
   }
 

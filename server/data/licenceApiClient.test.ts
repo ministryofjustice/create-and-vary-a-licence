@@ -767,6 +767,13 @@ describe('Licence API client tests', () => {
     })
   })
 
+  describe('HDC risk checks status: ', () => {
+    it('should get HDC risk checks status', async () => {
+      await licenceApiClient.getHdcRiskChecksStatus('12345')
+      expect(get).toHaveBeenCalledWith({ path: '/licence/id/12345/hdc/hdc-risk-checks-status' })
+    })
+  })
+
   describe('Electronic Monitoring Programme: ', () => {
     it('should update Electronic Monitoring Programme', async () => {
       const request: UpdateElectronicMonitoringProgrammeRequest = {

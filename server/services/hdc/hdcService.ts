@@ -50,6 +50,13 @@ export default class HdcService {
     return hdcVariationParent.kind === 'HDC' && hdcVariationParent.isHdcMigration
   }
 
+  async hasHdcRiskChecksCompleted(bookingId: string, kind: string): Promise<boolean> {
+    if (kind !== 'HDC') {
+      return false
+    }
+    return this.licenceApiClient.getHdcRiskChecksStatus(bookingId)
+  }
+
   buildWeeklyCurfewTimesRequest = (start: SimpleTime, end: SimpleTime): WeeklyCurfewTimesRequest => {
     const startMinutes = simpleTimeToMinutes(start)
     const endMinutes = simpleTimeToMinutes(end)

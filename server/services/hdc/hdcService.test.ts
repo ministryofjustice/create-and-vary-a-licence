@@ -362,4 +362,19 @@ describe('HDC Service', () => {
       expect(result).toBe(false)
     })
   })
+
+  describe('hasHdcRiskChecksCompleted', () => {
+    const bookingId = '123'
+
+    it('should return false if the licence is not HDC kind', async () => {
+      const result = await hdcService.hasHdcRiskChecksCompleted(bookingId, 'CRD')
+      expect(result).toBe(false)
+    })
+
+    it('should return HDC risk checks status for an HDC licence', async () => {
+      licenceApiClient.getHdcRiskChecksStatus.mockResolvedValue(true)
+      const result = await hdcService.hasHdcRiskChecksCompleted(bookingId, 'HDC')
+      expect(result).toBe(true)
+    })
+  })
 })

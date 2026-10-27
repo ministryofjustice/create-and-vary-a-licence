@@ -686,6 +686,12 @@ export default class LicenceApiClient extends RestClient {
     })) as Promise<boolean>
   }
 
+  async getHdcRiskChecksStatus(bookingId: string): Promise<boolean> {
+    return (await this.get({
+      path: `/licence/id/${bookingId}/hdc/hdc-risk-checks-status`,
+    })) as Promise<boolean>
+  }
+
   async getRecallSupportInfo(nomisId: string): Promise<RecallSupportInfo> {
     return (await this.get({
       path: `/offender/nomisid/${nomisId}/recall-info`,
@@ -783,6 +789,16 @@ export default class LicenceApiClient extends RestClient {
       { username: user?.username },
     )) as Promise<void>
   }
+
+  // async getHdcStatus(bookingId: string, user?: User): Promise<HomeDetentionCurfew> {
+  //   return (await this.get(
+  //     {
+  //       path: `/licence/hdc/hdc-status`,
+  //       return404: true,
+  //     },
+  //     { username: user?.username },
+  //   )) as Promise<HomeDetentionCurfew>
+  // }
 
   async updateHdcFirstNightCurfewTimes(
     licenceId: number,
