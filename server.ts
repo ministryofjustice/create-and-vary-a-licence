@@ -10,11 +10,10 @@ const applicationInfo = createApplicationInfo()
 
 import logger from './logger'
 
-import { app, sqsDomainEventsListener } from './server/index'
+import app from './server/index'
 
 const server = app(applicationInfo)
 
 server.listen(server.get('port'), () => {
   logger.info(`Server listening on port ${server.get('port')}`)
 })
-sqsDomainEventsListener.app.start()
