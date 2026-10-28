@@ -112,7 +112,7 @@
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@opentelemetry/api": "1.9.0",
     "agentkeepalive": "^4.6.0",
-    "body-parser": "^2.3.0",
+    "body-parser": "^2.4.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
     "class-transformer": "^0.5.1",
