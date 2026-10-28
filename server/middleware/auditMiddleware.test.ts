@@ -81,7 +81,7 @@ describe('auditMiddleware', () => {
       req.id,
       {
         audit: true,
-        eventType: 'RESTRICTED_OFFENDER_DETAILS_SUCCESS',
+        eventType: 'VIEW_RESTRICTED_OFFENDER_DETAILS_SUCCESS',
         customHandler: false,
       },
       res.locals.licence,
