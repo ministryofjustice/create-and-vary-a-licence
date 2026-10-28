@@ -3,9 +3,13 @@ import moment from 'moment/moment'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
 import { FoundComCase, ComSearchResponse } from '../../../@types/licenceApiClientTypes'
+import AuditService from '../../../services/audit/auditService'
 
 export default class ProbationSearch {
-  constructor(private readonly searchService: SearchService) {}
+  constructor(
+    private readonly auditService: AuditService,
+    private readonly searchService: SearchService,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const enteredQueryTerm = req.query?.queryTerm as string
@@ -48,6 +52,8 @@ export default class ProbationSearch {
     const hasRestrictedCasesInPrison = peopleInPrison.filter(c => c.isRestricted).length > 0
     const hasRestrictedCasesOnProbation = peopleOnProbation.filter(c => c.isRestricted).length > 0
     const hasCustomSorting = hasReviewNeededCases || hasRestrictedCasesInPrison || hasRestrictedCasesOnProbation
+
+    await this.auditService.logProbationSearchEvent(req.id, queryTerm, searchResponse.results, user)
 
     return res.render('pages/search/probationSearch/probationSearch', {
       queryTerm,
