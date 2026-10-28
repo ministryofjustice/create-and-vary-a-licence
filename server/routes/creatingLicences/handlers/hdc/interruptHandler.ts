@@ -35,7 +35,10 @@ export default class InterruptHandler {
     const isAddressChecksIncomplete = interruptType === HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE
     const canContinueAfterInterrupt = req.query?.continueAfterHdcInterrupt === 'true'
 
-    if (interruptType && (isAddressChecksIncomplete || !canContinueAfterInterrupt)) {
+    if (
+      interruptType &&
+      (isAddressChecksIncomplete || (!canContinueAfterInterrupt && !res.locals.validationErrors?.length))
+    ) {
       res.redirect(`/licence/create/id/${req.params.licenceId}/interrupt`)
       return
     }
