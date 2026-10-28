@@ -17,7 +17,7 @@
   },
   "GET /:crn/restricted": {
     "audit": true,
-    "eventType": "VIEW_RESTRICTED_OFFENDER_DETAILS_SUCCESS"
+    "eventType": "VIEW_RESTRICTED_OFFENDER_DETAILS"
   },
   "GET /licence/create/caseload": {
     "audit": false,
@@ -25,15 +25,15 @@
   },
   "GET /licence/create/probation-practitioner/staffCode/:staffCode": {
     "audit": true,
-    "eventType": "VIEW_PROBATION_PRACTITIONER_DETAILS_SUCCESS"
+    "eventType": "VIEW_PROBATION_PRACTITIONER_DETAILS"
   },
   "GET /licence/create/nomisId/:nomisId/confirm": {
     "audit": true,
-    "eventType": "VIEW_LICENCE_CREATION_CONFIRMATION_SUCCESS"
+    "eventType": "VIEW_LICENCE_CREATION_CONFIRMATION"
   },
   "POST /licence/create/nomisId/:nomisId/confirm": {
     "audit": true,
-    "eventType": "CREATE_LICENCE_SUCCESS"
+    "eventType": "CREATE_LICENCE"
   },
   "GET /licence/create/id/:licenceId/additional-licence-conditions-question": {
     "audit": false,
@@ -53,7 +53,7 @@
   },
   "GET /licence/create/id/:licenceId/check-your-answers": {
     "audit": true,
-    "eventType": "VIEW_LICENCE_CREATION_CHECK_YOUR_ANSWERS_SUCCESS"
+    "eventType": "VIEW_LICENCE_CREATION_CHECK_YOUR_ANSWERS"
   },
   "POST /licence/create/id/:licenceId/check-your-answers": {
     "audit": true,
