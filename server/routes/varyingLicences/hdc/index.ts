@@ -3,7 +3,7 @@ import { Services } from '../../../services'
 import roleCheckMiddleware from '../../../middleware/roleCheckMiddleware'
 import { alterResObject } from '..'
 import checkComCaseAccessMiddleware from '../../../middleware/checkComCaseAccessMiddleware'
-import fetchLicence from '../../../middleware/fetchLicenceMiddleware'
+import checkLicenceAccess from '../../../middleware/checkLicenceAccessMiddleware'
 import validationMiddleware from '../../../middleware/validationMiddleware'
 import AccommodationTypeQuestionRoutes from './handlers/accommodationTypeQuestion'
 import ResidentialChecksCompletedQuestionRoutes from './handlers/residentialChecksCompletedQuestion'
@@ -36,7 +36,7 @@ export default function Index(services: Services): Router {
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       alterResObject(),
       checkComCaseAccessMiddleware(licenceService),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       handler,
     )
 
@@ -45,7 +45,7 @@ export default function Index(services: Services): Router {
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
