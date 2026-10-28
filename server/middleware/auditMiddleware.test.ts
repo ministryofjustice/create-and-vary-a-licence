@@ -81,12 +81,24 @@ describe('auditMiddleware', () => {
       req.id,
       {
         audit: true,
-        eventType: 'VIEW_RESTRICTED_OFFENDER_DETAILS_SUCCESS',
+        eventType: 'VIEW_RESTRICTED_OFFENDER_DETAILS',
         customHandler: false,
       },
       res.locals.licence,
       res.locals.user,
     )
+    expect(next).toHaveBeenCalledTimes(1)
+  })
+
+  it('should handle route not being found in policy config', async () => {
+    const missingRouteReq = {
+      ...req,
+      path: '/this/route/does/not/exist',
+    } as Request
+
+    await middleware(missingRouteReq, res, next)
+
+    expect(auditService.logPageViewAttempt).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalledTimes(1)
   })
 })
