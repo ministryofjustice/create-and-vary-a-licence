@@ -318,7 +318,9 @@ function isHdcOptOutLicence(licence: Licence): boolean {
 }
 
 function isHdcPostponedLicence(licence: Licence): licence is HdcLicence {
-  return licence.kind === LicenceKind.HDC && licence.isPostponed === true
+  return (
+    licence.kind === LicenceKind.HDC && licence.statusCode === LicenceStatus.IN_PROGRESS && licence.isPostponed === true
+  )
 }
 
 function assertIsHdcLicence(licence: Licence): asserts licence is HdcLicence | HdcVariationLicence {
