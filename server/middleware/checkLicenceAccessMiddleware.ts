@@ -3,7 +3,7 @@ import getUrlAccessByStatus from '../utils/urlAccessByStatus'
 import LicenceService from '../services/licenceService'
 import logger from '../../logger'
 
-export default function fetchLicence(licenceService: LicenceService): RequestHandler {
+export default function checkLicenceAccess(licenceService: LicenceService): RequestHandler {
   return async (req, res, next) => {
     if (req.params.licenceId) {
       try {
