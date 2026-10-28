@@ -1,5 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response, Router } from 'express'
-import fetchLicence from '../../middleware/fetchLicenceMiddleware'
+import checkLicenceAccess from '../../middleware/checkLicenceAccessMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
 import CaseloadRoutes from './handlers/caseload'
@@ -61,7 +61,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       alterResObject(),
       checkComCaseAccessMiddleware(licenceService),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       handler,
     )
 
@@ -70,7 +70,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
