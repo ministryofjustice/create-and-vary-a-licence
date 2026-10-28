@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import fetchLicence from './fetchLicenceMiddleware'
+import checkLicenceAccess from './checkLicenceAccessMiddleware'
 import LicenceService from '../services/licenceService'
 import { Licence } from '../@types/licenceApiClientTypes'
 
@@ -48,7 +48,7 @@ const probationRes = {
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
-const middleware = fetchLicence(licenceService)
+const middleware = checkLicenceAccess(licenceService)
 
 beforeEach(() => {
   req.params = { licenceId: '1' }
