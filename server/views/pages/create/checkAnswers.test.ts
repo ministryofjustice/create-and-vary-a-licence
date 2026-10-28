@@ -8,37 +8,6 @@ import config from '../../../config'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/create/checkAnswers.njk').toString())
 
-describe('Create a Licence Views - HDC address checks interrupt', () => {
-  const renderInterrupt = templateRenderer(
-    fs.readFileSync('server/views/pages/create/addressChecksIncompleteInterrupt.njk').toString(),
-  )
-  const model = {
-    backLink: '/licence/create/caseload?search=Smith',
-  }
-
-  it('should display the incomplete address checks message and HDC service link', () => {
-    const $ = renderInterrupt(model)
-
-    expect($('.moj-interruption-card h1').text().trim()).toBe('This person has opted in to HDC')
-    expect($('.moj-interruption-card__body').text()).toContain(
-      'You must complete the address checks in HDC before you can continue with this licence in CVL.',
-    )
-    expect($('.moj-interruption-card__body > p a').first().text()).toBe('Check the HDC service')
-    expect($('.moj-interruption-card__body > p a').first().attr('href')).toBe(config.hdc.url)
-  })
-
-  it('should use the full-width interrupt layout and only allow returning to the case list or HDC', () => {
-    const $ = renderInterrupt(model)
-
-    expect($('.govuk-grid-column-full .moj-interruption-card').length).toBe(1)
-    expect($('.moj-interruption-card a').length).toBe(2)
-    expect($('.moj-interruption-card a.govuk-button').length).toBe(0)
-    expect($('.moj-interruption-card__body > p').last().find('a').attr('href')).toBe(model.backLink)
-    expect($('.moj-interruption-card__body > p').last().find('a').text()).toBe('Return to case list')
-    expect($('.govuk-back-link').attr('href')).toBe(model.backLink)
-  })
-})
-
 describe('Create a Licence Views - Check Answers', () => {
   config.finalThirdEnabled = true
   const licence = {

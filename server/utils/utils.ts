@@ -290,13 +290,35 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
   return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
 }
 
-function shouldShowHdcAddressChecksInterrupt(licence: Licence): boolean {
+function isHdcAddressChecksIncompleteLicence(
+  licence: Licence,
+): licence is HdcLicence & { hdcAddressChecksComplete: false } {
   return (
     licence.kind === LicenceKind.HDC &&
     licence.statusCode === LicenceStatus.IN_PROGRESS &&
     licence.isReplacementForOptedInLicence &&
     licence.hdcAddressChecksComplete === false
   )
+}
+
+function isHdcRefusedLicence(licence: Licence): boolean {
+  return (
+    licence.kind === LicenceKind.CRD &&
+    licence.statusCode === LicenceStatus.IN_PROGRESS &&
+    licence.isReplacementForRefusedLicence === true
+  )
+}
+
+function isHdcOptOutLicence(licence: Licence): boolean {
+  return (
+    licence.kind === LicenceKind.CRD &&
+    licence.statusCode === LicenceStatus.IN_PROGRESS &&
+    licence.isReplacementForOptedOutLicence === true
+  )
+}
+
+function isHdcPostponedLicence(licence: Licence): licence is HdcLicence {
+  return licence.kind === LicenceKind.HDC && licence.isPostponed === true
 }
 
 function assertIsHdcLicence(licence: Licence): asserts licence is HdcLicence | HdcVariationLicence {
@@ -362,7 +384,10 @@ export {
   cvlDateToDateShort,
   isVariation,
   isHdcLicence,
-  shouldShowHdcAddressChecksInterrupt,
+  isHdcAddressChecksIncompleteLicence,
+  isHdcRefusedLicence,
+  isHdcOptOutLicence,
+  isHdcPostponedLicence,
   assertIsHdcLicence,
   assertIsVariation,
   formatAddressTitleCase,

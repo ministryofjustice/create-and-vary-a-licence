@@ -79,6 +79,7 @@ export default class IndexPage extends Page {
   clickCreateALicenceWithHdcReplacement = (replacementFlags: {
     isReplacementForOptedOutLicence?: boolean
     isReplacementForRefusedLicence?: boolean
+    isHdcPostponed?: boolean
   }): CaseloadPage => {
     cy.task('stubGetStaffCreateCaseload', {
       licenceId: 1,

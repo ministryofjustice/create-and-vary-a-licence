@@ -30,6 +30,8 @@ const licencePlaceholder: Licence = {
   isInHardStopPeriod: false,
   isReviewNeeded: false,
   isVariation: false,
+  isReplacementForOptedOutLicence: false,
+  isReplacementForRefusedLicence: false,
   id: 1,
   typeCode: 'AP',
   kind: 'CRD',
@@ -442,6 +444,8 @@ export default {
 
   stubGetHdcLicence: (options: {
     isReplacementForOptedInLicence?: boolean
+    hdcAddressChecksComplete?: boolean
+    isPostponed?: boolean
     licenceId?: string
     firstNightCurfewTimes?: {
       fromTime?: string
@@ -471,6 +475,8 @@ export default {
           ...licencePlaceholder,
           kind: options.kind ?? LicenceKind.HDC,
           isReplacementForOptedInLicence: options.isReplacementForOptedInLicence ?? false,
+          hdcAddressChecksComplete: options.hdcAddressChecksComplete,
+          isPostponed: options.isPostponed ?? false,
           statusCode: options.statusCode ?? licencePlaceholder.statusCode,
           typeCode: options.typeCode ?? licencePlaceholder.typeCode,
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate ?? '01/03/2021',
@@ -2062,6 +2068,7 @@ export default {
     licenceCreationType: string
     isReplacementForOptedOutLicence?: boolean
     isReplacementForRefusedLicence?: boolean
+    isHdcPostponed?: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -2090,6 +2097,7 @@ export default {
             licenceCreationType: options.licenceCreationType,
             isReplacementForOptedOutLicence: options.isReplacementForOptedOutLicence || false,
             isReplacementForRefusedLicence: options.isReplacementForRefusedLicence || false,
+            isHdcPostponed: options.isHdcPostponed || false,
           },
         ],
       },

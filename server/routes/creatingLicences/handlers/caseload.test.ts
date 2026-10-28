@@ -469,40 +469,14 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         isReplacementForRefusedLicence: true,
       }
 
-      it('should show the interrupt every time an in-progress refused replacement is opened', () => {
+      it('should route refused replacements to check answers so HDC middleware can show the interrupt', () => {
         config.hdc.hdcCreationEnabled = true
-
-        expect(handler.findCreateLinkToDisplay(refusedCase)).toBe('/licence/create/id/123/refused-interrupt')
-        expect(handler.findCreateLinkToDisplay(refusedCase)).toBe('/licence/create/id/123/refused-interrupt')
-      })
-
-      it.each([false, undefined])('should not show the interrupt when the refusal flag is %s', refusalFlag => {
-        config.hdc.hdcCreationEnabled = true
-
-        expect(handler.findCreateLinkToDisplay({ ...refusedCase, isReplacementForRefusedLicence: refusalFlag })).toBe(
-          '/licence/create/id/123/check-your-answers',
-        )
-      })
-
-      it('should not show the interrupt when HDC creation is disabled', () => {
-        config.hdc.hdcCreationEnabled = false
 
         expect(handler.findCreateLinkToDisplay(refusedCase)).toBe('/licence/create/id/123/check-your-answers')
       })
-
-      it.each([...nonInProgressStatuses, 'REJECTED', null, undefined] as ComCreateCase['licenceStatus'][])(
-        'should not show the interrupt when the licence status is %s',
-        licenceStatus => {
-          config.hdc.hdcCreationEnabled = true
-
-          expect(handler.findCreateLinkToDisplay({ ...refusedCase, licenceStatus })).toBe(
-            '/licence/create/id/123/check-your-answers',
-          )
-        },
-      )
     })
 
-    it('should link to the HDC opt-out interrupt when the toggle is enabled for an in-progress licence', () => {
+    it('should route an opted-out replacement to check answers for HDC middleware handling', () => {
       // Given
       config.hdc.hdcCreationEnabled = true
       comCase.isReplacementForOptedOutLicence = true
@@ -511,7 +485,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       const createLink = handler.findCreateLinkToDisplay(comCase)
 
       // Then
-      expect(createLink).toBe('/licence/create/id/123/opt-out-interrupt')
+      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
     })
 
     it('should link to check your answers when the toggle is enabled for an in-progress licence that is not a replacement for an opted-out licence', () => {
@@ -536,7 +510,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(createLink).toBe('/licence/create/id/123/check-your-answers')
     })
 
-    it('should link to the postponed interrupt when the HDC application is postponed', () => {
+    it('should route a postponed licence to check answers for HDC middleware handling', () => {
       // Given
       config.hdc.hdcCreationEnabled = true
       comCase.isHdcPostponed = true
@@ -545,7 +519,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       const createLink = handler.findCreateLinkToDisplay(comCase)
 
       // Then
-      expect(createLink).toBe('/licence/create/id/123/postponed-interrupt')
+      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
     })
 
     it.each(nonInProgressStatuses)(

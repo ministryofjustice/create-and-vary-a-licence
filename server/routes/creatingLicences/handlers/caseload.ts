@@ -8,7 +8,6 @@ import { cvlDateToDateShort, parseCvlDate } from '../../../utils/utils'
 import LicenceCreationType from '../../../enumeration/licenceCreationType'
 import { LicenceKind } from '../../../enumeration'
 import type { ComCreateCase } from '../../../@types/licenceApiClientTypes'
-import config from '../../../config'
 
 export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
@@ -91,38 +90,6 @@ export default class CaseloadRoutes {
       return `/licence/create/nomisId/${comCase.prisonerNumber}/confirm`
     }
 
-    if (this.isHdcPostponed(comCase)) {
-      return `/licence/create/id/${comCase.licenceId}/postponed-interrupt`
-    }
-
-    if (this.isHdcOptOut(comCase)) {
-      return `/licence/create/id/${comCase.licenceId}/opt-out-interrupt`
-    }
-
-    if (this.isHdcRefused(comCase)) {
-      return `/licence/create/id/${comCase.licenceId}/refused-interrupt`
-    }
-
     return `/licence/create/id/${comCase.licenceId}/check-your-answers`
-  }
-
-  isHdcRefused = (comCase: ComCreateCase): boolean => {
-    return (
-      config.hdc.hdcCreationEnabled &&
-      comCase.licenceStatus === 'IN_PROGRESS' &&
-      comCase.isReplacementForRefusedLicence === true
-    )
-  }
-
-  isHdcOptOut = (comCase: ComCreateCase): boolean => {
-    return (
-      config.hdc.hdcCreationEnabled &&
-      comCase.licenceStatus === 'IN_PROGRESS' &&
-      comCase.isReplacementForOptedOutLicence === true
-    )
-  }
-
-  isHdcPostponed = (comCase: ComCreateCase): boolean => {
-    return config.hdc.hdcCreationEnabled && comCase.isHdcPostponed === true
   }
 }

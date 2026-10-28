@@ -23,9 +23,7 @@ import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import UserType from '../../enumeration/userType'
 import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMiddleware'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
-import OptOutInterruptHandler from './handlers/optOutInterruptHandler'
-import PostponedInterruptHandler from './handlers/postponedInterruptHandler'
-import RefusedInterruptHandler from './handlers/refusedInterruptHandler'
+import InterruptHandler from './handlers/hdc/interruptHandler'
 
 export default function Index({
   licenceService,
@@ -37,6 +35,7 @@ export default function Index({
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create${path}`
+  const interruptHandler = new InterruptHandler(licenceService)
 
   /*
    * The fetchLicence middleware will call the licenceAPI during each GET request on the create a licence journey
@@ -44,13 +43,13 @@ export default function Index({
    * This means that for each page, the licence will already exist in context, and so the handlers will not need
    * to explicitly inject the licence data into their individual view contexts.
    */
-  const get = (path: string, handler: RequestHandler) =>
+  const get = (path: string, ...handlers: RequestHandler[]) =>
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       fetchLicence(licenceService),
-      handler,
+      ...handlers,
     )
 
   const getWithHardStopCheck = (path: string, handler: RequestHandler) => {
@@ -130,24 +129,9 @@ export default function Index({
 
   {
     const controller = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
-    get('/id/:licenceId/check-your-answers', controller.GET)
+    get('/id/:licenceId/check-your-answers', interruptHandler.GET, controller.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }
-  {
-    const controller = new OptOutInterruptHandler()
-    get('/id/:licenceId/opt-out-interrupt', controller.GET)
-  }
-
-  {
-    const controller = new RefusedInterruptHandler()
-    get('/id/:licenceId/refused-interrupt', controller.GET)
-  }
-
-  {
-    const controller = new PostponedInterruptHandler(licenceService)
-    get('/id/:licenceId/postponed-interrupt', controller.GET)
-  }
-
   {
     const controller = new EditQuestionRoutes(licenceService)
     getWithHardStopCheck('/id/:licenceId/edit', controller.GET)

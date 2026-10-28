@@ -26,7 +26,10 @@ import {
   cvlDateToDateShort,
   isVariation,
   isHdcLicence,
-  shouldShowHdcAddressChecksInterrupt,
+  isHdcAddressChecksIncompleteLicence,
+  isHdcRefusedLicence,
+  isHdcOptOutLicence,
+  isHdcPostponedLicence,
   lowercaseFirstLetter,
   escapeCsv,
   isTimeServedLicence,
@@ -596,7 +599,7 @@ describe('isHdcLicence', () => {
   })
 })
 
-describe('shouldShowHdcAddressChecksInterrupt', () => {
+describe('isHdcAddressChecksIncompleteLicence', () => {
   const licence = {
     kind: LicenceKind.HDC,
     statusCode: LicenceStatus.IN_PROGRESS,
@@ -604,20 +607,89 @@ describe('shouldShowHdcAddressChecksInterrupt', () => {
     hdcAddressChecksComplete: false,
   } as Licence
 
-  it('returns true for an in-progress opted-in HDC replacement with incomplete address checks', () => {
-    expect(shouldShowHdcAddressChecksInterrupt(licence)).toBe(true)
+  it('returns true for an in-progress opted-in HDC replacement when checks are incomplete', () => {
+    expect(isHdcAddressChecksIncompleteLicence(licence)).toBe(true)
   })
 
   it.each([
+    { hdcAddressChecksComplete: true },
     { kind: LicenceKind.CRD },
     { kind: LicenceKind.HDC_VARIATION },
     { statusCode: LicenceStatus.SUBMITTED },
     { isReplacementForOptedInLicence: false },
-    { hdcAddressChecksComplete: true },
     { hdcAddressChecksComplete: undefined },
   ])('returns false when the licence does not meet the interrupt conditions: %o', changes => {
-    expect(shouldShowHdcAddressChecksInterrupt({ ...licence, ...changes } as Licence)).toBe(false)
+    expect(isHdcAddressChecksIncompleteLicence({ ...licence, ...changes } as Licence)).toBe(false)
   })
+})
+
+describe('HDC interrupt licence predicates', () => {
+  it('identifies an in-progress CRD replacement for an HDC refusal', () => {
+    expect(
+      isHdcRefusedLicence({
+        kind: LicenceKind.CRD,
+        statusCode: LicenceStatus.IN_PROGRESS,
+        isReplacementForRefusedLicence: true,
+      } as Licence),
+    ).toBe(true)
+  })
+
+  it.each([
+    { kind: LicenceKind.HDC },
+    { statusCode: LicenceStatus.SUBMITTED },
+    { isReplacementForRefusedLicence: false },
+  ])('does not identify a licence that is not an in-progress refused CRD replacement: %o', changes => {
+    expect(
+      isHdcRefusedLicence({
+        kind: LicenceKind.CRD,
+        statusCode: LicenceStatus.IN_PROGRESS,
+        isReplacementForRefusedLicence: true,
+        ...changes,
+      } as Licence),
+    ).toBe(false)
+  })
+
+  it('identifies an in-progress CRD replacement for HDC opt-out', () => {
+    expect(
+      isHdcOptOutLicence({
+        kind: LicenceKind.CRD,
+        statusCode: LicenceStatus.IN_PROGRESS,
+        isReplacementForOptedOutLicence: true,
+      } as Licence),
+    ).toBe(true)
+  })
+
+  it.each([
+    { kind: LicenceKind.HDC },
+    { statusCode: LicenceStatus.SUBMITTED },
+    { isReplacementForOptedOutLicence: false },
+  ])('does not identify a licence that is not an in-progress opt-out CRD replacement: %o', changes => {
+    expect(
+      isHdcOptOutLicence({
+        kind: LicenceKind.CRD,
+        statusCode: LicenceStatus.IN_PROGRESS,
+        isReplacementForOptedOutLicence: true,
+        ...changes,
+      } as Licence),
+    ).toBe(false)
+  })
+
+  it('narrows a postponed HDC licence', () => {
+    const licence = {
+      kind: LicenceKind.HDC,
+      isPostponed: true,
+    } as Licence
+
+    expect(isHdcPostponedLicence(licence)).toBe(true)
+    if (isHdcPostponedLicence(licence)) expectTypeOf(licence).toMatchTypeOf<HdcLicence>()
+  })
+
+  it.each([{ kind: LicenceKind.CRD }, { isPostponed: false }])(
+    'does not identify a non-postponed HDC licence: %o',
+    changes => {
+      expect(isHdcPostponedLicence({ kind: LicenceKind.HDC, isPostponed: true, ...changes } as Licence)).toBe(false)
+    },
+  )
 })
 
 describe('  lowercaseFirstLetter', () => {

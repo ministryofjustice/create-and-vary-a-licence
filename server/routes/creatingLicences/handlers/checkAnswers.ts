@@ -6,7 +6,7 @@ import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import ConditionService from '../../../services/conditionService'
-import { groupingBy, isInHardStopPeriod, isVariation, shouldShowHdcAddressChecksInterrupt } from '../../../utils/utils'
+import { groupingBy, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 import HdcService from '../../../services/hdc/hdcService'
 import config from '../../../config'
 import LicenceStatus from '../../../enumeration/licenceStatus'
@@ -29,9 +29,6 @@ export default class CheckAnswersRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user, validationErrors } = res.locals
     const backLink = req.session?.returnToCase || '/licence/create/caseload'
-
-    if (config.hdc.hdcCreationEnabled && shouldShowHdcAddressChecksInterrupt(licence))
-      return res.render('pages/create/addressChecksIncompleteInterrupt', { backLink })
 
     // Record the view event only when an officer views a licence which is not their own
     if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
