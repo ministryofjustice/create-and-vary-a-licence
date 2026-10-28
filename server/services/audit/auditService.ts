@@ -15,7 +15,7 @@ export default class AuditService {
     licence: Licence | undefined,
     user: User,
   ): Promise<void> {
-    const eventType = `PAGE_VIEW_${policy.eventType}_ATTEMPT`
+    const eventType = `VIEW_${policy.eventType}_ATTEMPT`
     const auditEvent = this.createAuditEvent(eventType, licence, requestId, user)
     await this.sendAuditEvent(policy.eventType, auditEvent)
   }
@@ -26,7 +26,7 @@ export default class AuditService {
     licence: Licence | undefined,
     user: User,
   ): Promise<void> {
-    const eventType = `PAGE_VIEW_${policy.eventType}_SUCCESS`
+    const eventType = `VIEW_${policy.eventType}_SUCCESS`
     const auditEventMessage = this.createAuditEvent(eventType, licence, requestId, user)
     await this.sendAuditEvent(policy.eventType, auditEventMessage)
   }
@@ -38,7 +38,7 @@ export default class AuditService {
     user: User,
   ): Promise<void> {
     const searchResultsSubjectIds = searchResults.map(result => result.crn)
-    const baseEventMessage = this.createAuditEvent('PROBATION_SEARCH_SUCCESS', undefined, requestId, user)
+    const baseEventMessage = this.createAuditEvent('SEARCH_PROBATION_SEARCH_SUCCESS', undefined, requestId, user)
     const auditEvent: AuditEvent = {
       ...baseEventMessage,
       subjectType: 'SEARCH_TERM',
@@ -87,22 +87,18 @@ export default class AuditService {
     user: User,
   ): { subjectType: SubjectType; subjectId: string } {
     if (licence) {
-      if (user?.authSource === 'nomis') {
-        return {
-          subjectType: 'PRISONER_ID',
-          subjectId: licence.nomsId,
-        }
-      }
-
       if (user?.authSource === 'delius') {
         return {
           subjectType: 'CRN',
           subjectId: licence.crn,
         }
       }
+      return {
+        subjectType: 'PRISONER_ID',
+        subjectId: licence.nomsId,
+      }
     }
 
-    // TODO : do we have any other subject types we can use here when licence is not availabe?
     return {
       subjectType: 'NOT_APPLICABLE',
       subjectId: '',

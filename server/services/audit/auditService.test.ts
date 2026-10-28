@@ -58,7 +58,7 @@ describe('AuditService', () => {
       await auditService.logPageViewAttempt(requestId, { eventType, audit: true }, licence, user)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `PAGE_VIEW_${eventType}_ATTEMPT`,
+        what: `VIEW_${eventType}_ATTEMPT`,
         subjectType: 'CRN',
         subjectId: licence.crn,
         correlationId: requestId,
@@ -83,7 +83,7 @@ describe('AuditService', () => {
       await auditService.logPageViewAttempt(requestId, { eventType, audit: true }, licence, prisonUser)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `PAGE_VIEW_${eventType}_ATTEMPT`,
+        what: `VIEW_${eventType}_ATTEMPT`,
         subjectType: 'PRISONER_ID',
         subjectId: licence.nomsId,
         correlationId: requestId,
@@ -107,7 +107,7 @@ describe('AuditService', () => {
       await auditService.logPageViewAttempt(requestId, { eventType, audit: true }, undefined, prisonUser)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `PAGE_VIEW_${eventType}_ATTEMPT`,
+        what: `VIEW_${eventType}_ATTEMPT`,
         subjectType: 'NOT_APPLICABLE',
         subjectId: '',
         correlationId: requestId,
@@ -128,7 +128,7 @@ describe('AuditService', () => {
       await auditService.logPageViewSuccess(requestId, { eventType, audit: true }, licence, user)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `PAGE_VIEW_${eventType}_SUCCESS`,
+        what: `VIEW_${eventType}_SUCCESS`,
         subjectType: 'CRN',
         subjectId: licence.crn,
         correlationId: requestId,
@@ -143,7 +143,7 @@ describe('AuditService', () => {
 
   describe('custom handlers', () => {
     it('should log a probation search event', async () => {
-      const eventType = 'PROBATION_SEARCH'
+      const eventType = 'SEARCH_PROBATION_SEARCH'
       const searchTerm = 'CRN123'
       const searchResults = [
         {
