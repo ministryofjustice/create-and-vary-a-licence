@@ -10,7 +10,14 @@ import {
 } from '../../../../utils/utils'
 import LicenceService from '../../../../services/licenceService'
 
-type HdcInterruptType = 'addressChecksIncomplete' | 'refused' | 'optOut' | 'postponed'
+const HdcInterruptType = {
+  ADDRESS_CHECKS_INCOMPLETE: 'addressChecksIncomplete',
+  REFUSED: 'refused',
+  OPT_OUT: 'optOut',
+  POSTPONED: 'postponed',
+} as const
+
+type HdcInterruptType = (typeof HdcInterruptType)[keyof typeof HdcInterruptType]
 
 export default class InterruptHandler {
   constructor(private readonly licenceService: LicenceService) {}
@@ -24,7 +31,7 @@ export default class InterruptHandler {
     }
 
     if (isHdcAddressChecksIncompleteLicence(licence)) {
-      this.render(req, res, 'addressChecksIncomplete')
+      this.render(req, res, HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE)
       return
     }
 
@@ -34,12 +41,12 @@ export default class InterruptHandler {
     }
 
     if (isHdcRefusedLicence(licence)) {
-      this.render(req, res, 'refused')
+      this.render(req, res, HdcInterruptType.REFUSED)
       return
     }
 
     if (isHdcOptOutLicence(licence)) {
-      this.render(req, res, 'optOut')
+      this.render(req, res, HdcInterruptType.OPT_OUT)
       return
     }
 
@@ -54,7 +61,7 @@ export default class InterruptHandler {
   private render = (req: Request, res: Response, interruptType: HdcInterruptType, omuContact?: string): void => {
     const { licenceId } = req.params
     const backLink = req.session?.returnToCase || '/licence/create/caseload'
-    const isAddressChecksIncomplete = interruptType === 'addressChecksIncomplete'
+    const isAddressChecksIncomplete = interruptType === HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE
 
     res.render('pages/create/hdc/interrupt', {
       backLink,
@@ -69,6 +76,6 @@ export default class InterruptHandler {
 
   private renderPostponed = async (req: Request, res: Response, licence: HdcLicence, user: User): Promise<void> => {
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
-    this.render(req, res, 'postponed', omuEmail ?? licence.prisonCode)
+    this.render(req, res, HdcInterruptType.POSTPONED, omuEmail ?? licence.prisonCode)
   }
 }
