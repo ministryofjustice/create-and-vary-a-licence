@@ -15,7 +15,7 @@ export default class AuditService {
     licence: Licence | undefined,
     user: User,
   ): Promise<void> {
-    const eventType = `VIEW_${policy.eventType}_ATTEMPT`
+    const eventType = `${policy.eventType}_ATTEMPT`
     const auditEvent = this.createAuditEvent(eventType, licence, requestId, user)
     await this.sendAuditEvent(policy.eventType, auditEvent)
   }
@@ -26,7 +26,7 @@ export default class AuditService {
     licence: Licence | undefined,
     user: User,
   ): Promise<void> {
-    const eventType = `VIEW_${policy.eventType}_SUCCESS`
+    const eventType = `${policy.eventType}_SUCCESS`
     const auditEventMessage = this.createAuditEvent(eventType, licence, requestId, user)
     await this.sendAuditEvent(policy.eventType, auditEventMessage)
   }

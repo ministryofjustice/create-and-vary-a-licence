@@ -58,7 +58,7 @@ describe('AuditService', () => {
       await auditService.logPageViewAttempt(requestId, { eventType, audit: true }, licence, user)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `VIEW_${eventType}_ATTEMPT`,
+        what: `${eventType}_ATTEMPT`,
         subjectType: 'CRN',
         subjectId: licence.crn,
         correlationId: requestId,
@@ -83,7 +83,7 @@ describe('AuditService', () => {
       await auditService.logPageViewAttempt(requestId, { eventType, audit: true }, licence, prisonUser)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `VIEW_${eventType}_ATTEMPT`,
+        what: `${eventType}_ATTEMPT`,
         subjectType: 'PRISONER_ID',
         subjectId: licence.nomsId,
         correlationId: requestId,
@@ -107,7 +107,7 @@ describe('AuditService', () => {
       await auditService.logPageViewAttempt(requestId, { eventType, audit: true }, undefined, prisonUser)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `VIEW_${eventType}_ATTEMPT`,
+        what: `${eventType}_ATTEMPT`,
         subjectType: 'NOT_APPLICABLE',
         subjectId: '',
         correlationId: requestId,
@@ -128,7 +128,7 @@ describe('AuditService', () => {
       await auditService.logPageViewSuccess(requestId, { eventType, audit: true }, licence, user)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `VIEW_${eventType}_SUCCESS`,
+        what: `${eventType}_SUCCESS`,
         subjectType: 'CRN',
         subjectId: licence.crn,
         correlationId: requestId,
