@@ -32,10 +32,6 @@ generic-service:
     HDC_URL: 'https://licences.prison.service.justice.gov.uk/'
     HDC_CREATION_ENABLED: false
 
-  namespace_secrets:
-    create-and-vary-a-licence-domain-events-sqs-instance-output:
-      SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
-
 gotenberg:
   replicaCount: 2
   env:
@@ -45,6 +41,3 @@ gotenberg:
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts
-  sqsAlertsQueueNames:
-    - "Digital-Prison-Services-prod-cvl_domain_events_queue"
-    - "Digital-Prison-Services-prod-cvl_domain_events_dl"

@@ -43,7 +43,7 @@ export default function Index({
       handler,
     )
   {
-    const controller = new ConfirmCreateRoutes(probationService, licenceService, prisonerService)
+    const controller = new ConfirmCreateRoutes(licenceService, prisonerService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)
     post('/create/nomisId/:nomisId/confirm', controller.POST)
   }

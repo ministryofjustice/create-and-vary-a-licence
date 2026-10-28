@@ -1,0 +1,1311 @@
+{
+  "GET /": {
+    "audit": false,
+    "reason": "Home page user navigation, not auditable action"
+  },
+  "GET /contact": {
+    "audit": false,
+    "reason": "Contact page static content, not auditable action"
+  },
+  "GET /accessibility-statement": {
+    "audit": false,
+    "reason": "Accessibility statement static content, not auditable action"
+  },
+  "GET /whats-new": {
+    "audit": false,
+    "reason": "Whats new page static content, not auditable action"
+  },
+  "GET /:crn/restricted": {
+    "audit": true,
+    "eventType": "VIEW_RESTRICTED_OFFENDER_DETAILS_SUCCESS"
+  },
+  "GET /licence/create/caseload": {
+    "audit": false,
+    "reason": "Caseload list user navigation, not auditable action"
+  },
+  "GET /licence/create/probation-practitioner/staffCode/:staffCode": {
+    "audit": true,
+    "eventType": "VIEW_PROBATION_PRACTITIONER_DETAILS_SUCCESS"
+  },
+  "GET /licence/create/nomisId/:nomisId/confirm": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATION_CONFIRMATION_SUCCESS"
+  },
+  "POST /licence/create/nomisId/:nomisId/confirm": {
+    "audit": true,
+    "eventType": "CREATE_LICENCE_SUCCESS"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions-question": {
+    "audit": false,
+    "reason": "Form page user navigation, not auditable action"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions-question": {
+    "audit": false,
+    "reason": "No data is changed as a result this action"
+  },
+  "GET /licence/create/id/:licenceId/bespoke-conditions-question": {
+    "audit": false,
+    "reason": "Form page user navigation, not auditable action"
+  },
+  "POST /licence/create/id/:licenceId/bespoke-conditions-question": {
+    "audit": false,
+    "reason": "No data is changed as a result this action"
+  },
+  "GET /licence/create/id/:licenceId/check-your-answers": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATION_CHECK_YOUR_ANSWERS_SUCCESS"
+  },
+  "POST /licence/create/id/:licenceId/check-your-answers": {
+    "audit": true,
+    "eventType": "EDIT_SUBMIT_LICENCE_CREATION"
+  },
+  "GET /licence/create/id/:licenceId/edit": {
+    "audit": false,
+    "reason": "Edit page user navigation, not auditable action"
+  },
+  "POST /licence/create/id/:licenceId/edit": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATION_ANSWER"
+  },
+  "GET /licence/create/id/:licenceId/confirmation": {
+    "audit": false,
+    "reason": "Confirmation page post-submission message, not auditable action"
+  },
+  "GET /licence/create/nomisId/:nomisId/prison-will-create-this-licence": {
+    "audit": false,
+    "reason": "Information page user notification, not auditable action"
+  },
+  "GET /licence/create/id/:licenceId/licence-created-by-prison": {
+    "audit": false,
+    "reason": "Information page user notification, not auditable action"
+  },
+  "GET /licence/create/id/:licenceId/licence-changes-not-approved-in-time": {
+    "audit": false,
+    "reason": "Information page user notification, not auditable action"
+  },
+  "GET /licence/hard-stop/create/nomisId/:nomisId/confirm": {
+    "audit": true,
+    "eventType": "VIEW_CONFIRM_LICENCE_CREATION_HARD_STOP"
+  },
+  "GET /licence/create/id/:licenceId/refused-interrupt": {
+    "audit": true,
+    "eventType": "VIEW_REFUSED_LICENCE_CREATION"
+  },
+  "POST /licence/hard-stop/create/nomisId/:nomisId/confirm": {
+    "audit": true,
+    "eventType": "SUBMIT_LICENCE_CREATION_HARD_STOP"
+  },
+  "GET /licence/create/id/:licenceId/opt-out-interrupt": {
+    "audit": true,
+    "eventType": "VIEW_OPT_OUT_OF_LICENCE_CREATION"
+  },
+  "GET /licence/hard-stop/create/nomisId/:nomisId/no-com-allocated": {
+    "audit": true,
+    "eventType": "VIEW_NO_COM_ALLOCATED_FOR_LICENCE_CREATION"
+  },
+  "GET /licence/hdc/create/nomisId/:nomisId/confirm": {
+    "audit": true,
+    "eventType": "VIEW_CONFIRM_LICENCE_CREATION_HDC"
+  },
+  "POST /licence/hdc/create/nomisId/:nomisId/confirm": {
+    "audit": true,
+    "eventType": "SUBMIT_LICENCE_CREATION_HDC"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions": {
+    "audit": true,
+    "eventType": "VIEW_ADDITIONAL_CONDITIONS"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions": {
+    "audit": true,
+    "eventType": "SUBMIT_ADDITIONAL_CONDITIONS"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/callback": {
+    "audit": true,
+    "eventType": "VIEW_CALLBACK_ADDITIONAL_CONDITIONS"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId": {
+    "audit": true,
+    "eventType": "VIEW_ADDITIONAL_CONDITION"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId": {
+    "audit": true,
+    "eventType": "SUBMIT_ADDITIONAL_CONDITION"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/delete": {
+    "audit": true,
+    "eventType": "VIEW_DELETE_ADDITIONAL_CONDITION"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/skip": {
+    "audit": true,
+    "eventType": "VIEW_SKIP_ADDITIONAL_CONDITION"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/code/:conditionCode/delete": {
+    "audit": true,
+    "eventType": "VIEW_DELETE_ADDITIONAL_CONDITION_BY_CODE"
+  },
+  "GET /licence/create/id/:licenceId/bespoke-conditions": {
+    "audit": true,
+    "eventType": "VIEW_BESPOKE_CONDITIONS"
+  },
+  "POST /licence/create/id/:licenceId/bespoke-conditions": {
+    "audit": true,
+    "eventType": "CREATE_BESPOKE_CONDITIONS"
+  },
+  "GET /licence/create/id/:licenceId/bespoke-conditions/delete": {
+    "audit": true,
+    "eventType": "VIEW_DELETE_BESPOKE_CONDITIONS"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionCode/file-uploads": {
+    "audit": true,
+    "eventType": "VIEW_ADDITIONAL_CONDITION_FILE_UPLOADS"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionCode/file-uploads": {
+    "audit": true,
+    "eventType": "CREATE_ADDITIONAL_CONDITION_FILE_UPLOADS"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/file-upload-input": {
+    "audit": true,
+    "eventType": "CREATE_ADDITIONAL_CONDITION_FILE_UPLOAD_INPUT"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/file-upload-delete": {
+    "audit": true,
+    "eventType": "VIEW_DELETE_ADDITIONAL_CONDITION_FILE_UPLOAD"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/file-upload": {
+    "audit": true,
+    "eventType": "CREATE_ADDITIONAL_CONDITION_FILE_UPLOAD"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/file-upload-removal": {
+    "audit": true,
+    "eventType": "VIEW_ADDITIONAL_CONDITION_FILE_UPLOAD_REMOVAL"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/file-upload-removal": {
+    "audit": true,
+    "eventType": "CREATE_ADDITIONAL_CONDITION_FILE_UPLOAD_REMOVAL"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionCode/outofbounds-premises": {
+    "audit": true,
+    "eventType": "VIEW_ADDITIONAL_CONDITION_OUTOFBOUNDS_PREMISES"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionCode/outofbounds-premises": {
+    "audit": true,
+    "eventType": "CREATE_ADDITIONAL_CONDITION_OUTOFBOUNDS_PREMISES"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/outofbounds-premises-input": {
+    "audit": true,
+    "eventType": "CREATE_ADDITIONAL_CONDITION_OUTOFBOUNDS_PREMISES_INPUT"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/outofbounds-premises-delete": {
+    "audit": true,
+    "eventType": "VIEW_ADDITIONAL_CONDITION_OUTOFBOUNDS_PREMISES_DELETE"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/outofbounds-premises-removal": {
+    "audit": true,
+    "eventType": "VIEW_ADDITIONAL_CONDITION_OUTOFBOUNDS_PREMISES_REMOVAL"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/outofbounds-premises-removal": {
+    "audit": true,
+    "eventType": "CREATE_ADDITIONAL_CONDITION_OUTOFBOUNDS_PREMISES_REMOVAL"
+  },
+  "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionCode/curfew": {
+    "audit": true,
+    "eventType": "VIEW_ADDITIONAL_CONDITION_CURFEW"
+  },
+  "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionCode/curfew": {
+    "audit": true,
+    "eventType": "CREATE_ADDITIONAL_CONDITION_CURFEW"
+  },
+  "GET /licence/vary/caseload": {
+    "audit": true,
+    "eventType": "VIEW_CASELOAD"
+  },
+  "GET /licence/vary/id/:licenceId/probation-practitioner": {
+    "audit": true,
+    "eventType": "VIEW_PROBATION_PRACTITIONER_DETAILS"
+  },
+  "GET /licence/vary/id/:licenceId/timeline": {
+    "audit": true,
+    "eventType": "VIEW_TIMELINE"
+  },
+  "POST /licence/vary/id/:licenceId/timeline": {
+    "audit": true,
+    "eventType": "CREATE_TIMELINE_COMMENT"
+  },
+  "GET /licence/vary/id/:licenceId/view": {
+    "audit": true,
+    "eventType": "VIEW_VARIATION"
+  },
+  "GET /licence/vary/id/:licenceId/view-active": {
+    "audit": true,
+    "eventType": "VIEW_ACTIVE_VARIATION"
+  },
+  "GET /licence/vary/id/:licenceId/confirm-vary-action": {
+    "audit": true,
+    "eventType": "VIEW_CONFIRM_VARY_ACTION"
+  },
+  "POST /licence/vary/id/:licenceId/confirm-vary-action": {
+    "audit": true,
+    "eventType": "CREATE_CONFIRM_VARY_ACTION"
+  },
+  "GET /licence/vary/id/:licenceId/spo-discussion": {
+    "audit": true,
+    "eventType": "VIEW_SPO_DISCUSSION"
+  },
+  "POST /licence/vary/id/:licenceId/spo-discussion": {
+    "audit": true,
+    "eventType": "CREATE_SPO_DISCUSSION"
+  },
+  "GET /licence/vary/id/:licenceId/vlo-discussion": {
+    "audit": true,
+    "eventType": "VIEW_VLO_DISCUSSION"
+  },
+  "POST /licence/vary/id/:licenceId/vlo-discussion": {
+    "audit": true,
+    "eventType": "CREATE_VLO_DISCUSSION"
+  },
+  "GET /licence/vary/id/:licenceId/confirm-amend-variation": {
+    "audit": true,
+    "eventType": "VIEW_CONFIRM_AMEND_VARIATION"
+  },
+  "POST /licence/vary/id/:licenceId/confirm-amend-variation": {
+    "audit": true,
+    "eventType": "CREATE_CONFIRM_AMEND_VARIATION"
+  },
+  "GET /licence/vary/id/:licenceId/confirm-discard-variation": {
+    "audit": true,
+    "eventType": "VIEW_CONFIRM_DISCARD_VARIATION"
+  },
+  "POST /licence/vary/id/:licenceId/confirm-discard-variation": {
+    "audit": true,
+    "eventType": "CREATE_CONFIRM_DISCARD_VARIATION"
+  },
+  "GET /licence/vary/id/:licenceId/have-you-reviewed-this-licence": {
+    "audit": true,
+    "eventType": "VIEW_HAVE_YOU_REVIEWED_THIS_LICENCE"
+  },
+  "POST /licence/vary/id/:licenceId/have-you-reviewed-this-licence": {
+    "audit": true,
+    "eventType": "CREATE_HAVE_YOU_REVIEWED_THIS_LICENCE"
+  },
+  "GET /licence/vary/id/:licenceId/reason-for-variation": {
+    "audit": true,
+    "eventType": "VIEW_REASON_FOR_VARIATION"
+  },
+  "POST /licence/vary/id/:licenceId/reason-for-variation": {
+    "audit": true,
+    "eventType": "CREATE_REASON_FOR_VARIATION"
+  },
+  "GET /licence/vary/id/:licenceId/summary": {
+    "audit": true,
+    "eventType": "VIEW_SUMMARY"
+  },
+  "POST /licence/vary/id/:licenceId/summary": {
+    "audit": true,
+    "eventType": "CREATE_VARY_LICENCE_SUMMARY"
+  },
+  "GET /licence/vary/id/:licenceId/confirmation": {
+    "audit": true,
+    "eventType": "VIEW_CONFIRMATION"
+  },
+  "GET /licence/vary/id/:licenceId/policy-changes": {
+    "audit": true,
+    "eventType": "VIEW_POLICY_CHANGES"
+  },
+  "POST /licence/vary/id/:licenceId/policy-changes": {
+    "audit": true,
+    "eventType": "CREATE_VARIATION_POLICY_CHANGES"
+  },
+  "GET /licence/vary/id/:licenceId/policy-changes/callback": {
+    "audit": true,
+    "eventType": "VIEW_POLICY_CHANGES_CALLBACK"
+  },
+  "GET /licence/vary/id/:licenceId/policy-changes/condition/:changeCounter": {
+    "audit": true,
+    "eventType": "VIEW_POLICY_CHANGE_CONDITION"
+  },
+  "POST /licence/vary/id/:licenceId/policy-changes/condition/:changeCounter": {
+    "audit": true,
+    "eventType": "CREATE_POLICY_CHANGE_CONDITION"
+  },
+  "POST /licence/vary/id/:licenceId/policy-changes/condition/:changeCounter/delete": {
+    "audit": true,
+    "eventType": "CREATE_POLICY_CHANGE_CONDITION_DELETE"
+  },
+  "GET /licence/vary/id/:licenceId/policy-changes/condition/:changeCounter/delete": {
+    "audit": true,
+    "eventType": "VIEW_POLICY_CHANGE_CONDITION_DELETE"
+  },
+  "GET /licence/vary/id/:licenceId/policy-changes/input/callback/:changeCounter": {
+    "audit": true,
+    "eventType": "VIEW_POLICY_CHANGE_INPUT_CALLBACK"
+  },
+  "GET /licence/vary/id/:licenceId/other-agencies": {
+    "audit": true,
+    "eventType": "VIEW_OTHER_AGENCIES"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/accommodation-type-question": {
+    "audit": true,
+    "eventType": "VIEW_HDC_ACCOMMODATION_TYPE_QUESTION"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/accommodation-type-question": {
+    "audit": true,
+    "eventType": "CREATE_HDC_ACCOMMODATION_TYPE_QUESTION"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/address-checks": {
+    "audit": true,
+    "eventType": "VIEW_HDC_ADDRESS_CHECKS"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/address-checks": {
+    "audit": true,
+    "eventType": "CREATE_HDC_ADDRESS_CHECKS"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/residential-checks-incomplete": {
+    "audit": true,
+    "eventType": "VIEW_HDC_RESIDENTIAL_CHECKS_INCOMPLETE"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/residential-checks-incomplete": {
+    "audit": true,
+    "eventType": "CREATE_HDC_RESIDENTIAL_CHECKS_INCOMPLETE"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/find-the-new-curfew-address": {
+    "audit": true,
+    "eventType": "VIEW_HDC_FIND_NEW_CURFEW_ADDRESS"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/find-the-new-curfew-address": {
+    "audit": true,
+    "eventType": "CREATE_HDC_FIND_NEW_CURFEW_ADDRESS"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/no-curfew-address-found": {
+    "audit": true,
+    "eventType": "VIEW_HDC_NO_CURFEW_ADDRESS_FOUND"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/select-curfew-address": {
+    "audit": true,
+    "eventType": "VIEW_HDC_SELECT_CURFEW_ADDRESS"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/select-curfew-address": {
+    "audit": true,
+    "eventType": "CREATE_HDC_SELECT_CURFEW_ADDRESS"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/manual-curfew-address-entry": {
+    "audit": true,
+    "eventType": "VIEW_HDC_MANUAL_CURFEW_ADDRESS_ENTRY"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/manual-curfew-address-entry": {
+    "audit": true,
+    "eventType": "CREATE_HDC_MANUAL_CURFEW_ADDRESS_ENTRY"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/standard-curfew-hours-question": {
+    "audit": true,
+    "eventType": "VIEW_HDC_STANDARD_CURFEW_HOURS_QUESTION"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/standard-curfew-hours-question": {
+    "audit": true,
+    "eventType": "CREATE_HDC_STANDARD_CURFEW_HOURS_QUESTION"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/do-hdc-curfew-hours-apply-daily": {
+    "audit": true,
+    "eventType": "VIEW_HDC_CURFEW_HOURS_APPLY_DAILY"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/do-hdc-curfew-hours-apply-daily": {
+    "audit": true,
+    "eventType": "CREATE_HDC_CURFEW_HOURS_APPLY_DAILY"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/individual-curfew-hours": {
+    "audit": true,
+    "eventType": "VIEW_HDC_INDIVIDUAL_CURFEW_HOURS"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/individual-curfew-hours": {
+    "audit": true,
+    "eventType": "CREATE_HDC_INDIVIDUAL_CURFEW_HOURS"
+  },
+  "GET /licence/vary/id/:licenceId/hdc/curfew-hours": {
+    "audit": true,
+    "eventType": "VIEW_HDC_CURFEW_HOURS"
+  },
+  "POST /licence/vary/id/:licenceId/hdc/curfew-hours": {
+    "audit": true,
+    "eventType": "CREATE_HDC_CURFEW_HOURS"
+  },
+  "GET /licence/approve/cases": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_APPROVE_CASES"
+  },
+  "GET /licence/approve/id/:licenceId/probation-practitioner": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_APPROVE_PROBATION_PRACTITIONER"
+  },
+  "GET /licence/approve/id/:licenceId/view": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_APPROVE"
+  },
+  "POST /licence/approve/id/:licenceId/view": {
+    "audit": true,
+    "eventType": "CREATE_LICENCE_APPROVE"
+  },
+  "GET /licence/approve/id/:licenceId/confirm-approved": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_APPROVE_CONFIRM_APPROVED"
+  },
+  "GET /licence/view/cases": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_CASES"
+  },
+  "GET /licence/view/probation-practitioner/staffCode/:staffCode": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_PROBATION_PRACTITIONER"
+  },
+  "GET /licence/view/id/:licenceId/show": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW"
+  },
+  "GET /licence/view/id/:licenceId/crds-click": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_CRDS_CLICK"
+  },
+  "GET /licence/view/id/:licenceId/html-print": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_HTML_PRINT"
+  },
+  "GET /licence/view/id/:licenceId/pdf-print": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_PDF_PRINT"
+  },
+  "GET /licence/vary-approve/list": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VARY_APPROVE_LIST"
+  },
+  "GET /licence/vary-approve/id/:licenceId/view": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VARY_APPROVE"
+  },
+  "POST /licence/vary-approve/id/:licenceId/view": {
+    "audit": true,
+    "eventType": "CREATE_LICENCE_VARY_APPROVE"
+  },
+  "GET /licence/vary-approve/id/:licenceId/approve": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VARY_APPROVE_APPROVE"
+  },
+  "GET /licence/vary-approve/id/:licenceId/refer": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VARY_APPROVE_REFER"
+  },
+  "POST /licence/vary-approve/id/:licenceId/refer": {
+    "audit": true,
+    "eventType": "CREATE_LICENCE_VARY_APPROVE_REFER"
+  },
+  "GET /licence/vary-approve/id/:licenceId/refer-confirm": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VARY_APPROVE_REFER_CONFIRM"
+  },
+  "GET /licence/vary-approve/id/:licenceId/probation-practitioner": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VARY_APPROVE_PROBATION_PRACTITIONER"
+  },
+  "GET /support/": {
+    "audit": true,
+    "eventType": "VIEW_SUPPORT"
+  },
+  "GET /support/manage-omu-email-address": {
+    "audit": true,
+    "eventType": "VIEW_MANAGE_OMU_EMAIL_ADDRESS"
+  },
+  "GET /support/manage-omu-email-address/:prisonId": {
+    "audit": true,
+    "eventType": "VIEW_MANAGE_OMU_EMAIL_ADDRESS_PRISON"
+  },
+  "POST /support/manage-omu-email-address/add-or-edit": {
+    "audit": true,
+    "eventType": "CREATE_MANAGE_OMU_EMAIL_ADDRESS_ADD_OR_EDIT"
+  },
+  "POST /support/manage-omu-email-address/delete": {
+    "audit": true,
+    "eventType": "CREATE_MANAGE_OMU_EMAIL_ADDRESS_DELETE"
+  },
+  "POST /support/manage-omu-email-address": {
+    "audit": true,
+    "eventType": "CREATE_MANAGE_OMU_EMAIL_ADDRESS"
+  },
+  "GET /support/probation-teams/:teamCode/caseload": {
+    "audit": true,
+    "eventType": "VIEW_PROBATION_TEAM_CASELOAD"
+  },
+  "GET /support/probation-practitioner/:staffCode": {
+    "audit": true,
+    "eventType": "VIEW_PROBATION_PRACTITIONER_DETAILS"
+  },
+  "GET /support/probation-practitioner/:staffCode/caseload": {
+    "audit": true,
+    "eventType": "VIEW_PROBATION_PRACTITIONER_CASELOAD"
+  },
+  "GET /support/offender-search": {
+    "audit": true,
+    "eventType": "VIEW_OFFENDER_SEARCH"
+  },
+  "GET /support/offender/:nomsId/detail": {
+    "audit": true,
+    "eventType": "VIEW_OFFENDER_DETAIL"
+  },
+  "GET /support/offender/:nomsId/licences": {
+    "audit": true,
+    "eventType": "VIEW_OFFENDER_LICENCES"
+  },
+  "GET /search/probation-search": {
+    "audit": true,
+    "customHandler": true,
+    "eventType": "VIEW_PROBATION_SEARCH"
+  },
+  "GET /health": {
+    "audit": false,
+    "reason": "Health check endpoint system monitoring, not auditable action"
+  },
+  "GET /info": {
+    "audit": false,
+    "reason": "Application info endpoint system monitoring, not auditable action"
+  },
+  "GET /ping": {
+    "audit": false,
+    "reason": "Ping endpoint system monitoring, not auditable action"
+  },
+  "GET /autherror": {
+    "audit": false,
+    "reason": "Authentication error page system response, not auditable action"
+  },
+  "GET /access-denied": {
+    "audit": false,
+    "reason": "Access denied page system response, not auditable action"
+  },
+  "GET /login": {
+    "audit": false,
+    "reason": "OAuth2 login redirect authentication flow, not auditable action"
+  },
+  "GET /login/callback": {
+    "audit": false,
+    "reason": "OAuth2 callback—authentication flow, not auditable action"
+  },
+  "GET /licence/create/id/:licenceId/postponed-interrupt": {
+    "audit": true,
+    "eventType": "VIEW_POSTPONED_LICENCE_CREATION"
+  },
+  "GET /support/offender/:nomsId/licence/:licenceId/audit": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_AUDIT"
+  },
+  "GET /support/offender/:nomsId/licence/:licenceId/audit/:auditEventId": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_AUDIT_EVENT"
+  },
+  "GET /support/offender/:nomsId/licence/:licenceId/status": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_STATUS"
+  },
+  "POST /support/offender/:nomsId/licence/:licenceId/status": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_STATUS"
+  },
+  "GET /support/offender/:nomsId/licence/:licenceId/dates": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_DATES"
+  },
+  "POST /support/offender/:nomsId/licence/:licenceId/dates": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_DATES"
+  },
+  "GET /support/offender/:nomsId/licence/:licenceId/prisoner-details": {
+    "audit": true,
+    "eventType": "VIEW_PRISONER_DETAILS"
+  },
+  "POST /support/offender/:nomsId/licence/:licenceId/prisoner-details": {
+    "audit": true,
+    "eventType": "EDIT_PRISONER_DETAILS"
+  },
+  "GET /support/offender/:nomsId/allocation": {
+    "audit": true,
+    "eventType": "VIEW_ALLOCATION"
+  },
+  "POST /support/offender/:nomsId/allocation": {
+    "audit": true,
+    "eventType": "EDIT_OFFENDER_ALLOCATION"
+  },
+  "GET /support/variation-approver/cases/by-pdu": {
+    "audit": true,
+    "eventType": "VIEW_CASES_BY_PDU"
+  },
+  "GET /support/variation-approver/cases/by-region": {
+    "audit": true,
+    "eventType": "VIEW_CASES_BY_REGION"
+  },
+  "GET /licence/approve/change-location": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_APPROVE_CHANGE_LOCATION"
+  },
+  "POST /licence/approve/change-location": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_APPROVE_CHANGE_LOCATION"
+  },
+  "GET /licence/view/change-location": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_CHANGE_LOCATION"
+  },
+  "POST /licence/view/change-location": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_VIEW_CHANGE_LOCATION"
+  },
+  "GET /licence/create/caseload/change-team": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_CHANGE_TEAM"
+  },
+  "POST /licence/create/caseload/change-team": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_CHANGE_TEAM"
+  },
+  "GET /licence/vary/caseload/change-team": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VARY_CHANGE_TEAM"
+  },
+  "POST /licence/vary/caseload/change-team": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_VARY_CHANGE_TEAM"
+  },
+  "GET /search/ca-search": {
+    "audit": true,
+    "eventType": "VIEW_CA_SEARCH"
+  },
+  "GET /search/approver-search": {
+    "audit": true,
+    "eventType": "VIEW_APPROVER_SEARCH"
+  },
+  "GET /search/vary-approver-search": {
+    "audit": true,
+    "eventType": "VIEW_VARY_APPROVER_SEARCH"
+  },
+  "GET /licence/create/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_INITIAL_MEETING_NAME"
+  },
+  "POST /licence/create/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_INITIAL_MEETING_NAME"
+  },
+  "GET /licence/view/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_INITIAL_MEETING_NAME"
+  },
+  "POST /licence/view/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_VIEW_INITIAL_MEETING_NAME"
+  },
+  "GET /licence/create/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_INITIAL_MEETING_PLACE"
+  },
+  "GET /licence/create/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_LICENCE_CONTACT_ADDRESS"
+  },
+  "POST /licence/create/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_INITIAL_MEETING_PLACE"
+  },
+  "POST /licence/create/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_LICENCE_CONTACT_ADDRESS"
+  },
+  "GET /licence/view/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_INITIAL_MEETING_PLACE"
+  },
+  "POST /licence/view/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_VIEW_INITIAL_MEETING_PLACE"
+  },
+  "GET /licence/create/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_INITIAL_MEETING_CONTACT"
+  },
+  "GET /licence/create/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_LICENCE_CONTACT_NUMBER"
+  },
+  "POST /licence/create/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_INITIAL_MEETING_CONTACT"
+  },
+  "POST /licence/create/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_LICENCE_CONTACT_NUMBER"
+  },
+  "GET /licence/view/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_INITIAL_MEETING_CONTACT"
+  },
+  "POST /licence/view/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_VIEW_INITIAL_MEETING_CONTACT"
+  },
+  "GET /licence/create/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_INITIAL_MEETING_TIME"
+  },
+  "POST /licence/create/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_INITIAL_MEETING_TIME"
+  },
+  "GET /licence/view/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_INITIAL_MEETING_TIME"
+  },
+  "POST /licence/view/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_VIEW_INITIAL_MEETING_TIME"
+  },
+  "GET /licence/create/id/:licenceId/no-address-found": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_NO_ADDRESS_FOUND"
+  },
+  "GET /licence/view/id/:licenceId/no-address-found": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_NO_ADDRESS_FOUND"
+  },
+  "GET /licence/create/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_SELECT_ADDRESS"
+  },
+  "POST /licence/create/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_SELECT_ADDRESS"
+  },
+  "GET /licence/view/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_SELECT_ADDRESS"
+  },
+  "POST /licence/view/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_VIEW_SELECT_ADDRESS"
+  },
+  "GET /licence/create/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_MANUAL_ADDRESS_ENTRY"
+  },
+  "POST /licence/create/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_MANUAL_ADDRESS_ENTRY"
+  },
+  "GET /licence/view/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_VIEW_MANUAL_ADDRESS_ENTRY"
+  },
+  "POST /licence/view/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_VIEW_MANUAL_ADDRESS_ENTRY"
+  },
+  "GET /staff/delete/id/:licenceId/address/preferred/:reference": {
+    "audit": true,
+    "eventType": "VIEW_DELETE_ADDRESS"
+  },
+  "GET /staff/hard-stop/delete/id/:licenceId/address/preferred/:reference": {
+    "audit": true,
+    "eventType": "VIEW_HARD_STOP_DELETE_ADDRESS"
+  },
+  "GET /licence/hard-stop/create/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CREATE_INITIAL_MEETING_NAME"
+  },
+  "POST /licence/hard-stop/create/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_CREATE_INITIAL_MEETING_NAME"
+  },
+  "GET /licence/hard-stop/edit/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_EDIT_INITIAL_MEETING_NAME"
+  },
+  "POST /licence/hard-stop/edit/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_EDIT_INITIAL_MEETING_NAME"
+  },
+  "GET /licence/hard-stop/create/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CREATE_INITIAL_MEETING_PLACE"
+  },
+  "GET /licence/hard-stop/create/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CREATE_LICENCE_CONTACT_ADDRESS"
+  },
+  "POST /licence/hard-stop/create/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_CREATE_INITIAL_MEETING_PLACE"
+  },
+  "POST /licence/hard-stop/create/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_CREATE_LICENCE_CONTACT_ADDRESS"
+  },
+  "GET /licence/hard-stop/edit/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_EDIT_INITIAL_MEETING_PLACE"
+  },
+  "GET /licence/hard-stop/edit/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_EDIT_LICENCE_CONTACT_ADDRESS"
+  },
+  "POST /licence/hard-stop/edit/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_EDIT_INITIAL_MEETING_PLACE"
+  },
+  "POST /licence/hard-stop/edit/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_EDIT_LICENCE_CONTACT_ADDRESS"
+  },
+  "GET /licence/hard-stop/create/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CREATE_SELECT_ADDRESS"
+  },
+  "POST /licence/hard-stop/create/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_CREATE_SELECT_ADDRESS"
+  },
+  "GET /licence/hard-stop/edit/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_EDIT_SELECT_ADDRESS"
+  },
+  "POST /licence/hard-stop/edit/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_EDIT_SELECT_ADDRESS"
+  },
+  "GET /licence/hard-stop/create/id/:licenceId/no-address-found": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CREATE_NO_ADDRESS_FOUND"
+  },
+  "GET /licence/hard-stop/edit/id/:licenceId/no-address-found": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_EDIT_NO_ADDRESS_FOUND"
+  },
+  "GET /licence/hard-stop/create/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CREATE_MANUAL_ADDRESS_ENTRY"
+  },
+  "POST /licence/hard-stop/create/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_CREATE_MANUAL_ADDRESS_ENTRY"
+  },
+  "GET /licence/hard-stop/edit/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_EDIT_MANUAL_ADDRESS_ENTRY"
+  },
+  "POST /licence/hard-stop/edit/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_EDIT_MANUAL_ADDRESS_ENTRY"
+  },
+  "GET /licence/hard-stop/create/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CREATE_INITIAL_MEETING_CONTACT"
+  },
+  "GET /licence/hard-stop/create/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CREATE_LICENCE_CONTACT_NUMBER"
+  },
+  "POST /licence/hard-stop/create/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_CREATE_INITIAL_MEETING_CONTACT"
+  },
+  "POST /licence/hard-stop/create/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_CREATE_LICENCE_CONTACT_NUMBER"
+  },
+  "GET /licence/hard-stop/edit/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_EDIT_INITIAL_MEETING_CONTACT"
+  },
+  "GET /licence/hard-stop/edit/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_EDIT_LICENCE_CONTACT_NUMBER"
+  },
+  "POST /licence/hard-stop/edit/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_EDIT_INITIAL_MEETING_CONTACT"
+  },
+  "POST /licence/hard-stop/edit/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_EDIT_LICENCE_CONTACT_NUMBER"
+  },
+  "GET /licence/hard-stop/create/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CREATE_INITIAL_MEETING_TIME"
+  },
+  "POST /licence/hard-stop/create/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_CREATE_INITIAL_MEETING_TIME"
+  },
+  "GET /licence/hard-stop/edit/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_EDIT_INITIAL_MEETING_TIME"
+  },
+  "POST /licence/hard-stop/edit/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_EDIT_INITIAL_MEETING_TIME"
+  },
+  "GET /licence/hard-stop/id/:licenceId/check-your-answers": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CHECK_YOUR_ANSWERS"
+  },
+  "POST /licence/hard-stop/id/:licenceId/check-your-answers": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_HARD_STOP_CHECK_YOUR_ANSWERS"
+  },
+  "GET /licence/hard-stop/id/:licenceId/confirmation": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_HARD_STOP_CONFIRMATION"
+  },
+  "GET /licence/time-served/create/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE_INITIAL_MEETING_NAME"
+  },
+  "POST /licence/time-served/create/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CREATE_INITIAL_MEETING_NAME"
+  },
+  "GET /licence/time-served/edit/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_EDIT_INITIAL_MEETING_NAME"
+  },
+  "POST /licence/time-served/edit/id/:licenceId/initial-meeting-name": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_EDIT_INITIAL_MEETING_NAME"
+  },
+  "GET /licence/time-served/create/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE_INITIAL_MEETING_PLACE"
+  },
+  "GET /licence/time-served/create/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE_LICENCE_CONTACT_ADDRESS"
+  },
+  "POST /licence/time-served/create/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CREATE_INITIAL_MEETING_PLACE"
+  },
+  "POST /licence/time-served/create/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CREATE_LICENCE_CONTACT_ADDRESS"
+  },
+  "GET /licence/time-served/edit/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_EDIT_INITIAL_MEETING_PLACE"
+  },
+  "GET /licence/time-served/edit/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_EDIT_LICENCE_CONTACT_ADDRESS"
+  },
+  "POST /licence/time-served/edit/id/:licenceId/initial-meeting-place": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_EDIT_INITIAL_MEETING_PLACE"
+  },
+  "POST /licence/time-served/edit/id/:licenceId/licence-contact-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_EDIT_LICENCE_CONTACT_ADDRESS"
+  },
+  "GET /licence/time-served/create/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE_SELECT_ADDRESS"
+  },
+  "POST /licence/time-served/create/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CREATE_SELECT_ADDRESS"
+  },
+  "GET /licence/time-served/edit/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_EDIT_SELECT_ADDRESS"
+  },
+  "POST /licence/time-served/edit/id/:licenceId/select-address": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_EDIT_SELECT_ADDRESS"
+  },
+  "GET /licence/time-served/create/id/:licenceId/no-address-found": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE_NO_ADDRESS_FOUND"
+  },
+  "GET /licence/time-served/edit/id/:licenceId/no-address-found": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_EDIT_NO_ADDRESS_FOUND"
+  },
+  "GET /licence/time-served/create/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE_MANUAL_ADDRESS_ENTRY"
+  },
+  "POST /licence/time-served/create/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CREATE_MANUAL_ADDRESS_ENTRY"
+  },
+  "GET /licence/time-served/edit/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_EDIT_MANUAL_ADDRESS_ENTRY"
+  },
+  "POST /licence/time-served/edit/id/:licenceId/manual-address-entry": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_EDIT_MANUAL_ADDRESS_ENTRY"
+  },
+  "GET /licence/time-served/create/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE_INITIAL_MEETING_CONTACT"
+  },
+  "GET /licence/time-served/create/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE_LICENCE_CONTACT_NUMBER"
+  },
+  "POST /licence/time-served/create/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CREATE_INITIAL_MEETING_CONTACT"
+  },
+  "POST /licence/time-served/create/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CREATE_LICENCE_CONTACT_NUMBER"
+  },
+  "GET /licence/time-served/edit/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_EDIT_INITIAL_MEETING_CONTACT"
+  },
+  "GET /licence/time-served/edit/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_EDIT_LICENCE_CONTACT_NUMBER"
+  },
+  "POST /licence/time-served/edit/id/:licenceId/initial-meeting-contact": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_EDIT_INITIAL_MEETING_CONTACT"
+  },
+  "POST /licence/time-served/edit/id/:licenceId/licence-contact-number": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_EDIT_LICENCE_CONTACT_NUMBER"
+  },
+  "GET /licence/time-served/create/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE_INITIAL_MEETING_TIME"
+  },
+  "POST /licence/time-served/create/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CREATE_INITIAL_MEETING_TIME"
+  },
+  "GET /licence/time-served/edit/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_EDIT_INITIAL_MEETING_TIME"
+  },
+  "POST /licence/time-served/edit/id/:licenceId/initial-meeting-time": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_EDIT_INITIAL_MEETING_TIME"
+  },
+  "GET /licence/time-served/id/:licenceId/check-your-answers": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CHECK_YOUR_ANSWERS"
+  },
+  "POST /licence/time-served/id/:licenceId/check-your-answers": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CHECK_YOUR_ANSWERS"
+  },
+  "GET /licence/time-served/id/:licenceId/confirmation": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CONFIRMATION"
+  },
+  "GET /licence/create/id/:licenceId/add-pathfinder": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATE_ADD_PATHFINDER"
+  },
+  "POST /licence/create/id/:licenceId/add-pathfinder": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_CREATE_ADD_PATHFINDER"
+  },
+  "GET /:reportId": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS"
+  },
+  "GET /reports/last-minute-handover-cases": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS_LAST_MINUTE_HANDOVER_CASES"
+  },
+  "GET /reports/last-minute-handover-cases/download-csv": {
+    "audit": true,
+    "eventType": "VIEW_DOWNLOAD_REPORTS_LAST_MINUTE_HANDOVER_CASES_CSV"
+  },
+  "GET /reports/upcoming-releases-with-monitoring": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS_UPCOMING_RELEASES_WITH_MONITORING"
+  },
+  "GET /reports/upcoming-releases-with-monitoring/download-csv": {
+    "audit": true,
+    "eventType": "VIEW_DOWNLOAD_REPORTS_UPCOMING_RELEASES_WITH_MONITORING_CSV"
+  },
+  "GET /reports/licence-status-cases": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS_LICENCE_STATUS_CASES"
+  },
+  "GET /reports/licence-status-cases/download-csv": {
+    "audit": true,
+    "eventType": "VIEW_DOWNLOAD_REPORTS_LICENCE_STATUS_CASES_CSV"
+  },
+  "GET /reports/": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS"
+  },
+  "POST /": {
+    "audit": true,
+    "eventType": "EDIT_REPORTS"
+  },
+  "POST /:reportId/:id/tableId/:tableId,/:reportId/:id": {
+    "audit": true,
+    "eventType": "EDIT_REPORTS_TABLE"
+  },
+  "POST /remove-item/:executionId/table-id/:tableId,/remove-item/report-id/:reportId/id/:id": {
+    "audit": true,
+    "eventType": "REMOVE_REPORTS_ITEM"
+  },
+  "GET /row/:reportId/:id/:executionId/:tableId": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS_ROW"
+  },
+  "POST /remove-item/:executionId": {
+    "audit": true,
+    "eventType": "REMOVE_REPORTS_ITEM"
+  },
+  "POST /:reportId/:id/subscribe": {
+    "audit": true,
+    "eventType": "CREATE_REPORTS_SUBSCRIPTION"
+  },
+  "POST /:reportId/:id/unsubscribe": {
+    "audit": true,
+    "eventType": "EDIT_UNSUBSCRIBE_REPORTS"
+  },
+  "GET /,/download-disabled": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS_DOWNLOAD_DISABLED"
+  },
+  "POST /apply-filters": {
+    "audit": true,
+    "eventType": "CREATE_REPORTS_FILTERS"
+  },
+  "POST /reset-filters": {
+    "audit": true,
+    "eventType": "EDIT_RESET_REPORTS_FILTERS"
+  },
+  "POST /apply-columns": {
+    "audit": true,
+    "eventType": "CREATE_REPORTS_COLUMNS"
+  },
+  "POST /reset-columns": {
+    "audit": true,
+    "eventType": "EDIT_RESET_REPORTS_COLUMNS"
+  },
+  "POST /save-defaults": {
+    "audit": true,
+    "eventType": "CREATE_SAVE_REPORTS_DEFAULTS"
+  },
+  "POST /remove-defaults": {
+    "audit": true,
+    "eventType": "REMOVE_REPORTS_DEFAULTS"
+  },
+  "GET /async/:type/:reportId/:id/request/:tableId/:type": {
+    "audit": true,
+    "eventType": "VIEW_ASYNC_REQUEST"
+  },
+  "GET /async/:type/:reportId/:id/request/:tableId/report/:download": {
+    "audit": true,
+    "eventType": "VIEW_ASYNC_REQUEST_REPORT"
+  },
+  "POST /async/:type/:reportId/:id/request/:tableId/:type": {
+    "audit": true,
+    "eventType": "CREATE_ASYNC_REQUEST"
+  },
+  "POST /:type/:reportId/:id/:executionId/cancel": {
+    "audit": true,
+    "eventType": "EDIT_ASYNC_REQUEST"
+  },
+  "POST /resetFilters": {
+    "audit": true,
+    "eventType": "EDIT_RESET_REPORTS_FILTERS"
+  },
+  "GET /current-status": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS_CURRENT_STATUS"
+  },
+  "GET /:type/:reportId/:id/:executionId/cancel/failed": {
+    "audit": true,
+    "eventType": "VIEW_ASYNC_REQUEST_FAILED"
+  },
+  "GET /async/:type/:reportId/:id/request": {
+    "audit": true,
+    "eventType": "VIEW_ASYNC_REQUEST"
+  },
+  "GET /async/:type/:reportId/:id/request/:executionId": {
+    "audit": true,
+    "eventType": "VIEW_ASYNC_REQUEST_EXECUTION"
+  },
+  "GET /licence/time-served/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CREATE"
+  },
+  "POST /licence/time-served/create/nomisId/:nomisId/do-you-want-to-create-the-licence-on-this-service": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CREATE"
+  },
+  "GET /licence/time-served/create/id/:licenceId/contact-probation-team": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_CONTACT_PROBATION_TEAM"
+  },
+  "POST /licence/time-served/create/id/:licenceId/contact-probation-team": {
+    "audit": true,
+    "eventType": "EDIT_LICENCE_TIME_SERVED_CONTACT_PROBATION_TEAM"
+  },
+  "GET /licence/time-served/create/nomisId/:nomisId/ndelius-missing-error": {
+    "audit": true,
+    "eventType": "VIEW_LICENCE_TIME_SERVED_NDELIUS_MISSING_ERROR"
+  },
+  "GET /licence/create/id/:licenceId/hdc/first-night-curfew-hours": {
+    "audit": true,
+    "eventType": "VIEW_HDC_FIRST_NIGHT_CURFEW_HOURS"
+  },
+  "POST /licence/create/id/:licenceId/hdc/first-night-curfew-hours": {
+    "audit": true,
+    "eventType": "EDIT_HDC_FIRST_NIGHT_CURFEW_HOURS"
+  },
+  "GET /licence/create/id/:licenceId/hdc/standard-curfew-hours-question": {
+    "audit": true,
+    "eventType": "VIEW_HDC_STANDARD_CURFEW_HOURS_QUESTION"
+  },
+  "POST /licence/create/id/:licenceId/hdc/standard-curfew-hours-question": {
+    "audit": true,
+    "eventType": "EDIT_HDC_STANDARD_CURFEW_HOURS_QUESTION"
+  },
+  "GET /licence/create/id/:licenceId/hdc/do-hdc-curfew-hours-apply-daily": {
+    "audit": true,
+    "eventType": "VIEW_HDC_DO_CURFEW_HOURS_APPLY_DAILY"
+  },
+  "POST /licence/create/id/:licenceId/hdc/do-hdc-curfew-hours-apply-daily": {
+    "audit": true,
+    "eventType": "EDIT_HDC_DO_CURFEW_HOURS_APPLY_DAILY"
+  },
+  "GET /licence/create/id/:licenceId/hdc/curfew-hours": {
+    "audit": true,
+    "eventType": "VIEW_HDC_CURFEW_HOURS"
+  },
+  "POST /licence/create/id/:licenceId/hdc/curfew-hours": {
+    "audit": true,
+    "eventType": "EDIT_HDC_CURFEW_HOURS"
+  },
+  "GET /licence/create/id/:licenceId/hdc/individual-curfew-hours": {
+    "audit": true,
+    "eventType": "VIEW_HDC_INDIVIDUAL_CURFEW_HOURS"
+  },
+  "POST /licence/create/id/:licenceId/hdc/individual-curfew-hours": {
+    "audit": true,
+    "eventType": "EDIT_HDC_INDIVIDUAL_CURFEW_HOURS"
+  },
+  "GET /prisoner/:nomsId/image": {
+    "audit": true,
+    "eventType": "VIEW_PRISONER_IMAGE"
+  },
+  "GET /reports/recent-releases-with-monitoring": {
+    "audit": true,
+    "eventType": "VIEW_REPORTS_RECENT_RELEASES_WITH_MONITORING"
+  },
+  "GET /reports/recent-releases-with-monitoring/download-csv": {
+    "audit": true,
+    "eventType": "VIEW_DOWNLOAD_REPORTS_RECENT_RELEASES_WITH_MONITORING_CSV"
+  }
+}

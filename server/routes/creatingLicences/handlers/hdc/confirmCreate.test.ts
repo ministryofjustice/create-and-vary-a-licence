@@ -3,20 +3,17 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import { LicenceSummary, PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
-import ProbationService from '../../../../services/probationService'
 import PrisonerService from '../../../../services/prisonerService'
 import config from '../../../../config'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../../../../services/licenceService')
-jest.mock('../../../../services/probationService')
 jest.mock('../../../../services/prisonerService')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(probationService, licenceService, prisonerService)
+  const handler = new ConfirmCreateRoutes(licenceService, prisonerService)
   let req: Request
   let res: Response
 
