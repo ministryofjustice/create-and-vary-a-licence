@@ -294,6 +294,7 @@ describe('populateCurrentUser', () => {
       probationPduCodes: ['pduCode'],
       probationLauCodes: ['lauCode'],
       probationTeamCodes: ['teamCode-1', 'teamCode-4'],
+      reportUserId: null,
       userUuid: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
     })
     expect(licenceServiceMock.updateComDetails).toHaveBeenCalledWith({
@@ -328,6 +329,7 @@ describe('populateCurrentUser', () => {
     expect(req.session.currentUser).toMatchObject({
       displayName: 'Joe Bloggs',
       emailAddress: 'jbloggs@prison.gov.uk',
+      reportUserId: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
       userUuid: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
     })
     expect(next).toHaveBeenCalled()
