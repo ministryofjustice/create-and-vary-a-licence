@@ -48,7 +48,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       ...handlers,
     )
 
