@@ -678,6 +678,7 @@ describe('HDC interrupt licence predicates', () => {
     const licence = {
       kind: LicenceKind.HDC,
       isPostponed: true,
+      statusCode: LicenceStatus.IN_PROGRESS,
     } as Licence
 
     expect(isHdcPostponedLicence(licence)).toBe(true)
