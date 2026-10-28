@@ -69,4 +69,16 @@ describe('populateLicenceMiddleware', () => {
     expect(licenceService.getLicence).toHaveBeenCalledTimes(1)
     expect(next).toHaveBeenCalledTimes(1)
   })
+
+  it(`should not attempt to populate licence if we can't find a policy`, async () => {
+    const nonExistentRouteRequest = {
+      ...req,
+      path: '/invalid/path/that/does/not/exist',
+    } as Request
+
+    await middleware(nonExistentRouteRequest, res, next)
+
+    expect(licenceService.getLicence).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledTimes(1)
+  })
 })
