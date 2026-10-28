@@ -688,7 +688,14 @@ describe('HDC interrupt licence predicates', () => {
   it.each([{ kind: LicenceKind.CRD }, { isPostponed: false }])(
     'does not identify a non-postponed HDC licence: %o',
     changes => {
-      expect(isHdcPostponedLicence({ kind: LicenceKind.HDC, isPostponed: true, ...changes } as Licence)).toBe(false)
+      expect(
+        isHdcPostponedLicence({
+          kind: LicenceKind.HDC,
+          statusCode: LicenceStatus.IN_PROGRESS,
+          isPostponed: true,
+          ...changes,
+        } as Licence),
+      ).toBe(false)
     },
   )
 })
