@@ -35,7 +35,7 @@ export default function Index({
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create${path}`
-  const interruptHandler = new InterruptHandler(licenceService)
+  const hdcInterruptHandler = new InterruptHandler(licenceService)
 
   /*
    * The fetchLicence middleware will call the licenceAPI during each GET request on the create a licence journey
@@ -129,7 +129,7 @@ export default function Index({
 
   {
     const controller = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
-    get('/id/:licenceId/check-your-answers', interruptHandler.GET, controller.GET)
+    get('/id/:licenceId/check-your-answers', hdcInterruptHandler.GET, controller.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }
   {
