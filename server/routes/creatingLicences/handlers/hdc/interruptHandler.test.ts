@@ -24,7 +24,7 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       params: { licenceId: '123' },
       session: { returnToCase: '/licence/create/caseload?view=team' },
     } as unknown as Request
-    res = { render: jest.fn(), locals: {} } as unknown as Response
+    res = { render: jest.fn(), redirect: jest.fn(), locals: {} } as unknown as Response
     next = jest.fn()
   })
 
@@ -49,6 +49,19 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
     expect(next).not.toHaveBeenCalled()
   })
 
+  it('should redirect to the dedicated interrupt route when an interrupt applies', () => {
+    res.locals.licence = {
+      kind: LicenceKind.CRD,
+      statusCode: LicenceStatus.IN_PROGRESS,
+      isReplacementForRefusedLicence: true,
+    } as Licence
+
+    handler.redirectIfRequired(req, res, next)
+
+    expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/interrupt')
+    expect(next).not.toHaveBeenCalled()
+  })
+
   it('should continue to check answers after the COM chooses Continue from the refused interrupt', async () => {
     req.query = { continueAfterHdcInterrupt: 'true' }
     res.locals.licence = {
@@ -57,7 +70,7 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       isReplacementForRefusedLicence: true,
     } as Licence
 
-    await handler.GET(req, res, next)
+    handler.redirectIfRequired(req, res, next)
 
     expect(next).toHaveBeenCalledTimes(1)
     expect(res.render).not.toHaveBeenCalled()
@@ -93,10 +106,10 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       hdcAddressChecksComplete: true,
     } as Licence
 
-    await handler.GET(req, res, next)
+    handler.redirectIfRequired(req, res, next)
 
     expect(next).toHaveBeenCalledTimes(1)
-    expect(res.render).not.toHaveBeenCalled()
+    expect(res.redirect).not.toHaveBeenCalled()
   })
 
   it('should render the opt-out interrupt from the fetched licence state', async () => {
@@ -146,7 +159,7 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       isReplacementForOptedOutLicence: true,
     } as Licence
 
-    await handler.GET(req, res, next)
+    handler.redirectIfRequired(req, res, next)
 
     expect(next).toHaveBeenCalledTimes(1)
     expect(res.render).not.toHaveBeenCalled()
@@ -161,9 +174,9 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       hdcAddressChecksComplete: false,
     } as Licence
 
-    await handler.GET(req, res, next)
+    handler.redirectIfRequired(req, res, next)
 
-    expect(res.render).toHaveBeenCalledWith('pages/create/hdc/interrupt', expect.any(Object))
+    expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/interrupt')
     expect(next).not.toHaveBeenCalled()
   })
 
@@ -177,7 +190,7 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
     } as Licence
     res.locals.licence = licence
 
-    await handler.GET(req, res, next)
+    handler.redirectIfRequired(req, res, next)
 
     expect(next).toHaveBeenCalledTimes(1)
     expect(res.render).not.toHaveBeenCalled()

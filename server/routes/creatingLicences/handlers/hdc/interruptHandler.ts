@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import config from '../../../../config'
+import logger from '../../../../../logger'
 import { HdcLicence, Licence } from '../../../../@types/licenceApiClientTypes'
 import { User } from '../../../../@types/CvlUserDetails'
 import {
@@ -22,7 +23,7 @@ type HdcInterruptType = (typeof HdcInterruptType)[keyof typeof HdcInterruptType]
 export default class InterruptHandler {
   constructor(private readonly licenceService: LicenceService) {}
 
-  GET: RequestHandler = async (req, res, next): Promise<void> => {
+  redirectIfRequired: RequestHandler = (req, res, next): void => {
     const licence = res.locals.licence as Licence
 
     if (!config.hdc.hdcCreationEnabled) {
@@ -30,32 +31,36 @@ export default class InterruptHandler {
       return
     }
 
-    if (isHdcAddressChecksIncompleteLicence(licence)) {
-      this.render(req, res, HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE)
-      return
-    }
+    const interruptType = this.getInterruptType(licence)
+    const isAddressChecksIncomplete = interruptType === HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE
+    const canContinueAfterInterrupt = req.query?.continueAfterHdcInterrupt === 'true'
 
-    if (req.query?.continueAfterHdcInterrupt === 'true') {
-      next()
-      return
-    }
-
-    if (isHdcRefusedLicence(licence)) {
-      this.render(req, res, HdcInterruptType.REFUSED)
-      return
-    }
-
-    if (isHdcOptOutLicence(licence)) {
-      this.render(req, res, HdcInterruptType.OPT_OUT)
-      return
-    }
-
-    if (isHdcPostponedLicence(licence)) {
-      await this.renderPostponed(req, res, licence, res.locals.user)
+    if (interruptType && (isAddressChecksIncomplete || !canContinueAfterInterrupt)) {
+      res.redirect(`/licence/create/id/${req.params.licenceId}/interrupt`)
       return
     }
 
     next()
+  }
+
+  GET: RequestHandler = async (req, res): Promise<void> => {
+    const licence = res.locals.licence as Licence
+
+    const interruptType = this.getInterruptType(licence)
+
+    if (!interruptType) {
+      res.redirect(`/licence/create/id/${req.params.licenceId}/check-your-answers`)
+      return
+    }
+
+    logger.info(`HDC interrupt displayed for licence ${licence.id ?? req.params.licenceId}; reason: ${interruptType}`)
+
+    if (interruptType === HdcInterruptType.POSTPONED) {
+      await this.renderPostponed(req, res, licence as HdcLicence, res.locals.user)
+      return
+    }
+
+    this.render(req, res, interruptType)
   }
 
   private render = (req: Request, res: Response, interruptType: HdcInterruptType, omuContact?: string): void => {
@@ -77,5 +82,21 @@ export default class InterruptHandler {
   private renderPostponed = async (req: Request, res: Response, licence: HdcLicence, user: User): Promise<void> => {
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
     this.render(req, res, HdcInterruptType.POSTPONED, omuEmail ?? licence.prisonCode)
+  }
+
+  private getInterruptType = (licence: Licence): HdcInterruptType | undefined => {
+    if (isHdcAddressChecksIncompleteLicence(licence)) {
+      return HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE
+    }
+    if (isHdcRefusedLicence(licence)) {
+      return HdcInterruptType.REFUSED
+    }
+    if (isHdcOptOutLicence(licence)) {
+      return HdcInterruptType.OPT_OUT
+    }
+    if (isHdcPostponedLicence(licence)) {
+      return HdcInterruptType.POSTPONED
+    }
+    return undefined
   }
 }

@@ -55,6 +55,10 @@
     "audit": true,
     "eventType": "VIEW_LICENCE_CREATION_CHECK_YOUR_ANSWERS"
   },
+  "GET /licence/create/id/:licenceId/interrupt": {
+    "audit": true,
+    "eventType": "VIEW_HDC_INTERRUPT"
+  },
   "POST /licence/create/id/:licenceId/check-your-answers": {
     "audit": true,
     "eventType": "EDIT_SUBMIT_LICENCE_CREATION"

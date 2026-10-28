@@ -129,7 +129,8 @@ export default function Index({
 
   {
     const controller = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
-    get('/id/:licenceId/check-your-answers', hdcInterruptHandler.GET, controller.GET)
+    get('/id/:licenceId/check-your-answers', hdcInterruptHandler.redirectIfRequired, controller.GET)
+    get('/id/:licenceId/interrupt', hdcInterruptHandler.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }
   {
