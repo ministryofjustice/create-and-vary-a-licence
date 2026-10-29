@@ -132,7 +132,7 @@ describe('fetchLicenceMiddleware', () => {
   })
 
   it('should deny access to any licence route when address checks are incomplete', async () => {
-    req.originalUrl = '/licence/create/id/1/edit'
+    const editReq = { ...req, path: '/licence/create/id/1/edit' } as Request
     res.locals.licence = {
       ...licence,
       kind: LicenceKind.HDC,
@@ -141,7 +141,7 @@ describe('fetchLicenceMiddleware', () => {
       hdcAddressChecksComplete: false,
     } as Licence
 
-    await middleware(req, res, next)
+    await middleware(editReq, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     expect(next).not.toHaveBeenCalled()
