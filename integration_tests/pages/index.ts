@@ -77,6 +77,7 @@ export default class IndexPage extends Page {
   }
 
   clickCreateALicenceWithHdcReplacement = (replacementFlags: {
+    kind?: 'CRD' | 'HDC'
     isReplacementForOptedOutLicence?: boolean
     isReplacementForRefusedLicence?: boolean
     isHdcPostponed?: boolean

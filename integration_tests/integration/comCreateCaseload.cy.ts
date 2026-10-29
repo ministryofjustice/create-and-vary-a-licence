@@ -118,7 +118,7 @@ context('View COM create caseload', () => {
     })
 
     const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.clickCreateALicenceWithHdcReplacement({})
+    indexPage.clickCreateALicenceWithHdcReplacement({ kind: 'HDC' })
 
     cy.get('#name-button-1').click()
     cy.get('#hdc-opt-in-interrupt-page-heading').should('contain', 'This person has opted in to HDC')
@@ -135,15 +135,11 @@ context('View COM create caseload', () => {
     cy.task('stubGetHdcLicence', { kind: 'HDC', statusCode: 'IN_PROGRESS', isPostponed: true })
 
     const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.clickCreateALicenceWithHdcReplacement({ isHdcPostponed: true })
+    indexPage.clickCreateALicenceWithHdcReplacement({ kind: 'HDC', isHdcPostponed: true })
 
     cy.get('#name-button-1').click()
     cy.get('#hdc-postponed-interrupt-page-heading').should('contain', 'HDC application postponed')
     cy.contains('Contact test@test.test to ask for the application to be refused')
-    cy.get('.postponed-interrupt__button').should(
-      'have.attr',
-      'href',
-      '/licence/create/id/1/check-your-answers?continueAfterHdcInterrupt=true',
-    )
+    cy.get('.postponed-interrupt__button').should('have.attr', 'href', '/licence/create/id/1/check-your-answers')
   })
 })

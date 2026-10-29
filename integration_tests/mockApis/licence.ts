@@ -2066,6 +2066,7 @@ export default {
     licenceId: number
     licenceStatus: string
     licenceCreationType: string
+    kind?: 'CRD' | 'HDC'
     isReplacementForOptedOutLicence?: boolean
     isReplacementForRefusedLicence?: boolean
     isHdcPostponed?: boolean
@@ -2085,6 +2086,7 @@ export default {
             prisonerNumber: 'G9786GC',
             releaseDate: '01/09/2024',
             licenceId: options.licenceId,
+            kind: options.kind ?? 'CRD',
             licenceStatus: options.licenceStatus,
             licenceType: 'AP',
             probationPractitioner: {
