@@ -69,6 +69,10 @@ export default class CheckAnswersRoutes {
     const { licenceId } = req.params
     const { licence, user } = res.locals
 
+    if (licence.kind === 'HDC' && licence.isPostponed) {
+      return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
+    }
+
     const errors = await this.validateLicence(licence)
     if (errors.length > 0) {
       req.flash('validationErrors', JSON.stringify(errors))
