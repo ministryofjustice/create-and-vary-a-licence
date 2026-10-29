@@ -438,13 +438,18 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     it('should route HDC and HDC replacement cases to the interrupt handler', () => {
       const interruptPath = '/licence/create/id/3/interrupt'
 
-      expect(handler.findCreateLinkToDisplay({ licenceId: 3, kind: LicenceKind.HDC } as ComCreateCase)).toBe(
-        interruptPath,
-      )
+      expect(
+        handler.findCreateLinkToDisplay({
+          licenceId: 3,
+          kind: LicenceKind.HDC,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+        } as ComCreateCase),
+      ).toBe(interruptPath)
       expect(
         handler.findCreateLinkToDisplay({
           licenceId: 3,
           kind: LicenceKind.CRD,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
           isReplacementForOptedOutLicence: true,
         } as ComCreateCase),
       ).toBe(interruptPath)
@@ -452,6 +457,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         handler.findCreateLinkToDisplay({
           licenceId: 3,
           kind: LicenceKind.CRD,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
           isReplacementForRefusedLicence: true,
         } as ComCreateCase),
       ).toBe(interruptPath)
