@@ -52,6 +52,15 @@ export default function Index({
       ...handlers,
     )
 
+  const getWithHdcInterruptAccess = (path: string, handler: RequestHandler) =>
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkComCaseAccessMiddleware(licenceService),
+      checkLicenceAccess(licenceService, { allowHdcInterruptAccess: true }),
+      handler,
+    )
+
   const getWithHardStopCheck = (path: string, handler: RequestHandler) => {
     return router.get(
       routePrefix(path),
@@ -129,8 +138,8 @@ export default function Index({
 
   {
     const controller = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
-    get('/id/:licenceId/check-your-answers', hdcInterruptHandler.redirectIfRequired, controller.GET)
-    get('/id/:licenceId/interrupt', hdcInterruptHandler.GET)
+    get('/id/:licenceId/check-your-answers', controller.GET)
+    getWithHdcInterruptAccess('/id/:licenceId/interrupt', hdcInterruptHandler.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }
   {

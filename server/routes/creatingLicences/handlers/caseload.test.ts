@@ -434,5 +434,27 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       )
       expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
     })
+
+    it('should route HDC and HDC replacement cases to the interrupt handler', () => {
+      const interruptPath = '/licence/create/id/3/interrupt'
+
+      expect(handler.findCreateLinkToDisplay({ licenceId: 3, kind: LicenceKind.HDC } as ComCreateCase)).toBe(
+        interruptPath,
+      )
+      expect(
+        handler.findCreateLinkToDisplay({
+          licenceId: 3,
+          kind: LicenceKind.CRD,
+          isReplacementForOptedOutLicence: true,
+        } as ComCreateCase),
+      ).toBe(interruptPath)
+      expect(
+        handler.findCreateLinkToDisplay({
+          licenceId: 3,
+          kind: LicenceKind.CRD,
+          isReplacementForRefusedLicence: true,
+        } as ComCreateCase),
+      ).toBe(interruptPath)
+    })
   })
 })

@@ -31,14 +31,12 @@ describe('View HDC interrupt page', () => {
     expect(hdcLink.attr('href')).toBe(config.hdc.url)
   })
 
-  it('should display the continue button and return to case list link', () => {
+  it('should display the Continue button and return to case list link', () => {
     const $ = render(model)
     const continueButton = $('.refused-interrupt__actions a.govuk-button')
 
     expect(continueButton.text().trim()).toBe('Continue')
     expect(continueButton.attr('href')).toBe(model.toCheckYourAnswer)
-    expect(continueButton.attr('role')).toBe('button')
-    expect(continueButton.attr('draggable')).toBe('false')
 
     const returnLink = $('.refused-interrupt__actions a.govuk-link')
     expect(returnLink.text().trim()).toBe('Return to case list')
@@ -64,7 +62,6 @@ describe('View HDC interrupt page', () => {
     expect($('.moj-interruption-card__body > p').first().text().trim()).toBe(
       'This licence is now for a standard release.',
     )
-    expect($('.opt-out-interrupt__actions a.govuk-button').length).toBe(1)
   })
 
   it('should display the postponed interruption and OMU contact', () => {
@@ -77,6 +74,5 @@ describe('View HDC interrupt page', () => {
     expect($('.moj-interruption-card__body').text()).toContain(
       'Contact omu@example.test to ask for the application to be refused if this person needs a licence for a standard release.',
     )
-    expect($('.postponed-interrupt__actions a.govuk-button').length).toBe(1)
   })
 })

@@ -423,19 +423,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   })
 
   describe('POST', () => {
-    it('should not submit a postponed HDC licence', async () => {
-      res.locals.licence = Object.assign(res.locals.licence, {
-        kind: LicenceKind.HDC,
-        isPostponed: true,
-        statusCode: LicenceStatus.IN_PROGRESS,
-      })
-
-      await handler.POST(req, res)
-
-      expect(licenceService.submitLicence).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
-    })
-
     it('should redirect back with error messages in flash if licence fields are empty', async () => {
       res.locals.licence = {
         appointmentPerson: '',

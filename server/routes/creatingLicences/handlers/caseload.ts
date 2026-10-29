@@ -90,6 +90,14 @@ export default class CaseloadRoutes {
       return `/licence/create/nomisId/${comCase.prisonerNumber}/confirm`
     }
 
+    if (
+      comCase.kind === LicenceKind.HDC ||
+      comCase.isReplacementForOptedOutLicence ||
+      comCase.isReplacementForRefusedLicence
+    ) {
+      return `/licence/create/id/${comCase.licenceId}/interrupt`
+    }
+
     return `/licence/create/id/${comCase.licenceId}/check-your-answers`
   }
 }

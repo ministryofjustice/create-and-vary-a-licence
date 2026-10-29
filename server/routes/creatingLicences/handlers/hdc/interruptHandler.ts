@@ -23,31 +23,13 @@ type HdcInterruptType = (typeof HdcInterruptType)[keyof typeof HdcInterruptType]
 export default class InterruptHandler {
   constructor(private readonly licenceService: LicenceService) {}
 
-  redirectIfRequired: RequestHandler = (req, res, next): void => {
+  GET: RequestHandler = async (req, res): Promise<void> => {
     const licence = res.locals.licence as Licence
 
     if (!config.hdc.hdcCreationEnabled) {
-      next()
+      res.redirect(`/licence/create/id/${req.params.licenceId}/check-your-answers`)
       return
     }
-
-    const interruptType = this.getInterruptType(licence)
-    const isAddressChecksIncomplete = interruptType === HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE
-    const canContinueAfterInterrupt = req.query?.continueAfterHdcInterrupt === 'true'
-
-    if (
-      interruptType &&
-      (isAddressChecksIncomplete || (!canContinueAfterInterrupt && !res.locals.validationErrors?.length))
-    ) {
-      res.redirect(`/licence/create/id/${req.params.licenceId}/interrupt`)
-      return
-    }
-
-    next()
-  }
-
-  GET: RequestHandler = async (req, res): Promise<void> => {
-    const licence = res.locals.licence as Licence
 
     const interruptType = this.getInterruptType(licence)
 
@@ -67,15 +49,12 @@ export default class InterruptHandler {
   }
 
   private render = (req: Request, res: Response, interruptType: HdcInterruptType, omuContact?: string): void => {
-    const { licenceId } = req.params
     const backLink = req.session?.returnToCase || '/licence/create/caseload'
     const isAddressChecksIncomplete = interruptType === HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE
 
     res.render('pages/create/hdc/interrupt', {
       backLink,
-      toCheckYourAnswer: `/licence/create/id/${licenceId}/check-your-answers${
-        isAddressChecksIncomplete ? '' : '?continueAfterHdcInterrupt=true'
-      }`,
+      toCheckYourAnswer: `/licence/create/id/${req.params.licenceId}/check-your-answers`,
       interruptType,
       ...(isAddressChecksIncomplete && { hdcAddressChecksComplete: false }),
       ...(omuContact && { omuContact }),

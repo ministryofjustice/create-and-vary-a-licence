@@ -43,37 +43,22 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
 
     expect(res.render).toHaveBeenCalledWith('pages/create/hdc/interrupt', {
       backLink: '/licence/create/caseload?view=team',
-      toCheckYourAnswer: '/licence/create/id/123/check-your-answers?continueAfterHdcInterrupt=true',
+      toCheckYourAnswer: '/licence/create/id/123/check-your-answers',
       interruptType: 'refused',
     })
     expect(next).not.toHaveBeenCalled()
   })
 
-  it('should redirect to the dedicated interrupt route when an interrupt applies', () => {
+  it('should redirect to CYA when no interrupt applies', async () => {
     res.locals.licence = {
       kind: LicenceKind.CRD,
       statusCode: LicenceStatus.IN_PROGRESS,
-      isReplacementForRefusedLicence: true,
     } as Licence
 
-    handler.redirectIfRequired(req, res, next)
+    await handler.GET(req, res, next)
 
-    expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/interrupt')
+    expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/check-your-answers')
     expect(next).not.toHaveBeenCalled()
-  })
-
-  it('should continue to check answers after the COM chooses Continue from the refused interrupt', async () => {
-    req.query = { continueAfterHdcInterrupt: 'true' }
-    res.locals.licence = {
-      kind: LicenceKind.CRD,
-      statusCode: LicenceStatus.IN_PROGRESS,
-      isReplacementForRefusedLicence: true,
-    } as Licence
-
-    handler.redirectIfRequired(req, res, next)
-
-    expect(next).toHaveBeenCalledTimes(1)
-    expect(res.render).not.toHaveBeenCalled()
   })
 
   it('should render the opted-in interrupt when address checks are incomplete', async () => {
@@ -106,10 +91,9 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       hdcAddressChecksComplete: true,
     } as Licence
 
-    handler.redirectIfRequired(req, res, next)
+    await handler.GET(req, res, next)
 
-    expect(next).toHaveBeenCalledTimes(1)
-    expect(res.redirect).not.toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/check-your-answers')
   })
 
   it('should render the opt-out interrupt from the fetched licence state', async () => {
@@ -123,7 +107,7 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
 
     expect(res.render).toHaveBeenCalledWith('pages/create/hdc/interrupt', {
       backLink: '/licence/create/caseload?view=team',
-      toCheckYourAnswer: '/licence/create/id/123/check-your-answers?continueAfterHdcInterrupt=true',
+      toCheckYourAnswer: '/licence/create/id/123/check-your-answers',
       interruptType: 'optOut',
     })
     expect(next).not.toHaveBeenCalled()
@@ -144,43 +128,33 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
     expect(getOmuEmail).toHaveBeenCalledWith('MDI', res.locals.user)
     expect(res.render).toHaveBeenCalledWith('pages/create/hdc/interrupt', {
       backLink: '/licence/create/caseload?view=team',
-      toCheckYourAnswer: '/licence/create/id/123/check-your-answers?continueAfterHdcInterrupt=true',
+      toCheckYourAnswer: '/licence/create/id/123/check-your-answers',
       interruptType: 'postponed',
       omuContact: 'omu@example.test',
     })
     expect(next).not.toHaveBeenCalled()
   })
 
-  it('should continue after Continue from opt-out or postponed interrupts', async () => {
-    req.query = { continueAfterHdcInterrupt: 'true' }
-    res.locals.licence = {
-      kind: LicenceKind.CRD,
-      statusCode: LicenceStatus.IN_PROGRESS,
-      isReplacementForOptedOutLicence: true,
-    } as Licence
-
-    handler.redirectIfRequired(req, res, next)
-
-    expect(next).toHaveBeenCalledTimes(1)
-    expect(res.render).not.toHaveBeenCalled()
-  })
-
-  it('should keep blocking when address checks are incomplete despite the Continue query', async () => {
-    req.query = { continueAfterHdcInterrupt: 'true' }
+  it('should use the prison code when no OMU email is available', async () => {
+    res.locals.user = { username: 'joebloggs' } as unknown as User
     res.locals.licence = {
       kind: LicenceKind.HDC,
       statusCode: LicenceStatus.IN_PROGRESS,
-      isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: false,
+      isPostponed: true,
+      prisonCode: 'MDI',
     } as Licence
 
-    handler.redirectIfRequired(req, res, next)
+    await handler.GET(req, res, next)
 
-    expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/interrupt')
-    expect(next).not.toHaveBeenCalled()
+    expect(res.render).toHaveBeenCalledWith('pages/create/hdc/interrupt', {
+      backLink: '/licence/create/caseload?view=team',
+      toCheckYourAnswer: '/licence/create/id/123/check-your-answers',
+      interruptType: 'postponed',
+      omuContact: 'MDI',
+    })
   })
 
-  it('should continue when HDC creation is disabled', async () => {
+  it('should redirect to CYA when HDC creation is disabled', async () => {
     config.hdc.hdcCreationEnabled = false
     const licence = {
       kind: LicenceKind.HDC,
@@ -190,9 +164,8 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
     } as Licence
     res.locals.licence = licence
 
-    handler.redirectIfRequired(req, res, next)
+    await handler.GET(req, res, next)
 
-    expect(next).toHaveBeenCalledTimes(1)
-    expect(res.render).not.toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/check-your-answers')
   })
 })
