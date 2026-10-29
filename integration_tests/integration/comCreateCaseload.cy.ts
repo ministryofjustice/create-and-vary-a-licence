@@ -6,13 +6,15 @@ context('View COM create caseload', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetLicence', {})
-    cy.task('stubGetOmuEmail')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubCheckComCaseAccess')
-    cy.task('stubGetProbationCase')
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      ['stubGetLicence', {}],
+      'stubGetOmuEmail',
+      ['stubGetBankHolidays', dates],
+      'stubCheckComCaseAccess',
+      'stubGetProbationCase',
+    ])
     cy.signIn()
   })
 
@@ -66,7 +68,9 @@ context('View COM create caseload', () => {
     cy.task('stubRecordAuditEvent')
 
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicenceWithHdcReplacement({ isReplacementForOptedOutLicence: true })
+    let caseloadPage = indexPage.clickCreateALicenceWithHdcReplacement({
+      isReplacementForOptedOutLicence: true,
+    })
 
     let optOutInterruptPage = caseloadPage.clickNameOfOptedOutLicence()
     optOutInterruptPage.getInterruptMessage().should('contain', 'This person has opted out of HDC')
@@ -87,7 +91,9 @@ context('View COM create caseload', () => {
     cy.task('stubRecordAuditEvent')
 
     const indexPage = Page.verifyOnPage(IndexPage)
-    let caseloadPage = indexPage.clickCreateALicenceWithHdcReplacement({ isReplacementForRefusedLicence: true })
+    let caseloadPage = indexPage.clickCreateALicenceWithHdcReplacement({
+      isReplacementForRefusedLicence: true,
+    })
     let refusedInterruptPage = caseloadPage.clickNameOfRefusedLicence()
 
     refusedInterruptPage.getInterruptMessage().should('contain', 'HDC application refused')

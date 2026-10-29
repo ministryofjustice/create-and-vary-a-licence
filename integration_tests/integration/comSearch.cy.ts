@@ -7,14 +7,16 @@ context('Search for a person', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubGetOmuEmail')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetLicence', {})
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      'stubGetOmuEmail',
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      ['stubGetLicence', {}],
+      'stubRecordAuditEvent',
+      'stubGetLicencePolicyConditions',
+      ['stubGetBankHolidays', dates],
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 

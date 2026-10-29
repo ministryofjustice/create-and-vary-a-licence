@@ -10,22 +10,24 @@ context('Create a licence', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetLicence', { hasAppointmentTimeType: false })
-    cy.task('stubGetOmuEmail')
-    cy.task('stubGetPrisonerImage')
-    cy.task('stubSearchForAddresses')
-    cy.task('stubGetStaffPreferredAddresses')
-    cy.task('stubPutLicenceAppointmentPerson')
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubAddAdditionalCondition')
-    cy.task('stubDeleteAdditionalConditionsByCode')
-    cy.task('stubPostProbationLicence')
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      ['stubGetLicence', { hasAppointmentTimeType: false }],
+      'stubGetOmuEmail',
+      'stubGetPrisonerImage',
+      'stubSearchForAddresses',
+      'stubGetStaffPreferredAddresses',
+      'stubPutLicenceAppointmentPerson',
+      'stubRecordAuditEvent',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      ['stubGetBankHolidays', dates],
+      'stubAddAdditionalCondition',
+      'stubDeleteAdditionalConditionsByCode',
+      'stubPostProbationLicence',
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 
@@ -48,7 +50,10 @@ context('Create a licence', () => {
       'contain',
       'Check this date with the prison. It may change because it is on or just before a weekend or bank holiday. This may affect the initial appointment.',
     )
-    cy.task('stubGetLicence', { isEligibleForEarlyRelease: true, hasAppointmentTimeType: 'IMMEDIATE_UPON_RELEASE' })
+    cy.task('stubGetLicence', {
+      isEligibleForEarlyRelease: true,
+      hasAppointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
+    })
     const appointmentPersonPage = confirmCreatePage.clickContinue()
     appointmentPersonPage.selectAppointmentPersonType(2)
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()

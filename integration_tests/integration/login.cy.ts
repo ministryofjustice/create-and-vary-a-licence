@@ -5,9 +5,7 @@ import Page from '../pages/page'
 context('SignIn with fallback header', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubFeComponentsFail')
+    cy.task('stubAll', ['stubProbationSignIn', 'stubGetStaffDetails', 'stubFeComponentsFail'])
   })
 
   it('Unauthenticated user directed to auth', () => {

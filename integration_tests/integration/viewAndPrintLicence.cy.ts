@@ -10,28 +10,35 @@ context('View and print licence', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubPrisonSignIn')
-    cy.task('stubGetPrisonUserDetails')
-    cy.task('stubGetPrisonOmuCaseload')
-    cy.task('stubGetProbationOmuCaseload')
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
-    cy.task('stubGetProbationers')
-    cy.task('stubGetStaffDetailsByStaffCode')
+    cy.task('stubAll', [
+      'stubPrisonSignIn',
+      'stubGetPrisonUserDetails',
+      'stubGetPrisonOmuCaseload',
+      'stubGetProbationOmuCaseload',
+      ['stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' }],
+      'stubGetProbationers',
+      'stubGetStaffDetailsByStaffCode',
+    ])
     cy.task('stubGetCompletedLicence', {
       statusCode: 'APPROVED',
       typeCode: 'AP_PSS',
-      electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
+      electronicMonitoringProvider: {
+        isToBeTaggedForProgramme: true,
+        programmeName: 'EM',
+      },
       electronicMonitoringProviderStatus: 'COMPLETE',
       appointmentTelephoneNumber: '0123456789',
       appointmentAlternativeTelephoneNumber: '0987654321',
     })
-    cy.task('stubGetHdcStatus')
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetPrisons')
-    cy.task('stubGetPrisonerImage')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubGetBankHolidays', dates)
+    cy.task('stubAll', [
+      'stubGetHdcStatus',
+      'stubRecordAuditEvent',
+      'stubGetPrisons',
+      'stubGetPrisonerImage',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      ['stubGetBankHolidays', dates],
+    ])
   })
   const singleCaseload = {
     details: [
@@ -91,7 +98,10 @@ context('View and print licence', () => {
     cy.task('stubGetCompletedLicence', {
       statusCode: 'APPROVED',
       typeCode: 'AP_PSS',
-      electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
+      electronicMonitoringProvider: {
+        isToBeTaggedForProgramme: true,
+        programmeName: 'EM',
+      },
       electronicMonitoringProviderStatus: 'COMPLETE',
       appointmentTelephoneNumber: '0123456789',
     })
@@ -148,7 +158,10 @@ context('View and print licence', () => {
     const changeLocationPage = Page.verifyOnPage(ChangeLocationPage)
     changeLocationPage.clickCancelLink()
     cy.url().should('eq', 'http://localhost:3007/licence/view/cases')
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
+    cy.task('stubGetLicencesForOffender', {
+      nomisId: 'G9786GC',
+      status: 'ACTIVE',
+    })
     viewCasesList.clickLinkWithDataQa('probation-view-link')
     viewCasesList.clickChangeLocationsLink()
     changeLocationPage.clickCancelLink()
@@ -165,7 +178,10 @@ context('View and print licence', () => {
     changeLocationPage.clickCheckBox('Leeds')
     changeLocationPage.clickContinue()
     cy.url().should('eq', 'http://localhost:3007/licence/view/cases')
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
+    cy.task('stubGetLicencesForOffender', {
+      nomisId: 'G9786GC',
+      status: 'ACTIVE',
+    })
     viewCasesList.clickLinkWithDataQa('probation-view-link')
     viewCasesList.clickChangeLocationsLink()
     changeLocationPage.clickCheckBox('Leeds')
@@ -194,7 +210,10 @@ context('View and print licence', () => {
       expect(rows).to.have.length(1)
     })
     viewCasesList.getRow(0).contains('Approved')
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
+    cy.task('stubGetLicencesForOffender', {
+      nomisId: 'G9786GC',
+      status: 'ACTIVE',
+    })
     viewCasesList.clickLinkWithDataQa('probation-view-link')
     viewCasesList.getTableRows().should(rows => {
       expect(rows).to.have.length(1)

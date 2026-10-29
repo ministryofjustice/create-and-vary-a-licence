@@ -4,10 +4,7 @@ import IndexPage from '../../pages'
 context('Approve a licence - time served', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubPrisonSignIn')
-    cy.task('stubGetPrisonUserDetails')
-    cy.task('stubGetPrisons')
-    cy.task('stubGetPrisonerImage')
+    cy.task('stubAll', ['stubPrisonSignIn', 'stubGetPrisonUserDetails', 'stubGetPrisons', 'stubGetPrisonerImage'])
     cy.task('stubGetPrisonUserCaseloads', {
       details: [
         {
@@ -19,7 +16,11 @@ context('Approve a licence - time served', () => {
         },
       ],
     })
-    cy.task('stubGetApprovalCaseload', { kind: 'TIME_SERVED', statusCode: 'SUBMITTED', urgentApproval: true })
+    cy.task('stubGetApprovalCaseload', {
+      kind: 'TIME_SERVED',
+      statusCode: 'SUBMITTED',
+      urgentApproval: true,
+    })
     cy.signIn()
     Page.verifyOnPage(IndexPage)
   })
