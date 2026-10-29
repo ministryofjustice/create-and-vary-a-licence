@@ -57,7 +57,6 @@ const originalHdcCreationEnabled = config.hdc.hdcCreationEnabled
 beforeEach(() => {
   req.params = { licenceId: '1' }
   req.method = 'GET'
-  req.originalUrl = '/licence/create/id/1/check-your-answers'
   res = prisonRes
   prisonRes.locals.user.prisonCaseload = ['LEI', 'MDI']
   config.hdc.hdcCreationEnabled = true

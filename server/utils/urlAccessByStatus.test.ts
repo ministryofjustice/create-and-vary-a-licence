@@ -11,6 +11,7 @@ const allowedPathsByStatus = {
     '/licence/time-served/id/1/check-your-answers',
     '/licence/time-served/create/foo',
     '/licence/time-served/edit/foo',
+    '/licence/create/id/1/interrupt',
     '/licence/create/foo',
     '/licence/view/foo',
   ],
