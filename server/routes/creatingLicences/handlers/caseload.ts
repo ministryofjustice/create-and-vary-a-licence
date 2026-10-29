@@ -91,9 +91,10 @@ export default class CaseloadRoutes {
     }
 
     if (
-      comCase.kind === LicenceKind.HDC ||
-      comCase.isReplacementForOptedOutLicence ||
-      comCase.isReplacementForRefusedLicence
+      comCase.licenceStatus === 'IN_PROGRESS' &&
+      (comCase.kind === LicenceKind.HDC ||
+        comCase.isReplacementForOptedOutLicence ||
+        comCase.isReplacementForRefusedLicence)
     ) {
       return `/licence/create/id/${comCase.licenceId}/interrupt`
     }
