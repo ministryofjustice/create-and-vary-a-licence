@@ -57,6 +57,9 @@ export default function checkLicenceAccess(
           const addressChecksAreIncomplete = isHdcAddressChecksIncompleteLicence(licence)
 
           if (config.hdc.hdcCreationEnabled && !options.allowHdcInterruptAccess && addressChecksAreIncomplete) {
+            if (req.method === 'GET' && req.path === `/licence/create/id/${licence.id}/check-your-answers`) {
+              return res.redirect(`/licence/create/id/${licence.id}/interrupt`)
+            }
             logger.info(`Access denied while HDC interrupt applies for licence ${licence.id}`)
             return res.redirect('/access-denied')
           }
