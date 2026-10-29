@@ -11,22 +11,24 @@ context('Create a licence', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetEmptyLicence')
-    cy.task('stubGetOmuEmail')
-    cy.task('stubGetPrisonerImage')
-    cy.task('stubSearchForAddresses')
-    cy.task('stubGetStaffPreferredAddresses')
-    cy.task('stubPutLicenceAppointmentPerson')
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubAddAdditionalCondition')
-    cy.task('stubPostExclusionZone')
-    cy.task('stubPostProbationLicence')
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      'stubGetEmptyLicence',
+      'stubGetOmuEmail',
+      'stubGetPrisonerImage',
+      'stubSearchForAddresses',
+      'stubGetStaffPreferredAddresses',
+      'stubPutLicenceAppointmentPerson',
+      'stubRecordAuditEvent',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      ['stubGetBankHolidays', dates],
+      'stubAddAdditionalCondition',
+      'stubPostExclusionZone',
+      'stubPostProbationLicence',
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 
@@ -80,9 +82,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 0,
             data: [
-              { id: 1, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 0, contributesToLicence: true },
+              {
+                id: 1,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 0,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 1, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 1,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
         ])
@@ -133,9 +148,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 0,
             data: [
-              { id: 1, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 0, contributesToLicence: true },
+              {
+                id: 1,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 0,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 1, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 1,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
         ])
@@ -150,9 +178,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 0,
             data: [
-              { id: 1, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 0, contributesToLicence: true },
+              {
+                id: 1,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 0,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 1, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 1,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
           {
@@ -162,9 +203,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 1,
             data: [
-              { id: 2, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 1, contributesToLicence: true },
+              {
+                id: 2,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 1,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 2, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 2,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
         ])
@@ -215,9 +269,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 0,
             data: [
-              { id: 1, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 0, contributesToLicence: true },
+              {
+                id: 1,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 0,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 1, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 1,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
         ])
@@ -232,9 +299,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 0,
             data: [
-              { id: 1, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 0, contributesToLicence: true },
+              {
+                id: 1,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 0,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 1, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 1,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
           {
@@ -244,9 +324,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 1,
             data: [
-              { id: 2, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 1, contributesToLicence: true },
+              {
+                id: 2,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 1,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 2, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 2,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
         ])
@@ -269,9 +362,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 0,
             data: [
-              { id: 1, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 0, contributesToLicence: true },
+              {
+                id: 1,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 0,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 1, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 1,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
         ],
@@ -322,9 +428,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 0,
             data: [
-              { id: 1, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 0, contributesToLicence: true },
+              {
+                id: 1,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 0,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 1, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 1,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
         ])
@@ -339,9 +458,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 0,
             data: [
-              { id: 1, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 0, contributesToLicence: true },
+              {
+                id: 1,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 0,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 1, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 1,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
           {
@@ -351,9 +483,22 @@ context('Create a licence', () => {
             category: 'Freedom of movement',
             sequence: 1,
             data: [
-              { id: 2, field: 'outOfBoundsFilename', value: 'test_map.pdf', sequence: 1, contributesToLicence: true },
+              {
+                id: 2,
+                field: 'outOfBoundsFilename',
+                value: 'test_map.pdf',
+                sequence: 1,
+                contributesToLicence: true,
+              },
             ],
-            uploadSummary: [{ id: 2, filename: 'test_map.pdf', fileSize: 1, uploadedTime: new Date().toString() }],
+            uploadSummary: [
+              {
+                id: 2,
+                filename: 'test_map.pdf',
+                fileSize: 1,
+                uploadedTime: new Date().toString(),
+              },
+            ],
             readyToSubmit: true,
           },
         ])

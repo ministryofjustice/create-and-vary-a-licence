@@ -1,7 +1,13 @@
 import { defineConfig } from 'cypress'
 import 'reflect-metadata'
 import moment, { Moment } from 'moment/moment'
-import { resetStubs, verifyEndpointCalled, verifyEndpointCalledWith } from './integration_tests/wiremock'
+import {
+  collectStubs,
+  importStubs,
+  resetStubs,
+  verifyEndpointCalled,
+  verifyEndpointCalledWith,
+} from './integration_tests/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import licence from './integration_tests/mockApis/licence'
@@ -22,20 +28,33 @@ export default defineConfig({
   reporterOptions: {
     configFile: 'reporter-config.json',
   },
+  video: false,
+  numTestsKeptInMemory: 0,
   taskTimeout: 60000,
   viewportHeight: 1200,
   viewportWidth: 1300,
   e2e: {
     setupNodeEvents(on) {
-      on('task', {
+      // Axe runs once per page per cypress run (set CYPRESS_AXE_ALWAYS=true to run on every visit)
+      const axeCheckedPages = new Set<string>()
+      const stubTasks = {
+        shouldRunAxe: (pageId: string): boolean => {
+          if (process.env.CYPRESS_AXE_ALWAYS === 'true') return true
+          if (axeCheckedPages.has(pageId)) return false
+          axeCheckedPages.add(pageId)
+          return true
+        },
         ...manageUsersApi,
         ...tokenVerification,
         reset: async () => {
-          await resetStubs()
-          await feComponent.stubFeComponents()
-          await feComponent.stubFeComponentsJs()
-          await feComponent.stubFeComponentsCss()
-          await manageUsersApi.stubManageUser()
+          await resetStubs(
+            collectStubs(() => {
+              feComponent.stubFeComponents()
+              feComponent.stubFeComponentsJs()
+              feComponent.stubFeComponentsCss()
+              manageUsersApi.stubManageUser()
+            }),
+          )
           return null
         },
         verifyEndpointCalled,
@@ -183,6 +202,24 @@ export default defineConfig({
             appointmentDate.add(1, 'day')
           }
           return appointmentDate
+        },
+      }
+
+      type StubCall = string | [string, unknown]
+      on('task', {
+        ...stubTasks,
+        // Creates many stubs in a single wiremock call: stubAll([['stubGetLicence', {..}], 'stubRecordAuditEvent'])
+        stubAll: async (calls: StubCall[]) => {
+          const mappings = collectStubs(() =>
+            calls.forEach(call => {
+              const [name, arg] = Array.isArray(call) ? call : [call, undefined]
+              const stub = stubTasks[name as keyof typeof stubTasks] as (arg?: unknown) => unknown
+              if (!stub) throw new Error(`Unknown stub task: ${name}`)
+              stub(arg)
+            }),
+          )
+          await importStubs(mappings)
+          return null
         },
       })
     },

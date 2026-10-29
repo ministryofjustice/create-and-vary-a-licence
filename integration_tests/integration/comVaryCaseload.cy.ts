@@ -8,18 +8,18 @@ context('View COM vary caseload', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'VARIATION', status: 'ACTIVE' })
-    cy.task('stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP_PSS' })
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      ['stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'VARIATION', status: 'ACTIVE' }],
+      ['stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP_PSS' }],
+    ])
     cy.task('stubGetStaffVaryCaseload', {
       licenceId: 1,
       licenceStatus: LicenceStatus.ACTIVE,
       licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,
     })
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubCheckComCaseAccess')
-    cy.task('stubGetCaseAccessDetails')
+    cy.task('stubAll', [['stubGetBankHolidays', dates], 'stubCheckComCaseAccess', 'stubGetCaseAccessDetails'])
     cy.signIn()
   })
 

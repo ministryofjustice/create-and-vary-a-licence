@@ -6,10 +6,7 @@ import { LicenceKind } from '../../../server/enumeration'
 context('Vary a licence - time served', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubGetOmuEmail')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubMatchLicenceEvents')
+    cy.task('stubAll', ['stubGetOmuEmail', 'stubProbationSignIn', 'stubGetStaffDetails', 'stubMatchLicenceEvents'])
     cy.task('stubGetStaffVaryCaseload', {
       licenceId: 1,
       licenceStatus: LicenceStatus.ACTIVE,
@@ -21,8 +18,7 @@ context('Vary a licence - time served', () => {
       kind: LicenceKind.TIME_SERVED,
       isReviewNeeded: true,
     })
-    cy.task('stubReviewWithOutVariation')
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', ['stubReviewWithOutVariation', 'stubCheckComCaseAccess'])
     cy.signIn()
   })
 

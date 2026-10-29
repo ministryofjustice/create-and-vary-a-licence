@@ -5,8 +5,7 @@ import LicenceKind from '../../../server/enumeration/LicenceKind'
 context('Create a Time Served licence', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubPrisonSignIn')
-    cy.task('stubGetPrisonUserDetails')
+    cy.task('stubAll', ['stubPrisonSignIn', 'stubGetPrisonUserDetails'])
     cy.task('stubGetPrisonUserCaseloads', {
       details: [
         {
@@ -18,14 +17,22 @@ context('Create a Time Served licence', () => {
         },
       ],
     })
-    cy.task('stubGetStaffPreferredAddresses')
-    cy.task('stubGetCaseloadItemInHardStop')
-    cy.task('stubPostPrisonLicence')
-    cy.task('stubGetPrisons')
-    stubTimeServedOmuCase({ licenceId: null, hasNomisLicence: false, licenceStatus: 'TIMED_OUT' })
-    cy.task('stubUpdateTimeServedExternalRecord')
-    cy.task('stubGetTimeServedExternalRecordReasonNotSet')
-    cy.task('stubGetProbationCase')
+    cy.task('stubAll', [
+      'stubGetStaffPreferredAddresses',
+      'stubGetCaseloadItemInHardStop',
+      'stubPostPrisonLicence',
+      'stubGetPrisons',
+    ])
+    stubTimeServedOmuCase({
+      licenceId: null,
+      hasNomisLicence: false,
+      licenceStatus: 'TIMED_OUT',
+    })
+    cy.task('stubAll', [
+      'stubUpdateTimeServedExternalRecord',
+      'stubGetTimeServedExternalRecordReasonNotSet',
+      'stubGetProbationCase',
+    ])
     cy.signIn()
   })
 
@@ -93,7 +100,11 @@ context('Create a Time Served licence', () => {
     })
 
     it('should create a Time Served licence without allocated com', () => {
-      stubTimeServedOmuCase({ licenceId: null, isUnallocatedCom: true, licenceStatus: 'TIMED_OUT' })
+      stubTimeServedOmuCase({
+        licenceId: null,
+        isUnallocatedCom: true,
+        licenceStatus: 'TIMED_OUT',
+      })
       cy.task('stubPutLicenceAppointmentPerson')
       cy.task('stubRecordAuditEvent')
       cy.task('stubGetLicence', { licenceKind: LicenceKind.TIME_SERVED })
@@ -134,7 +145,10 @@ context('Create a Time Served licence', () => {
 
   describe('Reason for using NOMIS to create a time served licence', () => {
     it('should record a reason for using NOMIS to create a time served licence', () => {
-      stubTimeServedOmuCase({ hasNomisLicence: true, licenceStatus: 'TIMED_OUT' })
+      stubTimeServedOmuCase({
+        hasNomisLicence: true,
+        licenceStatus: 'TIMED_OUT',
+      })
       const indexPage = Page.verifyOnPage(IndexPage)
       let viewCasesList = indexPage.clickViewAndPrintALicence()
       const releaseDateFlag = viewCasesList.getReleaseDateFlag()
@@ -157,7 +171,10 @@ context('Create a Time Served licence', () => {
     })
 
     it('should prepopulate a reason for using NOMIS to create a time served licence if one already exists and then allow user to update', () => {
-      stubTimeServedOmuCase({ hasNomisLicence: true, licenceStatus: 'TIMED_OUT' })
+      stubTimeServedOmuCase({
+        hasNomisLicence: true,
+        licenceStatus: 'TIMED_OUT',
+      })
       cy.task('stubGetTimeServedExternalRecordReasonSet')
       const indexPage = Page.verifyOnPage(IndexPage)
       let viewCasesList = indexPage.clickViewAndPrintALicence()
@@ -202,7 +219,10 @@ context('Create a Time Served licence', () => {
     })
 
     it('should show validation error when no option is selected and a reason is not entered', () => {
-      stubTimeServedOmuCase({ hasNomisLicence: true, licenceStatus: 'TIMED_OUT' })
+      stubTimeServedOmuCase({
+        hasNomisLicence: true,
+        licenceStatus: 'TIMED_OUT',
+      })
       const indexPage = Page.verifyOnPage(IndexPage)
       const viewCasesList = indexPage.clickViewAndPrintALicence()
       const releaseDateFlag = viewCasesList.getReleaseDateFlag()

@@ -13,33 +13,36 @@ context('Create an HDC licence', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetHdcCaseloadItem')
-    cy.task('stubGetOmuEmail')
-    cy.task('stubGetPrisonerImage')
-    cy.task('stubSearchForAddresses')
-    cy.task('stubGetStaffPreferredAddresses')
-    cy.task('stubPutLicenceAppointmentPerson')
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      'stubGetHdcCaseloadItem',
+      'stubGetOmuEmail',
+      'stubGetPrisonerImage',
+      'stubSearchForAddresses',
+      'stubGetStaffPreferredAddresses',
+      'stubPutLicenceAppointmentPerson',
+    ])
     cy.task('stubGetHdcLicence', {
       firstNightCurfewTimes: {
         fromTime: '17:00:00',
         untilTime: '07:00:00',
       },
     })
-    cy.task('stubGetProbationCase')
-    cy.task('stubGetResponsibleCommunityManager')
+    cy.task('stubAll', ['stubGetProbationCase', 'stubGetResponsibleCommunityManager'])
     cy.task('searchPrisonersByBookingIds', '2024-07-09')
-    cy.task('stubGetHdcLicencesForOffender', { status: 'APPROVED', bookingId: 1201102 })
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubDeleteAdditionalConditionsByCode')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubAddAdditionalCondition')
-    cy.task('stubPostProbationLicence')
-    cy.task('stubUpdateHdcWeeklyCurfewTimes')
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      ['stubGetHdcLicencesForOffender', { status: 'APPROVED', bookingId: 1201102 }],
+      'stubRecordAuditEvent',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      'stubDeleteAdditionalConditionsByCode',
+      ['stubGetBankHolidays', dates],
+      'stubAddAdditionalCondition',
+      'stubPostProbationLicence',
+      'stubUpdateHdcWeeklyCurfewTimes',
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 
@@ -57,7 +60,10 @@ context('Create an HDC licence', () => {
     checkAnswersPage.getReplacementInfo().should('exist')
     checkAnswersPage.clickSendLicenceConditionsToPrison()
 
-    cy.task('stubGetHdcLicence', { isReplacementForOptedInLicence: true, statusCode: 'SUBMITTED' })
+    cy.task('stubGetHdcLicence', {
+      isReplacementForOptedInLicence: true,
+      statusCode: 'SUBMITTED',
+    })
     cy.visit('/licence/create/id/1/check-your-answers')
     checkAnswersPage.getReplacementInfo().should('not.exist')
   })
@@ -85,7 +91,11 @@ context('Create an HDC licence', () => {
         .enterDate(moment(appointmentDate))
         .enterTime(moment())
         .clickContinueToFirstNightCurfewTimes()
-        .enterFirstNightCurfewStartTime({ hour: '06', minute: '00', ampm: 'pm' })
+        .enterFirstNightCurfewStartTime({
+          hour: '06',
+          minute: '00',
+          ampm: 'pm',
+        })
         .enterFirstNightCurfewEndTime({ hour: '11', minute: '00', ampm: 'am' })
         .clickContinue()
         .selectYes()
@@ -141,7 +151,11 @@ context('Create an HDC licence', () => {
       })
       const firstNightCurfewHoursPage = checkAnswersPage.clickChangeFirstNightCurfewHoursLink()
       firstNightCurfewHoursPage
-        .enterFirstNightCurfewStartTime({ hour: '08', minute: '00', ampm: 'pm' })
+        .enterFirstNightCurfewStartTime({
+          hour: '08',
+          minute: '00',
+          ampm: 'pm',
+        })
         .enterFirstNightCurfewEndTime({ hour: '10', minute: '00', ampm: 'am' })
         .clickSave()
 

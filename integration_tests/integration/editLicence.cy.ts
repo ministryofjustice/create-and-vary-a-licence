@@ -6,15 +6,17 @@ context('Edit a licence before release', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetOmuEmail')
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubPutContactNumber')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      'stubGetOmuEmail',
+      'stubRecordAuditEvent',
+      'stubPutContactNumber',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      ['stubGetBankHolidays', dates],
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 

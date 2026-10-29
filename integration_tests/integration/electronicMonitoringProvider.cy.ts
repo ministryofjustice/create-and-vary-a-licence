@@ -1,313 +1,89 @@
-import moment from 'moment'
 import Page from '../pages/page'
 import IndexPage from '../pages'
-import CurfewType from '../../server/enumeration/CurfewType'
+import CheckAnswersPage from '../pages/checkAnswers'
+import PathfinderDetailsQuestionPage from '../pages/PathfinderDetailsQuestionPage'
 
 context('Create a licence that needs pathfinder or programme question', () => {
   const dates: string[] = []
 
+  // Sets up the caseload stubs the journey relies on, then lets tests jump straight to the page under test
+  const stubCaseload = () => Page.verifyOnPage(IndexPage).clickCreateALicence()
+
+  const visitCheckAnswers = (status: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE', provider?: object) => {
+    stubCaseload()
+    cy.task('stubAll', [
+      'stubPutAdditionalConditionData',
+      'stubPutBespokeConditions',
+      [
+        'stubGetCompletedLicence',
+        {
+          statusCode: 'IN_PROGRESS',
+          typeCode: 'AP',
+          kind: 'CRD',
+          electronicMonitoringProvider: provider,
+          electronicMonitoringProviderStatus: status,
+          appointmentTelephoneNumber: '01234567890',
+          appointmentAlternativeTelephoneNumber: '09876543210',
+        },
+      ],
+    ])
+    cy.visit('/licence/create/id/1/check-your-answers')
+    return Page.verifyOnPage(CheckAnswersPage)
+  }
+
+  const visitPathfinderQuestion = () => {
+    stubCaseload()
+    cy.task('stubGetLicence', { electronicMonitoringProviderStatus: 'NOT_STARTED' })
+    cy.visit('/licence/create/id/1/add-pathfinder')
+    return Page.verifyOnPage(PathfinderDetailsQuestionPage)
+  }
+
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetLicence', {})
-    cy.task('stubGetOmuEmail')
-    cy.task('stubSearchForAddresses')
-    cy.task('stubGetStaffPreferredAddresses')
-    cy.task('stubPutLicenceAppointmentPerson')
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubAddAdditionalCondition')
-    cy.task('stubDeleteAdditionalConditionsByCode')
-    cy.task('stubPostProbationLicence')
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      ['stubGetLicence', {}],
+      'stubGetOmuEmail',
+      'stubSearchForAddresses',
+      'stubGetStaffPreferredAddresses',
+      'stubPutLicenceAppointmentPerson',
+      'stubRecordAuditEvent',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      ['stubGetBankHolidays', dates],
+      'stubAddAdditionalCondition',
+      'stubDeleteAdditionalConditionsByCode',
+      'stubPostProbationLicence',
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 
   it('should throw an error if the licence is submitted with out answering the pathfinder or programme question', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
-
-    const appointmentPersonPage = confirmCreatePage.clickContinue()
-    appointmentPersonPage.selectAppointmentPersonType(2)
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
-
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
-
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
-
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
-        .selectCondition('fce34fb2-02f4-4eb0-9b8d-d091e11451fa')
-        .selectCondition('df3f08a8-4ae0-41fe-b3bc-d0be1fd2d8aa')
-        .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
-        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
-
-      const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .selectRadio('London')
-        .nextCondition()
-        .selectRadio()
-        .nextCondition()
-        .checkBoxes()
-        .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio(CurfewType.TWO_CURFEWS)
-        .addTwoCurfews(2)
-        .selectRadio('Other')
-        .enterText('Annually', 'alternativeReviewPeriod')
-        .nextCondition()
-        .enterText('Knives', 'item[0]')
-        .clickAddAnother()
-        .enterText('Needles', 'item[1]')
-        .clickContinue()
-
-      const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
-
-      const checkAnswersPage = bespokeConditionsPage
-        .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
-        .checkDeleteThisCondition() // for single Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(2, 'A final third bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinueEM(
-          null,
-          {
-            isToBeTaggedForProgramme: null,
-            programmeName: '',
-          },
-          'NOT_STARTED',
-        )
-
-      checkAnswersPage.checkIfElectronicMonitoringProviderExists()
-      checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
-    })
+    const checkAnswersPage = visitCheckAnswers('NOT_STARTED', { isToBeTaggedForProgramme: null, programmeName: '' })
+    checkAnswersPage.checkIfElectronicMonitoringProviderExists()
+    checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
   })
 
   it('should not throw error if the licence is submitted with answering the pathfinder or programme question', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
-
-    const appointmentPersonPage = confirmCreatePage.clickContinue()
-    appointmentPersonPage.selectAppointmentPersonType(2)
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
-
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
-
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
-
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
-        .selectCondition('fce34fb2-02f4-4eb0-9b8d-d091e11451fa')
-        .selectCondition('df3f08a8-4ae0-41fe-b3bc-d0be1fd2d8aa')
-        .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
-        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
-
-      const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .selectRadio('London')
-        .nextCondition()
-        .selectRadio()
-        .nextCondition()
-        .checkBoxes()
-        .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio(CurfewType.TWO_CURFEWS)
-        .addTwoCurfews(2)
-        .selectRadio('Other')
-        .enterText('Annually', 'alternativeReviewPeriod')
-        .nextCondition()
-        .enterText('Knives', 'item[0]')
-        .clickAddAnother()
-        .enterText('Needles', 'item[1]')
-        .clickContinue()
-
-      const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
-
-      const checkAnswersPage = bespokeConditionsPage
-        .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
-        .checkDeleteThisCondition() // for single Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(2, 'A final third bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinueEM(
-          null,
-          {
-            isToBeTaggedForProgramme: true,
-            programmeName: 'Test Programme',
-          },
-          'COMPLETE',
-        )
-      checkAnswersPage.checkIfElectronicMonitoringProviderExists()
-
-      const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
-      const caseloadPageExit = confirmationPage.clickReturn()
-      caseloadPageExit.signOut().click()
+    const checkAnswersPage = visitCheckAnswers('COMPLETE', {
+      isToBeTaggedForProgramme: true,
+      programmeName: 'Test Programme',
     })
+    checkAnswersPage.checkIfElectronicMonitoringProviderExists()
+
+    const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
+    const caseloadPageExit = confirmationPage.clickReturn()
+    caseloadPageExit.signOut().click()
   })
 
   it('should not load electronic monitoring provider section when electronicMonitoringProviderStatus is NOT_NEEDED', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
-
-    const appointmentPersonPage = confirmCreatePage.clickContinue()
-    appointmentPersonPage.selectAppointmentPersonType(2)
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
-
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
-
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
-
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
-        .selectCondition('fce34fb2-02f4-4eb0-9b8d-d091e11451fa')
-        .selectCondition('df3f08a8-4ae0-41fe-b3bc-d0be1fd2d8aa')
-        .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
-        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
-
-      const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .selectRadio('London')
-        .nextCondition()
-        .selectRadio()
-        .nextCondition()
-        .checkBoxes()
-        .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio(CurfewType.TWO_CURFEWS)
-        .addTwoCurfews(2)
-        .selectRadio('Other')
-        .enterText('Annually', 'alternativeReviewPeriod')
-        .nextCondition()
-        .enterText('Knives', 'item[0]')
-        .clickAddAnother()
-        .enterText('Needles', 'item[1]')
-        .clickContinue()
-
-      const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
-
-      const checkAnswersPage = bespokeConditionsPage
-        .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
-        .checkDeleteThisCondition() // for single Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(2, 'A final third bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinue()
-
-      checkAnswersPage.checkIfElectronicMonitoringProviderDoesNotExist()
-    })
+    visitCheckAnswers('NOT_NEEDED').checkIfElectronicMonitoringProviderDoesNotExist()
   })
 
   it('should load electronic monitoring provider section if electronicMonitoringProviderStaus is NOT_STARTED', () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
-
-    const appointmentPersonPage = confirmCreatePage.clickContinue()
-    appointmentPersonPage.selectAppointmentPersonType(2)
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
-
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
-
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
-
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
-        .selectCondition('fce34fb2-02f4-4eb0-9b8d-d091e11451fa')
-        .selectCondition('df3f08a8-4ae0-41fe-b3bc-d0be1fd2d8aa')
-        .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
-        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
-
-      const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .selectRadio('London')
-        .nextCondition()
-        .selectRadio()
-        .nextCondition()
-        .checkBoxes()
-        .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .selectRadio(CurfewType.TWO_CURFEWS)
-        .addTwoCurfews(2)
-        .selectRadio('Other')
-        .enterText('Annually', 'alternativeReviewPeriod')
-        .nextCondition()
-        .enterText('Knives', 'item[0]')
-        .clickAddAnother()
-        .enterText('Needles', 'item[1]')
-        .clickContinue()
-
-      const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
-
-      const checkAnswersPage = bespokeConditionsPage
-        .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
-        .checkDeleteThisCondition() // for single Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(2, 'A final third bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinueEM(
-          null,
-          {
-            isToBeTaggedForProgramme: null,
-            programmeName: '',
-          },
-          'NOT_STARTED',
-        )
-      checkAnswersPage.checkIfElectronicMonitoringProviderExists()
-    })
+    visitCheckAnswers('NOT_STARTED').checkIfElectronicMonitoringProviderExists()
   })
 
   it('should load electronic monitoring provider section if electronicMonitoringProviderStaus is COMPLETE and licence not approved in time', () => {
@@ -322,197 +98,37 @@ context('Create a licence that needs pathfinder or programme question', () => {
   })
 
   it("should throw an error if neither 'Yes' nor 'No' is selected", () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
-
-    const appointmentPersonPage = confirmCreatePage.clickContinue()
-    appointmentPersonPage.selectAppointmentPersonType(2)
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
-
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
-
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
-
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('fd129172-bdd3-4d97-a4a0-efd7b47a49d4')
-        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
-
-      const pathfinderQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .selectRadio('exclusion zone')
-        .nextCondition()
-        .enterText('Knives', 'item[0]')
-        .clickAddAnother()
-        .enterText('Needles', 'item[1]')
-        .navigateToPathfinder()
-
-      pathfinderQuestionPage.clickContinueWithError().getErrorSummary().should('exist')
-    })
+    visitPathfinderQuestion().clickContinueWithError().getErrorSummary().should('exist')
   })
 
   it("should throw an error if 'Yes' is selected and pathfinder/programme name is not provided", () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
-
-    const appointmentPersonPage = confirmCreatePage.clickContinue()
-    appointmentPersonPage.selectAppointmentPersonType(2)
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
-
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
-
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
-
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('fd129172-bdd3-4d97-a4a0-efd7b47a49d4')
-        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
-
-      const pathfinderQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .selectRadio('exclusion zone')
-        .nextCondition()
-        .enterText('Knives', 'item[0]')
-        .clickAddAnother()
-        .enterText('Needles', 'item[1]')
-        .navigateToPathfinder()
-
-      pathfinderQuestionPage.selectYes().clickContinueWithError().getErrorSummary().should('exist')
-    })
+    visitPathfinderQuestion().selectYes().clickContinueWithError().getErrorSummary().should('exist')
   })
 
   it("should continue licence creation flow if 'Yes' is selected and pathfinder/programme name is provided", () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+    const bespokeConditionsQuestionPage = visitPathfinderQuestion()
+      .selectYes()
+      .enterProgrammeName('Test Pathfinder Programme')
+      .clickContinue()
 
-    const appointmentPersonPage = confirmCreatePage.clickContinue()
-    appointmentPersonPage.selectAppointmentPersonType(2)
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
+    const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
+    const checkAnswersPage = bespokeConditionsPage
+      .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
+      .checkDeleteThisCondition() // for single Bespoke Condition
+      .clickAddAnother()
+      .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
+      .checkDeleteTheseConditions() // for multiple Bespoke Condition
+      .clickAddAnother()
+      .enterBespokeCondition(2, 'A final third bespoke condition')
+      .checkDeleteTheseConditions() // for multiple Bespoke Condition
+      .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
-
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
-
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('fd129172-bdd3-4d97-a4a0-efd7b47a49d4')
-        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
-
-      const pathfinderQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .selectRadio('exclusion zone')
-        .nextCondition()
-        .enterText('Knives', 'item[0]')
-        .clickAddAnother()
-        .enterText('Needles', 'item[1]')
-        .navigateToPathfinder()
-
-      const bespokeConditionsQuestionPage = pathfinderQuestionPage
-        .selectYes()
-        .enterProgrammeName('Test Pathfinder Programme')
-        .clickContinue()
-
-      const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
-      const checkAnswersPage = bespokeConditionsPage
-        .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
-        .checkDeleteThisCondition() // for single Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(2, 'A final third bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinue()
-
-      const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
-      const caseloadPageExit = confirmationPage.clickReturn()
-      caseloadPageExit.signOut().click()
-    })
+    const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
+    const caseloadPageExit = confirmationPage.clickReturn()
+    caseloadPageExit.signOut().click()
   })
 
   it("should continue licence creation flow if 'No' is selected", () => {
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
-    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
-
-    const appointmentPersonPage = confirmCreatePage.clickContinue()
-    appointmentPersonPage.selectAppointmentPersonType(2)
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Test officer').clickContinue()
-    const selectAddressPage = appointmentPlacePage.enterAddressOrPostcode('123 Fake Street').findAddress()
-    const appointmentContactPage = selectAddressPage.selectAddress().clickContinue()
-
-    const appointmentTimePage = appointmentContactPage.enterTelephone('012345678', '012345679').clickContinue()
-
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
-      const additionalConditionsPage = appointmentTimePage
-        .selectType('SPECIFIC_DATE_TIME')
-        .enterDate(moment(appointmentDate))
-        .enterTime(moment())
-        .clickContinue()
-        .selectYes()
-        .clickContinue()
-
-      const additionalConditionsInputPage = additionalConditionsPage
-        .selectCondition('fd129172-bdd3-4d97-a4a0-efd7b47a49d4')
-        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
-        .clickContinue()
-
-      const pathfinderQuestionPage = additionalConditionsInputPage
-        .withContext(additionalConditionsPage.getContext())
-        .selectRadio('exclusion zone')
-        .nextCondition()
-        .enterText('Knives', 'item[0]')
-        .clickAddAnother()
-        .enterText('Needles', 'item[1]')
-        .navigateToPathfinder()
-
-      const bespokeConditionsQuestionPage = pathfinderQuestionPage.selectNo().clickContinue()
-
-      const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
-      const checkAnswersPage = bespokeConditionsPage
-        .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
-        .checkDeleteThisCondition() // for single Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickAddAnother()
-        .enterBespokeCondition(2, 'A final third bespoke condition')
-        .checkDeleteTheseConditions() // for multiple Bespoke Condition
-        .clickContinue()
-
-      const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
-      const caseloadPageExit = confirmationPage.clickReturn()
-      caseloadPageExit.signOut().click()
-    })
+    visitPathfinderQuestion().selectNo().clickContinue()
   })
 })

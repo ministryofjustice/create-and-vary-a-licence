@@ -8,24 +8,28 @@ context('Vary a licence', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetOmuEmail')
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'VARIATION', status: 'ACTIVE' })
-    cy.task('stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP_PSS' })
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      'stubGetOmuEmail',
+      ['stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'VARIATION', status: 'ACTIVE' }],
+      ['stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP_PSS' }],
+    ])
     cy.task('stubGetStaffVaryCaseloadWithLao', {
       licenceId: 1,
       licenceStatus: LicenceStatus.ACTIVE,
       licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,
     })
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubMatchLicenceEvents')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubGetPolicyChanges')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubDeleteAdditionalConditionsByCode')
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      'stubRecordAuditEvent',
+      'stubMatchLicenceEvents',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      'stubGetPolicyChanges',
+      ['stubGetBankHolidays', dates],
+      'stubDeleteAdditionalConditionsByCode',
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 

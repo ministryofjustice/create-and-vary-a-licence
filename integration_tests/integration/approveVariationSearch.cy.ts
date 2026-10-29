@@ -5,16 +5,18 @@ import VaryApprovalSearchPage from '../pages/varyApproveSearchPage'
 context('ACO search a licence variation', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationAcoSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetVaryApproverCaseload')
-    cy.task('stubGetCompletedLicence', { statusCode: 'VARIATION_SUBMITTED', typeCode: 'AP' })
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubMatchLicenceEvents')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubCheckComCaseAccess')
-    cy.task('stubGetCaseAccessDetails')
+    cy.task('stubAll', [
+      'stubProbationAcoSignIn',
+      'stubGetStaffDetails',
+      'stubGetVaryApproverCaseload',
+      ['stubGetCompletedLicence', { statusCode: 'VARIATION_SUBMITTED', typeCode: 'AP' }],
+      'stubRecordAuditEvent',
+      'stubMatchLicenceEvents',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      'stubCheckComCaseAccess',
+      'stubGetCaseAccessDetails',
+    ])
     cy.signIn()
   })
 

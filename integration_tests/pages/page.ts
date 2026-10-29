@@ -1,5 +1,8 @@
 import type { RuleObject } from 'axe-core'
 
+// Pages already axe-checked in this spec; avoids a task round trip per page object (the task dedupes across specs)
+const axeSeenInSpec = new Set<string>()
+
 export default abstract class Page {
   static verifyOnPage<T>(constructor: new () => T): T {
     return new constructor()
@@ -11,8 +14,11 @@ export default abstract class Page {
     private readonly rules: RuleObject = {},
   ) {
     this.checkOnPage()
-    if (axeTest) {
-      this.runAxe()
+    if (axeTest && (Cypress.env('AXE_ALWAYS') === 'true' || !axeSeenInSpec.has(pageId))) {
+      axeSeenInSpec.add(pageId)
+      cy.task<boolean>('shouldRunAxe', this.pageId).then(shouldRun => {
+        if (shouldRun) this.runAxe()
+      })
     }
   }
 
