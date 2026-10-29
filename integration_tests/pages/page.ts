@@ -12,7 +12,9 @@ export default abstract class Page {
   ) {
     this.checkOnPage()
     if (axeTest) {
-      this.runAxe()
+      cy.task<boolean>('shouldRunAxe', this.pageId).then(shouldRun => {
+        if (shouldRun) this.runAxe()
+      })
     }
   }
 

@@ -8,21 +8,23 @@ context('Create a licence that needs pathfinder or programme question', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetLicence', {})
-    cy.task('stubGetOmuEmail')
-    cy.task('stubSearchForAddresses')
-    cy.task('stubGetStaffPreferredAddresses')
-    cy.task('stubPutLicenceAppointmentPerson')
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubAddAdditionalCondition')
-    cy.task('stubDeleteAdditionalConditionsByCode')
-    cy.task('stubPostProbationLicence')
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      ['stubGetLicence', {}],
+      'stubGetOmuEmail',
+      'stubSearchForAddresses',
+      'stubGetStaffPreferredAddresses',
+      'stubPutLicenceAppointmentPerson',
+      'stubRecordAuditEvent',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      ['stubGetBankHolidays', dates],
+      'stubAddAdditionalCondition',
+      'stubDeleteAdditionalConditionsByCode',
+      'stubPostProbationLicence',
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 

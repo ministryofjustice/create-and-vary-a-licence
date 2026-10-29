@@ -6,14 +6,16 @@ import ChangeLocationPage from '../pages/changeLocationPage'
 context('Search for a person', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubPrisonSignIn')
-    cy.task('stubGetPrisonUserDetails')
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
-    cy.task('stubGetApprovalCaseload')
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetPrisons')
-    cy.task('stubGetPrisonerImage')
-    cy.task('stubGetStaffDetails')
+    cy.task('stubAll', [
+      'stubPrisonSignIn',
+      'stubGetPrisonUserDetails',
+      ['stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' }],
+      'stubGetApprovalCaseload',
+      'stubRecordAuditEvent',
+      'stubGetPrisons',
+      'stubGetPrisonerImage',
+      'stubGetStaffDetails',
+    ])
   })
 
   const singleCaseload = {

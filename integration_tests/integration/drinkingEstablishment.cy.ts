@@ -9,20 +9,22 @@ context('Create a licence', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetEmptyLicence')
-    cy.task('stubGetOmuEmail')
-    cy.task('stubSearchForAddresses')
-    cy.task('stubGetStaffPreferredAddresses')
-    cy.task('stubPutLicenceAppointmentPerson')
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetLicencePolicyConditions', '4.0')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubAddAdditionalCondition')
-    cy.task('stubPostProbationLicence')
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      'stubGetEmptyLicence',
+      'stubGetOmuEmail',
+      'stubSearchForAddresses',
+      'stubGetStaffPreferredAddresses',
+      'stubPutLicenceAppointmentPerson',
+      'stubRecordAuditEvent',
+      ['stubGetLicencePolicyConditions', '4.0'],
+      'stubGetActivePolicyConditions',
+      ['stubGetBankHolidays', dates],
+      'stubAddAdditionalCondition',
+      'stubPostProbationLicence',
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 

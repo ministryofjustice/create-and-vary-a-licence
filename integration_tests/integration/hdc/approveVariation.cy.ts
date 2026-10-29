@@ -16,9 +16,7 @@ context('ACO review a HDC licence variation', () => {
   }
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationAcoSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetVaryApproverCaseload')
+    cy.task('stubAll', ['stubProbationAcoSignIn', 'stubGetStaffDetails', 'stubGetVaryApproverCaseload'])
     cy.task('stubGetHdcLicence', {
       statusCode: 'VARIATION_SUBMITTED',
       typeCode: 'AP',
@@ -26,12 +24,14 @@ context('ACO review a HDC licence variation', () => {
       curfewAddress,
       variationOf: '120',
     })
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubMatchLicenceEvents')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubCheckComCaseAccess')
-    cy.task('stubGetCaseAccessDetails')
+    cy.task('stubAll', [
+      'stubRecordAuditEvent',
+      'stubMatchLicenceEvents',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      'stubCheckComCaseAccess',
+      'stubGetCaseAccessDetails',
+    ])
     cy.signIn()
   })
 

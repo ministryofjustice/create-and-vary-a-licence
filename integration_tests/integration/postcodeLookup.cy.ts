@@ -7,16 +7,18 @@ context('Postcode lookup', () => {
   describe('Postcode Lookup - COM', () => {
     beforeEach(() => {
       cy.task('reset')
-      cy.task('stubProbationSignIn')
-      cy.task('stubGetStaffDetails')
-      cy.task('stubGetLicence', {})
-      cy.task('stubSearchForAddresses')
-      cy.task('stubPutLicenceAppointmentPerson')
-      cy.task('stubGetLicencePolicyConditions')
-      cy.task('stubGetActivePolicyConditions')
-      cy.task('stubPostProbationLicence')
-      cy.task('stubDeleteAppointmentAddress')
-      cy.task('stubCheckComCaseAccess')
+      cy.task('stubAll', [
+        'stubProbationSignIn',
+        'stubGetStaffDetails',
+        ['stubGetLicence', {}],
+        'stubSearchForAddresses',
+        'stubPutLicenceAppointmentPerson',
+        'stubGetLicencePolicyConditions',
+        'stubGetActivePolicyConditions',
+        'stubPostProbationLicence',
+        'stubDeleteAppointmentAddress',
+        'stubCheckComCaseAccess',
+      ])
       cy.signIn()
     })
 
@@ -104,33 +106,40 @@ context('Postcode lookup', () => {
     }
     beforeEach(() => {
       cy.task('reset')
-      cy.task('stubPrisonSignIn')
-      cy.task('stubGetPrisonUserDetails')
-      cy.task('stubGetPrisonOmuCaseload')
-      cy.task('stubGetProbationOmuCaseload')
-      cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
-      cy.task('stubGetProbationers')
-      cy.task('stubGetStaffDetailsByStaffCode')
+      cy.task('stubAll', [
+        'stubPrisonSignIn',
+        'stubGetPrisonUserDetails',
+        'stubGetPrisonOmuCaseload',
+        'stubGetProbationOmuCaseload',
+        ['stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' }],
+        'stubGetProbationers',
+        'stubGetStaffDetailsByStaffCode',
+      ])
       cy.task('stubGetCompletedLicence', {
         statusCode: 'APPROVED',
         typeCode: 'AP_PSS',
         kind: LicenceKind.HARD_STOP,
-        electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
+        electronicMonitoringProvider: {
+          isToBeTaggedForProgramme: true,
+          programmeName: 'EM',
+        },
         electronicMonitoringProviderStatus: 'COMPLETE',
         isInHardStopPeriod: true,
       })
-      cy.task('stubGetHdcStatus')
-      cy.task('stubRecordAuditEvent')
-      cy.task('stubGetPrisons')
-      cy.task('stubGetLicencePolicyConditions')
-      cy.task('stubGetActivePolicyConditions')
-      cy.task('stubGetBankHolidays', dates)
-      cy.task('stubGetStaffPreferredAddresses')
-      cy.task('stubPostPrisonLicence')
-      cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-      cy.task('stubPutLicenceAppointmentPerson')
-      cy.task('stubDeleteAppointmentAddress')
-      cy.task('stubGetProbationCase')
+      cy.task('stubAll', [
+        'stubGetHdcStatus',
+        'stubRecordAuditEvent',
+        'stubGetPrisons',
+        'stubGetLicencePolicyConditions',
+        'stubGetActivePolicyConditions',
+        ['stubGetBankHolidays', dates],
+        'stubGetStaffPreferredAddresses',
+        'stubPostPrisonLicence',
+        ['stubGetPrisonUserCaseloads', singleCaseload],
+        'stubPutLicenceAppointmentPerson',
+        'stubDeleteAppointmentAddress',
+        'stubGetProbationCase',
+      ])
       cy.signIn()
     })
 
@@ -227,10 +236,22 @@ context('Postcode lookup', () => {
   })
 
   const postcodesToTest = [
-    { postcode: 'FA1 1E', shouldShowError: true, expectedError: 'Enter a valid postcode' },
+    {
+      postcode: 'FA1 1E',
+      shouldShowError: true,
+      expectedError: 'Enter a valid postcode',
+    },
     { postcode: 'EC1A1BB', shouldShowError: false },
-    { postcode: 'abc', shouldShowError: true, expectedError: 'Postcode must be at least 5 characters' },
-    { postcode: 'NE661234LX', shouldShowError: true, expectedError: 'Postcode must be at most 8 characters' },
+    {
+      postcode: 'abc',
+      shouldShowError: true,
+      expectedError: 'Postcode must be at least 5 characters',
+    },
+    {
+      postcode: 'NE661234LX',
+      shouldShowError: true,
+      expectedError: 'Postcode must be at most 8 characters',
+    },
     { postcode: 'NE66 1LX', shouldShowError: false },
     { postcode: 'CF2 35AG', shouldShowError: false },
   ]
@@ -250,22 +271,29 @@ context('Postcode lookup', () => {
 
     beforeEach(() => {
       cy.task('reset')
-      cy.task('stubPrisonSignIn')
-      cy.task('stubGetPrisonUserDetails')
-      cy.task('stubGetPrisonOmuCaseload')
-      cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
+      cy.task('stubAll', [
+        'stubPrisonSignIn',
+        'stubGetPrisonUserDetails',
+        'stubGetPrisonOmuCaseload',
+        ['stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' }],
+      ])
       cy.task('stubGetCompletedLicence', {
         statusCode: 'APPROVED',
         typeCode: 'AP_PSS',
-        electronicMonitoringProvider: { isToBeTaggedForProgramme: true, programmeName: 'EM' },
+        electronicMonitoringProvider: {
+          isToBeTaggedForProgramme: true,
+          programmeName: 'EM',
+        },
         electronicMonitoringProviderStatus: 'COMPLETE',
       })
-      cy.task('stubGetHdcStatus')
-      cy.task('stubRecordAuditEvent')
-      cy.task('stubGetPrisons')
-      cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-      cy.task('stubGetLicenceInHardStop')
-      cy.task('stubPutLicenceAppointmentPerson')
+      cy.task('stubAll', [
+        'stubGetHdcStatus',
+        'stubRecordAuditEvent',
+        'stubGetPrisons',
+        ['stubGetPrisonUserCaseloads', singleCaseload],
+        'stubGetLicenceInHardStop',
+        'stubPutLicenceAppointmentPerson',
+      ])
       cy.signIn()
     })
 
