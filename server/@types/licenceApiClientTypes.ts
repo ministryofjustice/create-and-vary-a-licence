@@ -22,12 +22,12 @@ export type Licence =
   | components['schemas']['VariationLicence']
   | components['schemas']['HardStopLicence']
   | components['schemas']['CrdLicence']
-  | components['schemas']['HdcLicence']
+  | HdcLicence
   | components['schemas']['PrrdLicenceResponse']
   | components['schemas']['TimeServedLicence']
 
 export type VariationLicence = components['schemas']['VariationLicence']
-export type HdcLicence = components['schemas']['HdcLicence']
+export type HdcLicence = components['schemas']['HdcLicence'] & { hdcAddressChecksComplete?: boolean }
 export type HdcVariationLicence = components['schemas']['HdcVariationLicence']
 export type LicenceEvent = components['schemas']['LicenceEvent']
 export type StatusUpdateRequest = components['schemas']['StatusUpdateRequest']

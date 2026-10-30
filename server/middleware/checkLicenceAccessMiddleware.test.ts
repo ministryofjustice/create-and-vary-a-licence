@@ -2,6 +2,9 @@ import { Request, Response } from 'express'
 import checkLicenceAccess from './checkLicenceAccessMiddleware'
 import LicenceService from '../services/licenceService'
 import { Licence } from '../@types/licenceApiClientTypes'
+import LicenceKind from '../enumeration/LicenceKind'
+import LicenceStatus from '../enumeration/licenceStatus'
+import config from '../config'
 
 jest.mock('../services/licenceService')
 jest.mock('../services/userService')
@@ -49,13 +52,18 @@ const probationRes = {
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 const middleware = checkLicenceAccess(licenceService)
+const originalHdcCreationEnabled = config.hdc.hdcCreationEnabled
 
 beforeEach(() => {
   req.params = { licenceId: '1' }
+  req.method = 'GET'
   res = prisonRes
+  prisonRes.locals.user.prisonCaseload = ['LEI', 'MDI']
+  config.hdc.hdcCreationEnabled = true
 })
 
 afterEach(() => {
+  config.hdc.hdcCreationEnabled = originalHdcCreationEnabled
   jest.resetAllMocks()
 })
 
@@ -119,6 +127,53 @@ describe('fetchLicenceMiddleware', () => {
     await middleware(req, res, next)
 
     expect(licenceService.canComAccessLicence).toHaveBeenCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
+  })
+
+  it('should deny access to any licence route when address checks are incomplete', async () => {
+    const editReq = { ...req, path: '/licence/create/id/1/edit' } as Request
+    res.locals.licence = {
+      ...licence,
+      kind: LicenceKind.HDC,
+      statusCode: LicenceStatus.IN_PROGRESS,
+      isReplacementForOptedInLicence: true,
+      hdcAddressChecksComplete: false,
+    } as Licence
+
+    await middleware(editReq, res, next)
+
+    expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+    expect(next).not.toHaveBeenCalled()
+  })
+
+  it('should allow interrupt routes to check licences with an HDC interrupt', async () => {
+    res.locals.licence = {
+      ...licence,
+      kind: LicenceKind.HDC,
+      statusCode: LicenceStatus.IN_PROGRESS,
+      isReplacementForOptedInLicence: true,
+      hdcAddressChecksComplete: false,
+    } as Licence
+
+    await checkLicenceAccess(licenceService, { allowHdcInterruptAccess: true })(req, res, next)
+
+    expect(res.redirect).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledTimes(1)
+  })
+
+  it('should not apply the interrupt access block when HDC creation is disabled', async () => {
+    config.hdc.hdcCreationEnabled = false
+    res.locals.licence = {
+      ...licence,
+      kind: LicenceKind.HDC,
+      statusCode: LicenceStatus.IN_PROGRESS,
+      isReplacementForOptedInLicence: true,
+      hdcAddressChecksComplete: false,
+    } as Licence
+
+    await middleware(req, res, next)
+
+    expect(res.redirect).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalledTimes(1)
   })
 })

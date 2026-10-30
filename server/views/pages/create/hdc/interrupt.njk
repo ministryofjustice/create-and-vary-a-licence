@@ -1,0 +1,78 @@
+{% extends "layout.njk" %}
+
+{% if interruptType == 'addressChecksIncomplete' %}
+    {% set pageTitle = applicationName + " - This person has opted in to HDC" %}
+    {% set pageId = "hdc-opt-in-interrupt-page" %}
+    {% set interruptClass = "refused-interrupt" %}
+{% elif interruptType == 'optOut' %}
+    {% set pageTitle = applicationName + " - This person has opted out of HDC" %}
+    {% set pageId = "hdc-opt-out-interrupt-page" %}
+    {% set interruptClass = "opt-out-interrupt" %}
+{% elif interruptType == 'postponed' %}
+    {% set pageTitle = applicationName + " - HDC application postponed" %}
+    {% set pageId = "hdc-postponed-interrupt-page" %}
+    {% set interruptClass = "postponed-interrupt" %}
+{% else %}
+    {% set pageTitle = applicationName + " - HDC application refused" %}
+    {% set pageId = "hdc-refused-interrupt-page" %}
+    {% set interruptClass = "refused-interrupt" %}
+{% endif %}
+{% set backLinkHref = backLink %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="moj-interruption-card">
+                <div class="moj-interruption-card__content">
+                    <h1 class="govuk-heading-l moj-interruption-card__heading" id="{{ pageId }}-heading">
+                        {% if interruptType == 'addressChecksIncomplete' %}
+                            This person has opted in to HDC
+                        {% elif interruptType == 'optOut' %}
+                            This person has opted out of HDC
+                        {% elif interruptType == 'postponed' %}
+                            HDC application postponed
+                        {% else %}
+                            HDC application refused
+                        {% endif %}
+                    </h1>
+                    <div class="govuk-body-l moj-interruption-card__body">
+                        <p>
+                            {% if interruptType == 'addressChecksIncomplete' %}
+                                You must complete the address checks in HDC before you can continue with this licence in CVL.
+                            {% elif interruptType == 'optOut' %}
+                                This licence is now for a standard release.
+                            {% elif interruptType == 'postponed' %}
+                                You can continue working on this licence but it can only be submitted if the application resumes.
+                            {% else %}
+                                This licence is now for a standard release.
+                            {% endif %}
+                        </p>
+                        {% if interruptType == 'postponed' %}
+                            <p>
+                                Contact {{ omuContact }} to ask for the application to be refused if this person needs a licence for a standard release.
+                            </p>
+                        {% endif %}
+                        <p>
+                            <a href="{{ hdcUrl }}" class="govuk-link {{ interruptClass }}__link">Check the HDC service</a> for more information about the HDC application.
+                        </p>
+                        <div class="{{ interruptClass }}__actions">
+                            {% if interruptType != 'addressChecksIncomplete' %}
+                                <a href="{{ toCheckYourAnswer }}"
+                                   role="button"
+                                   draggable="false"
+                                   class="govuk-button {{ interruptClass }}__button">
+                                    Continue
+                                </a>
+                            {% endif %}
+                            <p>
+                                <a href="{{ backLink }}" class="govuk-link {{ interruptClass }}__link">
+                                    Return to case list
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

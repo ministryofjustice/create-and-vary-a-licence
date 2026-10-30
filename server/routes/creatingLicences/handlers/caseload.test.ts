@@ -7,7 +7,6 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { ComCreateCase } from '../../../@types/licenceApiClientTypes'
 import { parseIsoDate } from '../../../utils/utils'
-import config from '../../../config'
 
 const comCaseloadService = new ComCaseloadService(null, null) as jest.Mocked<ComCaseloadService>
 
@@ -435,154 +434,33 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       )
       expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
     })
-  })
 
-  describe('findCreateLinkToDisplay', () => {
-    const comCase = {
-      licenceId: 123,
-      licenceStatus: LicenceStatus.IN_PROGRESS,
-      isHdcPostponed: false,
-      isReplacementForOptedOutLicence: false,
-    } as ComCreateCase
+    it('should route HDC and HDC replacement cases to the interrupt handler', () => {
+      const interruptPath = '/licence/create/id/3/interrupt'
 
-    const nonInProgressStatuses: ComCreateCase['licenceStatus'][] = [
-      'SUBMITTED',
-      'ACTIVE',
-      'INACTIVE',
-      'APPROVED',
-      'NOT_STARTED',
-      'VARIATION_IN_PROGRESS',
-      'VARIATION_SUBMITTED',
-      'VARIATION_REJECTED',
-      'VARIATION_APPROVED',
-      'TIMED_OUT',
-    ]
-    const existingHdcCreationEnabled = config.hdc.hdcCreationEnabled
-
-    afterEach(() => {
-      config.hdc.hdcCreationEnabled = existingHdcCreationEnabled
+      expect(
+        handler.findCreateLinkToDisplay({
+          licenceId: 3,
+          kind: LicenceKind.HDC,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+        } as ComCreateCase),
+      ).toBe(interruptPath)
+      expect(
+        handler.findCreateLinkToDisplay({
+          licenceId: 3,
+          kind: LicenceKind.CRD,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          isReplacementForOptedOutLicence: true,
+        } as ComCreateCase),
+      ).toBe(interruptPath)
+      expect(
+        handler.findCreateLinkToDisplay({
+          licenceId: 3,
+          kind: LicenceKind.CRD,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          isReplacementForRefusedLicence: true,
+        } as ComCreateCase),
+      ).toBe(interruptPath)
     })
-
-    describe('HDC refusal', () => {
-      const refusedCase = {
-        ...comCase,
-        isReplacementForRefusedLicence: true,
-      }
-
-      it('should show the interrupt every time an in-progress refused replacement is opened', () => {
-        config.hdc.hdcCreationEnabled = true
-
-        expect(handler.findCreateLinkToDisplay(refusedCase)).toBe('/licence/create/id/123/refused-interrupt')
-        expect(handler.findCreateLinkToDisplay(refusedCase)).toBe('/licence/create/id/123/refused-interrupt')
-      })
-
-      it.each([false, undefined])('should not show the interrupt when the refusal flag is %s', refusalFlag => {
-        config.hdc.hdcCreationEnabled = true
-
-        expect(handler.findCreateLinkToDisplay({ ...refusedCase, isReplacementForRefusedLicence: refusalFlag })).toBe(
-          '/licence/create/id/123/check-your-answers',
-        )
-      })
-
-      it('should not show the interrupt when HDC creation is disabled', () => {
-        config.hdc.hdcCreationEnabled = false
-
-        expect(handler.findCreateLinkToDisplay(refusedCase)).toBe('/licence/create/id/123/check-your-answers')
-      })
-
-      it.each([...nonInProgressStatuses, 'REJECTED', null, undefined] as ComCreateCase['licenceStatus'][])(
-        'should not show the interrupt when the licence status is %s',
-        licenceStatus => {
-          config.hdc.hdcCreationEnabled = true
-
-          expect(handler.findCreateLinkToDisplay({ ...refusedCase, licenceStatus })).toBe(
-            '/licence/create/id/123/check-your-answers',
-          )
-        },
-      )
-    })
-
-    it('should link to the HDC opt-out interrupt when the toggle is enabled for an in-progress licence', () => {
-      // Given
-      config.hdc.hdcCreationEnabled = true
-      comCase.isReplacementForOptedOutLicence = true
-
-      // When
-      const createLink = handler.findCreateLinkToDisplay(comCase)
-
-      // Then
-      expect(createLink).toBe('/licence/create/id/123/opt-out-interrupt')
-    })
-
-    it('should link to check your answers when the toggle is enabled for an in-progress licence that is not a replacement for an opted-out licence', () => {
-      config.hdc.hdcCreationEnabled = true
-
-      const createLink = handler.findCreateLinkToDisplay({
-        ...comCase,
-        isReplacementForOptedOutLicence: false,
-      })
-
-      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
-    })
-
-    it('should link to check your answers when the HDC opt-out toggle is disabled', () => {
-      // Given
-      config.hdc.hdcCreationEnabled = false
-
-      // When
-      const createLink = handler.findCreateLinkToDisplay(comCase)
-
-      // Then
-      expect(createLink).toBe('/licence/create/id/123/check-your-answers')
-    })
-
-    it('should link to the postponed interrupt when the HDC application is postponed', () => {
-      // Given
-      config.hdc.hdcCreationEnabled = true
-      comCase.isHdcPostponed = true
-
-      // When
-      const createLink = handler.findCreateLinkToDisplay(comCase)
-
-      // Then
-      expect(createLink).toBe('/licence/create/id/123/postponed-interrupt')
-    })
-
-    it.each(nonInProgressStatuses)(
-      'should link to check your answers when the licence status is %s and licence is opt out',
-      licenceStatus => {
-        // Given
-        config.hdc.hdcCreationEnabled = true
-        comCase.isReplacementForOptedOutLicence = true
-        comCase.isHdcPostponed = false
-
-        // When
-        const createLink = handler.findCreateLinkToDisplay({
-          ...comCase,
-          licenceStatus,
-        })
-
-        // Then
-        expect(createLink).toBe('/licence/create/id/123/check-your-answers')
-      },
-    )
-
-    it.each(nonInProgressStatuses)(
-      'should link to check your answers when the licence status is %s and licence is postponed',
-      licenceStatus => {
-        // Given
-        config.hdc.hdcCreationEnabled = true
-        comCase.isHdcPostponed = false
-
-        // When
-        const createLink = handler.findCreateLinkToDisplay({
-          ...comCase,
-          licenceStatus,
-        })
-
-        // Then
-        expect(createLink).toBe('/licence/create/id/123/check-your-answers')
-      },
-    )
   })
 })

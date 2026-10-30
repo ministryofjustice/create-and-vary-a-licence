@@ -108,4 +108,38 @@ context('View COM create caseload', () => {
       .should('contain', 'Any additional or bespoke conditions you entered previously will be saved.')
       .and('contain', 'You must enter any initial appointment details again and then submit the licence.')
   })
+
+  it('should block the replacement licence when HDC address checks are incomplete', () => {
+    cy.task('stubGetHdcLicence', {
+      kind: 'HDC',
+      statusCode: 'IN_PROGRESS',
+      isReplacementForOptedInLicence: true,
+      hdcAddressChecksComplete: false,
+    })
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.clickCreateALicenceWithHdcReplacement({ kind: 'HDC' })
+
+    cy.get('#name-button-1').click()
+    cy.get('#hdc-opt-in-interrupt-page-heading').should('contain', 'This person has opted in to HDC')
+    cy.contains('You must complete the address checks in HDC before you can continue with this licence in CVL.')
+    cy.get('.refused-interrupt__actions a.govuk-button').should('not.exist')
+    cy.contains('.refused-interrupt__actions a', 'Return to case list').should(
+      'have.attr',
+      'href',
+      '/licence/create/caseload',
+    )
+  })
+
+  it('should show the postponed HDC interrupt with OMU contact details', () => {
+    cy.task('stubGetHdcLicence', { kind: 'HDC', statusCode: 'IN_PROGRESS', isPostponed: true })
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.clickCreateALicenceWithHdcReplacement({ kind: 'HDC', isHdcPostponed: true })
+
+    cy.get('#name-button-1').click()
+    cy.get('#hdc-postponed-interrupt-page-heading').should('contain', 'HDC application postponed')
+    cy.contains('Contact test@test.test to ask for the application to be refused')
+    cy.get('.postponed-interrupt__button').should('have.attr', 'href', '/licence/create/id/1/check-your-answers')
+  })
 })

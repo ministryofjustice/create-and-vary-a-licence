@@ -51,7 +51,7 @@ export default class CheckAnswersRoutes {
     const initialApptUpdatedMessage = req.flash('initialApptUpdated')?.[0]
     const hasValidationErrors = validationErrors && validationErrors.length > 0
 
-    res.render('pages/create/checkAnswers', {
+    return res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
       backLink,
