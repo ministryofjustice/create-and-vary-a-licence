@@ -1,7 +1,7 @@
 import { AuditService as HmppsAuditService } from '@ministryofjustice/hmpps-audit-client'
 import { User } from '../../@types/CvlUserDetails'
 import AuditService from './auditService'
-import { FoundComCase, Licence } from '../../@types/licenceApiClientTypes'
+import { CaCase, FoundComCase, Licence, PrisonCaseAdminSearchResult } from '../../@types/licenceApiClientTypes'
 import config from '../../config'
 
 jest.mock('../../data/licenceApiClient')
@@ -143,7 +143,7 @@ describe('AuditService', () => {
 
   describe('custom handlers', () => {
     it('should log a probation search event', async () => {
-      const eventType = 'SEARCH_PROBATION_SEARCH'
+      const eventType = 'VIEW_PROBATION_SEARCH_RESULTS_SUCCESS'
       const searchTerm = 'CRN123'
       const searchResults = [
         {
@@ -161,7 +161,7 @@ describe('AuditService', () => {
       await auditService.logProbationSearchEvent(requestId, searchTerm, searchResults, user)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `${eventType}_SUCCESS`,
+        what: eventType,
         subjectType: 'SEARCH_TERM',
         subjectId: searchTerm,
         correlationId: requestId,
@@ -172,6 +172,59 @@ describe('AuditService', () => {
           results: {
             resultCount: searchResults.length,
             returnedSubjectIds: searchResults.map(result => result.crn),
+          },
+        },
+      })
+    })
+
+    it('should log a CA search event', async () => {
+      const eventType = 'VIEW_CA_SEARCH_RESULTS_SUCCESS'
+      const searchTerm = 'A1234BC'
+      const searchResults: PrisonCaseAdminSearchResult = {
+        inPrisonResults: [
+          {
+            prisonerNumber: 'A1234BC',
+            name: 'prisoner one',
+          } as CaCase,
+        ],
+        onProbationResults: [
+          {
+            prisonerNumber: 'B1234BC',
+            name: 'probation one',
+          } as CaCase,
+        ],
+        attentionNeededResults: [
+          {
+            prisonerNumber: 'C1234BC',
+            name: 'attention one',
+          } as CaCase,
+        ],
+      }
+      const expectedResultCount =
+        searchResults.inPrisonResults.length +
+        searchResults.onProbationResults.length +
+        searchResults.attentionNeededResults.length
+      const expectedSubjectIds = searchResults.inPrisonResults
+        .map(result => result.prisonerNumber)
+        .concat(searchResults.onProbationResults.map(result => result.prisonerNumber))
+        .concat(searchResults.attentionNeededResults.map(result => result.prisonerNumber))
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logCaSearchEvent(requestId, searchTerm, searchResults, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'SEARCH_TERM',
+        subjectId: searchTerm,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          results: {
+            resultCount: expectedResultCount,
+            returnedSubjectIds: expectedSubjectIds,
           },
         },
       })

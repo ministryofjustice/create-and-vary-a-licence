@@ -1,7 +1,13 @@
 import { telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
 import { AuditEvent, AuditService as HmppsAuditService, SubjectType } from '@ministryofjustice/hmpps-audit-client'
 import { User } from '../../@types/CvlUserDetails'
-import { FoundComCase, Licence } from '../../@types/licenceApiClientTypes'
+import {
+  ApproverSearchResponse,
+  FoundComCase,
+  Licence,
+  PrisonCaseAdminSearchResult,
+  VaryApproverCaseloadSearchResponse,
+} from '../../@types/licenceApiClientTypes'
 import logger from '../../../logger'
 import { AuditPolicy } from './routeAuditPolicy'
 import config from '../../config'
@@ -17,7 +23,7 @@ export default class AuditService {
   ): Promise<void> {
     const eventType = `${policy.eventType}_ATTEMPT`
     const auditEvent = this.createAuditEvent(eventType, licence, requestId, user)
-    await this.sendAuditEvent(policy.eventType, auditEvent)
+    await this.sendAuditEvent(auditEvent)
   }
 
   async logPageViewSuccess(
@@ -28,7 +34,7 @@ export default class AuditService {
   ): Promise<void> {
     const eventType = `${policy.eventType}_SUCCESS`
     const auditEventMessage = this.createAuditEvent(eventType, licence, requestId, user)
-    await this.sendAuditEvent(policy.eventType, auditEventMessage)
+    await this.sendAuditEvent(auditEventMessage)
   }
 
   async logProbationSearchEvent(
@@ -38,7 +44,7 @@ export default class AuditService {
     user: User,
   ): Promise<void> {
     const searchResultsSubjectIds = searchResults.map(result => result.crn)
-    const baseEventMessage = this.createAuditEvent('SEARCH_PROBATION_SEARCH_SUCCESS', undefined, requestId, user)
+    const baseEventMessage = this.createAuditEvent('VIEW_PROBATION_SEARCH_RESULTS_SUCCESS', undefined, requestId, user)
     const auditEvent: AuditEvent = {
       ...baseEventMessage,
       subjectType: 'SEARCH_TERM',
@@ -51,12 +57,98 @@ export default class AuditService {
         },
       },
     }
-    await this.sendAuditEvent('PROBATION_SEARCH', auditEvent)
+    await this.sendAuditEvent(auditEvent)
   }
 
-  private async sendAuditEvent(eventType: string, auditEvent: AuditEvent): Promise<void> {
+  async logCaSearchEvent(
+    requestId: string,
+    searchTerm: string,
+    searchResults: PrisonCaseAdminSearchResult,
+    user: User,
+  ): Promise<void> {
+    // const searchResultsSubjectIds = searchResults.map(result => result.crn)
+    const inPrisonIds = searchResults.inPrisonResults.map(result => result.prisonerNumber)
+    const probationIds = searchResults.onProbationResults.map(result => result.prisonerNumber)
+    const attentionNeededIds = searchResults.attentionNeededResults.map(result => result.prisonerNumber)
+    const searchResultsSubjectIds = inPrisonIds.concat(probationIds).concat(attentionNeededIds)
+
+    const baseEventMessage = this.createAuditEvent('VIEW_CA_SEARCH_RESULTS_SUCCESS', undefined, requestId, user)
+    const auditEvent: AuditEvent = {
+      ...baseEventMessage,
+      subjectType: 'SEARCH_TERM',
+      subjectId: searchTerm,
+      details: {
+        ...baseEventMessage.details,
+        results: {
+          resultCount: searchResultsSubjectIds.length,
+          returnedSubjectIds: searchResultsSubjectIds,
+        },
+      },
+    }
+    await this.sendAuditEvent(auditEvent)
+  }
+
+  async logApproverSearchEvent(
+    requestId: string,
+    searchTerm: string,
+    searchResults: ApproverSearchResponse,
+    user: User,
+  ): Promise<void> {
+    const approvedIds = searchResults.recentlyApprovedResponse.map(result => result.prisonerNumber)
+    const needApprovalIds = searchResults.approvalNeededResponse.map(result => result.prisonerNumber)
+    const searchResultsSubjectIds = approvedIds.concat(needApprovalIds)
+
+    const baseEventMessage = this.createAuditEvent('VIEW_APPROVER_SEARCH_RESULTS_SUCCESS', undefined, requestId, user)
+    const auditEvent: AuditEvent = {
+      ...baseEventMessage,
+      subjectType: 'SEARCH_TERM',
+      subjectId: searchTerm,
+      details: {
+        ...baseEventMessage.details,
+        results: {
+          resultCount: searchResultsSubjectIds.length,
+          returnedSubjectIds: searchResultsSubjectIds,
+        },
+      },
+    }
+    await this.sendAuditEvent(auditEvent)
+  }
+
+  async logVaryApproverSearchEvent(
+    requestId: string,
+    searchTerm: string,
+    searchResults: VaryApproverCaseloadSearchResponse,
+    user: User,
+  ): Promise<void> {
+    const pduCaseIds = searchResults.pduCasesResponse.map(result => result.crnNumber)
+    const regionCaseIds = searchResults.regionCasesResponse.map(result => result.crnNumber)
+    // Convert to set to remove duplicates as the same case can be in both the PDU and region results
+    const searchResultsSubjectIds = Array.from(new Set(pduCaseIds.concat(regionCaseIds)))
+
+    const baseEventMessage = this.createAuditEvent(
+      'VIEW_VARY_APPROVER_SEARCH_RESULTS_SUCCESS',
+      undefined,
+      requestId,
+      user,
+    )
+    const auditEvent: AuditEvent = {
+      ...baseEventMessage,
+      subjectType: 'SEARCH_TERM',
+      subjectId: searchTerm,
+      details: {
+        ...baseEventMessage.details,
+        results: {
+          resultCount: searchResultsSubjectIds.length,
+          returnedSubjectIds: searchResultsSubjectIds,
+        },
+      },
+    }
+    await this.sendAuditEvent(auditEvent)
+  }
+
+  private async sendAuditEvent(auditEvent: AuditEvent): Promise<void> {
     if (config.sqs.audit.enabled) {
-      logger.info(`sending audit event type: ${eventType}`)
+      logger.info(`sending audit event type: ${auditEvent.what}`)
       telemetry.setSpanAttributes({ audited: true })
 
       try {
