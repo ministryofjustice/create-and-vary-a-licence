@@ -1,7 +1,16 @@
 import { AuditService as HmppsAuditService } from '@ministryofjustice/hmpps-audit-client'
 import { User } from '../../@types/CvlUserDetails'
 import AuditService from './auditService'
-import { CaCase, FoundComCase, Licence, PrisonCaseAdminSearchResult } from '../../@types/licenceApiClientTypes'
+import {
+  ApprovalCase,
+  ApproverSearchResponse,
+  CaCase,
+  FoundComCase,
+  Licence,
+  PrisonCaseAdminSearchResult,
+  VaryApproverCase,
+  VaryApproverCaseloadSearchResponse,
+} from '../../@types/licenceApiClientTypes'
 import config from '../../config'
 
 jest.mock('../../data/licenceApiClient')
@@ -212,6 +221,90 @@ describe('AuditService', () => {
       hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
 
       await auditService.logCaSearchEvent(requestId, searchTerm, searchResults, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'SEARCH_TERM',
+        subjectId: searchTerm,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          results: {
+            resultCount: expectedResultCount,
+            returnedSubjectIds: expectedSubjectIds,
+          },
+        },
+      })
+    })
+
+    it('should log an approver search event', async () => {
+      const eventType = 'VIEW_APPROVER_SEARCH_RESULTS_SUCCESS'
+      const searchTerm = 'name'
+      const searchResults: ApproverSearchResponse = {
+        approvalNeededResponse: [
+          {
+            prisonerNumber: 'A1234BC',
+          } as ApprovalCase,
+        ],
+        recentlyApprovedResponse: [
+          {
+            prisonerNumber: 'A9823BD',
+          } as ApprovalCase,
+        ],
+      }
+
+      const expectedSubjectIds = searchResults.approvalNeededResponse
+        .map(result => result.prisonerNumber)
+        .concat(searchResults.recentlyApprovedResponse.map(result => result.prisonerNumber))
+      const expectedResultCount = expectedSubjectIds.length
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logApproverSearchEvent(requestId, searchTerm, searchResults, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'SEARCH_TERM',
+        subjectId: searchTerm,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          results: {
+            resultCount: expectedResultCount,
+            returnedSubjectIds: expectedSubjectIds,
+          },
+        },
+      })
+    })
+
+    it('should log a vary approver search event', async () => {
+      const eventType = 'VIEW_VARY_APPROVER_SEARCH_RESULTS_SUCCESS'
+      const searchTerm = 'a name'
+      const searchResults: VaryApproverCaseloadSearchResponse = {
+        pduCasesResponse: [
+          {
+            crnNumber: 'CRN123',
+          } as VaryApproverCase,
+        ],
+        regionCasesResponse: [
+          {
+            crnNumber: 'CRN456',
+          } as VaryApproverCase,
+        ],
+      }
+
+      const expectedSubjectIds = searchResults.pduCasesResponse
+        .map(result => result.crnNumber)
+        .concat(searchResults.regionCasesResponse.map(result => result.crnNumber))
+      const expectedResultCount = expectedSubjectIds.length
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logVaryApproverSearchEvent(requestId, searchTerm, searchResults, user)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
         what: eventType,

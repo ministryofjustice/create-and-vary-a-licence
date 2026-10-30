@@ -94,9 +94,9 @@ export default class AuditService {
     searchResults: ApproverSearchResponse,
     user: User,
   ): Promise<void> {
-    const approvedIds = searchResults.recentlyApprovedResponse.map(result => result.prisonerNumber)
     const needApprovalIds = searchResults.approvalNeededResponse.map(result => result.prisonerNumber)
-    const searchResultsSubjectIds = approvedIds.concat(needApprovalIds)
+    const approvedIds = searchResults.recentlyApprovedResponse.map(result => result.prisonerNumber)
+    const searchResultsSubjectIds = needApprovalIds.concat(approvedIds)
 
     const baseEventMessage = this.createAuditEvent('VIEW_APPROVER_SEARCH_RESULTS_SUCCESS', undefined, requestId, user)
     const auditEvent: AuditEvent = {
