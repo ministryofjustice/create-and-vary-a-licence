@@ -670,14 +670,17 @@
   },
   "GET /search/ca-search": {
     "audit": true,
+    "customHandler": true,
     "eventType": "VIEW_CA_SEARCH"
   },
   "GET /search/approver-search": {
     "audit": true,
+    "customHandler": true,
     "eventType": "VIEW_APPROVER_SEARCH"
   },
   "GET /search/vary-approver-search": {
     "audit": true,
+    "customHandler": true,
     "eventType": "VIEW_VARY_APPROVER_SEARCH"
   },
   "GET /licence/create/id/:licenceId/initial-meeting-name": {

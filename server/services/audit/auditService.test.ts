@@ -1,7 +1,16 @@
 import { AuditService as HmppsAuditService } from '@ministryofjustice/hmpps-audit-client'
 import { User } from '../../@types/CvlUserDetails'
 import AuditService from './auditService'
-import { FoundComCase, Licence } from '../../@types/licenceApiClientTypes'
+import {
+  ApprovalCase,
+  ApproverSearchResponse,
+  CaCase,
+  FoundComCase,
+  Licence,
+  PrisonCaseAdminSearchResult,
+  VaryApproverCase,
+  VaryApproverCaseloadSearchResponse,
+} from '../../@types/licenceApiClientTypes'
 import config from '../../config'
 
 jest.mock('../../data/licenceApiClient')
@@ -143,7 +152,7 @@ describe('AuditService', () => {
 
   describe('custom handlers', () => {
     it('should log a probation search event', async () => {
-      const eventType = 'SEARCH_PROBATION_SEARCH'
+      const eventType = 'VIEW_PROBATION_SEARCH_RESULTS_SUCCESS'
       const searchTerm = 'CRN123'
       const searchResults = [
         {
@@ -161,7 +170,7 @@ describe('AuditService', () => {
       await auditService.logProbationSearchEvent(requestId, searchTerm, searchResults, user)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `${eventType}_SUCCESS`,
+        what: eventType,
         subjectType: 'SEARCH_TERM',
         subjectId: searchTerm,
         correlationId: requestId,
@@ -172,6 +181,143 @@ describe('AuditService', () => {
           results: {
             resultCount: searchResults.length,
             returnedSubjectIds: searchResults.map(result => result.crn),
+          },
+        },
+      })
+    })
+
+    it('should log a CA search event', async () => {
+      const eventType = 'VIEW_CA_SEARCH_RESULTS_SUCCESS'
+      const searchTerm = 'A1234BC'
+      const searchResults: PrisonCaseAdminSearchResult = {
+        inPrisonResults: [
+          {
+            prisonerNumber: 'A1234BC',
+            name: 'prisoner one',
+          } as CaCase,
+        ],
+        onProbationResults: [
+          {
+            prisonerNumber: 'B1234BC',
+            name: 'probation one',
+          } as CaCase,
+        ],
+        attentionNeededResults: [
+          {
+            prisonerNumber: 'C1234BC',
+            name: 'attention one',
+          } as CaCase,
+        ],
+      }
+      const expectedResultCount =
+        searchResults.inPrisonResults.length +
+        searchResults.onProbationResults.length +
+        searchResults.attentionNeededResults.length
+      const expectedSubjectIds = searchResults.inPrisonResults
+        .map(result => result.prisonerNumber)
+        .concat(searchResults.onProbationResults.map(result => result.prisonerNumber))
+        .concat(searchResults.attentionNeededResults.map(result => result.prisonerNumber))
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logCaSearchEvent(requestId, searchTerm, searchResults, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'SEARCH_TERM',
+        subjectId: searchTerm,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          results: {
+            resultCount: expectedResultCount,
+            returnedSubjectIds: expectedSubjectIds,
+          },
+        },
+      })
+    })
+
+    it('should log an approver search event', async () => {
+      const eventType = 'VIEW_APPROVER_SEARCH_RESULTS_SUCCESS'
+      const searchTerm = 'name'
+      const searchResults: ApproverSearchResponse = {
+        approvalNeededResponse: [
+          {
+            prisonerNumber: 'A1234BC',
+          } as ApprovalCase,
+        ],
+        recentlyApprovedResponse: [
+          {
+            prisonerNumber: 'A9823BD',
+          } as ApprovalCase,
+        ],
+      }
+
+      const expectedSubjectIds = searchResults.approvalNeededResponse
+        .map(result => result.prisonerNumber)
+        .concat(searchResults.recentlyApprovedResponse.map(result => result.prisonerNumber))
+      const expectedResultCount = expectedSubjectIds.length
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logApproverSearchEvent(requestId, searchTerm, searchResults, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'SEARCH_TERM',
+        subjectId: searchTerm,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          results: {
+            resultCount: expectedResultCount,
+            returnedSubjectIds: expectedSubjectIds,
+          },
+        },
+      })
+    })
+
+    it('should log a vary approver search event', async () => {
+      const eventType = 'VIEW_VARY_APPROVER_SEARCH_RESULTS_SUCCESS'
+      const searchTerm = 'a name'
+      const searchResults: VaryApproverCaseloadSearchResponse = {
+        pduCasesResponse: [
+          {
+            crnNumber: 'CRN123',
+          } as VaryApproverCase,
+        ],
+        regionCasesResponse: [
+          {
+            crnNumber: 'CRN456',
+          } as VaryApproverCase,
+        ],
+      }
+
+      const expectedSubjectIds = searchResults.pduCasesResponse
+        .map(result => result.crnNumber)
+        .concat(searchResults.regionCasesResponse.map(result => result.crnNumber))
+      const expectedResultCount = expectedSubjectIds.length
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logVaryApproverSearchEvent(requestId, searchTerm, searchResults, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'SEARCH_TERM',
+        subjectId: searchTerm,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          results: {
+            resultCount: expectedResultCount,
+            returnedSubjectIds: expectedSubjectIds,
           },
         },
       })
