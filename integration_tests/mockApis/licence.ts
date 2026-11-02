@@ -443,6 +443,7 @@ export default {
   },
 
   stubGetHdcLicence: (options: {
+    isInHardStopPeriod?: boolean
     isReplacementForOptedInLicence?: boolean
     hdcAddressChecksComplete?: boolean
     isPostponed?: boolean
@@ -474,6 +475,7 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           kind: options.kind ?? LicenceKind.HDC,
+          isInHardStopPeriod: options.isInHardStopPeriod ?? false,
           isReplacementForOptedInLicence: options.isReplacementForOptedInLicence ?? false,
           hdcAddressChecksComplete: options.hdcAddressChecksComplete,
           isPostponed: options.isPostponed ?? false,

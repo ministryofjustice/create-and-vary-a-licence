@@ -2,13 +2,8 @@ import { RequestHandler } from 'express'
 import getUrlAccessByStatus from '../utils/urlAccessByStatus'
 import LicenceService from '../services/licenceService'
 import logger from '../../logger'
-import config from '../config'
-import { isHdcAddressChecksIncompleteLicence } from '../utils/utils'
 
-export default function checkLicenceAccess(
-  licenceService: LicenceService,
-  options: { allowHdcInterruptAccess?: boolean } = {},
-): RequestHandler {
+export default function checkLicenceAccess(licenceService: LicenceService): RequestHandler {
   return async (req, res, next) => {
     if (req.params.licenceId) {
       try {
@@ -51,16 +46,6 @@ export default function checkLicenceAccess(
           // Is the URL requested allowed for a licence in this status?
           if (!getUrlAccessByStatus(req.path, licence.id, licence.statusCode, user.username)) {
             logger.info(`URL access denied to licence ID ${licence.statusCode} ${licence.id} ${req.path}`)
-            return res.redirect('/access-denied')
-          }
-
-          const addressChecksAreIncomplete = isHdcAddressChecksIncompleteLicence(licence)
-
-          if (config.hdc.hdcCreationEnabled && !options.allowHdcInterruptAccess && addressChecksAreIncomplete) {
-            if (req.method === 'GET' && req.path === `/licence/create/id/${licence.id}/check-your-answers`) {
-              return res.redirect(`/licence/create/id/${licence.id}/interrupt`)
-            }
-            logger.info(`Access denied while HDC interrupt applies for licence ${licence.id}`)
             return res.redirect('/access-denied')
           }
         }

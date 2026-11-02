@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import checkLicenceAccess from '../../../../middleware/checkLicenceAccessMiddleware'
+import checkLicenceAccessForJourney from '../../../../middleware/checkLicenceAccessForJourney'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 
@@ -14,13 +14,18 @@ export default function Index({ licenceService, conditionService }: Services): R
   const routePrefix = (path: string) => `/licence/create/id/:licenceId${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), checkLicenceAccess(licenceService), handler)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      checkLicenceAccessForJourney(licenceService),
+      handler,
+    )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccessForJourney(licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )

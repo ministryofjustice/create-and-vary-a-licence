@@ -1,4 +1,5 @@
 import { RequestHandler, Router } from 'express'
+import checkLicenceAccessForJourney from '../../middleware/checkLicenceAccessForJourney'
 import checkLicenceAccess from '../../middleware/checkLicenceAccessMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -48,7 +49,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccessForJourney(licenceService),
       ...handlers,
     )
 
@@ -57,7 +58,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService, { allowHdcInterruptAccess: true }),
+      checkLicenceAccess(licenceService),
       handler,
     )
 
@@ -66,7 +67,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccessForJourney(licenceService),
       hardStopCheckMiddleware(UserType.PROBATION),
       handler,
     )
@@ -77,7 +78,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccessForJourney(licenceService),
       preLicenceCreationMiddleware(probationService),
       handler,
     )
@@ -87,7 +88,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccessForJourney(licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(UserType.PROBATION),
       handler,
@@ -98,7 +99,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccessForJourney(licenceService),
       preLicenceCreationMiddleware(probationService),
       validationMiddleware(conditionService, type),
       handler,

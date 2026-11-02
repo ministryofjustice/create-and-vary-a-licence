@@ -129,6 +129,10 @@ context('View COM create caseload', () => {
       'href',
       '/licence/create/caseload',
     )
+    cy.visit('/licence/create/id/1/check-your-answers')
+    cy.location('pathname').should('eq', '/licence/create/id/1/interrupt')
+    cy.visit('/licence/create/id/1/edit')
+    cy.location('pathname').should('eq', '/licence/create/id/1/interrupt')
   })
 
   it('should show the postponed HDC interrupt with OMU contact details', () => {
