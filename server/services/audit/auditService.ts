@@ -12,6 +12,13 @@ import logger from '../../../logger'
 import { AuditPolicy } from './routeAuditPolicy'
 import config from '../../config'
 
+const methodEventPrefix: { [key: string]: string } = {
+  GET: 'VIEW',
+  POST: 'SUBMIT',
+  PUT: 'EDIT',
+  DELETE: 'DELETE',
+}
+
 export default class AuditService {
   constructor(private readonly hmppsAuditService: HmppsAuditService) {}
 
@@ -146,6 +153,18 @@ export default class AuditService {
     await this.sendAuditEvent(auditEvent)
   }
 
+  async logLicenceConfirmCreateFailure(requestId: string, method: string, nomisId: string, user: User): Promise<void> {
+    const eventType = `${methodEventPrefix[method]}_LICENCE_CREATION_CONFIRMATION_FAILURE`
+    const auditEventMessage = this.createAuditEventForSubject(
+      eventType,
+      requestId,
+      'PRISONER_ID' as SubjectType,
+      nomisId,
+      user,
+    )
+    await this.sendAuditEvent(auditEventMessage)
+  }
+
   private async sendAuditEvent(auditEvent: AuditEvent): Promise<void> {
     if (config.sqs.audit.enabled) {
       logger.info(`sending audit event type: ${auditEvent.what}`)
@@ -161,6 +180,26 @@ export default class AuditService {
 
   private createAuditEvent(eventType: string, licence: Licence | undefined, requestId: string, user: User): AuditEvent {
     const { subjectType, subjectId } = this.getSubjectFromRequest(licence, user)
+    return {
+      what: eventType,
+      subjectType,
+      subjectId,
+      correlationId: requestId,
+      who: user.username,
+      details: {
+        build: config.gitRef,
+        userRoles: user.userRoles,
+      },
+    }
+  }
+
+  private createAuditEventForSubject(
+    eventType: string,
+    requestId: string,
+    subjectType: SubjectType,
+    subjectId: string,
+    user: User,
+  ): AuditEvent {
     return {
       what: eventType,
       subjectType,

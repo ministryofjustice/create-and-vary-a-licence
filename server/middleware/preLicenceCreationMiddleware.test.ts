@@ -2,16 +2,19 @@ import { Request, Response } from 'express'
 import ProbationService from '../services/probationService'
 import preLicenceCreationMiddleware from './preLicenceCreationMiddleware'
 import { DeliusManager } from '../@types/deliusClientTypes'
+import AuditService from '../services/audit/auditService'
 
+jest.mock('../services/audit/auditService')
 jest.mock('../services/probationService')
 
 let req: Request
 let res: Response
 const next = jest.fn()
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 
-const middleware = preLicenceCreationMiddleware(probationService)
+const middleware = preLicenceCreationMiddleware(auditService, probationService)
 
 beforeEach(() => {
   jest.resetAllMocks()
@@ -108,9 +111,31 @@ describe('preLicenceCreationMiddleware', () => {
         },
       },
     } as DeliusManager)
+
     await middleware(req, res, next)
+
     expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(1)
+    expect(auditService.logLicenceConfirmCreateFailure).toHaveBeenCalledWith(
+      req.id,
+      req.params.nomisId,
+      res.locals.user,
+    )
     expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+    expect(next).not.toHaveBeenCalled()
+  })
+
+  it('should deny access when no responsible COM', async () => {
+    probationService.getResponsibleCommunityManager.mockResolvedValue(null)
+
+    await middleware(req, res, next)
+
+    expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(1)
+    expect(auditService.logLicenceConfirmCreateFailure).toHaveBeenCalledWith(
+      req.id,
+      req.params.nomisId,
+      res.locals.user,
+    )
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
     expect(next).not.toHaveBeenCalled()
   })
 })

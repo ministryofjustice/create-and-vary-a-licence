@@ -322,5 +322,40 @@ describe('AuditService', () => {
         },
       })
     })
+
+    it('should log a view licence confirm create failure event', async () => {
+      const eventType = 'LICENCE_CREATION_CONFIRMATION_FAILURE'
+      const nomisId = 'A1234BC'
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logLicenceConfirmCreateFailure(requestId, 'GET', nomisId, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: `VIEW_${eventType}`,
+        subjectType: 'PRISONER_ID',
+        subjectId: nomisId,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+        },
+      })
+
+      await auditService.logLicenceConfirmCreateFailure(requestId, 'POST', nomisId, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: `SUBMIT_${eventType}`,
+        subjectType: 'PRISONER_ID',
+        subjectId: nomisId,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+        },
+      })
+    })
   })
 })

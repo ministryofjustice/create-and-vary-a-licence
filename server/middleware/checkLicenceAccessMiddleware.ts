@@ -15,6 +15,7 @@ export default function checkLicenceAccess(licenceService: LicenceService): Requ
               logger.info(
                 `Prison caseload ${user?.prisonCaseload} denied access to licence ID ${licence.id} ${licence.prisonCode}`,
               )
+              // TODO: add here
               return res.redirect('/access-denied')
             }
           }
@@ -39,6 +40,7 @@ export default function checkLicenceAccess(licenceService: LicenceService): Requ
                 `Probation teams ${user?.probationTeamCodes} denies access to licence ID ${licence.id} ${licence.probationTeamCode}`,
               )
 
+              // TODO: add here
               return res.redirect('/access-denied')
             }
           }
@@ -46,6 +48,7 @@ export default function checkLicenceAccess(licenceService: LicenceService): Requ
           // Is the URL requested allowed for a licence in this status?
           if (!getUrlAccessByStatus(req.path, licence.id, licence.statusCode, user.username)) {
             logger.info(`URL access denied to licence ID ${licence.statusCode} ${licence.id} ${req.path}`)
+            // TODO: add here
             return res.redirect('/access-denied')
           }
         }

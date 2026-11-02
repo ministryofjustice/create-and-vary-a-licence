@@ -9,6 +9,7 @@ import preLicenceCreationMiddleware from '../../../../middleware/preLicenceCreat
 import checkComCaseAccessMiddleware from '../../../../middleware/checkComCaseAccessMiddleware'
 
 export default function Index({
+  auditService,
   licenceService,
   conditionService,
   probationService,
@@ -30,7 +31,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(licenceService),
-      preLicenceCreationMiddleware(probationService),
+      preLicenceCreationMiddleware(auditService, probationService),
       handler,
     )
 
