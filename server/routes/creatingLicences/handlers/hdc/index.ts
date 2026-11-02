@@ -30,7 +30,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       preLicenceCreationMiddleware(auditService, probationService),
       handler,
     )
@@ -39,7 +39,7 @@ export default function Index({
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )

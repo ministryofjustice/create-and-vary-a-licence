@@ -23,7 +23,7 @@ import ManualAddress from './types/manualAddress'
 import PostcodeLookupInputValidation from './types/PostcodeLookupInputValidation'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
-export default function Index({ licenceService, conditionService, addressService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence${path}`
@@ -39,7 +39,7 @@ export default function Index({ licenceService, conditionService, addressService
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       licenceKindCheckMiddleware([LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
       hardStopCheckMiddleware(userType),
       handler,
@@ -50,7 +50,7 @@ export default function Index({ licenceService, conditionService, addressService
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       licenceKindCheckMiddleware([LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
       validationMiddleware(conditionService, type),
       handler,

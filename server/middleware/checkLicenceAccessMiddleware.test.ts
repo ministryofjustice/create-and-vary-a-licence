@@ -2,7 +2,9 @@ import { Request, Response } from 'express'
 import checkLicenceAccess from './checkLicenceAccessMiddleware'
 import LicenceService from '../services/licenceService'
 import { Licence } from '../@types/licenceApiClientTypes'
+import AuditService from '../services/audit/auditService'
 
+jest.mock('../services/audit/auditService')
 jest.mock('../services/licenceService')
 jest.mock('../services/userService')
 
@@ -46,9 +48,10 @@ const probationRes = {
   redirect: jest.fn(),
 } as unknown as Response
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
-const middleware = checkLicenceAccess(licenceService)
+const middleware = checkLicenceAccess(auditService, licenceService)
 
 beforeEach(() => {
   req.params = { licenceId: '1' }

@@ -1,5 +1,6 @@
 import { telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
 import { AuditEvent, AuditService as HmppsAuditService, SubjectType } from '@ministryofjustice/hmpps-audit-client'
+import { Request } from 'express'
 import { User } from '../../@types/CvlUserDetails'
 import {
   ApproverSearchResponse,
@@ -9,12 +10,12 @@ import {
   VaryApproverCaseloadSearchResponse,
 } from '../../@types/licenceApiClientTypes'
 import logger from '../../../logger'
-import { AuditPolicy } from './routeAuditPolicy'
+import getAuditPolicy, { AuditPolicy } from './routeAuditPolicy'
 import config from '../../config'
 
 const methodEventPrefix: { [key: string]: string } = {
   GET: 'VIEW',
-  POST: 'SUBMIT',
+  POST: 'CREATE',
   PUT: 'EDIT',
   DELETE: 'DELETE',
 }
@@ -162,6 +163,19 @@ export default class AuditService {
       nomisId,
       user,
     )
+    await this.sendAuditEvent(auditEventMessage)
+  }
+
+  async logPageAccessFailure(req: Request, licence: Licence | undefined, user: User): Promise<void> {
+    const path = `${req.method} ${req.baseUrl}${req.path}`
+    const routePolicy = getAuditPolicy(path)
+    if (!routePolicy?.policy) {
+      logger.error(`No audit policy found for route: ${path}`)
+      return
+    }
+
+    const eventType = `${methodEventPrefix[req.method]}_${routePolicy.policy.eventType}_FAILURE`
+    const auditEventMessage = this.createAuditEvent(eventType, licence, req.id, user)
     await this.sendAuditEvent(auditEventMessage)
   }
 

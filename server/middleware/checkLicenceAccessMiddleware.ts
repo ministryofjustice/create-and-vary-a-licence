@@ -2,8 +2,9 @@ import { RequestHandler } from 'express'
 import getUrlAccessByStatus from '../utils/urlAccessByStatus'
 import LicenceService from '../services/licenceService'
 import logger from '../../logger'
+import AuditService from '../services/audit/auditService'
 
-export default function checkLicenceAccess(licenceService: LicenceService): RequestHandler {
+export default function checkLicenceAccess(auditService: AuditService, licenceService: LicenceService): RequestHandler {
   return async (req, res, next) => {
     if (req.params.licenceId) {
       try {
@@ -15,7 +16,7 @@ export default function checkLicenceAccess(licenceService: LicenceService): Requ
               logger.info(
                 `Prison caseload ${user?.prisonCaseload} denied access to licence ID ${licence.id} ${licence.prisonCode}`,
               )
-              // TODO: add here
+              await auditService.logPageAccessFailure(req, licence, user)
               return res.redirect('/access-denied')
             }
           }
@@ -40,7 +41,7 @@ export default function checkLicenceAccess(licenceService: LicenceService): Requ
                 `Probation teams ${user?.probationTeamCodes} denies access to licence ID ${licence.id} ${licence.probationTeamCode}`,
               )
 
-              // TODO: add here
+              await auditService.logPageAccessFailure(req, licence, user)
               return res.redirect('/access-denied')
             }
           }
@@ -48,7 +49,7 @@ export default function checkLicenceAccess(licenceService: LicenceService): Requ
           // Is the URL requested allowed for a licence in this status?
           if (!getUrlAccessByStatus(req.path, licence.id, licence.statusCode, user.username)) {
             logger.info(`URL access denied to licence ID ${licence.statusCode} ${licence.id} ${req.path}`)
-            // TODO: add here
+            await auditService.logPageAccessFailure(req, licence, user)
             return res.redirect('/access-denied')
           }
         }

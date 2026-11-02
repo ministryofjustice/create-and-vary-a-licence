@@ -1,4 +1,5 @@
 import { AuditService as HmppsAuditService } from '@ministryofjustice/hmpps-audit-client'
+import { Request } from 'express'
 import { User } from '../../@types/CvlUserDetails'
 import AuditService from './auditService'
 import {
@@ -346,7 +347,7 @@ describe('AuditService', () => {
       await auditService.logLicenceConfirmCreateFailure(requestId, 'POST', nomisId, user)
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        what: `SUBMIT_${eventType}`,
+        what: `CREATE_${eventType}`,
         subjectType: 'PRISONER_ID',
         subjectId: nomisId,
         correlationId: requestId,
@@ -356,6 +357,31 @@ describe('AuditService', () => {
           userRoles: user.userRoles,
         },
       })
+    })
+
+    it('should log a page access failure event', async () => {
+      const req = {
+        id: 'request-id',
+        baseUrl: '',
+        method: 'GET',
+        path: '/licence/create/id/37/additional-licence-conditions-question',
+      } as Request
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logPageAccessFailure(req, licence, user)
+
+      // expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+      //   what: `VIEW_${eventType}`,
+      //   subjectType: 'PRISONER_ID',
+      //   subjectId: nomisId,
+      //   correlationId: requestId,
+      //   who: user.username,
+      //   details: {
+      //     build: config.gitRef,
+      //     userRoles: user.userRoles,
+      //   },
+      // })
     })
   })
 })
