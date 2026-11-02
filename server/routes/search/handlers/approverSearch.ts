@@ -2,9 +2,11 @@ import { Request, Response } from 'express'
 import PrisonerService from '../../../services/prisonerService'
 import SearchService from '../../../services/searchService'
 import { ApproverSearchResponse } from '../../../@types/licenceApiClientTypes'
+import AuditService from '../../../services/audit/auditService'
 
 export default class ApproverSearch {
   constructor(
+    private readonly auditService: AuditService,
     private readonly searchService: SearchService,
     private readonly prisonerService: PrisonerService,
   ) {}
@@ -56,6 +58,8 @@ export default class ApproverSearch {
 
     const allPrisons = await this.prisonerService.getPrisons()
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
+
+    await this.auditService.logApproverSearchEvent(req.id, queryTerm, results, res.locals.user)
 
     return res.render('pages/search/approverSearch/approverSearch', {
       queryTerm,
