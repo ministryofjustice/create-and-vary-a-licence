@@ -117,6 +117,7 @@ describe('preLicenceCreationMiddleware', () => {
     expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(1)
     expect(auditService.logLicenceConfirmCreateFailure).toHaveBeenCalledWith(
       req.id,
+      req.method,
       req.params.nomisId,
       res.locals.user,
     )
@@ -132,6 +133,7 @@ describe('preLicenceCreationMiddleware', () => {
     expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(1)
     expect(auditService.logLicenceConfirmCreateFailure).toHaveBeenCalledWith(
       req.id,
+      req.method,
       req.params.nomisId,
       res.locals.user,
     )
