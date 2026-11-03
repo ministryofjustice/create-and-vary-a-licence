@@ -32,6 +32,16 @@ generic-service:
     HDC_URL: 'https://licences.prison.service.justice.gov.uk/'
     HDC_CREATION_ENABLED: false
 
+    # HMPPS audit
+    AUDIT_ENABLED: true
+    AUDIT_SQS_REGION: "eu-west-2"
+    AUDIT_SERVICE_NAME: "create-and-vary-a-licence"
+
+  namespace_secrets:
+    sqs-hmpps-audit-secret:
+      AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
+      AUDIT_SQS_QUEUE_NAME: 'sqs_queue_name'
+
 gotenberg:
   replicaCount: 2
   env:
