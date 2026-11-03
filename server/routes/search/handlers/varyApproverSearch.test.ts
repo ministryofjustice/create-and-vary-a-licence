@@ -4,13 +4,16 @@ import SearchService from '../../../services/searchService'
 import { VaryApproverCase } from '../../../@types/licenceApiClientTypes'
 import { User } from '../../../@types/CvlUserDetails'
 import LicenceType from '../../../enumeration/licenceType'
+import AuditService from '../../../services/audit/auditService'
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
 
+jest.mock('../../../services/audit/auditService')
 jest.mock('../../../services/searchService')
 
 describe('Route Handlers - Search - Vary Approver Search', () => {
-  const handler = new VaryApproverSearchRoutes(searchService)
+  const handler = new VaryApproverSearchRoutes(auditService, searchService)
   let req: Request
   let res: Response
 
@@ -131,6 +134,13 @@ describe('Route Handlers - Search - Vary Approver Search', () => {
       req.query = { queryTerm: 'test' }
 
       await handler.GET(req, res)
+
+      expect(auditService.logVaryApproverSearchEvent).toHaveBeenCalledWith(
+        req.id,
+        req.query.queryTerm,
+        searchResponse,
+        res.locals.user,
+      )
 
       expect(res.render).toHaveBeenCalledWith('pages/search/varyApproverSearch/varyApproverSearch', {
         queryTerm: 'test',

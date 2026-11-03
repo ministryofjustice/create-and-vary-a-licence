@@ -1,9 +1,13 @@
 import { Request, Response } from 'express'
 import SearchService from '../../../services/searchService'
 import { VaryApproverCaseloadSearchResponse } from '../../../@types/licenceApiClientTypes'
+import AuditService from '../../../services/audit/auditService'
 
 export default class VaryApproverSearch {
-  constructor(private readonly searchService: SearchService) {}
+  constructor(
+    private readonly auditService: AuditService,
+    private readonly searchService: SearchService,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const enteredQueryTerm = req.query?.queryTerm as string
@@ -40,6 +44,8 @@ export default class VaryApproverSearch {
         resultsCount: regionCasesResponse.length,
       },
     }
+
+    await this.auditService.logVaryApproverSearchEvent(req.id, queryTerm, results, res.locals.user)
 
     return res.render('pages/search/varyApproverSearch/varyApproverSearch', {
       queryTerm,

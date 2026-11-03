@@ -5,15 +5,18 @@ import SearchService from '../../../services/searchService'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { ApprovalCase } from '../../../@types/licenceApiClientTypes'
 import { User } from '../../../@types/CvlUserDetails'
+import AuditService from '../../../services/audit/auditService'
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
+jest.mock('../../../services/audit/auditService')
 jest.mock('../../../services/searchService')
 jest.mock('../../../services/prisonerService')
 
 describe('Route Handlers - Search - Prison Approver Search', () => {
-  const handler = new ApproverSearchRoutes(searchService, prisonerService)
+  const handler = new ApproverSearchRoutes(auditService, searchService, prisonerService)
   let req: Request
   let res: Response
 
@@ -169,7 +172,6 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
       await handler.GET(req, res)
 
       expect(searchService.getPrisonApproverSearchResults).not.toHaveBeenCalled()
-
       expect(res.render).toHaveBeenCalledWith('pages/search/approverSearch/approverSearch', {
         queryTerm: '',
         backLink: '/licence/approve/cases',
@@ -199,6 +201,13 @@ describe('Route Handlers - Search - Prison Approver Search', () => {
     searchService.getPrisonApproverSearchResults.mockResolvedValue(searchResponse)
     req.query = { queryTerm: 'test' }
     await handler.GET(req, res)
+
+    expect(auditService.logApproverSearchEvent).toHaveBeenCalledWith(
+      req.id,
+      req.query.queryTerm,
+      searchResponse,
+      res.locals.user,
+    )
 
     expect(res.render).toHaveBeenCalledWith('pages/search/approverSearch/approverSearch', {
       queryTerm: 'test',
