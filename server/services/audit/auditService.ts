@@ -174,7 +174,7 @@ export default class AuditService {
       return
     }
 
-    const eventType = `${methodEventPrefix[req.method]}_${routePolicy.policy.eventType}_FAILURE`
+    const eventType = `${routePolicy.policy.eventType}_FAILURE`
     const auditEventMessage = this.createAuditEvent(eventType, licence, req.id, user)
     await this.sendAuditEvent(auditEventMessage)
   }

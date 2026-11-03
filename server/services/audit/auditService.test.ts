@@ -364,24 +364,25 @@ describe('AuditService', () => {
         id: 'request-id',
         baseUrl: '',
         method: 'GET',
-        path: '/licence/create/id/37/additional-licence-conditions-question',
+        path: '/licence/create/id/37/bespoke-conditions',
       } as Request
 
+      const eventType = 'VIEW_BESPOKE_CONDITIONS'
       hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
 
       await auditService.logPageAccessFailure(req, licence, user)
 
-      // expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-      //   what: `VIEW_${eventType}`,
-      //   subjectType: 'PRISONER_ID',
-      //   subjectId: nomisId,
-      //   correlationId: requestId,
-      //   who: user.username,
-      //   details: {
-      //     build: config.gitRef,
-      //     userRoles: user.userRoles,
-      //   },
-      // })
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: `${eventType}_FAILURE`,
+        subjectType: 'CRN',
+        subjectId: licence.crn,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+        },
+      })
     })
   })
 })
