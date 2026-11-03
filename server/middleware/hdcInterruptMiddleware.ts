@@ -17,7 +17,7 @@ export default function hdcInterruptMiddleware(): RequestHandler {
       return next()
     }
 
-    const interruptPath = `/licence/create/id/${licence.id}/interrupt`
+    const interruptPath = `/licence/hdc/create/id/${licence.id}/interrupt`
     if (req.method === 'GET') {
       return res.redirect(interruptPath)
     }

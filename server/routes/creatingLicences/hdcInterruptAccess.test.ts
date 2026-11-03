@@ -50,7 +50,7 @@ describe('HDC interrupt route access', () => {
   })
 
   it('renders the interrupt without redirecting to itself', async () => {
-    const response = await request(app).get('/licence/create/id/1/interrupt').expect(200)
+    const response = await request(app).get('/licence/hdc/create/id/1/interrupt').expect(200)
     expect(response.text).toContain(
       'You must complete the address checks in HDC before you can continue with this licence in CVL.',
     )
@@ -62,7 +62,7 @@ describe('HDC interrupt route access', () => {
     '/licence/create/id/1/initial-meeting-name',
     '/licence/create/id/1/additional-licence-conditions',
   ])('redirects an authorised COM from %s', async path => {
-    await request(app).get(path).expect(302).expect('Location', '/licence/create/id/1/interrupt')
+    await request(app).get(path).expect(302).expect('Location', '/licence/hdc/create/id/1/interrupt')
   })
 
   it.each([
@@ -86,7 +86,7 @@ describe('HDC interrupt route access', () => {
     await request(app).post(path).send({}).expect(302).expect('Location', '/access-denied')
   })
 
-  it.each(['/licence/create/id/1/check-your-answers', '/licence/create/id/1/interrupt'])(
+  it.each(['/licence/create/id/1/check-your-answers', '/licence/hdc/create/id/1/interrupt'])(
     'enforces team access before the HDC journey for %s',
     async path => {
       user.probationTeamCodes = ['OTHER']
@@ -95,7 +95,7 @@ describe('HDC interrupt route access', () => {
     },
   )
 
-  it.each(['/licence/create/id/1/check-your-answers', '/licence/create/id/1/interrupt'])(
+  it.each(['/licence/create/id/1/check-your-answers', '/licence/hdc/create/id/1/interrupt'])(
     'enforces case restrictions for %s',
     async path => {
       licenceService.checkComCaseAccess.mockResolvedValue({ crn: 'X12345', type: 'RESTRICTED' })
@@ -105,13 +105,13 @@ describe('HDC interrupt route access', () => {
 
   it('enforces role access on the interrupt', async () => {
     user.userRoles = [AuthRole.READONLY]
-    await request(app).get('/licence/create/id/1/interrupt').expect(302).expect('Location', '/access-denied')
+    await request(app).get('/licence/hdc/create/id/1/interrupt').expect(302).expect('Location', '/access-denied')
   })
 
   it('allows the interrupt when the feature is disabled to redirect back to the journey', async () => {
     config.hdc.hdcCreationEnabled = false
     await request(app)
-      .get('/licence/create/id/1/interrupt')
+      .get('/licence/hdc/create/id/1/interrupt')
       .expect(302)
       .expect('Location', '/licence/create/id/1/check-your-answers')
   })

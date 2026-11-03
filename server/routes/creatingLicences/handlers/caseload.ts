@@ -96,7 +96,7 @@ export default class CaseloadRoutes {
         comCase.isReplacementForOptedOutLicence ||
         comCase.isReplacementForRefusedLicence)
     ) {
-      return `/licence/create/id/${comCase.licenceId}/interrupt`
+      return `/licence/hdc/create/id/${comCase.licenceId}/interrupt`
     }
 
     return `/licence/create/id/${comCase.licenceId}/check-your-answers`

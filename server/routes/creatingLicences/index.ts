@@ -1,6 +1,5 @@
 import { RequestHandler, Router } from 'express'
 import checkLicenceAccessForJourney from '../../middleware/checkLicenceAccessForJourney'
-import checkLicenceAccess from '../../middleware/checkLicenceAccessMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
@@ -24,7 +23,6 @@ import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import UserType from '../../enumeration/userType'
 import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMiddleware'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
-import InterruptHandler from './handlers/hdc/interruptHandler'
 
 export default function Index({
   licenceService,
@@ -36,7 +34,6 @@ export default function Index({
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create${path}`
-  const hdcInterruptHandler = new InterruptHandler(licenceService)
 
   /*
    * The fetchLicence middleware will call the licenceAPI during each GET request on the create a licence journey
@@ -51,15 +48,6 @@ export default function Index({
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccessForJourney(licenceService),
       ...handlers,
-    )
-
-  const getWithHdcInterruptAccess = (path: string, handler: RequestHandler) =>
-    router.get(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      handler,
     )
 
   const getWithHardStopCheck = (path: string, handler: RequestHandler) => {
@@ -140,7 +128,6 @@ export default function Index({
   {
     const controller = new CheckAnswersRoutes(licenceService, conditionService, hdcService)
     get('/id/:licenceId/check-your-answers', controller.GET)
-    getWithHdcInterruptAccess('/id/:licenceId/interrupt', hdcInterruptHandler.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }
   {

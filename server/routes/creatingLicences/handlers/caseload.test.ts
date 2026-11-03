@@ -436,7 +436,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     })
 
     it('should route HDC and HDC replacement cases to the interrupt handler', () => {
-      const interruptPath = '/licence/create/id/3/interrupt'
+      const interruptPath = '/licence/hdc/create/id/3/interrupt'
 
       expect(
         handler.findCreateLinkToDisplay({

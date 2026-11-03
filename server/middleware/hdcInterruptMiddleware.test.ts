@@ -44,12 +44,12 @@ describe('hdcInterruptMiddleware', () => {
     '/licence/view/id/1/show',
   ])('redirects a COM visiting %s to the interrupt', path => {
     middleware({ ...req, path } as Request, res, next)
-    expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/interrupt')
+    expect(res.redirect).toHaveBeenCalledWith('/licence/hdc/create/id/1/interrupt')
     expect(next).not.toHaveBeenCalled()
   })
 
   it.each(['POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'])('blocks %s even on the interrupt route', method => {
-    middleware({ ...req, method, path: '/licence/create/id/1/interrupt' } as Request, res, next)
+    middleware({ ...req, method, path: '/licence/hdc/create/id/1/interrupt' } as Request, res, next)
     expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     expect(next).not.toHaveBeenCalled()
   })

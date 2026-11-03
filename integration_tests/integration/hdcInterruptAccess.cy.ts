@@ -27,7 +27,7 @@ context('HDC interrupt user access', () => {
 
       cy.visit('/licence/create/id/1/initial-meeting-name')
 
-      cy.location('pathname').should('eq', '/licence/create/id/1/interrupt')
+      cy.location('pathname').should('eq', '/licence/hdc/create/id/1/interrupt')
       cy.get('#hdc-opt-in-interrupt-page-heading').should('contain', 'This person has opted in to HDC')
       cy.contains('You must complete the address checks in HDC before you can continue with this licence in CVL.')
     })
