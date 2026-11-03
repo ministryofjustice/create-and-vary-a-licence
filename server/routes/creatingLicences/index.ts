@@ -41,13 +41,13 @@ export default function Index({
    * This means that for each page, the licence will already exist in context, and so the handlers will not need
    * to explicitly inject the licence data into their individual view contexts.
    */
-  const get = (path: string, ...handlers: RequestHandler[]) =>
+  const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccessForJourney(licenceService),
-      ...handlers,
+      handler,
     )
 
   const getWithHardStopCheck = (path: string, handler: RequestHandler) => {
