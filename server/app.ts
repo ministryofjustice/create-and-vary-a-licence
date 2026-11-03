@@ -42,7 +42,7 @@ export default function createApp(services: Services, applicationInfo: Applicati
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.url)))
   app.use(trimRequestBody())
-  app.use(authorisationMiddleware)
+  app.use(authorisationMiddleware(services.auditService))
   app.use(setUpCsrf())
   app.get(/(.*)/, getFrontendComponents(services))
   app.use(setupRoutes(services, nunjucksEnvironment))

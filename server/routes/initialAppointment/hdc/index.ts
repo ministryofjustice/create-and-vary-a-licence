@@ -23,7 +23,7 @@ export default function Index(services: Services): Router {
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkLicenceAccess(auditService, licenceService),
       licenceKindCheckMiddleware([
         LicenceKind.CRD,
@@ -39,7 +39,7 @@ export default function Index(services: Services): Router {
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkLicenceAccess(auditService, licenceService),
       licenceKindCheckMiddleware([
         LicenceKind.CRD,
