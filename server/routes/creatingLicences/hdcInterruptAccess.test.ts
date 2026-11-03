@@ -61,8 +61,8 @@ describe('HDC interrupt route access', () => {
     '/licence/create/id/1/edit',
     '/licence/create/id/1/initial-meeting-name',
     '/licence/create/id/1/additional-licence-conditions',
-  ])('redirects an authorised COM from %s', async path => {
-    await request(app).get(path).expect(302).expect('Location', '/licence/hdc/create/id/1/interrupt')
+  ])('denies a COM directly visiting %s', async path => {
+    await request(app).get(path).expect(302).expect('Location', '/access-denied')
   })
 
   it.each([

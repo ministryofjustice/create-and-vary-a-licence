@@ -6,6 +6,7 @@ import { User } from '../@types/CvlUserDetails'
 import LicenceKind from '../enumeration/LicenceKind'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AuthRole from '../enumeration/authRole'
+import logger from '../../logger'
 
 describe('hdcInterruptMiddleware', () => {
   const middleware = hdcInterruptMiddleware()
@@ -19,7 +20,7 @@ describe('hdcInterruptMiddleware', () => {
     req = { method: 'GET', path: '/licence/create/id/1/check-your-answers' } as Request
     res = {
       locals: {
-        user: { isProbationUser: true, userRoles: [AuthRole.RESPONSIBLE_OFFICER] },
+        user: { username: 'COM1', isProbationUser: true, userRoles: [AuthRole.RESPONSIBLE_OFFICER] },
         licence: {
           id: 1,
           kind: LicenceKind.HDC,
@@ -42,22 +43,35 @@ describe('hdcInterruptMiddleware', () => {
     '/licence/create/id/1/edit',
     '/licence/create/id/1/initial-meeting',
     '/licence/view/id/1/show',
-  ])('redirects a COM visiting %s to the interrupt', path => {
+  ])('denies a COM directly visiting %s', path => {
     middleware({ ...req, path } as Request, res, next)
-    expect(res.redirect).toHaveBeenCalledWith('/licence/hdc/create/id/1/interrupt')
-    expect(next).not.toHaveBeenCalled()
-  })
-
-  it.each(['POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'])('blocks %s even on the interrupt route', method => {
-    middleware({ ...req, method, path: '/licence/hdc/create/id/1/interrupt' } as Request, res, next)
     expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     expect(next).not.toHaveBeenCalled()
   })
 
-  it('blocks licence updates', () => {
-    middleware({ ...req, method: 'POST' } as Request, res, next)
+  it.each(['POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'])('denies %s requests to a guarded page', method => {
+    middleware({ ...req, method, path: '/licence/create/id/1/check-your-answers' } as Request, res, next)
     expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     expect(next).not.toHaveBeenCalled()
+  })
+
+  it('logs the reason and request details when denying a COM', () => {
+    const warn = jest.spyOn(logger, 'warn').mockImplementation()
+
+    middleware({ ...req, originalUrl: '/licence/create/id/1/check-your-answers' } as Request, res, next)
+
+    expect(warn).toHaveBeenCalledWith(
+      {
+        licenceId: 1,
+        username: 'COM1',
+        method: 'GET',
+        path: '/licence/create/id/1/check-your-answers',
+      },
+      'Blocked COM access because HDC address checks are incomplete for an opted-in replacement licence',
+    )
+    expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+    expect(next).not.toHaveBeenCalled()
+    warn.mockRestore()
   })
 
   it.each([

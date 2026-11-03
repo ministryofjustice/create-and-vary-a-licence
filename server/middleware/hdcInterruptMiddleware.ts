@@ -17,12 +17,15 @@ export default function hdcInterruptMiddleware(): RequestHandler {
       return next()
     }
 
-    const interruptPath = `/licence/hdc/create/id/${licence.id}/interrupt`
-    if (req.method === 'GET') {
-      return res.redirect(interruptPath)
-    }
-
-    logger.info(`Access denied while HDC interrupt applies for licence ${licence.id}`)
+    logger.warn(
+      {
+        licenceId: licence.id,
+        username: user.username,
+        method: req.method,
+        path: req.originalUrl || req.path,
+      },
+      'Blocked COM access because HDC address checks are incomplete for an opted-in replacement licence',
+    )
     return res.redirect('/access-denied')
   }
 }

@@ -21,15 +21,14 @@ context('HDC interrupt user access', () => {
 
   const comRoles = [['ROLE_LICENCE_RO'], ['ROLE_LICENCE_RO', 'ROLE_LICENCE_ACO']]
   comRoles.forEach(roles => {
-    it(`interrupts a COM with roles ${roles.join(', ')} on shared appointment pages`, () => {
+    it(`denies direct navigation for a COM with roles ${roles.join(', ')} on shared appointment pages`, () => {
       cy.task('stubProbationSignIn', roles)
       cy.signIn()
 
-      cy.visit('/licence/create/id/1/initial-meeting-name')
+      cy.visit('/licence/create/id/1/initial-meeting-name', { failOnStatusCode: false })
 
-      cy.location('pathname').should('eq', '/licence/hdc/create/id/1/interrupt')
-      cy.get('#hdc-opt-in-interrupt-page-heading').should('contain', 'This person has opted in to HDC')
-      cy.contains('You must complete the address checks in HDC before you can continue with this licence in CVL.')
+      cy.location('pathname').should('eq', '/access-denied')
+      cy.get('#access-denied-page').should('exist')
     })
   })
 
