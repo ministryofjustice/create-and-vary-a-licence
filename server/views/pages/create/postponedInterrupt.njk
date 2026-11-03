@@ -1,0 +1,45 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "moj/components/interruption-card/macro.njk" import interruptionCard -%}
+
+{% set pageTitle = applicationName + " - HDC application postponed" %}
+{% set pageId = "hdc-postponed-interrupt-page" %}
+{% set backLinkHref = backLink %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="moj-interruption-card">
+                <div class="moj-interruption-card__content">
+                    <h1 class="govuk-heading-l moj-interruption-card__heading" id="hdc-postponed-interrupt-page-heading">
+                        HDC application postponed
+                    </h1>
+                    <div class="govuk-body-l moj-interruption-card__body">
+                        <p>
+                            You can continue working on this licence but it can only be submitted if the application resumes.
+                        </p>
+                        <p>
+                            Contact {{ omuContact }} to ask for the application to be refused if this person needs a licence for a standard release.
+                        </p>
+                        <p>
+                            <a href="{{ hdcUrl }}" class="govuk-link postponed-interrupt__link">Check the HDC service</a> for more information about the HDC application.
+                        </p>
+                        <div class="postponed-interrupt__actions">
+                            <a href="{{ toCheckYourAnswer }}"
+                               role="button"
+                               draggable="false"
+                               class="govuk-button postponed-interrupt__button">
+                                Continue
+                            </a>
+                            <p>
+                                <a href="{{ backLink }}" class="govuk-link postponed-interrupt__link">
+                                    Return to case list
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

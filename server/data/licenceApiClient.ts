@@ -29,6 +29,7 @@ import type {
   CreateLicenceResponse,
   CreateVariationResponse,
   EditLicenceResponse,
+  EditVariationRequest,
   EligibilityAssessment,
   ExternalTimeServedRecordRequest,
   ExternalTimeServedRecordResponse,
@@ -62,7 +63,6 @@ import type {
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
-  UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
@@ -279,10 +279,6 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/submit`, data: body }, { username: user.username })
   }
 
-  async triggerReleaseProcess(prisonNumber: string): Promise<void> {
-    await this.post({ path: `/licence/trigger-release-prisoner`, data: { prisonNumber } })
-  }
-
   /** @deprecated use a custom api endpoint instead */
   async matchLicences({
     statuses,
@@ -379,6 +375,13 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<CreateVariationResponse>
   }
 
+  async editVariation(variationId: string, request: EditVariationRequest, user: User): Promise<void> {
+    return (await this.post(
+      { path: `/variations/id/${variationId}/edit`, data: request },
+      { username: user?.username },
+    )) as Promise<void>
+  }
+
   async updateSpoDiscussion(licenceId: string, request: UpdateSpoDiscussionRequest, user: User): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/spo-discussion`, data: request }, { username: user?.username })
   }
@@ -414,14 +417,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username },
     )) as Promise<AuditEvent[]>
-  }
-
-  async updatePrisonInformation(
-    licenceId: string,
-    request: UpdatePrisonInformationRequest,
-    user?: User,
-  ): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/prison-information`, data: request }, { username: user?.username })
   }
 
   async approveVariation(licenceId: string, user: User): Promise<void> {
@@ -712,6 +707,12 @@ export default class LicenceApiClient extends RestClient {
   async getUpcomingReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
     return (await this.get({
       path: `/cvl-report/upcoming-releases-with-monitoring`,
+    })) as Promise<UpcomingReleasesWithMonitoringConditionsResponse[]>
+  }
+
+  async getRecentReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
+    return (await this.get({
+      path: `/cvl-report/recent-releases-with-monitoring`,
     })) as Promise<UpcomingReleasesWithMonitoringConditionsResponse[]>
   }
 

@@ -687,6 +687,60 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/variations/id/{variationId}/edit': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Updates the status of a submitted variation so that it is ready to be edited.
+     * @description Updates the status of a submitted variation so that it is ready to be edited. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['editVariation']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/user/unsubscribe': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description Unsubscribe user to report */
+    post: operations['unsubscribe']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/user/subscribe': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description Subscribe user to report */
+    post: operations['subscribe']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/recalculate-licence-start-dates': {
     parameters: {
       query?: never
@@ -883,6 +937,7 @@ export interface paths {
     put?: never
     /**
      * Updates the standard conditions on a licence to the latest policy available for the licence
+     * @deprecated
      * @description Updates the standard conditions on a licence to the latest policy available for the licence. Requires ROLE_CVL_ADMIN.
      */
     post: operations['updateLicencePolicy']
@@ -1602,6 +1657,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/user/subscriptions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description User Subscriptions */
+    get: operations['subscriptions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/subject-access-request': {
     parameters: {
       query?: never
@@ -1684,6 +1756,23 @@ export interface paths {
     }
     /** @description Streams the entire result set of the sync query execution as a csv file. */
     get: operations['downloadCsv']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/reports/{reportId}/{reportVariantId}/download/xlsx': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description Streams the entire result set of the sync query execution as an Excel (xlsx) file. Unlike the csv download, cell types are explicit, so values such as room numbers are not reinterpreted as dates when the file is opened in Excel. */
+    get: operations['downloadXlsx']
     put?: never
     post?: never
     delete?: never
@@ -2197,6 +2286,26 @@ export interface paths {
      * @description Returns a list of UpcomingReleasesWithMonitoringConditionsResponse objects
      */
     get: operations['getUpcomingReleasesWithMonitoringConditions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/cvl-report/recent-releases-with-monitoring': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve list of recent cases with electronic monitoring conditions for FTR-56 report
+     * @description Returns a list of UpcomingReleasesWithMonitoringConditionsResponse objects
+     */
+    get: operations['getRecentReleasesWithMonitoringConditions']
     put?: never
     post?: never
     delete?: never
@@ -2941,7 +3050,7 @@ export interface components {
        * @description The type of additional condition, either licence or post sentence supervision
        * @enum {string}
        */
-      conditionType: 'AP' | 'PSS'
+      conditionType: 'AP'
     }
     /** @description Describes the data entered for an additional condition */
     AdditionalConditionData: {
@@ -3059,6 +3168,30 @@ export interface components {
       changes?: {
         [key: string]: unknown
       } | null
+    }
+    /** @description Request object for editing a variation licence */
+    EditVariationRequest: {
+      /**
+       * @description The username of the person who is updating this status
+       * @example X12333
+       */
+      username: string
+    }
+    AnySubscribableRequest: {
+      reportId: string
+      reportVariantId: string
+    }
+    UserSubscription: {
+      id: string
+      userId: string
+      reportId: string
+      reportVariantId: string
+      status: string
+      tableId: string
+      /** Format: date-time */
+      createdTime: string
+      /** Format: date-time */
+      updatedTime?: string | null
     }
     /** @description Request object for updating licence start dates for a batch of licences. */
     RecalculateLicenceStartDatesRequest: {
@@ -4577,6 +4710,21 @@ export interface components {
         | 'NOT_STARTED'
         | 'ELIGIBILITY_CHECKS_COMPLETE'
         | 'RISK_CHECKS_COMPLETE'
+      /**
+       * @description Whether this HDC licence is currently postponed.
+       * @example true
+       */
+      isHdcPostponed: boolean
+      /**
+       * @description Is this licence a replacement for an opted out licence?
+       * @example true
+       */
+      isReplacementForOptedOutLicence: boolean
+      /**
+       * @description Is this licence a replacement for a refused licence?
+       * @example true
+       */
+      isReplacementForRefusedLicence: boolean
     }
     /** @description Search Criteria for CA Caseload Search */
     CaCaseloadSearch: {
@@ -4694,6 +4842,11 @@ export interface components {
        * @example Leeds (HMP)
        */
       prisonDescription?: string | null
+      /**
+       * @description Whether the case is postponed in the HDC service
+       * @example false
+       */
+      isHdcPostponed: boolean
       hasNomisLicence: boolean
     }
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
@@ -4865,6 +5018,15 @@ export interface components {
        * @enum {string}
        */
       type: 'BESPOKE'
+    }
+    UserReportSubscription: {
+      userId: string
+      reportId: string
+      reportVariantId: string
+      tableId: string
+      reportStatus: string
+      /** Format: date-time */
+      reportUpdatedTime?: string | null
     }
     ExternalTimeServedRecordResponse: {
       /**
@@ -5053,6 +5215,51 @@ export interface components {
     }
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
+      /**
+       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 07700 900000
+       */
+      appointmentAlternativeTelephoneNumber?: string | null
+      /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /** @description The address of initial appointment */
+      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
+      /**
+       * @description Whether a licence is missing appointment time
+       * @example false
+       */
+      missingAppointmentTime?: boolean | null
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
+      appointmentTelephoneNumber?: string | null
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][] | null
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string | null
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Test Person
+       */
+      createdByFullName?: string | null
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string | null
+      kind: string
       /** @description The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
@@ -5164,6 +5371,31 @@ export interface components {
        * @example Cardiff-A
        */
       probationTeamCode?: string | null
+      eligibleKind?: string | null
+      /**
+       * @description The telephone number to contact the prison
+       * @example 0161 234 4747
+       */
+      prisonTelephone?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
+       * @example 24/08/2022 11:30:33
+       */
+      supersededDate?: string | null
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       * @example 24/08/2022 09:30:33
+       */
+      dateLastUpdated?: string | null
+      /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
+      comEmail?: string | null
+      /** @deprecated */
+      isVariation: boolean
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
       isEligibleForEarlyRelease: boolean
       /**
@@ -5173,79 +5405,15 @@ export interface components {
        */
       licenceStartDate?: string | null
       /**
-       * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
-       */
-      earliestReleaseDate?: string | null
-      /**
        * @description The agency description of the detaining prison
        * @example Leeds (HMP)
        */
       prisonDescription?: string | null
       /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string | null
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string | null
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /**
        * @description The username of the person who last updated this licence
        * @example X34433
        */
       updatedByUsername?: string | null
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean | null
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string | null
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Test Person
-       */
-      createdByFullName?: string | null
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][] | null
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][] | null
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string | null
-      /**
-       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 0114 2557665
-       */
-      appointmentTelephoneNumber?: string | null
-      /** @description The address of initial appointment */
-      licenceAppointmentAddress?: components['schemas']['AddressResponse'] | null
-      /**
-       * @description Whether a licence is missing appointment time
-       * @example false
-       */
-      missingAppointmentTime?: boolean | null
-      /**
-       * @description The status of the electronic monitoring provider
-       * @example NOT_NEEDED
-       * @enum {string}
-       */
-      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
-      /**
-       * @description An alternative UK telephone number to contact the person the offender should meet for their initial meeting
-       * @example 07700 900000
-       */
-      appointmentAlternativeTelephoneNumber?: string | null
-      kind: string
       /**
        * @description The current status code for this licence
        * @example IN_PROGRESS
@@ -5362,19 +5530,21 @@ export interface components {
        * @example 23/08/2022 12:12
        */
       appointmentTime?: string | null
-      eligibleKind?: string | null
       /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
-      prisonTelephone?: string | null
+      earliestReleaseDate?: string | null
       /**
-       * @description The email address for the supervising probation officer
-       * @example jane.jones@nps.gov.uk
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
        */
-      comEmail?: string | null
-      /** @deprecated */
-      isVariation: boolean
+      submittedByFullName?: string | null
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string | null
       /**
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
@@ -5385,20 +5555,12 @@ export interface components {
        * @example true
        */
       isReviewNeeded: boolean
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       * @example 24/08/2022 09:30:33
-       */
-      dateLastUpdated?: string | null
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       * @example 24/08/2022 11:30:33
-       */
-      supersededDate?: string | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean | null
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean | null
       /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
@@ -5544,7 +5706,7 @@ export interface components {
     CvlFields: {
       /**
        * @description The type of licence this person should have based on their current dates, NB: this may differ from the current licence type if sentence dates have changed since any licence has been created
-       * @example AP_PSS
+       * @example AP
        * @enum {string}
        */
       licenceType: 'AP' | 'AP_PSS' | 'PSS'
@@ -6321,6 +6483,16 @@ export interface components {
       isInHardStopPeriod: boolean
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      /**
+       * @description Is this licence a replacement for an opted out licence?
+       * @example true
+       */
+      isReplacementForOptedOutLicence: boolean
+      /**
+       * @description Is this licence a replacement for a refused HDC licence?
+       * @example true
+       */
+      isReplacementForRefusedLicence: boolean
       /**
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
@@ -7262,6 +7434,16 @@ export interface components {
        * @example false
        */
       isHdcMigration: boolean
+      /**
+       * @description Whether this HDC licence is currently postponed.
+       * @example true
+       */
+      isPostponed: boolean
+      /**
+       * @description Is this licence a replacement for an opted in CRD licence?
+       * @example false
+       */
+      isReplacementForOptedInLicence: boolean
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -9007,6 +9189,12 @@ export interface components {
         | 'TIMED_OUT'
         | 'REVIEWED_WITHOUT_VARIATION'
         | 'REVIEWED_WITH_VARIATION'
+        | 'INACTIVE_WHEN_HDC_OPT_OUT'
+        | 'CRD_CREATED_WHEN_HDC_OPT_OUT'
+        | 'INACTIVE_WHEN_HDC_OPT_IN'
+        | 'CRD_CREATED_WHEN_HDC_OPT_IN'
+        | 'INACTIVE_WHEN_HDC_REFUSED'
+        | 'CRD_CREATED_WHEN_HDC_REFUSED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -9056,6 +9244,7 @@ export interface components {
       isMissing: boolean
       /** @enum {string|null} */
       loadType?: 'sync' | 'async' | null
+      schedule?: string | null
     }
     ChildVariantDefinition: {
       id: string
@@ -9178,6 +9367,7 @@ export interface components {
       type?: 'boolean' | 'date' | 'double' | 'HTML' | 'long' | 'string' | 'time' | 'timestamp' | null
       header?: boolean | null
       mergeRows?: boolean | null
+      defaultSort?: boolean | null
     }
     VariantDefinition: {
       id: string
@@ -9204,6 +9394,7 @@ export interface components {
       description?: string | null
       sections: components['schemas']['DashboardSectionDefinition'][]
       filterFields?: components['schemas']['FieldDefinition'][] | null
+      childVariants?: components['schemas']['DashboardDefinition'][] | null
     }
     DashboardOptionDefinition: {
       useRagColour?: boolean | null
@@ -12250,6 +12441,204 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  editVariation: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        variationId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EditVariationRequest']
+      }
+    }
+    responses: {
+      /** @description The variation is ready for editing. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The variation for the provided ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  unsubscribe: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AnySubscribableRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UserSubscription']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  subscribe: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AnySubscribableRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UserSubscription']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Gone */
@@ -15518,6 +15907,62 @@ export interface operations {
       }
     }
   }
+  subscriptions: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UserReportSubscription'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getSarContentByReference: {
     parameters: {
       query?: {
@@ -15779,12 +16224,6 @@ export interface operations {
         filters: {
           [key: string]: string
         }
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
       }
       header?: never
       path: {
@@ -15849,7 +16288,82 @@ export interface operations {
   downloadCsv: {
     parameters: {
       query: {
-        dataProductDefinitionsPath?: string
+        /**
+         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
+         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
+         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
+         *           filters.someMultiselectFilter=a,b,c
+         * @example {
+         *       "filters.date.start": "2023-04-25",
+         *       "filters.date.end": "2023-05-30",
+         *       "filters.someMultiselectFilter": "a,b,c"
+         *     }
+         */
+        filters: {
+          [key: string]: string
+        }
+        /** @description List of column names to include in the generated report. If not provided all the columns will be returned. */
+        columns?: string[]
+        sortColumn?: string
+        sortedAsc?: boolean
+      }
+      header?: never
+      path: {
+        reportId: string
+        reportVariantId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  downloadXlsx: {
+    parameters: {
+      query: {
         /**
          * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
          *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
@@ -15940,12 +16454,6 @@ export interface operations {
         filters: {
           [key: string]: string
         }
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
       }
       header?: never
       path: {
@@ -16026,12 +16534,6 @@ export interface operations {
         filters: {
           [key: string]: string
         }
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
       }
       header?: never
       path: {
@@ -17470,6 +17972,12 @@ export interface operations {
           | 'TIMED_OUT'
           | 'REVIEWED_WITHOUT_VARIATION'
           | 'REVIEWED_WITH_VARIATION'
+          | 'INACTIVE_WHEN_HDC_OPT_OUT'
+          | 'CRD_CREATED_WHEN_HDC_OPT_OUT'
+          | 'INACTIVE_WHEN_HDC_OPT_IN'
+          | 'CRD_CREATED_WHEN_HDC_OPT_IN'
+          | 'INACTIVE_WHEN_HDC_REFUSED'
+          | 'CRD_CREATED_WHEN_HDC_REFUSED'
         )[]
         sortBy?: string
         sortOrder?: string
@@ -17544,12 +18052,6 @@ export interface operations {
          * @example HTML
          */
         renderMethod?: 'HTML' | 'PDF' | 'SVG'
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
       }
       header?: never
       path?: never
@@ -17606,14 +18108,7 @@ export interface operations {
   }
   definitionSummary: {
     parameters: {
-      query?: {
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
-      }
+      query?: never
       header?: never
       path: {
         /**
@@ -17676,23 +18171,6 @@ export interface operations {
   definition: {
     parameters: {
       query: {
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
-        /**
-         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
-         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
-         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
-         *           filters.someMultiselectFilter=a,b,c
-         * @example {
-         *       "filters.date.start": "2023-04-25",
-         *       "filters.date.end": "2023-05-30",
-         *       "filters.someMultiselectFilter": "a,b,c"
-         *     }
-         */
         filters: {
           [key: string]: string
         }
@@ -17764,23 +18242,6 @@ export interface operations {
   dashboardDefinition: {
     parameters: {
       query: {
-        /**
-         * @description This optional parameter sets the path of the directory of the data product definition files your application will use.
-         *           "This query parameter is intended to be used in conjunction with the `dpr.lib.dataProductDefinitions.host` property to retrieve definition files from another application by using a web client.
-         * @example definitions/prisons/orphanage
-         */
-        dataProductDefinitionsPath?: string
-        /**
-         * @description The filter query parameters have to start with the prefix "filters." followed by the name of the filter.
-         *           For range filters, like date for instance, these need to be followed by a .start or .end suffix accordingly.
-         *           For multiselect filters, these are passed as one query parameter per filter with a comma separated list of values:
-         *           filters.someMultiselectFilter=a,b,c
-         * @example {
-         *       "filters.date.start": "2023-04-25",
-         *       "filters.date.end": "2023-05-30",
-         *       "filters.someMultiselectFilter": "a,b,c"
-         *     }
-         */
         filters: {
           [key: string]: string
         }
@@ -17858,7 +18319,72 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description A list of last minute handover cases */
+      /** @description A list of upcoming cases with electronic monitoring conditions cases */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UpcomingReleasesWithMonitoringConditionsResponse'][]
+        }
+      }
+      /** @description Bad request, request parameters must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getRecentReleasesWithMonitoringConditions: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A list of recent cases with electronic monitoring conditions cases */
       200: {
         headers: {
           [name: string]: unknown

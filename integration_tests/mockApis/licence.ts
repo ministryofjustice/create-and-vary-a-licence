@@ -415,6 +415,8 @@ export default {
     responsibleComFullName?: string
     isEligibleForEarlyRelease: boolean
     hasAppointmentTimeType?: string
+    isReplacementForOptedOutLicence?: boolean
+    isReplacementForRefusedLicence?: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -431,12 +433,15 @@ export default {
           electronicMonitoringProviderStatus: options.electronicMonitoringProviderStatus || 'NOT_NEEDED',
           responsibleComFullName: options.responsibleComFullName || null,
           isEligibleForEarlyRelease: options.isEligibleForEarlyRelease || false,
+          isReplacementForOptedOutLicence: options.isReplacementForOptedOutLicence || false,
+          isReplacementForRefusedLicence: options.isReplacementForRefusedLicence || false,
         },
       },
     })
   },
 
   stubGetHdcLicence: (options: {
+    isReplacementForOptedInLicence?: boolean
     licenceId?: string
     firstNightCurfewTimes?: {
       fromTime?: string
@@ -465,6 +470,7 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           kind: options.kind ?? LicenceKind.HDC,
+          isReplacementForOptedInLicence: options.isReplacementForOptedInLicence ?? false,
           statusCode: options.statusCode ?? licencePlaceholder.statusCode,
           typeCode: options.typeCode ?? licencePlaceholder.typeCode,
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate ?? '01/03/2021',
@@ -1413,23 +1419,6 @@ export default {
     })
   },
 
-  stubUpdatePolicy: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: `/licences-api/licence/id/(\\d*)/update-policy`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          policyUpdated: false,
-          policyVersion: '3.0',
-        },
-      },
-    })
-  },
-
   stubGetLicencePolicyConditions: (version = ACTIVE_POLICY_VERSION): SuperAgentRequest => {
     let policy: LicencePolicyResponse
     switch (version) {
@@ -2071,6 +2060,8 @@ export default {
     licenceId: number
     licenceStatus: string
     licenceCreationType: string
+    isReplacementForOptedOutLicence?: boolean
+    isReplacementForRefusedLicence?: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -2097,6 +2088,8 @@ export default {
             hardStopDate: '03/01/2023',
             hardStopWarningDate: '01/01/2023',
             licenceCreationType: options.licenceCreationType,
+            isReplacementForOptedOutLicence: options.isReplacementForOptedOutLicence || false,
+            isReplacementForRefusedLicence: options.isReplacementForRefusedLicence || false,
           },
         ],
       },

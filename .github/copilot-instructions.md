@@ -52,7 +52,7 @@ docker compose -f docker-compose-test.yml pull
 docker compose -f docker-compose-test.yml up -d
 ```
 
-This starts: redis, wiremock (port 9091), gotenberg (port 3002), localstack (port 4566)
+This starts: redis, wiremock (port 9091), gotenberg (port 3002)
 
 Then:
 ```bash
@@ -73,7 +73,7 @@ Note: This test is NOT run in CI currently.
 ### Running Locally
 
 **Local Development** (requires VPN):
-1. Start required containers: `docker compose up -d` (redis, gotenberg, localstack)
+1. Start required containers: `docker compose up -d` (redis, gotenberg)
 2. Create `.env` file: Run `./create-env-file.sh` (fetches secrets from k8s dev namespace)
 3. Start dev server: `npm run start:dev`
    - Runs concurrent watch processes for views, TypeScript, Node, and SASS
@@ -86,14 +86,14 @@ Note: This test is NOT run in CI currently.
 ## Project Structure
 
 ### Root Files
-- `server.ts` - Application entry point, initializes app insights, starts Express server and SQS listeners
+- `server.ts` - Application entry point, initializes app insights, starts Express server
 - `logger.ts` - Bunyan logger configuration
 - `package.json` - Dependencies and npm scripts
 - `tsconfig.json` - TypeScript config extending @tsconfig/node24
 - `eslint.config.mjs` - ESLint configuration
 - `jest.setup.ts` - Jest setup (imports reflect-metadata)
 - `cypress.config.ts` - Cypress E2E test configuration
-- `docker-compose.yml` - Local dev containers (redis, gotenberg, localstack)
+- `docker-compose.yml` - Local dev containers (redis, gotenberg)
 - `docker-compose-test.yml` - Integration test containers (adds wiremock)
 - `Dockerfile` - Multi-stage build for deployment
 
@@ -101,13 +101,12 @@ Note: This test is NOT run in CI currently.
 - `bin/build-css.sh` - Compiles SASS with load paths for govuk-frontend, MOJ frontend, and DPR frontend
 - `create-env-file.sh` - Fetches secrets from kubernetes dev namespace for local development
 - `generate-*-api-types.sh` - Regenerate TypeScript types from OpenAPI specs (5 scripts for different APIs)
-- `localstack/01-setup-queues.sh` - Creates SQS queues for prison, probation, and domain events
 
 ### Server Directory (`server/`)
 
 **Core Files**:
 - `app.ts` - Express app factory, sets up middleware, routes, error handling
-- `index.ts` - Exports app factory and SQS listeners
+- `index.ts` - Exports app factory
 - `config.ts` - Environment variable configuration with production requirement checks
 - `errorHandler.ts` - Express error handling middleware
 - `applicationInfo.ts` - Build and git info for health endpoints
@@ -119,7 +118,6 @@ Note: This test is NOT run in CI currently.
 - `data/` - API clients (licenceApiClient, prisonApiClient, deliusClient, etc.), Redis client
 - `enumeration/` - Enums for licence types, status codes, roles
 - `licences/` - Core licence domain logic
-- `listeners/` - SQS event listeners for prison/probation/domain events
 - `middleware/` - Express middleware (auth, session, security, CSRF, health checks)
 - `routes/` - Route handlers organized by feature (creatingLicences, varyingLicences, approvingLicences, etc.)
 - `services/` - Business logic services (licenceService, prisonerService, conditionService, etc.)
@@ -156,10 +154,7 @@ Note: This test is NOT run in CI currently.
    - Stores test results and reports
 
 3. `integration_test` job:
-   - Uses integration-tests executor (node + redis + localstack)
-   - Installs AWS CLI
-   - Waits 10 seconds for localstack to start
-   - Creates SQS queues via AWS CLI
+   - Uses integration-tests executor (node + redis)
    - Downloads wiremock.jar, runs on port 9091
    - Runs `npm run start-feature` in background
    - Waits 5 seconds for app to start
@@ -181,11 +176,6 @@ Note: This test is NOT run in CI currently.
 - prison-register - Prison information
 - gotenberg - HTML to PDF conversion
 
-**Message Queues** (SQS via localstack in dev):
-- create_and_vary_a_licence_prison_events_queue
-- create_and_vary_a_licence_probation_events_queue
-- create_and_vary_a_licence_domain_events_queue
-
 **Frontend Libraries**:
 - govuk-frontend 5.13.0
 - @ministryofjustice/frontend 8.0.0
@@ -199,25 +189,23 @@ Note: This test is NOT run in CI currently.
 
 3. **Linting runs after build**: This is intentional - integration test code references compiled types.
 
-4. **Localstack timing**: Wait 10 seconds after starting localstack before creating queues (as per CircleCI config).
+4. **Wiremock port**: Integration tests use port 9091 for wiremock (configured in docker-compose-test.yml).
 
-5. **Wiremock port**: Integration tests use port 9091 for wiremock (configured in docker-compose-test.yml).
-
-6. **Gotenberg host resolution**:
+5. **Gotenberg host resolution**:
    - Mac/Windows: Uses `host.docker.internal` automatically
    - Linux: Requires `extra_hosts` in docker-compose.yml (already configured)
 
-7. **Generated API types**: After regenerating types from OpenAPI specs, manually:
+6. **Generated API types**: After regenerating types from OpenAPI specs, manually:
    - Replace double quotes with single quotes
    - Remove semicolons
    - Add `eslint-disable camelcase` for non-camelCase properties
    - Remove or ignore empty interfaces
 
-8. **Redis required**: Redis is required even for local dev (session store and token caching).
+7. **Redis required**: Redis is required even for local dev (session store and token caching).
 
-9. **VPN required for local dev**: Connecting to DEV environment APIs requires VPN access.
+8. **VPN required for local dev**: Connecting to DEV environment APIs requires VPN access.
 
-10. **Environment files**:
+9. **Environment files**:
     - `.env` for local dev (created by `create-env-file.sh`)
     - `feature.env` for integration tests (already in repo)
 

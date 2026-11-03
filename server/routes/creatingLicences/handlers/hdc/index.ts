@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import fetchLicence from '../../../../middleware/fetchLicenceMiddleware'
+import checkLicenceAccess from '../../../../middleware/checkLicenceAccessMiddleware'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 
@@ -29,7 +29,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       preLicenceCreationMiddleware(probationService),
       handler,
     )
@@ -38,12 +38,12 @@ export default function Index({
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
   {
-    const controller = new ConfirmCreateRoutes(probationService, licenceService, prisonerService)
+    const controller = new ConfirmCreateRoutes(licenceService, prisonerService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)
     post('/create/nomisId/:nomisId/confirm', controller.POST)
   }

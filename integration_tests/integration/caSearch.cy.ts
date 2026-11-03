@@ -5,13 +5,15 @@ import ChangeLocationPage from '../pages/changeLocationPage'
 context('Search for a person', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubPrisonSignIn')
-    cy.task('stubGetPrisonUserDetails')
-    cy.task('stubGetPrisonOmuCaseload')
-    cy.task('stubGetProbationOmuCaseload')
-    cy.task('stubGetPrisons')
-    cy.task('stubGetCompletedLicence', { statusCode: 'APPROVED', typeCode: 'AP_PSS' })
-    cy.task('stubRecordAuditEvent')
+    cy.task('stubAll', [
+      'stubPrisonSignIn',
+      'stubGetPrisonUserDetails',
+      'stubGetPrisonOmuCaseload',
+      'stubGetProbationOmuCaseload',
+      'stubGetPrisons',
+      ['stubGetCompletedLicence', { statusCode: 'APPROVED', typeCode: 'AP_PSS' }],
+      'stubRecordAuditEvent',
+    ])
   })
   const singleCaseload = {
     details: [

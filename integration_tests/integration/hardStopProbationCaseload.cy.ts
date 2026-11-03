@@ -6,12 +6,14 @@ context('Create a licence', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubGetCaseloadItemInHardStop')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubGetOmuEmail')
-    cy.task('stubGetBankHolidays', dates)
-    cy.task('stubCheckComCaseAccess')
+    cy.task('stubAll', [
+      'stubGetCaseloadItemInHardStop',
+      'stubProbationSignIn',
+      'stubGetStaffDetails',
+      'stubGetOmuEmail',
+      ['stubGetBankHolidays', dates],
+      'stubCheckComCaseAccess',
+    ])
     cy.signIn()
   })
 

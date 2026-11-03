@@ -1,0 +1,40 @@
+{% extends "layout.njk" %}
+
+{% set pageTitle = applicationName + " - HDC application refused" %}
+{% set pageId = "hdc-refused-interrupt-page" %}
+{% set backLinkHref = backLink %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="moj-interruption-card">
+                <div class="moj-interruption-card__content">
+                    <h1 class="govuk-heading-l moj-interruption-card__heading" id="hdc-refused-interrupt-page-heading">
+                        HDC application refused
+                    </h1>
+                    <div class="govuk-body-l moj-interruption-card__body">
+                        <p>
+                            This licence is now for a standard release.
+                        </p>
+                        <p>
+                            <a href="{{ hdcUrl }}" class="govuk-link refused-interrupt__link">Check the HDC service</a> for more information about the HDC application.
+                        </p>
+                        <div class="refused-interrupt__actions">
+                            <a href="{{ toCheckYourAnswer }}"
+                               role="button"
+                               draggable="false"
+                               class="govuk-button refused-interrupt__button">
+                                Continue
+                            </a>
+                            <p>
+                                <a href="{{ backLink }}" class="govuk-link refused-interrupt__link">
+                                    Return to case list
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

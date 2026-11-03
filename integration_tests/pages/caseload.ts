@@ -7,6 +7,8 @@ import PrisonWillCreateLicencePage from './prisonWillCreateLicencePage'
 import LicenceNotApprovedInTimePage from './licenceNotApprovedInTimePage'
 import HardStopLicencePage from './hardStopLicencePage'
 import RestrictedDetailsPage from './restrictedDetails'
+import OptOutInterruptPage from './optOutInterruptPage'
+import RefusedInterruptPage from './refusedInterruptPage'
 
 export default class CaseloadPage extends Page {
   private createLicenceButtonId = '#name-button-1'
@@ -51,6 +53,16 @@ export default class CaseloadPage extends Page {
   clickNameOfHardStopLicence = (): HardStopLicencePage => {
     cy.get(this.createLicenceButtonId).click()
     return Page.verifyOnPage(HardStopLicencePage)
+  }
+
+  clickNameOfOptedOutLicence = (): OptOutInterruptPage => {
+    cy.get(this.createLicenceButtonId).click()
+    return Page.verifyOnPage(OptOutInterruptPage)
+  }
+
+  clickNameOfRefusedLicence = (): RefusedInterruptPage => {
+    cy.get(this.createLicenceButtonId).click()
+    return Page.verifyOnPage(RefusedInterruptPage)
   }
 
   clickComName = (): ComDetailsPage => {

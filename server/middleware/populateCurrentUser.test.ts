@@ -25,6 +25,15 @@ const middleware = populateCurrentUser(userServiceMock, licenceServiceMock)
 beforeEach(() => {
   jest.resetAllMocks()
 
+  userServiceMock.getUser.mockResolvedValue({
+    active: false,
+    authSource: '',
+    name: '',
+    userId: '',
+    username: '',
+    uuid: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
+  } as UserDetails)
+
   res = {
     redirect: jest.fn(),
     locals: {
@@ -118,6 +127,7 @@ describe('populateCurrentUser', () => {
       hasMultipleCaseloadsInNomis: true,
       hasSelectedMultiplePrisonCaseloads: false,
       prisonCaseloadToDisplay: ['MDI'],
+      userUuid: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
     })
     expect(licenceServiceMock.updatePrisonUserDetails).toHaveBeenCalledWith({
       staffUsername: 'joebloggs',
@@ -167,7 +177,8 @@ describe('populateCurrentUser', () => {
       hasMultipleCaseloadsInNomis: true,
       hasSelectedMultiplePrisonCaseloads: false,
       prisonCaseloadToDisplay: ['MDI'],
-      reportUserId: '3000',
+      reportUserId: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
+      userUuid: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
     })
     expect(licenceServiceMock.updatePrisonUserDetails).toHaveBeenCalledWith({
       staffUsername: 'joebloggs',
@@ -283,6 +294,8 @@ describe('populateCurrentUser', () => {
       probationPduCodes: ['pduCode'],
       probationLauCodes: ['lauCode'],
       probationTeamCodes: ['teamCode-1', 'teamCode-4'],
+      reportUserId: null,
+      userUuid: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
     })
     expect(licenceServiceMock.updateComDetails).toHaveBeenCalledWith({
       staffIdentifier: 2000,
@@ -302,6 +315,10 @@ describe('populateCurrentUser', () => {
     userServiceMock.getUser.mockResolvedValue({
       name: 'Joe Bloggs',
       userId: 'some-id',
+      active: false,
+      authSource: '',
+      username: '',
+      uuid: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
     } as UserDetails)
     userServiceMock.getUserEmail.mockResolvedValue({
       email: 'jbloggs@prison.gov.uk',
@@ -312,7 +329,8 @@ describe('populateCurrentUser', () => {
     expect(req.session.currentUser).toMatchObject({
       displayName: 'Joe Bloggs',
       emailAddress: 'jbloggs@prison.gov.uk',
-      reportUserId: 'some-id',
+      reportUserId: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
+      userUuid: '25e43a79-bca4-4e67-b399-73b0f089d0c7',
     })
     expect(next).toHaveBeenCalled()
   })

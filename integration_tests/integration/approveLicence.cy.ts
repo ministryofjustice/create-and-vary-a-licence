@@ -6,17 +6,19 @@ import ApproveCasesPage from '../pages/approvalCases'
 context('Approve a licence', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubPrisonSignIn')
-    cy.task('stubGetPrisonUserDetails')
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' })
-    cy.task('stubGetApprovalCaseload')
-    cy.task('stubUpdateLicenceStatus', 1)
-    cy.task('stubRecordAuditEvent')
-    cy.task('stubGetPrisons')
-    cy.task('stubGetLicencePolicyConditions')
-    cy.task('stubGetActivePolicyConditions')
-    cy.task('stubGetPrisonerImage')
-    cy.task('stubGetStaffDetails')
+    cy.task('stubAll', [
+      'stubPrisonSignIn',
+      'stubGetPrisonUserDetails',
+      ['stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' }],
+      'stubGetApprovalCaseload',
+      ['stubUpdateLicenceStatus', 1],
+      'stubRecordAuditEvent',
+      'stubGetPrisons',
+      'stubGetLicencePolicyConditions',
+      'stubGetActivePolicyConditions',
+      'stubGetPrisonerImage',
+      'stubGetStaffDetails',
+    ])
   })
 
   const singleCaseload = {
@@ -92,7 +94,10 @@ context('Approve a licence', () => {
   })
 
   it('should display Approve licence heading if licence is of type AP', () => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' })
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'SUBMITTED',
+      typeCode: 'AP',
+    })
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -105,7 +110,11 @@ context('Approve a licence', () => {
   })
 
   it('should display Licence conditions heading if licence kind is HARD_STOP', () => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP', kind: 'HARD_STOP' })
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'SUBMITTED',
+      typeCode: 'AP',
+      kind: 'HARD_STOP',
+    })
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -150,7 +159,10 @@ context('Approve a licence', () => {
   })
 
   it('should get prisoner image', () => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' })
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'SUBMITTED',
+      typeCode: 'AP',
+    })
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -240,7 +252,9 @@ context('Approve a licence', () => {
 
   it('should show correct probation practitioner on approval and recently approved case tab', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: { name: 'Joe Bloggs', allocated: true } })
+    cy.task('stubGetRecentlyApprovedCaseload', {
+      probationPractitioner: { name: 'Joe Bloggs', allocated: true },
+    })
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
@@ -260,8 +274,12 @@ context('Approve a licence', () => {
       allocated: false,
     }
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-    cy.task('stubGetApprovalCaseload', { probationPractitioner: unallocatedProbationPractitioner })
-    cy.task('stubGetRecentlyApprovedCaseload', { probationPractitioner: unallocatedProbationPractitioner })
+    cy.task('stubGetApprovalCaseload', {
+      probationPractitioner: unallocatedProbationPractitioner,
+    })
+    cy.task('stubGetRecentlyApprovedCaseload', {
+      probationPractitioner: unallocatedProbationPractitioner,
+    })
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()

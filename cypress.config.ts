@@ -1,14 +1,19 @@
 import { defineConfig } from 'cypress'
 import 'reflect-metadata'
 import moment, { Moment } from 'moment/moment'
-import { resetStubs, verifyEndpointCalled, verifyEndpointCalledWith } from './integration_tests/wiremock'
+import {
+  collectStubs,
+  importStubs,
+  resetStubs,
+  verifyEndpointCalled,
+  verifyEndpointCalledWith,
+} from './integration_tests/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import licence from './integration_tests/mockApis/licence'
 import delius from './integration_tests/mockApis/delius'
 import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import prison from './integration_tests/mockApis/prison'
-import events from './integration_tests/support/events'
 import feComponent from './integration_tests/mockApis/feComponent'
 import manageUsersApi from './integration_tests/mockApis/manageUsers'
 import prisonRegister from './integration_tests/mockApis/prisonRegister'
@@ -23,19 +28,33 @@ export default defineConfig({
   reporterOptions: {
     configFile: 'reporter-config.json',
   },
+  video: false,
+  numTestsKeptInMemory: 0,
   taskTimeout: 60000,
   viewportHeight: 1200,
   viewportWidth: 1300,
   e2e: {
     setupNodeEvents(on) {
-      on('task', {
+      // Axe runs once per page per cypress run (set CYPRESS_AXE_ALWAYS=true to run on every visit)
+      const axeCheckedPages = new Set<string>()
+      const stubTasks = {
+        shouldRunAxe: (pageId: string): boolean => {
+          if (process.env.CYPRESS_AXE_ALWAYS === 'true') return true
+          if (axeCheckedPages.has(pageId)) return false
+          axeCheckedPages.add(pageId)
+          return true
+        },
         ...manageUsersApi,
         ...tokenVerification,
         reset: async () => {
-          await resetStubs()
-          await feComponent.stubFeComponents()
-          await feComponent.stubFeComponentsJs()
-          await feComponent.stubFeComponentsCss()
+          await resetStubs(
+            collectStubs(() => {
+              feComponent.stubFeComponents()
+              feComponent.stubFeComponentsJs()
+              feComponent.stubFeComponentsCss()
+              manageUsersApi.stubManageUser()
+            }),
+          )
           return null
         },
         verifyEndpointCalled,
@@ -89,7 +108,6 @@ export default defineConfig({
         stubMatchLicenceEvents: licence.stubMatchLicenceEvents,
         stubApproveVariation: licence.stubApproveVariation,
         stubReferVariation: licence.stubReferVariation,
-        stubUpdatePolicy: licence.stubUpdatePolicy,
         stubGetVaryApproverCaseload: licence.stubGetVaryApproverCaseload,
         stubGetLicencePolicyConditions: licence.stubGetLicencePolicyConditions,
         stubGetActivePolicyConditions: licence.stubGetActivePolicyConditions,
@@ -174,9 +192,6 @@ export default defineConfig({
 
         stubGotenbergApiPing: gotenbergApi.stubPing,
 
-        sendDomainEvent: events.sendDomainEvent,
-        sendPrisonEvent: events.sendPrisonEvent,
-        purgeQueues: events.purgeQueues,
         getNextWorkingDay: (dates: string[]): Moment => {
           const appointmentDate = moment().add(1, 'year').add(1, 'week').day(7)
           while (
@@ -187,6 +202,24 @@ export default defineConfig({
             appointmentDate.add(1, 'day')
           }
           return appointmentDate
+        },
+      }
+
+      type StubCall = string | [string, unknown]
+      on('task', {
+        ...stubTasks,
+        // Creates many stubs in a single wiremock call: stubAll([['stubGetLicence', {..}], 'stubRecordAuditEvent'])
+        stubAll: async (calls: StubCall[]) => {
+          const mappings = collectStubs(() =>
+            calls.forEach(call => {
+              const [name, arg] = Array.isArray(call) ? call : [call, undefined]
+              const stub = stubTasks[name as keyof typeof stubTasks] as (arg?: unknown) => unknown
+              if (!stub) throw new Error(`Unknown stub task: ${name}`)
+              stub(arg)
+            }),
+          )
+          await importStubs(mappings)
+          return null
         },
       })
     },

@@ -48,15 +48,6 @@ describe('Prison Api client tests', () => {
     expect(result.toString()).toEqual('image')
   })
 
-  it('Get prison information', async () => {
-    get.mockResolvedValue({ description: 'Moorland (HMP)' })
-
-    const result = await prisonApiClient.getPrisonInformation('MDI', { username: 'joebloggs' } as User)
-
-    expect(get).toHaveBeenCalledWith({ path: '/api/agencies/prison/MDI' }, { username: 'joebloggs' })
-    expect(result).toEqual({ description: 'Moorland (HMP)' })
-  })
-
   it('Get latest HDC status', async () => {
     get.mockResolvedValue({ approvalStatus: 'APPROVED' })
 

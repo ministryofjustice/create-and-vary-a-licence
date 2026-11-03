@@ -5,7 +5,6 @@ import type { TokenStore } from './tokenStore'
 import type {
   PrisonApiCaseload,
   PrisonApiUserDetail,
-  PrisonInformation,
   HomeDetentionCurfew,
   PrisonDetail,
 } from '../@types/prisonApiClientTypes'
@@ -35,13 +34,6 @@ export default class PrisonApiClient extends RestClient {
       },
       { username: user.username },
     )) as Promise<Buffer>
-  }
-
-  async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {
-    return (await this.get(
-      { path: `/api/agencies/prison/${prisonId}` },
-      { username: user?.username },
-    )) as Promise<PrisonInformation>
   }
 
   async getPrisons(): Promise<PrisonDetail[]> {

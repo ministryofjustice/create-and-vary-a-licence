@@ -2,50 +2,26 @@ import { Request, Response } from 'express'
 import { format } from 'date-fns'
 
 import LicenceService from '../../../services/licenceService'
-import { escapeCsv } from '../../../utils/utils'
+import { getCsvResponse, mapReleasesWithMonitoring } from '../utils/recentOrUpcomingReleaseMonitoringUtils'
 
 export default class UpcomingReleasesWithMonitoringConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const upcomingCases = await this.getUpcomingReleasesWithMonitoring()
+    const upcomingCases = mapReleasesWithMonitoring(await this.licenceService.getUpcomingReleasesWithMonitoring())
 
-    return res.render('pages/reports/upcomingReleasesWithMonitoring', {
+    return res.render('pages/reports/recentOrUpcomingReleasesWithMonitoring', {
       user,
       upcomingCases,
+      releaseType: 'Upcoming',
+      downloadCsvUrl: '/reports/upcoming-releases-with-monitoring/download-csv',
     })
   }
 
   GET_CSV = async (req: Request, res: Response): Promise<void> => {
-    const upcomingCases = await this.getUpcomingReleasesWithMonitoring()
-
-    const header = [
-      'Prison Number',
-      'Name',
-      'CRN',
-      'Licence Status',
-      'Ems conditions',
-      'EM Types',
-      'EM End Date',
-      'Licence Start Date',
-      'Licence Submitted Date',
-    ]
-
-    const csv = upcomingCases
-      .map(upcomingCases => [
-        upcomingCases.prisonNumber,
-        upcomingCases.fullName,
-        upcomingCases.crn,
-        upcomingCases.status,
-        escapeCsv(upcomingCases.emConditionCodes),
-        escapeCsv(upcomingCases.electronicMonitoringTypes),
-        upcomingCases.emEndDate,
-        upcomingCases.licenceStartDate,
-        upcomingCases.submittedDate,
-      ])
-      .map(row => row.join(','))
-      .join('\n')
+    const upcomingCases = mapReleasesWithMonitoring(await this.licenceService.getUpcomingReleasesWithMonitoring())
+    const { header, csv } = getCsvResponse(upcomingCases)
 
     res.type('text/csv')
     res.setHeader(
@@ -53,23 +29,5 @@ export default class UpcomingReleasesWithMonitoringConditionsRoutes {
       `attachment; filename=upcoming-releases-with-monitoring-conditions-report-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`,
     )
     res.send(`${header.join(',')}\n${csv}`)
-  }
-
-  private async getUpcomingReleasesWithMonitoring() {
-    const upcomingCases = await this.licenceService.getUpcomingReleasesWithMonitoring()
-
-    return upcomingCases.map(upcomingCase => {
-      return {
-        crn: upcomingCase.crn,
-        prisonNumber: upcomingCase.prisonNumber,
-        status: upcomingCase.status,
-        licenceStartDate: upcomingCase.licenceStartDate,
-        submittedDate: upcomingCase.submittedDate,
-        emConditionCodes: upcomingCase.emConditionCodes,
-        fullName: upcomingCase.fullName,
-        electronicMonitoringTypes: upcomingCase.electronicMonitoringTypes,
-        emEndDate: upcomingCase.emEndDate,
-      }
-    })
   }
 }

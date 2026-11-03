@@ -220,6 +220,49 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
 
+  describe('HDC postponed label', () => {
+    const hdcPostponedCase = {
+      name: 'Test Person',
+      crnNumber: 'A123456',
+      prisonerNumber: 'ABC123',
+      releaseDate: '20 December 2025',
+      releaseDateLabel: 'HDC actual date',
+      probationPractitioner: {
+        name: 'Joe Bloggs',
+        staffCode: 'ABC123',
+        allocated: true,
+      },
+      isClickable: true,
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      createLink: '/licence/create/nomisId/ABC123/confirm',
+      kind: LicenceKind.HDC,
+      isHdcPostponed: true,
+    }
+
+    it('should show HDC application postponed label when HDC is postponed and hdcCreationEnabled is true', () => {
+      const $ = render({ statusConfig, hdcCreationEnabled: true, caseload: [hdcPostponedCase] })
+
+      expect($('#release-date-1').text()).toBe('HDC actual date: 20 December 2025HDC application postponed')
+      expect($('.urgent-highlight-message').text().toString()).toEqual('HDC application postponed')
+    })
+
+    it('should show HDC release label when HDC is postponed but hdcCreationEnabled is false', () => {
+      const $ = render({ statusConfig, hdcCreationEnabled: false, caseload: [hdcPostponedCase] })
+
+      expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    })
+
+    it('should show HDC release label when hdcCreationEnabled is true but HDC is not postponed', () => {
+      const $ = render({
+        statusConfig,
+        hdcCreationEnabled: true,
+        caseload: [{ ...hdcPostponedCase, isHdcPostponed: false }],
+      })
+
+      expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+    })
+  })
+
   it('should highlight a HDC variation with a HDC release warning label', () => {
     const $ = render({
       statusConfig,

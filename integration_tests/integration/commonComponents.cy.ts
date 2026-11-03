@@ -5,8 +5,7 @@ import Page from '../pages/page'
 context('SignIn with common header', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
+    cy.task('stubAll', ['stubProbationSignIn', 'stubGetStaffDetails'])
   })
 
   it('Unauthenticated user directed to auth', () => {

@@ -1,8 +1,8 @@
 import VaryApproverCaseloadService from './varyApproverCaseloadService'
 import { User } from '../../@types/CvlUserDetails'
-import { LicenceApiClient } from '../../data'
+import LicenceApiClient from '../../data/licenceApiClient'
 
-jest.mock('../../data')
+jest.mock('../../data/licenceApiClient')
 
 describe('Vary Approver Caseload Service', () => {
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>

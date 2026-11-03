@@ -1,7 +1,7 @@
 import { User } from '../../@types/CvlUserDetails'
 import LicenceService from '../licenceService'
 import type { ComCreateCase, ComReviewCount, ComVaryCase } from '../../@types/licenceApiClientTypes'
-import { LicenceApiClient } from '../../data'
+import type LicenceApiClient from '../../data/licenceApiClient'
 
 export default class ComCaseloadService {
   constructor(

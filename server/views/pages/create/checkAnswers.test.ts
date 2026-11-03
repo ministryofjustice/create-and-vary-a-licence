@@ -88,6 +88,28 @@ describe('Create a Licence Views - Check Answers', () => {
     expect(successAlert.text()).toContain('Details updated.')
   })
 
+  it('should display a warning alert when an HDC licence is postponed', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, isPostponed: true },
+    })
+
+    const alertBanner = $('.moj-alert--warning')
+    expect(alertBanner.length).toBe(1)
+    expect(alertBanner.find('.moj-alert__heading').text().trim()).toBe('HDC application postponed')
+    expect(alertBanner.text()).toContain('This licence cannot be submitted until the application resumes')
+    expect(alertBanner.find('.moj-alert__icon').length).toBe(1)
+  })
+
+  it('should not display a warning alert when an HDC licence is postponed and HDC creation is disabled', () => {
+    const $ = render({
+      hdcCreationEnabled: false,
+      licence: { ...licence, isPostponed: true },
+    })
+
+    expect($('.moj-alert--warning').length).toBe(0)
+  })
+
   it('should display no alerts when they are not passed through', () => {
     const $ = render({
       banner: {},
@@ -333,6 +355,38 @@ describe('Create a Licence Views - Check Answers', () => {
 
     expect($2('.govuk-summary-list__actions').length).toBe(10)
     expect($2('[data-qa="send-licence-conditions"]').length).toBe(1)
+  })
+
+  it('should disable the submit button when an HDC licence is postponed', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, kind: 'HDC', isPostponed: true },
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    expect($('[data-qa="send-licence-conditions"]').prop('disabled')).toBe(true)
+  })
+
+  it('should enable the submit button when an HDC licence is postponed and HDC creation is disabled', () => {
+    const $ = render({
+      hdcCreationEnabled: false,
+      licence: { ...licence, kind: 'HDC', isPostponed: true },
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    expect($('[data-qa="send-licence-conditions"]').prop('disabled')).toBe(false)
+  })
+
+  it('should enable the submit button when an HDC licence is not postponed', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC', isPostponed: false },
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    expect($('[data-qa="send-licence-conditions"]').prop('disabled')).toBe(false)
   })
 
   it('should hide edit initial appointment buttons when canEditInitialAppt is false', () => {
@@ -652,5 +706,105 @@ describe('Create a Licence Views - Check Answers', () => {
     })
 
     expect($('[data-qa=curfew-address-change-link]').length).toBe(1)
+  })
+
+  it('should show opted in replacement info text below the heading while the licence is in progress', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, kind: 'HDC', isReplacementForOptedInLicence: true },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    const info = $('h1').next('[data-qa=hdc-replacement-info]')
+    expect(info.length).toBe(1)
+    expect(info.text()).toContain('Any additional or bespoke conditions you entered previously will be saved.')
+    expect(info.text()).toContain('You must enter any initial appointment details again and then submit the licence.')
+  })
+
+  it.each(['SUBMITTED', 'APPROVED', 'ACTIVE'])(
+    'should hide opted in replacement info text when the licence is %s',
+    statusCode => {
+      const $ = render({
+        hdcCreationEnabled: true,
+        licence: { ...licence, kind: 'HDC', isReplacementForOptedInLicence: true },
+        statusCode,
+      })
+
+      expect($('[data-qa=hdc-replacement-info]').length).toBe(0)
+    },
+  )
+
+  it('should hide opted in replacement info text for a new HDC licence', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, kind: 'HDC', isReplacementForOptedInLicence: false },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=hdc-replacement-info]').length).toBe(0)
+  })
+
+  it('should hide opted in replacement info text when HDC creation is disabled', () => {
+    const $ = render({
+      hdcCreationEnabled: false,
+      licence: { ...licence, kind: 'HDC', isReplacementForOptedInLicence: true },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=hdc-replacement-info]').length).toBe(0)
+  })
+
+  it('should show opted out replacement info text while the licence is in progress', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, isReplacementForOptedOutLicence: true },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=hdc-replacement-info]').text()).toContain(
+      'Any additional or bespoke conditions you entered previously will be saved.',
+    )
+  })
+
+  it('should show refused replacement info text while the licence is in progress', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, isReplacementForRefusedLicence: true },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=hdc-replacement-info]').text()).toContain(
+      'Any additional or bespoke conditions you entered previously will be saved.',
+    )
+  })
+
+  it('should hide opted out replacement info text once the licence is submitted', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, isReplacementForOptedOutLicence: true },
+      statusCode: 'SUBMITTED',
+    })
+
+    expect($('[data-qa=hdc-replacement-info]').length).toBe(0)
+  })
+
+  it('should hide opted out replacement info text for licences that are not replacements', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, isReplacementForOptedOutLicence: false },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=hdc-replacement-info]').length).toBe(0)
+  })
+
+  it('should hide opted out replacement info text when HDC creation is disabled', () => {
+    const $ = render({
+      hdcCreationEnabled: false,
+      licence: { ...licence, isReplacementForOptedOutLicence: true },
+      statusCode: 'IN_PROGRESS',
+    })
+
+    expect($('[data-qa=hdc-replacement-info]').length).toBe(0)
   })
 })

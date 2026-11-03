@@ -24,7 +24,7 @@ export default function checkComCaseAccessMiddleware(licenceService: LicenceServ
 
     try {
       const caseAccessDetails = await licenceService.checkComCaseAccess(request, user)
-      logger.info(`case access details : ${caseAccessDetails}`)
+      logger.info(`case access details : ${caseAccessDetails.crn}: ${caseAccessDetails.type}`)
       if (caseAccessDetails.type !== 'NONE') {
         logger.info(`Access denied to restricted case for user ${user.deliusStaffCode}, ${req.path}`)
         if (isVaryJourney) {

@@ -60,6 +60,7 @@ export default class ViewAndPrintCaseRoutes {
           link,
           licenceStatus,
           kind: caCase.kind,
+          isHdcPostponed: caCase.isHdcPostponed,
         }
       }),
       CaViewCasesTab,

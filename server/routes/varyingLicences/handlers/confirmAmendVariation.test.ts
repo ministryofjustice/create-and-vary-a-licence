@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import LicenceService from '../../../services/licenceService'
 import ConfirmAmendVariationRoutes from './confirmAmendVariation'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
 
 jest.mock('../../../services/licenceService')
@@ -53,11 +52,10 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
   describe('POST', () => {
     it('should update status to in progress when answer is yes and the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
-      licenceService.updatePolicy.mockResolvedValue({ policyUpdated: true, policyVersion: '2.0' })
 
       await handler.POST(req, res)
 
-      expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.VARIATION_IN_PROGRESS, {
+      expect(licenceService.editVariation).toHaveBeenCalledWith('1', {
         username: 'joebloggs',
       })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
@@ -65,11 +63,10 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
 
     it('should update status to in progress and update the standard conditions when answer is yes and the licence version is out of date', async () => {
       req.body = { answer: 'Yes' }
-      licenceService.updatePolicy.mockResolvedValue({ policyUpdated: true, policyVersion: '2.0' })
 
       await handler.POST(req, res)
 
-      expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.VARIATION_IN_PROGRESS, {
+      expect(licenceService.editVariation).toHaveBeenCalledWith('1', {
         username: 'joebloggs',
       })
 

@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express'
 import { Services } from '../../services'
-import fetchLicence from '../../middleware/fetchLicenceMiddleware'
+import checkLicenceAccess from '../../middleware/checkLicenceAccessMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
 import ViewAndPrintCaseRoutes from './handlers/viewCases'
@@ -25,7 +25,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
       checkComCaseAccessMiddleware(licenceService),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       handler,
     )
 
@@ -34,7 +34,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
       checkComCaseAccessMiddleware(licenceService),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       hdcActualDateCheckMiddleware(),
       handler,
     )

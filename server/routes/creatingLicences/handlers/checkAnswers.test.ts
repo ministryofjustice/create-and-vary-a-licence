@@ -120,7 +120,9 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       ] as FieldValidationError[]
       const original = config.finalThirdEnabled
       config.finalThirdEnabled = true
+
       await handler.GET(req, res)
+
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
@@ -421,6 +423,19 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   })
 
   describe('POST', () => {
+    it('should not submit a postponed HDC licence', async () => {
+      res.locals.licence = Object.assign(res.locals.licence, {
+        kind: LicenceKind.HDC,
+        isPostponed: true,
+        statusCode: LicenceStatus.IN_PROGRESS,
+      })
+
+      await handler.POST(req, res)
+
+      expect(licenceService.submitLicence).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+    })
+
     it('should redirect back with error messages in flash if licence fields are empty', async () => {
       res.locals.licence = {
         appointmentPerson: '',
@@ -450,7 +465,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
     it('should call the licence API to submit the licence for approval', async () => {
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(licenceService.submitLicence).toHaveBeenCalledWith('1', {
         username: 'joebloggs',
@@ -460,7 +474,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
     it('should redirect to the confirmation page', async () => {
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/confirmation')
     })
@@ -490,7 +503,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         version: '2.0',
       } as Licence
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
       expect(licenceService.submitLicence).toHaveBeenCalledWith('1', {
@@ -502,7 +514,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     it('should redirect to the reason-for-variation page if the licence is a variation', async () => {
       res.locals.licence.kind = LicenceKind.VARIATION
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/reason-for-variation')
     })
@@ -510,7 +521,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     it('should redirect to the reason-for-variation page if the licence is an HDC variation', async () => {
       res.locals.licence.kind = LicenceKind.HDC_VARIATION
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/reason-for-variation')
     })

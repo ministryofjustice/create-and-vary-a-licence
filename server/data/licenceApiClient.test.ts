@@ -26,7 +26,6 @@ import {
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
-  UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
@@ -364,6 +363,17 @@ describe('Licence API client tests', () => {
     expect(result).toEqual({ licenceId: 1 })
   })
 
+  it('Edit variation', async () => {
+    await licenceApiClient.editVariation('1', { username: 'joebloggs' }, {
+      username: 'joebloggs',
+    } as User)
+
+    expect(post).toHaveBeenCalledWith(
+      { path: '/variations/id/1/edit', data: { username: 'joebloggs' } },
+      { username: 'joebloggs' },
+    )
+  })
+
   it('Activate variation', async () => {
     await licenceApiClient.activateVariation(1, { username: 'joebloggs' } as User)
 
@@ -413,30 +423,6 @@ describe('Licence API client tests', () => {
     await licenceApiClient.discard('1', { username: 'joebloggs' } as User)
 
     expect(del).toHaveBeenCalledWith({ path: '/licence/id/1/discard' }, { username: 'joebloggs' })
-  })
-
-  it('Update prison information', async () => {
-    await licenceApiClient.updatePrisonInformation(
-      '1',
-      {
-        prisonCode: 'PVI',
-        prisonDescription: 'Pentonville (HMP)',
-        prisonTelephone: '+44 276 54545',
-      } as UpdatePrisonInformationRequest,
-      { username: 'joebloggs' } as User,
-    )
-
-    expect(put).toHaveBeenCalledWith(
-      {
-        path: '/licence/id/1/prison-information',
-        data: {
-          prisonCode: 'PVI',
-          prisonDescription: 'Pentonville (HMP)',
-          prisonTelephone: '+44 276 54545',
-        },
-      },
-      { username: 'joebloggs' },
-    )
   })
 
   it('Approve a licence variation', async () => {
@@ -1035,17 +1021,6 @@ describe('Licence API client tests', () => {
         },
         { username: 'joebloggs' },
       )
-    })
-  })
-
-  describe('trigger release process', () => {
-    it('should call to trigger the release process', async () => {
-      await licenceApiClient.triggerReleaseProcess('A1234AA')
-
-      expect(post).toHaveBeenCalledWith({
-        path: `/licence/trigger-release-prisoner`,
-        data: { prisonNumber: 'A1234AA' },
-      })
     })
   })
 

@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import fetchLicence from '../../../../../middleware/fetchLicenceMiddleware'
+import checkLicenceAccess from '../../../../../middleware/checkLicenceAccessMiddleware'
 import validationMiddleware from '../../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../../middleware/roleCheckMiddleware'
 import timeServedCheckMiddleware from '../../../../../middleware/timeServedCheckMiddleware'
@@ -43,7 +43,7 @@ export default function Index({ licenceService, conditionService, addressService
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA']),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       timeServedCheckMiddleware(userType),
       handler,
     )
@@ -52,7 +52,7 @@ export default function Index({ licenceService, conditionService, addressService
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA']),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       validationMiddleware(conditionService, type),
       timeServedCheckMiddleware(userType),
       handler,

@@ -4,7 +4,7 @@ import { User } from '../../@types/CvlUserDetails'
 import { ComCreateCase, ComVaryCase } from '../../@types/licenceApiClientTypes'
 import ComCaseloadService from './comCaseloadService'
 import { convertDateFormat } from '../../utils/utils'
-import { LicenceApiClient } from '../../data'
+import LicenceApiClient from '../../data/licenceApiClient'
 
 jest.mock('../prisonerService')
 jest.mock('../probationService')

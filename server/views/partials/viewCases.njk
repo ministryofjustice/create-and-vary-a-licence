@@ -124,8 +124,12 @@
             %}
         {% endif %}
 
+        {% set releaseDateHighlight = '<span class="info-highlight info-highlight-message"></span>' if case.isHdcPostponed else '' %}
+
         {% if case.kind == "TIME_SERVED"  %}
             {% set releaseDate = '<span class="urgent-highlight white-space-nowrap">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Time-served release</span>' %}
+        {% elseif case.isHdcPostponed %}
+            {% set releaseDate = '<span class="info-highlight white-space-nowrap">' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '<br><span class="info-highlight-message">HDC application postponed</span></span>' %}
         {% else %}
             {% set releaseDate = '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate | cvlDateToDateShort + '</p>' %}
         {% endif %}

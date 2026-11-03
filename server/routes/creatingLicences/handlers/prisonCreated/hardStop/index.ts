@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import fetchLicence from '../../../../../middleware/fetchLicenceMiddleware'
+import checkLicenceAccess from '../../../../../middleware/checkLicenceAccessMiddleware'
 import validationMiddleware from '../../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../../middleware/roleCheckMiddleware'
 
@@ -21,13 +21,13 @@ export default function Index({ licenceService, conditionService }: Services): R
    * to explicitly inject the licence data into their individual view contexts.
    */
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_CA']), fetchLicence(licenceService), handler)
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_CA']), checkLicenceAccess(licenceService), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA']),
-      fetchLicence(licenceService),
+      checkLicenceAccess(licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )

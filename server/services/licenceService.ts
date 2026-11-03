@@ -38,7 +38,6 @@ import type {
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdateElectronicMonitoringProgrammeRequest,
-  UpdatePrisonInformationRequest,
   UpdatePrisonUserRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
@@ -317,6 +316,10 @@ export default class LicenceService {
     return this.licenceApiClient.createVariation(licenceId, user)
   }
 
+  async editVariation(variationId: string, user: User): Promise<void> {
+    return this.licenceApiClient.editVariation(variationId, { username: user.username }, user)
+  }
+
   async updateSpoDiscussion(licenceId: string, spoDiscussion: UpdateSpoDiscussionRequest, user: User): Promise<void> {
     return this.licenceApiClient.updateSpoDiscussion(licenceId, spoDiscussion, user)
   }
@@ -373,14 +376,6 @@ export default class LicenceService {
     } as AuditRequest
 
     return this.licenceApiClient.getAuditEvents(requestBody, user)
-  }
-
-  async updatePrisonInformation(
-    licenceId: string,
-    prisonInformation: UpdatePrisonInformationRequest,
-    user?: User,
-  ): Promise<void> {
-    return this.licenceApiClient.updatePrisonInformation(licenceId, prisonInformation, user)
   }
 
   async approveVariation(licenceId: string, user: User): Promise<void> {
@@ -498,6 +493,10 @@ export default class LicenceService {
 
   async getUpcomingReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
     return this.licenceApiClient.getUpcomingReleasesWithMonitoring()
+  }
+
+  async getRecentReleasesWithMonitoring(): Promise<UpcomingReleasesWithMonitoringConditionsResponse[]> {
+    return this.licenceApiClient.getRecentReleasesWithMonitoring()
   }
 
   async getLicenceStatusCases(): Promise<LicenceStatusResponse[]> {

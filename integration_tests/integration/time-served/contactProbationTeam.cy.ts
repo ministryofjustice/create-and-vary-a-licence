@@ -9,8 +9,7 @@ context('Time Served – Contact Probation Team', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubPrisonSignIn')
-    cy.task('stubGetPrisonUserDetails')
+    cy.task('stubAll', ['stubPrisonSignIn', 'stubGetPrisonUserDetails'])
     cy.task('stubGetPrisonUserCaseloads', {
       details: [
         {
@@ -22,16 +21,14 @@ context('Time Served – Contact Probation Team', () => {
         },
       ],
     })
-    cy.task('stubGetCaseloadItemInHardStop')
-    cy.task('stubGetPrisons')
+    cy.task('stubAll', ['stubGetCaseloadItemInHardStop', 'stubGetPrisons'])
     cy.task('stubGetCompletedLicence', {
       statusCode: 'SUBMITTED',
       licenceStatus: 'TIMED_OUT',
       isTimeServed: true,
       kind: 'TIME_SERVED',
     })
-    cy.task('stubUpdateTimeServedExternalRecord')
-    cy.task('stubGetTimeServedExternalRecordReasonNotSet')
+    cy.task('stubAll', ['stubUpdateTimeServedExternalRecord', 'stubGetTimeServedExternalRecordReasonNotSet'])
     cy.signIn()
   })
 

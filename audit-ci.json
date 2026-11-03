@@ -3,6 +3,23 @@
   "package-manager": "auto",
   "registry": "https://registry.npmjs.org",
   "allowlist": [
-    "GHSA-73rr-hh4g-fpgx|mocha>diff"
+    "GHSA-73rr-hh4g-fpgx|mocha>diff",
+    "GHSA-hp3w-g68c-fv3c|@jest/expect>jest-snapshot>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|@jest/globals>@jest/expect>jest-snapshot>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|@jest/reporters>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|jest-circus>jest-runtime>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|jest-cli>@jest/core>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|jest-html-reporter>@jest/reporters>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js",
+    "GHSA-hp3w-g68c-fv3c|jest-resolve-dependencies>jest-snapshot>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|jest-runner>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|jest-runtime>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|jest-snapshot>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js>",
+    "GHSA-hp3w-g68c-fv3c|ts-jest>jest>@jest/core>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js",
+    "GHSA-pqg4-j6r4-53mv|concurrently>shell-quote",
+    "GHSA-vfj7-8cjw-p6xm|nodemon>chokidar>braces"
   ]
 }

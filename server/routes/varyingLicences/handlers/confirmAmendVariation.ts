@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import YesOrNo from '../../../enumeration/yesOrNo'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class ConfirmAmendVariationRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -16,8 +15,7 @@ export default class ConfirmAmendVariationRoutes {
     const { user } = res.locals
 
     if (answer === YesOrNo.YES) {
-      await this.licenceService.updateStatus(parseInt(licenceId, 10), LicenceStatus.VARIATION_IN_PROGRESS, user)
-      await this.licenceService.updatePolicy(licenceId)
+      await this.licenceService.editVariation(licenceId, user)
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     }
 

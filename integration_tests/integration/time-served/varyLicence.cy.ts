@@ -6,10 +6,7 @@ import { LicenceKind } from '../../../server/enumeration'
 context('Vary a licence - time served', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubGetOmuEmail')
-    cy.task('stubProbationSignIn')
-    cy.task('stubGetStaffDetails')
-    cy.task('stubMatchLicenceEvents')
+    cy.task('stubAll', ['stubGetOmuEmail', 'stubProbationSignIn', 'stubGetStaffDetails', 'stubMatchLicenceEvents'])
     cy.task('stubGetStaffVaryCaseload', {
       licenceId: 1,
       licenceStatus: LicenceStatus.ACTIVE,
@@ -21,9 +18,7 @@ context('Vary a licence - time served', () => {
       kind: LicenceKind.TIME_SERVED,
       isReviewNeeded: true,
     })
-    cy.task('stubReviewWithOutVariation')
-    cy.task('stubCheckComCaseAccess')
-    cy.task('stubUpdatePolicy')
+    cy.task('stubAll', ['stubReviewWithOutVariation', 'stubCheckComCaseAccess'])
     cy.signIn()
   })
 
@@ -38,9 +33,9 @@ context('Vary a licence - time served', () => {
     varyCasesPage.getLicenceStatusByIndex(1).should('contain', 'Review needed')
     const timelinePage = varyCasesPage.selectCase()
     timelinePage.checkThatPageHasTimeServedReviewNeededMessage()
-    const reviewLicencQuestionPage = timelinePage.clickReviewLicenceButton()
-    reviewLicencQuestionPage.selectNoToReviewWithOutVariation()
-    reviewLicencQuestionPage.clickContinue()
+    const reviewLicenceQuestionPage = timelinePage.clickReviewLicenceButton()
+    reviewLicenceQuestionPage.selectNoToReviewWithOutVariation()
+    reviewLicenceQuestionPage.clickContinue()
   })
 
   it('review without varying timeserved licence with out com', () => {
@@ -57,9 +52,9 @@ context('Vary a licence - time served', () => {
     varyCasesPage.getLicenceStatusByIndex(1).should('contain', 'Review needed')
     const timelinePage = varyCasesPage.selectCase()
     timelinePage.checkThatPageHasTimeServedReviewNeededMessage()
-    const reviewLicencQuestionPage = timelinePage.clickReviewLicenceButton()
-    reviewLicencQuestionPage.selectNoToReviewWithOutVariation()
-    reviewLicencQuestionPage.clickContinue()
+    const reviewLicenceQuestionPage = timelinePage.clickReviewLicenceButton()
+    reviewLicenceQuestionPage.selectNoToReviewWithOutVariation()
+    reviewLicenceQuestionPage.clickContinue()
   })
 
   it('vary timeserved licence with com', () => {
@@ -72,9 +67,9 @@ context('Vary a licence - time served', () => {
     varyCasesPage.getLicenceStatusByIndex(1).should('contain', 'Review needed')
     const timelinePage = varyCasesPage.selectCase()
     timelinePage.checkThatPageHasTimeServedReviewNeededMessage()
-    const reviewLicencQuestionPage = timelinePage.clickReviewLicenceButton()
-    reviewLicencQuestionPage.selectYesToVary()
-    const spoDiscussionPage = reviewLicencQuestionPage.clickContinueToSpoPage()
+    const reviewLicenceQuestionPage = timelinePage.clickReviewLicenceButton()
+    reviewLicenceQuestionPage.selectYesToVary()
+    const spoDiscussionPage = reviewLicenceQuestionPage.clickContinueToSpoPage()
     const vloDiscussionPage = spoDiscussionPage.selectYes().clickContinue()
     const checkAnswersPage = vloDiscussionPage.selectYes().clickContinue()
     const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
@@ -107,9 +102,9 @@ context('Vary a licence - time served', () => {
     varyCasesPage.getLicenceStatusByIndex(1).should('contain', 'Review needed')
     const timelinePage = varyCasesPage.selectCase()
     timelinePage.checkThatPageHasTimeServedReviewNeededMessage()
-    const reviewLicencQuestionPage = timelinePage.clickReviewLicenceButton()
-    reviewLicencQuestionPage.selectYesToVary()
-    const spoDiscussionPage = reviewLicencQuestionPage.clickContinueToSpoPage()
+    const reviewLicenceQuestionPage = timelinePage.clickReviewLicenceButton()
+    reviewLicenceQuestionPage.selectYesToVary()
+    const spoDiscussionPage = reviewLicenceQuestionPage.clickContinueToSpoPage()
     const vloDiscussionPage = spoDiscussionPage.selectYes().clickContinue()
     const checkAnswersPage = vloDiscussionPage.selectYes().clickContinue()
     const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
