@@ -16,7 +16,7 @@ import FirstNightCurfewTimesRoutes from './handlers/firstNightCurfewTimes'
 
 export default function Index(services: Services): Router {
   const router = Router()
-  const { conditionService, licenceService, hdcService } = services
+  const { auditService, conditionService, licenceService, hdcService } = services
 
   const routePrefix = (path: string) => `/licence/create/id/:licenceId/hdc${path}`
 

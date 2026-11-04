@@ -6,7 +6,7 @@ import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 import type { Services } from '../../../../services'
 import CurfewRoutes from './curfewRoutes'
 
-export default function Index({ licenceService, conditionService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create/id/:licenceId${path}`

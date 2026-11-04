@@ -23,7 +23,7 @@ import ManualAddress from './types/manualAddress'
 import PostcodeLookupInputValidation from './types/PostcodeLookupInputValidation'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
-export default function Index({ licenceService, conditionService, addressService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence${path}`

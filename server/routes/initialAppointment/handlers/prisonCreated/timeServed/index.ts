@@ -28,7 +28,7 @@ export const getTimeServedEditPath = (licence: Licence): string => {
   return `/licence/time-served/id/${licence.id}/check-your-answers`
 }
 
-export default function Index({ licenceService, conditionService, addressService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/time-served${path}`

@@ -8,7 +8,7 @@ import OutofboundsPremisesInputRoutes from './outOfBoundsPremisesInputRoutes'
 import OutOfBoundsPremisesListRoutes from './outOfBoundsPremisesListRoutes'
 import OutOfBoundsPremisesRemovalRoutes from './outOfBoundsPremisesRemovalRoutes'
 
-export default function Index({ licenceService, conditionService }: Services): Router {
+export default function Index({ auditService, conditionService, licenceService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create/id/:licenceId${path}`

@@ -19,7 +19,7 @@ import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMid
 
 export default function Index(services: Services): Router {
   const router = Router()
-  const { licenceService, conditionService } = services
+  const { auditService, licenceService, conditionService } = services
 
   const routePrefix = (path: string) => `/licence/create/id/:licenceId${path}`
 

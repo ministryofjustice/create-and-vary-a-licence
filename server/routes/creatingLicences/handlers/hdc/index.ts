@@ -11,6 +11,7 @@ import checkComCaseAccessMiddleware from '../../../../middleware/checkComCaseAcc
 import InterruptHandler from './interruptHandler'
 
 export default function Index({
+  auditService,
   licenceService,
   conditionService,
   probationService,

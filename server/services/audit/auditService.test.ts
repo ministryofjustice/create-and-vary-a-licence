@@ -1,4 +1,5 @@
 import { AuditService as HmppsAuditService } from '@ministryofjustice/hmpps-audit-client'
+import { Request } from 'express'
 import { User } from '../../@types/CvlUserDetails'
 import AuditService from './auditService'
 import {
@@ -319,6 +320,67 @@ describe('AuditService', () => {
             resultCount: expectedResultCount,
             returnedSubjectIds: expectedSubjectIds,
           },
+        },
+      })
+    })
+
+    it('should log a view licence confirm create failure event', async () => {
+      const eventType = 'LICENCE_CREATION_CONFIRMATION_FAILURE'
+      const nomisId = 'A1234BC'
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logLicenceConfirmCreateFailure(requestId, 'GET', nomisId, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: `VIEW_${eventType}`,
+        subjectType: 'PRISONER_ID',
+        subjectId: nomisId,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+        },
+      })
+
+      await auditService.logLicenceConfirmCreateFailure(requestId, 'POST', nomisId, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: `CREATE_${eventType}`,
+        subjectType: 'PRISONER_ID',
+        subjectId: nomisId,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+        },
+      })
+    })
+
+    it('should log a page access failure event', async () => {
+      const req = {
+        id: 'request-id',
+        baseUrl: '',
+        method: 'GET',
+        path: '/licence/create/id/37/bespoke-conditions',
+      } as Request
+
+      const eventType = 'VIEW_BESPOKE_CONDITIONS'
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logPageAccessFailure(req, licence, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: `${eventType}_FAILURE`,
+        subjectType: 'CRN',
+        subjectId: licence.crn,
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
         },
       })
     })

@@ -25,6 +25,7 @@ import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMid
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
 export default function Index({
+  auditService,
   licenceService,
   comCaseloadService,
   probationService,

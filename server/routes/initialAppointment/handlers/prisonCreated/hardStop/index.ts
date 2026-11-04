@@ -21,7 +21,7 @@ import NoAddressFoundRoutes from './noAddressFound'
 import ManualAddressPostcodeLookupRoutes from './manualAddressPostcodeLookup'
 import ManualAddress from '../../../types/manualAddress'
 
-export default function Index({ licenceService, conditionService, addressService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hard-stop${path}`
