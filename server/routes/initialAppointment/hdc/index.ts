@@ -24,7 +24,7 @@ export default function Index(services: Services): Router {
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       licenceKindCheckMiddleware([
         LicenceKind.CRD,
         LicenceKind.HARD_STOP,
@@ -40,7 +40,7 @@ export default function Index(services: Services): Router {
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       licenceKindCheckMiddleware([
         LicenceKind.CRD,
         LicenceKind.HARD_STOP,

@@ -47,7 +47,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       handler,
     )
 
@@ -56,7 +56,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       hardStopCheckMiddleware(UserType.PROBATION),
       handler,
     )
@@ -67,8 +67,8 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccessForJourney(licenceService),
-      preLicenceCreationMiddleware(probationService),
+      checkLicenceAccessForJourney(auditService, licenceService),
+      preLicenceCreationMiddleware(auditService, probationService),
       handler,
     )
 
@@ -77,7 +77,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(UserType.PROBATION),
       handler,
@@ -88,8 +88,8 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccessForJourney(licenceService),
-      preLicenceCreationMiddleware(probationService),
+      checkLicenceAccessForJourney(auditService, licenceService),
+      preLicenceCreationMiddleware(auditService, probationService),
       validationMiddleware(conditionService, type),
       handler,
     )

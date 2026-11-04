@@ -17,7 +17,7 @@ export default function Index({ auditService, conditionService, licenceService }
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       handler,
     )
 
@@ -25,7 +25,7 @@ export default function Index({ auditService, conditionService, licenceService }
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )

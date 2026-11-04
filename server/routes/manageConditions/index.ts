@@ -34,7 +34,7 @@ export default function Index(services: Services): Router {
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       handler,
     )
 
@@ -43,7 +43,7 @@ export default function Index(services: Services): Router {
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )

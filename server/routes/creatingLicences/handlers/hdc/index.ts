@@ -1,6 +1,5 @@
 import { RequestHandler, Router } from 'express'
 import checkLicenceAccessForJourney from '../../../../middleware/checkLicenceAccessForJourney'
-import checkLicenceAccess from '../../../../middleware/checkLicenceAccessMiddleware'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 
@@ -33,8 +32,8 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccessForJourney(licenceService),
-      preLicenceCreationMiddleware(probationService),
+      checkLicenceAccessForJourney(auditService, licenceService),
+      preLicenceCreationMiddleware(auditService, probationService),
       handler,
     )
 
@@ -42,7 +41,7 @@ export default function Index({
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      checkLicenceAccessForJourney(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
@@ -51,7 +50,7 @@ export default function Index({
     routePrefix('/create/id/:licenceId/interrupt'),
     roleCheckMiddleware(['ROLE_LICENCE_RO']),
     checkComCaseAccessMiddleware(licenceService),
-    checkLicenceAccess(licenceService),
+    checkLicenceAccessForJourney(auditService, licenceService),
     interruptHandler.GET,
   )
 
