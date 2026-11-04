@@ -108,6 +108,11 @@ describe('HDC interrupt route access', () => {
     await request(app).get('/licence/hdc/create/id/1/interrupt').expect(302).expect('Location', '/access-denied')
   })
 
+  it('enforces status access on the interrupt', async () => {
+    licence.statusCode = LicenceStatus.SUBMITTED
+    await request(app).get('/licence/hdc/create/id/1/interrupt').expect(302).expect('Location', '/access-denied')
+  })
+
   it('allows the interrupt when the feature is disabled to redirect back to the journey', async () => {
     config.hdc.hdcCreationEnabled = false
     await request(app)
