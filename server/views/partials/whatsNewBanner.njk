@@ -1,5 +1,25 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 
-{% if showCommsBanner %}
+{% set bannerText %}
+  <p>
+    A new version of Map Maker is available at a new web address. Probation practitioners must use <a href="https://mapmaker.misoportal.com/map/default">Map Maker (https://mapmaker.misoportal.com/map/default)</a> for all exclusion and restriction zones on licences.
+  </p>
+
+  <p>
+    Check and update any bookmarks in your browser. The old version will no longer be available.
+  </p>
+{% endset %}
+
+{% if showCommsBanner and isProbationUser %}
+   <div class="govuk-!-margin-top-6">
+    {{ mojAlert({
+        variant: "information",
+        title: "New Map Maker web address",
+        showTitleAsHeading: true,
+        dismissible: false,
+        html: bannerText
+    }) }}
+   </div>
+
 {% endif %}
