@@ -44,7 +44,7 @@ export default function Index({ auditService, licenceService, conditionService, 
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA']),
       checkLicenceAccess(auditService, licenceService),
-      timeServedCheckMiddleware(userType),
+      timeServedCheckMiddleware(auditService, userType),
       handler,
     )
 
@@ -54,7 +54,7 @@ export default function Index({ auditService, licenceService, conditionService, 
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA']),
       checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
-      timeServedCheckMiddleware(userType),
+      timeServedCheckMiddleware(auditService, userType),
       handler,
     )
   {

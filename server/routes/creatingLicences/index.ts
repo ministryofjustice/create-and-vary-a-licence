@@ -60,7 +60,7 @@ export default function Index({
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
-      hardStopCheckMiddleware(UserType.PROBATION),
+      hardStopCheckMiddleware(auditService, UserType.PROBATION),
       handler,
     )
   }
@@ -82,7 +82,7 @@ export default function Index({
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
-      hardStopCheckMiddleware(UserType.PROBATION),
+      hardStopCheckMiddleware(auditService, UserType.PROBATION),
       handler,
     )
 
@@ -103,12 +103,12 @@ export default function Index({
   }
 
   {
-    const controller = new ComDetailsRoutes(probationService)
+    const controller = new ComDetailsRoutes(auditService, probationService)
     get('/probation-practitioner/staffCode/:staffCode', controller.GET)
   }
 
   {
-    const controller = new ConfirmCreateRoutes(probationService, licenceService)
+    const controller = new ConfirmCreateRoutes(auditService, licenceService)
     getWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.GET)
     postWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.POST)
   }

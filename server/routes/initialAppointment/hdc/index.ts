@@ -25,7 +25,7 @@ export default function Index(services: Services): Router {
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkLicenceAccess(auditService, licenceService),
-      licenceKindCheckMiddleware([
+      licenceKindCheckMiddleware(auditService, [
         LicenceKind.CRD,
         LicenceKind.HARD_STOP,
         LicenceKind.HDC_VARIATION,
@@ -41,7 +41,7 @@ export default function Index(services: Services): Router {
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkLicenceAccess(auditService, licenceService),
-      licenceKindCheckMiddleware([
+      licenceKindCheckMiddleware(auditService, [
         LicenceKind.CRD,
         LicenceKind.HARD_STOP,
         LicenceKind.HDC_VARIATION,

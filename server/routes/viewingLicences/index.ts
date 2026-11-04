@@ -36,7 +36,7 @@ export default function Index({
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
-      hdcActualDateCheckMiddleware(),
+      hdcActualDateCheckMiddleware(auditService),
       handler,
     )
 
