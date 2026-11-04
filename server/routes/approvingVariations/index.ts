@@ -14,6 +14,7 @@ import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMid
 import { alterResObject } from '../varyingLicences'
 
 export default function Index({
+  auditService,
   licenceService,
   varyApproverCaseloadService,
   probationService,
@@ -36,7 +37,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_ACO']),
       alterResObject(),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       handler,
     )
 
@@ -46,7 +47,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_ACO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )

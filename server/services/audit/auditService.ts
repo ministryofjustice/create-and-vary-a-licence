@@ -1,5 +1,6 @@
 import { telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
 import { AuditEvent, AuditService as HmppsAuditService, SubjectType } from '@ministryofjustice/hmpps-audit-client'
+import { Request } from 'express'
 import { User } from '../../@types/CvlUserDetails'
 import {
   ApproverSearchResponse,
@@ -9,8 +10,15 @@ import {
   VaryApproverCaseloadSearchResponse,
 } from '../../@types/licenceApiClientTypes'
 import logger from '../../../logger'
-import { AuditPolicy } from './routeAuditPolicy'
+import getAuditPolicy, { AuditPolicy } from './routeAuditPolicy'
 import config from '../../config'
+
+const methodEventPrefix: { [key: string]: string } = {
+  GET: 'VIEW',
+  POST: 'CREATE',
+  PUT: 'EDIT',
+  DELETE: 'DELETE',
+}
 
 export default class AuditService {
   constructor(private readonly hmppsAuditService: HmppsAuditService) {}
@@ -146,6 +154,31 @@ export default class AuditService {
     await this.sendAuditEvent(auditEvent)
   }
 
+  async logLicenceConfirmCreateFailure(requestId: string, method: string, nomisId: string, user: User): Promise<void> {
+    const eventType = `${methodEventPrefix[method]}_LICENCE_CREATION_CONFIRMATION_FAILURE`
+    const auditEventMessage = this.createAuditEventForSubject(
+      eventType,
+      requestId,
+      'PRISONER_ID' as SubjectType,
+      nomisId,
+      user,
+    )
+    await this.sendAuditEvent(auditEventMessage)
+  }
+
+  async logPageAccessFailure(req: Request, licence: Licence | undefined, user: User): Promise<void> {
+    const path = `${req.method} ${req.baseUrl}${req.path}`
+    const routePolicy = getAuditPolicy(path)
+    if (!routePolicy?.policy) {
+      logger.error(`No audit policy found for route: ${path}`)
+      return
+    }
+
+    const eventType = `${routePolicy.policy.eventType}_FAILURE`
+    const auditEventMessage = this.createAuditEvent(eventType, licence, req.id, user)
+    await this.sendAuditEvent(auditEventMessage)
+  }
+
   private async sendAuditEvent(auditEvent: AuditEvent): Promise<void> {
     if (config.sqs.audit.enabled) {
       logger.info(`sending audit event type: ${auditEvent.what}`)
@@ -161,6 +194,26 @@ export default class AuditService {
 
   private createAuditEvent(eventType: string, licence: Licence | undefined, requestId: string, user: User): AuditEvent {
     const { subjectType, subjectId } = this.getSubjectFromRequest(licence, user)
+    return {
+      what: eventType,
+      subjectType,
+      subjectId,
+      correlationId: requestId,
+      who: user.username,
+      details: {
+        build: config.gitRef,
+        userRoles: user.userRoles,
+      },
+    }
+  }
+
+  private createAuditEventForSubject(
+    eventType: string,
+    requestId: string,
+    subjectType: SubjectType,
+    subjectId: string,
+    user: User,
+  ): AuditEvent {
     return {
       what: eventType,
       subjectType,

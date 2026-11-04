@@ -25,7 +25,8 @@ import IndividualCurfewHoursRoutes from './handlers/individualCurfewHours'
 import DailyCurfewTimes from '../../initialAppointment/hdc/types/dailyCurfewTimes'
 
 export default function Index(services: Services): Router {
-  const { conditionService, licenceService, hdcCurfewAddressService, hdcService, addressService } = services
+  const { auditService, conditionService, licenceService, hdcCurfewAddressService, hdcService, addressService } =
+    services
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/vary/id/:licenceId/hdc${path}`
@@ -36,7 +37,7 @@ export default function Index(services: Services): Router {
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       alterResObject(),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       handler,
     )
 
@@ -45,7 +46,7 @@ export default function Index(services: Services): Router {
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )

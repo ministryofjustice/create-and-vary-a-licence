@@ -28,6 +28,7 @@ import PostponedInterruptHandler from './handlers/postponedInterruptHandler'
 import RefusedInterruptHandler from './handlers/refusedInterruptHandler'
 
 export default function Index({
+  auditService,
   licenceService,
   comCaseloadService,
   probationService,
@@ -49,7 +50,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       handler,
     )
 
@@ -58,7 +59,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       hardStopCheckMiddleware(UserType.PROBATION),
       handler,
     )
@@ -69,8 +70,8 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      preLicenceCreationMiddleware(probationService),
+      checkLicenceAccess(auditService, licenceService),
+      preLicenceCreationMiddleware(auditService, probationService),
       handler,
     )
 
@@ -79,7 +80,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(UserType.PROBATION),
       handler,
@@ -90,8 +91,8 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      preLicenceCreationMiddleware(probationService),
+      checkLicenceAccess(auditService, licenceService),
+      preLicenceCreationMiddleware(auditService, probationService),
       validationMiddleware(conditionService, type),
       handler,
     )
