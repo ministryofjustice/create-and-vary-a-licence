@@ -21,7 +21,7 @@ import NoAddressFoundRoutes from './noAddressFound'
 import ManualAddressPostcodeLookupRoutes from './manualAddressPostcodeLookup'
 import ManualAddress from '../../../types/manualAddress'
 
-export default function Index({ licenceService, conditionService, addressService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hard-stop${path}`
@@ -33,13 +33,18 @@ export default function Index({ licenceService, conditionService, addressService
    * to explicitly inject the licence data into their individual view contexts.
    */
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_CA']), checkLicenceAccess(licenceService), handler)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA']),
+      checkLicenceAccess(auditService, licenceService),
+      handler,
+    )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA']),
-      checkLicenceAccess(licenceService),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA']),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )

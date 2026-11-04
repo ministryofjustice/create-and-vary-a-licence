@@ -29,6 +29,7 @@ import VaryApproverRegionCaseloadRoutes from './handlers/varyApproverRegionCasel
 import OffenderAllocationRoutes from './handlers/offenderAllocation'
 
 export default function Index({
+  auditService,
   probationService,
   prisonerService,
   licenceService,
@@ -42,12 +43,12 @@ export default function Index({
   const routePrefix = (path: string) => `/support${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']), handler)
+    router.get(routePrefix(path), roleCheckMiddleware(auditService, ['ROLE_NOMIS_BATCHLOAD']), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']),
+      roleCheckMiddleware(auditService, ['ROLE_NOMIS_BATCHLOAD']),
       validationMiddleware(conditionService, type),
       handler,
     )

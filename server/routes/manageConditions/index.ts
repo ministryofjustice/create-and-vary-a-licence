@@ -19,7 +19,7 @@ import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMid
 
 export default function Index(services: Services): Router {
   const router = Router()
-  const { licenceService, conditionService } = services
+  const { auditService, licenceService, conditionService } = services
 
   const routePrefix = (path: string) => `/licence/create/id/:licenceId${path}`
 
@@ -32,18 +32,18 @@ export default function Index(services: Services): Router {
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       handler,
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
