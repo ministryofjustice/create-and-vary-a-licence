@@ -208,4 +208,5 @@ export default {
     url: get('HDC_URL', 'https://licences-dev.prison.service.justice.gov.uk'),
     hdcCreationEnabled: get('HDC_CREATION_ENABLED', 'false') === 'true',
   },
+  licenceTemplateV2Enabled: get('LICENCE_TEMPLATE_V2_ENABLED', 'false') === 'true',
 }

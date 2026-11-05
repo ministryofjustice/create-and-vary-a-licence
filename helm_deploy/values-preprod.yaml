@@ -32,6 +32,9 @@ generic-service:
     HDC_URL: 'https://licences-preprod.prison.service.justice.gov.uk/'
     HDC_CREATION_ENABLED: true
 
+    LICENCE_TEMPLATE_V2_ENABLED: false
+
+
   scheduledDowntime:
     enabled: true
     businessHoursOnly: true
