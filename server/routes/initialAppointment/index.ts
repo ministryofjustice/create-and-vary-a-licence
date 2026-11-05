@@ -52,7 +52,6 @@ export default function Index({ auditService, licenceService, conditionService, 
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
       licenceKindCheckMiddleware(auditService, [LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
-      hardStopCheckMiddleware(auditService, UserType.PROBATION),
       validationMiddleware(conditionService, type),
       handler,
     )
