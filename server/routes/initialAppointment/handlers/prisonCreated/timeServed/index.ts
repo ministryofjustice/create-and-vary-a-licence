@@ -28,7 +28,7 @@ export const getTimeServedEditPath = (licence: Licence): string => {
   return `/licence/time-served/id/${licence.id}/check-your-answers`
 }
 
-export default function Index({ licenceService, conditionService, addressService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/time-served${path}`
@@ -43,7 +43,7 @@ export default function Index({ licenceService, conditionService, addressService
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA']),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       timeServedCheckMiddleware(userType),
       handler,
     )
@@ -52,7 +52,7 @@ export default function Index({ licenceService, conditionService, addressService
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA']),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       timeServedCheckMiddleware(userType),
       handler,

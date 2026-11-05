@@ -11,6 +11,7 @@ import { Services } from '../../services'
 import ComDetailsRoutes from './handlers/comDetails'
 
 export default function Index({
+  auditService,
   licenceService,
   approvedCaseloadService,
   probationService,
@@ -21,13 +22,18 @@ export default function Index({
   const routePrefix = (path: string) => `/licence/approve${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_DM']), checkLicenceAccess(licenceService), handler)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_DM']),
+      checkLicenceAccess(auditService, licenceService),
+      handler,
+    )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_DM']),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
