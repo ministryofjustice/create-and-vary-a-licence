@@ -146,7 +146,7 @@ describe('fetchLicenceMiddleware', () => {
       ...licence,
       kind: LicenceKind.HDC,
       isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: false,
+      hdcRiskChecksComplete: false,
     } as Licence
 
     await middleware(req, res, next)
@@ -162,7 +162,7 @@ describe('fetchLicenceMiddleware', () => {
       ...licence,
       kind: LicenceKind.HDC,
       isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: false,
+      hdcRiskChecksComplete: false,
     } as Licence
     licenceService.canComAccessLicence.mockResolvedValue(false)
 
@@ -178,7 +178,7 @@ describe('fetchLicenceMiddleware', () => {
       ...licence,
       kind: LicenceKind.HDC,
       isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: false,
+      hdcRiskChecksComplete: false,
     } as Licence
 
     await middleware({ ...req, path: '/licence/approve/id/1/approve' } as Request, res, next)

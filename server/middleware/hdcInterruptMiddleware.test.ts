@@ -26,7 +26,7 @@ describe('hdcInterruptMiddleware', () => {
           kind: LicenceKind.HDC,
           statusCode: LicenceStatus.IN_PROGRESS,
           isReplacementForOptedInLicence: true,
-          hdcAddressChecksComplete: false,
+          hdcRiskChecksComplete: false,
         },
       },
       redirect: jest.fn(),
@@ -87,8 +87,7 @@ describe('hdcInterruptMiddleware', () => {
   })
 
   it.each([
-    { hdcAddressChecksComplete: true },
-    { hdcAddressChecksComplete: undefined },
+    { hdcRiskChecksComplete: true },
     { statusCode: LicenceStatus.SUBMITTED },
     { kind: LicenceKind.CRD },
     { isReplacementForOptedInLicence: false },

@@ -445,7 +445,7 @@ export default {
   stubGetHdcLicence: (options: {
     isInHardStopPeriod?: boolean
     isReplacementForOptedInLicence?: boolean
-    hdcAddressChecksComplete?: boolean
+    hdcRiskChecksComplete?: boolean
     isPostponed?: boolean
     licenceId?: string
     firstNightCurfewTimes?: {
@@ -477,7 +477,7 @@ export default {
           kind: options.kind ?? LicenceKind.HDC,
           isInHardStopPeriod: options.isInHardStopPeriod ?? false,
           isReplacementForOptedInLicence: options.isReplacementForOptedInLicence ?? false,
-          hdcAddressChecksComplete: options.hdcAddressChecksComplete,
+          hdcRiskChecksComplete: options.hdcRiskChecksComplete,
           isPostponed: options.isPostponed ?? false,
           statusCode: options.statusCode ?? licencePlaceholder.statusCode,
           typeCode: options.typeCode ?? licencePlaceholder.typeCode,

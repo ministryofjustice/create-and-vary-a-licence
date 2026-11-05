@@ -56,7 +56,7 @@ export default class InterruptHandler {
       backLink,
       toCheckYourAnswer: `/licence/create/id/${req.params.licenceId}/check-your-answers`,
       interruptType,
-      ...(isAddressChecksIncomplete && { hdcAddressChecksComplete: false }),
+      ...(isAddressChecksIncomplete && { hdcRiskChecksComplete: false }),
       ...(omuContact && { omuContact }),
     })
   }

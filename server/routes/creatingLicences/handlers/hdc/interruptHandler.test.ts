@@ -67,7 +67,7 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       kind: LicenceKind.HDC,
       statusCode: LicenceStatus.IN_PROGRESS,
       isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: false,
+      hdcRiskChecksComplete: false,
     } as Licence
 
     res.locals.licence = licence
@@ -78,7 +78,7 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       backLink: '/licence/create/caseload?view=team',
       toCheckYourAnswer: '/licence/create/id/123/check-your-answers',
       interruptType: 'addressChecksIncomplete',
-      hdcAddressChecksComplete: false,
+      hdcRiskChecksComplete: false,
     })
     expect(next).not.toHaveBeenCalled()
   })
@@ -88,7 +88,7 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       kind: LicenceKind.HDC,
       statusCode: LicenceStatus.IN_PROGRESS,
       isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: true,
+      hdcRiskChecksComplete: true,
     } as Licence
 
     await handler.GET(req, res, next)
@@ -160,7 +160,7 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
       kind: LicenceKind.HDC,
       statusCode: LicenceStatus.IN_PROGRESS,
       isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: false,
+      hdcRiskChecksComplete: false,
     } as Licence
     res.locals.licence = licence
 

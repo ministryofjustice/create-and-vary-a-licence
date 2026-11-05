@@ -604,7 +604,7 @@ describe('isHdcAddressChecksIncompleteLicence', () => {
     kind: LicenceKind.HDC,
     statusCode: LicenceStatus.IN_PROGRESS,
     isReplacementForOptedInLicence: true,
-    hdcAddressChecksComplete: false,
+    hdcRiskChecksComplete: false,
   } as Licence
 
   it('returns true for an in-progress opted-in HDC replacement when checks are incomplete', () => {
@@ -612,12 +612,12 @@ describe('isHdcAddressChecksIncompleteLicence', () => {
   })
 
   it.each([
-    { hdcAddressChecksComplete: true },
+    { hdcRiskChecksComplete: true },
     { kind: LicenceKind.CRD },
     { kind: LicenceKind.HDC_VARIATION },
     { statusCode: LicenceStatus.SUBMITTED },
     { isReplacementForOptedInLicence: false },
-    { hdcAddressChecksComplete: undefined },
+    { hdcRiskChecksComplete: undefined },
   ])('returns false when the licence does not meet the interrupt conditions: %o', changes => {
     expect(isHdcAddressChecksIncompleteLicence({ ...licence, ...changes } as Licence)).toBe(false)
   })

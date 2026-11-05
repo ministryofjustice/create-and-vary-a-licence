@@ -292,12 +292,12 @@ function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLic
 
 function isHdcAddressChecksIncompleteLicence(
   licence: Licence,
-): licence is HdcLicence & { hdcAddressChecksComplete: false } {
+): licence is HdcLicence & { hdcRiskChecksComplete: false } {
   return (
     licence.kind === LicenceKind.HDC &&
     licence.statusCode === LicenceStatus.IN_PROGRESS &&
     licence.isReplacementForOptedInLicence &&
-    licence.hdcAddressChecksComplete === false
+    licence.hdcRiskChecksComplete === false
   )
 }
 

@@ -13,7 +13,7 @@ context('HDC interrupt user access', () => {
           kind: 'HDC',
           statusCode: 'IN_PROGRESS',
           isReplacementForOptedInLicence: true,
-          hdcAddressChecksComplete: false,
+          hdcRiskChecksComplete: false,
         },
       ],
     ])
@@ -49,7 +49,7 @@ context('HDC interrupt user access', () => {
       kind: 'HDC',
       statusCode: 'IN_PROGRESS',
       isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: false,
+      hdcRiskChecksComplete: false,
       isInHardStopPeriod: true,
     })
     cy.task('stubGetPrisonUserCaseloads', {

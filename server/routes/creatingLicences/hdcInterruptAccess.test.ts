@@ -30,7 +30,7 @@ describe('HDC interrupt route access', () => {
       statusCode: LicenceStatus.IN_PROGRESS,
       probationTeamCode: 'ABC123',
       isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: false,
+      hdcRiskChecksComplete: false,
     } as Licence
     user = {
       username: 'joebloggs',

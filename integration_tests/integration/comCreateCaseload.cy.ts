@@ -114,7 +114,7 @@ context('View COM create caseload', () => {
       kind: 'HDC',
       statusCode: 'IN_PROGRESS',
       isReplacementForOptedInLicence: true,
-      hdcAddressChecksComplete: false,
+      hdcRiskChecksComplete: false,
     })
 
     const indexPage = Page.verifyOnPage(IndexPage)
