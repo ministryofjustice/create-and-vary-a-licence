@@ -789,6 +789,35 @@ describe('Route - print a licence', () => {
       expect(footerHtml).toContain('John Bloggs | Prison number:')
       config.licenceTemplateV2Enabled = false
     })
+
+    it('returns v1 footer for HDC licences even when v2 is enabled', () => {
+      config.licenceTemplateV2Enabled = true
+      const licence = {
+        forename: 'John',
+        surname: 'Bloggs',
+        nomsId: 'A1234AA',
+        bookingNo: 'BOOKING123',
+        cro: 'CRO123',
+        pnc: 'PNC123',
+        prisonDescription: 'HMP Sheffield',
+        typeCode: 'AP',
+        kind: 'HDC',
+        id: 1,
+        version: '1.4',
+        prisonCode: 'SHF',
+        licenceVersion: '1.4',
+      } as Licence
+
+      const footerHtml = handler.getPdfFooter(licence)
+
+      expect(footerHtml).toContain('Prison No:')
+      expect(footerHtml).toContain('Booking No:')
+      expect(footerHtml).toContain('CRO No:')
+      expect(footerHtml).toContain('PNC ID:')
+      expect(footerHtml).toContain('Version No:')
+      expect(footerHtml).not.toContain('John Bloggs | Prison number:')
+      config.licenceTemplateV2Enabled = false
+    })
   })
 
   describe('getTemplateForLicenceType', () => {
