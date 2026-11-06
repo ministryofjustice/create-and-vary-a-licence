@@ -5,21 +5,18 @@ import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { User } from '../../../@types/CvlUserDetails'
-import { isHdcLicence } from '../../../utils/utils'
+import { convertToTitleCase, isHdcLicence } from '../../../utils/utils'
 import {
   MEZ_CONDITION_CODE,
   RESTRICTION_ZONE_CONDITION_CODE,
   EVENT_RESTRICTION_CONDITION_CODE,
 } from '../../../utils/conditionRoutes'
 
-const pdfHeaderFooterStyle =
-  'font-family: Arial; ' +
-  'font-size: 10px; ' +
-  'font-weight: normal; ' +
-  'width: 100%; ' +
-  'height: 55px; ' +
-  'text-align: center; ' +
-  'padding: 20px;'
+const pdfHeaderFooterStyleV1 =
+  'font-family: Arial; font-size: 10px; font-weight: normal; width: 100%; height: 55px; text-align: center; padding: 20px;'
+
+const pdfHeaderFooterStyleV2 =
+  'font-family: Arial; font-size: 10px; font-weight: normal; width: 100%; text-align: center;'
 
 const mapUploadConditions = [MEZ_CONDITION_CODE, RESTRICTION_ZONE_CONDITION_CODE, EVENT_RESTRICTION_CONDITION_CODE]
 
@@ -92,6 +89,7 @@ export default class PrintLicenceRoutes {
     const { monitoringSupplierTelephone } = config
 
     const { prisonTelephone } = licence
+    const { licenceTemplateV2Enabled } = config
 
     const licenceToPrint = {
       licencesUrl,
@@ -100,6 +98,7 @@ export default class PrintLicenceRoutes {
       qrCode,
       htmlPrint: false,
       watermark,
+      licenceTemplateV2Enabled,
       singleItemConditions,
       multipleItemConditions,
       exclusionZoneMapData,
@@ -149,13 +148,28 @@ export default class PrintLicenceRoutes {
   }
 
   getPdfFooter = (licence: Licence): string => {
+    const { licenceTemplateV2Enabled } = config
+
+    if (licenceTemplateV2Enabled) {
+      const fullName = convertToTitleCase(`${licence.forename || ''} ${licence.surname || ''}`.trim())
+      return `
+      <div style="${pdfHeaderFooterStyleV2}">
+        <table style="width: 100%; padding-left: 15px; padding-right: 15px;">
+          <tr>
+            <td style="text-align: left; width: 70%;">${fullName} | Prison number: <span>${licence.nomsId}</span></td>
+            <td style="text-align: right; width: 30%; font-size: 12px;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></td>
+          </tr>
+        </table>
+     </div>`
+    }
+
     let printVersion = licence.licenceVersion
     const majorVersion = licence.licenceVersion.split('.')[0]
     if (parseInt(majorVersion, 10) > 1) {
       printVersion = majorVersion
     }
     return `
-      <div style="${pdfHeaderFooterStyle}">
+      <div style="${pdfHeaderFooterStyleV1}">
         <table style="width: 100%; padding-left: 15px; padding-right: 15px;">
           <tr>
             <td style="text-align: left;">Prison No: <span style="font-weight: bold;">${licence.nomsId}</span></td>
@@ -216,10 +230,17 @@ export default class PrintLicenceRoutes {
   }
 
   getTemplateForLicence(licence: Licence): string {
+    const { licenceTemplateV2Enabled } = config
     const licenceType = licence.typeCode
+
     if (isHdcLicence(licence)) {
       return `HDC_${licenceType}`
     }
+
+    if (licenceTemplateV2Enabled) {
+      return `v2/${licenceType}`
+    }
+
     return licenceType
   }
 }
