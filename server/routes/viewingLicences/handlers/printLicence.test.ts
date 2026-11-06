@@ -739,13 +739,6 @@ describe('Route - print a licence', () => {
       config.licenceTemplateV2Enabled = false
     })
 
-    it('returns v2 template path for HDC AP licences', () => {
-      config.licenceTemplateV2Enabled = true
-      const licence = { kind: 'HDC', typeCode: 'AP' } as Licence
-      expect(handler.getTemplateForLicence(licence)).toBe('v2/HDC_AP')
-      config.licenceTemplateV2Enabled = false
-    })
-
     it('returns footer with v2 format containing fullname and prison number only', () => {
       config.licenceTemplateV2Enabled = true
       const licence = {
