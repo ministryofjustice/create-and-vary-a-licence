@@ -21,7 +21,11 @@ export default function auditMiddleware(auditService: AuditService): RequestHand
           await auditService.logPageViewAttempt(req.id, routePolicy.policy, licence, user)
           res.prependOnceListener('finish', () => {
             if (res.statusCode === 200) {
-              auditService.logPageViewSuccess(req.id, routePolicy.policy, licence, user)
+              try {
+                auditService.logPageViewSuccess(req.id, routePolicy.policy, licence, user)
+              } catch (error) {
+                logger.error(`Error logging page view success for route: ${path}`, error)
+              }
             }
           })
         }
