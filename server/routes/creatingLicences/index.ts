@@ -48,7 +48,7 @@ export default function Index({
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
       handler,
@@ -57,10 +57,10 @@ export default function Index({
   const getWithHardStopCheck = (path: string, handler: RequestHandler) => {
     return router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
-      hardStopCheckMiddleware(UserType.PROBATION),
+      hardStopCheckMiddleware(auditService, UserType.PROBATION),
       handler,
     )
   }
@@ -68,7 +68,7 @@ export default function Index({
   const getWithPreLicenceCreationCheck = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
       preLicenceCreationMiddleware(auditService, probationService),
@@ -78,18 +78,18 @@ export default function Index({
   const postWithHardStopCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
-      hardStopCheckMiddleware(UserType.PROBATION),
+      hardStopCheckMiddleware(auditService, UserType.PROBATION),
       handler,
     )
 
   const postWithPreLicenceCreationCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
       preLicenceCreationMiddleware(auditService, probationService),
@@ -103,12 +103,12 @@ export default function Index({
   }
 
   {
-    const controller = new ComDetailsRoutes(probationService)
+    const controller = new ComDetailsRoutes(auditService, probationService)
     get('/probation-practitioner/staffCode/:staffCode', controller.GET)
   }
 
   {
-    const controller = new ConfirmCreateRoutes(probationService, licenceService)
+    const controller = new ConfirmCreateRoutes(auditService, licenceService)
     getWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.GET)
     postWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.POST)
   }

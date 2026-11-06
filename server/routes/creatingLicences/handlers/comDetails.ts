@@ -1,9 +1,13 @@
 import { Request, Response } from 'express'
 import ProbationService from '../../../services/probationService'
 import { nameToString } from '../../../data/deliusClient'
+import AuditService from '../../../services/audit/auditService'
 
 export default class ComDetailsRoutes {
-  constructor(private readonly probationService: ProbationService) {}
+  constructor(
+    private readonly auditService: AuditService,
+    private readonly probationService: ProbationService,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { staffCode } = req.params
@@ -16,6 +20,7 @@ export default class ComDetailsRoutes {
     const backLink = req.session.returnToCase
 
     if (!isInCurrentUsersTeam) {
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 

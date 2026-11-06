@@ -37,21 +37,21 @@ export default function Index({ auditService, licenceService, conditionService, 
   const get = (path: string, handler: RequestHandler, userType: UserType) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
-      licenceKindCheckMiddleware([LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
-      hardStopCheckMiddleware(userType),
+      licenceKindCheckMiddleware(auditService, [LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
+      hardStopCheckMiddleware(auditService, userType),
       handler,
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) => {
     return router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccess(auditService, licenceService),
-      licenceKindCheckMiddleware([LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
+      licenceKindCheckMiddleware(auditService, [LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
       validationMiddleware(conditionService, type),
       handler,
     )
