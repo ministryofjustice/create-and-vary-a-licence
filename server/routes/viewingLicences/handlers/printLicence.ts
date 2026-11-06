@@ -150,7 +150,7 @@ export default class PrintLicenceRoutes {
   getPdfFooter = (licence: Licence): string => {
     const { licenceTemplateV2Enabled } = config
 
-    if (licenceTemplateV2Enabled) {
+    if (licenceTemplateV2Enabled && !isHdcLicence(licence)) {
       const fullName = convertToTitleCase(`${licence.forename || ''} ${licence.surname || ''}`.trim())
       return `
       <div style="${pdfHeaderFooterStyleV2}">
