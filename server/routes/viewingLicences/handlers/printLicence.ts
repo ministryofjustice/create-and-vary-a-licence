@@ -233,16 +233,14 @@ export default class PrintLicenceRoutes {
     const { licenceTemplateV2Enabled } = config
     const licenceType = licence.typeCode
 
-    if (licenceTemplateV2Enabled) {
-      if (isHdcLicence(licence)) {
-        return `v2/HDC_${licenceType}`
-      }
-      return `v2/${licenceType}`
-    }
-
     if (isHdcLicence(licence)) {
       return `HDC_${licenceType}`
     }
+
+    if (licenceTemplateV2Enabled) {
+      return `v2/${licenceType}`
+    }
+
     return licenceType
   }
 }
