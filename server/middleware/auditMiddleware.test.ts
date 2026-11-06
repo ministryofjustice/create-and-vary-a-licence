@@ -6,13 +6,17 @@ import { Licence } from '../@types/licenceApiClientTypes'
 
 jest.mock('../services/audit/auditService')
 
-let res = {} as unknown as Response
+let res = {
+  prependOnceListener: jest.fn(),
+} as unknown as Response
+
 const req = {
   id: 'request-id',
   baseUrl: '',
   method: 'GET',
   path: '/licence/create/id/1/check-your-answers',
 } as Request
+
 const next = jest.fn()
 
 const prisonRes = {
@@ -24,10 +28,10 @@ const prisonRes = {
     },
     licence: undefined,
   },
-  redirect: jest.fn(),
+  prependOnceListener: jest.fn(),
 } as unknown as Response
-const auditService = new AuditService(null) as jest.Mocked<AuditService>
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const middleware = auditMiddleware(auditService)
 
 beforeEach(() => {
@@ -61,6 +65,7 @@ describe('auditMiddleware', () => {
     await middleware(noAuditNeededReq, res, next)
 
     expect(auditService.logPageViewAttempt).not.toHaveBeenCalled()
+    expect(res.prependOnceListener).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalledTimes(1)
   })
 
@@ -88,6 +93,7 @@ describe('auditMiddleware', () => {
       res.locals.user,
     )
     expect(next).toHaveBeenCalledTimes(1)
+    expect(res.prependOnceListener).toHaveBeenCalledWith('finish', expect.any(Function))
   })
 
   it('should handle route not being found in policy config', async () => {
