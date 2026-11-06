@@ -42,6 +42,7 @@ describe('timeServedCheckMiddleware', () => {
     } as unknown as Response
     licenceService.updateAppointmentPerson = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
+    auditService.logPageAccessFailure = jest.fn()
   })
 
   afterEach(() => {
@@ -52,8 +53,11 @@ describe('timeServedCheckMiddleware', () => {
     const userType = UserType.PROBATION
     it('should redirect to access-denied when time served', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.TIME_SERVED } as Licence
+
       await timeServedCheckMiddleware(auditService, userType)(req, res, next)
+
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+      expect(auditService.logPageAccessFailure).toHaveBeenCalledWith(req, res.locals.licence, res.locals.user)
       expect(next).not.toHaveBeenCalled()
     })
 
@@ -69,7 +73,10 @@ describe('timeServedCheckMiddleware', () => {
     const userType = UserType.PRISON
     it('should redirect prison users to access-denied when the licence is not time served', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.CRD } as Licence
+
       await timeServedCheckMiddleware(auditService, userType)(req, res, next)
+
+      expect(auditService.logPageAccessFailure).toHaveBeenCalledWith(req, res.locals.licence, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     })
 

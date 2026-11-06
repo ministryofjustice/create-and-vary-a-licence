@@ -11,6 +11,7 @@ export default function timeServedCheckMiddleware(auditService: AuditService, us
     // outside of time served
     if (licence.kind !== LicenceKind.TIME_SERVED && userType === UserType.PRISON) {
       logger.error('Access denied to prison user due to time served middleware')
+      await auditService.logPageAccessFailure(req, licence, res.locals.user)
       return res.redirect('/access-denied')
     }
 

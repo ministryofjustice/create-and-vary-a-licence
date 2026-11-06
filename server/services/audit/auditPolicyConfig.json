@@ -20,8 +20,8 @@
     "eventType": "VIEW_RESTRICTED_OFFENDER_DETAILS"
   },
   "GET /licence/create/caseload": {
-    "audit": false,
-    "reason": "Caseload list user navigation, not auditable action"
+    "audit": true,
+    "eventType": "VIEW_CREATE_CASELOAD"
   },
   "GET /licence/create/probation-practitioner/staffCode/:staffCode": {
     "audit": true,
@@ -217,7 +217,7 @@
   },
   "GET /licence/vary/caseload": {
     "audit": true,
-    "eventType": "VIEW_CASELOAD"
+    "eventType": "VIEW_VARY_CASELOAD"
   },
   "GET /licence/vary/id/:licenceId/probation-practitioner": {
     "audit": true,
