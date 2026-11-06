@@ -2,21 +2,21 @@ import { Request, Response } from 'express'
 
 import LicenceService from '../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
-import ProbationService from '../../../services/probationService'
 import { CvlPrisoner, LicenceSummary, PrisonerWithCvlFields } from '../../../@types/licenceApiClientTypes'
 import logger from '../../../../logger'
 import { LicenceKind } from '../../../enumeration'
+import AuditService from '../../../services/audit/auditService'
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 
+jest.mock('../../../services/audit/auditService')
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/probationService')
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../../logger')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(probationService, licenceService)
+  const handler = new ConfirmCreateRoutes(auditService, licenceService)
   let req: Request
   let res: Response
 

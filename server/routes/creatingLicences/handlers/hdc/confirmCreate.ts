@@ -5,9 +5,11 @@ import LicenceService from '../../../../services/licenceService'
 import config from '../../../../config'
 import logger from '../../../../../logger'
 import PrisonerService from '../../../../services/prisonerService'
+import AuditService from '../../../../services/audit/auditService'
 
 export default class ConfirmCreateRoutes {
   constructor(
+    private readonly auditService: AuditService,
     private readonly licenceService: LicenceService,
     private readonly prisonerService: PrisonerService,
   ) {}
@@ -19,6 +21,7 @@ export default class ConfirmCreateRoutes {
 
     if (!config.hdcEnabled) {
       logger.error('Access denied to HDC licence creation GET due HDC licence not to be created in CVL')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
@@ -29,16 +32,19 @@ export default class ConfirmCreateRoutes {
 
     if (nomisRecord.cvl.isInHardStopPeriod) {
       logger.error('Access denied to HDC licence creation GET due to being in hard stop period')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
     if (!nomisRecord.prisoner.homeDetentionCurfewActualDate) {
       logger.error('Access denied to HDC licence creation GET due to not having a HDCAD')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
     if (!nomisRecord.prisoner.homeDetentionCurfewEligibilityDate) {
       logger.error('Access denied to HDC licence creation GET due to not having a HDCED')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
@@ -46,6 +52,7 @@ export default class ConfirmCreateRoutes {
 
     if (!isHdcApproved) {
       logger.error('Access denied to HDC licence creation GET as not approved for HDC')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
@@ -69,16 +76,19 @@ export default class ConfirmCreateRoutes {
     const nomisRecord = await this.licenceService.getPrisonerDetail(nomisId, user)
     if (nomisRecord.cvl.isInHardStopPeriod) {
       logger.error('Access denied to HDC licence creation POST due to being in hard stop period')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
     if (!nomisRecord.prisoner.homeDetentionCurfewActualDate) {
       logger.error('Access denied to HDC licence creation POST due to not having a HDCAD')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
     if (!nomisRecord.prisoner.homeDetentionCurfewEligibilityDate) {
       logger.error('Access denied to HDC licence creation POST due to not having a HDCED')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
@@ -86,6 +96,7 @@ export default class ConfirmCreateRoutes {
 
     if (!isHdcApproved) {
       logger.error('Access denied to HDC licence creation POST as not approved for HDC')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 

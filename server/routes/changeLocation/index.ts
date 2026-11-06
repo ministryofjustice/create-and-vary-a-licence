@@ -6,17 +6,17 @@ import { Services } from '../../services'
 import Caseload from './types/caseload'
 import AuthRole from '../../enumeration/authRole'
 
-export default function Index({ userService, conditionService }: Services): Router {
+export default function Index({ auditService, userService, conditionService }: Services): Router {
   const routePrefix = (path: string) => `/licence${path}`
 
   const router = Router()
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_DM']), handler)
+    router.get(routePrefix(path), roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_DM']), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_DM']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_DM']),
       validationMiddleware(conditionService, type),
       handler,
     )

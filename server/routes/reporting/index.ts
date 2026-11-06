@@ -16,12 +16,16 @@ import LicenceStatusCasesRoutes from './handlers/licenceStatusCases'
 import { getSystemToken } from '../../data/systemToken'
 
 export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
-  const { licenceService } = services
+  const { auditService, licenceService } = services
   const router = Router()
   const routePrefix = (path: string) => `/reports${path}`
 
   const get = (path: string, ...handlers: RequestHandler[]) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD', 'ROLE_CVL_REPORTS']), ...handlers)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(auditService, ['ROLE_NOMIS_BATCHLOAD', 'ROLE_CVL_REPORTS']),
+      ...handlers,
+    )
 
   {
     const routes = new LastMinuteHandoverCasesRoutes(licenceService)

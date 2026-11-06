@@ -42,19 +42,19 @@ export default function Index({ auditService, licenceService, conditionService, 
   const get = (path: string, handler: RequestHandler, userType: UserType) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA']),
       checkLicenceAccess(auditService, licenceService),
-      timeServedCheckMiddleware(userType),
+      timeServedCheckMiddleware(auditService, userType),
       handler,
     )
 
   const post = (path: string, handler: RequestHandler, userType: UserType, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA']),
       checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
-      timeServedCheckMiddleware(userType),
+      timeServedCheckMiddleware(auditService, userType),
       handler,
     )
   {
