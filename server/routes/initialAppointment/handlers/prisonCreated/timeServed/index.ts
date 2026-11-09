@@ -51,7 +51,7 @@ export default function Index({ auditService, licenceService, conditionService, 
   const post = (path: string, handler: RequestHandler, userType: UserType, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA']),
       checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       timeServedCheckMiddleware(auditService, userType),

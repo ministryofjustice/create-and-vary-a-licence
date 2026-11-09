@@ -22,7 +22,7 @@ export default function Index({ auditService, licenceService, conditionService }
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkLicenceAccessForJourney(auditService, licenceService),
       handler,
     )
@@ -30,7 +30,7 @@ export default function Index({ auditService, licenceService, conditionService }
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
@@ -39,7 +39,7 @@ export default function Index({ auditService, licenceService, conditionService }
   const postWithFileUpload = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkLicenceAccessForJourney(auditService, licenceService),
       upload.single('filename'),
       validationMiddleware(conditionService, type),

@@ -41,7 +41,7 @@ export default function Index({
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
@@ -49,7 +49,7 @@ export default function Index({
 
   router.get(
     routePrefix('/create/id/:licenceId/interrupt'),
-    roleCheckMiddleware(['ROLE_LICENCE_RO']),
+    roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
     checkComCaseAccessMiddleware(licenceService),
     checkLicenceAccess(auditService, licenceService),
     interruptHandler.GET,
