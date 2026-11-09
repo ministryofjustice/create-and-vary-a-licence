@@ -9,6 +9,7 @@ import preLicenceCreationMiddleware from '../../../../middleware/preLicenceCreat
 import checkComCaseAccessMiddleware from '../../../../middleware/checkComCaseAccessMiddleware'
 
 export default function Index({
+  auditService,
   licenceService,
   conditionService,
   probationService,
@@ -27,23 +28,23 @@ export default function Index({
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      preLicenceCreationMiddleware(probationService),
+      checkLicenceAccess(auditService, licenceService),
+      preLicenceCreationMiddleware(auditService, probationService),
       handler,
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      checkLicenceAccess(licenceService),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
   {
-    const controller = new ConfirmCreateRoutes(licenceService, prisonerService)
+    const controller = new ConfirmCreateRoutes(auditService, licenceService, prisonerService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)
     post('/create/nomisId/:nomisId/confirm', controller.POST)
   }

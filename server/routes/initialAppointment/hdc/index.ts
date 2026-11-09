@@ -16,16 +16,16 @@ import FirstNightCurfewTimesRoutes from './handlers/firstNightCurfewTimes'
 
 export default function Index(services: Services): Router {
   const router = Router()
-  const { conditionService, licenceService, hdcService } = services
+  const { auditService, conditionService, licenceService, hdcService } = services
 
   const routePrefix = (path: string) => `/licence/create/id/:licenceId/hdc${path}`
 
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
-      checkLicenceAccess(licenceService),
-      licenceKindCheckMiddleware([
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      checkLicenceAccess(auditService, licenceService),
+      licenceKindCheckMiddleware(auditService, [
         LicenceKind.CRD,
         LicenceKind.HARD_STOP,
         LicenceKind.HDC_VARIATION,
@@ -39,9 +39,9 @@ export default function Index(services: Services): Router {
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
-      checkLicenceAccess(licenceService),
-      licenceKindCheckMiddleware([
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      checkLicenceAccess(auditService, licenceService),
+      licenceKindCheckMiddleware(auditService, [
         LicenceKind.CRD,
         LicenceKind.HARD_STOP,
         LicenceKind.HDC_VARIATION,

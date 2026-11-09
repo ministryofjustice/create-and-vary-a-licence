@@ -23,7 +23,7 @@ import ManualAddress from './types/manualAddress'
 import PostcodeLookupInputValidation from './types/PostcodeLookupInputValidation'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
 
-export default function Index({ licenceService, conditionService, addressService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence${path}`
@@ -37,21 +37,21 @@ export default function Index({ licenceService, conditionService, addressService
   const get = (path: string, handler: RequestHandler, userType: UserType) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      licenceKindCheckMiddleware([LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
-      hardStopCheckMiddleware(userType),
+      checkLicenceAccess(auditService, licenceService),
+      licenceKindCheckMiddleware(auditService, [LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
+      hardStopCheckMiddleware(auditService, userType),
       handler,
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) => {
     return router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      licenceKindCheckMiddleware([LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
+      checkLicenceAccess(auditService, licenceService),
+      licenceKindCheckMiddleware(auditService, [LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
       validationMiddleware(conditionService, type),
       handler,
     )

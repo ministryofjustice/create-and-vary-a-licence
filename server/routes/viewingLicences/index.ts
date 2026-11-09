@@ -11,6 +11,7 @@ import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMid
 import hdcActualDateCheckMiddleware from '../../middleware/hdcActualDateCheckMiddleware'
 
 export default function Index({
+  auditService,
   licenceService,
   prisonerService,
   probationService,
@@ -23,19 +24,19 @@ export default function Index({
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       handler,
     )
 
   const getWithHdcCheck = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      hdcActualDateCheckMiddleware(),
+      checkLicenceAccess(auditService, licenceService),
+      hdcActualDateCheckMiddleware(auditService),
       handler,
     )
 
