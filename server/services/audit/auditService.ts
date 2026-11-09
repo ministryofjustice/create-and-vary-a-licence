@@ -174,6 +174,7 @@ export default class AuditService {
       return
     }
 
+    req.res.locals.auditedFailedAccessAttempt = true
     const eventType = `${routePolicy.policy.eventType}_FAILURE`
     const auditEventMessage = this.createAuditEvent(eventType, licence, req.id, user)
     await this.sendAuditEvent(auditEventMessage)

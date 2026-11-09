@@ -365,7 +365,10 @@ describe('AuditService', () => {
         baseUrl: '',
         method: 'GET',
         path: '/licence/create/id/37/bespoke-conditions',
-      } as Request
+        res: {
+          locals: {},
+        },
+      } as unknown as Request
 
       const eventType = 'VIEW_BESPOKE_CONDITIONS'
       hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
@@ -383,6 +386,7 @@ describe('AuditService', () => {
           userRoles: user.userRoles,
         },
       })
+      expect(req.res.locals.auditedFailedAccessAttempt).toEqual(true)
     })
   })
 })
