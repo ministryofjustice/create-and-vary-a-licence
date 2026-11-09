@@ -121,6 +121,7 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
+          licenceTemplateV2Enabled: false,
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
@@ -164,6 +165,7 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
+          licenceTemplateV2Enabled: false,
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
@@ -222,6 +224,7 @@ describe('Route - print a licence', () => {
           htmlPrint: false,
           licence: res.locals.licence,
           watermark,
+          licenceTemplateV2Enabled: false,
           singleItemConditions: [],
           multipleItemConditions: [
             [
@@ -330,6 +333,7 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
+          licenceTemplateV2Enabled: false,
           licence: res.locals.licence,
           singleItemConditions: [],
           multipleItemConditions: [
@@ -512,6 +516,7 @@ describe('Route - print a licence', () => {
           qrCode: 'a QR code',
           htmlPrint: false,
           watermark,
+          licenceTemplateV2Enabled: false,
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
@@ -576,6 +581,7 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
+          licenceTemplateV2Enabled: false,
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
@@ -640,6 +646,7 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
+          licenceTemplateV2Enabled: false,
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
@@ -705,6 +712,7 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
+          licenceTemplateV2Enabled: false,
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
@@ -722,6 +730,93 @@ describe('Route - print a licence', () => {
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
       expect(footerHtml).toMatch(/Version No:.+1.4/)
+    })
+
+    it('returns v2 template path for CRD AP licences', () => {
+      config.licenceTemplateV2Enabled = true
+      const licence = { kind: 'CRD', typeCode: 'AP' } as Licence
+      expect(handler.getTemplateForLicence(licence)).toBe('v2/AP')
+      config.licenceTemplateV2Enabled = false
+    })
+
+    it('returns footer with v2 format containing fullname and prison number only', () => {
+      config.licenceTemplateV2Enabled = true
+      const licence = {
+        forename: 'John',
+        surname: 'Bloggs',
+        nomsId: 'A1234AA',
+        bookingNo: 'BOOKING123',
+        cro: 'CRO123',
+        pnc: 'PNC123',
+        prisonDescription: 'HMP Sheffield',
+        typeCode: 'AP',
+        id: 1,
+        version: '1.4',
+        prisonCode: 'SHF',
+        licenceVersion: '1.4',
+      } as Licence
+
+      const footerHtml = handler.getPdfFooter(licence)
+
+      expect(footerHtml).toContain('John Bloggs | Prison number: <span>A1234AA</span>')
+      expect(footerHtml).toContain('Page <span class="pageNumber"></span> of <span class="totalPages"></span>')
+      expect(footerHtml).not.toContain('Booking No')
+      expect(footerHtml).not.toContain('CRO No')
+      expect(footerHtml).not.toContain('PNC ID')
+      expect(footerHtml).not.toContain('Version No')
+      config.licenceTemplateV2Enabled = false
+    })
+
+    it('handles fullname formatting correctly with title case', () => {
+      config.licenceTemplateV2Enabled = true
+      const licence = {
+        forename: 'john',
+        surname: 'bloggs',
+        nomsId: 'A1234AA',
+        bookingNo: 'BOOKING123',
+        cro: 'CRO123',
+        pnc: 'PNC123',
+        prisonDescription: 'HMP Sheffield',
+        typeCode: 'AP',
+        id: 1,
+        version: '1.4',
+        prisonCode: 'SHF',
+        licenceVersion: '1.4',
+      } as Licence
+
+      const footerHtml = handler.getPdfFooter(licence)
+
+      expect(footerHtml).toContain('John Bloggs | Prison number:')
+      config.licenceTemplateV2Enabled = false
+    })
+
+    it('returns v1 footer for HDC licences even when v2 is enabled', () => {
+      config.licenceTemplateV2Enabled = true
+      const licence = {
+        forename: 'John',
+        surname: 'Bloggs',
+        nomsId: 'A1234AA',
+        bookingNo: 'BOOKING123',
+        cro: 'CRO123',
+        pnc: 'PNC123',
+        prisonDescription: 'HMP Sheffield',
+        typeCode: 'AP',
+        kind: 'HDC',
+        id: 1,
+        version: '1.4',
+        prisonCode: 'SHF',
+        licenceVersion: '1.4',
+      } as Licence
+
+      const footerHtml = handler.getPdfFooter(licence)
+
+      expect(footerHtml).toContain('Prison No:')
+      expect(footerHtml).toContain('Booking No:')
+      expect(footerHtml).toContain('CRO No:')
+      expect(footerHtml).toContain('PNC ID:')
+      expect(footerHtml).toContain('Version No:')
+      expect(footerHtml).not.toContain('John Bloggs | Prison number:')
+      config.licenceTemplateV2Enabled = false
     })
   })
 

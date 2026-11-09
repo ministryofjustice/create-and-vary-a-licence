@@ -4,8 +4,10 @@ import LicenceService from '../services/licenceService'
 import hardStopCheckMiddleware from './hardStopCheckMiddleware'
 import UserType from '../enumeration/userType'
 import { Licence } from '../@types/licenceApiClientTypes'
+import AuditService from '../services/audit/auditService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 
 describe('hardStopCheckMiddleware', () => {
   let req: Request
@@ -46,16 +48,20 @@ describe('hardStopCheckMiddleware', () => {
 
   describe('Probation users', () => {
     const userType = UserType.PROBATION
-    it('should redirect to access-denied when in the hard stop period', () => {
+    it('should redirect to access-denied when in the hard stop period', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.CRD, isInHardStopPeriod: true } as Licence
-      hardStopCheckMiddleware(userType)(req, res, next)
+
+      await hardStopCheckMiddleware(auditService, userType)(req, res, next)
+
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should call next if the licence is outside of the hard stop window', () => {
+    it('should call next if the licence is outside of the hard stop window', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
-      hardStopCheckMiddleware(userType)(req, res, next)
+
+      await hardStopCheckMiddleware(auditService, userType)(req, res, next)
+
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalled()
     })
@@ -65,13 +71,17 @@ describe('hardStopCheckMiddleware', () => {
     const userType = UserType.PRISON
     it('should redirect prison users to access-denied when the licence is not in the hard stop period', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
-      hardStopCheckMiddleware(userType)(req, res, next)
+
+      await hardStopCheckMiddleware(auditService, userType)(req, res, next)
+
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     })
 
-    it('should call next if the licence is in the hard stop window', () => {
+    it('should call next if the licence is in the hard stop window', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.CRD, isInHardStopPeriod: true } as Licence
-      hardStopCheckMiddleware(userType)(req, res, next)
+
+      await hardStopCheckMiddleware(auditService, userType)(req, res, next)
+
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalled()
     })

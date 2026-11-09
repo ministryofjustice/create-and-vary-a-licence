@@ -20,8 +20,8 @@
     "eventType": "VIEW_RESTRICTED_OFFENDER_DETAILS"
   },
   "GET /licence/create/caseload": {
-    "audit": false,
-    "reason": "Caseload list user navigation, not auditable action"
+    "audit": true,
+    "eventType": "VIEW_CREATE_CASELOAD"
   },
   "GET /licence/create/probation-practitioner/staffCode/:staffCode": {
     "audit": true,
@@ -36,20 +36,20 @@
     "eventType": "CREATE_LICENCE"
   },
   "GET /licence/create/id/:licenceId/additional-licence-conditions-question": {
-    "audit": false,
-    "reason": "Form page user navigation, not auditable action"
+    "audit": true,
+    "eventType": "VIEW_ADDITIONAL_LICENCE_CONDITIONS_QUESTION"
   },
   "POST /licence/create/id/:licenceId/additional-licence-conditions-question": {
-    "audit": false,
-    "reason": "No data is changed as a result this action"
+    "audit": true,
+    "eventType": "CREATE_ADDITIONAL_LICENCE_CONDITIONS_QUESTION"
   },
   "GET /licence/create/id/:licenceId/bespoke-conditions-question": {
-    "audit": false,
-    "reason": "Form page user navigation, not auditable action"
+    "audit": true,
+    "eventType": "VIEW_BESPOKE_CONDITIONS_QUESTION"
   },
   "POST /licence/create/id/:licenceId/bespoke-conditions-question": {
-    "audit": false,
-    "reason": "No data is changed as a result this action"
+    "audit": true,
+    "eventType": "CREATE_BESPOKE_CONDITIONS_QUESTION"
   },
   "GET /licence/create/id/:licenceId/check-your-answers": {
     "audit": true,
@@ -61,31 +61,31 @@
   },
   "POST /licence/create/id/:licenceId/check-your-answers": {
     "audit": true,
-    "eventType": "EDIT_SUBMIT_LICENCE_CREATION"
+    "eventType": "EDIT_LICENCE_CREATION"
   },
   "GET /licence/create/id/:licenceId/edit": {
-    "audit": false,
-    "reason": "Edit page user navigation, not auditable action"
+    "audit": true,
+    "eventType": "VIEW_LICENCE_EDIT"
   },
   "POST /licence/create/id/:licenceId/edit": {
     "audit": true,
-    "eventType": "EDIT_LICENCE_CREATION_ANSWER"
+    "eventType": "EDIT_LICENCE"
   },
   "GET /licence/create/id/:licenceId/confirmation": {
-    "audit": false,
-    "reason": "Confirmation page post-submission message, not auditable action"
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATION_CONFIRMATION"
   },
   "GET /licence/create/nomisId/:nomisId/prison-will-create-this-licence": {
-    "audit": false,
-    "reason": "Information page user notification, not auditable action"
+    "audit": true,
+    "eventType": "VIEW_PRISON_WILL_CREATE_LICENCE"
   },
   "GET /licence/create/id/:licenceId/licence-created-by-prison": {
-    "audit": false,
-    "reason": "Information page user notification, not auditable action"
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CREATED_BY_PRISON"
   },
   "GET /licence/create/id/:licenceId/licence-changes-not-approved-in-time": {
-    "audit": false,
-    "reason": "Information page user notification, not auditable action"
+    "audit": true,
+    "eventType": "VIEW_LICENCE_CHANGES_NOT_APPROVED_IN_TIME"
   },
   "GET /licence/hard-stop/create/nomisId/:nomisId/confirm": {
     "audit": true,
@@ -93,7 +93,7 @@
   },
   "POST /licence/hard-stop/create/nomisId/:nomisId/confirm": {
     "audit": true,
-    "eventType": "SUBMIT_LICENCE_CREATION_HARD_STOP"
+    "eventType": "CREATE_HARD_STOP_LICENCE"
   },
   "GET /licence/hard-stop/create/nomisId/:nomisId/no-com-allocated": {
     "audit": true,
@@ -105,7 +105,7 @@
   },
   "POST /licence/hdc/create/nomisId/:nomisId/confirm": {
     "audit": true,
-    "eventType": "SUBMIT_LICENCE_CREATION_HDC"
+    "eventType": "CREATE_LICENCE_HDC"
   },
   "GET /licence/create/id/:licenceId/additional-licence-conditions": {
     "audit": true,
@@ -113,7 +113,7 @@
   },
   "POST /licence/create/id/:licenceId/additional-licence-conditions": {
     "audit": true,
-    "eventType": "SUBMIT_ADDITIONAL_CONDITIONS"
+    "eventType": "CREATE_ADDITIONAL_CONDITIONS"
   },
   "GET /licence/create/id/:licenceId/additional-licence-conditions/callback": {
     "audit": true,
@@ -125,7 +125,7 @@
   },
   "POST /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId": {
     "audit": true,
-    "eventType": "SUBMIT_ADDITIONAL_CONDITION"
+    "eventType": "CREATE_ADDITIONAL_CONDITION"
   },
   "GET /licence/create/id/:licenceId/additional-licence-conditions/condition/:conditionId/delete": {
     "audit": true,
@@ -213,7 +213,7 @@
   },
   "GET /licence/vary/caseload": {
     "audit": true,
-    "eventType": "VIEW_CASELOAD"
+    "eventType": "VIEW_VARY_CASELOAD"
   },
   "GET /licence/vary/id/:licenceId/probation-practitioner": {
     "audit": true,
@@ -241,7 +241,7 @@
   },
   "POST /licence/vary/id/:licenceId/confirm-vary-action": {
     "audit": true,
-    "eventType": "CREATE_CONFIRM_VARY_ACTION"
+    "eventType": "CREATE_LICENCE_VARIATION"
   },
   "GET /licence/vary/id/:licenceId/spo-discussion": {
     "audit": true,
@@ -265,7 +265,7 @@
   },
   "POST /licence/vary/id/:licenceId/confirm-amend-variation": {
     "audit": true,
-    "eventType": "CREATE_CONFIRM_AMEND_VARIATION"
+    "eventType": "EDIT_AMENDED_VARIATION"
   },
   "GET /licence/vary/id/:licenceId/confirm-discard-variation": {
     "audit": true,
@@ -622,11 +622,11 @@
   },
   "GET /support/variation-approver/cases/by-pdu": {
     "audit": true,
-    "eventType": "VIEW_CASES_BY_PDU"
+    "eventType": "VIEW_VARIATION_APPROVER_CASES_BY_PDU"
   },
   "GET /support/variation-approver/cases/by-region": {
     "audit": true,
-    "eventType": "VIEW_CASES_BY_REGION"
+    "eventType": "VIEW_VARIATION_APPROVER_CASES_BY_REGION"
   },
   "GET /licence/approve/change-location": {
     "audit": true,

@@ -462,6 +462,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('hdcSurveyUrl', config.hdc.surveyUrl)
   njkEnv.addGlobal('hdcUrl', config.hdc.url)
   njkEnv.addGlobal('hdcCreationEnabled', config.hdc.hdcCreationEnabled)
+  njkEnv.addGlobal('licenceTemplateV2Enabled', config.licenceTemplateV2Enabled)
 
   return njkEnv
 }

@@ -41,6 +41,8 @@ generic-service:
     AUDIT_SQS_REGION: "eu-west-2"
     AUDIT_SERVICE_NAME: "create-and-vary-a-licence"
 
+    LICENCE_TEMPLATE_V2_ENABLED: false
+
   namespace_secrets:
     sqs-hmpps-audit-secret:
       AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'

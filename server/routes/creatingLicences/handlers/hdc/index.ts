@@ -31,7 +31,7 @@ export default function Index({
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
       checkLicenceAccessForJourney(auditService, licenceService),
       preLicenceCreationMiddleware(auditService, probationService),
@@ -56,7 +56,7 @@ export default function Index({
   )
 
   {
-    const controller = new ConfirmCreateRoutes(licenceService, prisonerService)
+    const controller = new ConfirmCreateRoutes(auditService, licenceService, prisonerService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)
     post('/create/nomisId/:nomisId/confirm', controller.POST)
   }
