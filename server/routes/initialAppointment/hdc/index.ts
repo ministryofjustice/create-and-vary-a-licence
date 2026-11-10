@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express'
 import roleCheckMiddleware from '../../../middleware/roleCheckMiddleware'
-import checkLicenceAccess from '../../../middleware/checkLicenceAccessMiddleware'
+import checkLicenceAccessForJourney from '../../../middleware/checkLicenceAccessForJourney'
 import { Services } from '../../../services'
 import StandardCurfewHoursQuestionRoutes from './handlers/standardCurfewHoursQuestion'
 import licenceKindCheckMiddleware from '../../../middleware/licenceKindCheckMiddleware'
@@ -24,7 +24,7 @@ export default function Index(services: Services): Router {
     router.get(
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       licenceKindCheckMiddleware(auditService, [
         LicenceKind.CRD,
         LicenceKind.HARD_STOP,
@@ -40,7 +40,7 @@ export default function Index(services: Services): Router {
     router.post(
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       licenceKindCheckMiddleware(auditService, [
         LicenceKind.CRD,
         LicenceKind.HARD_STOP,

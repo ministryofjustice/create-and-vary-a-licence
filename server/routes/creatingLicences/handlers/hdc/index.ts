@@ -1,4 +1,5 @@
 import { RequestHandler, Router } from 'express'
+import checkLicenceAccessForJourney from '../../../../middleware/checkLicenceAccessForJourney'
 import checkLicenceAccess from '../../../../middleware/checkLicenceAccessMiddleware'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
@@ -7,6 +8,7 @@ import { Services } from '../../../../services'
 import ConfirmCreateRoutes from './confirmCreate'
 import preLicenceCreationMiddleware from '../../../../middleware/preLicenceCreationMiddleware'
 import checkComCaseAccessMiddleware from '../../../../middleware/checkComCaseAccessMiddleware'
+import InterruptHandler from './interruptHandler'
 
 export default function Index({
   auditService,
@@ -18,6 +20,7 @@ export default function Index({
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hdc${path}`
+  const interruptHandler = new InterruptHandler(licenceService)
 
   /*
    * The fetchLicence middleware will call the licenceAPI during each GET request on the create a licence journey
@@ -30,7 +33,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       preLicenceCreationMiddleware(auditService, probationService),
       handler,
     )
@@ -39,10 +42,19 @@ export default function Index({
     router.post(
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
+
+  router.get(
+    routePrefix('/create/id/:licenceId/interrupt'),
+    roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
+    checkComCaseAccessMiddleware(licenceService),
+    checkLicenceAccess(auditService, licenceService),
+    interruptHandler.GET,
+  )
+
   {
     const controller = new ConfirmCreateRoutes(auditService, licenceService, prisonerService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)

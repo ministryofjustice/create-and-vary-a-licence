@@ -1,7 +1,7 @@
 import { RequestHandler, Router } from 'express'
 import multer from 'multer'
 import path from 'path'
-import checkLicenceAccess from '../../../../middleware/checkLicenceAccessMiddleware'
+import checkLicenceAccessForJourney from '../../../../middleware/checkLicenceAccessForJourney'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 
@@ -23,7 +23,7 @@ export default function Index({ auditService, licenceService, conditionService }
     router.get(
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       handler,
     )
 
@@ -31,7 +31,7 @@ export default function Index({ auditService, licenceService, conditionService }
     router.post(
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
@@ -40,7 +40,7 @@ export default function Index({ auditService, licenceService, conditionService }
     router.post(
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       upload.single('filename'),
       validationMiddleware(conditionService, type),
       handler,

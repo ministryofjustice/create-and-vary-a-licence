@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import checkLicenceAccess from '../../middleware/checkLicenceAccessMiddleware'
+import checkLicenceAccessForJourney from '../../middleware/checkLicenceAccessForJourney'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
@@ -23,9 +23,6 @@ import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import UserType from '../../enumeration/userType'
 import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMiddleware'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
-import OptOutInterruptHandler from './handlers/optOutInterruptHandler'
-import PostponedInterruptHandler from './handlers/postponedInterruptHandler'
-import RefusedInterruptHandler from './handlers/refusedInterruptHandler'
 
 export default function Index({
   auditService,
@@ -50,7 +47,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       handler,
     )
 
@@ -59,7 +56,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       hardStopCheckMiddleware(auditService, UserType.PROBATION),
       handler,
     )
@@ -70,7 +67,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       preLicenceCreationMiddleware(auditService, probationService),
       handler,
     )
@@ -80,7 +77,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(auditService, UserType.PROBATION),
       handler,
@@ -91,7 +88,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       preLicenceCreationMiddleware(auditService, probationService),
       validationMiddleware(conditionService, type),
       handler,
@@ -134,21 +131,6 @@ export default function Index({
     get('/id/:licenceId/check-your-answers', controller.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }
-  {
-    const controller = new OptOutInterruptHandler()
-    get('/id/:licenceId/opt-out-interrupt', controller.GET)
-  }
-
-  {
-    const controller = new RefusedInterruptHandler()
-    get('/id/:licenceId/refused-interrupt', controller.GET)
-  }
-
-  {
-    const controller = new PostponedInterruptHandler(licenceService)
-    get('/id/:licenceId/postponed-interrupt', controller.GET)
-  }
-
   {
     const controller = new EditQuestionRoutes(licenceService)
     getWithHardStopCheck('/id/:licenceId/edit', controller.GET)
