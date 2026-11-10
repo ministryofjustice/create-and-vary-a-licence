@@ -83,8 +83,9 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
     expect(next).not.toHaveBeenCalled()
   })
 
-  it('should continue to check answers when address checks are complete', async () => {
+  it('should render the opted-in interrupt when address checks are complete', async () => {
     res.locals.licence = {
+      id: 123,
       kind: LicenceKind.HDC,
       statusCode: LicenceStatus.IN_PROGRESS,
       isReplacementForOptedInLicence: true,
@@ -93,7 +94,24 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
 
     await handler.GET(req, res, next)
 
+    expect(res.render).toHaveBeenCalledWith('pages/create/hdc/interrupt', {
+      backLink: '/licence/create/caseload?view=team',
+      toCheckYourAnswer: '/licence/create/id/123/check-your-answers',
+      interruptType: 'addressChecksComplete',
+    })
+    expect(res.redirect).not.toHaveBeenCalled()
+  })
+
+  it('should not render the opted-in interrupt after the licence is submitted', async () => {
+    res.locals.licence = {
+      kind: LicenceKind.HDC,
+      statusCode: LicenceStatus.SUBMITTED,
+      isReplacementForOptedInLicence: true,
+      hdcRiskChecksComplete: true,
+    } as Licence
+    await handler.GET(req, res, next)
     expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/123/check-your-answers')
+    expect(res.render).not.toHaveBeenCalled()
   })
 
   it('should render the opt-out interrupt from the fetched licence state', async () => {

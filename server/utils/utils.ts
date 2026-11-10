@@ -301,6 +301,15 @@ function isHdcAddressChecksIncompleteLicence(
   )
 }
 
+function isHdcAddressChecksCompleteLicence(licence: Licence): licence is HdcLicence & { hdcRiskChecksComplete: true } {
+  return (
+    licence.kind === LicenceKind.HDC &&
+    licence.statusCode === LicenceStatus.IN_PROGRESS &&
+    licence.isReplacementForOptedInLicence &&
+    licence.hdcRiskChecksComplete === true
+  )
+}
+
 function isHdcRefusedLicence(licence: Licence): boolean {
   return (
     licence.kind === LicenceKind.CRD &&
@@ -387,6 +396,7 @@ export {
   isVariation,
   isHdcLicence,
   isHdcAddressChecksIncompleteLicence,
+  isHdcAddressChecksCompleteLicence,
   isHdcRefusedLicence,
   isHdcOptOutLicence,
   isHdcPostponedLicence,

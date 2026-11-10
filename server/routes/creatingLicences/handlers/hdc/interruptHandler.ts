@@ -8,11 +8,13 @@ import {
   isHdcPostponedLicence,
   isHdcRefusedLicence,
   isHdcAddressChecksIncompleteLicence,
+  isHdcAddressChecksCompleteLicence,
 } from '../../../../utils/utils'
 import LicenceService from '../../../../services/licenceService'
 
 const HdcInterruptType = {
   ADDRESS_CHECKS_INCOMPLETE: 'addressChecksIncomplete',
+  ADDRESS_CHECKS_COMPLETE: 'addressChecksComplete',
   REFUSED: 'refused',
   OPT_OUT: 'optOut',
   POSTPONED: 'postponed',
@@ -69,6 +71,9 @@ export default class InterruptHandler {
   private getInterruptType = (licence: Licence): HdcInterruptType | undefined => {
     if (isHdcAddressChecksIncompleteLicence(licence)) {
       return HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE
+    }
+    if (isHdcAddressChecksCompleteLicence(licence)) {
+      return HdcInterruptType.ADDRESS_CHECKS_COMPLETE
     }
     if (isHdcRefusedLicence(licence)) {
       return HdcInterruptType.REFUSED
