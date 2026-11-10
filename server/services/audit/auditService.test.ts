@@ -152,6 +152,150 @@ describe('AuditService', () => {
   })
 
   describe('custom handlers', () => {
+    it('should log viewing the COM caseload', async () => {
+      const eventType = 'VIEW_CREATE_CASELOAD'
+      const team = 'team1'
+      const caseload = [
+        {
+          crnNumber: 'CRN123',
+        },
+        {
+          crnNumber: 'CRN456',
+        },
+      ]
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logComCaseloadEvent(requestId, team, caseload, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'NOT_APPLICABLE',
+        subjectId: '',
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          queryParams: {
+            team,
+          },
+          results: {
+            resultCount: caseload.length,
+            returnedSubjectIds: caseload.map(result => result.crnNumber),
+          },
+        },
+      })
+    })
+
+    it('should log viewing the approver caseload', async () => {
+      const eventType = 'VIEW_LICENCE_APPROVE_CASES'
+      const prisons = ['prisonA']
+      const caseload = [
+        {
+          prisonerNumber: 'A1234BC',
+        },
+        {
+          prisonerNumber: 'B1234BC',
+        },
+      ]
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logApproverCaseloadEvent(requestId, prisons, caseload, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'NOT_APPLICABLE',
+        subjectId: '',
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          queryParams: {
+            prisons: prisons.join() || '',
+          },
+          results: {
+            resultCount: caseload.length,
+            returnedSubjectIds: caseload.map(result => result.prisonerNumber),
+          },
+        },
+      })
+    })
+
+    it('should log viewing the vary approver caseload', async () => {
+      const eventType = 'VIEW_LICENCE_VARY_APPROVE_CASES'
+      const regions = 'region1'
+      const caseload = [
+        {
+          crnNumber: 'CRN123',
+        },
+        {
+          crnNumber: 'CRN456',
+        },
+      ]
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logVaryApproverCaseloadEvent(requestId, regions, caseload, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'NOT_APPLICABLE',
+        subjectId: '',
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          queryParams: {
+            regions,
+          },
+          results: {
+            resultCount: caseload.length,
+            returnedSubjectIds: caseload.map(result => result.crnNumber),
+          },
+        },
+      })
+    })
+
+    it('should log viewing the OMU caseload', async () => {
+      const eventType = 'VIEW_LICENCE_VIEW_CASES'
+      const prisons = ['prisonA']
+      const caseload = [
+        {
+          prisonerNumber: 'A1234BC',
+        },
+        {
+          prisonerNumber: 'B1234BC',
+        },
+      ]
+
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logOmuCaseloadEvent(requestId, prisons, caseload, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'NOT_APPLICABLE',
+        subjectId: '',
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+          queryParams: {
+            prisons: prisons.join() || '',
+          },
+          results: {
+            resultCount: caseload.length,
+            returnedSubjectIds: caseload.map(result => result.prisonerNumber),
+          },
+        },
+      })
+    })
+
     it('should log a probation search event', async () => {
       const eventType = 'VIEW_PROBATION_SEARCH_RESULTS_SUCCESS'
       const searchTerm = 'CRN123'
