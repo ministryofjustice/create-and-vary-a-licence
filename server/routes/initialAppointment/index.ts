@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import checkLicenceAccess from '../../middleware/checkLicenceAccessMiddleware'
+import checkLicenceAccessForJourney from '../../middleware/checkLicenceAccessForJourney'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
@@ -39,7 +39,7 @@ export default function Index({ auditService, licenceService, conditionService, 
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       licenceKindCheckMiddleware(auditService, [LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
       hardStopCheckMiddleware(auditService, userType),
       handler,
@@ -50,7 +50,7 @@ export default function Index({ auditService, licenceService, conditionService, 
       routePrefix(path),
       roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(auditService, licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       licenceKindCheckMiddleware(auditService, [LicenceKind.VARIATION, LicenceKind.HDC_VARIATION]),
       validationMiddleware(conditionService, type),
       handler,

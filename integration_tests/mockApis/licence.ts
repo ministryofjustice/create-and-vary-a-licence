@@ -30,6 +30,8 @@ const licencePlaceholder: Licence = {
   isInHardStopPeriod: false,
   isReviewNeeded: false,
   isVariation: false,
+  isReplacementForOptedOutLicence: false,
+  isReplacementForRefusedLicence: false,
   id: 1,
   typeCode: 'AP',
   kind: 'CRD',
@@ -441,7 +443,10 @@ export default {
   },
 
   stubGetHdcLicence: (options: {
+    isInHardStopPeriod?: boolean
     isReplacementForOptedInLicence?: boolean
+    hdcRiskChecksComplete?: boolean
+    isPostponed?: boolean
     licenceId?: string
     firstNightCurfewTimes?: {
       fromTime?: string
@@ -470,7 +475,10 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           kind: options.kind ?? LicenceKind.HDC,
+          isInHardStopPeriod: options.isInHardStopPeriod ?? false,
           isReplacementForOptedInLicence: options.isReplacementForOptedInLicence ?? false,
+          hdcRiskChecksComplete: options.hdcRiskChecksComplete,
+          isPostponed: options.isPostponed ?? false,
           statusCode: options.statusCode ?? licencePlaceholder.statusCode,
           typeCode: options.typeCode ?? licencePlaceholder.typeCode,
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate ?? '01/03/2021',
@@ -2060,8 +2068,10 @@ export default {
     licenceId: number
     licenceStatus: string
     licenceCreationType: string
+    kind?: 'CRD' | 'HDC'
     isReplacementForOptedOutLicence?: boolean
     isReplacementForRefusedLicence?: boolean
+    isHdcPostponed?: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -2078,6 +2088,7 @@ export default {
             prisonerNumber: 'G9786GC',
             releaseDate: '01/09/2024',
             licenceId: options.licenceId,
+            kind: options.kind ?? 'CRD',
             licenceStatus: options.licenceStatus,
             licenceType: 'AP',
             probationPractitioner: {
@@ -2090,6 +2101,7 @@ export default {
             licenceCreationType: options.licenceCreationType,
             isReplacementForOptedOutLicence: options.isReplacementForOptedOutLicence || false,
             isReplacementForRefusedLicence: options.isReplacementForRefusedLicence || false,
+            isHdcPostponed: options.isHdcPostponed || false,
           },
         ],
       },
