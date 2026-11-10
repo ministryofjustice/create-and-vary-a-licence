@@ -72,7 +72,7 @@ export default class InterruptHandler {
     if (isHdcAddressChecksIncompleteLicence(licence)) {
       return HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE
     }
-    if (isHdcAddressChecksCompleteLicence(licence)) {
+    if (isHdcAddressChecksCompleteLicence(licence) && !isHdcPostponedLicence(licence)) {
       return HdcInterruptType.ADDRESS_CHECKS_COMPLETE
     }
     if (isHdcRefusedLicence(licence)) {

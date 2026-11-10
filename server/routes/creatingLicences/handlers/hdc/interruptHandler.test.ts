@@ -102,6 +102,30 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
     expect(res.redirect).not.toHaveBeenCalled()
   })
 
+  it('should render the postponed interrupt when address checks are complete and the licence is postponed', async () => {
+    res.locals.user = { username: 'joebloggs' } as unknown as User
+    res.locals.licence = {
+      id: 123,
+      kind: LicenceKind.HDC,
+      statusCode: LicenceStatus.IN_PROGRESS,
+      isReplacementForOptedInLicence: true,
+      hdcRiskChecksComplete: true,
+      isPostponed: true,
+      prisonCode: 'MDI',
+    } as Licence
+
+    await handler.GET(req, res, next)
+
+    expect(getOmuEmail).toHaveBeenCalledWith('MDI', res.locals.user)
+    expect(res.render).toHaveBeenCalledWith('pages/create/hdc/interrupt', {
+      backLink: '/licence/create/caseload?view=team',
+      toCheckYourAnswer: '/licence/create/id/123/check-your-answers',
+      interruptType: 'postponed',
+      omuContact: 'MDI',
+    })
+    expect(next).not.toHaveBeenCalled()
+  })
+
   it('should not render the opted-in interrupt after the licence is submitted', async () => {
     res.locals.licence = {
       kind: LicenceKind.HDC,
