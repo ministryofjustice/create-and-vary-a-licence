@@ -55,6 +55,20 @@ describe('View HDC interrupt page', () => {
     expect($('.refused-interrupt__actions a.govuk-link').text().trim()).toBe('Return to case list')
   })
 
+  it('should display the opted-in interruption and allow continuing when address checks are complete', () => {
+    const $ = render({ ...model, interruptType: 'addressChecksComplete' })
+
+    expect($('.moj-interruption-card h1').text().trim()).toBe('This person has opted in to HDC')
+    expect($('.moj-interruption-card__body > p').first().text().trim()).toBe('This licence is now for a HDC release')
+    expect($('.moj-interruption-card__body').text()).toContain(
+      'Check the HDC service for more information about the HDC application.',
+    )
+    expect($('.refused-interrupt__actions a.govuk-button').text().trim()).toBe('Continue')
+    expect($('.refused-interrupt__actions a.govuk-button').attr('href')).toBe(model.toCheckYourAnswer)
+    expect($('.refused-interrupt__actions a.govuk-link').text().trim()).toBe('Return to case list')
+    expect($('.refused-interrupt__actions a.govuk-link').attr('href')).toBe(model.backLink)
+  })
+
   it('should display the opted-out interruption', () => {
     const $ = render({ ...model, interruptType: 'optOut' })
 

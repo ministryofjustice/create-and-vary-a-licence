@@ -135,6 +135,34 @@ context('View COM create caseload', () => {
     cy.location('pathname').should('eq', '/access-denied')
   })
 
+  it('should show the opted-in HDC interrupt when address checks are complete', () => {
+    cy.task('stubRecordAuditEvent')
+    cy.task('stubGetHdcLicence', {
+      kind: 'HDC',
+      statusCode: 'IN_PROGRESS',
+      isReplacementForOptedInLicence: true,
+      hdcRiskChecksComplete: true,
+    })
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.clickCreateALicenceWithHdcReplacement({ kind: 'HDC' })
+
+    cy.get('#name-button-1').click()
+    cy.get('#hdc-opt-in-interrupt-page-heading').should('contain', 'This person has opted in to HDC')
+    cy.contains('This licence is now for a HDC release')
+    cy.contains('.moj-interruption-card__body a', 'Check the HDC service').should('have.attr', 'href')
+    cy.contains('.refused-interrupt__actions a', 'Return to case list').should(
+      'have.attr',
+      'href',
+      '/licence/create/caseload',
+    )
+    cy.get('.refused-interrupt__actions a.govuk-button')
+      .should('contain', 'Continue')
+      .and('have.attr', 'href', '/licence/create/id/1/check-your-answers')
+      .click()
+    cy.get('#check-answers-page').should('exist')
+  })
+
   it('should show the postponed HDC interrupt with OMU contact details', () => {
     cy.task('stubGetHdcLicence', { kind: 'HDC', statusCode: 'IN_PROGRESS', isPostponed: true })
 
