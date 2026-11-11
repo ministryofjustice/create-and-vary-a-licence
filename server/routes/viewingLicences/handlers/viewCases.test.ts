@@ -7,6 +7,10 @@ import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../enumeration
 
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import { CaCase } from '../../../@types/licenceApiClientTypes'
+import AuditService from '../../../services/audit/auditService'
+
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
+jest.mock('../../../services/audit/auditService')
 
 const caseloadService = new CaCaseloadService(null) as jest.Mocked<CaCaseloadService>
 jest.mock('../../../services/lists/caCaseloadService')
@@ -15,7 +19,7 @@ const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerS
 jest.mock('../../../services/prisonerService')
 
 describe('Route handlers - View and print case list', () => {
-  const handler = new ViewAndPrintCaseRoutes(caseloadService, prisonerService)
+  const handler = new ViewAndPrintCaseRoutes(auditService, caseloadService, prisonerService)
   let req: Request
   let res: Response
 
@@ -922,6 +926,12 @@ describe('Route handlers - View and print case list', () => {
 
       await handler.GET(req, res)
 
+      expect(auditService.logOmuCaseloadEvent).toHaveBeenCalledWith(
+        req.id,
+        ['BAI'],
+        [timeServedInProgress],
+        res.locals.user,
+      )
       expect(res.render).toHaveBeenCalledWith(
         'pages/view/cases',
         expect.objectContaining({
