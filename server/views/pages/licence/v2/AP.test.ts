@@ -31,8 +31,23 @@ describe('Print a V2 AP licence', () => {
       licenceTemplateV2Enabled: true,
     })
 
-    expect($('.title')).toHaveLength(2)
-    expect($('.title').first().text()).toBe('Licence for John Smith')
-    expect($('.title--subtitle').text()).toBe('Released from HMP Prison')
+    expect($('#title').text()).toBe('Licence for John Smith')
+    expect($('#subtitle').text()).toBe('Released from HMP Prison')
+  })
+
+  it('renders the first-meeting heading', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'John',
+        surname: 'Smith',
+        typeCode: 'AP',
+        version: '2.0',
+      },
+    })
+
+    const heading = $('#section-heading-first-meeting')
+    expect(heading).toHaveLength(1)
+    expect(heading.text()).toContain('Your first probation meeting')
   })
 })

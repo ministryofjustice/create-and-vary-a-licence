@@ -40,13 +40,40 @@ body.licence-template-v2 {
 body.licence-template-v2 .title {
   font-size: 22pt;
   font-weight: normal;
+  margin-bottom: 4px;
+}
+
+body.licence-template-v2 .subtitle {
+  font-size: 16pt;
+  margin-bottom: 30px;
+}
+
+body.licence-template-v2 .section-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 20pt;
+  font-weight: bolder;
   margin-bottom: 8px;
 }
 
-body.licence-template-v2 .title--subtitle {
-  font-size: 16pt;
-  margin-top: 0;
+body.licence-template-v2 .section-heading__icon-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 40px;
+  flex: 0 0 48px;
+  border: 1px dashed #555;
+  font-size: 8pt;
+  font-weight: normal;
 }
+
+.page-break-before {
+  break-before: page;
+  page-break-before: always;
+}
+
 
 .map-page {
   break-inside: avoid;

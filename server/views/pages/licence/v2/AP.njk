@@ -1,8 +1,12 @@
 {% extends "pages/licence/pdf-layout.njk" %}
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
-
 {% block content %}
-  <div id="title" class="title">Licence for {{ offenderName }}</div>
-  <div class="title title--subtitle">Released from {{ licence.prisonDescription }}</div>
+    <div id="title" class="title">Licence for {{ offenderName }}</div>
+    <div id="subtitle" class="subtitle">Released from {{ licence.prisonDescription }}</div>
+    <div id="section-heading-first-meeting" class="section-heading">
+        <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
+        <span>Your first probation meeting</span>
+    </div>
+    <div id="page-2-break" class="page-break-before"></div>
 {% endblock %}
