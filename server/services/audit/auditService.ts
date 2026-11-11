@@ -45,6 +45,110 @@ export default class AuditService {
     await this.sendAuditEvent(auditEventMessage)
   }
 
+  async logComCaseloadEvent(
+    requestId: string,
+    team: string | null,
+    caseload: { crnNumber?: string | null }[],
+    user: User,
+  ): Promise<void> {
+    const caseloadCrns = caseload.map(comCase => comCase.crnNumber)
+    const baseEventMessage = this.createAuditEvent('VIEW_CREATE_CASELOAD', undefined, requestId, user)
+    const auditEvent: AuditEvent = {
+      ...baseEventMessage,
+      subjectType: 'NOT_APPLICABLE',
+      subjectId: '',
+      details: {
+        ...baseEventMessage.details,
+        queryParams: {
+          team: team || '',
+        },
+        results: {
+          resultCount: caseloadCrns.length,
+          returnedSubjectIds: caseloadCrns,
+        },
+      },
+    }
+    await this.sendAuditEvent(auditEvent)
+  }
+
+  async logApproverCaseloadEvent(
+    requestId: string,
+    prisons: string[],
+    caseload: { prisonerNumber?: string | null }[],
+    user: User,
+  ): Promise<void> {
+    const caseloadPrisonerNumbers = caseload.map(approverCase => approverCase.prisonerNumber)
+    const baseEventMessage = this.createAuditEvent('VIEW_LICENCE_APPROVE_CASES', undefined, requestId, user)
+    const auditEvent: AuditEvent = {
+      ...baseEventMessage,
+      subjectType: 'NOT_APPLICABLE',
+      subjectId: '',
+      details: {
+        ...baseEventMessage.details,
+        queryParams: {
+          prisons: prisons.join() || '',
+        },
+        results: {
+          resultCount: caseloadPrisonerNumbers.length,
+          returnedSubjectIds: caseloadPrisonerNumbers,
+        },
+      },
+    }
+    await this.sendAuditEvent(auditEvent)
+  }
+
+  async logVaryApproverCaseloadEvent(
+    requestId: string,
+    regions: string | null,
+    caseload: { crnNumber?: string | null }[],
+    user: User,
+  ): Promise<void> {
+    const caseloadCrns = caseload.map(approverCase => approverCase.crnNumber)
+    const baseEventMessage = this.createAuditEvent('VIEW_LICENCE_VARY_APPROVE_CASES', undefined, requestId, user)
+    const auditEvent: AuditEvent = {
+      ...baseEventMessage,
+      subjectType: 'NOT_APPLICABLE',
+      subjectId: '',
+      details: {
+        ...baseEventMessage.details,
+        queryParams: {
+          regions: regions || '',
+        },
+        results: {
+          resultCount: caseloadCrns.length,
+          returnedSubjectIds: caseloadCrns,
+        },
+      },
+    }
+    await this.sendAuditEvent(auditEvent)
+  }
+
+  async logOmuCaseloadEvent(
+    requestId: string,
+    prisonCodes: string[],
+    caseload: { prisonerNumber?: string | null }[],
+    user: User,
+  ): Promise<void> {
+    const caseloadPrisonNumbers = caseload.map(omuCase => omuCase.prisonerNumber)
+    const baseEventMessage = this.createAuditEvent('VIEW_LICENCE_VIEW_CASES', undefined, requestId, user)
+    const auditEvent: AuditEvent = {
+      ...baseEventMessage,
+      subjectType: 'NOT_APPLICABLE',
+      subjectId: '',
+      details: {
+        ...baseEventMessage.details,
+        queryParams: {
+          prisons: prisonCodes.join() || '',
+        },
+        results: {
+          resultCount: caseloadPrisonNumbers.length,
+          returnedSubjectIds: caseloadPrisonNumbers,
+        },
+      },
+    }
+    await this.sendAuditEvent(auditEvent)
+  }
+
   async logProbationSearchEvent(
     requestId: string,
     searchTerm: string,

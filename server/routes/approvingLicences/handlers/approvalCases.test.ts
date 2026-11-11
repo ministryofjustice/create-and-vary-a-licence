@@ -6,6 +6,11 @@ import PrisonerService from '../../../services/prisonerService'
 import type { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import ApproverCaseloadService from '../../../services/lists/approverCaseloadService'
 import { ApprovalCase } from '../../../@types/licenceApiClientTypes'
+import AuditService from '../../../services/audit/auditService'
+import { cvlDateToDateShort } from '../../../utils/utils'
+
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
+jest.mock('../../../services/audit/auditService')
 
 const caseloadService = new ApproverCaseloadService(null) as jest.Mocked<ApproverCaseloadService>
 jest.mock('../../../services/lists/approverCaseloadService')
@@ -45,7 +50,7 @@ const caseload: ApprovalCase[] = [
 ]
 
 describe('Route Handlers - Approval - case list', () => {
-  const handler = new ApprovalCaseRoutes(caseloadService, prisonerService)
+  const handler = new ApprovalCaseRoutes(caseloadService, auditService, prisonerService)
   let req: Request
   let res: Response
 
@@ -94,7 +99,20 @@ describe('Route Handlers - Approval - case list', () => {
     describe('GET approval needed', () => {
       it('should render list of licences for approval', async () => {
         await handler.GET(req, res)
+
         expect(caseloadService.getApprovalNeeded).toHaveBeenCalledWith(res.locals.user, ['BAI'], undefined)
+        expect(auditService.logApproverCaseloadEvent).toHaveBeenCalledWith(
+          req.id,
+          ['BAI'],
+          caseload.map(aCase => {
+            return {
+              ...aCase,
+              releaseDate: aCase.releaseDate ? cvlDateToDateShort(aCase.releaseDate) : 'not found',
+              approvedOn: aCase.approvedOn ? cvlDateToDateShort(aCase.approvedOn) : null,
+            }
+          }),
+          res.locals.user,
+        )
         expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
           cases: [
             {

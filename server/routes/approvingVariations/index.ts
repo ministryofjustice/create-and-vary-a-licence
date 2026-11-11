@@ -53,7 +53,7 @@ export default function Index({
     )
 
   // Define route handlers for variation approvals
-  const listHandler = new VaryApproveListRoutes(varyApproverCaseloadService)
+  const listHandler = new VaryApproveListRoutes(auditService, varyApproverCaseloadService)
   const viewHandler = new VaryApproveViewRoutes(licenceService)
   const approveConfirmHandler = new VaryApproveConfirmRoutes()
   const referHandler = new VaryReferRoutes(licenceService)

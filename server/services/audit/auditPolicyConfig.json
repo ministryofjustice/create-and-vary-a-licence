@@ -21,6 +21,7 @@
   },
   "GET /licence/create/caseload": {
     "audit": true,
+    "customHandler": true,
     "eventType": "VIEW_CREATE_CASELOAD"
   },
   "GET /licence/create/probation-practitioner/staffCode/:staffCode": {
@@ -425,6 +426,7 @@
   },
   "GET /licence/approve/cases": {
     "audit": true,
+    "customHandler": true,
     "eventType": "VIEW_LICENCE_APPROVE_CASES"
   },
   "GET /licence/approve/id/:licenceId/probation-practitioner": {
@@ -469,6 +471,7 @@
   },
   "GET /licence/vary-approve/list": {
     "audit": true,
+    "customHandler": true,
     "eventType": "VIEW_LICENCE_VARY_APPROVE_LIST"
   },
   "GET /licence/vary-approve/id/:licenceId/view": {
@@ -566,11 +569,11 @@
   },
   "GET /autherror": {
     "audit": false,
-    "reason": "Authentication error page system response, not auditable action"
+    "reason": "Authentication error page, , this is audited as a failed access attempt before redirecting here"
   },
   "GET /access-denied": {
     "audit": false,
-    "reason": "Access denied page system response, not auditable action"
+    "reason": "Access denied page, this is audited as a failed access attempt before redirecting here"
   },
   "GET /login": {
     "audit": false,
