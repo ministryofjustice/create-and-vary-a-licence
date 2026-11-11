@@ -1,4 +1,8 @@
 {% extends "pages/licence/pdf-layout.njk" %}
+{% set offenderName = licence.forename + " " + licence.surname %}
+{% set pageTitle = offenderName %}
 
 {% block content %}
+  <div id="title" class="title">Licence for {{ offenderName }}</div>
+  <div class="title title--subtitle">Released from {{ licence.prisonDescription }}</div>
 {% endblock %}
