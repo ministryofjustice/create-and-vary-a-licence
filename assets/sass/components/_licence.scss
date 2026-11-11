@@ -33,6 +33,21 @@ body {
   line-height: normal;
 }
 
+body.licence-template-v2 {
+  font-family: Arial, sans-serif;
+}
+
+body.licence-template-v2 .title {
+  font-size: 22pt;
+  font-weight: normal;
+  margin-bottom: 8px;
+}
+
+body.licence-template-v2 .title--subtitle {
+  font-size: 16pt;
+  margin-top: 0;
+}
+
 .map-page {
   break-inside: avoid;
   page-break-inside: avoid;
