@@ -57,12 +57,16 @@ body.licence-template-v2 .section-heading {
   margin-bottom: 8px;
 }
 
-body.licence-template-v2 .section-heading__icon {
-  display: block;
-  width: 40px;
+body.licence-template-v2 .section-heading__icon-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
   height: 40px;
-  flex: 0 0 40px;
-  object-fit: contain;
+  flex: 0 0 48px;
+  border: 1px dashed #555;
+  font-size: 8pt;
+  font-weight: normal;
 }
 
 .page-break-before {
