@@ -35,6 +35,7 @@ body {
 
 body.licence-template-v2 {
   font-family: Arial, sans-serif;
+  font-size: 12pt;
 }
 
 body.licence-template-v2 .title {
@@ -67,6 +68,12 @@ body.licence-template-v2 .section-heading__icon-placeholder {
   border: 1px dashed #555;
   font-size: 8pt;
   font-weight: normal;
+}
+
+body.licence-template-v2 .first-probation-meeting-content {
+  width: 500px;
+  max-width: 100%;
+  line-height: 18px;
 }
 
 .page-break-before {

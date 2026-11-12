@@ -156,7 +156,7 @@ export default class PrintLicenceRoutes {
       <div style="${pdfHeaderFooterStyleV2}">
         <table style="width: 100%; padding-left: 15px; padding-right: 15px;">
           <tr>
-            <td style="text-align: left; width: 70%;">${fullName} | Prison number: <span>${licence.nomsId}</span></td>
+            <td style="text-align: left; width: 70%;">${fullName} | Prison number: <span>${licence.nomsId}</span> | CRN: <span>${licence.crn}</span></td>
             <td style="text-align: right; width: 30%; font-size: 12px;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></td>
           </tr>
         </table>

@@ -404,6 +404,7 @@ export {
   assertIsVariation,
   formatAddressTitleCase,
   formatAddressLine,
+  toAddressCase,
   lowercaseFirstLetter,
   isTimeServedLicence,
   mapToTargetField,
