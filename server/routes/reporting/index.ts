@@ -24,6 +24,7 @@ enum ReportAction {
   RESET_COLUMNS = 'RESET_COLUMNS',
   DOWNLOAD = 'DOWNLOAD',
   SAVE_DEFAULTS = 'SAVE_DEFAULTS',
+  DELETE_DEFAULTS = 'DELETE_DEFAULTS',
   RESET_FILTERS = 'RESET_FILTERS',
   LOAD_REPORT = 'LOAD_REPORT',
 }
@@ -35,6 +36,7 @@ const reportAuditConfig: { [key: string]: ReportAction } = {
   '/dpr/view-report/sync/report/:reportName1/:reportName2/report/reset-columns': ReportAction.RESET_COLUMNS,
   '/dpr/download-report/:reportName1/:reportName2': ReportAction.DOWNLOAD,
   '/dpr/view-report/sync/report/:reportName1/:reportName2/report/save-defaults': ReportAction.SAVE_DEFAULTS,
+  '/dpr/view-report/sync/report/:reportName1/:reportName2/report/delete-defaults': ReportAction.DELETE_DEFAULTS,
   '/dpr/view-report/sync/report/:reportName1/:reportName2/report/reset-filters': ReportAction.RESET_FILTERS,
 }
 
@@ -134,6 +136,8 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
         return `VIEW_${toSnakeCase(reportName1 as string)}_REPORT_DOWNLOAD_SUCCESS`
       case ReportAction.SAVE_DEFAULTS:
         return `EDIT_${toSnakeCase(reportName1 as string)}_REPORT_SAVE_DEFAULTS_SUCCESS`
+      case ReportAction.DELETE_DEFAULTS:
+        return `EDIT_${toSnakeCase(reportName1 as string)}_REPORT_DELETE_DEFAULTS_SUCCESS`
       case ReportAction.RESET_FILTERS:
         return `EDIT_${toSnakeCase(reportName1 as string)}_REPORT_RESET_FILTERS_SUCCESS`
       case ReportAction.LOAD_REPORT:
