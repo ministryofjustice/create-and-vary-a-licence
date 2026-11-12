@@ -1,12 +1,89 @@
 {% extends "pages/licence/pdf-layout.njk" %}
+
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
+
+{% set appointmentDate %}
+    {% if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' %}
+    <span id="appointment-time" data-qa="appointment-time">on
+        <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}</span>
+        at
+        <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime }}</span>
+    </span>
+    {% elif licence.appointmentTimeType === 'NEXT_WORKING_DAY_2PM' %}
+    <span id="appointment-time" data-qa="appointment-time">
+        <span class="bold">by 2pm on the next working day after you leave prison</span>
+    </span>
+    {% elif licence.appointmentTimeType === 'IMMEDIATE_UPON_RELEASE' %}
+    <span id="appointment-time" data-qa="appointment-time">
+        <span class="bold">as soon as you leave prison</span>
+    </span>
+    {% else %}
+    <span id="appointment-time" data-qa="appointment-time"></span>
+    {% endif %}
+{% endset %}
+
+{% set comDetails %}
+    {% switch licence.appointmentPersonType %}
+        {% case 'DUTY_OFFICER' %}the duty officer:
+    {% default %}
+        {{ licence.appointmentPerson }}:
+    {% endswitch %}
+{% endset %}
+
+{% set appointmentAddressLines = licence.licenceAppointmentAddress | formatLicenceAddressAsList if licence.licenceAppointmentAddress else licence.appointmentAddress | formatAddressAsList %}
+
 {% block content %}
-    <div id="title" class="title">Licence for {{ offenderName }}</div>
-    <div id="subtitle" class="subtitle">Released from {{ licence.prisonDescription }}</div>
-    <div id="section-heading-first-meeting" class="section-heading">
-        <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
-        <span>Your first probation meeting</span>
+  <div id="title" class="title">Licence for {{ offenderName }}</div>
+  <div id="subtitle" class="subtitle">Released from {{ licence.prisonDescription }}</div>
+
+  <div id="section-heading-first-meeting" class="section-heading">
+    <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
+    <span>Your first probation meeting</span>
+  </div>
+
+  <div id="first-probation-meeting-content" class="first-probation-meeting-content">
+    <div id="first-meeting-person-details">
+      <p>You must go to the following address {{ appointmentDate | safe }} and ask to speak to
+        {% if licence.appointmentPersonType === 'RESPONSIBLE_COM' %}
+          <span id="appointment-contact">
+            <span class="bold">{{ licence.responsibleComFullName }}</span> who will be your supervising officer:
+          </span>
+        {% else %}
+          <span id="appointment-contact" class="bold">{{ comDetails | trim }}</span>
+        {% endif %}
+      </p>
+      <div id="appointment-address">
+        {% for addressLine in appointmentAddressLines %}
+          {% if loop.last %}
+            <span class="line-space-after">{{ addressLine }}</span>
+          {% else %}
+            <span class="line-space-after">{{ addressLine | toAddressCase }},</span>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
-    <div id="page-2-break" class="page-break-before"></div>
+
+    <div id="first-meeting-person-details-content">
+      <p>Your first probation meeting is a chance for you to learn more about your licence period and to ask any questions.</p>
+    </div>
+
+    <div id="problems-questions-content">
+      <p class="bold">If you have any problems or questions</p>
+      <p id="appointment-telephone-details">
+        Phone number:
+        <span id="appointment-phone-number" class="bold">{{ licence.appointmentTelephoneNumber }}</span>
+        {% if licence.appointmentAlternativeTelephoneNumber %}
+          <span id="appointment-alternative-phone" class="line-space-after">
+            Alternative phone number:
+            <span id="appointment-alternative-phone-number" class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
+          </span>
+        {% endif %}
+      </p>
+    </div>
+
+  </div>
+
+  <div id="page-2-break" class="page-break-before"></div>
+
 {% endblock %}

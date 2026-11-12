@@ -739,12 +739,13 @@ describe('Route - print a licence', () => {
       config.licenceTemplateV2Enabled = false
     })
 
-    it('returns footer with v2 format containing fullname and prison number only', () => {
+    it('returns footer with v2 format containing fullname, prison number and CRN', () => {
       config.licenceTemplateV2Enabled = true
       const licence = {
         forename: 'John',
         surname: 'Bloggs',
         nomsId: 'A1234AA',
+        crn: 'CRN123',
         bookingNo: 'BOOKING123',
         cro: 'CRO123',
         pnc: 'PNC123',
@@ -758,7 +759,7 @@ describe('Route - print a licence', () => {
 
       const footerHtml = handler.getPdfFooter(licence)
 
-      expect(footerHtml).toContain('John Bloggs | Prison number: <span>A1234AA</span>')
+      expect(footerHtml).toContain('John Bloggs | Prison number: <span>A1234AA</span> | CRN: <span>CRN123</span>')
       expect(footerHtml).toContain('Page <span class="pageNumber"></span> of <span class="totalPages"></span>')
       expect(footerHtml).not.toContain('Booking No')
       expect(footerHtml).not.toContain('CRO No')

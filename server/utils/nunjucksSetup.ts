@@ -19,6 +19,7 @@ import {
   cvlDateToDateShort,
   formatAddressTitleCase,
   formatAddressLine,
+  toAddressCase,
 } from './utils'
 import { AdditionalCondition, AdditionalConditionData, Licence, FoundComCase } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
@@ -178,6 +179,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('formatAddressAsList', (address?: string) => {
     return address ? address.split(', ').filter(line => line.trim().length > 0) : undefined
   })
+
+  njkEnv.addFilter('toAddressCase', toAddressCase)
 
   njkEnv.addFilter('formatLicenceAddressAsList', addressObj => {
     if (!addressObj) return undefined
