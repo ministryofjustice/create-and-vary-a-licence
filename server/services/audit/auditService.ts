@@ -45,6 +45,11 @@ export default class AuditService {
     await this.sendAuditEvent(auditEventMessage)
   }
 
+  async logReportView(requestId: string, eventType: string, user: User): Promise<void> {
+    const auditEvent = this.createAuditEvent(eventType, undefined, requestId, user)
+    await this.sendAuditEvent(auditEvent)
+  }
+
   async logComCaseloadEvent(
     requestId: string,
     team: string | null,
