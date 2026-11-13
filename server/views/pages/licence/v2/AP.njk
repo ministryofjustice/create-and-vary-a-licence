@@ -6,9 +6,9 @@
 {% set appointmentDate %}
     {% if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' %}
     <span id="appointment-time" data-qa="appointment-time">on
-        <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}</span>
+        <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}
         at
-        <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime }}</span>
+        {{ licence.appointmentTime | datetimeTo12HourTimeCompact }}</span>
     </span>
     {% elif licence.appointmentTimeType === 'NEXT_WORKING_DAY_2PM' %}
     <span id="appointment-time" data-qa="appointment-time">
@@ -21,14 +21,6 @@
     {% else %}
     <span id="appointment-time" data-qa="appointment-time"></span>
     {% endif %}
-{% endset %}
-
-{% set comDetails %}
-    {% switch licence.appointmentPersonType %}
-        {% case 'DUTY_OFFICER' %}the duty officer:
-    {% default %}
-        {{ licence.appointmentPerson }}:
-    {% endswitch %}
 {% endset %}
 
 {% set appointmentAddressLines = licence.licenceAppointmentAddress | formatLicenceAddressAsList if licence.licenceAppointmentAddress else licence.appointmentAddress | formatAddressAsList %}
@@ -47,10 +39,12 @@
       <p>You must go to the following address {{ appointmentDate | safe }} and ask to speak to
         {% if licence.appointmentPersonType === 'RESPONSIBLE_COM' %}
           <span id="appointment-contact">
-            <span class="bold">{{ licence.responsibleComFullName }}</span> who will be your supervising officer:
+            <span class="bold">{{ licence.responsibleComFullName }}</span>, who will be your supervising officer:
           </span>
+        {% elif licence.appointmentPersonType === 'DUTY_OFFICER' %}
+          <span id="appointment-contact">the <span class="bold">duty officer</span>:</span>
         {% else %}
-          <span id="appointment-contact" class="bold">{{ comDetails | trim }}</span>
+          <span id="appointment-contact"><span class="bold">{{ licence.appointmentPerson }}</span>:</span>
         {% endif %}
       </p>
       <div id="appointment-address">
@@ -67,6 +61,12 @@
     <div id="first-meeting-person-details-content">
       <p>Your first probation meeting is a chance for you to learn more about your licence period and to ask any questions.</p>
     </div>
+
+    {% if licence.appointmentPersonType === 'DUTY_OFFICER' %}
+      <div id="first-meeting-duty-officer-content">
+        <p>The duty officer helps people when their supervising officer is unavailable. You will meet your supervising officer at a later appointment.</p>
+      </div>
+    {% endif %}
 
     <div id="problems-questions-content">
       <p class="bold">If you have any problems or questions</p>

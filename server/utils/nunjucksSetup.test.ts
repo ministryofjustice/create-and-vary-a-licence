@@ -218,6 +218,30 @@ describe('Nunjucks Filters', () => {
       })
       expect($('body').text()).toBe('09:15 pm')
     })
+
+    it('should format a date and time to compact 12-hour time without minutes when zero', () => {
+      const template = '{{ testDateTime | datetimeTo12HourTimeCompact }}'
+      const $ = renderTemplate(template, {
+        testDateTime: '23/12/2021 21:00',
+      })
+      expect($('body').text()).toBe('09 pm')
+    })
+
+    it('should keep minutes in compact 12-hour time when not zero', () => {
+      const template = '{{ testDateTime | datetimeTo12HourTimeCompact }}'
+      const $ = renderTemplate(template, {
+        testDateTime: '23/12/2021 21:15',
+      })
+      expect($('body').text()).toBe('09:15 pm')
+    })
+
+    it('should return null for invalid compact 12-hour time', () => {
+      const template = '{{ testDateTime | datetimeTo12HourTimeCompact }}'
+      const $ = renderTemplate(template, {
+        testDateTime: 'invalid',
+      })
+      expect($('body').text()).toBe('')
+    })
   })
 
   describe('Should select a checkbox', () => {

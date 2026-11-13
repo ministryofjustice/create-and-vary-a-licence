@@ -170,6 +170,12 @@ export function registerNunjucks(app?: express.Express): Environment {
     return jsonDtTo12HourTime(dt)
   })
 
+  njkEnv.addFilter('datetimeTo12HourTimeCompact', (dt: string) => {
+    const time = jsonDtTo12HourTime(dt)
+    if (!time) return null
+    return time.replace(/:00\s/, ' ')
+  })
+
   njkEnv.addFilter('format24HourTimeTo12HourTime', (dt: string) => {
     return json24HourTimeTo12HourTime(dt)
   })
