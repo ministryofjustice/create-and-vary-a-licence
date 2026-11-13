@@ -149,6 +149,25 @@ describe('AuditService', () => {
         },
       })
     })
+
+    it('should log an event for a report view', async () => {
+      const eventType = 'VIEWED_A_REPORT'
+      hmppsAuditService.logAuditEvent.mockResolvedValue(undefined)
+
+      await auditService.logReportView(requestId, eventType, user)
+
+      expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
+        what: eventType,
+        subjectType: 'NOT_APPLICABLE',
+        subjectId: '',
+        correlationId: requestId,
+        who: user.username,
+        details: {
+          build: config.gitRef,
+          userRoles: user.userRoles,
+        },
+      })
+    })
   })
 
   describe('custom handlers', () => {
