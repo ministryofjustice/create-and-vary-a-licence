@@ -271,4 +271,64 @@ describe('Print a V2 AP licence', () => {
     expect(paragraphs).toContain('If asked, you must have a drug test, whether or not you have previously used drugs.')
     expect(paragraphs).toContain('You must not do anything to stop or interfere with this test.')
   })
+
+  it('renders the standard conditions page', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+        standardLicenceConditions: [
+          {
+            id: 1,
+            sequence: 0,
+            text: 'Standard condition 1.',
+          },
+          {
+            id: 2,
+            sequence: 1,
+            text: 'Standard condition 2.',
+          },
+          {
+            id: 3,
+            sequence: 2,
+            text: 'Standard condition 3.',
+          },
+          {
+            id: 4,
+            sequence: 3,
+            text: 'Standard condition 4.',
+          },
+          {
+            id: 5,
+            sequence: 4,
+            text: 'Standard condition 5.',
+          },
+        ],
+      },
+    })
+
+    const heading = $('#section-heading-standard-conditions')
+    expect(heading).toHaveLength(1)
+    expect(heading.text()).toContain('Standard conditions')
+
+    const explan = $('#standard-conditions-explanation')
+    expect(explan).toHaveLength(1)
+    expect(explan.text()).toContain('Conditions everyone on licence must follow.')
+
+    expect($('#condition-1').text()).toContain('Standard condition 1.')
+    expect($('#condition-2').text()).toContain('Standard condition 2.')
+    expect($('#condition-3').text()).toContain('Standard condition 3.')
+    expect($('#condition-4').text()).toContain('Standard condition 4.')
+    expect($('#condition-5').text()).toContain('Standard condition 5.')
+
+    expect($('#condition-divider-1')).toHaveLength(1)
+    expect($('#condition-divider-2')).toHaveLength(1)
+    expect($('#condition-divider-3')).toHaveLength(1)
+    expect($('#condition-divider-4')).toHaveLength(1)
+    // There should be no divider after the last condition, so check that it is not present
+    expect($('#condition-divider-5')).toHaveLength(0)
+  })
 })

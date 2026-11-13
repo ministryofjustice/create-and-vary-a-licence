@@ -87,6 +87,31 @@ body.licence-template-v2 .recall-condition-list {
   padding-left: 24px;
 }
 
+body.licence-template-v2 .condition-section-heading {
+  font-size: 18pt;
+  font-weight: bolder;
+}
+
+body.licence-template-v2 .condition-divider {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid #000;
+  margin: 20px 0;
+}
+
+.v2_condition {
+  width: 500px;
+  break-inside: avoid;
+  padding-left: 30px;
+  margin: 20px 0 20px 30px;
+
+  &:before {
+    counter-increment: conditionCounter;
+    content: counter(conditionCounter) ;
+    position: absolute;
+    margin-left: -50px;
+  }
+}
 
 .page-break-before {
   break-before: page;
