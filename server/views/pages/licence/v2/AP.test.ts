@@ -78,11 +78,47 @@ describe('Print a V2 AP licence', () => {
     expect($('#appointment-alternative-phone-number').hasClass('bold')).toBe(true)
   })
 
+  it('renders duty officer explanation only when appointment is with duty officer', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+        appointmentPersonType: 'DUTY_OFFICER',
+      },
+    })
+
+    const dutyOfficerContent = $('#first-meeting-duty-officer-content')
+    expect(dutyOfficerContent.text()).toContain(
+      'The duty officer helps people when their supervising officer is unavailable',
+    )
+  })
+
+  it('does not render duty officer explanation when appointment is not with duty officer', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+        appointmentPersonType: 'RESPONSIBLE_COM',
+        responsibleComFullName: 'Allocated COM',
+      },
+    })
+
+    const dutyOfficerContent = $('#first-meeting-duty-officer-content')
+    expect(dutyOfficerContent).toHaveLength(0)
+  })
+
   it.each([
-    ['SPECIFIC_DATE_TIME', 'on '],
-    ['NEXT_WORKING_DAY_2PM', 'by 2pm on the next working day after you leave prison'],
-    ['IMMEDIATE_UPON_RELEASE', 'as soon as you leave prison'],
-  ])('renders appointment timing for %s', (appointmentTimeType, expectedText) => {
+    ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 11:15', '11:15 am'],
+    ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 11:00', '11 am'],
+    ['NEXT_WORKING_DAY_2PM', 'by 2pm on the next working day after you leave prison', undefined, undefined],
+    ['IMMEDIATE_UPON_RELEASE', 'as soon as you leave prison', undefined, undefined],
+  ])('renders appointment timing for %s', (appointmentTimeType, expectedText, appointmentTime, expectedTime) => {
     const $ = render({
       licence: {
         id: 1,
@@ -91,11 +127,19 @@ describe('Print a V2 AP licence', () => {
         typeCode: 'AP',
         version: '2.0',
         appointmentTimeType,
-        appointmentTime: '23/12/2021 11:15',
+        appointmentTime,
       },
     })
 
     expect($('#appointment-time').text()).toContain(expectedText.trim())
+
+    if (appointmentTime) {
+      const appointmentTimeElement = $('#appointment-time')
+      expect(appointmentTimeElement.text()).toContain(expectedTime)
+      const boldText = appointmentTimeElement.find('.bold').text()
+      expect(boldText).toContain('at')
+      expect(boldText).toContain(expectedTime)
+    }
   })
 
   it('renders appointment address correctly', () => {
@@ -148,8 +192,14 @@ describe('Print a V2 AP licence', () => {
       expect(appointmentContact.hasClass('bold')).toBe(false)
       expect(appointmentContact.find('.bold').text()).toBe(expectedName)
       expect(appointmentContact.text()).toContain('who will be your supervising officer:')
+    } else if (appointmentPersonType === 'DUTY_OFFICER') {
+      expect(appointmentContact.hasClass('bold')).toBe(false)
+      expect(appointmentContact.find('.bold').text()).toBe('duty officer')
+      expect(appointmentContact.text()).toContain('the duty officer:')
     } else {
-      expect(appointmentContact.hasClass('bold')).toBe(true)
+      expect(appointmentContact.hasClass('bold')).toBe(false)
+      expect(appointmentContact.find('.bold').text()).toBe(expectedName)
+      expect(appointmentContact.text()).toContain(`${expectedName}:`)
     }
   })
 
