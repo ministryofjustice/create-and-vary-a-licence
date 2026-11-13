@@ -152,4 +152,73 @@ describe('Print a V2 AP licence', () => {
       expect(appointmentContact.hasClass('bold')).toBe(true)
     }
   })
+
+  it('renders the licence condition paragraph', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+      },
+    })
+
+    const heading = $('#section-heading-licence-conditions')
+    expect(heading).toHaveLength(1)
+    expect(heading.text()).toContain('Your licence conditions')
+
+    const paragraphs = $('#licence-conditions-explanation').text().replace(/\s+/g, ' ').trim()
+    expect(paragraphs).toContain('What are licence conditions?')
+    expect(paragraphs).toContain('Licence conditions tell you what you must and must not do while on licence.')
+    expect(paragraphs).toContain(
+      'Your supervising officer can change some of these conditions. Any changes will be explained to you.',
+    )
+    expect(paragraphs).toContain(
+      'Some conditions can be made less strict or removed if you are doing well. If you do not follow your licence conditions, conditions can be added or made stricter.',
+    )
+    expect(paragraphs).toContain('Read the conditions starting on the next page carefully.')
+    expect(paragraphs).toContain('Ask your supervising officer any questions you have.')
+  })
+
+  it('renders the recall paragraph', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+      },
+    })
+
+    const paragraphs = $('#licence-conditions-recall').text().replace(/\s+/g, ' ').trim()
+    expect(paragraphs).toContain('Recall to prison')
+    expect(paragraphs).toContain(
+      'If you do not follow your licence conditions, your supervising officer will need to consider whether you should be sent back to prison. This is called being recalled.',
+    )
+    expect(paragraphs).toContain('You may commit an offence called being unlawfully at large if:')
+    expect(paragraphs).toContain('a decision is made to recall you to prison and you do not return, or')
+    expect(paragraphs).toContain(
+      'you remain out of contact with your supervising officer for 6 months after that decision is made',
+    )
+    expect(paragraphs).toContain('This can result in a fine, a prison sentence of up to 2 years, or both.')
+  })
+
+  it('renders the drug testing paragraph', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+      },
+    })
+
+    const paragraphs = $('#licence-conditions-drug-testing').text().replace(/\s+/g, ' ').trim()
+    expect(paragraphs).toContain('Drug testing')
+    expect(paragraphs).toContain('If asked, you must have a drug test, whether or not you have previously used drugs.')
+    expect(paragraphs).toContain('You must not do anything to stop or interfere with this test.')
+  })
 })
