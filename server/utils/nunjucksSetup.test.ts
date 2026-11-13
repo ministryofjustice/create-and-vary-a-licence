@@ -224,7 +224,7 @@ describe('Nunjucks Filters', () => {
       const $ = renderTemplate(template, {
         testDateTime: '23/12/2021 21:00',
       })
-      expect($('body').text()).toBe('09 pm')
+      expect($('body').text()).toBe('9 pm')
     })
 
     it('should keep minutes in compact 12-hour time when not zero', () => {
@@ -232,7 +232,15 @@ describe('Nunjucks Filters', () => {
       const $ = renderTemplate(template, {
         testDateTime: '23/12/2021 21:15',
       })
-      expect($('body').text()).toBe('09:15 pm')
+      expect($('body').text()).toBe('9:15 pm')
+    })
+
+    it('should remove leading zeros from compact 12-hour time', () => {
+      const template = '{{ testDateTime | datetimeTo12HourTimeCompact }}'
+      const $ = renderTemplate(template, {
+        testDateTime: '23/12/2021 09:30',
+      })
+      expect($('body').text()).toBe('9:30 am')
     })
 
     it('should return null for invalid compact 12-hour time', () => {
