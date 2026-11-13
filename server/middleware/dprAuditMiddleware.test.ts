@@ -35,7 +35,7 @@ afterEach(() => {
 })
 
 describe('dpAuditMiddleware', () => {
-  it('should not call audit service is auditing is disabled', async () => {
+  it('should not call audit service if auditing is disabled', async () => {
     config.sqs.audit.enabled = false
 
     await middleware(req, res, next)
@@ -57,11 +57,7 @@ describe('dpAuditMiddleware', () => {
   })
 
   it('should audit report routes', async () => {
-    const auditNeededReq = {
-      ...req,
-    } as Request
-
-    await middleware(auditNeededReq, res, next)
+    await middleware(req, res, next)
 
     expect(auditService.logReportView).toHaveBeenCalledWith(
       req.id,
