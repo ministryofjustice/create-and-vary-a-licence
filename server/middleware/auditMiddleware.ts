@@ -20,7 +20,8 @@ export default function auditMiddleware(auditService: AuditService): RequestHand
         if (policy?.audit && !policy.customHandler) {
           await auditService.logPageViewAttempt(req.id, routePolicy.policy, licence, user)
           res.prependOnceListener('finish', () => {
-            if (res.statusCode === 200) {
+            const redirectNeedsAuditing = res.statusCode === 302 && !res.locals.auditedFailedAccessAttempt
+            if (res.statusCode === 200 || redirectNeedsAuditing) {
               try {
                 auditService.logPageViewSuccess(req.id, routePolicy.policy, licence, user)
               } catch (error) {
