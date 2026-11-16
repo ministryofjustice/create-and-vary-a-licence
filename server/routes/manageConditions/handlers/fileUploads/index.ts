@@ -1,7 +1,7 @@
 import { RequestHandler, Router } from 'express'
 import multer from 'multer'
 import path from 'path'
-import checkLicenceAccess from '../../../../middleware/checkLicenceAccessMiddleware'
+import checkLicenceAccessForJourney from '../../../../middleware/checkLicenceAccessForJourney'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 
@@ -14,19 +14,24 @@ import FileUploadType from '../../../../enumeration/fileUploadType'
 export const uploadPath = path.resolve('uploads')
 const upload = multer({ dest: uploadPath })
 
-export default function Index({ licenceService, conditionService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create/id/:licenceId${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), checkLicenceAccess(licenceService), handler)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
+      checkLicenceAccessForJourney(auditService, licenceService),
+      handler,
+    )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      checkLicenceAccess(licenceService),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
@@ -34,8 +39,8 @@ export default function Index({ licenceService, conditionService }: Services): R
   const postWithFileUpload = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      checkLicenceAccess(licenceService),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
+      checkLicenceAccessForJourney(auditService, licenceService),
       upload.single('filename'),
       validationMiddleware(conditionService, type),
       handler,

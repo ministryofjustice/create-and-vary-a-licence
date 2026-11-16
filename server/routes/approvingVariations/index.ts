@@ -14,6 +14,7 @@ import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMid
 import { alterResObject } from '../varyingLicences'
 
 export default function Index({
+  auditService,
   licenceService,
   varyApproverCaseloadService,
   probationService,
@@ -33,10 +34,10 @@ export default function Index({
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_ACO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_ACO']),
       alterResObject(),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       handler,
     )
 
@@ -44,15 +45,15 @@ export default function Index({
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_ACO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_ACO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccess(auditService, licenceService),
       validationMiddleware(conditionService, type),
       handler,
     )
 
   // Define route handlers for variation approvals
-  const listHandler = new VaryApproveListRoutes(varyApproverCaseloadService)
+  const listHandler = new VaryApproveListRoutes(auditService, varyApproverCaseloadService)
   const viewHandler = new VaryApproveViewRoutes(licenceService)
   const approveConfirmHandler = new VaryApproveConfirmRoutes()
   const referHandler = new VaryReferRoutes(licenceService)

@@ -1,18 +1,4 @@
-import { flushTelemetry, initialiseTelemetry, SpanFilterFn, telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
-import { SpanStatusCode } from '@opentelemetry/api'
-
-const isExcludedPath = (url: string) =>
-  url.startsWith('/health') ||
-  url.startsWith('/ping') ||
-  url.startsWith('/info') ||
-  url.startsWith('/favicon.ico') ||
-  url.startsWith('/assets')
-
-const filterSuccessfulExcludedPaths: SpanFilterFn = span => {
-  const url = (span.attributes['url.path'] || span.attributes['http.target'] || '') as string
-
-  return !(isExcludedPath(url) && span.status?.code !== SpanStatusCode.ERROR)
-}
+import { flushTelemetry, initialiseTelemetry, telemetry } from '@ministryofjustice/hmpps-azure-telemetry'
 
 initialiseTelemetry({
   serviceName: 'create-and-vary-a-licence',
@@ -20,7 +6,7 @@ initialiseTelemetry({
   connectionString: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
   debug: process.env.DEBUG_TELEMETRY === 'true',
 })
-  .addFilter(filterSuccessfulExcludedPaths)
+  .addFilter(telemetry.processors.filterSpanWherePath(['/health', '/ping', '/info', '/assets/*', '/favicon.ico']))
   .addModifier(telemetry.processors.enrichSpanNameWithHttpRoute())
   .startRecording()
 

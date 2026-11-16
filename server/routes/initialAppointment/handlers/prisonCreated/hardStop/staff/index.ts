@@ -3,13 +3,13 @@ import DeletePreferredAddressRoutes from './handlers/deletePreferredAddress'
 import { Services } from '../../../../../../services'
 import roleCheckMiddleware from '../../../../../../middleware/roleCheckMiddleware'
 
-export default function Index({ addressService }: Services): Router {
+export default function Index({ auditService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/staff/hard-stop${path}`
 
   const del = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']), handler)
+    router.get(routePrefix(path), roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']), handler)
 
   {
     const controller = new DeletePreferredAddressRoutes(addressService)

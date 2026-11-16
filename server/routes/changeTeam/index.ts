@@ -4,16 +4,21 @@ import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import ChangeTeamsLocation from './handlers/changeTeam'
 import { Services } from '../../services'
 
-export default function Index({ conditionService, comCaseloadService }: Services): Router {
+export default function Index({ auditService, conditionService, comCaseloadService }: Services): Router {
   const createPrefix = (path: string) => `/licence/create/caseload${path}`
   const varyPrefix = (path: string) => `/licence/vary/caseload${path}`
 
   const router = Router()
   const get = (path: string, handler: RequestHandler) =>
-    router.get(path, roleCheckMiddleware(['ROLE_LICENCE_RO']), handler)
+    router.get(path, roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(path, roleCheckMiddleware(['ROLE_LICENCE_RO']), validationMiddleware(conditionService, type), handler)
+    router.post(
+      path,
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
+      validationMiddleware(conditionService, type),
+      handler,
+    )
 
   const createTeamHandler = new ChangeTeamsLocation(comCaseloadService, 'create')
   get(createPrefix('/change-team'), createTeamHandler.GET())

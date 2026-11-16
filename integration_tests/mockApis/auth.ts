@@ -105,12 +105,14 @@ const token = (authorities: string[], authSource: string) =>
 export default {
   getSignInUrl,
   stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubTokenVerificationPing()]),
-  stubProbationSignIn: (): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
+  stubProbationSignIn: (
+    roles?: string[],
+  ): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
       redirect(),
       signOut(),
-      token(['ROLE_LICENCE_RO'], 'delius'),
+      token(roles ?? ['ROLE_LICENCE_RO'], 'delius'),
       tokenVerification.stubVerifyToken(),
       licence.updateComDetails(),
       manageUsers.stubUserEmail(),

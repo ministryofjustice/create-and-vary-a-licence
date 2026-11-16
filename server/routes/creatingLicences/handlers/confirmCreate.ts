@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import ProbationService from '../../../services/probationService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import logger from '../../../../logger'
+import AuditService from '../../../services/audit/auditService'
 
 export default class ConfirmCreateRoutes {
   constructor(
-    private readonly probationService: ProbationService,
+    private readonly auditService: AuditService,
     private readonly licenceService: LicenceService,
   ) {}
 
@@ -23,6 +23,7 @@ export default class ConfirmCreateRoutes {
 
     if (nomisRecord.cvl.isInHardStopPeriod) {
       logger.error('Access denied to PP licence creation GET due to being in hard stop period')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
@@ -53,6 +54,7 @@ export default class ConfirmCreateRoutes {
     const nomisRecord = await this.licenceService.getPrisonerDetail(nomisId, user)
     if (nomisRecord.cvl.isInHardStopPeriod) {
       logger.error('Access denied to PP licence creation POST due to being in hard stop period')
+      await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 

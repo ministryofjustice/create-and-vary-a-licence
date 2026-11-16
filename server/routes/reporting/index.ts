@@ -1,11 +1,10 @@
-import { Router, RequestHandler } from 'express'
+import { RequestHandler, Router } from 'express'
 import type { Environment } from 'nunjucks'
 import {
-  setUpDprResources,
   DprUser,
   routes as dprPlatformRoutes,
+  setUpDprResources,
 } from '@ministryofjustice/hmpps-digital-prison-reporting-frontend'
-
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import { Services } from '../../services'
 import ReportHomeRoutes from './handlers'
@@ -14,14 +13,19 @@ import UpcomingReleasesWithMonitoringRoutes from './handlers/upcomingReleasesWit
 import RecentReleasesWithMonitoringRoutes from './handlers/recentReleasesWithMonitoring'
 import LicenceStatusCasesRoutes from './handlers/licenceStatusCases'
 import { getSystemToken } from '../../data/systemToken'
+import dprAuditMiddleware from '../../middleware/dprAuditMiddleware'
 
 export default function Index(services: Services, nunjucksEnvironment: Environment): Router {
-  const { licenceService } = services
+  const { auditService, licenceService } = services
   const router = Router()
   const routePrefix = (path: string) => `/reports${path}`
 
   const get = (path: string, ...handlers: RequestHandler[]) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD', 'ROLE_CVL_REPORTS']), ...handlers)
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(auditService, ['ROLE_NOMIS_BATCHLOAD', 'ROLE_CVL_REPORTS']),
+      ...handlers,
+    )
 
   {
     const routes = new LastMinuteHandoverCasesRoutes(licenceService)
@@ -78,7 +82,13 @@ export default function Index(services: Services, nunjucksEnvironment: Environme
   const reportHomeHandler = new ReportHomeRoutes()
   get('/', dprUserMiddleware, dprResourcesMiddleware, reportHomeHandler.GET)
 
-  router.use('/dpr', dprUserMiddleware, dprResourcesMiddleware, giveDownloadPermissionsMiddleware)
+  router.use(
+    '/dpr',
+    dprUserMiddleware,
+    dprResourcesMiddleware,
+    dprAuditMiddleware(services.auditService),
+    giveDownloadPermissionsMiddleware,
+  )
   router.use('/', dprPlatformRoutes({ services: services.dprServices, layoutPath }))
 
   return router

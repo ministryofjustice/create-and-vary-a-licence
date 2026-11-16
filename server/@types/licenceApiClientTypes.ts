@@ -22,7 +22,7 @@ export type Licence =
   | components['schemas']['VariationLicence']
   | components['schemas']['HardStopLicence']
   | components['schemas']['CrdLicence']
-  | components['schemas']['HdcLicence']
+  | HdcLicence
   | components['schemas']['PrrdLicenceResponse']
   | components['schemas']['TimeServedLicence']
 

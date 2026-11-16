@@ -7,9 +7,11 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { CaViewCasesTab } from '../../../enumeration'
 import { getFirstMaxValueKey } from '../../../utils/utils'
+import AuditService from '../../../services/audit/auditService'
 
 export default class CaSearch {
   constructor(
+    private readonly auditService: AuditService,
     private readonly searchService: SearchService,
     private readonly prisonerService: PrisonerService,
   ) {}
@@ -71,6 +73,8 @@ export default class CaSearch {
 
     const allPrisons = await this.prisonerService.getPrisons()
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
+
+    await this.auditService.logCaSearchEvent(req.id, queryTerm, results, res.locals.user)
 
     return res.render('pages/search/caSearch/caSearch', {
       queryTerm,

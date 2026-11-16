@@ -70,13 +70,5 @@ describe('Route handlers', () => {
         '/licence/create/id/1/additional-licence-conditions/condition/1?fromPolicyReview=true',
       )
     })
-
-    it('redirects to the relevant condition page for AP conditions', async () => {
-      conditionService.getAdditionalConditionType.mockResolvedValue(LicenceType.PSS)
-      await handler.GET(req, res)
-      expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-pss-conditions/condition/1?fromPolicyReview=true',
-      )
-    })
   })
 })

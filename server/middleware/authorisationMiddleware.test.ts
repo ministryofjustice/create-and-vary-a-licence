@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import type { Request, Response } from 'express'
 import authorisationMiddleware from './authorisationMiddleware'
+import AuditService from '../services/audit/auditService'
 
 function createToken(authorities: string[]) {
   const payload = {
@@ -15,6 +16,11 @@ function createToken(authorities: string[]) {
   return jwt.sign(payload, 'secret', { expiresIn: '1h' })
 }
 
+jest.mock('../services/audit/auditService')
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
+
+const middleware = authorisationMiddleware(auditService)
+
 describe('authorisationMiddleware', () => {
   let req: Request
   const next = jest.fn()
@@ -27,45 +33,45 @@ describe('authorisationMiddleware', () => {
           token: createToken(authorities),
         },
       },
-      redirect: (redirectUrl: string) => {
-        return redirectUrl
-      },
+      redirect: jest.fn(),
     } as unknown as Response
   }
 
-  it('should redirect when no required roles', () => {
+  it('should redirect when no required roles', async () => {
     const res = createResWithToken({ authorities: [] })
-    const authorisationResponse = authorisationMiddleware(req, res, next)
-    expect(authorisationResponse).toEqual('/authError')
+    await middleware(req, res, next)
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+    expect(auditService.logPageAccessFailure).toHaveBeenCalledWith(req, undefined, res.locals.user)
   })
 
-  it('should redirect when user has no authorised roles', () => {
+  it('should redirect when user has no authorised roles', async () => {
     const res = createResWithToken({ authorities: ['NOT_IN_THE_LIST'] })
-    const authorisationResponse = authorisationMiddleware(req, res, next)
-    expect(authorisationResponse).toEqual('/authError')
+    await middleware(req, res, next)
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+    expect(auditService.logPageAccessFailure).toHaveBeenCalledWith(req, undefined, res.locals.user)
   })
 
-  it('should return next when user has authorised role', () => {
+  it('should return next when user has authorised role', async () => {
     const res = createResWithToken({ authorities: ['ROLE_LICENCE_RO'] })
-    const authorisationResponse = authorisationMiddleware(req, res, next)
-    expect(authorisationResponse).toEqual(next())
+    await middleware(req, res, next)
+    expect(next).toHaveBeenCalled()
   })
 
-  it('should return next when user has the ACO role', () => {
+  it('should return next when user has the ACO role', async () => {
     const res = createResWithToken({ authorities: ['ROLE_LICENCE_ACO'] })
-    const authorisationResponse = authorisationMiddleware(req, res, next)
-    expect(authorisationResponse).toEqual(next())
+    await middleware(req, res, next)
+    expect(next).toHaveBeenCalled()
   })
 
-  it('should return next when user has a READONLY role', () => {
+  it('should return next when user has a READONLY role', async () => {
     const res = createResWithToken({ authorities: ['ROLE_LICENCE_READONLY'] })
-    const authorisationResponse = authorisationMiddleware(req, res, next)
-    expect(authorisationResponse).toEqual(next())
+    await middleware(req, res, next)
+    expect(next).toHaveBeenCalled()
   })
 
-  it('should return next when user has the REPORTS role', () => {
+  it('should return next when user has the REPORTS role', async () => {
     const res = createResWithToken({ authorities: ['ROLE_CVL_REPORTS'] })
-    const authorisationResponse = authorisationMiddleware(req, res, next)
-    expect(authorisationResponse).toEqual(next())
+    await middleware(req, res, next)
+    expect(next).toHaveBeenCalled()
   })
 })

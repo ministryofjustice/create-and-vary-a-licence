@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import checkLicenceAccess from '../../middleware/checkLicenceAccessMiddleware'
+import checkLicenceAccessForJourney from '../../middleware/checkLicenceAccessForJourney'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
@@ -23,11 +23,9 @@ import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import UserType from '../../enumeration/userType'
 import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMiddleware'
 import checkComCaseAccessMiddleware from '../../middleware/checkComCaseAccessMiddleware'
-import OptOutInterruptHandler from './handlers/optOutInterruptHandler'
-import PostponedInterruptHandler from './handlers/postponedInterruptHandler'
-import RefusedInterruptHandler from './handlers/refusedInterruptHandler'
 
 export default function Index({
+  auditService,
   licenceService,
   comCaseloadService,
   probationService,
@@ -47,19 +45,19 @@ export default function Index({
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       handler,
     )
 
   const getWithHardStopCheck = (path: string, handler: RequestHandler) => {
     return router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      hardStopCheckMiddleware(UserType.PROBATION),
+      checkLicenceAccessForJourney(auditService, licenceService),
+      hardStopCheckMiddleware(auditService, UserType.PROBATION),
       handler,
     )
   }
@@ -67,47 +65,47 @@ export default function Index({
   const getWithPreLicenceCreationCheck = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      preLicenceCreationMiddleware(probationService),
+      checkLicenceAccessForJourney(auditService, licenceService),
+      preLicenceCreationMiddleware(auditService, probationService),
       handler,
     )
 
   const postWithHardStopCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
-      hardStopCheckMiddleware(UserType.PROBATION),
+      hardStopCheckMiddleware(auditService, UserType.PROBATION),
       handler,
     )
 
   const postWithPreLicenceCreationCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_RO']),
       checkComCaseAccessMiddleware(licenceService),
-      checkLicenceAccess(licenceService),
-      preLicenceCreationMiddleware(probationService),
+      checkLicenceAccessForJourney(auditService, licenceService),
+      preLicenceCreationMiddleware(auditService, probationService),
       validationMiddleware(conditionService, type),
       handler,
     )
 
   {
-    const controller = new CaseloadRoutes(comCaseloadService)
+    const controller = new CaseloadRoutes(auditService, comCaseloadService)
     get('/caseload', controller.GET)
   }
 
   {
-    const controller = new ComDetailsRoutes(probationService)
+    const controller = new ComDetailsRoutes(auditService, probationService)
     get('/probation-practitioner/staffCode/:staffCode', controller.GET)
   }
 
   {
-    const controller = new ConfirmCreateRoutes(probationService, licenceService)
+    const controller = new ConfirmCreateRoutes(auditService, licenceService)
     getWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.GET)
     postWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.POST)
   }
@@ -133,21 +131,6 @@ export default function Index({
     get('/id/:licenceId/check-your-answers', controller.GET)
     postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }
-  {
-    const controller = new OptOutInterruptHandler()
-    get('/id/:licenceId/opt-out-interrupt', controller.GET)
-  }
-
-  {
-    const controller = new RefusedInterruptHandler()
-    get('/id/:licenceId/refused-interrupt', controller.GET)
-  }
-
-  {
-    const controller = new PostponedInterruptHandler(licenceService)
-    get('/id/:licenceId/postponed-interrupt', controller.GET)
-  }
-
   {
     const controller = new EditQuestionRoutes(licenceService)
     getWithHardStopCheck('/id/:licenceId/edit', controller.GET)

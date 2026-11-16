@@ -7,14 +7,18 @@ import { CaCase } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
 import { CaViewCasesTab, LicenceKind, LicenceStatus } from '../../../enumeration'
 import { User } from '../../../@types/CvlUserDetails'
+import AuditService from '../../../services/audit/auditService'
 
-const searchService = new SearchService(null) as jest.Mocked<SearchService>
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-jest.mock('../../../services/searchService')
+const searchService = new SearchService(null) as jest.Mocked<SearchService>
+
+jest.mock('../../../services/audit/auditService')
 jest.mock('../../../services/prisonerService')
+jest.mock('../../../services/searchService')
 
 describe('Route Handlers - Search - Ca Search', () => {
-  const handler = new CaSearchRoutes(searchService, prisonerService)
+  const handler = new CaSearchRoutes(auditService, searchService, prisonerService)
   let req: Request
   let res: Response
 
@@ -219,6 +223,12 @@ describe('Route Handlers - Search - Ca Search', () => {
     await handler.GET(req, res)
 
     // Then
+    expect(auditService.logCaSearchEvent).toHaveBeenCalledWith(
+      req.id,
+      req.query.queryTerm,
+      searchResponse,
+      res.locals.user,
+    )
     expect(res.render).toHaveBeenCalledWith('pages/search/caSearch/caSearch', {
       queryTerm: 'test',
       backLink: '/licence/view/cases',

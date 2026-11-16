@@ -4,7 +4,9 @@ import LicenceService from '../services/licenceService'
 import timeServedCheckMiddleware from './timeServedCheckMiddleware'
 import UserType from '../enumeration/userType'
 import { Licence } from '../@types/licenceApiClientTypes'
+import AuditService from '../services/audit/auditService'
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('timeServedCheckMiddleware', () => {
@@ -40,6 +42,7 @@ describe('timeServedCheckMiddleware', () => {
     } as unknown as Response
     licenceService.updateAppointmentPerson = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
+    auditService.logPageAccessFailure = jest.fn()
   })
 
   afterEach(() => {
@@ -48,16 +51,19 @@ describe('timeServedCheckMiddleware', () => {
 
   describe('Probation users', () => {
     const userType = UserType.PROBATION
-    it('should redirect to access-denied when time served', () => {
+    it('should redirect to access-denied when time served', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.TIME_SERVED } as Licence
-      timeServedCheckMiddleware(userType)(req, res, next)
+
+      await timeServedCheckMiddleware(auditService, userType)(req, res, next)
+
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+      expect(auditService.logPageAccessFailure).toHaveBeenCalledWith(req, res.locals.licence, res.locals.user)
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should call next if the licence is not time served', () => {
+    it('should call next if the licence is not time served', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.CRD } as Licence
-      timeServedCheckMiddleware(userType)(req, res, next)
+      await timeServedCheckMiddleware(auditService, userType)(req, res, next)
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalled()
     })
@@ -67,13 +73,16 @@ describe('timeServedCheckMiddleware', () => {
     const userType = UserType.PRISON
     it('should redirect prison users to access-denied when the licence is not time served', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.CRD } as Licence
-      timeServedCheckMiddleware(userType)(req, res, next)
+
+      await timeServedCheckMiddleware(auditService, userType)(req, res, next)
+
+      expect(auditService.logPageAccessFailure).toHaveBeenCalledWith(req, res.locals.licence, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     })
 
-    it('should call next if the licence is time served', () => {
+    it('should call next if the licence is time served', async () => {
       res.locals.licence = { ...licence, kind: LicenceKind.TIME_SERVED } as Licence
-      timeServedCheckMiddleware(userType)(req, res, next)
+      await timeServedCheckMiddleware(auditService, userType)(req, res, next)
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalled()
     })

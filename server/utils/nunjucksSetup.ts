@@ -19,6 +19,7 @@ import {
   cvlDateToDateShort,
   formatAddressTitleCase,
   formatAddressLine,
+  toAddressCase,
 } from './utils'
 import { AdditionalCondition, AdditionalConditionData, Licence, FoundComCase } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
@@ -169,6 +170,12 @@ export function registerNunjucks(app?: express.Express): Environment {
     return jsonDtTo12HourTime(dt)
   })
 
+  njkEnv.addFilter('datetimeTo12HourTimeCompact', (dt: string) => {
+    const time = jsonDtTo12HourTime(dt)
+    if (!time) return null
+    return time.replace(/:00\s/, ' ')
+  })
+
   njkEnv.addFilter('format24HourTimeTo12HourTime', (dt: string) => {
     return json24HourTimeTo12HourTime(dt)
   })
@@ -178,6 +185,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('formatAddressAsList', (address?: string) => {
     return address ? address.split(', ').filter(line => line.trim().length > 0) : undefined
   })
+
+  njkEnv.addFilter('toAddressCase', toAddressCase)
 
   njkEnv.addFilter('formatLicenceAddressAsList', addressObj => {
     if (!addressObj) return undefined
@@ -462,6 +471,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('hdcSurveyUrl', config.hdc.surveyUrl)
   njkEnv.addGlobal('hdcUrl', config.hdc.url)
   njkEnv.addGlobal('hdcCreationEnabled', config.hdc.hdcCreationEnabled)
+  njkEnv.addGlobal('licenceTemplateV2Enabled', config.licenceTemplateV2Enabled)
 
   return njkEnv
 }

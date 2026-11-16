@@ -2,7 +2,10 @@ import { Request, Response } from 'express'
 import checkLicenceAccess from './checkLicenceAccessMiddleware'
 import LicenceService from '../services/licenceService'
 import { Licence } from '../@types/licenceApiClientTypes'
+import LicenceKind from '../enumeration/LicenceKind'
+import AuditService from '../services/audit/auditService'
 
+jest.mock('../services/audit/auditService')
 jest.mock('../services/licenceService')
 jest.mock('../services/userService')
 
@@ -36,6 +39,7 @@ const probationRes = {
   locals: {
     user: {
       username: 'YY',
+      isProbationUser: true,
       deliusStaffIdentifier: 123,
       probationAreaCode: 'N55',
       probationTeamCodes: ['N55A'],
@@ -46,13 +50,27 @@ const probationRes = {
   redirect: jest.fn(),
 } as unknown as Response
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
-const middleware = checkLicenceAccess(licenceService)
+const middleware = checkLicenceAccess(auditService, licenceService)
 
 beforeEach(() => {
   req.params = { licenceId: '1' }
+  req.method = 'GET'
   res = prisonRes
+  prisonRes.locals.licence = { ...licence }
+  probationRes.locals.licence = { ...licence }
+  probationRes.locals.user = {
+    ...probationRes.locals.user,
+    username: 'YY',
+    isProbationUser: true,
+    deliusStaffIdentifier: 123,
+    probationAreaCode: 'N55',
+    probationTeamCodes: ['N55A'],
+    userRoles: ['ROLE_LICENCE_RO'],
+  }
+  prisonRes.locals.user.prisonCaseload = ['LEI', 'MDI']
 })
 
 afterEach(() => {
@@ -120,5 +138,52 @@ describe('fetchLicenceMiddleware', () => {
 
     expect(licenceService.canComAccessLicence).toHaveBeenCalledTimes(1)
     expect(next).toHaveBeenCalledTimes(1)
+  })
+
+  it('should leave HDC journey restrictions to the route-level guard', async () => {
+    res = probationRes
+    res.locals.licence = {
+      ...licence,
+      kind: LicenceKind.HDC,
+      isReplacementForOptedInLicence: true,
+      hdcRiskChecksComplete: false,
+    } as Licence
+
+    await middleware(req, res, next)
+
+    expect(res.redirect).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledTimes(1)
+  })
+
+  it('should deny an unauthorised COM before applying the interrupt guard', async () => {
+    res = probationRes
+    res.locals.user.probationTeamCodes = ['OTHER']
+    res.locals.licence = {
+      ...licence,
+      kind: LicenceKind.HDC,
+      isReplacementForOptedInLicence: true,
+      hdcRiskChecksComplete: false,
+    } as Licence
+    licenceService.canComAccessLicence.mockResolvedValue(false)
+
+    await middleware(req, res, next)
+
+    expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+    expect(next).not.toHaveBeenCalled()
+  })
+
+  it('should deny a disallowed URL before applying the interrupt guard', async () => {
+    res = probationRes
+    res.locals.licence = {
+      ...licence,
+      kind: LicenceKind.HDC,
+      isReplacementForOptedInLicence: true,
+      hdcRiskChecksComplete: false,
+    } as Licence
+
+    await middleware({ ...req, path: '/licence/approve/id/1/approve' } as Request, res, next)
+
+    expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+    expect(next).not.toHaveBeenCalled()
   })
 })

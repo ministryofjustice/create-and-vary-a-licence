@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import checkLicenceAccess from '../../../../../middleware/checkLicenceAccessMiddleware'
+import checkLicenceAccessForJourney from '../../../../../middleware/checkLicenceAccessForJourney'
 import validationMiddleware from '../../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../../middleware/roleCheckMiddleware'
 import timeServedCheckMiddleware from '../../../../../middleware/timeServedCheckMiddleware'
@@ -28,7 +28,7 @@ export const getTimeServedEditPath = (licence: Licence): string => {
   return `/licence/time-served/id/${licence.id}/check-your-answers`
 }
 
-export default function Index({ licenceService, conditionService, addressService }: Services): Router {
+export default function Index({ auditService, licenceService, conditionService, addressService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/time-served${path}`
@@ -42,19 +42,19 @@ export default function Index({ licenceService, conditionService, addressService
   const get = (path: string, handler: RequestHandler, userType: UserType) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA']),
-      checkLicenceAccess(licenceService),
-      timeServedCheckMiddleware(userType),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA']),
+      checkLicenceAccessForJourney(auditService, licenceService),
+      timeServedCheckMiddleware(auditService, userType),
       handler,
     )
 
   const post = (path: string, handler: RequestHandler, userType: UserType, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA']),
-      checkLicenceAccess(licenceService),
+      roleCheckMiddleware(auditService, ['ROLE_LICENCE_CA']),
+      checkLicenceAccessForJourney(auditService, licenceService),
       validationMiddleware(conditionService, type),
-      timeServedCheckMiddleware(userType),
+      timeServedCheckMiddleware(auditService, userType),
       handler,
     )
   {

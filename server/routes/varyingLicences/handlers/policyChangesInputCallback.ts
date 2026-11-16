@@ -34,11 +34,6 @@ export default class PolicyChangeInputCallbackRoutes {
         `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${condition.id}?fromPolicyReview=true`,
       )
     }
-    if (conditionType === 'PSS') {
-      return res.redirect(
-        `/licence/create/id/${licenceId}/additional-pss-conditions/condition/${condition.id}?fromPolicyReview=true`,
-      )
-    }
     // If somehow the condition is neither AP nor PSS, skip it.
     return res.redirect(
       `/licence/vary/id/${licenceId}/policy-changes/input/callback/${+req.session.changedConditionsInputsCounter + 1}`,

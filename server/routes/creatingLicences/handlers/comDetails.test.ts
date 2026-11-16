@@ -2,13 +2,16 @@ import { Request, Response } from 'express'
 import ProbationService from '../../../services/probationService'
 import ComDetailsRoutes from './comDetails'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
+import AuditService from '../../../services/audit/auditService'
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const deliusService = new ProbationService(null) as jest.Mocked<ProbationService>
 
+jest.mock('../../../services/audit/auditService')
 jest.mock('../../../services/probationService')
 
 describe('Route Handlers - Create Licence - Com Details', () => {
-  const handler = new ComDetailsRoutes(deliusService)
+  const handler = new ComDetailsRoutes(auditService, deliusService)
   let req: Request
   let res: Response
 
