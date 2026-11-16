@@ -115,4 +115,20 @@
         <p>If asked, you must have a drug test, whether or not you have previously used drugs. You must not do anything to stop or interfere with this test.</p>
     </div>
 
+    <div id="page-3-break" class="page-break-before"></div>
+
+    <div id="section-heading-standard-conditions" class="condition-section-heading">Standard conditions</div>
+    <div id="standard-conditions-explanation" class="licence-conditions">
+        <p>Conditions everyone on licence must follow.</p>
+    </div>
+
+    {% for condition in licence.standardLicenceConditions %}
+        <div id="condition-{{ loop.index }}" class="v2_condition">
+            <span>{{ condition.expandedText or condition.text }}</span>
+        </div>
+        {% if not loop.last %}
+            <hr id="condition-divider-{{ loop.index }}" aria-hidden="true">
+        {% endif %}
+    {% endfor %}
+
 {% endblock %}
