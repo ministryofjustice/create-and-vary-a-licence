@@ -221,9 +221,8 @@ describe('Print a V2 AP licence', () => {
     const paragraphs = $('#licence-conditions-explanation').text().replace(/\s+/g, ' ').trim()
     expect(paragraphs).toContain('What are licence conditions?')
     expect(paragraphs).toContain('Licence conditions tell you what you must and must not do while on licence.')
-    expect(paragraphs).toContain(
-      'Your supervising officer can change some of these conditions. Any changes will be explained to you.',
-    )
+    expect(paragraphs).toContain('Your supervising officer can change some of these conditions.')
+    expect(paragraphs).toContain('Any changes will be explained to you.')
     expect(paragraphs).toContain(
       'Some conditions can be made less strict or removed if you are doing well. If you do not follow your licence conditions, conditions can be added or made stricter.',
     )
