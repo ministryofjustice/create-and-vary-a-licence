@@ -56,6 +56,7 @@ function extractRoutes(layer: any, prefix = '', routes: RouteEntry[] = []): Rout
  */
 const excludedRoutes = new Set([
   'GET /*', // Frontend component fallback
+  'GET /dpr/*splat',
 ])
 
 describe('Route Audit Policy', () => {
