@@ -130,4 +130,12 @@ describe('Route Audit Policy', () => {
     const inValidRoute = 'GET /licence/create/nomisId/ABC123/confirmBad'
     expect(getAuditPolicy(inValidRoute)).not.toBeDefined()
   })
+
+  it('all DPR routes should have custom handlers so they are handled by the DPR audit middleware', () => {
+    const dprRoute =
+      'GET /dpr/view-report/sync/report/licences-due-to-be-released-on-or-after-september-02-2026/licences-due-to-be-released-on-or-after-september-02-2026/report'
+    const routeConfig = getAuditPolicy(dprRoute)
+    expect(routeConfig).toBeDefined()
+    expect(routeConfig.policy.customHandler).toEqual(true)
+  })
 })
