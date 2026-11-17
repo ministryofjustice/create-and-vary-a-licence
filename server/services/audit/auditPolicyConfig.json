@@ -1307,7 +1307,7 @@
     "eventType": "VIEW_DOWNLOAD_REPORTS_RECENT_RELEASES_WITH_MONITORING_CSV"
   },
   "GET /dpr/*splat": {
-    "audit": false,
+    "audit": true,
     "eventType": "DPR_ROUTES_HANDLED_BY_DPR_AUDIT_MIDDLEWARE",
     "customHandler": true
   }
