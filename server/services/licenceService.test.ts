@@ -741,11 +741,6 @@ describe('Licence Service', () => {
     expect(actualCase).toEqual(probationCase)
   })
 
-  it('Get IS-91 status', async () => {
-    await licenceService.getIS91Status('ABC123')
-    expect(licenceApiClient.getIS91Status).toHaveBeenCalledWith('ABC123')
-  })
-
   describe('Update Electronic Monitoring Programme', () => {
     it('should update the electronic monitoring programme', async () => {
       const request: UpdateElectronicMonitoringProgrammeRequest = {

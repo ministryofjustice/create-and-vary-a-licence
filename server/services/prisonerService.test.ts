@@ -4,9 +4,8 @@ import { User } from '../@types/CvlUserDetails'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import PrisonerService from './prisonerService'
-import { HomeDetentionCurfew, PrisonDetail } from '../@types/prisonApiClientTypes'
+import { PrisonDetail } from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
-import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 
 jest.mock('fs')
 jest.mock('../data/prisonApiClient')
@@ -72,135 +71,5 @@ describe('Prisoner Service', () => {
       { lastName: 'Bloggs' } as PrisonerSearchCriteria,
       user,
     )
-  })
-
-  describe('Get HDC statuses', () => {
-    it('should return empty list if no booking ids are available', async () => {
-      const actualResult = await prisonerService.getHdcStatuses(
-        [{ firstName: 'Joe', lastName: 'Bloggs' } as CvlPrisoner],
-        user,
-      )
-      expect(actualResult).toEqual([])
-      expect(prisonApiClient.getLatestHdcStatusBatch).not.toHaveBeenCalled()
-    })
-
-    it('should return list of HDC statuses', async () => {
-      prisonApiClient.getLatestHdcStatusBatch.mockResolvedValue([
-        { bookingId: 123, approvalStatus: 'PASSED', passed: true } as unknown as HomeDetentionCurfew,
-      ])
-
-      const actualResult = await prisonerService.getHdcStatuses(
-        [
-          {
-            firstName: 'Joe',
-            lastName: 'Bloggs',
-            bookingId: '123',
-            homeDetentionCurfewEligibilityDate: '26/12/2021',
-          } as CvlPrisoner,
-        ],
-        user,
-      )
-
-      expect(actualResult).toEqual([
-        {
-          approvalStatus: 'PASSED',
-          bookingId: '123',
-          checksPassed: true,
-        },
-      ])
-      expect(prisonApiClient.getLatestHdcStatusBatch).toHaveBeenCalledWith([123], user)
-    })
-  })
-
-  describe('Get Latest HDC Status', () => {
-    it('Should return NULL if no HDC status is found', async () => {
-      prisonApiClient.getLatestHdcStatus.mockResolvedValue(null)
-
-      const actualResult = await prisonerService.getActiveHdcStatus('123')
-
-      expect(actualResult).toBeNull()
-
-      expect(prisonApiClient.getLatestHdcStatus).toHaveBeenCalledWith('123')
-    })
-
-    it('Should return PASSED approval status', async () => {
-      prisonApiClient.getLatestHdcStatus.mockResolvedValue({
-        bookingId: 123,
-        approvalStatus: 'PASSED',
-        passed: true,
-      } as HomeDetentionCurfew)
-
-      const actualResult = await prisonerService.getActiveHdcStatus('123')
-
-      expect(actualResult).toEqual({
-        bookingId: '123',
-        approvalStatus: 'PASSED',
-        checksPassed: true,
-      })
-
-      expect(prisonApiClient.getLatestHdcStatus).toHaveBeenCalledWith('123')
-    })
-  })
-
-  describe('is HDC approved', () => {
-    it('Should return false if no HDCED', async () => {
-      const expectedResult = [{ firstName: 'Joe', lastName: 'Bloggs' }] as Prisoner[]
-
-      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
-
-      const actualResult = await prisonerService.isHdcApproved(123)
-
-      expect(actualResult).toStrictEqual(false)
-    })
-
-    it('Should return true if approved for HDC', async () => {
-      const expectedResult = [
-        { firstName: 'Joe', lastName: 'Bloggs', homeDetentionCurfewActualDate: '2023-01-02' },
-      ] as Prisoner[]
-
-      prisonApiClient.getLatestHdcStatus.mockResolvedValue({
-        bookingId: 123,
-        approvalStatus: 'APPROVED',
-        passed: true,
-      } as HomeDetentionCurfew)
-
-      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
-
-      const actualResult = await prisonerService.isHdcApproved(123)
-
-      expect(actualResult).toStrictEqual(true)
-    })
-
-    it('Should return false if no latest HDC status', async () => {
-      const expectedResult = [
-        { firstName: 'Joe', lastName: 'Bloggs', homeDetentionCurfewActualDate: '2023-01-02' },
-      ] as Prisoner[]
-
-      prisonApiClient.getLatestHdcStatus.mockResolvedValue(null)
-
-      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
-
-      const actualResult = await prisonerService.isHdcApproved(123)
-
-      expect(actualResult).toStrictEqual(false)
-    })
-
-    it('Should return true if not approved for HDC', async () => {
-      const expectedResult = [
-        { firstName: 'Joe', lastName: 'Bloggs', homeDetentionCurfewActualDate: '2023-01-02' },
-      ] as Prisoner[]
-
-      prisonApiClient.getLatestHdcStatus.mockResolvedValue({
-        bookingId: 123,
-        approvalStatus: 'REFUSED',
-        passed: true,
-      } as HomeDetentionCurfew)
-
-      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
-
-      const actualResult = await prisonerService.isHdcApproved(123)
-
-      expect(actualResult).toStrictEqual(false)
-    })
   })
 })

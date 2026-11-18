@@ -10,13 +10,7 @@ import preLicenceCreationMiddleware from '../../../../middleware/preLicenceCreat
 import checkComCaseAccessMiddleware from '../../../../middleware/checkComCaseAccessMiddleware'
 import InterruptHandler from './interruptHandler'
 
-export default function Index({
-  auditService,
-  licenceService,
-  conditionService,
-  probationService,
-  prisonerService,
-}: Services): Router {
+export default function Index({ auditService, licenceService, conditionService, probationService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hdc${path}`
@@ -56,7 +50,7 @@ export default function Index({
   )
 
   {
-    const controller = new ConfirmCreateRoutes(auditService, licenceService, prisonerService)
+    const controller = new ConfirmCreateRoutes(auditService, licenceService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)
     post('/create/nomisId/:nomisId/confirm', controller.POST)
   }
