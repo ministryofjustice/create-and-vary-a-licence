@@ -1858,6 +1858,7 @@ export default {
             hardStopDate: null,
             hardStopWarningDate: null,
             isInHardStopPeriod: false,
+            eligibleKind: 'HDC',
           },
         },
       },
