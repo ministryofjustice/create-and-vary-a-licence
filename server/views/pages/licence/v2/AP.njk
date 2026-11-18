@@ -1,4 +1,8 @@
 {% extends "pages/licence/pdf-layout.njk" %}
+{% from "pages/licence/v2/partials/additionalConditions.njk" import additionalConditions %}
+{% from "pages/licence/v2/partials/additionalConditionsMultiItem.njk" import additionalConditionsMultiItem %}
+{% from "pages/licence/v2/partials/additionalConditionsBespoke.njk" import additionalConditionsBespoke %}
+{% from "pages/licence/v2/partials/standardConditions.njk" import standardConditions %}
 
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
@@ -121,13 +125,36 @@
         <p>Conditions everyone on licence must follow.</p>
     </div>
 
-    {% for condition in licence.standardLicenceConditions %}
-        <div id="condition-{{ loop.index }}" class="v2_condition">
-            <span>{{ condition.expandedText or condition.text }}</span>
-        </div>
-        {% if not loop.last %}
-            <hr id="condition-divider-{{ loop.index }}" aria-hidden="true">
-        {% endif %}
-    {% endfor %}
+    {{ standardConditions(licence.standardLicenceConditions) }}
+
+    <div id="page-4-break" class="page-break-before"></div>
+
+    <div id="section-heading-additional-conditions" class="condition-section-heading additional-conditions__first-heading">
+        Additional and bespoke conditions
+    </div>
+    <table class="additional-conditions-table">
+        <thead>
+        <tr>
+            <th>
+                <div class="condition-section-heading additional-conditions__continued-heading">
+                    Additional and bespoke conditions - continued
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <div id="additional-conditions-explanation" class="licence-conditions">
+                    <p>Conditions you must follow that have been added specifically for you. They are aimed at helping
+                        you to make positive changes or stopping you doing things that led you to prison.</p>
+                </div>
+            </td>
+        </tr>
+        {{ additionalConditions(singleItemConditions) }}
+        {{ additionalConditionsMultiItem(multipleItemConditions) }}
+        {{ additionalConditionsBespoke(licence.bespokeConditions) }}
+        </tbody>
+    </table>
 
 {% endblock %}

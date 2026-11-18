@@ -330,4 +330,37 @@ describe('Print a V2 AP licence', () => {
     // There should be no divider after the last condition, so check that it is not present
     expect($('#condition-divider-5')).toHaveLength(0)
   })
+
+  it('renders additional conditions in a table with the correct heading', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+        standardLicenceConditions: [],
+        bespokeConditions: [{ text: 'Bespoke condition 1.' }],
+      },
+      singleItemConditions: [{ text: 'Additional condition 1.' }, { text: 'Additional condition 2.' }],
+      multipleItemConditions: [
+        [
+          { text: 'Additional condition 3.', textPlural: 'Plural form Additional condition 3.' },
+          { text: 'Additional condition 3.', textPlural: 'Plural form Additional condition 3.' },
+        ],
+        [{ text: 'Additional condition 4.' }],
+      ],
+    })
+
+    expect($('#section-heading-additional-conditions').text().trim()).toBe('Additional and bespoke conditions')
+    expect($('.additional-conditions-table thead .additional-conditions__continued-heading').text().trim()).toBe(
+      'Additional and bespoke conditions - continued',
+    )
+    expect($('.additional-conditions-table .additional-conditions__row')).toHaveLength(5)
+    expect($('#additional-condition-1').text()).toContain('Additional condition 1.')
+    expect($('#additional-condition-2').text()).toContain('Additional condition 2.')
+    expect($('#additional-condition-multi-item-1').text()).toContain('Plural form Additional condition 3.')
+    expect($('#additional-condition-multi-item-2').text()).toContain('Additional condition 4.')
+    expect($('#additional-condition-bespoke-1').text()).toContain('Bespoke condition 1.')
+  })
 })

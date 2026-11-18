@@ -1,0 +1,27 @@
+{% macro additionalConditionsMultiItem(conditions) %}
+    {% if conditions.length %}
+        {% for condition in conditions %}
+            {% if condition.length > 1 and condition[0].textPlural %}
+                <tr class="additional-conditions__row">
+                    <td>
+                        <div id="additional-condition-multi-item-{{ loop.index }}" class="v2_condition">
+                            <span>{{ condition[0].textPlural }}</span>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                {% set c = condition.shift() %}
+                <tr class="additional-conditions__row">
+                    <td>
+                        <div id="additional-condition-multi-item-{{ loop.index }}" class="v2_condition">
+                            <span>{{ c.expandedText or c.text }}</span>
+                            {% for subItem in condition %}
+                                <p> {{ subItem.expandedText or subItem.text }} </p>
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
