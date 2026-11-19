@@ -9,6 +9,7 @@ import {
   simpleDateTimeToJson,
   stringToAddressObject,
   jsonDtTo12HourTime,
+  jsonDtTo12HourTimeCompact,
   json24HourTimeTo12HourTime,
   jsonDtToDate,
   removeDuplicates,
@@ -208,6 +209,16 @@ test.each`
   } else {
     expect(timeValue).toBeNull()
   }
+})
+
+test.each`
+  jsonDateTime          | expectedTime
+  ${'23/12/2021 21:00'} | ${'9 pm'}
+  ${'23/12/2021 21:15'} | ${'9:15 pm'}
+  ${'23/12/2021 09:15'} | ${'9:15 am'}
+  ${'invalid'}          | ${null}
+`('convert JSON datetime to compact 12 hour time', ({ jsonDateTime, expectedTime }) => {
+  expect(jsonDtTo12HourTimeCompact(jsonDateTime)).toEqual(expectedTime)
 })
 
 test.each`
