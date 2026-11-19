@@ -78,6 +78,86 @@ describe('Print a V2 AP licence', () => {
     expect($('#appointment-alternative-phone-number').hasClass('bold')).toBe(true)
   })
 
+  it('renders support details instead of a meeting when no appointment is needed', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+        appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+        responsibleComFullName: 'Responsible COM',
+        appointmentTelephoneNumber: '01234 567890',
+        appointmentAlternativeTelephoneNumber: '09876 543210',
+        appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
+      },
+      finalThirdEnabled: true,
+    })
+
+    expect($('#section-heading-support').text()).toContain('Support while on licence')
+    expect($('#section-heading-first-meeting')).toHaveLength(0)
+    expect($('[data-qa="supervising-officer"]').text().trim()).toBe('Your supervising officer is Responsible COM.')
+    expect($('#no-appointment-content').text()).toContain(
+      'You do not need to meet with them after you are released unless they ask to see you.',
+    )
+    expect($('#no-appointment-content').text()).toContain(
+      'If you need support while you are on licence, contact Responsible using the details below:',
+    )
+    expect($('[data-qa="contact-phone-number"]').text().trim()).toBe('Phone number: 01234 567890')
+    expect($('[data-qa="alternative-contact-phone-number"]').text()).toContain('Alternative phone number:')
+    expect($('[data-qa="alternative-contact-phone-number"] .bold').text()).toBe('09876 543210')
+    expect($('#appointment-alternative-phone').parent().attr('id')).toBe('appointment-telephone-details')
+    expect($('#appointment-alternative-phone').hasClass('line-space-after')).toBe(true)
+    expect($('#appointment-address').prev().attr('id')).toBe('appointment-alternative-phone')
+    expect($('#appointment-address').hasClass('line-space-after')).toBe(true)
+    expect($('#appointment-address').text()).toContain('Address:')
+    expect($('#appointment-address').text()).toContain('The Square,')
+    expect($('#appointment-address').text()).toContain('Area,')
+    expect($('#appointment-address').text()).toContain('Town,')
+    expect($('#appointment-address').text()).toContain('County,')
+    expect($('#appointment-address').text()).toContain('S12 3QD')
+  })
+
+  it('explains no appointment is needed when there is no supervising officer', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+        appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+        responsibleComFullName: null,
+      },
+      finalThirdEnabled: true,
+    })
+
+    expect($('#no-appointment-content p').first().text().trim()).toBe(
+      'You do not need to meet with a supervising officer after you are released unless they ask to see you.',
+    )
+    expect($('#appointment-alternative-phone')).toHaveLength(0)
+    expect($('#appointment-address').prev().attr('data-qa')).toBe('contact-phone-number')
+    expect($('#appointment-address').hasClass('line-space-after')).toBe(true)
+  })
+
+  it('renders no-appointment content when the option is selected and final third is disabled', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+        appointmentPersonType: 'NO_APPOINTMENT_NEEDED',
+      },
+      finalThirdEnabled: false,
+    })
+
+    expect($('#section-heading-support')).toHaveLength(1)
+    expect($('#section-heading-first-meeting')).toHaveLength(0)
+  })
+
   it('renders duty officer explanation only when appointment is with duty officer', () => {
     const $ = render({
       licence: {
@@ -537,5 +617,10 @@ describe('Print a V2 AP licence', () => {
     expect($('#restriction-zone-bold-description-2')).toHaveLength(0)
     expect($('#restriction-zone-description-2 p.bold')).toHaveLength(0)
     expect($('#restriction-zone-description-2')).toHaveLength(0)
+
+    const pageBreakAfterZones = $('#page-break-after-zones')
+    expect(pageBreakAfterZones).toHaveLength(1)
+    expect(pageBreakAfterZones.hasClass('page-break-before')).toBe(true)
+    expect(pageBreakAfterZones.nextAll()).toHaveLength(0)
   })
 })
