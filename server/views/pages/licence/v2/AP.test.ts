@@ -157,6 +157,10 @@ describe('Print a V2 AP licence', () => {
       },
     })
 
+    const heading = $('#section-heading-licence-period')
+    expect(heading).toHaveLength(1)
+    expect(heading.text()).toContain('Your licence period')
+
     expect($('#licence-period-details').text().replace(/\s+/g, ' ').trim()).toBe(
       'You are on licence from Thursday 23 December 2021 until Friday 31 December 2021 at 11:59pm. This is also called being on probation.',
     )
