@@ -116,6 +116,8 @@ describe('Print a V2 AP licence', () => {
   it.each([
     ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 11:15', '11:15 am'],
     ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 11:00', '11 am'],
+    ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 09:15', '9:15 am'],
+    ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 21:00', '9 pm'],
     ['NEXT_WORKING_DAY_2PM', 'by 2pm on the next working day after you leave prison', undefined, undefined],
     ['IMMEDIATE_UPON_RELEASE', 'as soon as you leave prison', undefined, undefined],
   ])('renders appointment timing for %s', (appointmentTimeType, expectedText, appointmentTime, expectedTime) => {

@@ -11,6 +11,7 @@ import {
   convertToTitleCase,
   formatAddress,
   jsonDtTo12HourTime,
+  jsonDtTo12HourTimeCompact,
   json24HourTimeTo12HourTime,
   jsonDtToDate,
   jsonDtToDateWithDay,
@@ -171,9 +172,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('datetimeTo12HourTimeCompact', (dt: string) => {
-    const time = jsonDtTo12HourTime(dt)
-    if (!time) return null
-    return time.replace(/:00\s/, ' ')
+    return jsonDtTo12HourTimeCompact(dt)
   })
 
   njkEnv.addFilter('format24HourTimeTo12HourTime', (dt: string) => {
