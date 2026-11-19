@@ -30,7 +30,6 @@ import type {
   CreateVariationResponse,
   EditLicenceResponse,
   EditVariationRequest,
-  EligibilityAssessment,
   ExternalTimeServedRecordRequest,
   ExternalTimeServedRecordResponse,
   FirstNightCurfewTimesRequest,
@@ -53,7 +52,6 @@ import type {
   PrisonUserSearchRequest,
   ProbationCase,
   ProbationSearchRequest,
-  RecallSupportInfo,
   ReferVariationRequest,
   StatusUpdateRequest,
   SupportInfo,
@@ -672,24 +670,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user.username },
     )) as Promise<VaryApproverCaseloadSearchResponse>
-  }
-
-  async getIneligibilityReasons(nomisId: string): Promise<EligibilityAssessment> {
-    return (await this.get({
-      path: `/offender/nomisid/${nomisId}/ineligibility-reasons`,
-    })) as Promise<EligibilityAssessment>
-  }
-
-  async getIS91Status(nomisId: string): Promise<boolean> {
-    return (await this.get({
-      path: `/offender/nomisid/${nomisId}/is-91-status`,
-    })) as Promise<boolean>
-  }
-
-  async getRecallSupportInfo(nomisId: string): Promise<RecallSupportInfo> {
-    return (await this.get({
-      path: `/offender/nomisid/${nomisId}/recall-info`,
-    })) as Promise<RecallSupportInfo>
   }
 
   async getSupportInfo(nomisId: string): Promise<SupportInfo> {

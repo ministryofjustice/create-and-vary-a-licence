@@ -4,14 +4,13 @@ import { convertToTitleCase } from '../../../../utils/utils'
 import LicenceService from '../../../../services/licenceService'
 import config from '../../../../config'
 import logger from '../../../../../logger'
-import PrisonerService from '../../../../services/prisonerService'
 import AuditService from '../../../../services/audit/auditService'
+import type { PrisonerWithCvlFields } from '../../../../@types/licenceApiClientTypes'
 
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly auditService: AuditService,
     private readonly licenceService: LicenceService,
-    private readonly prisonerService: PrisonerService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -36,22 +35,8 @@ export default class ConfirmCreateRoutes {
       return res.redirect('/access-denied')
     }
 
-    if (!nomisRecord.prisoner.homeDetentionCurfewActualDate) {
-      logger.error('Access denied to HDC licence creation GET due to not having a HDCAD')
-      await this.auditService.logPageAccessFailure(req, null, user)
-      return res.redirect('/access-denied')
-    }
-
-    if (!nomisRecord.prisoner.homeDetentionCurfewEligibilityDate) {
-      logger.error('Access denied to HDC licence creation GET due to not having a HDCED')
-      await this.auditService.logPageAccessFailure(req, null, user)
-      return res.redirect('/access-denied')
-    }
-
-    const isHdcApproved = await this.prisonerService.isHdcApproved(parseInt(nomisRecord.prisoner.bookingId, 10))
-
-    if (!isHdcApproved) {
-      logger.error('Access denied to HDC licence creation GET as not approved for HDC')
+    if (!this.isEligibleForHdc(nomisRecord)) {
+      logger.error('Access denied to HDC licence creation GET as not eligible for HDC')
       await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
@@ -80,27 +65,17 @@ export default class ConfirmCreateRoutes {
       return res.redirect('/access-denied')
     }
 
-    if (!nomisRecord.prisoner.homeDetentionCurfewActualDate) {
-      logger.error('Access denied to HDC licence creation POST due to not having a HDCAD')
-      await this.auditService.logPageAccessFailure(req, null, user)
-      return res.redirect('/access-denied')
-    }
-
-    if (!nomisRecord.prisoner.homeDetentionCurfewEligibilityDate) {
-      logger.error('Access denied to HDC licence creation POST due to not having a HDCED')
-      await this.auditService.logPageAccessFailure(req, null, user)
-      return res.redirect('/access-denied')
-    }
-
-    const isHdcApproved = await this.prisonerService.isHdcApproved(parseInt(nomisRecord.prisoner.bookingId, 10))
-
-    if (!isHdcApproved) {
-      logger.error('Access denied to HDC licence creation POST as not approved for HDC')
+    if (!this.isEligibleForHdc(nomisRecord)) {
+      logger.error('Access denied to HDC licence creation POST as not eligible for HDC')
       await this.auditService.logPageAccessFailure(req, null, user)
       return res.redirect('/access-denied')
     }
 
     const { licenceId } = await this.licenceService.createProbationLicence(nomisId, user)
     return res.redirect(`/licence/create/id/${licenceId}/initial-meeting-name`)
+  }
+
+  private isEligibleForHdc(nomisRecord: PrisonerWithCvlFields) {
+    return nomisRecord.cvl.eligibleKind === 'HDC'
   }
 }
