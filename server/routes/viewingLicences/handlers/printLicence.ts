@@ -199,6 +199,7 @@ export default class PrintLicenceRoutes {
         const mapData = await this.licenceService.getExclusionZoneImageData(licence.id.toString(), `${c.id}`, user)
         const description = c.uploadSummary[0]?.description.trim()
         const dataValue = c.data.find(d => d.field === 'outOfBoundArea')
+        const eventName = c.data.find(d => d.field === 'eventName')
         const { text, expandedText } = c
         return {
           mapData,
@@ -206,6 +207,8 @@ export default class PrintLicenceRoutes {
           dataValue,
           text,
           expandedText,
+          isEvent: c.code === EVENT_RESTRICTION_CONDITION_CODE,
+          eventName: eventName?.value,
         }
       }),
     )

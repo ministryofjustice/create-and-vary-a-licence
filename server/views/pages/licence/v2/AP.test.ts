@@ -116,6 +116,8 @@ describe('Print a V2 AP licence', () => {
   it.each([
     ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 11:15', '11:15 am'],
     ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 11:00', '11 am'],
+    ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 09:15', '9:15 am'],
+    ['SPECIFIC_DATE_TIME', 'on ', '23/12/2021 21:00', '9 pm'],
     ['NEXT_WORKING_DAY_2PM', 'by 2pm on the next working day after you leave prison', undefined, undefined],
     ['IMMEDIATE_UPON_RELEASE', 'as soon as you leave prison', undefined, undefined],
   ])('renders appointment timing for %s', (appointmentTimeType, expectedText, appointmentTime, expectedTime) => {
@@ -362,5 +364,95 @@ describe('Print a V2 AP licence', () => {
     expect($('#additional-condition-multi-item-1').text()).toContain('Plural form Additional condition 3.')
     expect($('#additional-condition-multi-item-2').text()).toContain('Additional condition 4.')
     expect($('#additional-condition-bespoke-1').text()).toContain('Bespoke condition 1.')
+  })
+
+  it('renders the exclusion and event exclusion zones in the right order', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+      },
+      exclusionZoneMapData: [{ description: 'Description of exclusion zone 1', isEvent: false }],
+      eventExclusionZoneMapData: [
+        { description: 'Description of the event exclusion zone', isEvent: true, eventName: 'The event' },
+      ],
+    })
+
+    expect($('#exclusion-zones-page-break-first-1')).toHaveLength(1)
+    expect($('#exclusion-zone-heading-1').text().replace(/\s+/g, ' ').trim()).toContain('Exclusion zone 1')
+    expect($('#exclusion-zone-bold-1').text().replace(/\s+/g, ' ').trim()).toContain('Area you must not enter')
+    expect($('#exclusion-zone-text-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Do not enter the highlighted area shown in the following map without the prior approval of your supervising officer.',
+    )
+    expect($('#exclusion-zone-next-page-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Find more information about this map on the next page.',
+    )
+    expect($('#exclusion-zones-page-break-second-1')).toHaveLength(1)
+    expect($('#exclusion-zone-heading-description-1').text().replace(/\s+/g, ' ').trim()).toContain('Exclusion zone 1')
+    expect($('#exclusion-zone-bold-description-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Area you must not enter',
+    )
+    expect($('#exclusion-zone-description-1 p.bold').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Description of the area shown in the map on the previous page',
+    )
+    expect($('#exclusion-zone-description-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Description of exclusion zone 1',
+    )
+
+    expect($('#exclusion-zones-page-break-first-2')).toHaveLength(1)
+    expect($('#exclusion-zone-heading-2').text().replace(/\s+/g, ' ').trim()).toContain('Exclusion zone 2')
+    expect($('#exclusion-zone-bold-2').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Area you must not enter during an event',
+    )
+    expect($('#exclusion-zone-text-2').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Do not enter the highlighted area shown in the following map during The event, without the prior approval of your supervising officer.',
+    )
+    expect($('#exclusion-zone-next-page-2').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Find more information about this map on the next page.',
+    )
+    expect($('#exclusion-zones-page-break-second-2')).toHaveLength(1)
+    expect($('#exclusion-zone-heading-description-2').text().replace(/\s+/g, ' ').trim()).toContain('Exclusion zone 2')
+    expect($('#exclusion-zone-bold-description-2').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Area you must not enter during an event',
+    )
+    expect($('#exclusion-zone-description-2 p.bold').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Description of the area shown in the map on the previous page',
+    )
+    expect($('#exclusion-zone-description-2').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Description of the event exclusion zone',
+    )
+    expect($('#exclusion-zone-event-name-2 p.bold').text().replace(/\s+/g, ' ').trim()).toContain('Event name')
+    expect($('#exclusion-zone-event-name-2').text().replace(/\s+/g, ' ').trim()).toContain('The event')
+  })
+
+  it('renders the exclusion without a description page if there is no description', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+      },
+      exclusionZoneMapData: [{ isEvent: false }],
+    })
+
+    expect($('#exclusion-zones-page-break-first-1')).toHaveLength(1)
+    expect($('#exclusion-zone-heading-1').text().replace(/\s+/g, ' ').trim()).toContain('Exclusion zone 1')
+    expect($('#exclusion-zone-bold-1').text().replace(/\s+/g, ' ').trim()).toContain('Area you must not enter')
+    expect($('#exclusion-zone-text-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Do not enter the highlighted area shown in the following map without the prior approval of your supervising officer.',
+    )
+    // "Find more information about this map on the next page" and none of the second page
+    // should be rendered if there is no description
+    expect($('#exclusion-zone-next-page-1')).toHaveLength(0)
+    expect($('#exclusion-zones-page-break-second-1')).toHaveLength(0)
+    expect($('#exclusion-zone-heading-description-1')).toHaveLength(0)
+    expect($('#exclusion-zone-bold-description-1')).toHaveLength(0)
+    expect($('#exclusion-zone-description-1 p.bold')).toHaveLength(0)
+    expect($('#exclusion-zone-description-1')).toHaveLength(0)
   })
 })
