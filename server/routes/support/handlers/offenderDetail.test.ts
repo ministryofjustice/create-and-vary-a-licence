@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
 import OffenderDetailRoutes from './offenderDetail'
 import type {
@@ -9,13 +8,13 @@ import type {
   EligibilityAssessment,
   RecallSupportInfo,
   RemandSupportInfo,
+  Is91SupportInfo,
+  HdcSupportInfo,
 } from '../../../@types/licenceApiClientTypes'
-import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
 import { DeliusManager } from '../../../@types/deliusClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
-const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -62,6 +61,7 @@ const prisonerDetail = {
     hardStopDate: '03/02/2023',
     hardStopWarningDate: '01/02/2023',
     eligibleKind: 'FIXED_TERM',
+    hdcStatus: 'NOT_A_HDC_RELEASE',
   },
 } as PrisonerWithCvlFields
 
@@ -87,8 +87,31 @@ const defaultRecallDetails: RecallSupportInfo = {
   otherSentenceTypes: ['ADIMP_ORA'],
 }
 
+const defaultRemandDetails: RemandSupportInfo = {
+  isRemand: true,
+  courtEventOutcomeCode: '4200',
+  courtEventOutcomeDescription: 'Some description',
+}
+
+const defaultIs91Details: Is91SupportInfo = {
+  isIs91Case: true,
+  is91CourtEventOutcomes: [{ courtEventOutcomeCode: '1', courtEventOutcomeDescription: 'description-1' }],
+}
+
+const defaultHdcSupportDetails: HdcSupportInfo = {
+  passed: true,
+  approvalStatus: 'APPROVED',
+  checksPassedDate: '2026-01-21',
+  approvalStatusDate: '2026-03-23',
+  refusedReason: 'REFUSED',
+}
+
+const defaultEligibilityAssessment: EligibilityAssessment = {
+  genericIneligibilityReasons: ['Reason1', 'Reason2'],
+} as EligibilityAssessment
+
 describe('Route Handlers - Offender detail', () => {
-  const handler = new OffenderDetailRoutes(prisonerService, probationService, licenceService)
+  const handler = new OffenderDetailRoutes(probationService, licenceService)
   let req: Request
   let res: Response
 
@@ -134,36 +157,22 @@ describe('Route Handlers - Offender detail', () => {
       },
     } as DeliusManager)
 
-    licenceService.getIneligibilityReasons.mockResolvedValue({
-      genericIneligibilityReasons: [],
-    } as EligibilityAssessment)
-
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
     } as LicenceSummary)
+
+    licenceService.getSupportInfo.mockResolvedValue({
+      is91SupportInfo: defaultIs91Details,
+      recallSupportInfo: defaultRecallDetails,
+      remandSupportInfo: defaultRemandDetails,
+      nomisHdcSupportInfo: defaultHdcSupportDetails,
+      eligibilityAssessment: defaultEligibilityAssessment,
+    })
   })
 
   describe('GET', () => {
     it('Should render all offender information', async () => {
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetail)
-
-      prisonerService.getHdcStatuses.mockResolvedValue([
-        {
-          bookingId: '1',
-          approvalStatus: 'PENDING',
-          checksPassed: true,
-        } as HdcStatus,
-      ])
-
-      licenceService.getSupportInfo.mockResolvedValue({
-        isIS91Case: false,
-        recallSupportInfo: defaultRecallDetails,
-        remandSupportInfo: {
-          isRemand: false,
-          courtEventOutcomeCode: null,
-          courtEventOutcomeDescription: null,
-        },
-      })
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
@@ -175,7 +184,7 @@ describe('Route Handlers - Offender detail', () => {
           crn: 'X1234',
           determinate: 'Yes',
           dob: '1 Jan 1970',
-          hdcStatus: 'PENDING',
+          hdcStatus: 'NOT_A_HDC_RELEASE',
           hdced: '1 May 2022',
           hdcad: '1 May 2022',
           hdcEndDate: '1 May 2023',
@@ -187,7 +196,7 @@ describe('Route Handlers - Offender detail', () => {
           sentenceExpiryDate: '1 Jun 2022',
           tused: '1 May 2023',
           recall: 'Yes',
-          remand: 'No',
+          remand: 'Yes',
           hardStop: {
             cutoffDate: '3 Feb 2023',
             isInHardStopPeriod: false,
@@ -204,183 +213,13 @@ describe('Route Handlers - Offender detail', () => {
           region: 'Not found',
         },
         licence: licenceDatesNotFound,
-        ineligibilityReasons: { genericIneligibilityReasons: [] },
-        is91Status: 'No',
-        recallDetails: {
-          recallType: 'FIXED_TERM',
-          recallName: 'Fixed Term Recall 28 days',
-          fixTermSentenceTypes: ['FTR_ORA'],
-          standardRecallSentenceTypes: [],
-          otherSentenceTypes: ['ADIMP_ORA'],
-        },
-        remandDetails: {
-          courtEventOutcomeCode: null,
-          courtEventOutcomeDescription: null,
-          isRemand: false,
-        },
+        is91Status: 'Yes',
+        is91Details: defaultIs91Details,
+        hdcDetails: defaultHdcSupportDetails,
+        recallDetails: defaultRecallDetails,
+        remandDetails: defaultRemandDetails,
+        ineligibilityReasons: defaultEligibilityAssessment,
       })
-    })
-  })
-
-  it('Should render all offender information for standard recall', async () => {
-    licenceService.getPrisonerDetail.mockResolvedValue({
-      ...prisonerDetail,
-      cvl: {
-        ...prisonerDetail.cvl,
-        eligibleKind: 'STANDARD',
-      },
-    })
-
-    const standardRecallDetails: RecallSupportInfo = {
-      recallType: 'STANDARD',
-      recallName: 'Standard Recall',
-      fixTermSentenceTypes: [],
-      standardRecallSentenceTypes: ['LR'],
-      otherSentenceTypes: [],
-    }
-
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      {
-        bookingId: '1',
-        approvalStatus: 'PENDING',
-        checksPassed: true,
-      } as HdcStatus,
-    ])
-
-    licenceService.getSupportInfo.mockResolvedValue({
-      isIS91Case: false,
-      recallSupportInfo: standardRecallDetails,
-      remandSupportInfo: {
-        isRemand: false,
-        courtEventOutcomeCode: null,
-        courtEventOutcomeDescription: null,
-      },
-    })
-
-    await handler.GET(req, res)
-    expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
-      prisonerDetail: {
-        ...prisonerDetail.prisoner,
-        conditionalReleaseDate: '1 Jun 2022',
-        confirmedReleaseDate: '1 Jun 2022',
-        actualParoleDate: '21 Jun 2017',
-        crn: 'X1234',
-        determinate: 'Yes',
-        dob: '1 Jan 1970',
-        hdcStatus: 'PENDING',
-        hdced: '1 May 2022',
-        hdcad: '1 May 2022',
-        hdcEndDate: '1 May 2023',
-        licenceExpiryDate: '1 Jun 2022',
-        name: 'Joe Bloggs',
-        paroleEligibilityDate: '1 Jan 2022',
-        postRecallReleaseDate: '1 May 2022',
-        sentenceStartDate: '26 Mar 2015',
-        sentenceExpiryDate: '1 Jun 2022',
-        tused: '1 May 2023',
-        recall: 'Yes',
-        remand: 'No',
-        hardStop: {
-          cutoffDate: '3 Feb 2023',
-          isInHardStopPeriod: false,
-          warningDate: '1 Feb 2023',
-        },
-      },
-      probationPractitioner,
-      cvlCom: {
-        email: 'Not found',
-        username: 'Not found',
-        team: 'Not found',
-        lau: 'Not found',
-        pdu: 'Not found',
-        region: 'Not found',
-      },
-      licence: licenceDatesNotFound,
-      ineligibilityReasons: { genericIneligibilityReasons: [] },
-      is91Status: 'No',
-      recallDetails: {
-        recallType: 'STANDARD',
-        recallName: 'Standard Recall',
-        fixTermSentenceTypes: [],
-        standardRecallSentenceTypes: ['LR'],
-        otherSentenceTypes: [],
-      },
-      remandDetails: {
-        courtEventOutcomeCode: null,
-        courtEventOutcomeDescription: null,
-        isRemand: false,
-      },
-    })
-  })
-
-  it('Should render all offender information if on remand', async () => {
-    licenceService.getPrisonerDetail.mockResolvedValue({
-      ...prisonerDetail,
-      cvl: {
-        ...prisonerDetail.cvl,
-        eligibleKind: 'STANDARD',
-      },
-    })
-
-    const remandSupportInfo: RemandSupportInfo = {
-      isRemand: true,
-      courtEventOutcomeCode: '4200',
-      courtEventOutcomeDescription: 'Some description',
-    }
-
-    licenceService.getSupportInfo.mockResolvedValue({
-      isIS91Case: false,
-      recallSupportInfo: null,
-      remandSupportInfo,
-    })
-
-    await handler.GET(req, res)
-    expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
-      prisonerDetail: {
-        ...prisonerDetail.prisoner,
-        conditionalReleaseDate: '1 Jun 2022',
-        confirmedReleaseDate: '1 Jun 2022',
-        actualParoleDate: '21 Jun 2017',
-        crn: 'X1234',
-        determinate: 'Yes',
-        dob: '1 Jan 1970',
-        hdcStatus: 'PENDING',
-        hdced: '1 May 2022',
-        hdcad: '1 May 2022',
-        hdcEndDate: '1 May 2023',
-        licenceExpiryDate: '1 Jun 2022',
-        name: 'Joe Bloggs',
-        paroleEligibilityDate: '1 Jan 2022',
-        postRecallReleaseDate: '1 May 2022',
-        sentenceStartDate: '26 Mar 2015',
-        sentenceExpiryDate: '1 Jun 2022',
-        tused: '1 May 2023',
-        recall: 'Yes',
-        remand: 'Yes',
-        hardStop: {
-          cutoffDate: '3 Feb 2023',
-          isInHardStopPeriod: false,
-          warningDate: '1 Feb 2023',
-        },
-      },
-      probationPractitioner,
-      cvlCom: {
-        email: 'Not found',
-        username: 'Not found',
-        team: 'Not found',
-        lau: 'Not found',
-        pdu: 'Not found',
-        region: 'Not found',
-      },
-      licence: licenceDatesNotFound,
-      ineligibilityReasons: { genericIneligibilityReasons: [] },
-      is91Status: 'No',
-      recallDetails: null,
-      remandDetails: {
-        isRemand: true,
-        courtEventOutcomeCode: '4200',
-        courtEventOutcomeDescription: 'Some description',
-      },
     })
   })
 
@@ -398,32 +237,6 @@ describe('Route Handlers - Offender detail', () => {
     } as PrisonerWithCvlFields
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      {
-        bookingId: '1',
-        approvalStatus: 'APPROVED',
-        checksPassed: true,
-      } as HdcStatus,
-    ])
-
-    const noRecallDetails: RecallSupportInfo = {
-      recallType: 'NONE',
-      recallName: 'None',
-      fixTermSentenceTypes: [],
-      standardRecallSentenceTypes: [],
-      otherSentenceTypes: ['ADIMP_ORA'],
-    }
-
-    licenceService.getSupportInfo.mockResolvedValue({
-      isIS91Case: false,
-      recallSupportInfo: noRecallDetails,
-      remandSupportInfo: {
-        isRemand: false,
-        courtEventOutcomeCode: null,
-        courtEventOutcomeDescription: null,
-      },
-    })
-
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -433,7 +246,7 @@ describe('Route Handlers - Offender detail', () => {
         crn: 'X1234',
         determinate: 'Yes',
         dob: '1 Jan 1970',
-        hdcStatus: 'APPROVED',
+        hdcStatus: 'NOT_A_HDC_RELEASE',
         hdced: '1 May 2022',
         hdcad: '1 May 2022',
         hdcEndDate: '1 May 2023',
@@ -446,7 +259,7 @@ describe('Route Handlers - Offender detail', () => {
         actualParoleDate: '21 Jun 2017',
         tused: '1 May 2023',
         recall: 'No',
-        remand: 'No',
+        remand: 'Yes',
         hardStop: {
           cutoffDate: '3 Feb 2023',
           isInHardStopPeriod: false,
@@ -463,20 +276,12 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Not found',
       },
       licence: licenceDatesNotFound,
-      ineligibilityReasons: { genericIneligibilityReasons: [] },
-      is91Status: 'No',
-      recallDetails: {
-        recallType: 'NONE',
-        recallName: 'None',
-        fixTermSentenceTypes: [],
-        standardRecallSentenceTypes: [],
-        otherSentenceTypes: ['ADIMP_ORA'],
-      },
-      remandDetails: {
-        courtEventOutcomeCode: null,
-        courtEventOutcomeDescription: null,
-        isRemand: false,
-      },
+      is91Status: 'Yes',
+      is91Details: defaultIs91Details,
+      hdcDetails: defaultHdcSupportDetails,
+      recallDetails: defaultRecallDetails,
+      remandDetails: defaultRemandDetails,
+      ineligibilityReasons: defaultEligibilityAssessment,
     })
   })
   it('Should render all offender information with NULL sentence dates', async () => {
@@ -502,24 +307,6 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      {
-        bookingId: '1',
-        approvalStatus: 'APPROVED',
-        checksPassed: true,
-      } as HdcStatus,
-    ])
-
-    licenceService.getSupportInfo.mockResolvedValue({
-      isIS91Case: false,
-      recallSupportInfo: defaultRecallDetails,
-      remandSupportInfo: {
-        isRemand: false,
-        courtEventOutcomeCode: null,
-        courtEventOutcomeDescription: null,
-      },
-    })
-
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -529,7 +316,7 @@ describe('Route Handlers - Offender detail', () => {
         crn: 'X1234',
         determinate: 'Yes',
         dob: '1 Jan 1970',
-        hdcStatus: 'APPROVED',
+        hdcStatus: 'NOT_A_HDC_RELEASE',
         hdced: 'Not found',
         hdcad: 'Not found',
         actualParoleDate: 'Not found',
@@ -542,7 +329,7 @@ describe('Route Handlers - Offender detail', () => {
         sentenceExpiryDate: 'Not found',
         tused: 'Not found',
         recall: 'No',
-        remand: 'No',
+        remand: 'Yes',
         hardStop: {
           cutoffDate: '3 Feb 2023',
           isInHardStopPeriod: false,
@@ -559,20 +346,12 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Not found',
       },
       licence: licenceDatesNotFound,
-      ineligibilityReasons: { genericIneligibilityReasons: [] },
-      is91Status: 'No',
-      recallDetails: {
-        recallType: 'FIXED_TERM',
-        recallName: 'Fixed Term Recall 28 days',
-        fixTermSentenceTypes: ['FTR_ORA'],
-        standardRecallSentenceTypes: [],
-        otherSentenceTypes: ['ADIMP_ORA'],
-      },
-      remandDetails: {
-        courtEventOutcomeCode: null,
-        courtEventOutcomeDescription: null,
-        isRemand: false,
-      },
+      is91Status: 'Yes',
+      is91Details: defaultIs91Details,
+      hdcDetails: defaultHdcSupportDetails,
+      recallDetails: defaultRecallDetails,
+      remandDetails: defaultRemandDetails,
+      ineligibilityReasons: defaultEligibilityAssessment,
     })
   })
 
@@ -595,14 +374,6 @@ describe('Route Handlers - Offender detail', () => {
     }
 
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
-
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      {
-        bookingId: '1',
-        approvalStatus: 'APPROVED',
-        checksPassed: true,
-      } as HdcStatus,
-    ])
 
     licenceService.getLicence.mockResolvedValue({
       id: 1,
@@ -628,7 +399,7 @@ describe('Route Handlers - Offender detail', () => {
         dob: '1 Jan 1970',
         crn: 'X1234',
         determinate: 'Yes',
-        hdcStatus: 'APPROVED',
+        hdcStatus: 'NOT_A_HDC_RELEASE',
         hdced: '1 May 2022',
         hdcad: '1 May 2022',
         actualParoleDate: '21 Jun 2017',
@@ -641,7 +412,7 @@ describe('Route Handlers - Offender detail', () => {
         sentenceExpiryDate: '1 Jun 2022',
         tused: '1 May 2023',
         recall: 'Yes',
-        remand: 'No',
+        remand: 'Yes',
         hardStop: {
           cutoffDate: '3 Feb 2023',
           isInHardStopPeriod: false,
@@ -670,20 +441,12 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: '5 Jan 2022',
         prrd: 'Not found',
       },
-      ineligibilityReasons: { genericIneligibilityReasons: [] },
-      is91Status: 'No',
-      recallDetails: {
-        recallType: 'FIXED_TERM',
-        recallName: 'Fixed Term Recall 28 days',
-        fixTermSentenceTypes: ['FTR_ORA'],
-        standardRecallSentenceTypes: [],
-        otherSentenceTypes: ['ADIMP_ORA'],
-      },
-      remandDetails: {
-        courtEventOutcomeCode: null,
-        courtEventOutcomeDescription: null,
-        isRemand: false,
-      },
+      is91Status: 'Yes',
+      is91Details: defaultIs91Details,
+      hdcDetails: defaultHdcSupportDetails,
+      recallDetails: defaultRecallDetails,
+      remandDetails: defaultRemandDetails,
+      ineligibilityReasons: defaultEligibilityAssessment,
     })
   })
 
@@ -715,14 +478,6 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      {
-        bookingId: '1',
-        approvalStatus: 'APPROVED',
-        checksPassed: true,
-      } as HdcStatus,
-    ])
-
     licenceService.getLicence.mockResolvedValue({
       id: 1,
       comEmail: 'test@probation.gov.uk',
@@ -732,8 +487,6 @@ describe('Route Handlers - Offender detail', () => {
       probationPduDescription: 'PDU 1',
       probationAreaDescription: 'Region 1',
     } as Licence)
-
-    licenceService.getIS91Status.mockResolvedValue(false)
 
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith(
@@ -751,53 +504,9 @@ describe('Route Handlers - Offender detail', () => {
     )
   })
 
-  it('Should render ineligibility reasons if the offender is ineligible for CVL', async () => {
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      {
-        bookingId: '1',
-        approvalStatus: 'PENDING',
-        checksPassed: true,
-      } as HdcStatus,
-    ])
-
-    licenceService.getLicence.mockResolvedValue({
-      id: 1,
-      comEmail: 'test@probation.gov.uk',
-      comUsername: 'AB123C',
-      probationTeamDescription: 'Team 1',
-      probationLauDescription: 'LAU 1',
-      probationPduDescription: 'PDU 1',
-      probationAreaDescription: 'Region 1',
-      probationTeamCode: 'Test',
-    } as Licence)
-
-    licenceService.getIneligibilityReasons.mockResolvedValue({
-      genericIneligibilityReasons: ['Reason1', 'Reason2'],
-    } as EligibilityAssessment)
-
-    licenceService.getIS91Status.mockResolvedValue(false)
-
-    await handler.GET(req, res)
-    expect(res.render).toHaveBeenCalledWith(
-      'pages/support/offenderDetail',
-      expect.objectContaining({
-        ineligibilityReasons: { genericIneligibilityReasons: ['Reason1', 'Reason2'] },
-      }),
-    )
-  })
-
   it('should render all offender information if probationPractitioner is null', async () => {
     licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetail)
 
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      {
-        bookingId: '1',
-        approvalStatus: 'PENDING',
-        checksPassed: true,
-      } as HdcStatus,
-    ])
-
-    licenceService.getIS91Status.mockResolvedValue(false)
     probationService.getResponsibleCommunityManager.mockResolvedValue(null)
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith(

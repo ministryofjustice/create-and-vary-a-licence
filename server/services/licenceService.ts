@@ -20,7 +20,6 @@ import type {
   CreateLicenceResponse,
   CreateVariationResponse,
   EditLicenceResponse,
-  EligibilityAssessment,
   LastMinuteHandoverCaseResponse,
   Licence,
   LicenceConditionChange,
@@ -30,7 +29,6 @@ import type {
   PolicyUpdateResponse,
   PrisonerWithCvlFields,
   ProbationCase,
-  RecallSupportInfo,
   ReferVariationRequest,
   StatusUpdateRequest,
   SupportInfo,
@@ -469,18 +467,6 @@ export default class LicenceService {
 
   async getProbationCase(nomsId: string, user: User): Promise<ProbationCase> {
     return this.licenceApiClient.getProbationCase(nomsId, user)
-  }
-
-  async getIneligibilityReasons(nomsId: string): Promise<EligibilityAssessment> {
-    return this.licenceApiClient.getIneligibilityReasons(nomsId)
-  }
-
-  async getIS91Status(nomsId: string): Promise<boolean> {
-    return this.licenceApiClient.getIS91Status(nomsId)
-  }
-
-  async getRecallSupportInfo(nomsId: string): Promise<RecallSupportInfo> {
-    return this.licenceApiClient.getRecallSupportInfo(nomsId)
   }
 
   async getSupportInfo(nomsId: string): Promise<SupportInfo> {

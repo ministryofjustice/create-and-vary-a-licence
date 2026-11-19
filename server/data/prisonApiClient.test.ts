@@ -48,42 +48,6 @@ describe('Prison Api client tests', () => {
     expect(result.toString()).toEqual('image')
   })
 
-  it('Get latest HDC status', async () => {
-    get.mockResolvedValue({ approvalStatus: 'APPROVED' })
-
-    const result = await prisonApiClient.getLatestHdcStatus('1234', { username: 'joebloggs' } as User)
-
-    expect(get).toHaveBeenCalledWith(
-      { path: '/api/offender-sentences/booking/1234/home-detention-curfews/latest', return404: true },
-      { username: 'joebloggs' },
-    )
-    expect(result).toEqual({ approvalStatus: 'APPROVED' })
-  })
-
-  it('Get latest HDC status handles null responses', async () => {
-    get.mockResolvedValue(null)
-
-    const result = await prisonApiClient.getLatestHdcStatus('1234', { username: 'joebloggs' } as User)
-
-    expect(get).toHaveBeenCalledWith(
-      { path: '/api/offender-sentences/booking/1234/home-detention-curfews/latest', return404: true },
-      { username: 'joebloggs' },
-    )
-    expect(result).toEqual(null)
-  })
-
-  it('Get latest HDC status batch', async () => {
-    post.mockResolvedValue([{ approvalStatus: 'APPROVED' }])
-
-    const result = await prisonApiClient.getLatestHdcStatusBatch([1234], { username: 'joebloggs' } as User)
-
-    expect(post).toHaveBeenCalledWith(
-      { path: '/api/offender-sentences/home-detention-curfews/latest', data: [1234] },
-      { username: 'joebloggs' },
-    )
-    expect(result).toEqual([{ approvalStatus: 'APPROVED' }])
-  })
-
   it('Get prison user', async () => {
     get.mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
 

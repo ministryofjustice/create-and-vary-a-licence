@@ -401,6 +401,36 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">HDC details</caption>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Checks passed</th>
+                    <td class="govuk-table__cell">{{ hdcDetails.passed }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Checks passed date</th>
+                    <td class="govuk-table__cell">{{ hdcDetails.checksPassedDate or 'Not available' }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Approval status</th>
+                    <td class="govuk-table__cell">{{ hdcDetails.approvalStatus or 'Not available' }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Approval status date</th>
+                    <td class="govuk-table__cell">{{ hdcDetails.approvalStatusDate or 'Not available' }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Refusal reason</th>
+                    <td class="govuk-table__cell">{{ hdcDetails.refusedReason or 'Not available' }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
                 <caption class="govuk-table__caption govuk-table__caption--m">Eligibility</caption>
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">

@@ -74,7 +74,7 @@ export default function Index({
 
   // Case details
   const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, probationService)
-  const offenderDetailHandler = new OffenderDetailRoutes(prisonerService, probationService, licenceService)
+  const offenderDetailHandler = new OffenderDetailRoutes(probationService, licenceService)
   const offenderLicenceHandler = new OffenderLicencesRoutes(licenceService)
   const offenderAuditHandler = new OffenderAuditRoutes(licenceService)
   const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
