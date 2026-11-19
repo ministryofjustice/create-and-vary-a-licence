@@ -144,6 +144,33 @@ describe('Print a V2 AP licence', () => {
     }
   })
 
+  it('renders the licence period dates and guidance', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+        licenceStartDate: '23/12/2021 11:15',
+        licenceExpiryDate: '31/12/2021 11:15',
+      },
+    })
+
+    expect($('#licence-period-details').text().replace(/\s+/g, ' ').trim()).toBe(
+      'You are on licence from Thursday 23 December 2021 until Friday 31 December 2021 at 11:59pm. This is also called being on probation.',
+    )
+    expect(
+      $('#licence-period-additional-info p')
+        .map((_, paragraph) => $(paragraph).text().replace(/\s+/g, ' ').trim())
+        .get(),
+    ).toEqual([
+      'This means you must follow the licence conditions that are written on the next pages',
+      'You will work with a supervising officer, who will help you to follow these conditions. This is normally a probation officer.',
+      'Speak to them if you have questions or need advice.',
+    ])
+  })
+
   it('renders appointment address correctly', () => {
     const $ = render({
       licence: {
