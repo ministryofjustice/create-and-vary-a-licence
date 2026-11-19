@@ -482,4 +482,56 @@ describe('Print a V2 AP licence', () => {
     expect($('#exclusion-zone-description-1 p.bold')).toHaveLength(0)
     expect($('#exclusion-zone-description-1')).toHaveLength(0)
   })
+
+  it('renders the restriction zones in correctly', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        typeCode: 'AP',
+        version: '2.0',
+      },
+      restrictionZoneMapData: [
+        { description: 'Description of restriction zone 1', isEvent: false },
+        { isEvent: false },
+      ],
+    })
+
+    expect($('#restriction-zones-page-break-first-1')).toHaveLength(1)
+    expect($('#restriction-zone-heading-1').text().replace(/\s+/g, ' ').trim()).toContain('Restriction zone 1')
+    expect($('#restriction-zone-bold-1').text().replace(/\s+/g, ' ').trim()).toContain('Area you must not leave')
+    expect($('#restriction-zone-text-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Do not leave the highlighted area shown in the following map without the prior approval of your supervising officer.',
+    )
+    expect($('#restriction-zone-next-page-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Find more information about this map on the next page.',
+    )
+    expect($('#restriction-zones-page-break-second-1')).toHaveLength(1)
+    expect($('#restriction-zone-heading-description-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Restriction zone 1',
+    )
+    expect($('#restriction-zone-bold-description-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Area you must not leave',
+    )
+    expect($('#restriction-zone-description-1 p.bold').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Description of the area shown in the map on the previous page',
+    )
+    expect($('#restriction-zone-description-1').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Description of restriction zone 1',
+    )
+
+    expect($('#restriction-zones-page-break-first-2')).toHaveLength(1)
+    expect($('#restriction-zone-heading-2').text().replace(/\s+/g, ' ').trim()).toContain('Restriction zone 2')
+    expect($('#restriction-zone-bold-2').text().replace(/\s+/g, ' ').trim()).toContain('Area you must not leave')
+    expect($('#restriction-zone-text-2').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Do not leave the highlighted area shown in the following map without the prior approval of your supervising officer.',
+    )
+    expect($('#restriction-zone-next-page-2')).toHaveLength(0)
+    expect($('#restriction-zones-page-break-second-2')).toHaveLength(0)
+    expect($('#restriction-zone-heading-description-2')).toHaveLength(0)
+    expect($('#restriction-zone-bold-description-2')).toHaveLength(0)
+    expect($('#restriction-zone-description-2 p.bold')).toHaveLength(0)
+    expect($('#restriction-zone-description-2')).toHaveLength(0)
+  })
 })
