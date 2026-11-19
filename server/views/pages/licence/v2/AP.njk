@@ -28,73 +28,123 @@
 {% endset %}
 
 {% set appointmentAddressLines = licence.licenceAppointmentAddress | formatLicenceAddressAsList if licence.licenceAppointmentAddress else licence.appointmentAddress | formatAddressAsList %}
+{% set noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED' %}
 
 {% block content %}
   <div id="title" class="title">Licence for {{ offenderName }}</div>
   <div id="subtitle" class="subtitle">Released from {{ licence.prisonDescription }}</div>
 
-  <div id="section-heading-first-meeting" class="section-heading">
-    <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
-    <span>Your first probation meeting</span>
-  </div>
-
-  <div id="first-probation-meeting-content" class="first-probation-meeting-content">
-    <div id="first-meeting-person-details">
-      <p>You must go to the following address {{ appointmentDate | safe }} and ask to speak to
-        {% if licence.appointmentPersonType === 'RESPONSIBLE_COM' %}
-          <span id="appointment-contact">
-            <span class="bold">{{ licence.responsibleComFullName }}</span>, who will be your supervising officer:
-          </span>
-        {% elif licence.appointmentPersonType === 'DUTY_OFFICER' %}
-          <span id="appointment-contact">the <span class="bold">duty officer</span>:</span>
-        {% else %}
-          <span id="appointment-contact"><span class="bold">{{ licence.appointmentPerson }}</span>:</span>
-        {% endif %}
-      </p>
-      <div id="appointment-address">
-        {% for addressLine in appointmentAddressLines %}
-          {% if loop.last %}
-            <span class="line-space-after">{{ addressLine }}</span>
-          {% else %}
-            <span class="line-space-after">{{ addressLine | toAddressCase }},</span>
-          {% endif %}
-        {% endfor %}
-      </div>
+  {% if noAppointmentNeeded %}
+    <div id="section-heading-support" class="section-heading">
+      <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
+      <span>Support while on licence</span>
     </div>
 
-    <div id="first-meeting-person-details-content">
-      <p>Your first probation meeting is a chance for you to learn more about your licence period and to ask any questions.</p>
-    </div>
+    <div id="no-appointment-content" class="no-appointment-content">
+      {% if licence.responsibleComFullName %}
+        <p data-qa="supervising-officer">
+          Your supervising officer is <span class="bold">{{ licence.responsibleComFullName }}</span>.
+        </p>
+        <p>
+          You do not need to meet with them after you are released unless they ask to see you.
+        </p>
 
-    {% if licence.appointmentPersonType === 'DUTY_OFFICER' %}
-      <div id="first-meeting-duty-officer-content">
-        <p>The duty officer helps people when their supervising officer is unavailable. You will meet your supervising officer at a later appointment.</p>
-      </div>
-    {% endif %}
+        <p>
+          If you need support while you are on licence, contact {{ licence.responsibleComFullName.split(' ')[0] }} using the details below:
+        </p>
+      {% else %}
+        <p>
+          You do not need to meet with a supervising officer after you are released unless they ask to see you.
+        </p>
+        <p>
+          If you need support while you are on licence, you can use the details below:
+        </p>
+      {% endif %}
 
-    <div id="problems-questions-content">
-      <p class="bold">If you have any problems or questions</p>
       <p id="appointment-telephone-details">
-        Phone number:
-        <span id="appointment-phone-number" class="bold">{{ licence.appointmentTelephoneNumber }}</span>
+        <span data-qa="contact-phone-number">
+          Phone number: <span class="bold">{{ licence.appointmentTelephoneNumber }}</span>
+        </span>
         {% if licence.appointmentAlternativeTelephoneNumber %}
-          <span id="appointment-alternative-phone" class="line-space-after">
+          <span id="appointment-alternative-phone" class="line-space-after" data-qa="alternative-contact-phone-number">
             Alternative phone number:
-            <span id="appointment-alternative-phone-number" class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
+            <span class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
           </span>
         {% endif %}
+        <span id="appointment-address" class="line-space-after" data-qa="contact-address">
+          Address:
+          {% for addressLine in appointmentAddressLines %}
+            {% if loop.last %}
+              {{ addressLine }}
+            {% else %}
+              {{ addressLine | toAddressCase }},
+            {% endif %}
+          {% endfor %}
+        </span>
       </p>
     </div>
-  </div>
+  {% else %}
+    <div id="section-heading-first-meeting" class="section-heading">
+      <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
+      <span>Your first probation meeting</span>
+    </div>
+
+    <div id="first-probation-meeting-content" class="first-probation-meeting-content">
+      <div id="first-meeting-person-details">
+        <p>You must go to the following address {{ appointmentDate | safe }} and ask to speak to
+          {% if licence.appointmentPersonType === 'RESPONSIBLE_COM' %}
+            <span id="appointment-contact">
+              <span class="bold">{{ licence.responsibleComFullName }}</span>, who will be your supervising officer:
+            </span>
+          {% elif licence.appointmentPersonType === 'DUTY_OFFICER' %}
+            <span id="appointment-contact">the <span class="bold">duty officer</span>:</span>
+          {% else %}
+            <span id="appointment-contact"><span class="bold">{{ licence.appointmentPerson }}</span>:</span>
+          {% endif %}
+        </p>
+        <div id="appointment-address">
+          {% for addressLine in appointmentAddressLines %}
+            {% if loop.last %}
+              <span class="line-space-after">{{ addressLine }}</span>
+            {% else %}
+              <span class="line-space-after">{{ addressLine | toAddressCase }},</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div id="first-meeting-person-details-content">
+        <p>Your first probation meeting is a chance for you to learn more about your licence period and to ask any questions.</p>
+      </div>
+
+      {% if licence.appointmentPersonType === 'DUTY_OFFICER' %}
+        <div id="first-meeting-duty-officer-content">
+          <p>The duty officer helps people when their supervising officer is unavailable. You will meet your supervising officer at a later appointment.</p>
+        </div>
+      {% endif %}
+
+      <div id="problems-questions-content">
+        <p class="bold">If you have any problems or questions</p>
+        <p id="appointment-telephone-details">
+          Phone number:
+          <span id="appointment-phone-number" class="bold">{{ licence.appointmentTelephoneNumber }}</span>
+          {% if licence.appointmentAlternativeTelephoneNumber %}
+            <span id="appointment-alternative-phone" class="line-space-after">
+              Alternative phone number:
+              <span id="appointment-alternative-phone-number" class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
+            </span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  {% endif %}
 
   <div id="section-heading-licence-period" class="section-heading">
     <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
     <span>Your licence period</span>
   </div>
 
-
   <div id="licence-period-content" class="licence-period-content">
-
     <div id="licence-period-details">
       You are on licence from <span class="bold">{{ licence.licenceStartDate | datetimeToDateWithDay }}</span> until
       <span class="bold">{{ licence.licenceExpiryDate | datetimeToDateWithDay }} at 11:59pm</span>. This is also called
@@ -187,4 +237,7 @@
     {% if restrictionZoneMapData.length %}
         {% include "pages/licence/v2/partials/restrictionZones.njk" %}
     {% endif %}
+
+    <div id="page-break-after-zones" class="page-break-before"></div>
+
 {% endblock %}
