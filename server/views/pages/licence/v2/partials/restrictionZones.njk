@@ -1,0 +1,34 @@
+{% for zone in restrictionZoneMapData %}
+    <div id="restriction-zones-page-break-first-{{ loop.index }}" class="page-break-before"></div>
+    <div id="restriction-zone-heading-{{ loop.index }}" class="map-condition-heading">Restriction
+        zone {{ loop.index }}</div>
+    <div id="restriction-zone-bold-{{ loop.index }}" class="map-condition-bold">
+        Area you must not leave
+    </div>
+    <div id="restriction-zone-text-{{ loop.index }}" class="licence-conditions">
+        <p>Do not leave the highlighted area shown in the following map without the prior approval of your supervising
+            officer.</p>
+    </div>
+    <div class="v2-map-page">
+        <div class="v2-map-frame">
+            <img alt="Restriction zone" src="data:image/jpeg;charset-utf8;base64,{{ zone.mapData }}"
+                 class="v2-map-image" />
+        </div>
+    </div>
+
+    {% if zone.description %}
+        <div id="restriction-zone-next-page-{{ loop.index }}" class="licence-conditions">
+            <p>Find more information about this map on the next page.</p>
+        </div>
+        <div id="restriction-zones-page-break-second-{{ loop.index }}" class="page-break-before"></div>
+        <div id="restriction-zone-heading-description-{{ loop.index }}" class="map-condition-heading">Restriction
+            zone {{ loop.index }}</div>
+        <div id="restriction-zone-bold-description-{{ loop.index }}" class="map-condition-bold"> Area you must not
+            leave
+        </div>
+        <div id="restriction-zone-description-{{ loop.index }}" class="licence-conditions">
+            <p class="bold">Description of the area shown in the map on the previous page</p>
+            <p>{{ zone.description | striptags(false) | trim | escape }}</p>
+        </div>
+    {% endif %}
+{% endfor %}
