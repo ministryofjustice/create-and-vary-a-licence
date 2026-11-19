@@ -84,6 +84,13 @@ body.licence-template-v2 .no-appointment-content {
   margin-bottom: 50px;
 }
 
+body.licence-template-v2 .confirmation-content {
+  width: 500px;
+  max-width: 100%;
+  line-height: 18px;
+  margin-bottom: 50px;
+}
+
 body.licence-template-v2 .licence-period-content {
   width: 500px;
   max-width: 100%;
@@ -167,6 +174,23 @@ body.licence-template-v2 .condition-divider {
   border: 0;
   border-top: 1px solid #000;
   margin: 20px 0;
+}
+
+body.licence-template-v2 .confirmation-field-line {
+  width: 292px;
+  max-width: 100%;
+  margin: 30px 0;
+  border-top-color: #888;
+}
+
+body.licence-template-v2 .confirmation-date-line {
+  width: 168px;
+}
+
+body.licence-template-v2 .confirmation-divider {
+  width: 515px;
+  max-width: 100%;
+  margin: 20px auto;
 }
 
 .v2_condition {
