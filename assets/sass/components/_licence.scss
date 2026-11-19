@@ -87,9 +87,14 @@ body.licence-template-v2 .recall-condition-list {
   padding-left: 24px;
 }
 
-body.licence-template-v2 .condition-section-heading {
+body.licence-template-v2 .condition-section-heading,
+body.licence-template-v2 .map-condition-bold{
   font-size: 18pt;
   font-weight: bolder;
+}
+
+body.licence-template-v2 .map-condition-heading {
+  font-size: 18pt;
 }
 
 body.licence-template-v2 .additional-conditions__first-heading {
@@ -162,6 +167,26 @@ body.licence-template-v2 .condition-divider {
     position: absolute;
     margin-left: -50px;
   }
+}
+
+.v2-map-page {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.v2-map-frame {
+  width: 100%;
+  max-height: 750px;
+  overflow: hidden;
+}
+
+.v2-map-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 750px;
+  object-fit: contain;
+  object-position: top left;
 }
 
 .page-break-before {

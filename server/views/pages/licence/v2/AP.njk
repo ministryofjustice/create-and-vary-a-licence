@@ -157,4 +157,9 @@
         </tbody>
     </table>
 
+    {% set exclusionZones = (exclusionZoneMapData or []).concat(eventExclusionZoneMapData or []) %}
+
+    {% if exclusionZones.length %}
+        {% include "pages/licence/v2/partials/exclusionZones.njk" %}
+    {% endif %}
 {% endblock %}

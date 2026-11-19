@@ -1,0 +1,42 @@
+{% for zone in exclusionZones %}
+    <div id="exclusion-zones-page-break-first-{{ loop.index }}" class="page-break-before"></div>
+    <div id="exclusion-zone-heading-{{ loop.index }}" class="map-condition-heading">Exclusion
+        zone {{ loop.index }}</div>
+    <div id="exclusion-zone-bold-{{ loop.index }}" class="map-condition-bold">
+        Area you must not enter{{ " during an event" if zone.isEvent }}
+    </div>
+    <div id="exclusion-zone-text-{{ loop.index }}" class="licence-conditions">
+        <p>Do not enter the highlighted area shown in the following map{% if zone.isEvent %} during <span
+                    class="bold">{{ zone.eventName }},</span>{% endif %} without the prior approval of your supervising
+            officer.</p>
+    </div>
+    <div class="v2-map-page">
+        <div class="v2-map-frame">
+            <img alt="Exclusion zone" src="data:image/jpeg;charset-utf8;base64,{{ zone.mapData }}"
+                 class="v2-map-image" />
+        </div>
+    </div>
+
+    {% if zone.description %}
+        <div id="exclusion-zone-next-page-{{ loop.index }}" class="licence-conditions">
+            <p>Find more information about this map on the next page.</p>
+        </div>
+
+        <div id="exclusion-zones-page-break-second-{{ loop.index }}" class="page-break-before"></div>
+        <div id="exclusion-zone-heading-description-{{ loop.index }}" class="map-condition-heading">Exclusion
+            zone {{ loop.index }}</div>
+        <div id="exclusion-zone-bold-description-{{ loop.index }}" class="map-condition-bold">
+            Area you must not enter{{ " during an event" if zone.isEvent }}
+        </div>
+        {% if zone.isEvent %}
+            <div id="exclusion-zone-event-name-{{ loop.index }}" class="licence-conditions">
+                <p class="bold">Event name</p>
+                <p>{{ zone.eventName }}</p>
+            </div>
+        {% endif %}
+        <div id="exclusion-zone-description-{{ loop.index }}" class="licence-conditions">
+            <p class="bold">Description of the area shown in the map on the previous page</p>
+            <p>{{ zone.description | striptags(false) | trim | escape }}</p>
+        </div>
+    {% endif %}
+{% endfor %}
