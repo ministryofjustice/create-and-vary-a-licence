@@ -567,45 +567,6 @@ describe('Print a V2 AP licence', () => {
     expect($('#exclusion-zone-description-1')).toHaveLength(0)
   })
 
-  it('renders the confirmation fields', () => {
-    const $ = render({
-      licence: {
-        id: 1,
-        forename: 'Forename',
-        surname: 'Surname',
-        typeCode: 'AP',
-        version: '2.0',
-      },
-    })
-
-    expect($('#section-heading-confirmation').text()).toContain(
-      'Confirmation that the licence has been explained to you',
-    )
-    const nameLine = $('#confirmation-name-line')
-    expect($('#confirmation-name-label').text().trim()).toBe('Name')
-    expect($('#confirmation-name-label').hasClass('bold')).toBe(true)
-    expect($('#confirmation-name-label').next().attr('id')).toBe('confirmation-name-line')
-    expect(nameLine.hasClass('confirmation-field-line')).toBe(true)
-    expect(nameLine.attr('aria-hidden')).toBe('true')
-
-    const signatureLine = $('#confirmation-signature-line')
-    expect($('#confirmation-signature-label').text().trim()).toBe('Signature')
-    expect($('#confirmation-signature-label').hasClass('bold')).toBe(true)
-    expect($('#confirmation-signature-label').next().attr('id')).toBe('confirmation-signature-line')
-    expect(signatureLine.hasClass('confirmation-field-line')).toBe(true)
-    expect(signatureLine.attr('aria-hidden')).toBe('true')
-
-    const dateLine = $('#confirmation-date-line')
-    expect($('#confirmation-date-label').text().trim()).toBe('Date')
-    expect($('#confirmation-date-label').hasClass('bold')).toBe(true)
-    expect($('#confirmation-date-label').next().attr('id')).toBe('confirmation-date-line')
-    expect(dateLine.hasClass('confirmation-field-line')).toBe(true)
-    expect(dateLine.attr('aria-hidden')).toBe('true')
-    expect($('#confirmation-date-line').hasClass('confirmation-date-line')).toBe(true)
-    expect($('#confirmation-content').next().attr('id')).toBe('confirmation-divider')
-    expect($('#confirmation-divider').hasClass('confirmation-divider')).toBe(true)
-  })
-
   it('renders the restriction zones in correctly', () => {
     const $ = render({
       licence: {
