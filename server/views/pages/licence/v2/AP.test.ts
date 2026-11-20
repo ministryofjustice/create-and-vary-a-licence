@@ -621,6 +621,6 @@ describe('Print a V2 AP licence', () => {
     const pageBreakAfterZones = $('#page-break-after-zones')
     expect(pageBreakAfterZones).toHaveLength(1)
     expect(pageBreakAfterZones.hasClass('page-break-before')).toBe(true)
-    expect(pageBreakAfterZones.nextAll()).toHaveLength(0)
+    expect(pageBreakAfterZones.next().attr('id')).toBe('section-heading-confirmation')
   })
 })
