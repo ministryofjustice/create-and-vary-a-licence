@@ -467,7 +467,7 @@ describe('Print a V2 AP licence', () => {
 
     expect($('#section-heading-additional-conditions').text().trim()).toBe('Additional and bespoke conditions')
     expect($('.additional-conditions-table thead .additional-conditions__continued-heading').text().trim()).toBe(
-      'Additional and bespoke conditions - continued',
+      'Additional and bespoke conditions – continued',
     )
     expect($('.additional-conditions-table .additional-conditions__row')).toHaveLength(5)
     expect($('#additional-condition-1').text()).toContain('Additional condition 1.')
