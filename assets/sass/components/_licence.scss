@@ -188,9 +188,25 @@ body.licence-template-v2 .confirmation-date-line {
 }
 
 body.licence-template-v2 .confirmation-divider {
-  width: 515px;
+  width: 100%;
   max-width: 100%;
   margin: 20px auto;
+}
+
+body.licence-template-v2 .hmpps-info {
+  width: 575px;
+  max-width: 100%;
+  line-height: 18px;
+  margin-bottom: 0;
+}
+
+body.licence-template-v2 .hmpps-info td {
+  padding-left: 0;
+  padding-right: 0;
+}
+body.licence-template-v2 .hmpps-info-picture td {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .v2_condition {
@@ -225,6 +241,19 @@ body.licence-template-v2 .confirmation-divider {
   max-height: 750px;
   object-fit: contain;
   object-position: top left;
+}
+
+.v2-offender {
+  display: flex;
+
+  img {
+    height: 150px;
+    border: 1px solid #555;
+  }
+
+  div {
+    padding: 0 10px;
+  }
 }
 
 .page-break-before {

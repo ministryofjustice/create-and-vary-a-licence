@@ -258,6 +258,64 @@
 
   <hr id="confirmation-divider" class="condition-divider confirmation-divider" aria-hidden="true">
 
+    <div id="hmpps-info" class="hmpps-info">
+        <table style="width: 100%;">
+            <tr style="line-height: 14pt">
+                <td style="text-align: left; width: 90%;">
+                    <div>
+                        <p class="bold"> Additional information for staff</p>
+                        <p> This information is for people like staff in the Prison Service and Probation Service and
+                            the police.</p>
+                    </div>
+                </td>
+                <td style="text-align: right; width: 10%; font-size: 12pt;">
+                    <img alt="HMPPS logo" src="{{ licencesUrl }}/assets/images/HMPPS_BLK_AW.jpg" width="156"
+                         height="70">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="hmpps-info-details" class="hmpps-info-picture">
+        <table style="width: 100%; line-height: 12pt;">
+            <tr style="width: 50%">
+                <td class="v2-offender">
+                    {% include "pages/licence/partials/headshot.njk" %}
+                </td>
+                <td style="text-align: left; width: 90%; font-size: 12pt; vertical-align: top;">
+                    <p id="hmpps-info-name"><span class="bold">Name</span><br>{{ offenderName }}</p>
+                    <p id="hmpps-info-date-of-birth"><span class="bold">Date of birth</span><br>{{ licence.dateOfBirth | datetimeToDate }}</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="hmpps-info-reference-details" class="hmpps-info">
+        <table style="width: 100%; line-height: 12px;">
+            <tr style="width: 65%; vertical-align: top;">
+                <td>
+                    <p class="bold">Licence details</p>
+                    <p>
+                        <span id="hmpps-info-release-from">Released from: {{ licence.prisonDescription }} </span><br>
+                        <span id="hmpps-info-licence-version">Licence version: {{ licence.version }} </span><br>
+                        <span id="hmpps-info-date-of-approval">Date of approval: {{ licence.approvedDate | datetimeToDate }} </span><br>
+                        <span id="hmpps-info-approved-by">Approved by: {{ licence.approvedByName }} </span><br>
+                        <span id="hmpps-info-on-behalf-of" style="font-size: 10pt; line-height: 10pt">on behalf of the Secretary of State for Justice </span>
+                    </p>
+                </td>
+                <td style="text-align: left; width: 35%; vertical-align: top;">
+                    <p class="bold">Reference numbers</p>
+                    <p>
+                        <span id="hmpps-info-prison-number">Prison number: {{ licence.nomsId }}</span><br>
+                        <span id="hmpps-info-crn">CRN: {{ licence.crn }}</span><br>
+                        <span id="hmpps-info-booking-number">Booking number: {{ licence.bookingNo }}</span><br>
+                        <span id="hmpps-info-cro-number">CRO number: {{ licence.cro }}</span><br>
+                        <span id="hmpps-info-pnc-id">PNC ID: {{ licence.pnc }}</span>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+
 
 
 
