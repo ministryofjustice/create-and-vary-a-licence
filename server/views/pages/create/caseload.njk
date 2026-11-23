@@ -31,11 +31,12 @@
     {% set hdcLabel = 'HDC application postponed' if (hdcCreationEnabled and offender.isHdcPostponed) else 'HDC release' %}
 
     {% if hdcCreationEnabled and offender.noHdcCurfewAddress %}
-        {% set releaseDate = '<span class="info-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate %}
-        {% set releaseDate = releaseDate + '</span><span class="info-highlight info-highlight-message">No HDC curfew address</span>' %}
+        {% set releaseDate = '<span class="info-highlight">' + offender.releaseDateLabel +
+            ': <br>' + offender.releaseDate + '</span><span class="info-highlight info-highlight-message">No HDC curfew address</span>' %}
     {% else %}
-       {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate %}
-       {% set releaseDate = releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">' + hdcLabel + '</span>' %}
+       {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel +
+           ': <br>' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">'
+           + hdcLabel + '</span>' %}
     {% endif %}
 
   {% elseif offender | shouldShowHardStopWarning %}
