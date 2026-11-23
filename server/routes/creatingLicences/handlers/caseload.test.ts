@@ -331,6 +331,41 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(comCaseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
+    it.each(['me', 'team'])('should pass HDC accommodation details to the %s caseload', async view => {
+      // given
+      req.query = { view }
+      const comCase: ComCreateCase = {
+        crnNumber: 'X381306',
+        name: 'Test Person',
+        prisonerNumber: '123',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        kind: LicenceKind.HDC,
+        probationPractitioner: { name: 'Joe Bloggs', staffCode: 'X6789', allocated: true },
+        isRestricted: false,
+        isHdcPostponed: false,
+        isReplacementForOptedOutLicence: false,
+        isReplacementForRefusedLicence: false,
+        isReviewNeeded: false,
+        hdcStatus: 'APPROVED',
+        noHdcCurfewAddress: true,
+      }
+      comCaseloadService.getStaffCreateCaseload.mockResolvedValue([comCase])
+      comCaseloadService.getTeamCreateCaseload.mockResolvedValue([comCase])
+
+      // when
+      await handler.GET(req, res)
+
+      // then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/create/caseload',
+        expect.objectContaining({
+          caseload: [expect.objectContaining({ noHdcCurfewAddress: true })],
+        }),
+      )
+    })
+
     it('should redirect to change team page when user has multiple teams and no active team selected', async () => {
       req.query = { view: 'team' }
       req.session.teamSelection = null

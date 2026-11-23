@@ -3547,6 +3547,11 @@ export interface components {
        */
       name: string
       /**
+       * @description Whether the HDC licence has no curfew address and its proposed accommodation is residential or CAS 1 approved premises.
+       * @example true
+       */
+      noHdcCurfewAddress?: boolean | null
+      /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
        */
