@@ -13,6 +13,25 @@
   }
 }
 
+body.licence-template-v2 {
+  page: v2-licence;
+}
+
+@page v2-licence {
+  size: A4 portrait;
+  margin: 30pt 30pt 60pt 30pt;
+  .moj-logo {
+    display: none;
+  }
+
+  :first {
+    .moj-logo {
+      display: contents;
+      margin-bottom: 20px;
+    }
+  }
+}
+
 @media print {
   .watermark:before {
     content: "PROTOTYPE";
@@ -36,6 +55,9 @@ body {
 body.licence-template-v2 {
   font-family: Arial, sans-serif;
   font-size: 12pt;
+  margin: 0;
+  padding: 0 0 60pt 0;
+  box-sizing: border-box;
 }
 
 body.licence-template-v2 .title {
