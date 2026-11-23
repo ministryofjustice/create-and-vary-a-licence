@@ -467,7 +467,7 @@ describe('Print a V2 AP licence', () => {
 
     expect($('#section-heading-additional-conditions').text().trim()).toBe('Additional and bespoke conditions')
     expect($('.additional-conditions-table thead .additional-conditions__continued-heading').text().trim()).toBe(
-      'Additional and bespoke conditions - continued',
+      'Additional and bespoke conditions – continued',
     )
     expect($('.additional-conditions-table .additional-conditions__row')).toHaveLength(5)
     expect($('#additional-condition-1').text()).toContain('Additional condition 1.')
@@ -622,5 +622,45 @@ describe('Print a V2 AP licence', () => {
     expect(pageBreakAfterZones).toHaveLength(1)
     expect(pageBreakAfterZones.hasClass('page-break-before')).toBe(true)
     expect(pageBreakAfterZones.next().attr('id')).toBe('section-heading-confirmation')
+  })
+
+  it('renders the hmpps info section with the correct information', () => {
+    const $ = render({
+      licence: {
+        id: 1,
+        forename: 'Forename',
+        surname: 'Surname',
+        dateOfBirth: '23/4/1966',
+        prisonDescription: 'HMP Prison',
+        approvedDate: '18/11/2026 15:16:34',
+        approvedByName: 'An Approver',
+        nomsId: 'A1234BC',
+        crn: 'X123456',
+        bookingNo: '12345A',
+        cro: '123456/78A',
+        pnc: '12345/6789',
+        typeCode: 'AP',
+        version: '2.0',
+      },
+    })
+    expect($('#hmpps-info').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Additional information for staff This information is for people like staff in the Prison Service and Probation Service and the police.',
+    )
+    expect($('#hmpps-info-name').text().replace(/\s+/g, ' ').trim()).toContain('Forename Surname')
+    expect($('#hmpps-info-date-of-birth').text().replace(/\s+/g, ' ').trim()).toContain('23 April 1966')
+    expect($('#hmpps-info-release-from').text().replace(/\s+/g, ' ').trim()).toContain('Released from: HMP Prison')
+    expect($('#hmpps-info-licence-version').text().replace(/\s+/g, ' ').trim()).toContain('Licence version: 2.0')
+    expect($('#hmpps-info-date-of-approval').text().replace(/\s+/g, ' ').trim()).toContain(
+      'Date of approval: 18 November 2026',
+    )
+    expect($('#hmpps-info-approved-by').text().replace(/\s+/g, ' ').trim()).toContain('Approved by: An Approver')
+    expect($('#hmpps-info-on-behalf-of').text().replace(/\s+/g, ' ').trim()).toContain(
+      'on behalf of the Secretary of State for Justice',
+    )
+    expect($('#hmpps-info-prison-number').text().replace(/\s+/g, ' ').trim()).toContain('Prison number: A1234BC')
+    expect($('#hmpps-info-crn').text().replace(/\s+/g, ' ').trim()).toContain('CRN: X123456')
+    expect($('#hmpps-info-booking-number').text().replace(/\s+/g, ' ').trim()).toContain('Booking number: 12345A')
+    expect($('#hmpps-info-cro-number').text().replace(/\s+/g, ' ').trim()).toContain('CRO number: 123456/78A')
+    expect($('#hmpps-info-pnc-id').text().replace(/\s+/g, ' ').trim()).toContain('PNC ID: 12345/6789')
   })
 })
