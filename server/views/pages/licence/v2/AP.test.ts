@@ -249,7 +249,7 @@ describe('Print a V2 AP licence', () => {
         .map((_, paragraph) => $(paragraph).text().replace(/\s+/g, ' ').trim())
         .get(),
     ).toEqual([
-      'This means you must follow the licence conditions that are written on the next pages',
+      'This means you must follow the licence conditions that are written on the next pages.',
       'You will work with a supervising officer, who will help you to follow these conditions. This is normally a probation officer.',
       'Speak to them if you have questions or need advice.',
     ])
