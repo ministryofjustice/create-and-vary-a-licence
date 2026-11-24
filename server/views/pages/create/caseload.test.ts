@@ -220,6 +220,69 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
 
+  describe('missing HDC curfew address label', () => {
+    const hdcCase = {
+      name: 'Test Person',
+      crnNumber: 'A123456',
+      prisonerNumber: 'ABC123',
+      licenceId: 1,
+      releaseDate: '20 December 2025',
+      releaseDateLabel: 'HDC actual date',
+      probationPractitioner: { name: 'Joe Bloggs', staffCode: 'ABC123', allocated: true },
+      licenceStatus: LicenceStatus.IN_PROGRESS,
+      kind: LicenceKind.HDC,
+    }
+
+    it.each([LicenceKind.HDC, LicenceKind.HDC_VARIATION])(
+      'should show the label for %s when HDC creation is enabled and there is no curfew address',
+      kind => {
+        // given
+        const caseload = [{ ...hdcCase, kind, noHdcCurfewAddress: true }]
+
+        // when
+        const $ = render({ statusConfig, caseload, hdcCreationEnabled: true })
+
+        // then
+        expect($('#release-date-1 > .urgent-highlight-message').text()).not.toBe('HDC release')
+        expect($('#release-date-1 > .info-highlight-message').text()).toBe('No HDC curfew address')
+      },
+    )
+
+    it.each([false, undefined])('should not show the label when HDC creation is %s', hdcCreationEnabled => {
+      const caseload = [{ ...hdcCase, noHdcCurfewAddress: true }]
+      const $ = render({ statusConfig, caseload, hdcCreationEnabled })
+
+      expect($('#release-date-1 > .urgent-highlight-message').text()).toBe('HDC release')
+      expect($('#release-date-1 .urgent-highlight > .urgent-highlight-message').length).toBe(0)
+    })
+
+    it.each([false, null, undefined])('should not show the label when the API flag is %s', noHdcCurfewAddress => {
+      // given
+      const caseload = [{ ...hdcCase, noHdcCurfewAddress }]
+
+      // when
+      const $ = render({ statusConfig, caseload, hdcCreationEnabled: true })
+
+      // then
+      expect($('#release-date-1 .urgent-highlight > .urgent-highlight-message').length).toBe(0)
+    })
+
+    it('should show the label in team cases and redact it for restricted cases', () => {
+      // given
+      const caseload = [
+        { ...hdcCase, noHdcCurfewAddress: true },
+        { ...hdcCase, noHdcCurfewAddress: true, isRestricted: true },
+      ]
+
+      // when
+      const $ = render({ statusConfig, caseload, view: 'team', hdcCreationEnabled: true })
+
+      // then
+      expect($('#release-date-1 > .info-highlight-message').text()).toBe('No HDC curfew address')
+      expect($('#release-date-2').text()).toBe('Restricted')
+    })
+  })
+
   describe('HDC postponed label', () => {
     const hdcPostponedCase = {
       name: 'Test Person',

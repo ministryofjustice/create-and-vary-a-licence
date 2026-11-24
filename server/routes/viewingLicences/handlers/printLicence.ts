@@ -153,8 +153,8 @@ export default class PrintLicenceRoutes {
     if (licenceTemplateV2Enabled && !isHdcLicence(licence)) {
       const fullName = convertToTitleCase(`${licence.forename || ''} ${licence.surname || ''}`.trim())
       return `
-      <div style="${pdfHeaderFooterStyleV2}">
-        <table style="width: 100%; padding-left: 15px; padding-right: 15px;">
+      <div style="${pdfHeaderFooterStyleV2}; padding-left: 20pt; padding-right: 20pt; padding-bottom: 14pt;">
+        <table style="width: 100%;">
           <tr>
             <td style="text-align: left; width: 70%;">${fullName} | Prison number: <span>${licence.nomsId}</span> | CRN: <span>${licence.crn}</span></td>
             <td style="text-align: right; width: 30%; font-size: 12px;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></td>
