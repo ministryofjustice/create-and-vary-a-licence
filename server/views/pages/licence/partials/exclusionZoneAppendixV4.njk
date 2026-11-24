@@ -1,5 +1,8 @@
 <div id="exclusion-zone" class="section">
     {% for data in exclusionZoneMapData %}
+        {% if not loop.first %}
+            <div id="exclusion-v4-break" style="page-break-before: always;"></div>
+        {% endif %}
         <p><strong>Area you must not enter (exclusion zone)</strong></p>
         <p>You have the following rule on your licence:</p>
         <p>{{ data.text }}</p>
@@ -10,8 +13,8 @@
             <div class="map-frame">
                 <img alt="Exclusion zone" src="data:image/jpeg;charset-utf8;base64,{{ data.mapData }}" class="map-image" />
             </div>
-            <div style="page-break-before: always;"></div>
             {% if data.description %}
+                <div id="exclusion-v4-description-break" style="page-break-before: always;"></div>
                 <p><strong>Description of the area shown in the map</strong></p>
                 <p> {{ data.description | striptags(false) | trim | escape }}  </p>
                 {% if not loop.last %}
