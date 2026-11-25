@@ -83,6 +83,25 @@ describe('Route Handlers - Create Licence - HDC interrupt', () => {
     expect(next).not.toHaveBeenCalled()
   })
 
+  it('should render the address withdrawn interrupt', async () => {
+    res.locals.licence = {
+      id: 123,
+      kind: LicenceKind.HDC,
+      statusCode: LicenceStatus.IN_PROGRESS,
+      addressWithdrawn: true,
+      hdcRiskChecksComplete: false,
+    } as Licence
+
+    await handler.GET(req, res, next)
+
+    expect(res.render).toHaveBeenCalledWith('pages/create/hdc/interrupt', {
+      backLink: '/licence/create/caseload?view=team',
+      toCheckYourAnswer: '/licence/create/id/123/check-your-answers',
+      interruptType: 'addressWithdrawn',
+    })
+    expect(next).not.toHaveBeenCalled()
+  })
+
   it('should render the opted-in interrupt when address checks are complete', async () => {
     res.locals.licence = {
       id: 123,
