@@ -5483,6 +5483,11 @@ export interface components {
        */
       hdcRiskChecksComplete: boolean
       /**
+       * @description Whether the curfew address is withdrawn while an in-progress HDC application still needs address checks
+       * @example false
+       */
+      addressWithdrawn: boolean
+      /**
        * Format: date
        * @description The offender’s actual home detention curfew date
        * @example 06/05/2023
