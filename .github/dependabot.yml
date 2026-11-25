@@ -25,6 +25,9 @@ updates:
       default-days: 7
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "redis"
+        versions: [">=8.0"]
 
   - package-ecosystem: "docker-compose"
     directory: "/"
@@ -32,6 +35,9 @@ updates:
       default-days: 7
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "redis"
+        versions: [">=8.0"]
 
   - package-ecosystem: "helm"
     directory: "/helm_deploy/create-and-vary-a-licence"
