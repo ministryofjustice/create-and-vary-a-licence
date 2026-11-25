@@ -1,0 +1,25 @@
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% macro alwaysSupervisedDetails(isInitialAppointmentScreen = false) %}
+    {% set hintHtml %}
+        {% if isInitialAppointment %}
+            <p class="govuk-!-margin-bottom-2">Select No appointment needed if the person is being released in the final third of a standard determinate sentence and is not:</p>
+        {% else %}
+            Select no appointment needed if this person is being released in the final third of a standard determinate sentence and is not:
+        {% endif %}
+        <ul class="govuk-list govuk-list--bullet{% if not isInitialAppointment %} govuk-!-margin-top-1{% endif %}">
+            <li>serving a sentence for rape, serious sexual abuse against children or organised child sexual exploitation or grooming offences</li>
+            <li>MAPPA eligible</li>
+            <li>named on a child protection plan</li>
+            <li>serving a sentence for a state threat or a terrorist risk offence</li>
+            <li>tier A, B or C</li>
+            <li>serving a standard determinate sentence plus</li>
+            <li>a JEXU pathfinder case</li>
+        </ul>
+    {% endset %}
+    {{ govukDetails({
+        summaryText: "When no initial appointment is needed",
+        html: hintHtml,
+        classes: 'govuk-!-padding-bottom-3' if isInitialAppointmentScreen
+    }) }}
+{% endmacro %}

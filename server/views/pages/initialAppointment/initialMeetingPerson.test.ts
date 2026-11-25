@@ -64,7 +64,7 @@ describe('appointmentPerson page', () => {
         'Select No appointment needed if the person is being released in the final third of a standard determinate sentence and is not:',
       )
       const bulletItems = $('.govuk-list--bullet li')
-      expect(bulletItems.length).toBe(6)
+      expect(bulletItems.length).toBe(7)
       expect(bulletItems.eq(0).text().trim()).toBe(
         'serving a sentence for rape, serious sexual abuse against children or organised child sexual exploitation or grooming offences',
       )
@@ -73,6 +73,7 @@ describe('appointmentPerson page', () => {
       expect(bulletItems.eq(3).text().trim()).toBe('serving a sentence for a state threat or a terrorist risk offence')
       expect(bulletItems.eq(4).text().trim()).toBe('tier A, B or C')
       expect(bulletItems.eq(5).text().trim()).toBe('serving a standard determinate sentence plus')
+      expect(bulletItems.eq(6).text().trim()).toBe('a JEXU pathfinder case')
     })
 
     it('does not show hint text when NO_APPOINTMENT option is not available', () => {
