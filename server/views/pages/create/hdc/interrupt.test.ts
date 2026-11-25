@@ -55,6 +55,21 @@ describe('View HDC interrupt page', () => {
     expect($('.refused-interrupt__actions a.govuk-link').text().trim()).toBe('Return to case list')
   })
 
+  it('should display the address withdrawn interrupt and allow continuing', () => {
+    const $ = render({ ...model, interruptType: 'addressWithdrawn' })
+
+    expect($('.moj-interruption-card h1').text().trim()).toBe('HDC address withdrawn')
+    expect($('.moj-interruption-card__body > p').first().text().trim()).toBe(
+      'You can continue working on this licence but cannot submit until the address checks are completed in HDC.',
+    )
+    expect($('.moj-interruption-card__body > p a').text().trim()).toBe('Check the HDC service')
+    expect($('.moj-interruption-card__body > p a').attr('href')).toBe(config.hdc.url)
+    expect($('.address-withdrawn-interrupt__actions a.govuk-button').text().trim()).toBe('Continue')
+    expect($('.address-withdrawn-interrupt__actions a.govuk-button').attr('href')).toBe(model.toCheckYourAnswer)
+    expect($('.address-withdrawn-interrupt__actions a.govuk-link').text().trim()).toBe('Return to case list')
+    expect($('.address-withdrawn-interrupt__actions a.govuk-link').attr('href')).toBe(model.backLink)
+  })
+
   it('should display the opted-in interruption and allow continuing when address checks are complete', () => {
     const $ = render({ ...model, interruptType: 'addressChecksComplete' })
 

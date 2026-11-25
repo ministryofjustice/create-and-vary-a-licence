@@ -13,6 +13,7 @@ import {
 import LicenceService from '../../../../services/licenceService'
 
 const HdcInterruptType = {
+  ADDRESS_WITHDRAWN: 'addressWithdrawn',
   ADDRESS_CHECKS_INCOMPLETE: 'addressChecksIncomplete',
   ADDRESS_CHECKS_COMPLETE: 'addressChecksComplete',
   REFUSED: 'refused',
@@ -69,6 +70,9 @@ export default class InterruptHandler {
   }
 
   private getInterruptType = (licence: Licence): HdcInterruptType | undefined => {
+    if ('addressWithdrawn' in licence && licence.addressWithdrawn) {
+      return HdcInterruptType.ADDRESS_WITHDRAWN
+    }
     if (isHdcAddressChecksIncompleteLicence(licence)) {
       return HdcInterruptType.ADDRESS_CHECKS_INCOMPLETE
     }

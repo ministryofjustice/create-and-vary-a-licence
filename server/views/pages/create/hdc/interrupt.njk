@@ -1,6 +1,10 @@
 {% extends "layout.njk" %}
 
-{% if interruptType == 'addressChecksIncomplete' or interruptType == 'addressChecksComplete' %}
+{% if interruptType == 'addressWithdrawn' %}
+    {% set pageTitle = applicationName + " - HDC address withdrawn" %}
+    {% set pageId = "hdc-address-withdrawn-interrupt-page" %}
+    {% set interruptClass = "address-withdrawn-interrupt" %}
+{% elif interruptType == 'addressChecksIncomplete' or interruptType == 'addressChecksComplete' %}
     {% set pageTitle = applicationName + " - This person has opted in to HDC" %}
     {% set pageId = "hdc-opt-in-interrupt-page" %}
     {% set interruptClass = "refused-interrupt" %}
@@ -25,7 +29,9 @@
             <div class="moj-interruption-card">
                 <div class="moj-interruption-card__content">
                     <h1 class="govuk-heading-l moj-interruption-card__heading" id="{{ pageId }}-heading">
-                        {% if interruptType == 'addressChecksIncomplete' or interruptType == 'addressChecksComplete' %}
+                        {% if interruptType == 'addressWithdrawn' %}
+                            HDC address withdrawn
+                        {% elif interruptType == 'addressChecksIncomplete' or interruptType == 'addressChecksComplete' %}
                             This person has opted in to HDC
                         {% elif interruptType == 'optOut' %}
                             This person has opted out of HDC
@@ -37,7 +43,9 @@
                     </h1>
                     <div class="govuk-body-l moj-interruption-card__body">
                         <p>
-                            {% if interruptType == 'addressChecksIncomplete' %}
+                            {% if interruptType == 'addressWithdrawn' %}
+                                You can continue working on this licence but cannot submit until the address checks are completed in HDC.
+                            {% elif interruptType == 'addressChecksIncomplete' %}
                                 You must complete the address checks in HDC before you can continue with this licence in CVL.
                             {% elif interruptType == 'addressChecksComplete' %}
                                 This licence is now for a HDC release
