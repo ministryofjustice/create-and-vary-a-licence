@@ -224,4 +224,14 @@ describe('Print an AP licence', () => {
       expect($('[data-qa="appointment-person"]').text().trim()).toBe('')
     })
   })
+  describe('Exclusion zones with no description should not have a blank page after the map page', () => {
+    it('No description should result in no page break', () => {
+      const $ = render({
+        licence: { version: '4.1' },
+        isV4OrGreater: true,
+        exclusionZoneMapData: [{ isEvent: false }],
+      })
+      expect($('#exclusion-v4-description-break')).toHaveLength(0)
+    })
+  })
 })

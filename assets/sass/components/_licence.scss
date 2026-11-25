@@ -214,14 +214,28 @@ body.licence-template-v2 .confirmation-date-line {
 body.licence-template-v2 .confirmation-divider {
   width: 100%;
   max-width: 100%;
-  margin: 20px auto;
+  margin-bottom: 5px;
+  margin-top: 10px;
 }
 
 body.licence-template-v2 .hmpps-info {
-  width: 575px;
+  width: 725px;
   max-width: 100%;
   line-height: 18px;
+  margin-top: 0;
   margin-bottom: 0;
+}
+
+body.licence-template-v2 .hmpps-info-reference {
+  width: 600px;
+  max-width: 100%;
+  line-height: 15px;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+body.licence-template-v2 .hmpps-info-reference td {
+  padding-left: 0;
 }
 
 body.licence-template-v2 .hmpps-info td {
@@ -229,7 +243,7 @@ body.licence-template-v2 .hmpps-info td {
   padding-right: 0;
 }
 body.licence-template-v2 .hmpps-info-picture td {
-  padding-left: 10px;
+  padding-left: 0;
   padding-right: 10px;
 }
 
