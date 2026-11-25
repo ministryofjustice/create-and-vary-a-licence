@@ -5,12 +5,14 @@ import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import { LicenceStatus, LicenceKind, CaViewCasesTab } from '../../../enumeration'
 
 import { CaCase } from '../../../@types/licenceApiClientTypes'
+import AuditService from '../../../services/audit/auditService'
 
 const TIMED_OUT_KINDS = [LicenceKind.HARD_STOP, LicenceKind.TIME_SERVED]
 const EDITABLE_TIMED_OUT_STATUSES = [LicenceStatus.IN_PROGRESS, LicenceStatus.TIMED_OUT]
 
 export default class ViewAndPrintCaseRoutes {
   constructor(
+    private readonly auditService: AuditService,
     private readonly caseloadService: CaCaseloadService,
     private readonly prisonerService: PrisonerService,
   ) {}
@@ -41,6 +43,8 @@ export default class ViewAndPrintCaseRoutes {
         : await this.caseloadService.getProbationOmuCaseload(user, prisonCaseloadToDisplay, searchString)
     const hasSelectedNomisForTimeServedLicenceCreation =
       req.flash('hasSelectedNomisForTimeServedLicenceCreation')[0] === 'true'
+
+    await this.auditService.logOmuCaseloadEvent(req.id, prisonCaseloadToDisplay, cases, user)
 
     res.render('pages/view/cases', {
       cases: cases.map(caCase => {

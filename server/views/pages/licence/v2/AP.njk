@@ -1,4 +1,318 @@
 {% extends "pages/licence/pdf-layout.njk" %}
+{% from "pages/licence/v2/partials/additionalConditions.njk" import additionalConditions %}
+{% from "pages/licence/v2/partials/additionalConditionsMultiItem.njk" import additionalConditionsMultiItem %}
+{% from "pages/licence/v2/partials/additionalConditionsBespoke.njk" import additionalConditionsBespoke %}
+{% from "pages/licence/v2/partials/standardConditions.njk" import standardConditions %}
+
+{% set offenderName = licence.forename + " " + licence.surname %}
+{% set pageTitle = offenderName %}
+
+{% set appointmentDate %}
+    {% if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' %}
+    <span id="appointment-time" data-qa="appointment-time">on
+        <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}
+        at
+        {{ licence.appointmentTime | datetimeTo12HourTimeCompact }}</span>
+    </span>
+    {% elif licence.appointmentTimeType === 'NEXT_WORKING_DAY_2PM' %}
+    <span id="appointment-time" data-qa="appointment-time">
+        <span class="bold">by 2pm on the next working day after you leave prison</span>
+    </span>
+    {% elif licence.appointmentTimeType === 'IMMEDIATE_UPON_RELEASE' %}
+    <span id="appointment-time" data-qa="appointment-time">
+        <span class="bold">as soon as you leave prison</span>
+    </span>
+    {% else %}
+    <span id="appointment-time" data-qa="appointment-time"></span>
+    {% endif %}
+{% endset %}
+
+{% set appointmentAddressLines = licence.licenceAppointmentAddress | formatLicenceAddressAsList if licence.licenceAppointmentAddress else licence.appointmentAddress | formatAddressAsList %}
+{% set noAppointmentNeeded = licence.appointmentPersonType === 'NO_APPOINTMENT_NEEDED' %}
 
 {% block content %}
+  <div id="title" class="title">Licence for {{ offenderName }}</div>
+  <div id="subtitle" class="subtitle">Released from {{ licence.prisonDescription }}</div>
+
+  {% if noAppointmentNeeded %}
+    <div id="section-heading-support" class="section-heading">
+      <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
+      <span>Support while on licence</span>
+    </div>
+
+    <div id="no-appointment-content" class="no-appointment-content">
+      {% if licence.responsibleComFullName %}
+        <p data-qa="supervising-officer">
+          Your supervising officer is <span class="bold">{{ licence.responsibleComFullName }}</span>.
+        </p>
+        <p>
+          You do not need to meet with them after you are released unless they ask to see you.
+        </p>
+
+        <p>
+          If you need support while you are on licence, contact {{ licence.responsibleComFullName.split(' ')[0] }} using the details below:
+        </p>
+      {% else %}
+        <p>
+          You do not need to meet with a supervising officer after you are released unless they ask to see you.
+        </p>
+        <p>
+          If you need support while you are on licence, you can use the details below:
+        </p>
+      {% endif %}
+
+      <p id="appointment-telephone-details">
+        <span data-qa="contact-phone-number">
+          Phone number: <span class="bold">{{ licence.appointmentTelephoneNumber }}</span>
+        </span>
+        {% if licence.appointmentAlternativeTelephoneNumber %}
+          <span id="appointment-alternative-phone" class="line-space-after" data-qa="alternative-contact-phone-number">
+            Alternative phone number:
+            <span class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
+          </span>
+        {% endif %}
+        <span id="appointment-address" class="line-space-after" data-qa="contact-address">
+          Address:
+          {% for addressLine in appointmentAddressLines %}
+            {% if loop.last %}
+              {{ addressLine }}
+            {% else %}
+              {{ addressLine | toAddressCase }},
+            {% endif %}
+          {% endfor %}
+        </span>
+      </p>
+    </div>
+  {% else %}
+    <div id="section-heading-first-meeting" class="section-heading">
+      <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
+      <span>Your first probation meeting</span>
+    </div>
+
+    <div id="first-probation-meeting-content" class="first-probation-meeting-content">
+      <div id="first-meeting-person-details">
+        <p>You must go to the following address {{ appointmentDate | safe }} and ask to speak to
+          {% if licence.appointmentPersonType === 'RESPONSIBLE_COM' %}
+            <span id="appointment-contact">
+              <span class="bold">{{ licence.responsibleComFullName }}</span>, who will be your supervising officer:
+            </span>
+          {% elif licence.appointmentPersonType === 'DUTY_OFFICER' %}
+            <span id="appointment-contact">the <span class="bold">duty officer</span>:</span>
+          {% else %}
+            <span id="appointment-contact"><span class="bold">{{ licence.appointmentPerson }}</span>:</span>
+          {% endif %}
+        </p>
+        <div id="appointment-address">
+          {% for addressLine in appointmentAddressLines %}
+            {% if loop.last %}
+              <span class="line-space-after">{{ addressLine }}</span>
+            {% else %}
+              <span class="line-space-after">{{ addressLine | toAddressCase }},</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div id="first-meeting-person-details-content">
+        <p>Your first probation meeting is a chance for you to learn more about your licence period and to ask any questions.</p>
+      </div>
+
+      {% if licence.appointmentPersonType === 'DUTY_OFFICER' %}
+        <div id="first-meeting-duty-officer-content">
+          <p>The duty officer helps people when their supervising officer is unavailable. You will meet your supervising officer at a later appointment.</p>
+        </div>
+      {% endif %}
+
+      <div id="problems-questions-content">
+        <p class="bold">If you have any problems or questions</p>
+        <p id="appointment-telephone-details">
+          Phone number:
+          <span id="appointment-phone-number" class="bold">{{ licence.appointmentTelephoneNumber }}</span>
+          {% if licence.appointmentAlternativeTelephoneNumber %}
+            <span id="appointment-alternative-phone" class="line-space-after">
+              Alternative phone number:
+              <span id="appointment-alternative-phone-number" class="bold">{{ licence.appointmentAlternativeTelephoneNumber }}</span>
+            </span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  {% endif %}
+
+  <div id="section-heading-licence-period" class="section-heading">
+    <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
+    <span>Your licence period</span>
+  </div>
+
+  <div id="licence-period-content" class="licence-period-content">
+    <div id="licence-period-details">
+      You are on licence from <span class="bold">{{ licence.licenceStartDate | datetimeToDateWithDay }}</span> until
+      <span class="bold">{{ licence.licenceExpiryDate | datetimeToDateWithDay }} at 11:59pm</span>. This is also called
+      being on probation.
+    </div>
+
+    <div id="licence-period-additional-info">
+      <p>This means you must follow the licence conditions that are written on the next pages.</p>
+      <p> You will work with a supervising officer, who will help you to follow these conditions. This is
+        normally a probation officer. </p>
+      <p>Speak to them if you have questions or need advice.</p>
+    </div>
+
+  </div>
+
+    <div id="page-2-break" class="page-break-before"></div>
+
+    <div id="section-heading-licence-conditions" class="section-heading">
+        <span class="section-heading__icon-placeholder" aria-hidden="true">Icon</span>
+        <span>Your licence conditions</span>
+    </div>
+        <div id="licence-conditions-explanation" class="licence-conditions">
+        <p class="bold">What are licence conditions?</p>
+        <p>Licence conditions tell you what you must and must not do while on licence.</p>
+        <p>Your supervising officer can change some of these conditions.<br>Any changes will be explained to you.</p>
+        <p>Some conditions can be made less strict or removed if you are doing well. If you do not follow your licence conditions, conditions can be added or made stricter.</p>
+        <p>Read the conditions starting on the next page carefully.<br>Ask your supervising officer any questions you have.</p>
+    </div>
+    <div id="licence-conditions-recall" class="licence-conditions">
+        <p class="bold">Recall to prison</p>
+        <p>If you do not follow your licence conditions, your supervising officer will need to consider whether you
+            should be sent back to prison. This is called being recalled.</p>
+        <p>You may commit an offence called being unlawfully at large if:</p>
+        <ul class="recall-condition-list">
+            <li>a decision is made to recall you to prison and you do not return, or</li>
+            <li>you remain out of contact with your supervising officer for 6 months after that decision is made</li>
+        </ul>
+        <p >This can result in a fine, a prison sentence of up to 2 years, or both.</p>
+    </div>
+
+    <div id="licence-conditions-drug-testing" class="licence-conditions">
+        <p class="bold">Drug testing</p>
+        <p>If asked, you must have a drug test, whether or not you have previously used drugs. You must not do anything to stop or interfere with this test.</p>
+    </div>
+
+    <div id="page-3-break" class="page-break-before"></div>
+
+    <div id="section-heading-standard-conditions" class="condition-section-heading">Standard conditions</div>
+    <div id="standard-conditions-explanation" class="licence-conditions">
+        <p>Conditions everyone on licence must follow.</p>
+    </div>
+
+    {{ standardConditions(licence.standardLicenceConditions) }}
+
+    <div id="page-4-break" class="page-break-before"></div>
+
+    <div id="section-heading-additional-conditions" class="condition-section-heading additional-conditions__first-heading">
+        Additional and bespoke conditions
+    </div>
+    <table class="additional-conditions-table">
+        <thead>
+        <tr>
+            <th>
+                <div class="condition-section-heading additional-conditions__continued-heading">
+                    Additional and bespoke conditions – continued
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <div id="additional-conditions-explanation" class="licence-conditions">
+                    <p>Conditions you must follow that have been added specifically for you. They are aimed at helping
+                        you to make positive changes or stopping you doing things that led you to prison.</p>
+                </div>
+            </td>
+        </tr>
+        {{ additionalConditions(singleItemConditions) }}
+        {{ additionalConditionsMultiItem(multipleItemConditions) }}
+        {{ additionalConditionsBespoke(licence.bespokeConditions) }}
+        </tbody>
+    </table>
+
+    {% set exclusionZones = (exclusionZoneMapData or []).concat(eventExclusionZoneMapData or []) %}
+
+    {% if exclusionZones.length %}
+        {% include "pages/licence/v2/partials/exclusionZones.njk" %}
+    {% endif %}
+    {% if restrictionZoneMapData.length %}
+        {% include "pages/licence/v2/partials/restrictionZones.njk" %}
+    {% endif %}
+
+    <div id="page-break-after-zones" class="page-break-before"></div>
+
+  <div id="section-heading-confirmation" class="section-heading">
+    <span>Confirmation that the licence has been explained to you</span>
+  </div>
+
+  <div id="confirmation-content" class="confirmation-content">
+    <p>Add your name, signature and the date below to show this licence has been explained to you.</p>
+    <p>Speak to your supervising officer if you have any questions.</p>
+
+    <p id="confirmation-name-label" class="bold" style="margin-top: 30px;">Name</p>
+    <hr id="confirmation-name-line" class="condition-divider confirmation-field-line" aria-hidden="true">
+    <p id="confirmation-signature-label" class="bold">Signature</p>
+    <hr id="confirmation-signature-line" class="condition-divider confirmation-field-line" aria-hidden="true">
+    <p id="confirmation-date-label" class="bold">Date</p>
+    <hr id="confirmation-date-line" class="condition-divider confirmation-field-line confirmation-date-line" aria-hidden="true">
+  </div>
+
+  <hr id="confirmation-divider" class="condition-divider confirmation-divider" aria-hidden="true">
+
+    <div id="hmpps-info" class="hmpps-info">
+        <table style="width: 100%;">
+            <tr style="line-height: 14pt">
+                <td style="text-align: left; width: 60%;">
+                    <div>
+                        <p class="bold"> Additional information for staff</p>
+                        <p> This information is for people like staff in the Prison Service and Probation Service and
+                            the police.</p>
+                    </div>
+                </td>
+                <td style="text-align: right; width: 40%; font-size: 12pt;">
+                    <img alt="HMPPS logo" src="{{ licencesUrl }}/assets/images/HMPPS_BLK_AW.jpg" width="156"
+                         height="70">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="hmpps-info-details" class="hmpps-info-picture">
+        <table style="width: 100%; line-height: 12pt;">
+            <tr style="width: 50%">
+                <td class="v2-offender">
+                    {% include "pages/licence/partials/headshot.njk" %}
+                </td>
+                <td style="text-align: left; width: 90%; font-size: 12pt; vertical-align: top;">
+                    <p id="hmpps-info-name"><span class="bold">Name</span><br>{{ offenderName }}</p>
+                    <p id="hmpps-info-date-of-birth"><span class="bold">Date of birth</span><br>{{ licence.dateOfBirth | datetimeToDate }}</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="hmpps-info-reference-details" class="hmpps-info-reference">
+        <table style="width: 100%; line-height: 12px;">
+            <tr style="width: 65%; vertical-align: top;">
+                <td>
+                    <p class="bold">Licence details</p>
+                    <p>
+                        <span id="hmpps-info-release-from">Released from: {{ licence.prisonDescription }} </span><br>
+                        <span id="hmpps-info-licence-version">Licence version: {{ licence.version }} </span><br>
+                        <span id="hmpps-info-date-of-approval">Date of approval: {{ licence.approvedDate | datetimeToDate }} </span><br>
+                        <span id="hmpps-info-approved-by">Approved by: {{ licence.approvedByName }} </span><br>
+                        <span id="hmpps-info-on-behalf-of" style="font-size: 10pt; line-height: 10pt">on behalf of the Secretary of State for Justice </span>
+                    </p>
+                </td>
+                <td style="text-align: left; width: 35%; vertical-align: top;">
+                    <p class="bold">Reference numbers</p>
+                    <p>
+                        <span id="hmpps-info-prison-number">Prison number: {{ licence.nomsId }}</span><br>
+                        <span id="hmpps-info-crn">CRN: {{ licence.crn }}</span><br>
+                        <span id="hmpps-info-booking-number">Booking number: {{ licence.bookingNo }}</span><br>
+                        <span id="hmpps-info-cro-number">CRO number: {{ licence.cro }}</span><br>
+                        <span id="hmpps-info-pnc-id">PNC ID: {{ licence.pnc }}</span>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
 {% endblock %}

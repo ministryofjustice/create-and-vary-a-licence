@@ -1,0 +1,11 @@
+{% macro additionalConditions(conditions) %}
+    {% for condition in conditions %}
+        <tr class="additional-conditions__row">
+            <td>
+                <div id="additional-condition-{{ loop.index }}" class="v2_condition">
+                    <span>{{ condition.expandedText or condition.text }}</span>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endmacro %}

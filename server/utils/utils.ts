@@ -24,6 +24,8 @@ const ISO_DATE = 'yyyy-MM-dd'
 const JSON_DATE_TIME = 'DD/MM/YYYY HH:mm'
 const SIMPLE_DATE_TIME = 'D/MM/YYYY HHmm'
 const TWELVE_HOUR_TIME = 'hh:mm a'
+const TWELVE_HOUR_TIME_COMPACT = 'h a'
+const TWELVE_HOUR_TIME_COMPACT_WITH_MINUTES = 'h:mm a'
 const TWENTY_FOUR_HOUR_TIME = 'HH:mm:ss'
 
 interface FileMapInput {
@@ -134,6 +136,13 @@ const jsonDtToDateWithDay = (dt: string): string => {
 const jsonDtTo12HourTime = (dt: string): string => {
   const momentTime = moment(dt, JSON_DATE_TIME)
   return momentTime.isValid() ? momentTime.format(TWELVE_HOUR_TIME) : null
+}
+
+const jsonDtTo12HourTimeCompact = (dt: string): string => {
+  const momentTime = moment(dt, JSON_DATE_TIME)
+  return momentTime.isValid()
+    ? momentTime.format(momentTime.minutes() === 0 ? TWELVE_HOUR_TIME_COMPACT : TWELVE_HOUR_TIME_COMPACT_WITH_MINUTES)
+    : null
 }
 
 const json24HourTimeTo12HourTime = (dt: string): string => {
@@ -301,6 +310,15 @@ function isHdcAddressChecksIncompleteLicence(
   )
 }
 
+function isHdcAddressChecksCompleteLicence(licence: Licence): licence is HdcLicence & { hdcRiskChecksComplete: true } {
+  return (
+    licence.kind === LicenceKind.HDC &&
+    licence.statusCode === LicenceStatus.IN_PROGRESS &&
+    licence.isReplacementForOptedInLicence &&
+    licence.hdcRiskChecksComplete === true
+  )
+}
+
 function isHdcRefusedLicence(licence: Licence): boolean {
   return (
     licence.kind === LicenceKind.CRD &&
@@ -370,6 +388,7 @@ export {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   jsonDtTo12HourTime,
+  jsonDtTo12HourTimeCompact,
   json24HourTimeTo12HourTime,
   parseCvlDate,
   parseCvlDateTime,
@@ -387,6 +406,7 @@ export {
   isVariation,
   isHdcLicence,
   isHdcAddressChecksIncompleteLicence,
+  isHdcAddressChecksCompleteLicence,
   isHdcRefusedLicence,
   isHdcOptOutLicence,
   isHdcPostponedLicence,
@@ -394,6 +414,7 @@ export {
   assertIsVariation,
   formatAddressTitleCase,
   formatAddressLine,
+  toAddressCase,
   lowercaseFirstLetter,
   isTimeServedLicence,
   mapToTargetField,

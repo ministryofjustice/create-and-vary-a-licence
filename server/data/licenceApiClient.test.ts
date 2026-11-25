@@ -753,20 +753,6 @@ describe('Licence API client tests', () => {
     })
   })
 
-  describe('Ineligibility Reasons: ', () => {
-    it('should get ineligibility reasons', async () => {
-      await licenceApiClient.getIneligibilityReasons('A1234AA')
-      expect(get).toHaveBeenCalledWith({ path: '/offender/nomisid/A1234AA/ineligibility-reasons' })
-    })
-  })
-
-  describe('IS-91 status: ', () => {
-    it('should get IS-91 status', async () => {
-      await licenceApiClient.getIS91Status('A1234AA')
-      expect(get).toHaveBeenCalledWith({ path: '/offender/nomisid/A1234AA/is-91-status' })
-    })
-  })
-
   describe('Electronic Monitoring Programme: ', () => {
     it('should update Electronic Monitoring Programme', async () => {
       const request: UpdateElectronicMonitoringProgrammeRequest = {

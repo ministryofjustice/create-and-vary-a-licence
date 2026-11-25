@@ -40,7 +40,7 @@ export default function Index({
       handler,
     )
 
-  const viewCasesHandler = new ViewAndPrintCaseRoutes(caCaseloadService, prisonerService)
+  const viewCasesHandler = new ViewAndPrintCaseRoutes(auditService, caCaseloadService, prisonerService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService)
   const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService)
   const comDetailsHandler = new ComDetailsRoutes(probationService)

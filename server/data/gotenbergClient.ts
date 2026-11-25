@@ -26,6 +26,7 @@ export default class GotenbergClient {
         .buffer(true)
         .attach('files', Buffer.from(html), 'index.html')
         .responseType('blob')
+        .field('preferCssPageSize', 'true')
 
       // Attach header and footer HTML blocks if specified
       if (headerHtml) request.attach('files', Buffer.from(headerHtml), 'header.html')

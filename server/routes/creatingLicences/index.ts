@@ -95,7 +95,7 @@ export default function Index({
     )
 
   {
-    const controller = new CaseloadRoutes(comCaseloadService)
+    const controller = new CaseloadRoutes(auditService, comCaseloadService)
     get('/caseload', controller.GET)
   }
 

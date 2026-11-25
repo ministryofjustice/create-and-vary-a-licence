@@ -2,12 +2,7 @@ import { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
 import type { TokenStore } from './tokenStore'
-import type {
-  PrisonApiCaseload,
-  PrisonApiUserDetail,
-  HomeDetentionCurfew,
-  PrisonDetail,
-} from '../@types/prisonApiClientTypes'
+import type { PrisonApiCaseload, PrisonApiUserDetail, PrisonDetail } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
 
 export default class PrisonApiClient extends RestClient {
@@ -38,26 +33,6 @@ export default class PrisonApiClient extends RestClient {
 
   async getPrisons(): Promise<PrisonDetail[]> {
     return (await this.get({ path: `/api/agencies/type/INST?active=true` })) as Promise<PrisonDetail[]>
-  }
-
-  async getLatestHdcStatus(bookingId: string, user?: User): Promise<HomeDetentionCurfew> {
-    return (await this.get(
-      {
-        path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,
-        return404: true,
-      },
-      { username: user?.username },
-    )) as Promise<HomeDetentionCurfew>
-  }
-
-  async getLatestHdcStatusBatch(bookingIds: number[], user?: User): Promise<HomeDetentionCurfew[]> {
-    return (await this.post(
-      {
-        path: `/api/offender-sentences/home-detention-curfews/latest`,
-        data: bookingIds,
-      },
-      { username: user?.username },
-    )) as Promise<HomeDetentionCurfew[]>
   }
 
   async getUser(user: User): Promise<PrisonApiUserDetail> {

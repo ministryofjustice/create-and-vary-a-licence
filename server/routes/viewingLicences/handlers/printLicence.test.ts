@@ -262,6 +262,7 @@ describe('Route - print a licence', () => {
               description: 'Some words',
               mapData: 'base64 data',
               text: 'some text',
+              isEvent: false,
             },
           ],
           eventExclusionZoneMapData: [],
@@ -307,7 +308,10 @@ describe('Route - print a licence', () => {
           text: 'this is an event exclusion',
           expandedText: 'this is an event exclusion with expanded text',
           uploadSummary: [{ id: 4, description: 'Some words about an event exclusion', fileSize: 0, uploadedTime: '' }],
-          data: [{ field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true }],
+          data: [
+            { field: 'outOfBoundArea', id: 0, sequence: 0, contributesToLicence: true },
+            { field: 'eventName', value: 'Event name', id: 0, sequence: 1, contributesToLicence: true },
+          ],
         },
       ]
 
@@ -414,6 +418,13 @@ describe('Route - print a licence', () => {
                     id: 0,
                     sequence: 0,
                   },
+                  {
+                    contributesToLicence: true,
+                    field: 'eventName',
+                    value: 'Event name',
+                    id: 0,
+                    sequence: 1,
+                  },
                 ],
                 id: 4,
                 text: 'this is an event exclusion',
@@ -440,6 +451,7 @@ describe('Route - print a licence', () => {
               description: 'Some words',
               mapData: 'base64 data',
               text: 'some text',
+              isEvent: false,
             },
             {
               dataValue: {
@@ -451,6 +463,7 @@ describe('Route - print a licence', () => {
               description: 'Some more words',
               mapData: 'base64 data',
               text: 'some text',
+              isEvent: false,
             },
           ],
           restrictionZoneMapData: [
@@ -464,6 +477,7 @@ describe('Route - print a licence', () => {
               description: 'Some words about a restriction',
               mapData: 'base64 data',
               text: 'this is a restriction',
+              isEvent: false,
             },
           ],
           eventExclusionZoneMapData: [
@@ -478,6 +492,8 @@ describe('Route - print a licence', () => {
               mapData: 'base64 data',
               text: 'this is an event exclusion',
               expandedText: 'this is an event exclusion with expanded text',
+              isEvent: true,
+              eventName: 'Event name',
             },
           ],
           isV4OrGreater: true,
@@ -739,12 +755,13 @@ describe('Route - print a licence', () => {
       config.licenceTemplateV2Enabled = false
     })
 
-    it('returns footer with v2 format containing fullname and prison number only', () => {
+    it('returns footer with v2 format containing fullname, prison number and CRN', () => {
       config.licenceTemplateV2Enabled = true
       const licence = {
         forename: 'John',
         surname: 'Bloggs',
         nomsId: 'A1234AA',
+        crn: 'CRN123',
         bookingNo: 'BOOKING123',
         cro: 'CRO123',
         pnc: 'PNC123',
@@ -758,7 +775,7 @@ describe('Route - print a licence', () => {
 
       const footerHtml = handler.getPdfFooter(licence)
 
-      expect(footerHtml).toContain('John Bloggs | Prison number: <span>A1234AA</span>')
+      expect(footerHtml).toContain('John Bloggs | Prison number: <span>A1234AA</span> | CRN: <span>CRN123</span>')
       expect(footerHtml).toContain('Page <span class="pageNumber"></span> of <span class="totalPages"></span>')
       expect(footerHtml).not.toContain('Booking No')
       expect(footerHtml).not.toContain('CRO No')

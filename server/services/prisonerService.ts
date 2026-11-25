@@ -1,14 +1,11 @@
 import { Readable } from 'stream'
 import fs from 'fs'
-import _ from 'lodash'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import { PrisonDetail } from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
-import HdcStatus from '../@types/HdcStatus'
 import { User } from '../@types/CvlUserDetails'
-import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 
 export default class PrisonerService {
   constructor(
@@ -41,47 +38,5 @@ export default class PrisonerService {
 
   async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria, user?: User): Promise<Prisoner[]> {
     return this.prisonerSearchApiClient.searchPrisoners(prisonerSearchCriteria, user)
-  }
-
-  async getActiveHdcStatus(bookingId: string): Promise<HdcStatus | null> {
-    const hdcLicence = await this.prisonApiClient.getLatestHdcStatus(bookingId)
-    if (!hdcLicence) return null
-    return {
-      approvalStatus: hdcLicence.approvalStatus,
-      checksPassed: hdcLicence?.passed,
-      bookingId,
-    }
-  }
-
-  async getHdcStatuses(offenders: CvlPrisoner[], user?: User): Promise<HdcStatus[]> {
-    const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
-    if (bookingIds.length === 0) return []
-
-    const hdcList = []
-
-    /* eslint-disable */
-    for (const ids of _.chunk(bookingIds, 500)) {
-      const partResult = await this.prisonApiClient.getLatestHdcStatusBatch(ids, user)
-      hdcList.push(partResult)
-    }
-    /* eslint-enable */
-
-    return hdcList.flat().map(
-      h =>
-        <HdcStatus>{
-          bookingId: h.bookingId.toString(),
-          approvalStatus: h?.approvalStatus || 'Not found',
-          checksPassed: h?.passed || false,
-        },
-    )
-  }
-
-  async isHdcApproved(bookingId: number): Promise<boolean> {
-    const prisoners = await this.prisonerSearchApiClient.searchPrisonersByBookingIds({ bookingIds: [bookingId] })
-    if (!prisoners.length || !prisoners[0].homeDetentionCurfewActualDate) {
-      return false
-    }
-    const hdcLicence = await this.getActiveHdcStatus(bookingId.toString())
-    return !!hdcLicence && hdcLicence.approvalStatus === 'APPROVED'
   }
 }

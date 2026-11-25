@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 
-{% if interruptType == 'addressChecksIncomplete' %}
+{% if interruptType == 'addressChecksIncomplete' or interruptType == 'addressChecksComplete' %}
     {% set pageTitle = applicationName + " - This person has opted in to HDC" %}
     {% set pageId = "hdc-opt-in-interrupt-page" %}
     {% set interruptClass = "refused-interrupt" %}
@@ -25,7 +25,7 @@
             <div class="moj-interruption-card">
                 <div class="moj-interruption-card__content">
                     <h1 class="govuk-heading-l moj-interruption-card__heading" id="{{ pageId }}-heading">
-                        {% if interruptType == 'addressChecksIncomplete' %}
+                        {% if interruptType == 'addressChecksIncomplete' or interruptType == 'addressChecksComplete' %}
                             This person has opted in to HDC
                         {% elif interruptType == 'optOut' %}
                             This person has opted out of HDC
@@ -39,6 +39,8 @@
                         <p>
                             {% if interruptType == 'addressChecksIncomplete' %}
                                 You must complete the address checks in HDC before you can continue with this licence in CVL.
+                            {% elif interruptType == 'addressChecksComplete' %}
+                                This licence is now for a HDC release
                             {% elif interruptType == 'optOut' %}
                                 This licence is now for a standard release.
                             {% elif interruptType == 'postponed' %}

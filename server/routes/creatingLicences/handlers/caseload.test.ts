@@ -7,13 +7,16 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { ComCreateCase } from '../../../@types/licenceApiClientTypes'
 import { parseIsoDate } from '../../../utils/utils'
+import AuditService from '../../../services/audit/auditService'
 
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 const comCaseloadService = new ComCaseloadService(null, null) as jest.Mocked<ComCaseloadService>
 
+jest.mock('../../../services/audit/auditService')
 jest.mock('../../../services/lists/comCaseloadService')
 
 describe('Route Handlers - Create Licence - Caseload', () => {
-  const handler = new CaseloadRoutes(comCaseloadService)
+  const handler = new CaseloadRoutes(auditService, comCaseloadService)
   let req: Request
   let res: Response
 
@@ -275,6 +278,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       req.query = { view: 'team' }
 
       await handler.GET(req, res)
+
+      expect(auditService.logComCaseloadEvent).toHaveBeenCalledWith(req.id, 'teamA', expect.any(Array), res.locals.user)
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
           {
@@ -324,6 +329,41 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       })
       expect(comCaseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(comCaseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
+    })
+
+    it.each(['me', 'team'])('should pass HDC accommodation details to the %s caseload', async view => {
+      // given
+      req.query = { view }
+      const comCase: ComCreateCase = {
+        crnNumber: 'X381306',
+        name: 'Test Person',
+        prisonerNumber: '123',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        kind: LicenceKind.HDC,
+        probationPractitioner: { name: 'Joe Bloggs', staffCode: 'X6789', allocated: true },
+        isRestricted: false,
+        isHdcPostponed: false,
+        isReplacementForOptedOutLicence: false,
+        isReplacementForRefusedLicence: false,
+        isReviewNeeded: false,
+        hdcStatus: 'APPROVED',
+        noHdcCurfewAddress: true,
+      }
+      comCaseloadService.getStaffCreateCaseload.mockResolvedValue([comCase])
+      comCaseloadService.getTeamCreateCaseload.mockResolvedValue([comCase])
+
+      // when
+      await handler.GET(req, res)
+
+      // then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/create/caseload',
+        expect.objectContaining({
+          caseload: [expect.objectContaining({ noHdcCurfewAddress: true })],
+        }),
+      )
     })
 
     it('should redirect to change team page when user has multiple teams and no active team selected', async () => {

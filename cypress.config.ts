@@ -175,7 +175,6 @@ export default defineConfig({
         stubGetResponsibleCommunityManager: delius.stubGetResponsibleCommunityManager,
         stubGetResponsibleCommunityManagers: delius.stubGetResponsibleCommunityManagers,
         stubDeliusPing: delius.stubPing,
-        searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
         stubPrisonerSearchApiPing: prisonerSearch.stubPing,
 
         stubGetPrisonUserDetails: prison.stubGetUserDetails,

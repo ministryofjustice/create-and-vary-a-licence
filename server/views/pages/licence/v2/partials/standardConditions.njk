@@ -1,0 +1,10 @@
+{% macro standardConditions(conditions) %}
+    {% for condition in conditions %}
+        <div id="condition-{{ loop.index }}" class="v2_condition">
+            <span>{{ condition.expandedText or condition.text }}</span>
+        </div>
+        {% if not loop.last %}
+            <hr id="condition-divider-{{ loop.index }}" class="condition-divider" aria-hidden="true">
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

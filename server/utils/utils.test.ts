@@ -9,6 +9,7 @@ import {
   simpleDateTimeToJson,
   stringToAddressObject,
   jsonDtTo12HourTime,
+  jsonDtTo12HourTimeCompact,
   json24HourTimeTo12HourTime,
   jsonDtToDate,
   removeDuplicates,
@@ -27,6 +28,7 @@ import {
   isVariation,
   isHdcLicence,
   isHdcAddressChecksIncompleteLicence,
+  isHdcAddressChecksCompleteLicence,
   isHdcRefusedLicence,
   isHdcOptOutLicence,
   isHdcPostponedLicence,
@@ -207,6 +209,16 @@ test.each`
   } else {
     expect(timeValue).toBeNull()
   }
+})
+
+test.each`
+  jsonDateTime          | expectedTime
+  ${'23/12/2021 21:00'} | ${'9 pm'}
+  ${'23/12/2021 21:15'} | ${'9:15 pm'}
+  ${'23/12/2021 09:15'} | ${'9:15 am'}
+  ${'invalid'}          | ${null}
+`('convert JSON datetime to compact 12 hour time', ({ jsonDateTime, expectedTime }) => {
+  expect(jsonDtTo12HourTimeCompact(jsonDateTime)).toEqual(expectedTime)
 })
 
 test.each`
@@ -620,6 +632,29 @@ describe('isHdcAddressChecksIncompleteLicence', () => {
     { hdcRiskChecksComplete: undefined },
   ])('returns false when the licence does not meet the interrupt conditions: %o', changes => {
     expect(isHdcAddressChecksIncompleteLicence({ ...licence, ...changes } as Licence)).toBe(false)
+  })
+})
+
+describe('isHdcAddressChecksCompleteLicence', () => {
+  const licence = {
+    kind: LicenceKind.HDC,
+    statusCode: LicenceStatus.IN_PROGRESS,
+    isReplacementForOptedInLicence: true,
+    hdcRiskChecksComplete: true,
+  } as Licence
+
+  it('returns true for an in-progress opted-in HDC replacement when checks are complete', () => {
+    expect(isHdcAddressChecksCompleteLicence(licence)).toBe(true)
+  })
+
+  it.each([
+    { hdcRiskChecksComplete: false },
+    { kind: LicenceKind.CRD },
+    { kind: LicenceKind.HDC_VARIATION },
+    { statusCode: LicenceStatus.SUBMITTED },
+    { isReplacementForOptedInLicence: false },
+  ])('returns false when the licence does not meet the interrupt conditions: %o', changes => {
+    expect(isHdcAddressChecksCompleteLicence({ ...licence, ...changes } as Licence)).toBe(false)
   })
 })
 

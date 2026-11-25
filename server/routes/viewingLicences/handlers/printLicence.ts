@@ -153,10 +153,10 @@ export default class PrintLicenceRoutes {
     if (licenceTemplateV2Enabled && !isHdcLicence(licence)) {
       const fullName = convertToTitleCase(`${licence.forename || ''} ${licence.surname || ''}`.trim())
       return `
-      <div style="${pdfHeaderFooterStyleV2}">
-        <table style="width: 100%; padding-left: 15px; padding-right: 15px;">
+      <div style="${pdfHeaderFooterStyleV2}; padding-left: 20pt; padding-right: 20pt; padding-bottom: 14pt;">
+        <table style="width: 100%;">
           <tr>
-            <td style="text-align: left; width: 70%;">${fullName} | Prison number: <span>${licence.nomsId}</span></td>
+            <td style="text-align: left; width: 70%;">${fullName} | Prison number: <span>${licence.nomsId}</span> | CRN: <span>${licence.crn}</span></td>
             <td style="text-align: right; width: 30%; font-size: 12px;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></td>
           </tr>
         </table>
@@ -199,6 +199,7 @@ export default class PrintLicenceRoutes {
         const mapData = await this.licenceService.getExclusionZoneImageData(licence.id.toString(), `${c.id}`, user)
         const description = c.uploadSummary[0]?.description.trim()
         const dataValue = c.data.find(d => d.field === 'outOfBoundArea')
+        const eventName = c.data.find(d => d.field === 'eventName')
         const { text, expandedText } = c
         return {
           mapData,
@@ -206,6 +207,8 @@ export default class PrintLicenceRoutes {
           dataValue,
           text,
           expandedText,
+          isEvent: c.code === EVENT_RESTRICTION_CONDITION_CODE,
+          eventName: eventName?.value,
         }
       }),
     )

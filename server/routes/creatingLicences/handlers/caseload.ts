@@ -8,9 +8,13 @@ import { cvlDateToDateShort, parseCvlDate } from '../../../utils/utils'
 import LicenceCreationType from '../../../enumeration/licenceCreationType'
 import { LicenceKind } from '../../../enumeration'
 import type { ComCreateCase } from '../../../@types/licenceApiClientTypes'
+import AuditService from '../../../services/audit/auditService'
 
 export default class CaseloadRoutes {
-  constructor(private readonly comCaseloadService: ComCaseloadService) {}
+  constructor(
+    private readonly auditService: AuditService,
+    private readonly comCaseloadService: ComCaseloadService,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const view = req.query?.view === 'team' ? 'team' : 'me'
@@ -63,6 +67,8 @@ export default class CaseloadRoutes {
         isRestricted: comCase.isRestricted,
       }
     })
+
+    await this.auditService.logComCaseloadEvent(req.id, teamName, viewModelCaseload, user)
 
     res.render('pages/create/caseload', {
       caseload: viewModelCaseload,

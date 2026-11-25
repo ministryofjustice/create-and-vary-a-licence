@@ -11,6 +11,7 @@ import {
   convertToTitleCase,
   formatAddress,
   jsonDtTo12HourTime,
+  jsonDtTo12HourTimeCompact,
   json24HourTimeTo12HourTime,
   jsonDtToDate,
   jsonDtToDateWithDay,
@@ -19,6 +20,7 @@ import {
   cvlDateToDateShort,
   formatAddressTitleCase,
   formatAddressLine,
+  toAddressCase,
 } from './utils'
 import { AdditionalCondition, AdditionalConditionData, Licence, FoundComCase } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
@@ -169,6 +171,10 @@ export function registerNunjucks(app?: express.Express): Environment {
     return jsonDtTo12HourTime(dt)
   })
 
+  njkEnv.addFilter('datetimeTo12HourTimeCompact', (dt: string) => {
+    return jsonDtTo12HourTimeCompact(dt)
+  })
+
   njkEnv.addFilter('format24HourTimeTo12HourTime', (dt: string) => {
     return json24HourTimeTo12HourTime(dt)
   })
@@ -178,6 +184,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('formatAddressAsList', (address?: string) => {
     return address ? address.split(', ').filter(line => line.trim().length > 0) : undefined
   })
+
+  njkEnv.addFilter('toAddressCase', toAddressCase)
 
   njkEnv.addFilter('formatLicenceAddressAsList', addressObj => {
     if (!addressObj) return undefined

@@ -39,7 +39,7 @@ export default function Index({
     )
 
   const comDetailsHandler = new ComDetailsRoutes(probationService)
-  const approvalCasesHandler = new ApprovalCaseRoutes(approvedCaseloadService, prisonerService)
+  const approvalCasesHandler = new ApprovalCaseRoutes(approvedCaseloadService, auditService, prisonerService)
   const approvalViewHandler = new ApprovalViewRoutes(licenceService, probationService)
   const approvalConfirmedHandler = new ConfirmApprovedRoutes(probationService)
 

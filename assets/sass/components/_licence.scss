@@ -13,6 +13,25 @@
   }
 }
 
+body.licence-template-v2 {
+  page: v2-licence;
+}
+
+@page v2-licence {
+  size: A4 portrait;
+  margin: 30pt 30pt 60pt 30pt;
+  .moj-logo {
+    display: none;
+  }
+
+  :first {
+    .moj-logo {
+      display: contents;
+      margin-bottom: 20px;
+    }
+  }
+}
+
 @media print {
   .watermark:before {
     content: "PROTOTYPE";
@@ -32,6 +51,254 @@ body {
   font-weight: normal;
   line-height: normal;
 }
+
+body.licence-template-v2 {
+  font-family: Arial, sans-serif;
+  font-size: 12pt;
+  margin: 0;
+  padding: 0 0 60pt 0;
+  box-sizing: border-box;
+}
+
+body.licence-template-v2 .title {
+  font-size: 22pt;
+  font-weight: normal;
+  margin-bottom: 4px;
+}
+
+body.licence-template-v2 .subtitle {
+  font-size: 16pt;
+  margin-bottom: 30px;
+}
+
+body.licence-template-v2 .section-heading {
+  width: 500px;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 20pt;
+  font-weight: bolder;
+  margin-bottom: 8px;
+}
+
+body.licence-template-v2 .section-heading__icon-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 40px;
+  flex: 0 0 48px;
+  border: 1px dashed #555;
+  font-size: 8pt;
+  font-weight: normal;
+}
+
+body.licence-template-v2 .first-probation-meeting-content {
+  width: 500px;
+  max-width: 100%;
+  line-height: 18px;
+  margin-bottom: 50px;
+}
+
+body.licence-template-v2 .no-appointment-content {
+  width: 500px;
+  max-width: 100%;
+  line-height: 18px;
+  margin-bottom: 50px;
+}
+
+body.licence-template-v2 .confirmation-content {
+  width: 500px;
+  max-width: 100%;
+  line-height: 18px;
+  margin-bottom: 50px;
+}
+
+body.licence-template-v2 .licence-period-content {
+  width: 500px;
+  max-width: 100%;
+  line-height: 18px;
+}
+
+body.licence-template-v2 .licence-conditions {
+  width: 500px;
+  max-width: 100%;
+  line-height: 18px;
+  margin-bottom: 30px;
+}
+
+body.licence-template-v2 .recall-condition-list {
+  padding-left: 24px;
+}
+
+body.licence-template-v2 .condition-section-heading,
+body.licence-template-v2 .map-condition-bold{
+  font-size: 18pt;
+  font-weight: bolder;
+}
+
+body.licence-template-v2 .map-condition-heading {
+  font-size: 18pt;
+}
+
+body.licence-template-v2 .additional-conditions__first-heading {
+  height: 40px;
+  line-height: 40px;
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  margin-bottom: -40px;
+}
+
+body.licence-template-v2 .additional-conditions-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  thead th {
+    height: 40px;
+    padding: 0;
+    position: relative;
+    text-align: left;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      height: 4px;
+      background: #fff;
+      z-index: 1;
+    }
+  }
+
+  .additional-conditions__continued-heading {
+    height: 40px;
+    line-height: 40px;
+  }
+
+  td {
+    padding: 0;
+  }
+
+  .additional-conditions__row {
+    break-inside: avoid;
+    page-break-inside: avoid;
+
+    + .additional-conditions__row > td {
+      border-top: 1px solid #000;
+    }
+  }
+}
+
+body.licence-template-v2 .condition-divider {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid #000;
+  margin: 20px 0;
+}
+
+body.licence-template-v2 .confirmation-field-line {
+  width: 292px;
+  max-width: 100%;
+  margin: 30px 0;
+  border-top-color: #888;
+}
+
+body.licence-template-v2 .confirmation-date-line {
+  width: 168px;
+}
+
+body.licence-template-v2 .confirmation-divider {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+body.licence-template-v2 .hmpps-info {
+  width: 725px;
+  max-width: 100%;
+  line-height: 18px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+body.licence-template-v2 .hmpps-info-reference {
+  width: 600px;
+  max-width: 100%;
+  line-height: 15px;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+body.licence-template-v2 .hmpps-info-reference td {
+  padding-left: 0;
+}
+
+body.licence-template-v2 .hmpps-info td {
+  padding-left: 0;
+  padding-right: 0;
+}
+body.licence-template-v2 .hmpps-info-picture td {
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+.v2_condition {
+  width: 500px;
+  break-inside: avoid;
+  padding-left: 30px;
+  margin: 20px 0 20px 30px;
+
+  &:before {
+    counter-increment: conditionCounter;
+    content: counter(conditionCounter) ;
+    position: absolute;
+    margin-left: -50px;
+  }
+}
+
+.v2-map-page {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.v2-map-frame {
+  width: 100%;
+  max-height: 750px;
+  overflow: hidden;
+}
+
+.v2-map-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 750px;
+  object-fit: contain;
+  object-position: top left;
+}
+
+.v2-offender {
+  display: flex;
+
+  img {
+    height: 150px;
+    border: 1px solid #555;
+  }
+
+  div {
+    padding: 0 10px;
+  }
+}
+
+.page-break-before {
+  break-before: page;
+  page-break-before: always;
+}
+
 
 .map-page {
   break-inside: avoid;

@@ -2,10 +2,12 @@ import type { Request, Response } from 'express'
 import type PrisonerService from '../../../services/prisonerService'
 import type ApproverCaseloadService from '../../../services/lists/approverCaseloadService'
 import { cvlDateToDateShort } from '../../../utils/utils'
+import AuditService from '../../../services/audit/auditService'
 
 export default class ApprovalCaseRoutes {
   constructor(
     private readonly approverCaseloadService: ApproverCaseloadService,
+    private readonly auditService: AuditService,
     private readonly prisonerService: PrisonerService,
   ) {}
 
@@ -32,6 +34,7 @@ export default class ApprovalCaseRoutes {
     })
 
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
+    await this.auditService.logApproverCaseloadEvent(req.id, prisonCaseloadToDisplay, cases, user)
 
     res.render('pages/approve/cases', {
       cases,

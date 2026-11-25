@@ -1,8 +1,6 @@
-import { Request, Response } from 'express'
-import _ from 'lodash'
+import type { Request, Response } from 'express'
 import moment from 'moment'
 import { format } from 'date-fns'
-import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
 import { convertToTitleCase, isHdcLicence, parseCvlDate } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
@@ -34,7 +32,6 @@ type CvlCom = {
 
 export default class OffenderDetailRoutes {
   constructor(
-    private readonly prisonerService: PrisonerService,
     private readonly probationService: ProbationService,
     private readonly licenceService: LicenceService,
   ) {}
@@ -42,9 +39,8 @@ export default class OffenderDetailRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { nomsId } = req.params
-    const { prisoner: prisonerDetail, cvl: hardStopDetails } = await this.licenceService.getPrisonerDetail(nomsId, user)
+    const { prisoner: prisonerDetail, cvl: cvlFields } = await this.licenceService.getPrisonerDetail(nomsId, user)
     const probationPractitioner = await this.probationService.getResponsibleCommunityManager(nomsId)
-    const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
     const conditionalReleaseDate = this.formatNomisDate(prisonerDetail.conditionalReleaseDate)
     const confirmedReleaseDate = this.formatNomisDate(prisonerDetail.confirmedReleaseDate)
     const postRecallReleaseDate = this.formatNomisDate(prisonerDetail.postRecallReleaseDate)
@@ -60,8 +56,9 @@ export default class OffenderDetailRoutes {
 
     const licenceSummary = await this.licenceService.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
     const licence = licenceSummary ? await this.licenceService.getLicence(licenceSummary.licenceId, user) : null
-    const ineligibilityReasons = await this.licenceService.getIneligibilityReasons(nomsId)
-    const { isIS91Case, recallSupportInfo, remandSupportInfo } = await this.licenceService.getSupportInfo(nomsId)
+
+    const { is91SupportInfo, recallSupportInfo, remandSupportInfo, nomisHdcSupportInfo, eligibilityAssessment } =
+      await this.licenceService.getSupportInfo(nomsId)
 
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -82,17 +79,14 @@ export default class OffenderDetailRoutes {
         paroleEligibilityDate,
         actualParoleDate,
         hardStop: {
-          cutoffDate:
-            (hardStopDetails.hardStopDate && format(parseCvlDate(hardStopDetails.hardStopDate), 'd MMM yyyy')) || '',
+          cutoffDate: (cvlFields.hardStopDate && format(parseCvlDate(cvlFields.hardStopDate), 'd MMM yyyy')) || '',
           warningDate:
-            (hardStopDetails.hardStopWarningDate &&
-              format(parseCvlDate(hardStopDetails.hardStopWarningDate), 'd MMM yyyy')) ||
-            '',
-          isInHardStopPeriod: hardStopDetails.isInHardStopPeriod,
+            (cvlFields.hardStopWarningDate && format(parseCvlDate(cvlFields.hardStopWarningDate), 'd MMM yyyy')) || '',
+          isInHardStopPeriod: cvlFields.isInHardStopPeriod,
         },
         determinate: prisonerDetail.indeterminateSentence ? 'No' : 'Yes',
         dob: (!!prisonerDetail && moment(prisonerDetail.dateOfBirth).format('D MMM YYYY')) || '',
-        hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',
+        hdcStatus: cvlFields ? cvlFields?.hdcStatus : 'Not found',
         recall: prisonerDetail.recall ? 'Yes' : 'No',
         remand: remandSupportInfo.isRemand ? 'Yes' : 'No',
       },
@@ -110,8 +104,10 @@ export default class OffenderDetailRoutes {
       },
       cvlCom: this.getCvlComDetails(licence),
       licence: this.getLicenceDates(licence),
-      ineligibilityReasons,
-      is91Status: isIS91Case ? 'Yes' : 'No',
+      ineligibilityReasons: eligibilityAssessment,
+      is91Status: is91SupportInfo.isIs91Case ? 'Yes' : 'No',
+      hdcDetails: nomisHdcSupportInfo,
+      is91Details: is91SupportInfo,
       recallDetails: recallSupportInfo,
       remandDetails: remandSupportInfo,
     })
