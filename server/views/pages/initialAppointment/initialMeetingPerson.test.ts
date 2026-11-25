@@ -61,7 +61,7 @@ describe('appointmentPerson page', () => {
       )
       expect($('.govuk-details__summary-text').text().trim()).toBe('When no initial appointment is needed')
       expect($('.govuk-details__text').text()).toContain(
-        'Select No appointment needed if the person is being released in the final third of a standard determinate sentence and is not:',
+        'Select no appointment needed if this person is being released in the final third of a standard determinate sentence and is not:',
       )
       const bulletItems = $('.govuk-list--bullet li')
       expect(bulletItems.length).toBe(7)
