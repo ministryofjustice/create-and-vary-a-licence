@@ -362,14 +362,6 @@ describe('View and print a licence - case list', () => {
       expect($('#release-date-1 .info-highlight-message').length).toBe(0)
     })
 
-    it.each([{ licenceId: null }, { kind: LicenceKind.CRD }])(
-      'does not show the flag for a case without an HDC licence: %s',
-      overrides => {
-        const $ = renderCase(overrides)
-        expect($('#release-date-1 .info-highlight-message').length).toBe(0)
-      },
-    )
-
     it('shows the missing address rather than the postponed message when both apply', () => {
       const $ = renderCase({ isHdcPostponed: true })
       expect($('#release-date-1 .info-highlight-message').text()).toBe('No HDC curfew address')

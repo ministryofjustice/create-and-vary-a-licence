@@ -55,7 +55,7 @@
 
     {% set showReleaseDateLabel = case.kind == 'HDC' or case.kind == 'HDC_VARIATION' or not probationView %}
     {% set releaseDatePrefix = (case.releaseDateLabel + ': <br>') if showReleaseDateLabel else '' %}
-    {% if hdcCreationEnabled and case.licenceId and (case.kind == "HDC" or case.kind == "HDC_VARIATION") and case.noHdcCurfewAddress %}
+    {% if hdcCreationEnabled and case.noHdcCurfewAddress %}
         {% set releaseDateHtml = '<span class="info-highlight">' + releaseDatePrefix + (case.releaseDate | cvlDateToDateShort) + '</span><span class="info-highlight info-highlight-message">No HDC curfew address</span>' %}
     {% else %}
         {% set releaseDateHtml = '<p>' + releaseDatePrefix + (case.releaseDate | cvlDateToDateShort) + '</p>' %}
