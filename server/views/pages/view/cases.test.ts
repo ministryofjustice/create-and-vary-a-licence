@@ -344,7 +344,7 @@ describe('View and print a licence - case list', () => {
       const $ = renderCase({ tabType }, { probationView, showAttentionNeededTab: true })
 
       expect($('#release-date-1 > .info-highlight').first().text()).toBe('HDC actual date: 3 Aug 2022')
-      expect($('#release-date-1 > .info-highlight.info-highlight-message').text()).toBe('No HDC curfew address')
+      expect($('#release-date-1 > .info-highlight > .info-highlight-message').text()).toBe('No HDC curfew address')
     })
 
     it('shows the flag for an HDC variation', () => {
