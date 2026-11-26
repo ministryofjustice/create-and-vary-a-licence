@@ -436,6 +436,19 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
 
+    it('should not submit an HDC licence when the address is withdrawn', async () => {
+      res.locals.licence = Object.assign(res.locals.licence, {
+        kind: LicenceKind.HDC,
+        addressWithdrawn: true,
+        statusCode: LicenceStatus.IN_PROGRESS,
+      })
+
+      await handler.POST(req, res)
+
+      expect(licenceService.submitLicence).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+    })
+
     it('should redirect back with error messages in flash if licence fields are empty', async () => {
       res.locals.licence = {
         appointmentPerson: '',

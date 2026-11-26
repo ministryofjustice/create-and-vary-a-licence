@@ -110,6 +110,31 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('.moj-alert--warning').length).toBe(0)
   })
 
+  it('should display an HDC address missing alert and disable submission when the address is withdrawn', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, kind: 'HDC', addressWithdrawn: true },
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    const alertBanner = $('.moj-alert--warning')
+    expect(alertBanner.find('.moj-alert__heading').text().trim()).toBe('HDC address missing')
+    expect(alertBanner.text()).toContain(
+      'This licence cannot be submitted until the HDC address is added or CAS2 is selected',
+    )
+    expect($('[data-qa="send-licence-conditions"]').prop('disabled')).toBe(true)
+  })
+
+  it('should not display the HDC address missing alert when HDC creation is disabled', () => {
+    const $ = render({
+      hdcCreationEnabled: false,
+      licence: { ...licence, kind: 'HDC', addressWithdrawn: true },
+    })
+
+    expect($('.moj-alert--warning').length).toBe(0)
+  })
+
   it('should display no alerts when they are not passed through', () => {
     const $ = render({
       banner: {},
@@ -382,6 +407,17 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should enable the submit button when an HDC licence is not postponed', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC', isPostponed: false },
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
+    })
+
+    expect($('[data-qa="send-licence-conditions"]').prop('disabled')).toBe(false)
+  })
+
+  it('should enable the submit button when the HDC address is available', () => {
+    const $ = render({
+      hdcCreationEnabled: true,
+      licence: { ...licence, kind: 'HDC', addressWithdrawn: false },
       statusCode: 'IN_PROGRESS',
       isInHardStopPeriod: false,
     })
