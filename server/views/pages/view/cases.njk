@@ -55,7 +55,11 @@
 
     {% set showReleaseDateLabel = case.kind == 'HDC' or case.kind == 'HDC_VARIATION' or not probationView %}
     {% set releaseDatePrefix = (case.releaseDateLabel + ': <br>') if showReleaseDateLabel else '' %}
-    {% set releaseDateHtml = '<p>' + releaseDatePrefix + (case.releaseDate | cvlDateToDateShort) + '</p>' %}
+    {% if hdcCreationEnabled and case.noHdcCurfewAddress %}
+        {% set releaseDateHtml = '<span class="info-highlight">' + releaseDatePrefix + (case.releaseDate | cvlDateToDateShort) + '</span><span class="info-highlight info-highlight-message">No HDC curfew address</span>' %}
+    {% else %}
+        {% set releaseDateHtml = '<p>' + releaseDatePrefix + (case.releaseDate | cvlDateToDateShort) + '</p>' %}
+    {% endif %}
 
     {% set licences = (licences.push([
         {
@@ -159,14 +163,14 @@
                         label: releaseInNextTwoWorkingDaysLabel,
                         id: "releases-in-two-working-days",
                         panel: {
-                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig, count: releaseInTwoWorkingDaysCount, activeTab: 'releases-in-two-working-days' })
+                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig, count: releaseInTwoWorkingDaysCount, activeTab: 'releases-in-two-working-days', hdcCreationEnabled: hdcCreationEnabled })
                         }
                     },
                     {
                         label: futureReleasesLabel,
                         id: "future-releases",
                         panel: {
-                            html: futureReleasesTab({ cases: cases, tabType: CaViewCasesTab.FUTURE_RELEASES, config: statusConfig, count: futureReleasesCount, activeTab: 'future-releases' })
+                            html: futureReleasesTab({ cases: cases, tabType: CaViewCasesTab.FUTURE_RELEASES, config: statusConfig, count: futureReleasesCount, activeTab: 'future-releases', hdcCreationEnabled: hdcCreationEnabled })
                         }
                     }
                 ), peopleInPrisontabs)
@@ -178,7 +182,7 @@
                         label: attentionNeededTabHeadingWithCount({label: attentionNeededLabel, count: attentionNeededCount, isSearch: not not search}),
                         id: "attention-needed",
                         panel: {
-                            html: attentionNeededTab({ cases: cases, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: attentionNeededCount, activeTab: 'attention-needed' })
+                            html: attentionNeededTab({ cases: cases, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: attentionNeededCount, activeTab: 'attention-needed', hdcCreationEnabled: hdcCreationEnabled })
                         }
                     }
                     ), peopleInPrisontabs)

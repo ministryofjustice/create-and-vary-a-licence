@@ -2133,6 +2133,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/queue-admin/delete-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['deleteDlqMessages']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/queue-admin/get-dlq-messages/{dlqName}': {
     parameters: {
       query?: never
@@ -2181,6 +2197,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/queue-admin/retry-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['retryDlqMessages']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/queue-admin/retry-dlq/{dlqName}': {
     parameters: {
       query?: never
@@ -2190,6 +2222,22 @@ export interface paths {
     }
     get?: never
     put: operations['retryDlq']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/search-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['searchDlqMessages']
+    put?: never
     post?: never
     delete?: never
     options?: never
@@ -3290,6 +3338,11 @@ export interface components {
        */
       name: string
       /**
+       * @description Whether the HDC licence has no curfew address and its proposed accommodation is residential or CAS 1 approved premises.
+       * @example true
+       */
+      noHdcCurfewAddress?: boolean | null
+      /**
        * @description Legal Status
        * @example SENTENCED
        * @enum {string|null}
@@ -3751,29 +3804,17 @@ export interface components {
       count: number
     }
     /** @description Describes a CRD licence within this service */
-    CrdLicence: Omit<
-      WithRequired<
-        components['schemas']['Licence'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'electronicMonitoringProviderStatus'
-        | 'eligibleKind'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
+    CrdLicence: {
       /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
        */
       actualReleaseDate?: string | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -3828,6 +3869,8 @@ export interface components {
        * @example 24/08/2022 11:30:33
        */
       approvedDate?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -3907,6 +3950,12 @@ export interface components {
       /** @description Describes a electronic monitoring provider on a licence */
       electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider'] | null
       /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example CRD
        * @enum {string}
@@ -3929,10 +3978,18 @@ export interface components {
        * @example 01/05/2023
        */
       hardStopWarningDate?: string | null
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      id: number
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
       isInHardStopPeriod: boolean
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
@@ -3948,8 +4005,14 @@ export interface components {
        */
       isReplacementForRefusedLicence: boolean
       /**
-       * @description Type of this licence
-       * @example CRD
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * @description Type of this licence (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       kind: 'CRD'
@@ -4128,6 +4191,12 @@ export interface components {
        */
       topupSupervisionStartDate?: string | null
       /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
@@ -4142,12 +4211,6 @@ export interface components {
        * @example 1.4
        */
       version?: string | null
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'CRD'
     }
     /** @description A reference to the created licence */
     CreateLicenceResponse: {
@@ -4375,9 +4438,7 @@ export interface components {
       showLatest?: boolean | null
       useRagColour?: boolean | null
       xStacked?: boolean | null
-      xstacked?: boolean
       yStacked?: boolean | null
-      ystacked?: boolean
     }
     DashboardSectionDefinition: {
       description?: string | null
@@ -4430,7 +4491,21 @@ export interface components {
        */
       conditionCodes: string[]
     }
+    DeleteDlqMessagesBody: {
+      messageIds: string[]
+    }
+    DeleteDlqMessagesResult: {
+      deletedMessageIds: string[]
+      failedMessageIds: string[]
+      /** Format: int32 */
+      messagesDeletedCount: number
+      /** Format: int32 */
+      messagesFoundCount: number
+      notFoundMessageIds: string[]
+    }
     DlqMessage: {
+      /** Format: int32 */
+      approximateReceiveCount?: number | null
       body: {
         [key: string]: unknown
       }
@@ -4833,28 +4908,17 @@ export interface components {
       messagesReturnedCount: number
     }
     /** @description Describes a licence that was created by a prison */
-    HardStopLicence: Omit<
-      WithRequired<
-        components['schemas']['Licence'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'electronicMonitoringProviderStatus'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
+    HardStopLicence: {
       /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
        */
       actualReleaseDate?: string | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -4909,6 +4973,8 @@ export interface components {
        * @example 24/08/2022 11:30:33
        */
       approvedDate?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -4986,6 +5052,12 @@ export interface components {
        */
       earliestReleaseDate?: string | null
       /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example CRD
        * @enum {string|null}
@@ -5008,17 +5080,31 @@ export interface components {
        * @example 01/05/2023
        */
       hardStopWarningDate?: string | null
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      id: number
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
       isInHardStopPeriod: boolean
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean | null
       /**
-       * @description Type of this licence
-       * @example HARD_STOP
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * @description Type of this licence (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       kind: 'HARD_STOP'
@@ -5203,6 +5289,12 @@ export interface components {
        */
       topupSupervisionStartDate?: string | null
       /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
@@ -5217,12 +5309,6 @@ export interface components {
        * @example 1.4
        */
       version?: string | null
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HARD_STOP'
     }
     /** @description Describes a curfew address on a HDC licence */
     HdcCurfewAddress: {
@@ -5293,29 +5379,22 @@ export interface components {
       uprn?: string | null
     }
     /** @description Describes a HDC licence within this service */
-    HdcLicence: Omit<
-      WithRequired<
-        components['schemas']['Licence'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'electronicMonitoringProviderStatus'
-        | 'eligibleKind'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
+    HdcLicence: {
       /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
        */
       actualReleaseDate?: string | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description Whether the curfew address is withdrawn while an in-progress HDC application still needs address checks
+       * @example false
+       */
+      addressWithdrawn: boolean
       /** @description Are all curfew times equal across the week */
       allCurfewTimesEqual?: boolean | null
       /**
@@ -5372,6 +5451,8 @@ export interface components {
        * @example 24/08/2022 11:30:33
        */
       approvedDate?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -5453,6 +5534,12 @@ export interface components {
       /** @description Describes a electronic monitoring provider on a licence */
       electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider'] | null
       /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example HDC
        * @enum {string}
@@ -5483,11 +5570,6 @@ export interface components {
        */
       hdcRiskChecksComplete: boolean
       /**
-       * @description Whether the curfew address is withdrawn while an in-progress HDC application still needs address checks
-       * @example false
-       */
-      addressWithdrawn: boolean
-      /**
        * Format: date
        * @description The offender’s actual home detention curfew date
        * @example 06/05/2023
@@ -5505,10 +5587,18 @@ export interface components {
        * @example 06/05/2023
        */
       homeDetentionCurfewEndDate?: string | null
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      id: number
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
       /**
        * @description Has this licence been migrated from the HDC service?
        * @example false
@@ -5529,8 +5619,14 @@ export interface components {
        */
       isReplacementForOptedInLicence: boolean
       /**
-       * @description Type of this licence
-       * @example HDC
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * @description Type of this licence (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       kind: 'HDC'
@@ -5709,6 +5805,12 @@ export interface components {
        */
       topupSupervisionStartDate?: string | null
       /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
@@ -5725,12 +5827,6 @@ export interface components {
       version?: string | null
       /** @description The curfew times for this licence */
       weeklyCurfewTimes: components['schemas']['CurfewTimes'][]
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HDC'
     }
     /** @description Information about Hdc case to inform support for a prisoner */
     HdcSupportInfo: {
@@ -5746,29 +5842,17 @@ export interface components {
       refusedReason?: string | null
     }
     /** @description Describes a HDC licence variation within this service */
-    HdcVariationLicence: Omit<
-      WithRequired<
-        components['schemas']['Licence'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'electronicMonitoringProviderStatus'
-        | 'eligibleKind'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
+    HdcVariationLicence: {
       /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
        */
       actualReleaseDate?: string | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /** @description Are all curfew times equal across the week */
       allCurfewTimesEqual?: boolean | null
       /**
@@ -5825,6 +5909,8 @@ export interface components {
        * @example 24/08/2022 11:30:33
        */
       approvedDate?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -5904,6 +5990,12 @@ export interface components {
        */
       earliestReleaseDate?: string | null
       /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example HDC
        * @enum {string}
@@ -5934,13 +6026,27 @@ export interface components {
        * @example 06/05/2023
        */
       homeDetentionCurfewEndDate?: string | null
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      id: number
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean | null
       /**
-       * @description Type of this licence
-       * @example HDC_VARIATION
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * @description Type of this licence (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       kind: 'HDC_VARIATION'
@@ -6124,6 +6230,12 @@ export interface components {
        */
       topupSupervisionStartDate?: string | null
       /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
@@ -6150,12 +6262,6 @@ export interface components {
       vloDiscussion?: string | null
       /** @description The curfew times for this licence */
       weeklyCurfewTimes: components['schemas']['CurfewTimes'][]
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HDC_VARIATION'
     }
     HmppsSubjectAccessRequestContent: {
       /** @description The details of any attachments for the subject access request response */
@@ -8071,29 +8177,17 @@ export interface components {
       initialPromptCases: components['schemas']['Case'][]
     }
     /** @description Describes a PRRD licence within this service */
-    PrrdLicenceResponse: Omit<
-      WithRequired<
-        components['schemas']['Licence'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'electronicMonitoringProviderStatus'
-        | 'eligibleKind'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
+    PrrdLicenceResponse: {
       /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
        */
       actualReleaseDate?: string | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -8148,6 +8242,8 @@ export interface components {
        * @example 24/08/2022 11:30:33
        */
       approvedDate?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -8227,6 +8323,12 @@ export interface components {
       /** @description Describes a electronic monitoring provider on a licence */
       electronicMonitoringProvider?: components['schemas']['ElectronicMonitoringProvider'] | null
       /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example PRRD
        * @enum {string}
@@ -8249,17 +8351,31 @@ export interface components {
        * @example 01/05/2023
        */
       hardStopWarningDate?: string | null
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      id: number
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
       isInHardStopPeriod: boolean
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean | null
       /**
-       * @description Type of this licence
-       * @example PRRD
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * @description Type of this licence (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       kind: 'PRRD'
@@ -8438,6 +8554,12 @@ export interface components {
        */
       topupSupervisionStartDate?: string | null
       /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
@@ -8452,12 +8574,6 @@ export interface components {
        * @example 1.4
        */
       version?: string | null
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'PRRD'
     }
     /** @description Describes the Post Sentence Supervision conditions which apply to a licence, V2 API */
     PssConditionsV2: {
@@ -8841,6 +8957,17 @@ export interface components {
       /** @enum {string} */
       template: 'table-header' | 'table-footer' | 'section-header' | 'section-footer' | 'page-header' | 'page-footer'
     }
+    RetryDlqMessagesBody: {
+      messageIds: string[]
+    }
+    RetryDlqMessagesResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesRetriedCount: number
+      notFoundMessageIds: string[]
+      retriedMessageIds: string[]
+    }
     RetryDlqResult: {
       /** Format: int32 */
       messagesFoundCount: number
@@ -8853,6 +8980,13 @@ export interface components {
       condition?: components['schemas']['Condition'][] | null
       /** @enum {string} */
       effect: 'PERMIT' | 'DENY'
+    }
+    SearchDlqResult: {
+      messages: components['schemas']['DlqMessage'][]
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesReturnedCount: number
     }
     SingleVariantReportDefinition: {
       description?: string | null
@@ -9026,28 +9160,17 @@ export interface components {
       teamCode: string
     }
     /** @description Describes a time served licence that was created by a prison */
-    TimeServedLicence: Omit<
-      WithRequired<
-        components['schemas']['Licence'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'electronicMonitoringProviderStatus'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
+    TimeServedLicence: {
       /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
        */
       actualReleaseDate?: string | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -9102,6 +9225,8 @@ export interface components {
        * @example 24/08/2022 11:30:33
        */
       approvedDate?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -9179,6 +9304,12 @@ export interface components {
        */
       earliestReleaseDate?: string | null
       /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
        * @description The type the licence the offender as eligible for based on release dates
        * @example CRD
        * @enum {string|null}
@@ -9201,17 +9332,31 @@ export interface components {
        * @example 01/05/2023
        */
       hardStopWarningDate?: string | null
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      id: number
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
       /** @description Is the licence in the hard stop period? (Within two working days of release) */
       isInHardStopPeriod: boolean
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean | null
       /**
-       * @description Type of this licence
-       * @example TIME_SERVED
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * @description Type of this licence (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       kind: 'TIME_SERVED'
@@ -9396,6 +9541,12 @@ export interface components {
        */
       topupSupervisionStartDate?: string | null
       /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
@@ -9410,12 +9561,6 @@ export interface components {
        * @example 1.4
        */
       version?: string | null
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'TIME_SERVED'
     }
     TimeServedProbationConfirmContactRequest: {
       communicationMethods: ('EMAIL' | 'TEAMS' | 'PHONE' | 'OTHER')[]
@@ -9679,28 +9824,17 @@ export interface components {
       licenceConditionsRemoved: components['schemas']['Condition'][]
     }
     /** @description Describes a licence variation within this service */
-    VariationLicence: Omit<
-      WithRequired<
-        components['schemas']['Licence'],
-        | 'additionalLicenceConditions'
-        | 'additionalPssConditions'
-        | 'bespokeConditions'
-        | 'electronicMonitoringProviderStatus'
-        | 'id'
-        | 'isEligibleForEarlyRelease'
-        | 'isReviewNeeded'
-        | 'isVariation'
-        | 'kind'
-        | 'typeCode'
-      >,
-      'kind'
-    > & {
+    VariationLicence: {
       /**
        * Format: date
        * @description The actual release date (if set)
        * @example 13/09/2022
        */
       actualReleaseDate?: string | null
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -9755,6 +9889,8 @@ export interface components {
        * @example 24/08/2022 11:30:33
        */
       approvedDate?: string | null
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -9832,6 +9968,12 @@ export interface components {
        */
       earliestReleaseDate?: string | null
       /**
+       * @description The status of the electronic monitoring provider
+       * @example NOT_NEEDED
+       * @enum {string}
+       */
+      electronicMonitoringProviderStatus: 'NOT_NEEDED' | 'NOT_STARTED' | 'COMPLETE'
+      /**
        * @description The eligible kind of the licence that this variation is created from
        * @example CRD
        * @enum {string|null}
@@ -9842,13 +9984,27 @@ export interface components {
        * @example Michael
        */
       forename?: string | null
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      id: number
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean | null
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
       /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean | null
       /**
-       * @description Type of this licence
-       * @example VARIATION
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /** @deprecated */
+      isVariation: boolean
+      /**
+       * @description Type of this licence (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       kind: 'VARIATION'
@@ -10032,6 +10188,12 @@ export interface components {
        */
       topupSupervisionStartDate?: string | null
       /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
+      /**
        * @description The full name of the person who last updated this licence
        * @example Jane Jones
        */
@@ -10056,35 +10218,40 @@ export interface components {
        * @example Yes
        */
       vloDiscussion?: string | null
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'VARIATION'
     }
     /** @description Describes an additional condition that has changed when a licence was varied. */
-    VariedAdditionalCondition: Omit<WithRequired<components['schemas']['Condition'], 'condition' | 'type'>, 'type'> & {
+    VariedAdditionalCondition: {
       /**
        * @description The category code of the condition
        * @example Making or maintaining contact with a person
        */
       category?: string | null
-      uploadSummaries: components['schemas']['ImageUploadSummary'][]
-    } & {
       /**
-       * @description discriminator enum property added by openapi-typescript
+       * @description The condition text
+       * @example Receive home visits from a Mental Health Worker.
+       */
+      condition: string
+      /**
+       * @description The type of licence condition (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       type: 'AP'
+      uploadSummaries: components['schemas']['ImageUploadSummary'][]
     }
     /** @description Describes a bespoke condition that has changed when a licence was varied. */
-    VariedBespokeCondition: Omit<
-      WithRequired<components['schemas']['Condition'], 'category' | 'condition' | 'type'>,
-      'type'
-    > & {
+    VariedBespokeCondition: {
       /**
-       * @description discriminator enum property added by openapi-typescript
+       * @description The category code of the condition
+       * @example Making or maintaining contact with a person
+       */
+      category: string
+      /**
+       * @description The condition text
+       * @example Receive home visits from a Mental Health Worker.
+       */
+      condition: string
+      /**
+       * @description The type of licence condition (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       type: 'BESPOKE'
@@ -18041,6 +18208,68 @@ export interface operations {
       }
     }
   }
+  deleteDlqMessages: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DeleteDlqMessagesBody']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['DeleteDlqMessagesResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getDlqMessages: {
     parameters: {
       query?: {
@@ -18215,6 +18444,68 @@ export interface operations {
       }
     }
   }
+  retryDlqMessages: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RetryDlqMessagesBody']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RetryDlqMessagesResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   retryDlq: {
     parameters: {
       query?: never
@@ -18233,6 +18524,67 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['RetryDlqResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchDlqMessages: {
+    parameters: {
+      query?: {
+        filter?: string
+        maxMessages?: number
+      }
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SearchDlqResult']
         }
       }
       /** @description Bad Request */

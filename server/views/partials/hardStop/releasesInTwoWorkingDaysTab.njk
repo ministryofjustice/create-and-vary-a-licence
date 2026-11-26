@@ -10,6 +10,6 @@
                 <li>you can generate a standard licence if a probation practitioner has not submitted one or for time-served releases</li>
             </ul>
         {% endif %}
-       {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config, activeTab: params.activeTab}) }}
+       {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config, activeTab: params.activeTab, hdcCreationEnabled: params.hdcCreationEnabled}) }}
     </div>
 {% endmacro %}
