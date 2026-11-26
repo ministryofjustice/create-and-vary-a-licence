@@ -143,6 +143,26 @@ describe('Route handlers - View and print case list', () => {
   const prisonCaseload = caCase as CaCase[]
 
   describe('GET', () => {
+    it.each(['prison', 'probation'])('passes the HDC address flag to the %s caseload', async view => {
+      const hdcCase: CaCase = {
+        ...caCase[0],
+        kind: LicenceKind.HDC,
+        noHdcCurfewAddress: true,
+      }
+      req.query.view = view
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue([hdcCase])
+      caseloadService.getProbationOmuCaseload.mockResolvedValue([hdcCase])
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/view/cases',
+        expect.objectContaining({
+          cases: [expect.objectContaining({ licenceId: hdcCase.licenceId, noHdcCurfewAddress: true })],
+        }),
+      )
+    })
+
     const probationCaseLoad = [
       {
         kind: LicenceKind.CRD,

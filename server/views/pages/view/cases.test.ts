@@ -313,6 +313,69 @@ describe('View and print a licence - case list', () => {
     expect($('#release-date-1').text()).toBe('HDC actual date: 3 Aug 2022')
   })
 
+  describe('missing HDC curfew address label', () => {
+    const hdcCase = {
+      name: 'Test Person',
+      prisonerNumber: 'A1234AA',
+      licenceId: 1,
+      releaseDate: '03/08/2022',
+      releaseDateLabel: 'HDC actual date',
+      tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS,
+      kind: LicenceKind.HDC,
+      noHdcCurfewAddress: true,
+      probationPractitioner: { name: 'Not allocated', allocated: false },
+    }
+
+    const renderCase = (caseOverrides = {}, options = {}) =>
+      render({
+        cases: [{ ...hdcCase, ...caseOverrides }],
+        CaViewCasesTab,
+        statusConfig,
+        hdcCreationEnabled: true,
+        ...options,
+      })
+
+    it.each([
+      [CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, false],
+      [CaViewCasesTab.FUTURE_RELEASES, false],
+      [CaViewCasesTab.ATTENTION_NEEDED, false],
+      [CaViewCasesTab.FUTURE_RELEASES, true],
+    ])('shows the grey flag in %s (probation view: %s)', (tabType, probationView) => {
+      const $ = renderCase({ tabType }, { probationView, showAttentionNeededTab: true })
+
+      expect($('#release-date-1 > .info-highlight').first().text()).toBe('HDC actual date: 3 Aug 2022')
+      expect($('#release-date-1 > .info-highlight.info-highlight-message').text()).toBe('No HDC curfew address')
+    })
+
+    it('shows the flag for an HDC variation', () => {
+      const $ = renderCase({ kind: LicenceKind.HDC_VARIATION })
+      expect($('#release-date-1 .info-highlight-message').text()).toBe('No HDC curfew address')
+    })
+
+    it.each([false, null, undefined])('does not show the flag when the API flag is %s', noHdcCurfewAddress => {
+      const $ = renderCase({ noHdcCurfewAddress })
+      expect($('#release-date-1 .info-highlight-message').length).toBe(0)
+    })
+
+    it('does not show the flag when HDC creation is disabled', () => {
+      const $ = renderCase({}, { hdcCreationEnabled: false })
+      expect($('#release-date-1 .info-highlight-message').length).toBe(0)
+    })
+
+    it.each([{ licenceId: null }, { kind: LicenceKind.CRD }])(
+      'does not show the flag for a case without an HDC licence: %s',
+      overrides => {
+        const $ = renderCase(overrides)
+        expect($('#release-date-1 .info-highlight-message').length).toBe(0)
+      },
+    )
+
+    it('shows the missing address rather than the postponed message when both apply', () => {
+      const $ = renderCase({ isHdcPostponed: true })
+      expect($('#release-date-1 .info-highlight-message').text()).toBe('No HDC curfew address')
+    })
+  })
+
   it('should highlight a Time Served licence with a Time Served release warning label and Not allocated com in prison view', () => {
     const search = ''
     const prisonsToDisplay = ''
