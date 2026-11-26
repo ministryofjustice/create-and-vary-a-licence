@@ -37,6 +37,7 @@
 
 {% set isInProgress = statusCode == 'IN_PROGRESS' or statusCode == 'VARIATION_IN_PROGRESS' %}
 {% set isHdcPostponed = licence.isPostponed and hdcCreationEnabled %}
+{% set isHdcAddressWithdrawn = licence.addressWithdrawn and hdcCreationEnabled %}
 {% set isInVariation = statusCode == 'VARIATION_IN_PROGRESS' or statusCode == 'VARIATION_SUBMITTED'
     or statusCode == 'VARIATION_REJECTED' or statusCode == 'VARIATION_APPROVED' %}
 {% set canChooseToEdit = (statusCode == 'APPROVED' or statusCode == 'SUBMITTED') and (not isInHardStopPeriod) %}
@@ -59,6 +60,16 @@
             title: 'HDC application postponed',
             showTitleAsHeading: true,
             text: 'This licence cannot be submitted until the application resumes',
+            dismissible: false
+        }) }}
+    {% endif %}
+
+    {% if isHdcAddressWithdrawn %}
+        {{ mojAlert({
+            variant: 'warning',
+            title: 'HDC address missing',
+            showTitleAsHeading: true,
+            text: 'This licence cannot be submitted until the HDC address is added or CAS2 is selected',
             dismissible: false
         }) }}
     {% endif %}
@@ -143,7 +154,7 @@
                         <div class="govuk-button-group">
                         {{ govukButton({
                             text: submitButtonText,
-                            disabled: isHdcPostponed,
+                            disabled: isHdcPostponed or isHdcAddressWithdrawn,
                             attributes: submitButtonAttrs
                         }) }}
                     {% endif %}

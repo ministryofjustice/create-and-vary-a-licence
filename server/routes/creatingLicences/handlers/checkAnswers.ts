@@ -69,7 +69,7 @@ export default class CheckAnswersRoutes {
     const { licenceId } = req.params
     const { licence, user } = res.locals
 
-    if (licence.kind === 'HDC' && licence.isPostponed) {
+    if (licence.kind === 'HDC' && (licence.isPostponed || licence.addressWithdrawn)) {
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     }
 
