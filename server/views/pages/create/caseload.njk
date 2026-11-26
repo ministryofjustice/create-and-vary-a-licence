@@ -32,7 +32,7 @@
 
     {% if hdcCreationEnabled and offender.noHdcCurfewAddress %}
         {% set releaseDate = '<span class="info-highlight">' + offender.releaseDateLabel +
-            ': <br>' + offender.releaseDate + '</span><span class="info-highlight info-highlight-message">No HDC curfew address</span>' %}
+            ': <br>' + offender.releaseDate + '</span><span class="info-highlight"><span class="info-highlight-message">No HDC curfew address</span></span>' %}
     {% else %}
        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel +
            ': <br>' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">'

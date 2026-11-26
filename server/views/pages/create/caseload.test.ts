@@ -244,7 +244,7 @@ describe('Create a Licence Views - Caseload', () => {
 
         // then
         expect($('#release-date-1 > .urgent-highlight-message').text()).not.toBe('HDC release')
-        expect($('#release-date-1 > .info-highlight-message').text()).toBe('No HDC curfew address')
+        expect($('#release-date-1 > .info-highlight > .info-highlight-message').text()).toBe('No HDC curfew address')
       },
     )
 
@@ -278,7 +278,7 @@ describe('Create a Licence Views - Caseload', () => {
       const $ = render({ statusConfig, caseload, view: 'team', hdcCreationEnabled: true })
 
       // then
-      expect($('#release-date-1 > .info-highlight-message').text()).toBe('No HDC curfew address')
+      expect($('#release-date-1 > .info-highlight > .info-highlight-message').text()).toBe('No HDC curfew address')
       expect($('#release-date-2').text()).toBe('Restricted')
     })
   })

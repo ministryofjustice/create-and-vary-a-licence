@@ -35,6 +35,18 @@ describe('viewCases template', () => {
     expect($('.info-highlight-message').text().toString()).toEqual('HDC application postponed')
   })
 
+  it('should render the missing HDC curfew address message inside an info highlight', () => {
+    const options = createComponentModel({
+      kind: LicenceKind.HDC,
+      noHdcCurfewAddress: true,
+      hdcCreationEnabled: true,
+    })
+
+    const $ = render({ options })
+
+    expect($('#release-date-1 > .info-highlight > .info-highlight-message').text()).toBe('No HDC curfew address')
+  })
+
   it('should render time-served release date with message, and formatted date when kind Time Served kind', () => {
     // Given
     const options = createComponentModel({
@@ -118,6 +130,8 @@ describe('viewCases template', () => {
     probationPractitioner = { name: 'Test COM', staffCode: 'T123', allocated: true } as ProbationPractitioner,
     releaseDateLabel = 'Confirmed release date',
     isHdcPostponed = false,
+    noHdcCurfewAddress = false,
+    hdcCreationEnabled = false,
   }: {
     kind: LicenceKind
     name?: string
@@ -125,7 +139,10 @@ describe('viewCases template', () => {
     probationPractitioner?: ProbationPractitioner
     releaseDateLabel?: string
     isHdcPostponed?: boolean
+    noHdcCurfewAddress?: boolean
+    hdcCreationEnabled?: boolean
   }) => ({
+    hdcCreationEnabled,
     cases: [
       {
         link: '',
@@ -141,6 +158,7 @@ describe('viewCases template', () => {
         lastWorkedOnBy: 'Updater Name',
         kind,
         isHdcPostponed,
+        noHdcCurfewAddress,
       },
     ],
     tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS,
