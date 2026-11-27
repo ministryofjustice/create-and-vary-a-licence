@@ -1,6 +1,7 @@
-import { components } from './deliusApiImport'
+import * as types from './deliusApiImport'
 
-export type DeliusStaff = components['schemas']['Staff']
-export type DeliusManager = components['schemas']['Manager']
-export type DeliusPDUHead = components['schemas']['PDUHead']
-export type DeliusRecord = components['schemas']['ProbationCase']
+export type DeliusStaff = types.Staff
+export type DeliusManager = types.Manager
+export type DeliusPDUHead = types.PduHead
+export type DeliusRecord = types.ProbationCase
+export type Name = types.Name

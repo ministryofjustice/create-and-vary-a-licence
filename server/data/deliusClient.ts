@@ -2,7 +2,7 @@ import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
 import { DeliusManager, DeliusPDUHead, DeliusRecord, DeliusStaff } from '../@types/deliusClientTypes'
 import type { TokenStore } from './tokenStore'
-import { components } from '../@types/deliusApiImport'
+import { Name } from '../@types/deliusApiImport'
 
 export default class DeliusClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -40,7 +40,7 @@ export default class DeliusClient extends RestClient {
   }
 }
 
-export function nameToString(name: components['schemas']['Name']): string {
+export function nameToString(name: Name): string {
   return name
     ? [name.forename, name.middleName, name.surname]
         .filter(s => s && s.trim() !== '')

@@ -1,104 +1,102 @@
-import { components } from './licenceApiImport'
+import * as types from './licenceApiImport'
 
-export type AdditionalCondition = components['schemas']['AdditionalCondition']
-export type AddHdcCurfewAddressRequest = components['schemas']['AddHdcCurfewAddressRequest']
-export type AppointmentPersonRequest = components['schemas']['AppointmentPersonRequest']
-export type AppointmentPersonUpdateResponse = components['schemas']['AppointmentPersonUpdateResponse']
-export type AppointmentTimeRequest = components['schemas']['AppointmentTimeRequest']
-export type AuditEvent = components['schemas']['AuditEvent']
-export type AuditRequest = components['schemas']['AuditRequest']
-export type BespokeCondition = components['schemas']['BespokeCondition']
-export type BespokeConditionsRequest = components['schemas']['BespokeConditionRequest']
-export type AdditionalConditionsRequest = components['schemas']['AdditionalConditionsRequest']
-export type UpdateAdditionalConditionDataRequest = components['schemas']['UpdateAdditionalConditionDataRequest']
-export type AdditionalConditionData = components['schemas']['AdditionalConditionData']
-export type ContactNumberRequest = components['schemas']['ContactNumberRequest']
-export type CreateLicenceResponse = components['schemas']['CreateLicenceResponse']
-export type CreateVariationResponse = components['schemas']['CreateVariationResponse']
-export type EditLicenceResponse = components['schemas']['EditLicenceResponse']
-export type LicenceSummary = components['schemas']['LicenceSummary']
+export type AdditionalCondition = types.AdditionalCondition
+export type AddHdcCurfewAddressRequest = types.AddHdcCurfewAddressRequest
+export type AppointmentPersonRequest = types.AppointmentPersonRequest
+export type AppointmentPersonUpdateResponse = types.AppointmentPersonUpdateResponse
+export type AppointmentTimeRequest = types.AppointmentTimeRequest
+export type AuditEvent = types.AuditEvent
+export type AuditRequest = types.AuditRequest
+export type BespokeCondition = types.BespokeCondition
+export type BespokeConditionsRequest = types.BespokeConditionRequest
+export type AdditionalConditionsRequest = types.AdditionalConditionsRequest
+export type UpdateAdditionalConditionDataRequest = types.UpdateAdditionalConditionDataRequest
+export type AdditionalConditionData = types.AdditionalConditionData
+export type ContactNumberRequest = types.ContactNumberRequest
+export type CreateLicenceResponse = types.CreateLicenceResponse
+export type CreateVariationResponse = types.CreateVariationResponse
+export type EditLicenceResponse = types.EditLicenceResponse
+export type LicenceSummary = types.LicenceSummary
 export type Licence =
-  | components['schemas']['HdcVariationLicence']
-  | components['schemas']['VariationLicence']
-  | components['schemas']['HardStopLicence']
-  | components['schemas']['CrdLicence']
+  | types.HdcVariationLicence
+  | types.VariationLicence
+  | types.HardStopLicence
+  | types.CrdLicence
   | HdcLicence
-  | components['schemas']['PrrdLicenceResponse']
-  | components['schemas']['TimeServedLicence']
+  | types.PrrdLicenceResponse
+  | types.TimeServedLicence
 
-export type VariationLicence = components['schemas']['VariationLicence']
-export type HdcLicence = components['schemas']['HdcLicence']
-export type HdcVariationLicence = components['schemas']['HdcVariationLicence']
-export type LicenceEvent = components['schemas']['LicenceEvent']
-export type StatusUpdateRequest = components['schemas']['StatusUpdateRequest']
-export type UpdateComRequest = components['schemas']['UpdateComRequest']
-export type UpdatePrisonUserRequest = components['schemas']['UpdatePrisonUserRequest']
-export type AddAdditionalConditionRequest = components['schemas']['AddAdditionalConditionRequest']
-export type UpdateSpoDiscussionRequest = components['schemas']['UpdateSpoDiscussionRequest']
-export type UpdateVloDiscussionRequest = components['schemas']['UpdateVloDiscussionRequest']
-export type UpdateReasonForVariationRequest = components['schemas']['UpdateReasonForVariationRequest']
-export type ReferVariationRequest = components['schemas']['ReferVariationRequest']
-export type NotifyRequest = components['schemas']['NotifyRequest']
-export type OmuContact = components['schemas']['OmuContact']
-export type LicencePolicyResponse = components['schemas']['LicencePolicy']
-export type StandardCondition = components['schemas']['StandardCondition']
-export type AdditionalConditionsResponse = components['schemas']['AdditionalConditions']
-export type AdditionalConditionApResponse = components['schemas']['AdditionalConditionAp']
-export type AdditionalConditionPssResponse = components['schemas']['AdditionalConditionPss']
-export type LicenceConditionChange = components['schemas']['LicenceConditionChanges']
-export type OverrideLicenceDatesRequest = components['schemas']['OverrideLicenceDatesRequest']
-export type OverrideLicencePrisonerDetailsRequest = components['schemas']['OverrideLicencePrisonerDetailsRequest']
-export type ProbationSearchRequest = components['schemas']['ProbationUserSearchRequest']
-export type ComSearchResponse = components['schemas']['ComSearchResponse']
-export type FoundComCase = components['schemas']['FoundComCase']
-export type ComReviewCount = components['schemas']['ComReviewCount']
-export type CvlPrisoner = components['schemas']['Prisoner']
-export type CvlFields = components['schemas']['CvlFields']
-export type PrisonerWithCvlFields = components['schemas']['PrisonerWithCvlFields']
-export type ApprovalCase = components['schemas']['ApprovalCase']
-export type CaCaseloadSearch = components['schemas']['CaCaseloadSearch']
-export type CaCase = components['schemas']['CaCase']
-export type ComCreateCase = components['schemas']['ComCreateCase']
-export type ComVaryCase = components['schemas']['ComVaryCase']
-export type TeamCaseloadRequest = components['schemas']['TeamCaseloadRequest']
-export type VaryApproverCaseloadSearchRequest = components['schemas']['VaryApproverCaseloadSearchRequest']
-export type VaryApproverCaseloadSearchResponse = components['schemas']['VaryApproverCaseloadSearchResponse']
-export type VaryApproverCase = components['schemas']['VaryApproverCase']
-export type ElectronicMonitoringProvider = components['schemas']['ElectronicMonitoringProvider']
-export type PrisonUserSearchRequest = components['schemas']['PrisonUserSearchRequest']
-export type PrisonCaseAdminSearchResult = components['schemas']['PrisonCaseAdminSearchResult']
-export type LastMinuteHandoverCaseResponse = components['schemas']['LastMinuteHandoverCaseResponse']
-export type UpcomingReleasesWithMonitoringConditionsResponse =
-  components['schemas']['UpcomingReleasesWithMonitoringConditionsResponse']
+export type VariationLicence = types.VariationLicence
+export type HdcLicence = types.HdcLicence
+export type HdcVariationLicence = types.HdcVariationLicence
+export type LicenceEvent = types.LicenceEvent
+export type StatusUpdateRequest = types.StatusUpdateRequest
+export type UpdateComRequest = types.UpdateComRequest
+export type UpdatePrisonUserRequest = types.UpdatePrisonUserRequest
+export type AddAdditionalConditionRequest = types.AddAdditionalConditionRequest
+export type UpdateSpoDiscussionRequest = types.UpdateSpoDiscussionRequest
+export type UpdateVloDiscussionRequest = types.UpdateVloDiscussionRequest
+export type UpdateReasonForVariationRequest = types.UpdateReasonForVariationRequest
+export type ReferVariationRequest = types.ReferVariationRequest
+export type NotifyRequest = types.NotifyRequest
+export type OmuContact = types.OmuContact
+export type LicencePolicyResponse = types.LicencePolicy
+export type StandardCondition = types.StandardCondition
+export type AdditionalConditionsResponse = types.AdditionalConditions
+export type AdditionalConditionApResponse = types.AdditionalConditionAp
+export type AdditionalConditionPssResponse = types.AdditionalConditionPss
+export type LicenceConditionChange = types.LicenceConditionChanges
+export type OverrideLicenceDatesRequest = types.OverrideLicenceDatesRequest
+export type OverrideLicencePrisonerDetailsRequest = types.OverrideLicencePrisonerDetailsRequest
+export type ProbationSearchRequest = types.ProbationUserSearchRequest
+export type ComSearchResponse = types.ComSearchResponse
+export type FoundComCase = types.FoundComCase
+export type ComReviewCount = types.ComReviewCount
+export type CvlPrisoner = types.Prisoner
+export type CvlFields = types.CvlFields
+export type PrisonerWithCvlFields = types.PrisonerWithCvlFields
+export type ApprovalCase = types.ApprovalCase
+export type CaCaseloadSearch = types.CaCaseloadSearch
+export type CaCase = types.CaCase
+export type ComCreateCase = types.ComCreateCase
+export type ComVaryCase = types.ComVaryCase
+export type TeamCaseloadRequest = types.TeamCaseloadRequest
+export type VaryApproverCaseloadSearchRequest = types.VaryApproverCaseloadSearchRequest
+export type VaryApproverCaseloadSearchResponse = types.VaryApproverCaseloadSearchResponse
+export type VaryApproverCase = types.VaryApproverCase
+export type ElectronicMonitoringProvider = types.ElectronicMonitoringProvider
+export type PrisonUserSearchRequest = types.PrisonUserSearchRequest
+export type PrisonCaseAdminSearchResult = types.PrisonCaseAdminSearchResult
+export type LastMinuteHandoverCaseResponse = types.LastMinuteHandoverCaseResponse
+export type UpcomingReleasesWithMonitoringConditionsResponse = types.UpcomingReleasesWithMonitoringConditionsResponse
 
-export type ApproverSearchRequest = components['schemas']['ApproverSearchRequest']
-export type ApproverSearchResponse = components['schemas']['ApproverSearchResponse']
-export type UpdateElectronicMonitoringProgrammeRequest =
-  components['schemas']['UpdateElectronicMonitoringProgrammeRequest']
-export type AddressSearchResponse = components['schemas']['AddressSearchResponse']
-export type AddAddressRequest = components['schemas']['AddAddressRequest']
-export type AddressResponse = components['schemas']['AddressResponse']
-export type LicencePermissionsRequest = components['schemas']['LicencePermissionsRequest']
-export type LicencePermissionsResponse = components['schemas']['LicencePermissionsResponse']
-export type EligibilityAssessment = components['schemas']['EligibilityAssessment']
-export type ExternalTimeServedRecordRequest = components['schemas']['ExternalTimeServedRecordRequest']
-export type ExternalTimeServedRecordResponse = components['schemas']['ExternalTimeServedRecordResponse']
-export type TimeServedProbationConfirmContactRequest = components['schemas']['TimeServedProbationConfirmContactRequest']
-export type TimeServedLicence = components['schemas']['TimeServedLicence']
-export type CheckCaseAccessRequest = components['schemas']['CheckCaseAccessRequest']
-export type CaseAccessDetails = components['schemas']['CaseAccessDetails']
-export type WeeklyCurfewTimesRequest = components['schemas']['UpdateWeeklyCurfewTimesRequest']
-export type CurfewTimes = components['schemas']['CurfewTimes']
-export type ProbationCase = components['schemas']['ProbationCase']
-export type FirstNightCurfewTimesRequest = components['schemas']['UpdateFirstNightCurfewTimesRequest']
-export type LicenceStatusResponse = components['schemas']['LicenceStatusResponse']
-export type RecallSupportInfo = components['schemas']['RecallSupportInfo']
-export type RemandSupportInfo = components['schemas']['RemandSupportInfo']
-export type Is91SupportInfo = components['schemas']['Is91SupportInfo']
-export type HdcSupportInfo = components['schemas']['HdcSupportInfo']
-export type SupportInfo = components['schemas']['SupportInfo']
-export type PolicyUpdateResponse = components['schemas']['PolicyUpdateResponse']
-export type HdcCurfewAddress = components['schemas']['HdcCurfewAddress']
+export type ApproverSearchRequest = types.ApproverSearchRequest
+export type ApproverSearchResponse = types.ApproverSearchResponse
+export type UpdateElectronicMonitoringProgrammeRequest = types.UpdateElectronicMonitoringProgrammeRequest
+export type AddressSearchResponse = types.AddressSearchResponse
+export type AddAddressRequest = types.AddAddressRequest
+export type AddressResponse = types.AddressResponse
+export type LicencePermissionsRequest = types.LicencePermissionsRequest
+export type LicencePermissionsResponse = types.LicencePermissionsResponse
+export type EligibilityAssessment = types.EligibilityAssessment
+export type ExternalTimeServedRecordRequest = types.ExternalTimeServedRecordRequest
+export type ExternalTimeServedRecordResponse = types.ExternalTimeServedRecordResponse
+export type TimeServedProbationConfirmContactRequest = types.TimeServedProbationConfirmContactRequest
+export type TimeServedLicence = types.TimeServedLicence
+export type CheckCaseAccessRequest = types.CheckCaseAccessRequest
+export type CaseAccessDetails = types.CaseAccessDetails
+export type WeeklyCurfewTimesRequest = types.UpdateWeeklyCurfewTimesRequest
+export type CurfewTimes = types.CurfewTimes
+export type ProbationCase = types.ProbationCase
+export type FirstNightCurfewTimesRequest = types.UpdateFirstNightCurfewTimesRequest
+export type LicenceStatusResponse = types.LicenceStatusResponse
+export type RecallSupportInfo = types.RecallSupportInfo
+export type RemandSupportInfo = types.RemandSupportInfo
+export type Is91SupportInfo = types.Is91SupportInfo
+export type HdcSupportInfo = types.HdcSupportInfo
+export type SupportInfo = types.SupportInfo
+export type PolicyUpdateResponse = types.PolicyUpdateResponse
+export type HdcCurfewAddress = types.HdcCurfewAddress
 
 export type EditVariationRequest = {
   username: string

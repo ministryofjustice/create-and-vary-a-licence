@@ -1,5 +1,5 @@
-import { components } from './prisonApiImport'
+import * as types from './prisonApiImport'
 
-export type PrisonApiCaseload = components['schemas']['CaseLoad']
-export type PrisonApiUserDetail = components['schemas']['UserDetail']
-export type PrisonDetail = components['schemas']['Agency']
+export type PrisonApiCaseload = types.CaseLoad
+export type PrisonApiUserDetail = types.UserDetail
+export type PrisonDetail = types.Agency
