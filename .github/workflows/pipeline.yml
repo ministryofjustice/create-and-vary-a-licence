@@ -36,6 +36,8 @@ jobs:
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
     needs: [node_build]
     secrets: inherit
+    with:
+      test-report-continue-on-error: true
   node_integration_tests:
     name: node integration tests
     uses: ./.github/workflows/integration_tests.yml
@@ -43,6 +45,7 @@ jobs:
     secrets: inherit
     with:
       redis_tag: "7.2"
+      test-report-continue-on-error: true
   helm_lint:
     strategy:
       matrix:
