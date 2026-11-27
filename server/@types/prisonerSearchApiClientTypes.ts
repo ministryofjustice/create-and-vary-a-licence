@@ -1,4 +1,4 @@
-import { components } from './prisonerOffenderSearchImport'
+import * as types from './prisonerOffenderSearchImport'
 
-export type Prisoner = components['schemas']['Prisoner']
-export type PrisonerSearchCriteria = components['schemas']['SearchCriteria']
+export type Prisoner = types.Prisoner
+export type PrisonerSearchCriteria = types.SearchCriteria

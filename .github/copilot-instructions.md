@@ -100,7 +100,7 @@ Note: This test is NOT run in CI currently.
 ### Shell Scripts
 - `bin/build-css.sh` - Compiles SASS with load paths for govuk-frontend, MOJ frontend, and DPR frontend
 - `create-env-file.sh` - Fetches secrets from kubernetes dev namespace for local development
-- `generate-*-api-types.sh` - Regenerate TypeScript types from OpenAPI specs (5 scripts for different APIs)
+- `generate-api-types.sh` - Regenerate TypeScript types from OpenAPI specs (targets: licence, delius, prison, prison-register, prisoner-offender-search, all)
 
 ### Server Directory (`server/`)
 
@@ -195,9 +195,7 @@ Note: This test is NOT run in CI currently.
    - Mac/Windows: Uses `host.docker.internal` automatically
    - Linux: Requires `extra_hosts` in docker-compose.yml (already configured)
 
-6. **Generated API types**: After regenerating types from OpenAPI specs, manually:
-   - Replace double quotes with single quotes
-   - Remove semicolons
+6. **Generated API types**: Run `./generate-api-types.sh <target>` (hey-api; `--local` is licence only). ESLint `--fix` runs automatically. If lint still fails, manually:
    - Add `eslint-disable camelcase` for non-camelCase properties
    - Remove or ignore empty interfaces
 

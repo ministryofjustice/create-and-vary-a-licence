@@ -121,25 +121,26 @@ This service makes use of imported types generated from the openAPI definitions 
 Whenever the APIs change or new types are added, the scripts can be re-run to import these and make them available.
 The types are committed into Git.
 
-Scripts are provided to generate these types from the development instances:
+Use `generate-api-types.sh <target>...` to generate types from the development instances:
 
-`generate-delius-api-types.sh` - Re-run when Probation Integration API types change
+`generate-api-types.sh licence` - Re-run when create and vary a CVL licence API types change from dev
+`generate-api-types.sh licence --local` - As above, but from a locally running API (licence only)
 
-`generate-licence-api-types.sh` - Re-run when create and vary a CVL licence API types change from dev
-`generate-licence-api-types.sh --local` - Re-run when create and vary a CVL licence API types change from locally running API
+`generate-api-types.sh delius` - Re-run when Probation Integration API types change
 
-`generate-prison-api-types.sh` - Re-run when prisoner API types change
+`generate-api-types.sh prison` - Re-run when prisoner API types change
 
-`generate-prisoner-offender-search-types.sh` Re-run when prisoner offender search API types change
+`generate-api-types.sh prisoner-offender-search` - Re-run when prisoner offender search API types change
 
-`generate-probation-offender-search-types.sh` Re-run when probation offender search API types change
+`generate-api-types.sh prison-register` - Re-run when prison register API types change
 
-`generate-prison-register-types.sh` Re-run when prison register API types change
+`generate-api-types.sh all` - Generate all of the above
 
-There may be some manual editing needed, particularly to:
+The script generates the types with hey-api (`@hey-api/openapi-ts`) into `server/@types/<name>Import/types.gen.ts`
+and runs ESLint with `--fix` on the output. Use `--local` with the `licence` target only.
 
-- Replace double quotes with single-quotes
-- Remove all semi-colons
+If the generated types fail linting, you may need some manual editing, particularly to:
+
 - Validate the api-docs endpoint for swagger (in case it changes)
 - Eslint ignore any lines which complain about not being camel-case with `eslint-disable camelcase`
 - Eslint ignore empty interfaces with `eslint-disable-next-line @typescript-eslint/no-empty-interface`

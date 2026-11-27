@@ -1,3 +1,3 @@
-import { components } from './prisonRegisterApiImport'
+import * as types from './prisonRegisterApiImport'
 
-export type PrisonDto = components['schemas']['PrisonDto']
+export type PrisonDto = types.PrisonDto
